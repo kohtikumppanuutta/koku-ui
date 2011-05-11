@@ -47,9 +47,69 @@
   		<version>${spring.version}</version>
   	</dependency>
   </dependencies>
+
   <properties>
   	<slf4j.version>1.6.1</slf4j.version>
-  	<portlet-api.version>2.0-r12</portlet-api.version>
+  	<portlet-api.version>2.0</portlet-api.version>
   	<spring.version>3.0.5.RELEASE</spring.version>
   </properties>
+
+  <repositories>
+
+	<repository>
+      <id>jboss-public-repository-group</id>
+      <name>JBoss Public Repository Group</name>
+      <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+      <layout>default</layout>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </snapshots>
+    </repository>
+
+<!--
+	<repository>
+	  <id>maven-repository.java.net</id>
+	  <name>Java.net Repository for Maven 1</name>
+	  <url>http://download.java.net/maven/1/</url>
+	  <layout>legacy</layout>
+	</repository>
+	<repository>
+	  <id>maven2-repository.java.net</id>
+	  <name>Java.net Repository for Maven 2</name>
+	  <url>http://download.java.net/maven/2/</url>  
+	</repository>
+-->
+
+  </repositories>
+
+  <pluginRepositories>
+
+	<pluginRepository>
+      <id>jboss-public-repository-group</id>
+      <name>JBoss Public Repository Group</name>
+      <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+
+<!--     
+    <pluginRepository>
+      <id>maven2-repository.java.net</id>
+	  <name>Java.net Repository for Maven</name>
+	  <url>http://download.java.net/maven/2/</url>
+	  <layout>default</layout>
+	</pluginRepository>
+ -->
+	
+  </pluginRepositories>
+
 </project>
