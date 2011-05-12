@@ -1,118 +1,119 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>kohti-kumppanuutta</groupId>
-  <artifactId>koku-ui</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <name>koku-ui</name>
-  <build>
-  	<plugins>
-  		<plugin>
-  			<inherited>true</inherited>
-  			<groupId>org.apache.maven.plugins</groupId>
-  			<artifactId>maven-compiler-plugin</artifactId>
-  			<configuration>
-                   <source>1.6</source>
-                   <target>1.6</target>
-                   <optimise>true</optimise>
-                   <debug>true</debug>
-            </configuration>
-  		</plugin>
-  	</plugins>
-  </build>
-  <modules>
-  	<module>kks</module>
-  	<module>pyh</module>
-  </modules>
-  <dependencies>
-  	<dependency>
-  		<groupId>javax.portlet</groupId>
-  		<artifactId>portlet-api</artifactId>
-  		<version>${portlet-api.version}</version>
-  		<scope>provided</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.slf4j</groupId>
-  		<artifactId>slf4j-api</artifactId>
-  		<version>${slf4j.version}</version>
-  		<scope>runtime</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.slf4j</groupId>
-  		<artifactId>slf4j-log4j12</artifactId>
-  		<version>${slf4j.version}</version>
-  		<scope>runtime</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.springframework</groupId>
-  		<artifactId>spring-webmvc-portlet</artifactId>
-  		<version>${spring.version}</version>
-  		<scope>runtime</scope>
-  	</dependency>
-  </dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>kohti-kumppanuutta</groupId>
+	<artifactId>koku-ui</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>koku-ui</name>
+	<build>
+		<plugins>
+			<plugin>
+				<inherited>true</inherited>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<optimise>true</optimise>
+					<debug>true</debug>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<modules>
+		<module>kks</module>
+		<module>pyh</module>
+	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>${servlet.jsp.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${servlet.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.portlet</groupId>
+			<artifactId>portlet-api</artifactId>
+			<version>${portlet-api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc-portlet</artifactId>
+			<version>${spring.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
 
-  <properties>
-  	<slf4j.version>1.6.1</slf4j.version>
-  	<portlet-api.version>2.0</portlet-api.version>
-  	<spring.version>3.0.5.RELEASE</spring.version>
-  </properties>
+	<properties>
+		<slf4j.version>1.6.1</slf4j.version>
+		<portlet-api.version>2.0</portlet-api.version>
+		<spring.version>3.0.5.RELEASE</spring.version>
+		<servlet.version>1.2</servlet.version>
+		<servlet.jsp.version>2.1</servlet.jsp.version>
+	</properties>
 
-  <repositories>
+	<repositories>
 
-	<repository>
-      <id>jboss-public-repository-group</id>
-      <name>JBoss Public Repository Group</name>
-      <url>http://repository.jboss.org/nexus/content/groups/public/</url>
-      <layout>default</layout>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-      </snapshots>
-    </repository>
+		<repository>
+			<id>jboss-public-repository-group</id>
+			<name>JBoss Public Repository Group</name>
+			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
 
-<!--
-	<repository>
-	  <id>maven-repository.java.net</id>
-	  <name>Java.net Repository for Maven 1</name>
-	  <url>http://download.java.net/maven/1/</url>
-	  <layout>legacy</layout>
-	</repository>
-	<repository>
-	  <id>maven2-repository.java.net</id>
-	  <name>Java.net Repository for Maven 2</name>
-	  <url>http://download.java.net/maven/2/</url>  
-	</repository>
--->
+		<!-- <repository> <id>maven-repository.java.net</id> <name>Java.net Repository 
+			for Maven 1</name> <url>http://download.java.net/maven/1/</url> <layout>legacy</layout> 
+			</repository> <repository> <id>maven2-repository.java.net</id> <name>Java.net 
+			Repository for Maven 2</name> <url>http://download.java.net/maven/2/</url> 
+			</repository> -->
 
-  </repositories>
+	</repositories>
 
-  <pluginRepositories>
+	<pluginRepositories>
 
-	<pluginRepository>
-      <id>jboss-public-repository-group</id>
-      <name>JBoss Public Repository Group</name>
-      <url>http://repository.jboss.org/nexus/content/groups/public/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </pluginRepository>
+		<pluginRepository>
+			<id>jboss-public-repository-group</id>
+			<name>JBoss Public Repository Group</name>
+			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
 
-<!--     
-    <pluginRepository>
-      <id>maven2-repository.java.net</id>
-	  <name>Java.net Repository for Maven</name>
-	  <url>http://download.java.net/maven/2/</url>
-	  <layout>default</layout>
-	</pluginRepository>
- -->
-	
-  </pluginRepositories>
+		<!-- <pluginRepository> <id>maven2-repository.java.net</id> <name>Java.net 
+			Repository for Maven</name> <url>http://download.java.net/maven/2/</url> 
+			<layout>default</layout> </pluginRepository> -->
+
+	</pluginRepositories>
 
 </project>
