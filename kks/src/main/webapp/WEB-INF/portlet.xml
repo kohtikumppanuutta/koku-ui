@@ -11,6 +11,7 @@
 			<portlet-mode>view</portlet-mode>
 			<portlet-mode>edit</portlet-mode>
 		</supports>
+		<resource-bundle>Language-ext</resource-bundle>
 		<portlet-info>
 			<title>KKS</title>
 		</portlet-info>
