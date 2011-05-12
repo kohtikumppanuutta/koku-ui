@@ -29,11 +29,13 @@
   		<groupId>javax.portlet</groupId>
   		<artifactId>portlet-api</artifactId>
   		<version>${portlet-api.version}</version>
+  		<scope>provided</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.slf4j</groupId>
   		<artifactId>slf4j-api</artifactId>
   		<version>${slf4j.version}</version>
+  		<scope>runtime</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.slf4j</groupId>
@@ -45,6 +47,7 @@
   		<groupId>org.springframework</groupId>
   		<artifactId>spring-webmvc-portlet</artifactId>
   		<version>${spring.version}</version>
+  		<scope>runtime</scope>
   	</dependency>
   </dependencies>
 
