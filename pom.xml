@@ -6,6 +6,13 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>koku-ui</name>
+		<properties>
+		<slf4j.version>1.6.1</slf4j.version>
+		<portlet-api.version>2.0</portlet-api.version>
+		<spring.version>3.0.5.RELEASE</spring.version>
+		<servlet.version>1.2</servlet.version>
+		<servlet.jsp.version>2.1</servlet.jsp.version>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
@@ -57,19 +64,35 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc-portlet</artifactId>
 			<version>${spring.version}</version>
-			<scope>runtime</scope>
+		</dependency>
+
+		<!-- standard.jar -->
+		<dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+
+		<!-- JSR 303 with Hibernate Validator -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.0.0.GA</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.1.0.Final</version>
 		</dependency>
 	</dependencies>
 
-	<properties>
-		<slf4j.version>1.6.1</slf4j.version>
-		<portlet-api.version>2.0</portlet-api.version>
-		<spring.version>3.0.5.RELEASE</spring.version>
-		<servlet.version>1.2</servlet.version>
-		<servlet.jsp.version>2.1</servlet.jsp.version>
-	</properties>
 
 	<repositories>
 
@@ -85,6 +108,15 @@
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+		
+		<repository>
+			<id>org.jboss.repository.releases</id>
+			<name>JBoss Maven Release Repository</name>
+			<url>https://repository.jboss.org/nexus/content/repositories/releases</url>
+			<snapshots>
+				<enabled>false</enabled>
 			</snapshots>
 		</repository>
 
