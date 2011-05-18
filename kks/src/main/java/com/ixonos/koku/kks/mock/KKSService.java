@@ -10,19 +10,19 @@ public interface KKSService {
 
   public void create(String userRole);
 
-  public List<Lapsi> getChilds(User user);
+  public List<Henkilo> getChilds(User user);
 
-  public List<Kehitystieto> getEntries(Lapsi child);
+  public List<KehitystietoOLD> getEntries(Henkilo child);
 
-  public void addEntry(Lapsi child, String description, KKSKentta... fields);
+  public void addEntry(Henkilo child, String description, KKSKentta... fields);
 
-  public void addEntry(Kehitystieto entry);
+  public void addEntry(KehitystietoOLD entry);
 
-  public List<Lapsi> searchChilds(Lapsi target);
+  public List<Henkilo> searchChilds(Henkilo target);
 
-  public Lapsi getChild(String socialSecurityNumber);
+  public Henkilo getChild(String socialSecurityNumber);
 
-  public List<Kehitystieto> searchEntries(Lapsi child, List<KKSKentta> fields);
+  public List<KehitystietoOLD> searchEntries(Henkilo child, List<KKSKentta> fields);
 
   public KKSKentta getField(String fieldId);
 

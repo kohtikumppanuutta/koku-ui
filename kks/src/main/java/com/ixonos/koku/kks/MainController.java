@@ -2,8 +2,8 @@ package com.ixonos.koku.kks;
 
 import javax.portlet.RenderRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ public class MainController {
   @Qualifier("myKKSService")
   private KKSService service;
 
-  private static Log log = LogFactory.getLog(MainController.class);
+  private static Logger log = LoggerFactory.getLogger(MainController.class);
 
   @RenderMapping
   public String render(RenderRequest req, Model model) {

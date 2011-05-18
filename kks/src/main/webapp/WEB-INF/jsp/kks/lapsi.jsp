@@ -1,31 +1,13 @@
-<%@page
-	import="com.ixonos.koku.kks.utils.enums.SupportActivity"%>
-<%@page
-	import="com.ixonos.koku.kks.utils.enums.HealthCondition"%>
-<%@page import="com.ixonos.koku.kks.utils.enums.ChildInfo"%>
-<%@page
-	import="com.ixonos.koku.kks.utils.enums.AdvancementType"%>
-<%@page
-	import="com.ixonos.koku.kks.utils.enums.AdvancementField"%>
-<%@page import="com.ixonos.koku.kks.utils.enums.UIField"%>
 <%@ taglib prefix="portlet" uri="http://java.sun.com/portlet"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page contentType="text/html" isELIgnored="false"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 
-<fmt:setBundle basename="com.ixonos.eservices.koku.bundle.KokuBundle"/>
-
-<c:set var="advancementFieldValues"
-	value="<%=AdvancementField.values()%>" />
-<c:set var="advancementTypeValues" value="<%=AdvancementType.values()%>" />
-<c:set var="childInfoValues" value="<%=ChildInfo.values()%>" />
-<c:set var="healthConditionValues" value="<%=HealthCondition.values()%>" />
-<c:set var="supportActivityValues" value="<%=SupportActivity.values()%>" />
-<c:set var="uiField" value="<%=UIField.ALL%>" />
+<fmt:setBundle basename="com.ixonos.eservices.koku.bundle.KokuBundle" />
 
 
 <portlet:defineObjects />
@@ -35,156 +17,218 @@
 </portlet:renderURL>
 <portlet:actionURL var="lisaaActionUrl">
 	<portlet:param name="toiminto" value="lisaaTieto" />
-	<portlet:param name="hetu"
-		value="${lapsi.hetu}" />
+	<portlet:param name="hetu" value="${lapsi.hetu}" />
 </portlet:actionURL>
 <portlet:actionURL var="hakuActionUrl">
 	<portlet:param name="toiminto" value="hae" />
-	<portlet:param name="hetu"
-		value="${lapsi.hetu}" />
+	<portlet:param name="hetu" value="${lapsi.hetu}" />
 </portlet:actionURL>
 
 
 <div>
 
 	<div class="home">
-		<a href="${kotiUrl}"><spring:message code="ui.takaisin"/></a>
+		<a href="${kotiUrl}"><spring:message code="ui.takaisin" />
+		</a>
 	</div>
 
 </div>
 
-<div id="page">
+<div id="main" class="wide">
+	<h1>
+		${lapsi.sukunimi}
+		<spring:message code="ui.kks.otsikko" />
+	</h1>
 
+	<div id="page">
+		<table width="100%" border="0">
+			<tr>
+				<th>TIETOKOKOELMA
+				</td>
+				<th>VIIMEISIN KIRJAUS
+				<th>KIRJAUSTEN TILA
+			</tr>
 
-	<div id="main" class="wide">
-		<h1>${child.fullName} <spring:message code="ui.kks.otsikko"/></h1>
-		<a class="tieto"> <spring:message code="ui.lisaa.uusi.kehitystieto"/><span class="sulje"><spring:message code="ui.piilota"/></span>
-		</a>
-		<div class="tietokentta ">
-			<form:form name="addEntryForm" commandName="tieto" method="post"
-				action="${lisaaActionUrl}">
-				<form:textarea class="add" path="kuvaus"></form:textarea>
-				<span class="errors"><form:errors path="kuvaus" /> </span>
-			<spring:message code="ui.luokittele.kirjattava.tieto"/>
-			<div style="height: 300px;">
-					<div class="choose">
-						<spring:message code="ui.kehitystieto.kokoelma"/><br>
-						<c:forEach items="${advancementFieldValues}" var="afv">
-						<spring:message code="${afv.bundleId}" var="afvText"/>
-					 	<form:checkbox path="kentat" value="${ afv.id }" label="${afvText}" />
-					 	<br/>
-					 	</c:forEach>
-					</div>
-					<div class="choose">
-						<spring:message code="ui.lapsen.tiedot"/><br>
-						<c:forEach items="${childInfoValues}" var="civ">
-						<spring:message code="${civ.bundleId}" var="civText"/>
-					 	<form:checkbox path="kentat" value="${ civ.id }" label="${civText}" />
-					 	<br/>
-					 </c:forEach>
-						<span class="errors"><form:errors path="kentat" /> </span>
-					</div>
-				</div>
-				<input type="submit" value="<spring:message code="ui.tallenna.tieto"/>" class="tallenna">
-			</form:form>
-		</div>
+			<tr>
+				<td><span class="kokoelma"><a
+						href="ammattilainen_kks_4v.html">4-vuotistarkastus</a>
+				</span>
+				</td>
+				<td>Etunimi Sukunimi 12.5.2011</td>
+				<td>Aktiivinen</td>
+			</tr>
+			<tr>
+				<td><span class="kokoelma"><a href="#">Varhaiskasvatus
+							suunnitelma</a>
+				</span>
+				</td>
 
-		<form:form name="searchForm" commandName="haku" method="post"
-			action="${hakuActionUrl}">
-			<span class="pvm"> <spring:message code="ui.nayta.kokoelma"/> <form:select
-					path="paaKentta" class="kokoelmavalinta">
-					
-					<spring:message code="${uiField.bundleId}" var="allText"/>
-					<form:option value="${uiField.id}"
-						label="${allText}" />
-					
-					<c:forEach items="${advancementFieldValues}" var="current">
-						<spring:message code="${current.bundleId}" var="afText"/>
-					 	<form:option value="${current.id}"
-						label="${ afText }" />
-					 </c:forEach>
+				<td>Etunimi Sukunimi 10.4.2011</td>
+				<td>Lukittu</td>
+			</tr>
+		</table>
+		<p>
+			<br> AKTIVOI UUSI TIETOKOKOELMA<span class="uusi">VALITSE
+				KOKOELMA: <select name="select3" class="kokoelmavalinta">
+					<option></option>
+					<option>esiopetukseen siirtyminen</option>
 
-				</form:select> </span>
-			<a class="tieto small"><spring:message code="ui.tarkempi.haku"/><span class="sulje"><spring:message code="ui.piilota"/></span>
-			</a>
+					<option>kouluun siirtyminen</option>
+					<option>tuen tarpeen muutokset</option>
+			</select> </span>AKTIIVINEN KIRJAUSAIKA: Alkaa: <select name="select"
+				class="syntmaika">
+				<option>01</option>
+				<option>02</option>
+				<option>03</option>
 
-			<div class="tietokentta">
-				<div style="height: 300px;">
-					<div class="choose">
-						<spring:message code="ui.kehitystieto.kokoelma"/><br>
-						
-					<c:forEach items="${advancementFieldValues}" var="afv">
-						<spring:message code="${afv.bundleId}" var="afvText"/>
-					 	<form:checkbox path="kentat" value="${ afv.id }" label="${afvText}" />
-					 	<br/>
-					 </c:forEach>
-						
-					</div>
-					<div class="choose">
-						<spring:message code="ui.lapsen.tiedot"/><br>
-						
-						<c:forEach items="${childInfoValues}" var="civ">
-						<spring:message code="${civ.bundleId}" var="civText"/>
-					 	<form:checkbox path="kentat" value="${ civ.id }" label="${civText}" />
-					 	<br/>
-					 </c:forEach>
-						<span class="errors"><form:errors path="kentat" /> </span>
-					</div>
-				</div>
-				<input type="submit" value="<spring:message code="ui.hae.tiedot"/>" class="tallenna">
-			</div>
+				<option>04</option>
+				<option>05</option>
+				<option>06</option>
+				<option>07</option>
+				<option>08</option>
+				<option>09</option>
 
-		</form:form>
+				<option>10</option>
+				<option>11</option>
+				<option>12</option>
+				<option>13</option>
+				<option>14</option>
+				<option>15</option>
 
-		<div id="child">
+				<option>16</option>
+				<option>17</option>
+				<option>18</option>
+				<option>19</option>
+				<option>20</option>
+				<option>21</option>
 
-			<c:if test="${not empty kentat}">
+				<option>22</option>
+				<option>23</option>
+				<option>24</option>
+				<option>25</option>
+				<option>26</option>
+				<option>27</option>
 
-				<c:forEach var="kentta" items="${kentat}">
+				<option>28</option>
+				<option>29</option>
+				<option>30</option>
+				<option>31</option>
+			</select> <select name="select2" class="syntmaika">
+				<option>01</option>
 
-					<div id="kentta">
+				<option>02</option>
+				<option>03</option>
+				<option>04</option>
+				<option>05</option>
+				<option>06</option>
+				<option>07</option>
 
-						<span class="entry.title"> <strong><fmt:formatDate
-									value="${kentta.pvm}" /> ${kentta.lapsi.sukunimi}, ${
-								kentta.lapsi.etunimi} </strong> </span>
-						<div class="entry.description">
-							<c:out value="${kentta.kuvaus}" />
-						</div>
+				<option>08</option>
+				<option>09</option>
+				<option>10</option>
+				<option>11</option>
+				<option>12</option>
+			</select> <select name="select2" class="syntmaika">
+				<option>2010</option>
+				<option>2011</option>
+				<option>2012</option>
+				<option>2013</option>
+				<option>2014</option>
 
-						<c:forEach items="${kentta.kentat}" var="tmp" varStatus="status">						
-							<spring:message code="${tmp.bundleId}" var="tmp2"/>
-							${fn:toUpperCase(tmp2)}
-							${not status.last ? ',' : ''}
-						</c:forEach>
+				<option>2015</option>
+				<option>2016</option>
+				<option>2017</option>
+				<option>2018</option>
+				<option>2019</option>
+			</select> - Loppuu: <select name="select2" class="syntmaika">
+				<option>01</option>
+				<option>02</option>
+				<option>03</option>
+				<option>04</option>
+				<option>05</option>
 
-						<div class="clearer">
-							<br>
-						</div>
-					</div>
-				</c:forEach>
+				<option>06</option>
+				<option>07</option>
+				<option>08</option>
+				<option>09</option>
+				<option>10</option>
+				<option>11</option>
 
+				<option>12</option>
+				<option>13</option>
+				<option>14</option>
+				<option>15</option>
+				<option>16</option>
+				<option>17</option>
 
-			</c:if>
+				<option>18</option>
+				<option>19</option>
+				<option>20</option>
+				<option>21</option>
+				<option>22</option>
+				<option>23</option>
 
-		</div>
+				<option>24</option>
+				<option>25</option>
+				<option>26</option>
+				<option>27</option>
+				<option>28</option>
+				<option>29</option>
+
+				<option>30</option>
+				<option>31</option>
+			</select> <select name="select2" class="syntmaika">
+				<option>01</option>
+				<option>02</option>
+				<option>03</option>
+
+				<option>04</option>
+				<option>05</option>
+				<option>06</option>
+				<option>07</option>
+				<option>08</option>
+				<option>09</option>
+
+				<option>10</option>
+				<option>11</option>
+				<option>12</option>
+			</select> <select name="select2" class="syntmaika">
+				<option>2010</option>
+				<option>2011</option>
+
+				<option>2012</option>
+				<option>2013</option>
+				<option>2014</option>
+				<option>2015</option>
+				<option>2016</option>
+				<option>2017</option>
+
+				<option>2018</option>
+				<option>2019</option>
+			</select>
+		</p>
+		<span class="viestintiedot"> <input type="submit"
+			class="tallenna" value="Aktivoi kokolema"> </span>
+
 	</div>
+</div>
 
 
 
 
 
-	<script type="text/javascript"
-		src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
-	<script type="text/javascript"
-		src="http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.4.js"></script>
-	<script type="text/javascript">
-		$(document).ready(function() {
+<script type="text/javascript"
+	src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
+<script type="text/javascript"
+	src="http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.4.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
 
-			$(".tietokentta").hide();
+		$(".tietokentta").hide();
 
-			$("a.tieto").click(function() {
-				$(this).toggleClass("active").next().slideToggle("fast");
-			});
-
+		$("a.tieto").click(function() {
+			$(this).toggleClass("active").next().slideToggle("fast");
 		});
-	</script>
+
+	});
+</script>

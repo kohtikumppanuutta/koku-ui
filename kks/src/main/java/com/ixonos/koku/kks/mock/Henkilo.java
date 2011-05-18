@@ -1,19 +1,20 @@
 package com.ixonos.koku.kks.mock;
 
-public class Lapsi {
+public class Henkilo {
 
   private String etunimi;
   private String toinenNimi;
   private String sukunimi;
   private String hetu;
+  private KKS kks;
 
-  public Lapsi() {
+  public Henkilo() {
     this.etunimi = "";
     this.toinenNimi = "";
     this.sukunimi = "";
   }
 
-  public Lapsi(String etuNimi, String toinenNimi, String sukuNimi, String hetu) {
+  public Henkilo(String etuNimi, String toinenNimi, String sukuNimi, String hetu) {
     this.etunimi = etuNimi;
     this.toinenNimi = toinenNimi;
     this.sukunimi = sukuNimi;
@@ -50,6 +51,22 @@ public class Lapsi {
 
   public void setHetu(String hetu) {
     this.hetu = hetu;
+  }
+
+  public String getId() {
+    return getHetu();
+  }
+
+  public KKS getKks() {
+    return kks;
+  }
+
+  public void setKks(KKS kks) {
+    this.kks = kks;
+  }
+
+  public String getNimi() {
+    return etunimi + " " + sukunimi;
   }
 
 }

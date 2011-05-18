@@ -9,19 +9,13 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import com.ixonos.koku.kks.utils.enums.AdvancementField;
-import com.ixonos.koku.kks.utils.enums.AdvancementType;
-import com.ixonos.koku.kks.utils.enums.ChildInfo;
-import com.ixonos.koku.kks.utils.enums.HealthCondition;
 import com.ixonos.koku.kks.utils.enums.KKSKentta;
-import com.ixonos.koku.kks.utils.enums.SupportActivity;
-import com.ixonos.koku.kks.utils.enums.UIField;
 
 @Service(value = "myKKSService")
 public class KKSServiceImpl implements KKSService {
 
   private User user;
-  private KKSModel model;
+  private KKSMockModel model;
   private Map<String, KKSKentta> fields;
 
   public User getUser() {
@@ -35,14 +29,14 @@ public class KKSServiceImpl implements KKSService {
     fields = createFieldsMap();
   }
 
-  public List<Lapsi> getChilds(User user) {
+  public List<Henkilo> getChilds(User user) {
     return model.getChilds();
   }
 
-  public List<Kehitystieto> getEntries(Lapsi child) {
-    List<Kehitystieto> tmp = new ArrayList<Kehitystieto>();
+  public List<KehitystietoOLD> getEntries(Henkilo child) {
+    List<KehitystietoOLD> tmp = new ArrayList<KehitystietoOLD>();
 
-    for (Kehitystieto e : model.getEntries()) {
+    for (KehitystietoOLD e : model.getEntries()) {
       if (e.getLapsi().equals(child)) {
         tmp.add(e);
       }
@@ -50,9 +44,9 @@ public class KKSServiceImpl implements KKSService {
     return tmp;
   }
 
-  public void addEntry(Lapsi child, String description, KKSKentta... fields) {
-    Kehitystieto tmp = new Kehitystieto(new Date(System.currentTimeMillis()),
-        description);
+  public void addEntry(Henkilo child, String description, KKSKentta... fields) {
+    KehitystietoOLD tmp = new KehitystietoOLD(new Date(
+        System.currentTimeMillis()), description);
     tmp.setLapsi(child);
 
     if (fields != null) {
@@ -61,9 +55,9 @@ public class KKSServiceImpl implements KKSService {
     model.addEntry(tmp);
   }
 
-  public List<Lapsi> searchChilds(Lapsi target) {
-    List<Lapsi> list = new ArrayList<Lapsi>();
-    Lapsi tmp = getChild(target.getHetu());
+  public List<Henkilo> searchChilds(Henkilo target) {
+    List<Henkilo> list = new ArrayList<Henkilo>();
+    Henkilo tmp = getChild(target.getHetu());
 
     if (tmp != null && tmp.getEtunimi().equals(target.getEtunimi())
         && tmp.getSukunimi().equals(target.getSukunimi())) {
@@ -73,14 +67,11 @@ public class KKSServiceImpl implements KKSService {
     return list;
   }
 
-  public List<Kehitystieto> searchEntries(Lapsi child, List<KKSKentta> fields) {
+  public List<KehitystietoOLD> searchEntries(Henkilo child,
+      List<KKSKentta> fields) {
 
-    if (fields.contains(UIField.ALL)) {
-      return getEntries(child);
-    }
-
-    List<Kehitystieto> tmp = new ArrayList<Kehitystieto>();
-    for (Kehitystieto e : model.getEntries()) {
+    List<KehitystietoOLD> tmp = new ArrayList<KehitystietoOLD>();
+    for (KehitystietoOLD e : model.getEntries()) {
       if (e.getLapsi().equals(child) && e.hasAtLeastOne(fields)) {
         tmp.add(e);
       }
@@ -88,8 +79,8 @@ public class KKSServiceImpl implements KKSService {
     return tmp;
   }
 
-  public Lapsi getChild(String socialSecurityNumber) {
-    for (Lapsi tmp : model.getChilds()) {
+  public Henkilo getChild(String socialSecurityNumber) {
+    for (Henkilo tmp : model.getChilds()) {
       if (tmp.getHetu().equals(socialSecurityNumber)) {
         return tmp;
       }
@@ -97,7 +88,7 @@ public class KKSServiceImpl implements KKSService {
     return null;
   }
 
-  public void addEntry(Kehitystieto entry) {
+  public void addEntry(KehitystietoOLD entry) {
     model.addEntry(entry);
   }
 
@@ -107,30 +98,6 @@ public class KKSServiceImpl implements KKSService {
 
   private Map<String, KKSKentta> createFieldsMap() {
     Map<String, KKSKentta> tmp = new HashMap<String, KKSKentta>();
-
-    for (AdvancementField field : AdvancementField.values()) {
-      tmp.put(field.getId(), field);
-    }
-
-    for (AdvancementType field : AdvancementType.values()) {
-      tmp.put(field.getId(), field);
-    }
-
-    for (ChildInfo field : ChildInfo.values()) {
-      tmp.put(field.getId(), field);
-    }
-
-    for (HealthCondition field : HealthCondition.values()) {
-      tmp.put(field.getId(), field);
-    }
-
-    for (SupportActivity field : SupportActivity.values()) {
-      tmp.put(field.getId(), field);
-    }
-
-    for (UIField field : UIField.values()) {
-      tmp.put(field.getId(), field);
-    }
 
     return tmp;
 
