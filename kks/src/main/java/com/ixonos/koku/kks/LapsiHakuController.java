@@ -18,18 +18,18 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 
 import com.ixonos.koku.kks.mock.Henkilo;
 import com.ixonos.koku.kks.mock.KKSService;
-import com.ixonos.koku.kks.utils.KKSKenttaEditor;
+import com.ixonos.koku.kks.utils.KehitystietoTyyppiEditor;
 import com.ixonos.koku.kks.utils.enums.KKSKentta;
 
 @Controller(value = "kksHakuController")
 @RequestMapping(value = "VIEW")
-public class KKSHakuController {
+public class LapsiHakuController {
 
   @Autowired
   @Qualifier("myKKSService")
   private KKSService service;
 
-  private static Logger log = LoggerFactory.getLogger(KKSHakuController.class);
+  private static Logger log = LoggerFactory.getLogger(LapsiHakuController.class);
 
   @ActionMapping(params = "toiminto=hae")
   public void hae(@ModelAttribute(value = "lapsi") Henkilo lapsi,
@@ -44,7 +44,7 @@ public class KKSHakuController {
   @InitBinder("haku")
   public void initBinder(WebDataBinder binder) {
     log.debug("init binder");
-    binder.registerCustomEditor(KKSKentta.class, new KKSKenttaEditor(service));
+    binder.registerCustomEditor(KKSKentta.class, new KehitystietoTyyppiEditor(service));
   }
 
   @ModelAttribute("lapsi")

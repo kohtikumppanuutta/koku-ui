@@ -36,7 +36,7 @@
 
 <div id="main" class="wide">
 	<h1>
-		${lapsi.sukunimi}
+		${lapsi.nimi}
 		<spring:message code="ui.kks.otsikko" />
 	</h1>
 
@@ -49,23 +49,36 @@
 				<th>KIRJAUSTEN TILA
 			</tr>
 
+		<c:if test="${not empty tiedot}">
+			<c:forEach var="tieto" items="${tiedot}">
 			<tr>
-				<td><span class="kokoelma"><a
-						href="ammattilainen_kks_4v.html">4-vuotistarkastus</a>
+				<td><span class="kokoelma">
+				
+				<a
+						href="
+						<portlet:actionURL>
+							<portlet:param name="toiminto" value="naytaKehitystieto" />
+							<portlet:param name="hetu" value="${tieto.tyyppi}" />
+						</portlet:actionURL>">
+						<strong>${ tieto.nimi }</strong> </a> 
+						
 				</span>
 				</td>
-				<td>Etunimi Sukunimi 12.5.2011</td>
-				<td>Aktiivinen</td>
+				<td>${ tieto.muokkaaja } ${ tieto.muokkausPvm }</td>
+				<td>
+					<c:choose>
+				<c:when test="${tieto.tila.aktiivinen}">
+						Aktiivinen
+					</c:when>
+					<c:otherwise>
+						Lukittu
+					</c:otherwise>
+						</c:choose>
+				</td>
 			</tr>
-			<tr>
-				<td><span class="kokoelma"><a href="#">Varhaiskasvatus
-							suunnitelma</a>
-				</span>
-				</td>
+			</c:forEach>
+			</c:if>
 
-				<td>Etunimi Sukunimi 10.4.2011</td>
-				<td>Lukittu</td>
-			</tr>
 		</table>
 		<p>
 			<br> AKTIVOI UUSI TIETOKOKOELMA<span class="uusi">VALITSE

@@ -3,18 +3,18 @@ package com.ixonos.koku.kks.utils;
 import java.beans.PropertyEditorSupport;
 
 import com.ixonos.koku.kks.mock.KKSService;
-import com.ixonos.koku.kks.utils.enums.KKSKentta;
+import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
 
 /**
- * Property editor for KKSField type properties.
+ * Property editor for KehitystietoTyyppi type properties.
  * 
  * @author tuomape
  */
-public class KKSKenttaEditor extends PropertyEditorSupport {
+public class KehitystietoTyyppiEditor extends PropertyEditorSupport {
 
   private KKSService service;
 
-  public KKSKenttaEditor(KKSService service) {
+  public KehitystietoTyyppiEditor(KKSService service) {
     super();
     this.service = service;
   }
@@ -22,8 +22,8 @@ public class KKSKenttaEditor extends PropertyEditorSupport {
   @Override
   public String getAsText() {
     String returnVal = "";
-    if (getValue() instanceof KKSKentta) {
-      returnVal = ((KKSKentta) getValue()).getId();
+    if (getValue() instanceof KehitystietoTyyppi) {
+      returnVal = ((KehitystietoTyyppi) getValue()).toString();
     }
     if (getValue() != null && getValue() instanceof String[]) {
       returnVal = ((String[]) getValue())[0];

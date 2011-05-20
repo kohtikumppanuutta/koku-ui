@@ -1,8 +1,6 @@
 package com.ixonos.koku.kks.mock;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,13 +8,14 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.ixonos.koku.kks.utils.enums.KKSKentta;
+import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
 
 @Service(value = "myKKSService")
 public class KKSServiceImpl implements KKSService {
 
   private User user;
   private KKSMockModel model;
-  private Map<String, KKSKentta> fields;
+  private Map<String, KehitystietoTyyppi> fields;
 
   public User getUser() {
     return user;
@@ -33,26 +32,13 @@ public class KKSServiceImpl implements KKSService {
     return model.getChilds();
   }
 
-  public List<KehitystietoOLD> getEntries(Henkilo child) {
-    List<KehitystietoOLD> tmp = new ArrayList<KehitystietoOLD>();
+  public List<Kehitystieto> getEntries(Henkilo child) {
 
-    for (KehitystietoOLD e : model.getEntries()) {
-      if (e.getLapsi().equals(child)) {
-        tmp.add(e);
-      }
-    }
-    return tmp;
+    return new ArrayList<Kehitystieto>(child.getKks().getKehitystiedot());
   }
 
   public void addEntry(Henkilo child, String description, KKSKentta... fields) {
-    KehitystietoOLD tmp = new KehitystietoOLD(new Date(
-        System.currentTimeMillis()), description);
-    tmp.setLapsi(child);
 
-    if (fields != null) {
-      tmp.setKentat(Arrays.asList(fields));
-    }
-    model.addEntry(tmp);
   }
 
   public List<Henkilo> searchChilds(Henkilo target) {
@@ -67,16 +53,9 @@ public class KKSServiceImpl implements KKSService {
     return list;
   }
 
-  public List<KehitystietoOLD> searchEntries(Henkilo child,
-      List<KKSKentta> fields) {
+  public List<Kehitystieto> searchEntries(Henkilo child, List<KKSKentta> fields) {
 
-    List<KehitystietoOLD> tmp = new ArrayList<KehitystietoOLD>();
-    for (KehitystietoOLD e : model.getEntries()) {
-      if (e.getLapsi().equals(child) && e.hasAtLeastOne(fields)) {
-        tmp.add(e);
-      }
-    }
-    return tmp;
+    return getEntries(child);
   }
 
   public Henkilo getChild(String socialSecurityNumber) {
@@ -88,19 +67,22 @@ public class KKSServiceImpl implements KKSService {
     return null;
   }
 
-  public void addEntry(KehitystietoOLD entry) {
+  public void addEntry(Kehitystieto entry) {
     model.addEntry(entry);
   }
 
-  public KKSKentta getField(String fieldId) {
+  public KehitystietoTyyppi getField(String fieldId) {
     return fields.get(fieldId);
   }
 
-  private Map<String, KKSKentta> createFieldsMap() {
-    Map<String, KKSKentta> tmp = new HashMap<String, KKSKentta>();
+  private Map<String, KehitystietoTyyppi> createFieldsMap() {
+    Map<String, KehitystietoTyyppi> tmp = new HashMap<String, KehitystietoTyyppi>();
+
+    for (KehitystietoTyyppi kt : KehitystietoTyyppi.values()) {
+      tmp.put(kt.toString(), kt);
+    }
 
     return tmp;
 
   }
-
 }

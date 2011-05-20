@@ -3,6 +3,7 @@ package com.ixonos.koku.kks.mock;
 import java.util.List;
 
 import com.ixonos.koku.kks.utils.enums.KKSKentta;
+import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
 
 public interface KKSService {
 
@@ -12,18 +13,18 @@ public interface KKSService {
 
   public List<Henkilo> getChilds(User user);
 
-  public List<KehitystietoOLD> getEntries(Henkilo child);
+  public List<Kehitystieto> getEntries(Henkilo child);
 
   public void addEntry(Henkilo child, String description, KKSKentta... fields);
 
-  public void addEntry(KehitystietoOLD entry);
+  public void addEntry(Kehitystieto entry);
 
   public List<Henkilo> searchChilds(Henkilo target);
 
   public Henkilo getChild(String socialSecurityNumber);
 
-  public List<KehitystietoOLD> searchEntries(Henkilo child, List<KKSKentta> fields);
+  public List<Kehitystieto> searchEntries(Henkilo child, List<KKSKentta> fields);
 
-  public KKSKentta getField(String fieldId);
+  public KehitystietoTyyppi getField(String fieldId);
 
 }

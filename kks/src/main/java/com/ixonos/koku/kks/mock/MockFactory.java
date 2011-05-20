@@ -1,6 +1,6 @@
 package com.ixonos.koku.kks.mock;
 
-import java.util.Date;
+import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
 
 public class MockFactory {
 
@@ -8,37 +8,42 @@ public class MockFactory {
 
     Henkilo c1 = new Henkilo("Etu1", "Toka1", "Sukunimi1", "270608-223Z");
     Henkilo c2 = new Henkilo("Etu2", "Toka2", "Sukunimi2", "200107-211Y");
-
+    createNewEntry(c1);
+    createNewEntry1(c2);
     KKSMockModel tmp = new KKSMockModel();
     tmp.addChild(c1);
     tmp.addChild(c2);
 
-    tmp.addEntry(createEntry1(c1));
-    tmp.addEntry(createEntry2(c1));
-    tmp.addEntry(createEntry3(c2));
-
     return tmp;
   }
 
-  public static KehitystietoOLD createEntry1(Henkilo c) {
-    KehitystietoOLD entry1 = new KehitystietoOLD(new Date(
-        System.currentTimeMillis()), "Pituus 123cm, paino 22kg. Ryhti hyvä.");
-    entry1.setLapsi(c);
+  public static Kehitystieto createNewEntry(Henkilo c) {
+    Kehitystieto entry1 = new DefaultKehitysTieto("1",
+        KehitystietoTyyppi.LAPSEN_KEHITYS, "Lapsen kehitys");
+    Kehitystieto entry2 = new DefaultKehitysTieto("2",
+        KehitystietoTyyppi.TUKITARVE, "Lapsen tukitarpeet");
+    Kehitystieto entry3 = new DefaultKehitysTieto("3",
+        KehitystietoTyyppi.TERVEYDEN_TILA, "Lapsen terveydentila");
+    KKS tmp = new KKS();
+    tmp.addKehitystieto(entry1);
+    tmp.addKehitystieto(entry2);
+    tmp.addKehitystieto(entry3);
+    c.setKks(tmp);
     return entry1;
   }
 
-  public static KehitystietoOLD createEntry2(Henkilo c) {
-    KehitystietoOLD entry1 = new KehitystietoOLD(
-        new Date(System.currentTimeMillis()),
-        "Oppi ajamaan pyörällä ilman apupyöriä. Ajaa jo pitkiä matkoja. Voi alkaa kulkea koulumatkoja pyörällä");
-    entry1.setLapsi(c);
-    return entry1;
-  }
-
-  public static KehitystietoOLD createEntry3(Henkilo c) {
-    KehitystietoOLD entry1 = new KehitystietoOLD(new Date(
-        System.currentTimeMillis()), "Lähineuvola lakkautusuhan alla");
-    entry1.setLapsi(c);
+  public static Kehitystieto createNewEntry1(Henkilo c) {
+    Kehitystieto entry1 = new DefaultKehitysTieto("4",
+        KehitystietoTyyppi.LAPSEN_KEHITYS, "Lapsen kehitys");
+    Kehitystieto entry2 = new DefaultKehitysTieto("5",
+        KehitystietoTyyppi.TUKITARVE, "Lapsen tukitarpeet");
+    Kehitystieto entry3 = new DefaultKehitysTieto("6",
+        KehitystietoTyyppi.TERVEYDEN_TILA, "Lapsen terveydentila");
+    KKS tmp = new KKS();
+    tmp.addKehitystieto(entry1);
+    tmp.addKehitystieto(entry2);
+    tmp.addKehitystieto(entry3);
+    c.setKks(tmp);
     return entry1;
   }
 }

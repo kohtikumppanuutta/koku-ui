@@ -1,5 +1,5 @@
 package com.ixonos.koku.kks.utils.enums;
 
-public enum KehitystietoTila {
+public enum Tila {
   AKTIIVINEN, LUKITTU
 }
