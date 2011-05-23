@@ -7,7 +7,10 @@ import com.ixonos.koku.kks.utils.enums.KehitysAsiaTyyppi;
 
 public class KehitysAsia {
 
+  private String id;
   private String nimi;
+  private String muokkaaja;
+  private String muokkausPvm;
   private KehitysAsiaTyyppi tyyppi;
   private Map<String, KKSProperty> properties;
 
@@ -44,6 +47,31 @@ public class KehitysAsia {
 
   public void setTyyppi(KehitysAsiaTyyppi tyyppi) {
     this.tyyppi = tyyppi;
+  }
+
+  public String getId() {
+    // TODO: Oikea id hanskaus
+    return getNimi();
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public String getMuokkaaja() {
+    return muokkaaja;
+  }
+
+  public void setMuokkaaja(String muokkaaja) {
+    this.muokkaaja = muokkaaja;
+  }
+
+  public String getMuokkausPvm() {
+    return muokkausPvm;
+  }
+
+  public void setMuokkausPvm(String muokkausPvm) {
+    this.muokkausPvm = muokkausPvm;
   }
 
 }

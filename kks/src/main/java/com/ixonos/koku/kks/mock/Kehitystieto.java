@@ -84,7 +84,15 @@ public abstract class Kehitystieto {
   }
 
   public void addKehitysAsia(KehitysAsia asia) {
-    kehitysAsiat.put(asia.getNimi(), asia);
+    kehitysAsiat.put(asia.getId(), asia);
+  }
+
+  public void removeKehitysAsia(String id) {
+    kehitysAsiat.remove(id);
+  }
+
+  public KehitysAsia getKehitysAsia(String id) {
+    return kehitysAsiat.get(id);
   }
 
 }

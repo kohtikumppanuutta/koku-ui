@@ -1,5 +1,7 @@
 package com.ixonos.koku.kks.mock;
 
+import java.util.Date;
+
 import com.ixonos.koku.kks.utils.enums.KehitysAsiaTyyppi;
 import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
 
@@ -21,14 +23,22 @@ public class MockFactory {
   public static Kehitystieto createNewEntry(Henkilo c) {
     Kehitystieto entry1 = new DefaultKehitysTieto("1",
         KehitystietoTyyppi.LAPSEN_KEHITYS, "Lapsen kehitys");
+
+    entry1.setMuokkausPvm(new Date());
+    entry1.setMuokkaaja("Mikko Muokkaaja");
+
     Kehitystieto entry2 = new DefaultKehitysTieto("2",
         KehitystietoTyyppi.TUKITARVE, "Lapsen tukitarpeet");
 
     entry2.addKehitysAsia(createTukiTarve("Tukitarve 1"));
     entry2.addKehitysAsia(createTukiTarve("Tukitarve 2"));
+    entry2.setMuokkausPvm(new Date());
+    entry2.setMuokkaaja("Mikko Muokkaaja");
 
     Kehitystieto entry3 = new DefaultKehitysTieto("3",
         KehitystietoTyyppi.TERVEYDEN_TILA, "Lapsen terveydentila");
+    entry3.setMuokkausPvm(new Date());
+    entry3.setMuokkaaja("Mikko Muokkaaja");
     KKS tmp = new KKS();
     tmp.addKehitystieto(entry1);
     tmp.addKehitystieto(entry2);
@@ -41,10 +51,16 @@ public class MockFactory {
     Kehitystieto entry1 = new DefaultKehitysTieto("4",
         KehitystietoTyyppi.LAPSEN_KEHITYS, "Lapsen kehitys");
     entry1.addKehitysAsia(createTukiTarve("Tukitarve 1"));
+    entry1.setMuokkausPvm(new Date());
+    entry1.setMuokkaaja("Mikko Muokkaaja");
     Kehitystieto entry2 = new DefaultKehitysTieto("5",
         KehitystietoTyyppi.TUKITARVE, "Lapsen tukitarpeet");
+    entry2.setMuokkausPvm(new Date());
+    entry2.setMuokkaaja("Mikko Muokkaaja");
     Kehitystieto entry3 = new DefaultKehitysTieto("6",
         KehitystietoTyyppi.TERVEYDEN_TILA, "Lapsen terveydentila");
+    entry3.setMuokkausPvm(new Date());
+    entry3.setMuokkaaja("Mikko Muokkaaja");
     KKS tmp = new KKS();
     tmp.addKehitystieto(entry1);
     tmp.addKehitystieto(entry2);
@@ -54,7 +70,8 @@ public class MockFactory {
   }
 
   private static KehitysAsia createTukiTarve(String nimi) {
-    KehitysAsia tmp = new KehitysAsia("Tukitarve 1", KehitysAsiaTyyppi.MITTAUS);
+    KehitysAsia tmp = new KehitysAsia("Tukitarve 1",
+        KehitysAsiaTyyppi.TUKITARVE);
     tmp.addProperty(new KKSProperty("kuvaus", nimi + " kuvaus"));
     tmp.addProperty(new KKSProperty("tehtavat", nimi + " tehtävät"));
     return tmp;
