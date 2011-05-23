@@ -54,7 +54,7 @@
 						<td><span class="kokoelma"> <a
 								href="
 						<portlet:actionURL>
-							<portlet:param name="toiminto" value="naytaKehitystieto" />
+							<portlet:param name="toiminto" value="kehitysTietoihin" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
 							<portlet:param name="tyyppi" value="${tieto.tyyppi}" />
 						</portlet:actionURL>">

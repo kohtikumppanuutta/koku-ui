@@ -4,7 +4,12 @@ import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
 
 public class ViewHelper {
 
-  public static String navigate(KehitystietoTyyppi tyyppi) {
+  public static String toiminto(KehitystietoTyyppi tyyppi) {
+
+    switch (tyyppi) {
+    case TUKITARVE:
+      return "naytaTukitoimet";
+    }
     return "";
   }
 }

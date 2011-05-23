@@ -55,9 +55,8 @@ public class MockFactory {
 
   private static KehitysAsia createTukiTarve(String nimi) {
     KehitysAsia tmp = new KehitysAsia("Tukitarve 1", KehitysAsiaTyyppi.MITTAUS);
-    tmp.addProperty(new KKSProperty("Tarpeen kuvaus", nimi + " kuvaus"));
-    tmp.addProperty(new KKSProperty("täyttämiseen liittyvät tehtävät", nimi
-        + " tehtävät"));
+    tmp.addProperty(new KKSProperty("kuvaus", nimi + " kuvaus"));
+    tmp.addProperty(new KKSProperty("tehtavat", nimi + " tehtävät"));
     return tmp;
   }
 }
