@@ -1,6 +1,7 @@
 package com.ixonos.koku.kks.mock;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
@@ -21,11 +22,18 @@ public abstract class Kehitystieto {
 
   private Map<String, KKSProperty> properties;
 
+  private Map<String, KehitysAsia> kehitysAsiat;
+
   public abstract String getId();
 
   public abstract KehitystietoTyyppi getTyyppi();
 
   public abstract String getNimi();
+
+  protected void init() {
+    properties = new HashMap<String, KKSProperty>();
+    kehitysAsiat = new HashMap<String, KehitysAsia>();
+  }
 
   public String getMuokkaaja() {
     return muokkaaja;
@@ -66,4 +74,17 @@ public abstract class Kehitystieto {
   public KKSProperty getProperty(String name) {
     return properties.get(name);
   }
+
+  public Map<String, KehitysAsia> getKehitysAsiat() {
+    return kehitysAsiat;
+  }
+
+  public void setKehitysAsiat(Map<String, KehitysAsia> kehitysAsiat) {
+    this.kehitysAsiat = kehitysAsiat;
+  }
+
+  public void addKehitysAsia(KehitysAsia asia) {
+    kehitysAsiat.put(asia.getNimi(), asia);
+  }
+
 }

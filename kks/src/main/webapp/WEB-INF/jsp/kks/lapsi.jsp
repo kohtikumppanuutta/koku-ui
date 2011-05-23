@@ -28,8 +28,7 @@
 <div>
 
 	<div class="home">
-		<a href="${kotiUrl}"><spring:message code="ui.takaisin" />
-		</a>
+		<a href="${kotiUrl}"><spring:message code="ui.takaisin" /> </a>
 	</div>
 
 </div>
@@ -49,73 +48,65 @@
 				<th>KIRJAUSTEN TILA
 			</tr>
 
-		<c:if test="${not empty tiedot}">
-			<c:forEach var="tieto" items="${tiedot}">
-			<tr>
-				<td><span class="kokoelma">
-				
-				<a
-						href="
+			<c:if test="${not empty tiedot}">
+				<c:forEach var="tieto" items="${tiedot}">
+					<tr>
+						<td><span class="kokoelma"> <a
+								href="
 						<portlet:actionURL>
 							<portlet:param name="toiminto" value="naytaKehitystieto" />
-							<portlet:param name="hetu" value="${tieto.tyyppi}" />
+							<portlet:param name="hetu" value="${lapsi.hetu}" />
+							<portlet:param name="tyyppi" value="${tieto.tyyppi}" />
 						</portlet:actionURL>">
-						<strong>${ tieto.nimi }</strong> </a> 
-						
-				</span>
-				</td>
-				<td>${ tieto.muokkaaja } ${ tieto.muokkausPvm }</td>
-				<td>
-					<c:choose>
-				<c:when test="${tieto.tila.aktiivinen}">
+									<strong>${ tieto.nimi }</strong> </a> </span></td>
+						<td>${ tieto.muokkaaja } ${ tieto.muokkausPvm }</td>
+						<td><c:choose>
+								<c:when test="${tieto.tila.aktiivinen}">
 						Aktiivinen
 					</c:when>
-					<c:otherwise>
+								<c:otherwise>
 						Lukittu
 					</c:otherwise>
-						</c:choose>
-				</td>
-			</tr>
-			</c:forEach>
+							</c:choose></td>
+					</tr>
+				</c:forEach>
 			</c:if>
 
 		</table>
 		<div>
 
-<form:form name="aktivointiForm" commandName="aktivointi" method="post"
-			action="${aktivointiActionUrl}">
-			
-			<div>
-			<br> AKTIVOI UUSI TIETOKOKOELMA
-			<span class="pvm"> <spring:message code="ui.valitse.kokoelma"/> <form:select
-					path="aktivoitavaKentta" class="kokoelmavalinta">
-					
-					<form:option value=""
-						label="" />
-					
-					
-					<c:forEach var="tieto" items="${tiedot}">
-					 	<form:option value="${tieto.tyyppi}"
-						label="${ tieto.nimi }" />
-					 </c:forEach>
-</form:select>
-</span>
+			<form:form name="aktivointiForm" commandName="aktivointi"
+				method="post" action="${aktivointiActionUrl}">
 
-</div>
-		
-<div>			
-			 </span>AKTIIVINEN KIRJAUSAIKA: Alkaa (DD/MM/YYYY): 
-			 
-			 <form:input path="alkaa"/>
-			 - Loppuu: <form:input path="loppuu"/>
-			
-			</div>
-			<span class="viestintiedot"> <input type="submit"
-			class="tallenna" value="Aktivoi kokolema"> </span>
-		</form:form>
+				<div>
+					<br> AKTIVOI UUSI TIETOKOKOELMA <span class="pvm"> <spring:message
+							code="ui.valitse.kokoelma" /> <form:select
+							path="aktivoitavaKentta" class="kokoelmavalinta">
+
+							<form:option value="" label="" />
+
+
+							<c:forEach var="tieto" items="${tiedot}">
+								<form:option value="${tieto.tyyppi}" label="${ tieto.nimi }" />
+							</c:forEach>
+						</form:select> </span>
+
+				</div>
+
+				<div>
+					</span>AKTIIVINEN KIRJAUSAIKA: Alkaa (DD/MM/YYYY):
+
+					<form:input path="alkaa" />
+					- Loppuu:
+					<form:input path="loppuu" />
+
+				</div>
+				<span class="viestintiedot"> <input type="submit"
+					class="tallenna" value="Aktivoi kokolema"> </span>
+			</form:form>
 		</div>
-		
-	
+
+
 	</div>
 </div>
 

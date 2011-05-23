@@ -15,6 +15,7 @@ public class DefaultKehitysTieto extends Kehitystieto {
     this.id = id;
     this.nimi = nimi;
     this.tyyppi = tyyppi;
+    init();
     setTila(new KehitysTietoTila(Tila.LUKITTU, null, null));
   }
 

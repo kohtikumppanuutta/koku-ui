@@ -71,7 +71,7 @@ public class LapsiController {
     binder.registerCustomEditor(KehitystietoTyyppi.class,
         new KehitystietoTyyppiEditor(service));
 
-    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     dateFormat.setLenient(false);
     binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,
         false));
