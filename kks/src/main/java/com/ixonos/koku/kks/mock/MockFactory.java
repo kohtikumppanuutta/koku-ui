@@ -1,5 +1,6 @@
 package com.ixonos.koku.kks.mock;
 
+import com.ixonos.koku.kks.utils.enums.KehitysAsiaTyyppi;
 import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
 
 public class MockFactory {
@@ -22,6 +23,10 @@ public class MockFactory {
         KehitystietoTyyppi.LAPSEN_KEHITYS, "Lapsen kehitys");
     Kehitystieto entry2 = new DefaultKehitysTieto("2",
         KehitystietoTyyppi.TUKITARVE, "Lapsen tukitarpeet");
+
+    entry2.addKehitysAsia(createTukiTarve("Tukitarve 1"));
+    entry2.addKehitysAsia(createTukiTarve("Tukitarve 2"));
+
     Kehitystieto entry3 = new DefaultKehitysTieto("3",
         KehitystietoTyyppi.TERVEYDEN_TILA, "Lapsen terveydentila");
     KKS tmp = new KKS();
@@ -35,6 +40,7 @@ public class MockFactory {
   public static Kehitystieto createNewEntry1(Henkilo c) {
     Kehitystieto entry1 = new DefaultKehitysTieto("4",
         KehitystietoTyyppi.LAPSEN_KEHITYS, "Lapsen kehitys");
+    entry1.addKehitysAsia(createTukiTarve("Tukitarve 1"));
     Kehitystieto entry2 = new DefaultKehitysTieto("5",
         KehitystietoTyyppi.TUKITARVE, "Lapsen tukitarpeet");
     Kehitystieto entry3 = new DefaultKehitysTieto("6",
@@ -45,5 +51,13 @@ public class MockFactory {
     tmp.addKehitystieto(entry3);
     c.setKks(tmp);
     return entry1;
+  }
+
+  private static KehitysAsia createTukiTarve(String nimi) {
+    KehitysAsia tmp = new KehitysAsia("Tukitarve 1", KehitysAsiaTyyppi.MITTAUS);
+    tmp.addProperty(new KKSProperty("Tarpeen kuvaus", nimi + " kuvaus"));
+    tmp.addProperty(new KKSProperty("täyttämiseen liittyvät tehtävät", nimi
+        + " tehtävät"));
+    return tmp;
   }
 }
