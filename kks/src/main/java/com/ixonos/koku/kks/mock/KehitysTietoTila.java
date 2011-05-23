@@ -45,6 +45,10 @@ public class KehitysTietoTila {
     if (Tila.LUKITTU.equals(tila))
       return false;
 
+    if (alkuPvm == null || loppuPvm == null) {
+      return true;
+    }
+
     Date d = new Date();
 
     if (d.after(alkuPvm) && d.before(loppuPvm)) {
