@@ -16,7 +16,6 @@ public class MockFactory {
     KKSMockModel tmp = new KKSMockModel();
     tmp.addChild(c1);
     tmp.addChild(c2);
-
     return tmp;
   }
 
@@ -35,16 +34,23 @@ public class MockFactory {
     entry2.setMuokkausPvm(new Date());
     entry2.setMuokkaaja("Mikko Muokkaaja");
 
-    Kehitystieto entry3 = new DefaultKehitysTieto("3",
-        KehitystietoTyyppi.TERVEYDEN_TILA, "Lapsen terveydentila");
+    Kehitystieto entry3 = createKasvatutsTieto("3",
+        "Kasvatusta ohjaavat tiedot");
     entry3.setMuokkausPvm(new Date());
     entry3.setMuokkaaja("Mikko Muokkaaja");
+<<<<<<< .mine
+
+    Kehitystieto entry4 = new DefaultKehitysTieto("7",
+        KehitystietoTyyppi.NELJA_VUOTISTARKASTUS, "Lapsen terveydentila");
+
+=======
         
         
     Kehitystieto entry4 = new DefaultKehitysTieto("4",
             KehitystietoTyyppi.NELJA_VUOTISTARKASTUS, "4-vuotistarkastus");
         
     
+>>>>>>> .r30
     KKS tmp = new KKS();
     tmp.addKehitystieto(entry1);
     tmp.addKehitystieto(entry2);
@@ -64,8 +70,8 @@ public class MockFactory {
         KehitystietoTyyppi.TUKITARVE, "Lapsen tukitarpeet");
     entry2.setMuokkausPvm(new Date());
     entry2.setMuokkaaja("Mikko Muokkaaja");
-    Kehitystieto entry3 = new DefaultKehitysTieto("6",
-        KehitystietoTyyppi.TERVEYDEN_TILA, "Lapsen terveydentila");
+    Kehitystieto entry3 = createKasvatutsTieto("6",
+        "Kasvatusta ohjaavat tiedot");
     entry3.setMuokkausPvm(new Date());
     entry3.setMuokkaaja("Mikko Muokkaaja");
     KKS tmp = new KKS();
@@ -81,7 +87,21 @@ public class MockFactory {
     tmp.setMuokkaaja("Mikko Muokkaaja");
     tmp.setMuokkausPvm(new Date());
     tmp.addProperty(new KKSProperty("kuvaus", nimi + " kuvaus"));
+<<<<<<< .mine
+    tmp.addProperty(new KKSProperty("tehtavat", nimi + " tehtävät"));
+=======
     tmp.addProperty(new KKSProperty("tehtavat", nimi + " tehtavat"));
+>>>>>>> .r30
+    return tmp;
+  }
+
+  private static Kehitystieto createKasvatutsTieto(String id, String nimi) {
+    Kehitystieto tmp = new DefaultKehitysTieto(id,
+        KehitystietoTyyppi.KASVATUSTA_OHJAAVAT_TIEDOT, nimi);
+    tmp.setMuokkaaja("Mikko Muokkaaja");
+    tmp.setMuokkausPvm(new Date());
+    tmp.addProperty(new KKSProperty("tarkeat_asiat", " tärkeät"));
+    tmp.addProperty(new KKSProperty("tavoitteet", " tavoitteet"));
     return tmp;
   }
 }

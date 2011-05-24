@@ -32,7 +32,7 @@
 </div>
 
 <div id="main" class="wide">
-	<h1>${tukitarve.nimi} ${tukitarve.nimi}</h1>
+	<h1>${lapsi.nimi} ${tukitarve.nimi}</h1>
 
 	<div id="page">
 
