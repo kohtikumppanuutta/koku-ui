@@ -77,8 +77,9 @@ public class MockFactory {
   }
 
   private static KehitysAsia createTukiTarve(String nimi) {
-    KehitysAsia tmp = new KehitysAsia("Tukitarve 1",
-        KehitysAsiaTyyppi.TUKITARVE);
+    KehitysAsia tmp = new KehitysAsia(nimi, KehitysAsiaTyyppi.TUKITARVE);
+    tmp.setMuokkaaja("Mikko Muokkaaja");
+    tmp.setMuokkausPvm(new Date());
     tmp.addProperty(new KKSProperty("kuvaus", nimi + " kuvaus"));
     tmp.addProperty(new KKSProperty("tehtavat", nimi + " teht�v�t"));
     return tmp;

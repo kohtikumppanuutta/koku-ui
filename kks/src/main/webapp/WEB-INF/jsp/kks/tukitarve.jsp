@@ -19,6 +19,7 @@
 <portlet:actionURL var="muokkaaActionUrl">
 	<portlet:param name="toiminto" value="muokkaaTukitarvetta" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
+	<portlet:param name="tarve" value="${tukitarve.id}" />
 	<portlet:param name="vanhaNimi" value="${tukitarve.id}" />
 </portlet:actionURL>
 
@@ -38,7 +39,7 @@
 		<div>
 			<div class="tietokentta ">
 				<form:form name="muokkaaTukitarveForm" commandName="tukitarve"
-					method="post" action="${lisaaActionUrl}">
+					method="post" action="${muokkaaActionUrl}">
 					<h2>
 						<spring:message code="ui.lisaa.uusi.tukitarve.nimi" />
 					</h2>

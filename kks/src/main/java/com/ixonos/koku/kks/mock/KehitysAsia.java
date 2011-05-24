@@ -1,5 +1,6 @@
 package com.ixonos.koku.kks.mock;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +11,7 @@ public class KehitysAsia {
   private String id;
   private String nimi;
   private String muokkaaja;
-  private String muokkausPvm;
+  private Date muokkausPvm;
   private KehitysAsiaTyyppi tyyppi;
   private Map<String, KKSProperty> properties;
 
@@ -66,11 +67,11 @@ public class KehitysAsia {
     this.muokkaaja = muokkaaja;
   }
 
-  public String getMuokkausPvm() {
+  public Date getMuokkausPvm() {
     return muokkausPvm;
   }
 
-  public void setMuokkausPvm(String muokkausPvm) {
+  public void setMuokkausPvm(Date muokkausPvm) {
     this.muokkausPvm = muokkausPvm;
   }
 

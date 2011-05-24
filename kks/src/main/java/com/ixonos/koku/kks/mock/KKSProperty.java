@@ -43,4 +43,11 @@ public class KKSProperty {
   public void addValue(String value) {
     values.add(value);
   }
+
+  public void setFirstValue(String value) {
+    if (values.size() > 0)
+      values.set(0, value);
+    else
+      values.add(value);
+  }
 }
