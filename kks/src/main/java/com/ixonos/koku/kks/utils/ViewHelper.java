@@ -9,6 +9,9 @@ public class ViewHelper {
     switch (tyyppi) {
     case TUKITARVE:
       return "naytaTukitoimet";
+    
+    case NELJA_VUOTISTARKASTUS:
+      return "naytaNeljavuotistarkastus";
     }
     return "";
   }

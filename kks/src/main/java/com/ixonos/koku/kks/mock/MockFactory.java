@@ -42,7 +42,7 @@ public class MockFactory {
         
         
     Kehitystieto entry4 = new DefaultKehitysTieto("4",
-            KehitystietoTyyppi.NELJA_VUOTISTARKASTUS, "Lapsen terveydentila");
+            KehitystietoTyyppi.NELJA_VUOTISTARKASTUS, "4-vuotistarkastus");
         
     
     KKS tmp = new KKS();
@@ -81,7 +81,7 @@ public class MockFactory {
     tmp.setMuokkaaja("Mikko Muokkaaja");
     tmp.setMuokkausPvm(new Date());
     tmp.addProperty(new KKSProperty("kuvaus", nimi + " kuvaus"));
-    tmp.addProperty(new KKSProperty("tehtavat", nimi + " teht�v�t"));
+    tmp.addProperty(new KKSProperty("tehtavat", nimi + " tehtavat"));
     return tmp;
   }
 }

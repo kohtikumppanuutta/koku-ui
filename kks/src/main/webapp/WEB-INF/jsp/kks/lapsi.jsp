@@ -42,10 +42,9 @@
 	<div id="page">
 		<table width="100%" border="0">
 			<tr>
-				<th>TIETOKOKOELMA
-				</td>
-				<th>VIIMEISIN KIRJAUS
-				<th>KIRJAUSTEN TILA
+				<th>TIETOKOKOELMA</th>
+				<th>VIIMEISIN KIRJAUS</th>
+				<th>KIRJAUSTEN TILA</th>
 			</tr>
 
 			<c:if test="${not empty tiedot}">
