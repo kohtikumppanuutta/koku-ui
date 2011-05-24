@@ -53,7 +53,7 @@ public class LapsiController {
   @RenderMapping(params = "toiminto=naytaLapsi")
   public String nayta(@ModelAttribute(value = "lapsi") Henkilo lapsi,
       RenderResponse response, Model model) {
-    log.info("näytä lapsi");
+    log.info("nayta lapsi");
     model.addAttribute("lapsi", lapsi);
     model.addAttribute("tiedot", lapsi.getKks().getKehitystiedot());
     return "lapsi";

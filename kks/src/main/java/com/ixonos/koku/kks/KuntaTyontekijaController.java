@@ -37,7 +37,7 @@ public class KuntaTyontekijaController {
   @RenderMapping(params = "toiminto=naytaTyontekija")
   public String nayta(RenderResponse response,
       @RequestParam("lapset") String[] childs, Model model) {
-    log.info("näytä kuntatyöntekijä");
+    log.info("nayta kuntatyontekija");
     model.addAttribute("lapset", toChilds(childs));
     return "hae";
   }
