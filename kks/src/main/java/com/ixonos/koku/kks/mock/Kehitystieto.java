@@ -1,9 +1,12 @@
 package com.ixonos.koku.kks.mock;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.ixonos.koku.kks.utils.enums.KehitysAsiaTyyppi;
 import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
 
 /**
@@ -77,6 +80,18 @@ public abstract class Kehitystieto {
 
   public Map<String, KehitysAsia> getKehitysAsiat() {
     return kehitysAsiat;
+  }
+
+  public List<KehitysAsia> getKehitysAsiat(KehitysAsiaTyyppi tyyppi) {
+
+    List<KehitysAsia> tmp = new ArrayList<KehitysAsia>();
+
+    for (KehitysAsia k : kehitysAsiat.values()) {
+      if (k.getTyyppi().equals(tyyppi)) {
+        tmp.add(k);
+      }
+    }
+    return tmp;
   }
 
   public void setKehitysAsiat(Map<String, KehitysAsia> kehitysAsiat) {

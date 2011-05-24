@@ -13,6 +13,8 @@ public class ViewHelper {
       return "naytaKasvatusTiedot";
     case NELJA_VUOTISTARKASTUS:
       return "naytaNeljavuotistarkastus";
+    case LAPSEN_KEHITYS:
+      return "naytaKehitys";
     }
     return "";
   }

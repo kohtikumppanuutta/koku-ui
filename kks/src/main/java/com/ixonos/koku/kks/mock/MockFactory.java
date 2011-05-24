@@ -20,8 +20,7 @@ public class MockFactory {
   }
 
   public static Kehitystieto createNewEntry(Henkilo c) {
-    Kehitystieto entry1 = new DefaultKehitysTieto("1",
-        KehitystietoTyyppi.LAPSEN_KEHITYS, "Lapsen kehitys");
+    Kehitystieto entry1 = createLapsenKehitys();
 
     entry1.setMuokkausPvm(new Date());
     entry1.setMuokkaaja("Mikko Muokkaaja");
@@ -38,10 +37,10 @@ public class MockFactory {
         "Kasvatusta ohjaavat tiedot");
     entry3.setMuokkausPvm(new Date());
     entry3.setMuokkaaja("Mikko Muokkaaja");
-       
-    Kehitystieto entry4 = new DefaultKehitysTieto("4",
-            KehitystietoTyyppi.NELJA_VUOTISTARKASTUS, "4-vuotistarkastus");
-    entry4.setMuokkausPvm(new Date());
+
+    Kehitystieto entry4 = new DefaultKehitysTieto("7",
+        KehitystietoTyyppi.NELJA_VUOTISTARKASTUS, "Lapsen terveydentila");
+		    entry4.setMuokkausPvm(new Date());
     entry4.setMuokkaaja("Mikko Muokkaaja");
 
     KKS tmp = new KKS();
@@ -54,8 +53,7 @@ public class MockFactory {
   }
 
   public static Kehitystieto createNewEntry1(Henkilo c) {
-    Kehitystieto entry1 = new DefaultKehitysTieto("4",
-        KehitystietoTyyppi.LAPSEN_KEHITYS, "Lapsen kehitys");
+    Kehitystieto entry1 = createLapsenKehitys();
     entry1.addKehitysAsia(createTukiTarve("Tukitarve 1"));
     entry1.setMuokkausPvm(new Date());
     entry1.setMuokkaaja("Mikko Muokkaaja");
@@ -80,8 +78,7 @@ public class MockFactory {
     tmp.setMuokkaaja("Mikko Muokkaaja");
     tmp.setMuokkausPvm(new Date());
     tmp.addProperty(new KKSProperty("kuvaus", nimi + " kuvaus"));
-    tmp.addProperty(new KKSProperty("tehtavat", nimi + " tehtavat"));
-
+    tmp.addProperty(new KKSProperty("tehtavat", nimi + " tehtävät"));
     return tmp;
   }
 
@@ -93,5 +90,42 @@ public class MockFactory {
     tmp.addProperty(new KKSProperty("tarkeat_asiat", " tärkeät"));
     tmp.addProperty(new KKSProperty("tavoitteet", " tavoitteet"));
     return tmp;
+  }
+
+  private static KehitysAsia createMittaus(String nimi) {
+    KehitysAsia tmp = new KehitysAsia(nimi, KehitysAsiaTyyppi.MITTAUS);
+    tmp.setMuokkaaja("Mikko Muokkaaja");
+    tmp.setMuokkausPvm(new Date());
+    tmp.addProperty(new KKSProperty("kuvaus", nimi + " kuvaus"));
+    return tmp;
+  }
+
+  private static KehitysAsia createHavainto(String nimi) {
+    KehitysAsia tmp = new KehitysAsia(nimi, KehitysAsiaTyyppi.HAVAINTO);
+    tmp.setMuokkaaja("Mikko Muokkaaja");
+    tmp.setMuokkausPvm(new Date());
+    tmp.addProperty(new KKSProperty("kuvaus", nimi + " kuvaus"));
+    return tmp;
+  }
+
+  private static KehitysAsia createArvio(String nimi) {
+    KehitysAsia tmp = new KehitysAsia(nimi, KehitysAsiaTyyppi.ARVIO);
+    tmp.setMuokkaaja("Mikko Muokkaaja");
+    tmp.setMuokkausPvm(new Date());
+    tmp.addProperty(new KKSProperty("kuvaus", nimi + " kuvaus"));
+    return tmp;
+  }
+
+  private static Kehitystieto createLapsenKehitys() {
+    Kehitystieto entry1 = new DefaultKehitysTieto("1",
+        KehitystietoTyyppi.LAPSEN_KEHITYS, "Lapsen kehitys");
+
+    entry1.addKehitysAsia(createMittaus("Mittaus 1"));
+    entry1.addKehitysAsia(createMittaus("Mittaus 2"));
+    entry1.addKehitysAsia(createArvio("Arvio 1"));
+    entry1.addKehitysAsia(createHavainto("Havainto 1"));
+    entry1.setMuokkausPvm(new Date());
+    entry1.setMuokkaaja("Mikko Muokkaaja");
+    return entry1;
   }
 }

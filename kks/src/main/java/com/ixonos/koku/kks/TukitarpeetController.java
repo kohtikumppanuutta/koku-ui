@@ -37,7 +37,7 @@ public class TukitarpeetController {
   @RenderMapping(params = "toiminto=naytaTukitoimet")
   public String nayta(@ModelAttribute(value = "lapsi") Henkilo lapsi,
       RenderResponse response, Model model) {
-    log.info("näytä tukitoimet");
+    log.info("nayta tukitoimet");
     model.addAttribute("lapsi", lapsi);
 
     Kehitystieto tieto = lapsi.getKks().getKehitystieto(

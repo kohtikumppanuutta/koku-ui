@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.ixonos.koku.kks.utils.enums.KKSKentta;
+import com.ixonos.koku.kks.utils.enums.KehitysAsiaTyyppi;
 import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
 
 @Service(value = "myKKSService")
@@ -16,6 +17,8 @@ public class KKSServiceImpl implements KKSService {
   private User user;
   private KKSMockModel model;
   private Map<String, KehitystietoTyyppi> fields;
+
+  private Map<String, KehitysAsiaTyyppi> asiaTyypit;
 
   public User getUser() {
     return user;
@@ -26,6 +29,7 @@ public class KKSServiceImpl implements KKSService {
     user.setRole(userRole);
     model = MockFactory.createModel();
     fields = createFieldsMap();
+    asiaTyypit = createAsiaTyypitMap();
   }
 
   public List<Henkilo> getChilds(User user) {
@@ -75,6 +79,10 @@ public class KKSServiceImpl implements KKSService {
     return fields.get(fieldId);
   }
 
+  public KehitysAsiaTyyppi getAsiatyyppi(String fieldId) {
+    return asiaTyypit.get(fieldId);
+  }
+
   private Map<String, KehitystietoTyyppi> createFieldsMap() {
     Map<String, KehitystietoTyyppi> tmp = new HashMap<String, KehitystietoTyyppi>();
 
@@ -85,4 +93,14 @@ public class KKSServiceImpl implements KKSService {
     return tmp;
 
   }
+
+  private Map<String, KehitysAsiaTyyppi> createAsiaTyypitMap() {
+    Map<String, KehitysAsiaTyyppi> tmp = new HashMap<String, KehitysAsiaTyyppi>();
+
+    for (KehitysAsiaTyyppi kt : KehitysAsiaTyyppi.values()) {
+      tmp.put(kt.toString(), kt);
+    }
+    return tmp;
+  }
+
 }

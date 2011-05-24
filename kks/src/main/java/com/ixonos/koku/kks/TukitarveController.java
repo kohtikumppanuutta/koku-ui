@@ -65,7 +65,7 @@ public class TukitarveController {
   public String naytaTukitarve(@ModelAttribute(value = "lapsi") Henkilo lapsi,
       @ModelAttribute(value = "tukitarve") KehitysAsia tarve,
       RenderResponse response, Model model) {
-    log.info("n‰yt‰ tukitoimet");
+    log.info("n√§yt√§ tukitoimet");
     model.addAttribute("lapsi", lapsi);
 
     model.addAttribute("tukitarve", tarve);
