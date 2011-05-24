@@ -38,19 +38,12 @@ public class MockFactory {
         "Kasvatusta ohjaavat tiedot");
     entry3.setMuokkausPvm(new Date());
     entry3.setMuokkaaja("Mikko Muokkaaja");
-<<<<<<< .mine
-
-    Kehitystieto entry4 = new DefaultKehitysTieto("7",
-        KehitystietoTyyppi.NELJA_VUOTISTARKASTUS, "Lapsen terveydentila");
-
-=======
-        
-        
+       
     Kehitystieto entry4 = new DefaultKehitysTieto("4",
             KehitystietoTyyppi.NELJA_VUOTISTARKASTUS, "4-vuotistarkastus");
-        
-    
->>>>>>> .r30
+    entry4.setMuokkausPvm(new Date());
+    entry4.setMuokkaaja("Mikko Muokkaaja");
+
     KKS tmp = new KKS();
     tmp.addKehitystieto(entry1);
     tmp.addKehitystieto(entry2);
@@ -87,11 +80,8 @@ public class MockFactory {
     tmp.setMuokkaaja("Mikko Muokkaaja");
     tmp.setMuokkausPvm(new Date());
     tmp.addProperty(new KKSProperty("kuvaus", nimi + " kuvaus"));
-<<<<<<< .mine
-    tmp.addProperty(new KKSProperty("tehtavat", nimi + " tehtävät"));
-=======
     tmp.addProperty(new KKSProperty("tehtavat", nimi + " tehtavat"));
->>>>>>> .r30
+
     return tmp;
   }
 

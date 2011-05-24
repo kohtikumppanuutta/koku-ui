@@ -23,7 +23,7 @@ import com.ixonos.koku.kks.mock.Kehitystieto;
 import com.ixonos.koku.kks.utils.enums.KehitysAsiaTyyppi;
 import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
 
-@Controller(value = "tukitoimetController")
+@Controller(value = "tukitarpeetController")
 @RequestMapping(value = "VIEW")
 public class TukitarpeetController {
 
