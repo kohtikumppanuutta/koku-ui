@@ -16,11 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import com.ixonos.koku.kks.mock.Henkilo;
-import com.ixonos.koku.kks.mock.KKSProperty;
 import com.ixonos.koku.kks.mock.KKSService;
 import com.ixonos.koku.kks.mock.KehitysAsia;
 import com.ixonos.koku.kks.mock.Kehitystieto;
-import com.ixonos.koku.kks.utils.enums.KehitysAsiaTyyppi;
 import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
 
 @Controller(value = "neljavuotistarkastusController")
@@ -40,52 +38,20 @@ public class NeljavuotistarkastusController {
       RenderResponse response, Model model) {
     log.info("nayta neljavuotistarkastus");
     model.addAttribute("lapsi", lapsi);
+    
+    Kehitystieto tieto = lapsi.getKks().getKehitystieto(KehitystietoTyyppi.NELJA_VUOTISTARKASTUS);
+//    model.addAttribute("neljavuotistiedot",
+//        tieto == null ? 
+//            new ArrayList<KehitysAsia>() : 
+//              tieto.getKehitysAsiat().values());
+        
     return "neljavuotistarkastus";
 
   }
-    
 
-
-  
-//  @RenderMapping(params = "toiminto=naytaNeljavuotistarkastus")
-//  public String nayta(@ModelAttribute(value = "lapsi") Henkilo lapsi,
-//      RenderResponse response, Model model) {
-//    log.info("nayta neljavuotistarkastus");
-//    model.addAttribute("lapsi", lapsi);
-//
-//    Kehitystieto tieto = lapsi.getKks().getKehitystieto(
-//        KehitystietoTyyppi.NELJA_VUOTISTARKASTUS);
-////    model.addAttribute("tukitarpeet",
-////        tieto == null ? new ArrayList<KehitysAsia>() : tieto.getKehitysAsiat()
-////            .values());
-//    return "neljavuotistarkastus";
-//  }
-//
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
     log.info("getLapsi");
     return service.getChild(hetu);
   }
-//
-//  @ModelAttribute("tarve")
-//  public KehitysAsia getCommandObject() {
-//    log.debug("get neljavuotistarkastus command object");
-//    KehitysAsia tmp = new KehitysAsia("tmp", KehitysAsiaTyyppi.TUKITARVE);//#TODO# Mika on tyyppina?
-////    tmp.addProperty(new KKSProperty("kuvaus", ""));
-////    tmp.addProperty(new KKSProperty("tehtavat", ""));
-//    return tmp;
-//  }
-//
-//  @RenderMapping(params = "toiminto=naytaNeljavuotistarkastus")
-//  public String naytaTukitarve(@ModelAttribute(value = "lapsi") Henkilo lapsi,
-//      @RequestParam(value = "tarve") String tarve, RenderResponse response,
-//      Model model) {
-//    log.info("nayta neljavuotistarkastus");
-//    model.addAttribute("lapsi", lapsi);
-////
-////    model.addAttribute("neljavuotistarkastus",
-////        lapsi.getKks().getKehitystieto(KehitystietoTyyppi.TUKITARVE)
-////            .getKehitysAsia(tarve));//#TODO# Mika on tyyppina? 
-//    return "neljavuotistarkastus";
-//  }
 }
