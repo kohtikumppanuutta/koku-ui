@@ -44,6 +44,11 @@ public class LisaaTukitarveController {
 
     tarve.setMuokkaaja("Koodista muokkaaja");
     tarve.setMuokkausPvm(new Date());
+
+    String id = ""
+        + lapsi.getKks().getKehitystieto(KehitystietoTyyppi.TUKITARVE)
+            .getKehitysAsiat().values().size();
+    tarve.setId(id);
     lapsi.getKks().getKehitystieto(KehitystietoTyyppi.TUKITARVE)
         .addKehitysAsia(tarve);
 
