@@ -39,10 +39,17 @@ public class MockFactory {
         KehitystietoTyyppi.TERVEYDEN_TILA, "Lapsen terveydentila");
     entry3.setMuokkausPvm(new Date());
     entry3.setMuokkaaja("Mikko Muokkaaja");
+        
+        
+    Kehitystieto entry4 = new DefaultKehitysTieto("4",
+            KehitystietoTyyppi.NELJA_VUOTISTARKASTUS, "Lapsen terveydentila");
+        
+    
     KKS tmp = new KKS();
     tmp.addKehitystieto(entry1);
     tmp.addKehitystieto(entry2);
     tmp.addKehitystieto(entry3);
+    tmp.addKehitystieto(entry4);
     c.setKks(tmp);
     return entry1;
   }
@@ -73,7 +80,7 @@ public class MockFactory {
     KehitysAsia tmp = new KehitysAsia("Tukitarve 1",
         KehitysAsiaTyyppi.TUKITARVE);
     tmp.addProperty(new KKSProperty("kuvaus", nimi + " kuvaus"));
-    tmp.addProperty(new KKSProperty("tehtavat", nimi + " tehtävät"));
+    tmp.addProperty(new KKSProperty("tehtavat", nimi + " tehtï¿½vï¿½t"));
     return tmp;
   }
 }
