@@ -61,7 +61,7 @@ public class AktivoiKehitystietoController {
     }
     response.setRenderParameter("toiminto", "naytaLapsi");
     response.setRenderParameter("hetu", lapsi.getHetu());
-    aktivointi = new Aktivointi();
+    aktivointi = getCommandObject();
     sessionStatus.setComplete();
   }
 

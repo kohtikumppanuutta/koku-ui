@@ -2,6 +2,8 @@ package com.ixonos.koku.kks.mock;
 
 import java.util.Date;
 
+import com.ixonos.koku.kks.utils.enums.ErikoisruokaPeruste;
+import com.ixonos.koku.kks.utils.enums.KaynninTyyppi;
 import com.ixonos.koku.kks.utils.enums.KehitysAsiaTyyppi;
 import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
 
@@ -28,8 +30,8 @@ public class MockFactory {
     Kehitystieto entry2 = new DefaultKehitysTieto("2",
         KehitystietoTyyppi.TUKITARVE, "Lapsen tukitarpeet");
 
-    entry2.addKehitysAsia(createTukiTarve("Tukitarve 1"));
-    entry2.addKehitysAsia(createTukiTarve("Tukitarve 2"));
+    entry2.addKehitysAsia(createTukiTarve("Kuljetustuki"));
+    entry2.addKehitysAsia(createTukiTarve("Kävelytuki"));
     entry2.setMuokkausPvm(new Date());
     entry2.setMuokkaaja("Mikko Muokkaaja");
 
@@ -39,15 +41,18 @@ public class MockFactory {
     entry3.setMuokkaaja("Mikko Muokkaaja");
 
     Kehitystieto entry4 = new DefaultKehitysTieto("7",
-        KehitystietoTyyppi.NELJA_VUOTISTARKASTUS, "Lapsen terveydentila");
-		    entry4.setMuokkausPvm(new Date());
+        KehitystietoTyyppi.NELJA_VUOTISTARKASTUS, "4-vuotistarkastus");
+    entry4.setMuokkausPvm(new Date());
     entry4.setMuokkaaja("Mikko Muokkaaja");
+
+    Kehitystieto entry5 = createTerveysTieto();
 
     KKS tmp = new KKS();
     tmp.addKehitystieto(entry1);
     tmp.addKehitystieto(entry2);
     tmp.addKehitystieto(entry3);
     tmp.addKehitystieto(entry4);
+    tmp.addKehitystieto(entry5);
     c.setKks(tmp);
     return entry1;
   }
@@ -87,8 +92,9 @@ public class MockFactory {
         KehitystietoTyyppi.KASVATUSTA_OHJAAVAT_TIEDOT, nimi);
     tmp.setMuokkaaja("Mikko Muokkaaja");
     tmp.setMuokkausPvm(new Date());
-    tmp.addProperty(new KKSProperty("tarkeat_asiat", " tärkeät"));
-    tmp.addProperty(new KKSProperty("tavoitteet", " tavoitteet"));
+    tmp.addProperty(new KKSProperty("tarkeat_asiat",
+        "päivärytmi, vuorovaikutus"));
+    tmp.addProperty(new KKSProperty("tavoitteet", "sosiaalisuus"));
     return tmp;
   }
 
@@ -120,12 +126,61 @@ public class MockFactory {
     Kehitystieto entry1 = new DefaultKehitysTieto("1",
         KehitystietoTyyppi.LAPSEN_KEHITYS, "Lapsen kehitys");
 
-    entry1.addKehitysAsia(createMittaus("Mittaus 1"));
-    entry1.addKehitysAsia(createMittaus("Mittaus 2"));
-    entry1.addKehitysAsia(createArvio("Arvio 1"));
-    entry1.addKehitysAsia(createHavainto("Havainto 1"));
+    entry1.addKehitysAsia(createMittaus("3kk mittaus"));
+    entry1.addKehitysAsia(createMittaus("6kk mittaus"));
+    entry1.addKehitysAsia(createArvio("Kielellinen"));
+    entry1.addKehitysAsia(createArvio("Sosiaalinen"));
+    entry1.addKehitysAsia(createHavainto("Aktiivisuus"));
     entry1.setMuokkausPvm(new Date());
     entry1.setMuokkaaja("Mikko Muokkaaja");
     return entry1;
+  }
+
+  private static Kehitystieto createTerveysTieto() {
+    Kehitystieto entry5 = new DefaultKehitysTieto("8",
+        KehitystietoTyyppi.TERVEYDEN_TILA, "Lapsen terveydentila");
+    entry5.setMuokkausPvm(new Date());
+    entry5.setMuokkaaja("Mikko Muokkaaja");
+    entry5.addKehitysAsia(createSairaus("Astma"));
+    entry5.addKehitysAsia(createErikoisruoka("Gluteeniton",
+        ErikoisruokaPeruste.ALLERGIA));
+    entry5.addKehitysAsia(createErikoisruoka("Kosher",
+        ErikoisruokaPeruste.VAKAUMUKSELLINEN));
+    entry5.addKehitysAsia(createKaynti("1v-neuvola", KaynninTyyppi.NEUVOLA));
+    entry5.addKehitysAsia(createKaynti("2v-neuvola", KaynninTyyppi.NEUVOLA));
+    entry5.addKehitysAsia(createKaynti("Terveydenhoitajalla käynti",
+        KaynninTyyppi.TERVEYDEN_HOITAJA));
+    return entry5;
+  }
+
+  private static KehitysAsia createSairaus(String nimi) {
+    KehitysAsia tmp = new KehitysAsia(nimi, KehitysAsiaTyyppi.SAIRAUS);
+    tmp.setMuokkaaja("Mikko Muokkaaja");
+    tmp.setMuokkausPvm(new Date());
+    tmp.addProperty(new KKSProperty("oireet", nimi + " oireet"));
+    tmp.addProperty(new KKSProperty("hoito", nimi + " hoito"));
+    tmp.addProperty(new KKSProperty("laake", nimi + " lääkeohjeet"));
+    tmp.addProperty(new KKSProperty("toimintasuunnitelma", nimi
+        + " suunnitelma"));
+    return tmp;
+  }
+
+  private static KehitysAsia createErikoisruoka(String nimi,
+      ErikoisruokaPeruste peruste) {
+    KehitysAsia tmp = new KehitysAsia(nimi, KehitysAsiaTyyppi.ERIKOISRUOKAVALIO);
+    tmp.setMuokkaaja("Mikko Muokkaaja");
+    tmp.setMuokkausPvm(new Date());
+    tmp.addProperty(new KKSProperty("peruste", peruste.toString()));
+    tmp.addProperty(new KKSProperty("kuvaus", nimi + " erikoisruuan kuvaus"));
+    return tmp;
+  }
+
+  private static KehitysAsia createKaynti(String nimi, KaynninTyyppi peruste) {
+    KehitysAsia tmp = new KehitysAsia(nimi, KehitysAsiaTyyppi.KAYNTI);
+    tmp.setMuokkaaja("Mikko Muokkaaja");
+    tmp.setMuokkausPvm(new Date());
+    tmp.addProperty(new KKSProperty("kaynti", peruste.toString()));
+    tmp.addProperty(new KKSProperty("kuvaus", nimi + " käynnin kuvaus"));
+    return tmp;
   }
 }

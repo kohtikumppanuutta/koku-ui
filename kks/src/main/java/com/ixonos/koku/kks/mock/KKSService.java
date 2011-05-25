@@ -8,11 +8,11 @@ import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
 
 public interface KKSService {
 
-  public User getUser();
+  public Kayttaja getUser();
 
   public void create(String userRole);
 
-  public List<Henkilo> getChilds(User user);
+  public List<Henkilo> getChilds(Kayttaja user);
 
   public List<Kehitystieto> getEntries(Henkilo child);
 

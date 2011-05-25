@@ -15,6 +15,8 @@ public class ViewHelper {
       return "naytaNeljavuotistarkastus";
     case LAPSEN_KEHITYS:
       return "naytaKehitys";
+    case TERVEYDEN_TILA:
+      return "naytaTerveys";
     }
     return "";
   }

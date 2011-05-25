@@ -56,12 +56,13 @@ public class LapsiController {
     log.info("nayta lapsi");
     model.addAttribute("lapsi", lapsi);
     model.addAttribute("tiedot", lapsi.getKks().getKehitystiedot());
+    getCommandObject();
     return "lapsi";
   }
 
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
-    log.info("getLapsi with hetu="+hetu);//#TODO# Remove hetu from log
+    log.info("getLapsi with hetu=" + hetu);// #TODO# Remove hetu from log
     return service.getChild(hetu);
   }
 
@@ -72,7 +73,7 @@ public class LapsiController {
         new KehitystietoTyyppiEditor(service));
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    dateFormat.setLenient(false);
+    // dateFormat.setLenient(false);
     binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,
         false));
   }

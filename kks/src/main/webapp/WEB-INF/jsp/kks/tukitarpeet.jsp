@@ -29,7 +29,7 @@
 
 </div>
 
-<div id="main" class="wide">
+
 	<h1>
 		${lapsi.nimi}
 		<spring:message code="ui.tukitarpeet.otsikko" />
@@ -39,8 +39,8 @@
 		<table border="0">
 			<tr>
 				<th>TUKITARVE
-				</td>
-				<th>VIIMEISIN KIRJAUS
+				</th>
+				<th>VIIMEISIN KIRJAUS</th>
 			</tr>
 			<c:if test="${not empty tukitarpeet}">
 				<c:forEach var="tarve" items="${tukitarpeet}">
@@ -88,7 +88,7 @@
 			</div>
 
 		</div>
-
+</div>
 		<script type="text/javascript"
 			src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
 		<script type="text/javascript"

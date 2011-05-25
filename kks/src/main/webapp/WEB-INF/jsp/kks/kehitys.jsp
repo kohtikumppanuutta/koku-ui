@@ -21,17 +21,10 @@
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
 </portlet:renderURL>
 <portlet:actionURL var="lisaaActionUrl">
-	<portlet:param name="toiminto" value="lisaa" />
+	<portlet:param name="toiminto" value="lisaaKehitysAsia" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
 </portlet:actionURL>
-<portlet:actionURL var="lisaaArvioActionUrl">
-	<portlet:param name="toiminto" value="lisaaArvio" />
-	<portlet:param name="hetu" value="${lapsi.hetu}" />
-</portlet:actionURL>
-<portlet:actionURL var="lisaaHavaintoActionUrl">
-	<portlet:param name="toiminto" value="lisaaHavainto" />
-	<portlet:param name="hetu" value="${lapsi.hetu}" />
-</portlet:actionURL>
+
 
 <div>
 
@@ -59,9 +52,9 @@
 					<a
 						href="
 							<portlet:renderURL>
-							<portlet:param name="toiminto" value="naytaMittaus" />
+							<portlet:param name="toiminto" value="naytaKehitysAsia" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
-							<portlet:param name="mittaus" value="${mittaus.id}" />
+							<portlet:param name="kehitys" value="${mittaus.id}" />
 						</portlet:renderURL>">
 						<strong>${mittaus.nimi }</strong> </a> ${ mittaus.muokkaaja } ${
 					mittaus.muokkausPvm }
@@ -86,9 +79,9 @@
 					<a
 						href="
 							<portlet:renderURL>
-							<portlet:param name="toiminto" value="naytaHavainto" />
+							<portlet:param name="toiminto" value="naytaKehitysAsia" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
-							<portlet:param name="mittaus" value="${havainto.id}" />
+							<portlet:param name="kehitys" value="${havainto.id}" />
 						</portlet:renderURL>">
 						<strong>${havainto.nimi }</strong> </a> ${ havainto.muokkaaja } ${
 					havainto.muokkausPvm }
@@ -100,8 +93,8 @@
 
 
 	</div>
-	
-		<div id="arviot">
+
+	<div id="arviot">
 
 		<h2>
 			<spring:message code="ui.arviot" />
@@ -113,9 +106,9 @@
 					<a
 						href="
 							<portlet:renderURL>
-							<portlet:param name="toiminto" value="naytaArvio" />
+							<portlet:param name="toiminto" value="naytaKehitysAsia" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
-							<portlet:param name="mittaus" value="${arvio.id}" />
+							<portlet:param name="kehitys" value="${arvio.id}" />
 						</portlet:renderURL>">
 						<strong>${arvio.nimi }</strong> </a> ${ arvio.muokkaaja } ${
 					arvio.muokkausPvm }
@@ -127,23 +120,23 @@
 
 
 	</div>
-	
-<br/>
+
+	<br />
 
 	<div>
 
-		<div>
+		<div class="kokoelma">
 			<a class="tieto"> <spring:message code="ui.lisaa.uusi" /><span
 				class="sulje"><spring:message code="ui.piilota" /> </span> </a>
 			<div class="tietokentta ">
 				<form:form name="lisaaKehitysForm" commandName="kehitys"
 					method="post" action="${lisaaActionUrl}">
-					
-					
+
+
 					<h2>
 						<spring:message code="ui.lisaa.uusi.kehitys.tyyppi" />
 					</h2>
-					
+
 					<form:select path="tyyppi" class="kokoelmavalinta">
 
 						<form:option value="MITTAUS" label="Mittaus" />
@@ -151,9 +144,9 @@
 						<form:option value="ARVIO" label="Arvio" />
 
 						<form:option value="HAVAINTO" label="Havainto" />
-						
+
 					</form:select>
-					
+
 					<h2>
 						<spring:message code="ui.lisaa.uusi.mittaus.nimi" />
 					</h2>

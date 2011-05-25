@@ -1,7 +1,5 @@
 package com.ixonos.koku.kks;
 
-import java.util.ArrayList;
-
 import javax.portlet.RenderResponse;
 
 import org.slf4j.Logger;
@@ -17,7 +15,6 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import com.ixonos.koku.kks.mock.Henkilo;
 import com.ixonos.koku.kks.mock.KKSService;
-import com.ixonos.koku.kks.mock.KehitysAsia;
 import com.ixonos.koku.kks.mock.Kehitystieto;
 import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
 
@@ -32,19 +29,19 @@ public class NeljavuotistarkastusController {
   private static Logger log = LoggerFactory
       .getLogger(NeljavuotistarkastusController.class);
 
-  
   @RenderMapping(params = "toiminto=naytaNeljavuotistarkastus")
   public String nayta(@ModelAttribute(value = "lapsi") Henkilo lapsi,
       RenderResponse response, Model model) {
     log.info("nayta neljavuotistarkastus");
     model.addAttribute("lapsi", lapsi);
-    
-    Kehitystieto tieto = lapsi.getKks().getKehitystieto(KehitystietoTyyppi.NELJA_VUOTISTARKASTUS);
-//    model.addAttribute("neljavuotistiedot",
-//        tieto == null ? 
-//            new ArrayList<KehitysAsia>() : 
-//              tieto.getKehitysAsiat().values());
-        
+
+    Kehitystieto tieto = lapsi.getKks().getKehitystieto(
+        KehitystietoTyyppi.NELJA_VUOTISTARKASTUS);
+    // model.addAttribute("neljavuotistiedot",
+    // tieto == null ?
+    // new ArrayList<KehitysAsia>() :
+    // tieto.getKehitysAsiat().values());
+
     return "neljavuotistarkastus";
 
   }

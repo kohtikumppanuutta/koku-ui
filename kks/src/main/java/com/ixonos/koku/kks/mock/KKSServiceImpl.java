@@ -14,25 +14,25 @@ import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
 @Service(value = "myKKSService")
 public class KKSServiceImpl implements KKSService {
 
-  private User user;
+  private Kayttaja user;
   private KKSMockModel model;
   private Map<String, KehitystietoTyyppi> fields;
 
   private Map<String, KehitysAsiaTyyppi> asiaTyypit;
 
-  public User getUser() {
+  public Kayttaja getUser() {
     return user;
   }
 
   public void create(String userRole) {
-    user = new User();
+    user = new Kayttaja();
     user.setRole(userRole);
     model = MockFactory.createModel();
     fields = createFieldsMap();
     asiaTyypit = createAsiaTyypitMap();
   }
 
-  public List<Henkilo> getChilds(User user) {
+  public List<Henkilo> getChilds(Kayttaja user) {
     return model.getChilds();
   }
 

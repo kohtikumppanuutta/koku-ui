@@ -1,6 +1,6 @@
 package com.ixonos.koku.kks.mock;
 
-public class User {
+public class Kayttaja {
 
   private String role;
 
