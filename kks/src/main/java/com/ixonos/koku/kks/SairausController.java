@@ -42,10 +42,12 @@ public class SairausController {
   @RenderMapping(params = "toiminto=naytaSairaus")
   public String nayta(@ModelAttribute(value = "lapsi") Henkilo lapsi,
       @ModelAttribute(value = "sairaus") KehitysAsia kehitys,
+      @RequestParam(value = "aktiivinen") String aktiivinen,
       RenderResponse response, Model model) {
     log.info("nayta sairaus");
     model.addAttribute("lapsi", lapsi);
     model.addAttribute("sairaus", kehitys);
+    model.addAttribute("aktiivinen", aktiivinen.toString());
     return "sairaus";
   }
 
@@ -77,6 +79,7 @@ public class SairausController {
   public void muokkaa(@ModelAttribute(value = "sairaus") KehitysAsia tarve,
       @ModelAttribute(value = "lapsi") Henkilo lapsi,
       @RequestParam(value = "vanha") String vanha, BindingResult bindingResult,
+      @RequestParam(value = "aktiivinen") String aktiivinen,
       ActionResponse response, SessionStatus sessionStatus) {
     log.debug("muokkaa sairautta");
 
@@ -90,6 +93,7 @@ public class SairausController {
 
     response.setRenderParameter("toiminto", "naytaTerveys");
     response.setRenderParameter("hetu", lapsi.getHetu());
+    response.setRenderParameter("aktiivinen", "" + aktiivinen.toString());
     sessionStatus.setComplete();
   }
 }

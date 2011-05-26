@@ -6,6 +6,7 @@ import com.ixonos.koku.kks.utils.enums.ErikoisruokaPeruste;
 import com.ixonos.koku.kks.utils.enums.KaynninTyyppi;
 import com.ixonos.koku.kks.utils.enums.KehitysAsiaTyyppi;
 import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
+import com.ixonos.koku.kks.utils.enums.Tila;
 
 public class MockFactory {
 
@@ -22,10 +23,16 @@ public class MockFactory {
   }
 
   public static Kehitystieto createNewEntry(Henkilo c) {
-    Kehitystieto entry1 = createLapsenKehitys();
 
-    entry1.setMuokkausPvm(new Date());
-    entry1.setMuokkaaja("Mikko Muokkaaja");
+    Date now = new Date();
+    Date valid = new Date();
+    valid.setYear(valid.getYear() + 1);
+
+    Kehitystieto entry1 = createLapsenKehitys();
+    KehitysTietoTila tila1 = entry1.getTila();
+    tila1.setTila(Tila.AKTIIVINEN);
+    tila1.setAlkuPvm(now);
+    tila1.setLoppuPvm(valid);
 
     Kehitystieto entry2 = new DefaultKehitysTieto("2",
         KehitystietoTyyppi.TUKITARVE, "Lapsen tukitarpeet");
@@ -35,10 +42,20 @@ public class MockFactory {
     entry2.setMuokkausPvm(new Date());
     entry2.setMuokkaaja("Mikko Muokkaaja");
 
+    KehitysTietoTila tila2 = entry2.getTila();
+    tila2.setTila(Tila.AKTIIVINEN);
+    tila2.setAlkuPvm(now);
+    tila2.setLoppuPvm(valid);
+
     Kehitystieto entry3 = createKasvatutsTieto("3",
         "Kasvatusta ohjaavat tiedot");
     entry3.setMuokkausPvm(new Date());
     entry3.setMuokkaaja("Mikko Muokkaaja");
+
+    KehitysTietoTila tila3 = entry3.getTila();
+    tila3.setTila(Tila.AKTIIVINEN);
+    tila3.setAlkuPvm(now);
+    tila3.setLoppuPvm(valid);
 
     Kehitystieto entry4 = new DefaultKehitysTieto("7",
         KehitystietoTyyppi.NELJA_VUOTISTARKASTUS, "4-vuotistarkastus");
@@ -46,6 +63,11 @@ public class MockFactory {
     entry4.setMuokkaaja("Mikko Muokkaaja");
 
     Kehitystieto entry5 = createTerveysTieto();
+
+    KehitysTietoTila tila5 = entry5.getTila();
+    tila5.setTila(Tila.AKTIIVINEN);
+    tila5.setAlkuPvm(now);
+    tila5.setLoppuPvm(valid);
 
     KKS tmp = new KKS();
     tmp.addKehitystieto(entry1);
@@ -58,10 +80,16 @@ public class MockFactory {
   }
 
   public static Kehitystieto createNewEntry1(Henkilo c) {
+    Date now = new Date();
+    Date valid = new Date();
+    valid.setYear(valid.getYear() + 1);
+
     Kehitystieto entry1 = createLapsenKehitys();
-    entry1.addKehitysAsia(createTukiTarve("Tukitarve 1"));
-    entry1.setMuokkausPvm(new Date());
-    entry1.setMuokkaaja("Mikko Muokkaaja");
+    KehitysTietoTila tila1 = entry1.getTila();
+    tila1.setTila(Tila.AKTIIVINEN);
+    tila1.setAlkuPvm(now);
+    tila1.setLoppuPvm(valid);
+
     Kehitystieto entry2 = new DefaultKehitysTieto("5",
         KehitystietoTyyppi.TUKITARVE, "Lapsen tukitarpeet");
     entry2.setMuokkausPvm(new Date());
@@ -123,8 +151,16 @@ public class MockFactory {
   }
 
   private static Kehitystieto createLapsenKehitys() {
+    Date now = new Date();
+    Date valid = new Date();
+    valid.setYear(valid.getYear() + 1);
+
     Kehitystieto entry1 = new DefaultKehitysTieto("1",
         KehitystietoTyyppi.LAPSEN_KEHITYS, "Lapsen kehitys");
+    KehitysTietoTila tila1 = entry1.getTila();
+    tila1.setTila(Tila.AKTIIVINEN);
+    tila1.setAlkuPvm(now);
+    tila1.setLoppuPvm(valid);
 
     entry1.addKehitysAsia(createMittaus("3kk mittaus"));
     entry1.addKehitysAsia(createMittaus("6kk mittaus"));

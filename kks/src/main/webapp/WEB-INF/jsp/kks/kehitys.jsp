@@ -55,6 +55,10 @@
 							<portlet:param name="toiminto" value="naytaKehitysAsia" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
 							<portlet:param name="kehitys" value="${mittaus.id}" />
+							
+							<c:if test="${ aktiivinen }">
+								<portlet:param name="aktiivinen" value="${true}" />
+							</c:if>
 						</portlet:renderURL>">
 						<strong>${mittaus.nimi }</strong> </a> ${ mittaus.muokkaaja } ${
 					mittaus.muokkausPvm }
@@ -82,6 +86,9 @@
 							<portlet:param name="toiminto" value="naytaKehitysAsia" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
 							<portlet:param name="kehitys" value="${havainto.id}" />
+							<c:if test="${ aktiivinen }">
+								<portlet:param name="aktiivinen" value="${true}" />
+							</c:if>
 						</portlet:renderURL>">
 						<strong>${havainto.nimi }</strong> </a> ${ havainto.muokkaaja } ${
 					havainto.muokkausPvm }
@@ -109,6 +116,11 @@
 							<portlet:param name="toiminto" value="naytaKehitysAsia" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
 							<portlet:param name="kehitys" value="${arvio.id}" />
+							
+							<c:if test="${ aktiivinen }">
+								<portlet:param name="aktiivinen" value="${true}" />
+							</c:if>
+							
 						</portlet:renderURL>">
 						<strong>${arvio.nimi }</strong> </a> ${ arvio.muokkaaja } ${
 					arvio.muokkausPvm }
@@ -123,50 +135,56 @@
 
 	<br />
 
+
 	<div>
 
 		<div class="kokoelma">
-			<a class="tieto"> <spring:message code="ui.lisaa.uusi" /><span
-				class="sulje"><spring:message code="ui.piilota" /> </span> </a>
-			<div class="tietokentta ">
-				<form:form name="lisaaKehitysForm" commandName="kehitys"
-					method="post" action="${lisaaActionUrl}">
+			<c:if test="${ sessionScope.ammattilainen && aktiivinen }">
+				<a class="tieto"> <spring:message code="ui.lisaa.uusi" /><span
+					class="sulje"><spring:message code="ui.piilota" /> </span> </a>
+				<div class="tietokentta ">
+					<form:form name="lisaaKehitysForm" commandName="kehitys"
+						method="post" action="${lisaaActionUrl}">
 
 
-					<h2>
-						<spring:message code="ui.lisaa.uusi.kehitys.tyyppi" />
-					</h2>
+						<h2>
+							<spring:message code="ui.lisaa.uusi.kehitys.tyyppi" />
+						</h2>
 
-					<form:select path="tyyppi" class="kokoelmavalinta">
+						<form:select path="tyyppi" class="kokoelmavalinta">
 
-						<form:option value="MITTAUS" label="Mittaus" />
+							<form:option value="MITTAUS" label="Mittaus" />
 
-						<form:option value="ARVIO" label="Arvio" />
+							<form:option value="ARVIO" label="Arvio" />
 
-						<form:option value="HAVAINTO" label="Havainto" />
+							<form:option value="HAVAINTO" label="Havainto" />
 
-					</form:select>
+						</form:select>
 
-					<h2>
-						<spring:message code="ui.lisaa.uusi.mittaus.nimi" />
-					</h2>
-					<form:input class="add" path="nimi"></form:input>
-					<span class="errors"><form:errors path="nimi" /> </span>
-					<h2>
-						<spring:message code="ui.lisaa.uusi.mittaus.kuvaus" />
-					</h2>
-					<form:textarea class="add" path="properties[kuvaus].firstValue"></form:textarea>
-					<span class="errors"><form:errors
-							path="properties[kuvaus].firstValue" /> </span>
+						<h2>
+							<spring:message code="ui.lisaa.uusi.mittaus.nimi" />
+						</h2>
+						<form:input class="add" path="nimi"></form:input>
+						<span class="errors"><form:errors path="nimi" /> </span>
+						<h2>
+							<spring:message code="ui.lisaa.uusi.mittaus.kuvaus" />
+						</h2>
+						<form:textarea class="add" path="properties[kuvaus].firstValue"></form:textarea>
+						<span class="errors"><form:errors
+								path="properties[kuvaus].firstValue" /> </span>
 
 
 
-					<input type="submit"
-						value="<spring:message code="ui.tallenna.tieto"/>"
-						class="tallenna">
-				</form:form>
-			</div>
+						<input type="submit"
+							value="<spring:message code="ui.tallenna.tieto"/>"
+							class="tallenna">
+					</form:form>
+
+				</div>
+			</c:if>
+
 		</div>
+
 	</div>
 </div>
 

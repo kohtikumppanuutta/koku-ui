@@ -32,7 +32,12 @@
 
 <div class="kokoelma">
 
-			<div class="tietokentta ">
+	<h1>${lapsi.nimi} ${sairaus.nimi}</h1>
+	
+	<div class="tietokentta ">
+
+		<c:if test="${ sessionScope.ammattilainen && aktiivinen  }">
+			<div class="edit">
 				<form:form name="muokkaaSairausForm" commandName="sairaus"
 					method="post" action="${muokkaaActionUrl}">
 
@@ -54,8 +59,8 @@
 					<form:textarea class="add" path="properties[hoito].firstValue"></form:textarea>
 					<span class="errors"><form:errors
 							path="properties[hoito].firstValue" /> </span>
-							
-							
+
+
 					<h2>
 						<spring:message code="ui.sairaus.laake.hoito" />
 					</h2>
@@ -66,13 +71,43 @@
 					<h2>
 						<spring:message code="ui.sairaus.toiminta" />
 					</h2>
-					<form:textarea class="add" path="properties[toimintasuunnitelma].firstValue"></form:textarea>
+					<form:textarea class="add"
+						path="properties[toimintasuunnitelma].firstValue"></form:textarea>
 					<span class="errors"><form:errors
 							path="properties[toimintasuunnitelma].firstValue" /> </span>
-							
+
 					<input type="submit"
 						value="<spring:message code="ui.tallenna.tieto"/>"
 						class="tallenna">
 				</form:form>
 			</div>
-		</div>
+		</c:if>
+
+		<c:if test="${ not sessionScope.ammattilainen || not aktiivinen  }">
+			<div class="read">
+
+				<h2>
+					<spring:message code="ui.sairaus.oireet" />
+				</h2>
+				<c:out value="${ sairaus.properties['oireet'].firstValue  }" />
+
+				<h2>
+					<spring:message code="ui.sairaus.hoito" />
+				</h2>
+				<c:out value="${ sairaus.properties['hoito'].firstValue  }" />
+
+				<h2>
+					<spring:message code="ui.sairaus.laake.hoito" />
+				</h2>
+				<c:out value="${ sairaus.properties['laake'].firstValue  }" />
+
+				<h2>
+					<spring:message code="ui.sairaus.toiminta" />
+				</h2>
+				<c:out
+					value="${ sairaus.properties['toimintasuunnitelma'].firstValue  }" />
+				<br />
+			</div>
+		</c:if>
+	</div>
+</div>

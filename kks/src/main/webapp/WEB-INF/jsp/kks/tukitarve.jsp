@@ -38,29 +38,51 @@
 
 		<div>
 			<div class="tietokentta ">
-				<form:form name="muokkaaTukitarveForm" commandName="tukitarve"
-					method="post" action="${muokkaaActionUrl}">
-					<h2>
-						<spring:message code="ui.lisaa.uusi.tukitarve.nimi" />
-					</h2>
-					<form:input class="add" path="nimi"></form:input>
-					<span class="errors"><form:errors path="nimi" /> </span>
-					<h2>
-						<spring:message code="ui.lisaa.uusi.tukitarve.kuvaus" />
-					</h2>
-					<form:textarea class="add" path="properties[kuvaus].firstValue"></form:textarea>
-					<span class="errors"><form:errors
-							path="properties[kuvaus].firstValue" /> </span>
-					<h2>
-						<spring:message code="ui.lisaa.uusi.tukitarve.tehtavat" />
-					</h2>
-					<form:textarea class="add" path="properties[tehtavat].firstValue"></form:textarea>
-					<span class="errors"><form:errors
-							path="properties[tehtavat].firstValue" /> </span>
 
-					<input type="submit"
-						value="<spring:message code="ui.tallenna.tieto"/>"
-						class="tallenna">
-				</form:form>
+				<c:if test="${ sessionScope.ammattilainen && aktiivinen }">
+					<div class="edit">
+						<form:form name="muokkaaTukitarveForm" commandName="tukitarve"
+							method="post" action="${muokkaaActionUrl}">
+							<h2>
+								<spring:message code="ui.lisaa.uusi.tukitarve.nimi" />
+							</h2>
+							<form:input class="add" path="nimi"></form:input>
+							<span class="errors"><form:errors path="nimi" /> </span>
+							<h2>
+								<spring:message code="ui.lisaa.uusi.tukitarve.kuvaus" />
+							</h2>
+							<form:textarea class="add" path="properties[kuvaus].firstValue"></form:textarea>
+							<span class="errors"><form:errors
+									path="properties[kuvaus].firstValue" /> </span>
+							<h2>
+								<spring:message code="ui.lisaa.uusi.tukitarve.tehtavat" />
+							</h2>
+							<form:textarea class="add" path="properties[tehtavat].firstValue"></form:textarea>
+							<span class="errors"><form:errors
+									path="properties[tehtavat].firstValue" /> </span>
+
+							<input type="submit"
+								value="<spring:message code="ui.tallenna.tieto"/>"
+								class="tallenna">
+						</form:form>
+					</div>
+				</c:if>
+
+				<c:if test="${ not sessionScope.ammattilainen || not aktiivinen  }">
+					<div class="read">
+					
+						<h2>
+							<spring:message code="ui.lisaa.uusi.tukitarve.kuvaus" />
+						</h2>
+						<c:out value="${ tukitarve.properties['kuvaus'].firstValue  }" />
+
+						<h2>
+							<spring:message code="ui.lisaa.uusi.tukitarve.tehtavat" />
+						</h2>
+						<c:out value="${ tukitarve.properties['tehtavat'].firstValue  }" />
+
+						<br />
+					</div>
+				</c:if>
 			</div>
 		</div>

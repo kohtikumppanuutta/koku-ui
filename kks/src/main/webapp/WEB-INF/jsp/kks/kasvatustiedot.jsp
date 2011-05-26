@@ -35,27 +35,53 @@
 
 	<div id="page">
 
-		<div>
-			<div class="tietokentta ">
-				<form:form name="muokkaaForm" commandName="tieto"
-					method="post" action="${muokkaaActionUrl}">
-					
-					<h2>
-						<spring:message code="ui.kasvatus.tieto.vanhemmille.tarkeat.asiat" />
-					</h2>
-					<form:textarea class="add" path="properties[tarkeat_asiat].firstValue"></form:textarea>
-					<span class="errors"><form:errors
-							path="properties[tarkeat_asiat].firstValue" /> </span>
-					<h2>
-						<spring:message code="ui.kasvatus.tieto.vanhempien.kasvatukselliset.tavoitteet" />
-					</h2>
-					<form:textarea class="add" path="properties[tavoitteet].firstValue"></form:textarea>
-					<span class="errors"><form:errors
-							path="properties[tavoitteet].firstValue" /> </span>
+		<c:if test="${ not sessionScope.ammattilainen }">
+			<div class="edit">
+				<div class="tietokentta ">
+					<form:form name="muokkaaForm" commandName="tieto" method="post"
+						action="${muokkaaActionUrl}">
 
-					<input type="submit"
-						value="<spring:message code="ui.tallenna.tieto"/>"
-						class="tallenna">
-				</form:form>
+						<h2>
+							<spring:message
+								code="ui.kasvatus.tieto.vanhemmille.tarkeat.asiat" />
+						</h2>
+						<form:textarea class="add"
+							path="properties[tarkeat_asiat].firstValue"></form:textarea>
+						<span class="errors"><form:errors
+								path="properties[tarkeat_asiat].firstValue" /> </span>
+						<h2>
+							<spring:message
+								code="ui.kasvatus.tieto.vanhempien.kasvatukselliset.tavoitteet" />
+						</h2>
+						<form:textarea class="add"
+							path="properties[tavoitteet].firstValue"></form:textarea>
+						<span class="errors"><form:errors
+								path="properties[tavoitteet].firstValue" /> </span>
+
+						<input type="submit"
+							value="<spring:message code="ui.tallenna.tieto"/>"
+							class="tallenna">
+					</form:form>
+				</div>
 			</div>
-		</div>
+		</c:if>
+
+
+		<c:if test="${ sessionScope.ammattilainen }">
+			<div class="read">
+				<h2>
+					<spring:message code="ui.kasvatus.tieto.vanhemmille.tarkeat.asiat" />
+				</h2>
+				<c:out value="${ tieto.properties['tarkeat_asiat'].firstValue }" />
+
+				<h2>
+					<spring:message
+						code="ui.kasvatus.tieto.vanhempien.kasvatukselliset.tavoitteet" />
+				</h2>
+				<c:out value="${ tieto.properties['tarkeat_asiat'].firstValue  }" />
+
+				<br />
+			</div>
+		</c:if>
+	</div>
+</div>

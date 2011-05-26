@@ -45,6 +45,8 @@ public class TukitarpeetController {
     model.addAttribute("tukitarpeet",
         tieto == null ? new ArrayList<KehitysAsia>() : tieto.getKehitysAsiat()
             .values());
+
+    model.addAttribute("aktiivinen", tieto.getTila().isAktiivinen());
     return "tukitarpeet";
   }
 

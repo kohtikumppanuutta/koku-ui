@@ -32,7 +32,12 @@
 
 <div class="kokoelma">
 
-			<div class="tietokentta ">
+	<h1>${lapsi.nimi} ${kaynti.nimi}</h1>
+	
+	<div class="tietokentta ">
+
+		<c:if test="${ sessionScope.ammattilainen && aktiivinen  }">
+			<div class="edit">
 				<form:form name="muokkaaRuokaForm" commandName="kaynti"
 					method="post" action="${muokkaaActionUrl}">
 
@@ -41,12 +46,13 @@
 						<spring:message code="ui.kaynti" />
 					</h2>
 
-					<form:select path="properties[kaynti].firstValue" class="kokoelmavalinta">
+					<form:select path="properties[kaynti].firstValue"
+						class="kokoelmavalinta">
 
 						<form:option value="NEUVOLA" label="Neuvola" />
 
 						<form:option value="TERVEYDEN_HOITAJA" label="Terveydenhoitaja" />
-						
+
 					</form:select>
 
 					<h2>
@@ -68,4 +74,25 @@
 						class="tallenna">
 				</form:form>
 			</div>
-		</div>
+		</c:if>
+
+		<c:if test="${ not sessionScope.ammattilainen || not aktiivinen }">
+			<div class="read">
+							
+				<h2>
+					<spring:message code="ui.kaynti" />
+				</h2>
+
+				<c:out value="${ kaynti.properties['kaynti'].firstValue }" />
+
+				<h2>
+					<spring:message code="ui.kaynti.kuvaus" />
+				</h2>
+				<c:out value="${ kaynti.properties['kuvaus'].firstValue  }" />
+
+				<br />
+			</div>
+		</c:if>
+	</div>
+
+</div>

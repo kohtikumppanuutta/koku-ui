@@ -1,5 +1,9 @@
 package com.ixonos.koku.kks;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.portlet.ActionResponse;
 
 import org.slf4j.Logger;
@@ -56,12 +60,33 @@ public class AktivoiKehitystietoController {
     if (kt != null) {
       KehitysTietoTila tila = kt.getTila();
       tila.setTila(Tila.AKTIIVINEN);
-      tila.setAlkuPvm(aktivointi.getAlkaa());
-      tila.setLoppuPvm(aktivointi.getLoppuu());
+
+      SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+      try {
+
+        if (aktivointi.getAlkaa() == null
+            || "".equals(aktivointi.getAlkaa().trim())) {
+          tila.setAlkuPvm(new Date());
+        } else {
+          tila.setAlkuPvm(dateFormat.parse(aktivointi.getAlkaa()));
+        }
+        if (aktivointi.getAlkaa() == null
+            || "".equals(aktivointi.getLoppuu().trim())) {
+          tila.setLoppuPvm(new Date());
+        } else {
+
+          tila.setLoppuPvm(dateFormat.parse(aktivointi.getLoppuu()));
+        }
+      } catch (ParseException e) {
+      }
+
     }
     response.setRenderParameter("toiminto", "naytaLapsi");
     response.setRenderParameter("hetu", lapsi.getHetu());
     aktivointi = getCommandObject();
+    aktivointi.setAlkaa("");
+    aktivointi.setLoppuu("");
     sessionStatus.setComplete();
   }
 

@@ -36,7 +36,12 @@
 
 <div class="kokoelma">
 
-			<div class="tietokentta ">
+	<h1>${lapsi.nimi} ${kehitys.nimi}</h1>
+	
+	<div class="tietokentta ">
+
+		<c:if test="${  sessionScope.ammattilainen && aktiivinen  }">
+			<div class="edit">
 				<form:form name="muokkaaKehitysForm" commandName="kehitys"
 					method="post" action="${muokkaaActionUrl}">
 
@@ -74,4 +79,25 @@
 						class="tallenna">
 				</form:form>
 			</div>
-		</div>
+		</c:if>
+
+		<c:if test="${ not sessionScope.ammattilainen || not aktiivinen  }">
+			<div class="read">
+
+				<h2>
+					<spring:message code="ui.lisaa.uusi.kehitys.tyyppi" />
+				</h2>
+
+				<c:out value="${ kehitys.tyyppi}" />
+
+				<h2>
+					<spring:message code="ui.kaynti.kuvaus" />
+				</h2>
+				<c:out value="${ kehitys.properties['kuvaus'].firstValue  }" />
+
+				<br />
+			</div>
+		</c:if>
+
+	</div>
+</div>

@@ -37,115 +37,126 @@
 </div>
 
 
-	<h1>
-		${lapsi.nimi}
-		<spring:message code="ui.terveystiedot.otsikko" />
-	</h1>
+<h1>
+	${lapsi.nimi}
+	<spring:message code="ui.terveystiedot.otsikko" />
+</h1>
 
 
-	<div id="sairaus">
+<div id="sairaus">
 
-		<h2>
-			<spring:message code="ui.sairaudet" />
-		</h2>
+	<h2>
+		<spring:message code="ui.sairaudet" />
+	</h2>
 
-		<c:if test="${not empty sairaudet}">
-			<c:forEach var="sairaus" items="${sairaudet}">
-				<div class="kokoelma">
-					<a
-						href="
+	<c:if test="${not empty sairaudet}">
+		<c:forEach var="sairaus" items="${sairaudet}">
+			<div class="kokoelma">
+				<a
+					href="
 							<portlet:renderURL>
 							<portlet:param name="toiminto" value="naytaSairaus" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
 							<portlet:param name="sairaus" value="${sairaus.id}" />
+							
+							<portlet:param name="aktiivinen" value="${ aktiivinen }" />
+							
 						</portlet:renderURL>">
-						<strong>${sairaus.nimi }</strong> </a> ${ sairaus.muokkaaja } ${
-					sairaus.muokkausPvm }
-				</div>
+					<strong>${sairaus.nimi }</strong> </a> ${ sairaus.muokkaaja } ${
+				sairaus.muokkausPvm }
+			</div>
 
-			</c:forEach>
-		</c:if>
+		</c:forEach>
+	</c:if>
 
 
-		<div>
+	<div>
 
 		<div class="kokoelma">
-			<a class="tieto"> <spring:message code="ui.uusi.sairaus" /><span
-				class="sulje"><spring:message code="ui.piilota" /> </span> </a>
-			<div class="tietokentta ">
-				<form:form name="lisaaSairausForm" commandName="sairaus"
-					method="post" action="${lisaaSairausActionUrl}">
+			<c:if test="${ sessionScope.ammattilainen && aktiivinen }">
+				<a class="tieto"> <spring:message code="ui.uusi.sairaus" /><span
+					class="sulje"><spring:message code="ui.piilota" /> </span> </a>
+				<div class="tietokentta ">
+					<form:form name="lisaaSairausForm" commandName="sairaus"
+						method="post" action="${lisaaSairausActionUrl}">
 
-					<h2>
-						<spring:message code="ui.lisaa.uusi.nimi" />
-					</h2>
-					<form:input class="add" path="nimi"></form:input>
-					<span class="errors"><form:errors path="nimi" /> </span>
-					<h2>
-						<spring:message code="ui.sairaus.oireet" />
-					</h2>
-					<form:textarea class="add" path="properties[oireet].firstValue"></form:textarea>
-					<span class="errors"><form:errors
-							path="properties[oireet].firstValue" /> </span>
+						<h2>
+							<spring:message code="ui.lisaa.uusi.nimi" />
+						</h2>
+						<form:input class="add" path="nimi"></form:input>
+						<span class="errors"><form:errors path="nimi" /> </span>
+						<h2>
+							<spring:message code="ui.sairaus.oireet" />
+						</h2>
+						<form:textarea class="add" path="properties[oireet].firstValue"></form:textarea>
+						<span class="errors"><form:errors
+								path="properties[oireet].firstValue" /> </span>
 
-					<h2>
-						<spring:message code="ui.sairaus.hoito" />
-					</h2>
-					<form:textarea class="add" path="properties[hoito].firstValue"></form:textarea>
-					<span class="errors"><form:errors
-							path="properties[hoito].firstValue" /> </span>
-							
-							
-					<h2>
-						<spring:message code="ui.sairaus.laake.hoito" />
-					</h2>
-					<form:textarea class="add" path="properties[laake].firstValue"></form:textarea>
-					<span class="errors"><form:errors
-							path="properties[laake].firstValue" /> </span>
+						<h2>
+							<spring:message code="ui.sairaus.hoito" />
+						</h2>
+						<form:textarea class="add" path="properties[hoito].firstValue"></form:textarea>
+						<span class="errors"><form:errors
+								path="properties[hoito].firstValue" /> </span>
 
-					<h2>
-						<spring:message code="ui.sairaus.toiminta" />
-					</h2>
-					<form:textarea class="add" path="properties[toimintasuunnitelma].firstValue"></form:textarea>
-					<span class="errors"><form:errors
-							path="properties[toimintasuunnitelma].firstValue" /> </span>
-							
-					<input type="submit"
-						value="<spring:message code="ui.tallenna.tieto"/>"
-						class="tallenna">
-				</form:form>
-			</div>
+
+						<h2>
+							<spring:message code="ui.sairaus.laake.hoito" />
+						</h2>
+						<form:textarea class="add" path="properties[laake].firstValue"></form:textarea>
+						<span class="errors"><form:errors
+								path="properties[laake].firstValue" /> </span>
+
+						<h2>
+							<spring:message code="ui.sairaus.toiminta" />
+						</h2>
+						<form:textarea class="add"
+							path="properties[toimintasuunnitelma].firstValue"></form:textarea>
+						<span class="errors"><form:errors
+								path="properties[toimintasuunnitelma].firstValue" /> </span>
+
+						<input type="submit"
+							value="<spring:message code="ui.tallenna.tieto"/>"
+							class="tallenna">
+					</form:form>
+				</div>
+			</c:if>
 		</div>
 	</div>
-		
-	</div>
 
-	<div id="erikoisruokavaliot">
+</div>
 
-		<h2>
-			<spring:message code="ui.erikoisruokavaliot" />
-		</h2>
+<div id="erikoisruokavaliot">
 
-		<c:if test="${not empty ruokavaliot}">
-			<c:forEach var="ruoka" items="${ruokavaliot}">
-				<div class="kokoelma">
-					<a
-						href="
+	<h2>
+		<spring:message code="ui.erikoisruokavaliot" />
+	</h2>
+
+	<c:if test="${not empty ruokavaliot}">
+		<c:forEach var="ruoka" items="${ruokavaliot}">
+			<div class="kokoelma">
+				<a
+					href="
 							<portlet:renderURL>
 							<portlet:param name="toiminto" value="naytaRuokavalio" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
 							<portlet:param name="ruokavalio" value="${ruoka.id}" />
+						
+								<portlet:param name="aktiivinen" value="${ aktiivinen }" />
+							
 						</portlet:renderURL>">
-						<strong>${ruoka.nimi }</strong> </a> ${ ruoka.muokkaaja } ${
-					ruoka.muokkausPvm }
-				</div>
+					<strong>${ruoka.nimi }</strong> </a> ${ ruoka.muokkaaja } ${
+				ruoka.muokkausPvm }
+			</div>
 
-			</c:forEach>
-		</c:if>
+		</c:forEach>
+	</c:if>
 
-		<div class="kokoelma">
-			<a class="tieto"> <spring:message code="ui.uusi.erikoisruokavalio" /><span
-				class="sulje"><spring:message code="ui.piilota" /> </span> </a>
+	<div class="kokoelma">
+		<c:if test="${ sessionScope.ammattilainen && aktiivinen }">
+			<a class="tieto"> <spring:message
+					code="ui.uusi.erikoisruokavalio" /><span class="sulje"><spring:message
+						code="ui.piilota" /> </span> </a>
 			<div class="tietokentta ">
 				<form:form name="lisaaRuokaForm" commandName="ruokavalio"
 					method="post" action="${lisaaErikoisruokaActionUrl}">
@@ -155,7 +166,8 @@
 						<spring:message code="ui.erikoisruokavalio.syy" />
 					</h2>
 
-					<form:select path="properties[peruste].firstValue" class="kokoelmavalinta">
+					<form:select path="properties[peruste].firstValue"
+						class="kokoelmavalinta">
 
 						<form:option value="ALLERGIA" label="Allergia" />
 
@@ -184,35 +196,40 @@
 						class="tallenna">
 				</form:form>
 			</div>
-		</div>
-
-
+		</c:if>
 	</div>
 
-	<div id="kaynnit">
 
-		<h2>
-			<spring:message code="ui.kaynnit" />
-		</h2>
+</div>
 
-		<c:if test="${not empty kaynnit}">
-			<c:forEach var="kaynti" items="${kaynnit}">
-				<div class="kokoelma">
-					<a
-						href="
+<div id="kaynnit">
+
+	<h2>
+		<spring:message code="ui.kaynnit" />
+	</h2>
+
+	<c:if test="${not empty kaynnit}">
+		<c:forEach var="kaynti" items="${kaynnit}">
+			<div class="kokoelma">
+				<a
+					href="
 							<portlet:renderURL>
 							<portlet:param name="toiminto" value="naytaKaynti" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
 							<portlet:param name="kaynti" value="${kaynti.id}" />
+							
+							<portlet:param name="aktiivinen" value="${ aktiivinen }" />
+							
 						</portlet:renderURL>">
-						<strong>${kaynti.nimi }</strong> </a> ${ kaynti.muokkaaja } ${
-					kaynti.muokkausPvm }
-				</div>
+					<strong>${kaynti.nimi }</strong> </a> ${ kaynti.muokkaaja } ${
+				kaynti.muokkausPvm }
+			</div>
 
-			</c:forEach>
-		</c:if>
+		</c:forEach>
+	</c:if>
 
-<div class="kokoelma">
+	<div class="kokoelma">
+		<c:if test="${ sessionScope.ammattilainen && aktiivinen }">
 			<a class="tieto"> <spring:message code="ui.uusi.kaynti" /><span
 				class="sulje"><spring:message code="ui.piilota" /> </span> </a>
 			<div class="tietokentta ">
@@ -224,12 +241,13 @@
 						<spring:message code="ui.kaynti" />
 					</h2>
 
-					<form:select path="properties[kaynti].firstValue" class="kokoelmavalinta">
+					<form:select path="properties[kaynti].firstValue"
+						class="kokoelmavalinta">
 
 						<form:option value="NEUVOLA" label="Neuvola" />
 
 						<form:option value="TERVEYDEN_HOITAJA" label="Terveydenhoitaja" />
-						
+
 					</form:select>
 
 					<h2>
@@ -251,13 +269,14 @@
 						class="tallenna">
 				</form:form>
 			</div>
-		</div>
-
+		</c:if>
 	</div>
 
-	<br />
+</div>
 
-	
+<br />
+
+
 
 <script type="text/javascript"
 	src="http://code.jquery.com/jquery-1.4.4.min.js"></script>

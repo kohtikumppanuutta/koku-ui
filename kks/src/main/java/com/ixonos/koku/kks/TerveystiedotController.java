@@ -63,6 +63,8 @@ public class TerveystiedotController {
     model.addAttribute("kaynnit", tieto == null ? new ArrayList<KehitysAsia>()
         : tieto.getKehitysAsiat(KehitysAsiaTyyppi.KAYNTI));
 
+    model.addAttribute("aktiivinen", tieto.getTila().isAktiivinen());
+
     return "terveystiedot";
   }
 

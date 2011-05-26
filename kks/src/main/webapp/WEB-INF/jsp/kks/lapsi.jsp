@@ -13,7 +13,15 @@
 <portlet:defineObjects />
 
 <portlet:renderURL var="kotiUrl">
-	<portlet:param name="toiminto" value="naytaLapset" />
+
+	<c:if test="${ not sessionScope.ammattilainen }">
+		<portlet:param name="toiminto" value="naytaLapset" />
+	</c:if>
+	<c:if test="${ sessionScope.ammattilainen }">
+		<portlet:param name="toiminto" value="naytaTyontekija" />
+		<portlet:param name="lapset" value="${lapsi.hetu}" />
+	</c:if>
+
 </portlet:renderURL>
 <portlet:actionURL var="lisaaActionUrl">
 	<portlet:param name="toiminto" value="lisaaTieto" />
@@ -42,67 +50,80 @@
 	<div id="page">
 		<table width="100%" border="0">
 			<tr>
-				<th>TIETOKOKOELMA</th>
-				<th>VIIMEISIN KIRJAUS</th>
-				<th>KIRJAUSTEN TILA</th>
+				<th align="left">TIETOKOKOELMA</th>
+				<th align="left">VIIMEISIN KIRJAUS</th>
+
+				<c:if test="${ sessionScope.ammattilainen }">
+					<th align="left">KIRJAUSTEN TILA</th>
+				</c:if>
 			</tr>
 
 			<c:if test="${not empty tiedot}">
 				<c:forEach var="tieto" items="${tiedot}">
-					<tr>
-						<td><span class="kokoelma"> <a
-								href="
+
+					<c:if
+						test="${ sessionScope.ammattilainen || tieto.tila.aktiivinen }">
+						<tr>
+							<td><span class="kokoelma"> <a
+									href="
 						<portlet:actionURL>
 							<portlet:param name="toiminto" value="kehitysTietoihin" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
 							<portlet:param name="tyyppi" value="${tieto.tyyppi}" />
 						</portlet:actionURL>">
-									<strong>${ tieto.nimi }</strong> </a> </span></td>
-						<td>${ tieto.muokkaaja } ${ tieto.muokkausPvm }</td>
-						<td><c:choose>
-								<c:when test="${tieto.tila.aktiivinen}">
-						Aktiivinen
-					</c:when>
-								<c:otherwise>
-						Lukittu
-					</c:otherwise>
-							</c:choose></td>
-					</tr>
+										<strong>${ tieto.nimi }</strong> </a> </span></td>
+							<td>${ tieto.muokkaaja }  <fmt:formatDate pattern="dd/MM/yyyy" value="${ tieto.muokkausPvm }"/> </td>
+
+							<c:if test="${ sessionScope.ammattilainen }">
+								<td><c:choose>
+										<c:when test="${tieto.tila.aktiivinen}">
+										Aktiivinen <fmt:formatDate pattern="dd/MM/yyyy" value="${ tieto.tila.alkuPvm }"/> - <fmt:formatDate pattern="dd/MM/yyyy" value="${ tieto.tila.loppuPvm }"/>
+										</c:when>
+										<c:otherwise>
+										Lukittu (voimassa viimeksi: <fmt:formatDate pattern="dd/MM/yyyy" value="${ tieto.tila.alkuPvm }"/> - <fmt:formatDate pattern="dd/MM/yyyy" value="${ tieto.tila.loppuPvm }"/>)
+									</c:otherwise>
+									</c:choose></td>
+							</c:if>
+						</tr>
+					</c:if>
 				</c:forEach>
 			</c:if>
 
 		</table>
+
+		<br />
+
 		<div>
+			<c:if test="${ sessionScope.ammattilainen }">
+				<form:form name="aktivointiForm" commandName="aktivointi"
+					method="post" action="${aktivointiActionUrl}">
 
-			<form:form name="aktivointiForm" commandName="aktivointi"
-				method="post" action="${aktivointiActionUrl}">
+					<div>
+						<br> AKTIVOI UUSI TIETOKOKOELMA: <span class="pvm"> <form:select
+								path="aktivoitavaKentta" class="kokoelmavalinta">
 
-				<div>
-					<br> AKTIVOI UUSI TIETOKOKOELMA <span class="pvm"> <spring:message
-							code="ui.valitse.kokoelma" /> <form:select
-							path="aktivoitavaKentta" class="kokoelmavalinta">
-
-							<form:option value="" label="" />
+								<form:option value="" label="" />
 
 
-							<c:forEach var="tieto" items="${tiedot}">
-								<form:option value="${tieto.tyyppi}" label="${ tieto.nimi }" />
-							</c:forEach>
-						</form:select> </span>
+								<c:forEach var="tieto" items="${tiedot}">
+									<form:option value="${tieto.tyyppi}" label="${ tieto.nimi }" />
+								</c:forEach>
+							</form:select> </span>
 
-				</div>
+					</div>
+<br/>
+					<div>
+						</span>AKTIIVINEN KIRJAUSAIKA (DD/MM/YYYY):
 
-				<div>
-					</span>AKTIIVINEN KIRJAUSAIKA: Alkaa (DD/MM/YYYY):
+						<form:input path="alkaa" />
+						<strong>-</strong> 
+						<form:input path="loppuu" />
 
-					<form:input path="alkaa" />
-					- Loppuu:
-					<form:input path="loppuu" />
-
-				</div>
-				<span class="viestintiedot"> <input type="submit"
-					class="tallenna" value="Aktivoi kokolema"> </span>
-			</form:form>
+					</div>
+					<span class="viestintiedot"> <input type="submit"
+						class="tallenna" value="Aktivoi kokolema"> </span>
+				</form:form>
+			</c:if>
 		</div>
 
 

@@ -1,16 +1,14 @@
 package com.ixonos.koku.kks.mock;
 
-import java.util.Date;
-
 import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
 
 public class Aktivointi {
 
   private KehitystietoTyyppi aktivoitavaKentta;
 
-  private Date alkaa;
+  private String alkaa;
 
-  private Date loppuu;
+  private String loppuu;
 
   public KehitystietoTyyppi getAktivoitavaKentta() {
     return aktivoitavaKentta;
@@ -20,19 +18,19 @@ public class Aktivointi {
     this.aktivoitavaKentta = aktivoitavaKentta;
   }
 
-  public Date getAlkaa() {
+  public String getAlkaa() {
     return alkaa;
   }
 
-  public void setAlkaa(Date alkaa) {
+  public void setAlkaa(String alkaa) {
     this.alkaa = alkaa;
   }
 
-  public Date getLoppuu() {
+  public String getLoppuu() {
     return loppuu;
   }
 
-  public void setLoppuu(Date loppuu) {
+  public void setLoppuu(String loppuu) {
     this.loppuu = loppuu;
   }
 

@@ -32,7 +32,12 @@
 
 <div class="kokoelma">
 
-			<div class="tietokentta ">
+		<h1>${lapsi.nimi} ${ruokavalio.nimi}</h1>
+		
+	<div class="tietokentta ">
+
+		<c:if test="${ sessionScope.ammattilainen && aktiivinen }">
+			<div class="edit">
 				<form:form name="muokkaaRuokaForm" commandName="ruokavalio"
 					method="post" action="${muokkaaActionUrl}">
 
@@ -41,7 +46,8 @@
 						<spring:message code="ui.erikoisruokavalio.syy" />
 					</h2>
 
-					<form:select path="properties[peruste].firstValue" class="kokoelmavalinta">
+					<form:select path="properties[peruste].firstValue"
+						class="kokoelmavalinta">
 
 						<form:option value="ALLERGIA" label="Allergia" />
 
@@ -50,24 +56,44 @@
 						<form:option value="VAKAUMUKSELLINEN" label="Vakaumuksellinen" />
 
 					</form:select>
-
 					<h2>
 						<spring:message code="ui.lisaa.uusi.nimi" />
 					</h2>
+
 					<form:input class="add" path="nimi"></form:input>
+
 					<span class="errors"><form:errors path="nimi" /> </span>
 					<h2>
 						<spring:message code="ui.erikoisruokavalio.kuvaus" />
 					</h2>
+
 					<form:textarea class="add" path="properties[kuvaus].firstValue"></form:textarea>
 					<span class="errors"><form:errors
 							path="properties[kuvaus].firstValue" /> </span>
-
 
 
 					<input type="submit"
 						value="<spring:message code="ui.tallenna.tieto"/>"
 						class="tallenna">
 				</form:form>
+
 			</div>
-		</div>
+		</c:if>
+
+		<c:if test="${ not sessionScope.ammattilainen }">
+			<div class="read">
+
+				<h2>
+					<spring:message code="ui.erikoisruokavalio.syy" />
+				</h2>
+				<c:out value="${ ruokavalio.properties['peruste'].firstValue }" />
+
+				<h2>
+					<spring:message code="ui.erikoisruokavalio.kuvaus" />
+				</h2>
+				<c:out value="${ ruokavalio.properties['kuvaus'].firstValue }" />
+				<br />
+			</div>
+		</c:if>
+	</div>
+</div>

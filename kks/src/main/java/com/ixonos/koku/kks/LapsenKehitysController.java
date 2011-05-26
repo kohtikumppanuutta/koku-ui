@@ -63,6 +63,7 @@ public class LapsenKehitysController {
         tieto == null ? new ArrayList<KehitysAsia>() : tieto
             .getKehitysAsiat(KehitysAsiaTyyppi.HAVAINTO));
 
+    model.addAttribute("aktiivinen", tieto.getTila().isAktiivinen());
     return "kehitys";
   }
 

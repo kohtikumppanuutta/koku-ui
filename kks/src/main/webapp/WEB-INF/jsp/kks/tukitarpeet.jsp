@@ -51,6 +51,8 @@
 							<portlet:param name="toiminto" value="naytaTukitarve" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
 							<portlet:param name="tarve" value="${tarve.id}" />
+							<portlet:param name="aktiivinen" value="${ aktiivinen }" />
+							
 						</portlet:renderURL>">
 									<strong>${tarve.nimi }</strong> </a> </span>
 						</td>
@@ -64,6 +66,7 @@
 		<div>
 
 			<div>
+				<c:if test="${ sessionScope.ammattilainen && aktiivinen }">
 				<a class="tieto"> <spring:message
 						code="ui.lisaa.uusi.tukitarve" /><span class="sulje"><spring:message
 							code="ui.piilota" />
@@ -85,6 +88,7 @@
 							class="tallenna">
 					</form:form>
 				</div>
+				</c:if>
 			</div>
 
 		</div>

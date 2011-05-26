@@ -11,6 +11,8 @@
 	<portlet:param name="toiminto" value="choose" />
 </portlet:renderURL>
 
+<c:set var="ammattilainen" value="${false}" scope="session"/>  
+    
 <div>
 
 	<div class="home">

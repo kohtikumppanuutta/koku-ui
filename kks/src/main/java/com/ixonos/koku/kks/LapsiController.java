@@ -1,8 +1,5 @@
 package com.ixonos.koku.kks;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.portlet.ActionResponse;
 import javax.portlet.RenderResponse;
 
@@ -10,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -47,16 +43,18 @@ public class LapsiController {
 
     response.setRenderParameter("toiminto", "naytaLapsi");
     response.setRenderParameter("hetu", lapsi.getHetu());
+    getCommandObject();
     sessionStatus.setComplete();
   }
 
   @RenderMapping(params = "toiminto=naytaLapsi")
   public String nayta(@ModelAttribute(value = "lapsi") Henkilo lapsi,
+      @ModelAttribute(value = "aktivointi") Aktivointi aktivointi,
       RenderResponse response, Model model) {
     log.info("nayta lapsi");
     model.addAttribute("lapsi", lapsi);
     model.addAttribute("tiedot", lapsi.getKks().getKehitystiedot());
-    getCommandObject();
+    aktivointi = getCommandObject();
     return "lapsi";
   }
 
@@ -68,14 +66,10 @@ public class LapsiController {
 
   @InitBinder("aktivointi")
   public void initBinder(WebDataBinder binder) {
-    log.debug("init binder");
+    log.debug("init binder  ");
     binder.registerCustomEditor(KehitystietoTyyppi.class,
         new KehitystietoTyyppiEditor(service));
 
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    // dateFormat.setLenient(false);
-    binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,
-        false));
   }
 
   @ModelAttribute("aktivointi")

@@ -19,6 +19,7 @@
 	<portlet:param name="toiminto" value="haeLapsi" />
 </portlet:actionURL>
 
+<c:set var="ammattilainen" value="${true}" scope="session"/>  
 
 <div>
 	<div class="home">
