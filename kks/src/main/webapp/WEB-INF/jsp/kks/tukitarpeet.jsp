@@ -19,6 +19,7 @@
 <portlet:actionURL var="lisaaActionUrl">
 	<portlet:param name="toiminto" value="lisaaTukitarve" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
+		<portlet:param name="aktiivinen" value="${aktiivinen}" />
 </portlet:actionURL>
 
 <div>

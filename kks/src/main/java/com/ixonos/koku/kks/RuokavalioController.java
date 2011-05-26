@@ -43,10 +43,12 @@ public class RuokavalioController {
   @RenderMapping(params = "toiminto=naytaRuokavalio")
   public String nayta(@ModelAttribute(value = "lapsi") Henkilo lapsi,
       @ModelAttribute(value = "ruokavalio") KehitysAsia kehitys,
+      @RequestParam(value = "aktiivinen") String aktiivinen,
       RenderResponse response, Model model) {
     log.info("nayta ruokavalio");
     model.addAttribute("lapsi", lapsi);
     model.addAttribute("ruokavalio", kehitys);
+    model.addAttribute("aktiivinen", aktiivinen.toString());
     return "erikoisruokavalio";
   }
 
@@ -77,8 +79,10 @@ public class RuokavalioController {
   @ActionMapping(params = "toiminto=muokkaaRuokavaliota")
   public void muokkaa(@ModelAttribute(value = "ruokavalio") KehitysAsia tarve,
       @ModelAttribute(value = "lapsi") Henkilo lapsi,
-      @RequestParam(value = "vanha") String vanha, BindingResult bindingResult,
-      ActionResponse response, SessionStatus sessionStatus) {
+      @RequestParam(value = "vanha") String vanha,
+      @RequestParam(value = "aktiivinen") String aktiivinen,
+      BindingResult bindingResult, ActionResponse response,
+      SessionStatus sessionStatus) {
     log.debug("muokkaa ruokavaliota");
 
     tarve.setMuokkaaja("Koodista muokkaaja");
@@ -91,6 +95,7 @@ public class RuokavalioController {
 
     response.setRenderParameter("toiminto", "naytaTerveys");
     response.setRenderParameter("hetu", lapsi.getHetu());
+    response.setRenderParameter("aktiivinen", "" + aktiivinen.toString());
     sessionStatus.setComplete();
   }
 

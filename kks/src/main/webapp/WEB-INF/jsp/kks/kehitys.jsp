@@ -23,6 +23,7 @@
 <portlet:actionURL var="lisaaActionUrl">
 	<portlet:param name="toiminto" value="lisaaKehitysAsia" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
+	<portlet:param name="aktiivinen" value="${aktiivinen}" />
 </portlet:actionURL>
 
 
@@ -55,10 +56,7 @@
 							<portlet:param name="toiminto" value="naytaKehitysAsia" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
 							<portlet:param name="kehitys" value="${mittaus.id}" />
-							
-							<c:if test="${ aktiivinen }">
-								<portlet:param name="aktiivinen" value="${true}" />
-							</c:if>
+							<portlet:param name="aktiivinen" value="${ aktiivinen }" />
 						</portlet:renderURL>">
 						<strong>${mittaus.nimi }</strong> </a> ${ mittaus.muokkaaja } ${
 					mittaus.muokkausPvm }
@@ -86,9 +84,7 @@
 							<portlet:param name="toiminto" value="naytaKehitysAsia" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
 							<portlet:param name="kehitys" value="${havainto.id}" />
-							<c:if test="${ aktiivinen }">
-								<portlet:param name="aktiivinen" value="${true}" />
-							</c:if>
+						    <portlet:param name="aktiivinen" value="${ aktiivinen }" />
 						</portlet:renderURL>">
 						<strong>${havainto.nimi }</strong> </a> ${ havainto.muokkaaja } ${
 					havainto.muokkausPvm }
@@ -116,10 +112,7 @@
 							<portlet:param name="toiminto" value="naytaKehitysAsia" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
 							<portlet:param name="kehitys" value="${arvio.id}" />
-							
-							<c:if test="${ aktiivinen }">
-								<portlet:param name="aktiivinen" value="${true}" />
-							</c:if>
+							<portlet:param name="aktiivinen" value="${ aktiivinen }" />
 							
 						</portlet:renderURL>">
 						<strong>${arvio.nimi }</strong> </a> ${ arvio.muokkaaja } ${

@@ -19,14 +19,17 @@
 <portlet:actionURL var="lisaaSairausActionUrl">
 	<portlet:param name="toiminto" value="lisaaSairaus" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
+		<portlet:param name="aktiivinen" value="${aktiivinen}" />
 </portlet:actionURL>
 <portlet:actionURL var="lisaaErikoisruokaActionUrl">
 	<portlet:param name="toiminto" value="lisaaRuokavalio" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
+		<portlet:param name="aktiivinen" value="${aktiivinen}" />
 </portlet:actionURL>
 <portlet:actionURL var="lisaaKayntiActionUrl">
 	<portlet:param name="toiminto" value="lisaaKaynti" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
+		<portlet:param name="aktiivinen" value="${aktiivinen}" />
 </portlet:actionURL>
 <div>
 
