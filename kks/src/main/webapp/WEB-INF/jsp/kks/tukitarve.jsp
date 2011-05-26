@@ -21,6 +21,7 @@
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
 	<portlet:param name="tarve" value="${tukitarve.id}" />
 	<portlet:param name="vanhaNimi" value="${tukitarve.id}" />
+	<portlet:param name="aktiivinen" value="${aktiivinen}" />
 </portlet:actionURL>
 
 <div>

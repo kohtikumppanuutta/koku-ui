@@ -39,7 +39,7 @@ public class TukitarveController {
       @ModelAttribute(value = "tukitarve") KehitysAsia tarve,
       @ModelAttribute(value = "lapsi") Henkilo lapsi,
       @RequestParam(value = "vanhaNimi") String vanhaNimi,
-      @RequestParam(value = "aktiivinen") Boolean aktiivinen,
+      @RequestParam(value = "aktiivinen") String aktiivinen,
       ActionResponse response, SessionStatus sessionStatus) {
     log.debug("muokkaaTukitarvetta");
 
@@ -53,7 +53,7 @@ public class TukitarveController {
 
     response.setRenderParameter("toiminto", "naytaTukitoimet");
     response.setRenderParameter("hetu", lapsi.getHetu());
-    response.setRenderParameter("aktiivinen", "" + aktiivinen.toString());
+    response.setRenderParameter("aktiivinen", "" + aktiivinen);
     sessionStatus.setComplete();
   }
 
@@ -66,7 +66,7 @@ public class TukitarveController {
   @RenderMapping(params = "toiminto=naytaTukitarve")
   public String naytaTukitarve(@ModelAttribute(value = "lapsi") Henkilo lapsi,
       @ModelAttribute(value = "tukitarve") KehitysAsia tarve,
-      @RequestParam(value = "aktiivinen") Boolean aktiivinen,
+      @RequestParam(value = "aktiivinen") String aktiivinen,
       RenderResponse response, Model model) {
     log.info("näytä tukitoimet");
     model.addAttribute("lapsi", lapsi);
