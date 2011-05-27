@@ -20,6 +20,7 @@
 	<portlet:param name="toiminto" value="muokkaaKasvatusTietoa" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
 	<portlet:param name="tieto" value="${tieto.tyyppi}" />
+		<portlet:param name="aktiivinen" value="${aktiivinen}" />
 </portlet:actionURL>
 
 <div>
@@ -78,7 +79,7 @@
 					<spring:message
 						code="ui.kasvatus.tieto.vanhempien.kasvatukselliset.tavoitteet" />
 				</h2>
-				<c:out value="${ tieto.properties['tarkeat_asiat'].firstValue  }" />
+				<c:out value="${ tieto.properties['tavoitteet'].firstValue  }" />
 
 				<br />
 			</div>

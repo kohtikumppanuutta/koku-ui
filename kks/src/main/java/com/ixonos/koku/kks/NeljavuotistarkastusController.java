@@ -49,6 +49,6 @@ public class NeljavuotistarkastusController {
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
     log.info("getLapsi");
-    return service.getChild(hetu);
+    return service.haeLapsi(hetu);
   }
 }

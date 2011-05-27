@@ -61,7 +61,7 @@ public class LapsiController {
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
     log.info("getLapsi with hetu=" + hetu);// #TODO# Remove hetu from log
-    return service.getChild(hetu);
+    return service.haeLapsi(hetu);
   }
 
   @InitBinder("aktivointi")

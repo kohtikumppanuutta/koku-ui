@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -54,7 +53,7 @@ public class SairausController {
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
     log.info("getLapsi");
-    return service.getChild(hetu);
+    return service.haeLapsi(hetu);
   }
 
   @ModelAttribute("sairaus")
@@ -63,7 +62,7 @@ public class SairausController {
       @RequestParam(value = "hetu") String hetu) {
     log.debug("get sairaus command object");
 
-    Henkilo lapsi = service.getChild(hetu);
+    Henkilo lapsi = service.haeLapsi(hetu);
     return lapsi.getKks().getKehitystieto(KehitystietoTyyppi.TERVEYDEN_TILA)
         .getKehitysAsia(kehitysAsia);
   }
@@ -78,7 +77,7 @@ public class SairausController {
   @ActionMapping(params = "toiminto=muokkaaSairautta")
   public void muokkaa(@ModelAttribute(value = "sairaus") KehitysAsia tarve,
       @ModelAttribute(value = "lapsi") Henkilo lapsi,
-      @RequestParam(value = "vanha") String vanha, BindingResult bindingResult,
+      @RequestParam(value = "vanha") String vanha,
       @RequestParam(value = "aktiivinen") String aktiivinen,
       ActionResponse response, SessionStatus sessionStatus) {
     log.debug("muokkaa sairautta");

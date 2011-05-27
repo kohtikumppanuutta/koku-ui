@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -43,17 +42,19 @@ public class LapsenKehitysAsiaController {
   @RenderMapping(params = "toiminto=naytaKehitysAsia")
   public String nayta(@ModelAttribute(value = "lapsi") Henkilo lapsi,
       @ModelAttribute(value = "kehitys") KehitysAsia kehitys,
+      @RequestParam(value = "aktiivinen") String aktiivinen,
       RenderResponse response, Model model) {
     log.info("nayta kehitys asia");
     model.addAttribute("lapsi", lapsi);
     model.addAttribute("kehitys", kehitys);
+    model.addAttribute("aktiivinen", aktiivinen);
     return "kehitys_asia";
   }
 
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
     log.info("getLapsi");
-    return service.getChild(hetu);
+    return service.haeLapsi(hetu);
   }
 
   @ModelAttribute("kehitys")
@@ -62,7 +63,7 @@ public class LapsenKehitysAsiaController {
       @RequestParam(value = "hetu") String hetu) {
     log.debug("get kehitys asia command object");
 
-    Henkilo lapsi = service.getChild(hetu);
+    Henkilo lapsi = service.haeLapsi(hetu);
     return lapsi.getKks().getKehitystieto(KehitystietoTyyppi.LAPSEN_KEHITYS)
         .getKehitysAsia(kehitysAsia);
   }
@@ -77,7 +78,8 @@ public class LapsenKehitysAsiaController {
   @ActionMapping(params = "toiminto=muokkaaKehitysAsiaa")
   public void muokkaa(@ModelAttribute(value = "kehitys") KehitysAsia tarve,
       @ModelAttribute(value = "lapsi") Henkilo lapsi,
-      @RequestParam(value = "vanha") String vanha, BindingResult bindingResult,
+      @RequestParam(value = "vanha") String vanha,
+      @RequestParam(value = "aktiivinen") String aktiivinen,
       ActionResponse response, SessionStatus sessionStatus) {
     log.debug("muokkaa kehitys asiaa");
 
@@ -91,6 +93,7 @@ public class LapsenKehitysAsiaController {
 
     response.setRenderParameter("toiminto", "naytaKehitys");
     response.setRenderParameter("hetu", lapsi.getHetu());
+    response.setRenderParameter("aktiivinen", "" + aktiivinen.toString());
     sessionStatus.setComplete();
   }
 }

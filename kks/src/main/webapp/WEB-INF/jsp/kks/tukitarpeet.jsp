@@ -39,9 +39,9 @@
 	<div id="page">
 		<table border="0">
 			<tr>
-				<th>TUKITARVE
+				<th align="left">TUKITARVE
 				</th>
-				<th>VIIMEISIN KIRJAUS</th>
+				<th align="left">VIIMEISIN KIRJAUS</th>
 			</tr>
 			<c:if test="${not empty tukitarpeet}">
 				<c:forEach var="tarve" items="${tukitarpeet}">
@@ -57,7 +57,7 @@
 						</portlet:renderURL>">
 									<strong>${tarve.nimi }</strong> </a> </span>
 						</td>
-						<td>${ tarve.muokkaaja } ${ tarve.muokkausPvm }</td>
+						<td>${ tarve.muokkaaja } <fmt:formatDate pattern="dd/MM/yyyy" value="${ tarve.muokkausPvm }"/> </td>
 
 					</tr>
 				</c:forEach>

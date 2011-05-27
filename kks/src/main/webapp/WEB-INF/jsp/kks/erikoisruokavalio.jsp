@@ -81,7 +81,7 @@
 			</div>
 		</c:if>
 
-		<c:if test="${ not sessionScope.ammattilainen }">
+		<c:if test="${ not sessionScope.ammattilainen || not aktiivinen}">
 			<div class="read">
 
 				<h2>

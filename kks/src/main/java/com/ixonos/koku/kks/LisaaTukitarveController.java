@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,8 +37,8 @@ public class LisaaTukitarveController {
   public void lisaaTukitarve(
       @ModelAttribute(value = "tarve") KehitysAsia tarve,
       @ModelAttribute(value = "lapsi") Henkilo lapsi,
-      BindingResult bindingResult, ActionResponse response,
-      SessionStatus sessionStatus) {
+      @RequestParam(value = "aktiivinen") String aktiivinen,
+      ActionResponse response, SessionStatus sessionStatus) {
     log.debug("lisaaTukitarve");
 
     tarve.setMuokkaaja("Koodista muokkaaja");
@@ -55,13 +54,14 @@ public class LisaaTukitarveController {
     tarve = getCommandObject();
     response.setRenderParameter("toiminto", "naytaTukitoimet");
     response.setRenderParameter("hetu", lapsi.getHetu());
+    response.setRenderParameter("aktiivinen", "" + aktiivinen.toString());
     sessionStatus.setComplete();
   }
 
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
     log.info("getLapsi");
-    return service.getChild(hetu);
+    return service.haeLapsi(hetu);
   }
 
   @ModelAttribute("tarve")

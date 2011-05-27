@@ -50,7 +50,7 @@ public class LapsiHakuController {
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
     log.debug("getLapsi");
-    return service.getChild(hetu);
+    return service.haeLapsi(hetu);
   }
 
 }

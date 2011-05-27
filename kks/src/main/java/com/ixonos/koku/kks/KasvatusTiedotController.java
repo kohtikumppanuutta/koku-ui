@@ -36,8 +36,9 @@ public class KasvatusTiedotController {
 
   @ActionMapping(params = "toiminto=muokkaaKasvatusTietoa")
   public void muokkaa(@ModelAttribute(value = "tieto") Kehitystieto tieto,
-      @ModelAttribute(value = "lapsi") Henkilo lapsi, ActionResponse response,
-      SessionStatus sessionStatus) {
+      @ModelAttribute(value = "lapsi") Henkilo lapsi,
+      @RequestParam(value = "aktiivinen") String aktiivinen,
+      ActionResponse response, SessionStatus sessionStatus) {
     log.debug("muokkaa kasvatustietoa");
 
     tieto.setMuokkausPvm(new Date());
@@ -46,13 +47,14 @@ public class KasvatusTiedotController {
 
     response.setRenderParameter("toiminto", "naytaLapsi");
     response.setRenderParameter("hetu", lapsi.getHetu());
+    response.setRenderParameter("aktiivinen", "" + aktiivinen.toString());
     sessionStatus.setComplete();
   }
 
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
     log.info("getLapsi");
-    return service.getChild(hetu);
+    return service.haeLapsi(hetu);
   }
 
   @RenderMapping(params = "toiminto=naytaKasvatusTiedot")
@@ -61,15 +63,15 @@ public class KasvatusTiedotController {
       RenderResponse response, Model model) {
     log.info("näytä kasvatustiedot");
     model.addAttribute("lapsi", lapsi);
-
     model.addAttribute("tieto", tieto);
+    model.addAttribute("aktiivinen", tieto.getTila().isAktiivinen());
     return "kasvatustiedot";
   }
 
   @ModelAttribute("tieto")
   public Kehitystieto getKasvatustieto(@RequestParam String hetu) {
     log.info("getTukitarve");
-    Henkilo lapsi = service.getChild(hetu);
+    Henkilo lapsi = service.haeLapsi(hetu);
     return lapsi.getKks().getKehitystieto(
         KehitystietoTyyppi.KASVATUSTA_OHJAAVAT_TIEDOT);
   }

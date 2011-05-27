@@ -41,17 +41,19 @@ public class KayntiController {
   @RenderMapping(params = "toiminto=naytaKaynti")
   public String nayta(@ModelAttribute(value = "lapsi") Henkilo lapsi,
       @ModelAttribute(value = "kaynti") KehitysAsia kehitys,
+      @RequestParam(value = "aktiivinen") String aktiivinen,
       RenderResponse response, Model model) {
     log.info("nayta ruokavalio");
     model.addAttribute("lapsi", lapsi);
     model.addAttribute("kaynti", kehitys);
+    model.addAttribute("aktiivinen", aktiivinen);
     return "kaynti";
   }
 
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
     log.info("getLapsi");
-    return service.getChild(hetu);
+    return service.haeLapsi(hetu);
   }
 
   @ModelAttribute("kaynti")
@@ -60,7 +62,7 @@ public class KayntiController {
       @RequestParam(value = "hetu") String hetu) {
     log.debug("get kaynti command object");
 
-    Henkilo lapsi = service.getChild(hetu);
+    Henkilo lapsi = service.haeLapsi(hetu);
     return lapsi.getKks().getKehitystieto(KehitystietoTyyppi.TERVEYDEN_TILA)
         .getKehitysAsia(kehitysAsia);
   }
@@ -75,8 +77,9 @@ public class KayntiController {
   @ActionMapping(params = "toiminto=muokkaaKayntia")
   public void muokkaa(@ModelAttribute(value = "kaynti") KehitysAsia tarve,
       @ModelAttribute(value = "lapsi") Henkilo lapsi,
-      @RequestParam(value = "vanha") String vanha, ActionResponse response,
-      SessionStatus sessionStatus) {
+      @RequestParam(value = "vanha") String vanha,
+      @RequestParam(value = "aktiivinen") String aktiivinen,
+      ActionResponse response, SessionStatus sessionStatus) {
     log.debug("muokkaa kayntia");
 
     tarve.setMuokkaaja("Koodista muokkaaja");
@@ -89,6 +92,7 @@ public class KayntiController {
 
     response.setRenderParameter("toiminto", "naytaTerveys");
     response.setRenderParameter("hetu", lapsi.getHetu());
+    response.setRenderParameter("aktiivinen", "" + aktiivinen.toString());
     sessionStatus.setComplete();
   }
 

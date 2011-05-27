@@ -49,7 +49,7 @@ public class KuntaTyontekijaController {
     log.info("hae lapsi");
 
     response.setRenderParameter("toiminto", "naytaTyontekija");
-    response.setRenderParameter("lapset", toArray(service.searchChilds(lapsi)));
+    response.setRenderParameter("lapset", toArray(service.haeHenkilo(lapsi)));
     sessionStatus.setComplete();
   }
 
@@ -80,7 +80,7 @@ public class KuntaTyontekijaController {
     if (childIds != null) {
       for (String s : childIds) {
         if (!"".equals(s)) {
-          tmp.add(service.getChild(s));
+          tmp.add(service.haeLapsi(s));
         }
       }
     }

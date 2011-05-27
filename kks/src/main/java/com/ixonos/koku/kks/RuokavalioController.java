@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -55,7 +54,7 @@ public class RuokavalioController {
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
     log.info("getLapsi");
-    return service.getChild(hetu);
+    return service.haeLapsi(hetu);
   }
 
   @ModelAttribute("ruokavalio")
@@ -64,7 +63,7 @@ public class RuokavalioController {
       @RequestParam(value = "hetu") String hetu) {
     log.debug("get kehitys asia command object");
 
-    Henkilo lapsi = service.getChild(hetu);
+    Henkilo lapsi = service.haeLapsi(hetu);
     return lapsi.getKks().getKehitystieto(KehitystietoTyyppi.TERVEYDEN_TILA)
         .getKehitysAsia(kehitysAsia);
   }
@@ -81,8 +80,7 @@ public class RuokavalioController {
       @ModelAttribute(value = "lapsi") Henkilo lapsi,
       @RequestParam(value = "vanha") String vanha,
       @RequestParam(value = "aktiivinen") String aktiivinen,
-      BindingResult bindingResult, ActionResponse response,
-      SessionStatus sessionStatus) {
+      ActionResponse response, SessionStatus sessionStatus) {
     log.debug("muokkaa ruokavaliota");
 
     tarve.setMuokkaaja("Koodista muokkaaja");

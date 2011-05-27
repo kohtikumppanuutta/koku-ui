@@ -60,7 +60,7 @@ public class TukitarveController {
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
     log.info("getLapsi");
-    return service.getChild(hetu);
+    return service.haeLapsi(hetu);
   }
 
   @RenderMapping(params = "toiminto=naytaTukitarve")
@@ -80,7 +80,7 @@ public class TukitarveController {
   public KehitysAsia getTukitarve(@RequestParam String hetu,
       @RequestParam String tarve) {
     log.info("getTukitarve");
-    Henkilo lapsi = service.getChild(hetu);
+    Henkilo lapsi = service.haeLapsi(hetu);
     return lapsi.getKks().getKehitystieto(KehitystietoTyyppi.TUKITARVE)
         .getKehitysAsia(tarve);
   }

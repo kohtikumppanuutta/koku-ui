@@ -22,13 +22,13 @@
 			<tr>
 				<td width="100%"><form:form name="guardianForm" method="post"
 						action="${viewChilds}">
-						<input type="submit" value="Huoltaja" />
+						<input type="submit" value="Lapsen Huoltaja" />
 					</form:form></td>
 			</tr>
 			<tr>
 				<td width="100%"><form:form name="proForm" method="post"
 						action="${showPro}">
-						<input type="submit" value="Ammattilainen" />
+						<input type="submit" value="Kunnan työntekijä" />
 					</form:form></td>
 			</tr>
 		</table>

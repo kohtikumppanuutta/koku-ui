@@ -70,7 +70,7 @@ public class LapsenKehitysController {
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
     log.info("getLapsi");
-    return service.getChild(hetu);
+    return service.haeLapsi(hetu);
   }
 
   @ModelAttribute("kehitys")
@@ -91,8 +91,9 @@ public class LapsenKehitysController {
   @ActionMapping(params = "toiminto=lisaaKehitysAsia")
   public void lisaa(@ModelAttribute(value = "kehitys") KehitysAsia tarve,
       @ModelAttribute(value = "lapsi") Henkilo lapsi,
-      BindingResult bindingResult, ActionResponse response,
-      SessionStatus sessionStatus) {
+      BindingResult bindingResult,
+      @RequestParam(value = "aktiivinen") String aktiivinen,
+      ActionResponse response, SessionStatus sessionStatus) {
     log.debug("lisaa mittaus");
 
     tarve.setMuokkaaja("Koodista muokkaaja");
@@ -108,6 +109,7 @@ public class LapsenKehitysController {
     tarve = getCommandObject();
     response.setRenderParameter("toiminto", "naytaKehitys");
     response.setRenderParameter("hetu", lapsi.getHetu());
+    response.setRenderParameter("aktiivinen", "" + aktiivinen.toString());
     sessionStatus.setComplete();
   }
 }

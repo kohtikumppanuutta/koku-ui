@@ -37,7 +37,7 @@ public class HuoltajaController {
   @ModelAttribute("lapset")
   public List<Henkilo> getLapset() {
     log.info("getLapset");
-    return service.getChilds(null);
+    return service.haeLapset(null);
   }
 
 }

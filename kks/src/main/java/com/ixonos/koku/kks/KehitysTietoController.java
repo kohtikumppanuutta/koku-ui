@@ -45,12 +45,12 @@ public class KehitysTietoController {
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
     log.info("getLapsi");
-    return service.getChild(hetu);
+    return service.haeLapsi(hetu);
   }
 
   @ModelAttribute("tyyppi")
   public KehitystietoTyyppi getTyyppi(@RequestParam String tyyppi) {
     log.info("getTyyppi");
-    return service.getField(tyyppi);
+    return service.getTyyppi(tyyppi);
   }
 }

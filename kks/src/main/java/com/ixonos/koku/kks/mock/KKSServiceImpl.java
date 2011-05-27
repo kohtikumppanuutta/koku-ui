@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import com.ixonos.koku.kks.utils.enums.KKSKentta;
 import com.ixonos.koku.kks.utils.enums.KehitysAsiaTyyppi;
 import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
 
@@ -16,8 +15,7 @@ public class KKSServiceImpl implements KKSService {
 
   private Kayttaja user;
   private KKSMockModel model;
-  private Map<String, KehitystietoTyyppi> fields;
-
+  private Map<String, KehitystietoTyyppi> tyypit;
   private Map<String, KehitysAsiaTyyppi> asiaTyypit;
 
   public Kayttaja getUser() {
@@ -28,26 +26,17 @@ public class KKSServiceImpl implements KKSService {
     user = new Kayttaja();
     user.setRole(userRole);
     model = MockFactory.createModel();
-    fields = createFieldsMap();
+    tyypit = createTyyppiFieldsMap();
     asiaTyypit = createAsiaTyypitMap();
   }
 
-  public List<Henkilo> getChilds(Kayttaja user) {
+  public List<Henkilo> haeLapset(Kayttaja user) {
     return model.getChilds();
   }
 
-  public List<Kehitystieto> getEntries(Henkilo child) {
-
-    return new ArrayList<Kehitystieto>(child.getKks().getKehitystiedot());
-  }
-
-  public void addEntry(Henkilo child, String description, KKSKentta... fields) {
-
-  }
-
-  public List<Henkilo> searchChilds(Henkilo target) {
+  public List<Henkilo> haeHenkilo(Henkilo target) {
     List<Henkilo> list = new ArrayList<Henkilo>();
-    Henkilo tmp = getChild(target.getHetu());
+    Henkilo tmp = haeLapsi(target.getHetu());
 
     if (tmp != null && tmp.getEtunimi().equals(target.getEtunimi())
         && tmp.getSukunimi().equals(target.getSukunimi())) {
@@ -57,12 +46,7 @@ public class KKSServiceImpl implements KKSService {
     return list;
   }
 
-  public List<Kehitystieto> searchEntries(Henkilo child, List<KKSKentta> fields) {
-
-    return getEntries(child);
-  }
-
-  public Henkilo getChild(String socialSecurityNumber) {
+  public Henkilo haeLapsi(String socialSecurityNumber) {
     for (Henkilo tmp : model.getChilds()) {
       if (tmp.getHetu().equals(socialSecurityNumber)) {
         return tmp;
@@ -75,15 +59,15 @@ public class KKSServiceImpl implements KKSService {
     model.addEntry(entry);
   }
 
-  public KehitystietoTyyppi getField(String fieldId) {
-    return fields.get(fieldId);
+  public KehitystietoTyyppi getTyyppi(String fieldId) {
+    return tyypit.get(fieldId);
   }
 
   public KehitysAsiaTyyppi getAsiatyyppi(String fieldId) {
     return asiaTyypit.get(fieldId);
   }
 
-  private Map<String, KehitystietoTyyppi> createFieldsMap() {
+  private Map<String, KehitystietoTyyppi> createTyyppiFieldsMap() {
     Map<String, KehitystietoTyyppi> tmp = new HashMap<String, KehitystietoTyyppi>();
 
     for (KehitystietoTyyppi kt : KehitystietoTyyppi.values()) {

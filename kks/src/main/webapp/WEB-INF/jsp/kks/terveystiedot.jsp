@@ -19,17 +19,17 @@
 <portlet:actionURL var="lisaaSairausActionUrl">
 	<portlet:param name="toiminto" value="lisaaSairaus" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
-		<portlet:param name="aktiivinen" value="${aktiivinen}" />
+	<portlet:param name="aktiivinen" value="${aktiivinen}" />
 </portlet:actionURL>
 <portlet:actionURL var="lisaaErikoisruokaActionUrl">
 	<portlet:param name="toiminto" value="lisaaRuokavalio" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
-		<portlet:param name="aktiivinen" value="${aktiivinen}" />
+	<portlet:param name="aktiivinen" value="${aktiivinen}" />
 </portlet:actionURL>
 <portlet:actionURL var="lisaaKayntiActionUrl">
 	<portlet:param name="toiminto" value="lisaaKaynti" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
-		<portlet:param name="aktiivinen" value="${aktiivinen}" />
+	<portlet:param name="aktiivinen" value="${aktiivinen}" />
 </portlet:actionURL>
 <div>
 
@@ -65,8 +65,9 @@
 							<portlet:param name="aktiivinen" value="${ aktiivinen }" />
 							
 						</portlet:renderURL>">
-					<strong>${sairaus.nimi }</strong> </a> ${ sairaus.muokkaaja } ${
-				sairaus.muokkausPvm }
+					<strong>${sairaus.nimi }</strong> </a> ${ sairaus.muokkaaja }
+				<fmt:formatDate pattern="dd/MM/yyyy"
+					value="${ sairaus.muokkausPvm }" />
 			</div>
 
 		</c:forEach>
@@ -148,8 +149,9 @@
 								<portlet:param name="aktiivinen" value="${ aktiivinen }" />
 							
 						</portlet:renderURL>">
-					<strong>${ruoka.nimi }</strong> </a> ${ ruoka.muokkaaja } ${
-				ruoka.muokkausPvm }
+					<strong>${ruoka.nimi }</strong> </a> ${ ruoka.muokkaaja }
+				<fmt:formatDate pattern="dd/MM/yyyy"
+					value="${ ruoka.muokkausPvm }" />
 			</div>
 
 		</c:forEach>
@@ -224,8 +226,8 @@
 							<portlet:param name="aktiivinen" value="${ aktiivinen }" />
 							
 						</portlet:renderURL>">
-					<strong>${kaynti.nimi }</strong> </a> ${ kaynti.muokkaaja } ${
-				kaynti.muokkausPvm }
+					<strong>${kaynti.nimi }</strong> </a> ${ kaynti.muokkaaja }
+				<fmt:formatDate pattern="dd/MM/yyyy" value="${ kaynti.muokkausPvm }" />
 			</div>
 
 		</c:forEach>

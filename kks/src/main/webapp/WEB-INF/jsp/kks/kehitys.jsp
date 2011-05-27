@@ -58,8 +58,9 @@
 							<portlet:param name="kehitys" value="${mittaus.id}" />
 							<portlet:param name="aktiivinen" value="${ aktiivinen }" />
 						</portlet:renderURL>">
-						<strong>${mittaus.nimi }</strong> </a> ${ mittaus.muokkaaja } ${
-					mittaus.muokkausPvm }
+						<strong>${mittaus.nimi }</strong> </a> ${ mittaus.muokkaaja }
+					<fmt:formatDate pattern="dd/MM/yyyy"
+						value="${ mittaus.muokkausPvm }" />
 				</div>
 
 			</c:forEach>
@@ -86,8 +87,9 @@
 							<portlet:param name="kehitys" value="${havainto.id}" />
 						    <portlet:param name="aktiivinen" value="${ aktiivinen }" />
 						</portlet:renderURL>">
-						<strong>${havainto.nimi }</strong> </a> ${ havainto.muokkaaja } ${
-					havainto.muokkausPvm }
+						<strong>${havainto.nimi }</strong> </a> ${ havainto.muokkaaja }
+					<fmt:formatDate pattern="dd/MM/yyyy"
+						value="${ havainto.muokkausPvm }" />
 				</div>
 
 			</c:forEach>
@@ -115,8 +117,8 @@
 							<portlet:param name="aktiivinen" value="${ aktiivinen }" />
 							
 						</portlet:renderURL>">
-						<strong>${arvio.nimi }</strong> </a> ${ arvio.muokkaaja } ${
-					arvio.muokkausPvm }
+						<strong>${arvio.nimi }</strong> </a> ${ arvio.muokkaaja }
+					<fmt:formatDate pattern="dd/MM/yyyy" value="${ arvio.muokkausPvm }" />
 				</div>
 
 			</c:forEach>
