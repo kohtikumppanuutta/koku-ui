@@ -10,9 +10,10 @@
 		<slf4j.version>1.6.1</slf4j.version>
 		<portlet-api.version>2.0</portlet-api.version>
 		<spring.version>3.0.5.RELEASE</spring.version>
-		<servlet.version>1.2</servlet.version>
+		<servlet.version>2.5</servlet.version>
 		<servlet.jsp.version>2.1</servlet.jsp.version>
-	</properties>
+		<jstl.version>1.2</jstl.version>
+		</properties>
 	<build>
 		<plugins>
 			<plugin>
@@ -25,6 +26,19 @@
 					<optimise>true</optimise>
 					<debug>true</debug>
 				</configuration>
+			</plugin>
+			<plugin>
+			  <groupId>org.zeroturnaround</groupId>
+			  <artifactId>jrebel-maven-plugin</artifactId>
+			  <executions>
+			    <execution>
+			      <id>generate-revel-xml</id>
+			      <phase>process-resources</phase>
+			      <goals>
+			        <goal>generate</goal>
+			      </goals>
+			    </execution>
+			  </executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -42,7 +56,7 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
-			<version>${servlet.version}</version>
+			<version>${jstl.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.portlet</groupId>
@@ -54,13 +68,13 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j.version}</version>
-			<scope>runtime</scope>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>${slf4j.version}</version>
-			<scope>runtime</scope>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
