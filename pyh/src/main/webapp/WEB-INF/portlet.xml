@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd 
+                       http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+   version="2.0">
+
+   <public-render-parameter>
+     <identifier>viesti-id</identifier>
+     <qname xmlns:kk="http://kohtikumppanuutta.fi/prp">kk:viesti</qname>
+   </public-render-parameter>
+
+   <portlet>
+      <portlet-name>pyh</portlet-name>
+      <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+      <supports>
+        <mime-type>text/html</mime-type>
+      </supports>
+      <portlet-info>
+          <title>pyh-portlet</title>
+      </portlet-info>
+
+      <supported-public-render-parameter>viesti-id</supported-public-render-parameter>
+
+   </portlet>
+   
+   <filter>
+     <filter-name>MyFilter</filter-name>
+     <filter-class>fi.koku.pyh.ui.demo.MyFilter</filter-class>
+     <lifecycle>ACTION_PHASE</lifecycle>
+     <lifecycle>RENDER_PHASE</lifecycle>
+   </filter>
+   
+   <filter-mapping>
+     <filter-name>MyFilter</filter-name>
+     <portlet-name>pyh</portlet-name>
+   </filter-mapping>
+   
+</portlet-app>

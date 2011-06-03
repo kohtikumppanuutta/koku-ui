@@ -10,4 +10,12 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>pyh-portlet</name>
+  <dependencies>
+	<dependency>
+		<groupId>org.exoplatform.portal</groupId>
+		<artifactId>exo.portal.webui.portal</artifactId>
+		<version>3.1.0-GA</version>
+		<scope>provided</scope>
+	</dependency>
+  </dependencies>
 </project>
