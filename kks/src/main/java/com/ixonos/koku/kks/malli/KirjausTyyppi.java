@@ -19,12 +19,13 @@ public class KirjausTyyppi {
   private List<String> arvoJoukko;
   private String vastuutaho;
   private String rekisteri;
+  private String ryhma;
   private List<Luokitus> luokitukset;
   private List<Luokitus> kehitysasiaTyypit;
 
   public KirjausTyyppi(int koodi, String nimi, String kuvaus,
       boolean moniArvoinen, Tietotyyppi tietoTyyppi, List<String> arvoJoukko,
-      String vastuutaho, String rekisteri) {
+      String vastuutaho, String rekisteri, String ryhma) {
     super();
     this.koodi = koodi;
     this.nimi = nimi;
@@ -34,6 +35,7 @@ public class KirjausTyyppi {
     this.arvoJoukko = arvoJoukko;
     this.vastuutaho = vastuutaho;
     this.rekisteri = rekisteri;
+    this.ryhma = ryhma;
   }
 
   public int getKoodi() {
@@ -114,6 +116,14 @@ public class KirjausTyyppi {
 
   public void setKehitysasiaTyypit(List<Luokitus> kehitysasiaTyypit) {
     this.kehitysasiaTyypit = kehitysasiaTyypit;
+  }
+
+  public String getRyhma() {
+    return ryhma;
+  }
+
+  public void setRyhma(String ryhma) {
+    this.ryhma = ryhma;
   }
 
 }

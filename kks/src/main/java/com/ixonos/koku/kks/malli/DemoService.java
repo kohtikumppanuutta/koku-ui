@@ -25,6 +25,7 @@ public class DemoService {
   }
 
   public void luo(String kayttaja) {
+    System.out.println("LUODAAN!!!!!!!!!!!!");
     this.kayttaja = new Kayttaja();
     this.kayttaja.setRole(kayttaja);
     malli = DemoFactory.luo();

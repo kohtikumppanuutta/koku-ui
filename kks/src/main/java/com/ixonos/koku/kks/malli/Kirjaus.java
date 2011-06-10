@@ -14,6 +14,7 @@ public class Kirjaus {
 
   private String arvo;
   private Date luontiAika;
+  private String kirjaaja;
   private int versio;
   private String rekisteri;
   private KirjausTyyppi tyyppi;
@@ -21,7 +22,7 @@ public class Kirjaus {
   private List<String> arvot;
 
   public Kirjaus(String arvo, Date luontiAika, int versio, String rekisteri,
-      KirjausTyyppi tyyppi) {
+      String kirjaaja, KirjausTyyppi tyyppi) {
     super();
     this.arvo = arvo;
     this.luontiAika = luontiAika;
@@ -29,6 +30,7 @@ public class Kirjaus {
     this.rekisteri = rekisteri;
     this.tyyppi = tyyppi;
     this.arvot = new ArrayList<String>();
+    this.kirjaaja = kirjaaja;
     this.arvot.add(arvo);
   }
 
@@ -88,6 +90,14 @@ public class Kirjaus {
 
   public void setArvot(List<String> arvot) {
     this.arvot = arvot;
+  }
+
+  public String getKirjaaja() {
+    return kirjaaja;
+  }
+
+  public void setKirjaaja(String kirjaaja) {
+    this.kirjaaja = kirjaaja;
   }
 
 }

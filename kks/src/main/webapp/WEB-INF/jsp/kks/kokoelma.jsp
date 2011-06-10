@@ -1,5 +1,5 @@
 <%@page import="com.ixonos.koku.kks.utils.enums.Tietotyyppi"%>
- <%@ taglib prefix="portlet" uri="http://java.sun.com/portlet"%>
+<%@ taglib prefix="portlet" uri="http://java.sun.com/portlet"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page contentType="text/html" isELIgnored="false"%>
@@ -49,27 +49,20 @@
 				<h2>${tyyppi.nimi }</h2>
 				<c:choose>
 					<c:when test="${ tyyppi.tietoTyyppi.nimi eq monivalinta.nimi }">
-                             <div class="monivalinta">   
-<c:forEach items="${tyyppi.arvoJoukko}" var="arvo">
-  <form:checkbox path="kirjaukset['${tyyppi.koodi}'].arvot" value="${ arvo }" label="${arvo}" />
-                        </c:forEach>
-                       </div> 
-                            </c:when>
-					<c:when test="${ tyyppi.tietoTyyppi.nimi eq valinta.nimi }">
-                                TOKA
-                            </c:when>
+						<div class="monivalinta">
+							<c:forEach items="${tyyppi.arvoJoukko}" var="arvo">
+								<form:checkbox path="kirjaukset['${tyyppi.koodi}'].arvot"
+									value="${ arvo }" label="${arvo}" />
+							</c:forEach>
+						</div>
+					</c:when>
 					<c:otherwise>
-					   <div class="vapaa.teksti">  
-						<form:input class="add" path="kirjaukset['${tyyppi.koodi}'].arvo"></form:input>
+						<div class="vapaa.teksti">
+							<form:textarea class="add" path="kirjaukset['${tyyppi.koodi}'].arvo"/>
 						</div>
 					</c:otherwise>
-
 				</c:choose>
-
-
-
 			</c:forEach>
-
 
 			<input type="submit"
 				value="<spring:message code="ui.tallenna.tieto"/>" class="tallenna">
@@ -79,7 +72,7 @@
 	</c:if>
 
 
-	
+
 
 </div>
 

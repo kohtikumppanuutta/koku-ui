@@ -1,5 +1,6 @@
 package com.ixonos.koku.kks.malli;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +20,7 @@ public class KokoelmaTyyppi {
     this.koodi = koodi;
     this.nimi = nimi;
     this.kuvaus = kuvaus;
+    this.kirjausTyypit = new ArrayList<KirjausTyyppi>();
   }
 
   public int getKoodi() {
@@ -50,7 +52,13 @@ public class KokoelmaTyyppi {
   }
 
   public void setKirjausTyypit(List<KirjausTyyppi> kirjausTyypit) {
+    assert kirjausTyypit == null : "Kirjaustyypit ei voi olla NULL ";
     this.kirjausTyypit = kirjausTyypit;
+  }
+
+  public void lisaaKirjausTyyppi(KirjausTyyppi tyyppi) {
+    assert tyyppi == null : "Kirjaustyyppi ei voi olla NULL ";
+    this.kirjausTyypit.add(tyyppi);
   }
 
 }

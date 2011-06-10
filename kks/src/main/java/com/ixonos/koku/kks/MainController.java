@@ -26,8 +26,8 @@ public class MainController {
   @RenderMapping
   public String render(RenderRequest req, Model model) {
 
-    if (!demoService.onkoLuotu())
-      demoService.luo("");
+    // if (!demoService.onkoLuotu())
+    demoService.luo("");
     return "valitse";
   }
 
