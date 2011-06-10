@@ -16,20 +16,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 
-import com.ixonos.koku.kks.mock.Henkilo;
-import com.ixonos.koku.kks.mock.KKSService;
-import com.ixonos.koku.kks.utils.KehitystietoTyyppiEditor;
-import com.ixonos.koku.kks.utils.enums.KKSKentta;
+import com.ixonos.koku.kks.malli.DemoService;
+import com.ixonos.koku.kks.malli.Henkilo;
 
 @Controller(value = "kksHakuController")
 @RequestMapping(value = "VIEW")
 public class LapsiHakuController {
 
   @Autowired
-  @Qualifier("myKKSService")
-  private KKSService service;
+  @Qualifier("demoKksService")
+  private DemoService demoService;
 
-  private static Logger log = LoggerFactory.getLogger(LapsiHakuController.class);
+  private static Logger log = LoggerFactory
+      .getLogger(LapsiHakuController.class);
 
   @ActionMapping(params = "toiminto=hae")
   public void hae(@ModelAttribute(value = "lapsi") Henkilo lapsi,
@@ -44,13 +43,14 @@ public class LapsiHakuController {
   @InitBinder("haku")
   public void initBinder(WebDataBinder binder) {
     log.debug("init binder");
-    binder.registerCustomEditor(KKSKentta.class, new KehitystietoTyyppiEditor(service));
+    // binder.registerCustomEditor(KKSKentta.class, new
+    // KehitystietoTyyppiEditor(service));
   }
 
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
     log.debug("getLapsi");
-    return service.haeLapsi(hetu);
+    return demoService.haeLapsi(hetu);
   }
 
 }

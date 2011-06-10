@@ -1,20 +1,18 @@
-package com.ixonos.koku.kks.mock;
-
-import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
+package com.ixonos.koku.kks.malli;
 
 public class Aktivointi {
 
-  private KehitystietoTyyppi aktivoitavaKentta;
+  private String aktivoitavaKentta;
 
   private String alkaa;
 
   private String loppuu;
 
-  public KehitystietoTyyppi getAktivoitavaKentta() {
+  public String getAktivoitavaKentta() {
     return aktivoitavaKentta;
   }
 
-  public void setAktivoitavaKentta(KehitystietoTyyppi aktivoitavaKentta) {
+  public void setAktivoitavaKentta(String aktivoitavaKentta) {
     this.aktivoitavaKentta = aktivoitavaKentta;
   }
 

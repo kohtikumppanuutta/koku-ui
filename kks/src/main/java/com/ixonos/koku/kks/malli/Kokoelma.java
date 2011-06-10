@@ -1,9 +1,9 @@
 package com.ixonos.koku.kks.malli;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
-import com.ixonos.koku.kks.utils.enums.Tila;
+import java.util.Map;
 
 /**
  * Sisältää yhden kasvatuksen ja kehityksen kokoelman tiedot
@@ -14,12 +14,25 @@ public class Kokoelma {
 
   private String nimi;
   private String kuvaus;
-  private Tila tila;
+  private String muokkaaja;
+  private KokoelmaTila tila;
   private Date luontiAika;
   private int versio;
   private KokoelmaTyyppi tyyppi;
-  private List<Kirjaus> kirjaukset;
   private List<Luokitus> luokitukset;
+  public Map<String, Kirjaus> kirjaukset;
+
+  public Kokoelma(String nimi, String kuvaus, KokoelmaTila tila,
+      Date luontiAika, int versio, KokoelmaTyyppi tyyppi) {
+    super();
+    this.nimi = nimi;
+    this.kuvaus = kuvaus;
+    this.tila = tila;
+    this.luontiAika = luontiAika;
+    this.versio = versio;
+    this.tyyppi = tyyppi;
+    kirjaukset = new HashMap<String, Kirjaus>();
+  }
 
   public String getNimi() {
     return nimi;
@@ -37,11 +50,11 @@ public class Kokoelma {
     this.kuvaus = kuvaus;
   }
 
-  public Tila getTila() {
+  public KokoelmaTila getTila() {
     return tila;
   }
 
-  public void setTila(Tila tila) {
+  public void setTila(KokoelmaTila tila) {
     this.tila = tila;
   }
 
@@ -61,14 +74,6 @@ public class Kokoelma {
     this.versio = versio;
   }
 
-  public List<Kirjaus> getKirjaukset() {
-    return kirjaukset;
-  }
-
-  public void setKirjaukset(List<Kirjaus> kirjaukset) {
-    this.kirjaukset = kirjaukset;
-  }
-
   public List<Luokitus> getLuokitukset() {
     return luokitukset;
   }
@@ -83,6 +88,26 @@ public class Kokoelma {
 
   public void setTyyppi(KokoelmaTyyppi tyyppi) {
     this.tyyppi = tyyppi;
+  }
+
+  public String getMuokkaaja() {
+    return muokkaaja;
+  }
+
+  public void setMuokkaaja(String muokkaaja) {
+    this.muokkaaja = muokkaaja;
+  }
+
+  public void lisaaKirjaus(Kirjaus kirjaus) {
+    kirjaukset.put("" + kirjaus.getTyyppi().getKoodi(), kirjaus);
+  }
+
+  public Map<String, Kirjaus> getKirjaukset() {
+    return kirjaukset;
+  }
+
+  public void setKirjaukset(Map<String, Kirjaus> kirjaukset) {
+    this.kirjaukset = kirjaukset;
   }
 
 }

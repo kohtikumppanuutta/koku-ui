@@ -28,7 +28,11 @@
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
 </portlet:actionURL>
 <portlet:actionURL var="aktivointiActionUrl">
-	<portlet:param name="toiminto" value="aktivoiKehitystieto" />
+	<portlet:param name="toiminto" value="aktivoiKokoelma" />
+	<portlet:param name="hetu" value="${lapsi.hetu}" />
+</portlet:actionURL>
+<portlet:actionURL var="uusiActionUrl">
+	<portlet:param name="toiminto" value="luoKokoelma" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
 </portlet:actionURL>
 
@@ -58,31 +62,40 @@
 				</c:if>
 			</tr>
 
-			<c:if test="${not empty tiedot}">
-				<c:forEach var="tieto" items="${tiedot}">
+			<c:if test="${not empty kokoelmat}">
+
+
+				<c:forEach var="tieto" items="${kokoelmat}">
 
 					<c:if
 						test="${ sessionScope.ammattilainen || tieto.tila.aktiivinen }">
 						<tr>
 							<td><span class="kokoelma"> <a
 									href="
-						<portlet:actionURL>
-							<portlet:param name="toiminto" value="kehitysTietoihin" />
+						<portlet:renderURL>
+							<portlet:param name="toiminto" value="naytaKokoelma" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
-							<portlet:param name="tyyppi" value="${tieto.tyyppi}" />
-						</portlet:actionURL>">
-										<strong>${ tieto.nimi }</strong> </a> </span></td>
-							<td>${ tieto.muokkaaja }  <fmt:formatDate pattern="dd/MM/yyyy" value="${ tieto.muokkausPvm }"/> </td>
+							<portlet:param name="kokoelma" value="${tieto.nimi}" />
+						</portlet:renderURL>">
+										<strong>${ tieto.nimi }</strong> </a> </span>
+							</td>
+							<td>${ tieto.muokkaaja } <fmt:formatDate
+									pattern="dd/MM/yyyy" value="${ tieto.luontiAika }" /></td>
 
 							<c:if test="${ sessionScope.ammattilainen }">
 								<td><c:choose>
 										<c:when test="${tieto.tila.aktiivinen}">
-										Aktiivinen <fmt:formatDate pattern="dd/MM/yyyy" value="${ tieto.tila.alkuPvm }"/> - <fmt:formatDate pattern="dd/MM/yyyy" value="${ tieto.tila.loppuPvm }"/>
+										Aktiivinen <fmt:formatDate pattern="dd/MM/yyyy"
+												value="${ tieto.tila.alkuPvm }" /> - <fmt:formatDate
+												pattern="dd/MM/yyyy" value="${ tieto.tila.loppuPvm }" />
 										</c:when>
 										<c:otherwise>
-										Lukittu (voimassa viimeksi: <fmt:formatDate pattern="dd/MM/yyyy" value="${ tieto.tila.alkuPvm }"/> - <fmt:formatDate pattern="dd/MM/yyyy" value="${ tieto.tila.loppuPvm }"/>)
+										Lukittu (voimassa viimeksi: <fmt:formatDate
+												pattern="dd/MM/yyyy" value="${ tieto.tila.alkuPvm }" /> - <fmt:formatDate
+												pattern="dd/MM/yyyy" value="${ tieto.tila.loppuPvm }" />)
 									</c:otherwise>
-									</c:choose></td>
+									</c:choose>
+								</td>
 							</c:if>
 						</tr>
 					</c:if>
@@ -93,37 +106,83 @@
 
 		<br />
 
-		<div>
+
+		<div class="uusi.kokoelma">
 			<c:if test="${ sessionScope.ammattilainen }">
-				<form:form name="aktivointiForm" commandName="aktivointi"
-					method="post" action="${aktivointiActionUrl}">
 
-					<div>
-						<br> AKTIVOI UUSI TIETOKOKOELMA: <span class="pvm"> <form:select
-								path="aktivoitavaKentta" class="kokoelmavalinta">
+				<div class="kokoelma">
 
-								<form:option value="" label="" />
+					<a class="tieto"> <spring:message code="ui.uusi.kokoelma" /><span
+						class="sulje"><spring:message code="ui.piilota" /> </span> </a>
+					<div class="tietokentta ">
+						<form:form name="uusiForm" commandName="aktivointi" method="post"
+							action="${uusiActionUrl}">
 
 
-								<c:forEach var="tieto" items="${tiedot}">
-									<form:option value="${tieto.tyyppi}" label="${ tieto.nimi }" />
-								</c:forEach>
-							</form:select> </span>
+							<h2>
+								<spring:message code="ui.kokoelma" />
+							</h2>
 
+							<span class="pvm"> <form:select path="aktivoitavaKentta"
+									class="kokoelmavalinta">
+
+									<form:option value="" label="" />
+
+
+									<c:forEach var="kokoelma" items="${luotavat}">
+										<form:option value="${kokoelma}" label="${ kokoelma }" />
+									</c:forEach>
+								</form:select> </span>
+
+							<input type="submit"
+								value="<spring:message code="ui.uusi.kehitystieto.luo"/>"
+								class="tallenna">
+						</form:form>
 					</div>
-<br/>
-					<div>
-						</span>AKTIIVINEN KIRJAUSAIKA (DD/MM/YYYY):
-
-						<form:input path="alkaa" />
-						<strong>-</strong> 
-						<form:input path="loppuu" />
-
-					</div>
-					<span class="viestintiedot"> <input type="submit"
-						class="tallenna" value="Aktivoi kokolema"> </span>
-				</form:form>
+				</div>
 			</c:if>
+		</div>
+
+		<div class="aktivoi.kokoelma">
+
+			<div class="kokoelma">
+				<c:if test="${ sessionScope.ammattilainen }">
+					<a class="tieto"> <spring:message code="ui.aktivoi.kokoelma" /><span
+						class="sulje"><spring:message code="ui.piilota" /> </span> </a>
+					<div class="tietokentta ">
+
+						<form:form name="aktivointiForm" commandName="aktivointi"
+							method="post" action="${aktivointiActionUrl}">
+
+							<div>
+								<br> AKTIVOI UUSI TIETOKOKOELMA: <span class="pvm">
+									<form:select path="aktivoitavaKentta" class="kokoelmavalinta">
+
+										<form:option value="" label="" />
+
+
+										<c:forEach var="kokoelma" items="${aktivoitavat}">
+											<form:option value="${kokoelma}" label="${ kokoelma }" />
+										</c:forEach>
+									</form:select> </span>
+
+							</div>
+							<br />
+							<div>
+								AKTIIVINEN KIRJAUSAIKA (DD/MM/YYYY):
+
+								<form:input path="alkaa" />
+								<strong>-</strong>
+								<form:input path="loppuu" />
+
+							</div>
+							<span class="viestintiedot"> <input type="submit"
+								class="tallenna" value="Aktivoi kokolema"> </span>
+						</form:form>
+
+					</div>
+				</c:if>
+			</div>
 		</div>
 
 

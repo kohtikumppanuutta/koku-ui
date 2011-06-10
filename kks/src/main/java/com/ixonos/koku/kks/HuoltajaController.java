@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import com.ixonos.koku.kks.mock.Henkilo;
-import com.ixonos.koku.kks.mock.KKSService;
+import com.ixonos.koku.kks.malli.DemoService;
+import com.ixonos.koku.kks.malli.Henkilo;
 
 @Controller(value = "huoltajaController")
 @RequestMapping(value = "VIEW")
 public class HuoltajaController {
 
   @Autowired
-  @Qualifier("myKKSService")
-  private KKSService service;
+  @Qualifier("demoKksService")
+  private DemoService demoService;
 
   private static Logger log = LoggerFactory.getLogger(HuoltajaController.class);
 
@@ -37,7 +37,7 @@ public class HuoltajaController {
   @ModelAttribute("lapset")
   public List<Henkilo> getLapset() {
     log.info("getLapset");
-    return service.haeLapset(null);
+    return demoService.haeLapset(null);
   }
 
 }

@@ -11,6 +11,13 @@ public class Luokitus {
   private String nimi;
   private String kuvaus;
 
+  public Luokitus(int koodi, String nimi, String kuvaus) {
+    super();
+    this.koodi = koodi;
+    this.nimi = nimi;
+    this.kuvaus = kuvaus;
+  }
+
   public int getKoodi() {
     return koodi;
   }

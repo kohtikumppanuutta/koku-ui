@@ -19,19 +19,17 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import com.ixonos.koku.kks.mock.Aktivointi;
-import com.ixonos.koku.kks.mock.Henkilo;
-import com.ixonos.koku.kks.mock.KKSService;
-import com.ixonos.koku.kks.utils.KehitystietoTyyppiEditor;
-import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
+import com.ixonos.koku.kks.malli.Aktivointi;
+import com.ixonos.koku.kks.malli.DemoService;
+import com.ixonos.koku.kks.malli.Henkilo;
 
 @Controller(value = "lapsiController")
 @RequestMapping(value = "VIEW")
 public class LapsiController {
 
   @Autowired
-  @Qualifier("myKKSService")
-  private KKSService service;
+  @Qualifier("demoKksService")
+  private DemoService demoService;
 
   private static Logger log = LoggerFactory.getLogger(LapsiController.class);
 
@@ -53,7 +51,10 @@ public class LapsiController {
       RenderResponse response, Model model) {
     log.info("nayta lapsi");
     model.addAttribute("lapsi", lapsi);
-    model.addAttribute("tiedot", lapsi.getKks().getKehitystiedot());
+    model.addAttribute("kokoelmat", lapsi.getKks().getKokoelmat());
+    model.addAttribute("luotavat", demoService.haeLuotavatKokoelmat(lapsi));
+    model.addAttribute("aktivoitavat",
+        demoService.haeAktivoitavatKokoelmat(lapsi));
     aktivointi = getCommandObject();
     return "lapsi";
   }
@@ -61,14 +62,14 @@ public class LapsiController {
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
     log.info("getLapsi with hetu=" + hetu);// #TODO# Remove hetu from log
-    return service.haeLapsi(hetu);
+    return demoService.haeLapsi(hetu);
   }
 
   @InitBinder("aktivointi")
   public void initBinder(WebDataBinder binder) {
     log.debug("init binder  ");
-    binder.registerCustomEditor(KehitystietoTyyppi.class,
-        new KehitystietoTyyppiEditor(service));
+    // binder.registerCustomEditor(KehitystietoTyyppi.class,
+    // new KehitystietoTyyppiEditor(service));
 
   }
 

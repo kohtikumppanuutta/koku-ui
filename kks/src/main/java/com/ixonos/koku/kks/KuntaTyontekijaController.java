@@ -20,16 +20,16 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import com.ixonos.koku.kks.mock.Henkilo;
-import com.ixonos.koku.kks.mock.KKSService;
+import com.ixonos.koku.kks.malli.DemoService;
+import com.ixonos.koku.kks.malli.Henkilo;
 
 @Controller(value = "kuntaTyontekijaController")
 @RequestMapping(value = "VIEW")
 public class KuntaTyontekijaController {
 
   @Autowired
-  @Qualifier("myKKSService")
-  private KKSService service;
+  @Qualifier("demoKksService")
+  private DemoService demoService;
 
   private static Logger log = LoggerFactory
       .getLogger(KuntaTyontekijaController.class);
@@ -49,7 +49,8 @@ public class KuntaTyontekijaController {
     log.info("hae lapsi");
 
     response.setRenderParameter("toiminto", "naytaTyontekija");
-    response.setRenderParameter("lapset", toArray(service.haeHenkilo(lapsi)));
+    response.setRenderParameter("lapset",
+        toArray(demoService.haeHenkilo(lapsi)));
     sessionStatus.setComplete();
   }
 
@@ -80,7 +81,7 @@ public class KuntaTyontekijaController {
     if (childIds != null) {
       for (String s : childIds) {
         if (!"".equals(s)) {
-          tmp.add(service.haeLapsi(s));
+          tmp.add(demoService.haeLapsi(s));
         }
       }
     }

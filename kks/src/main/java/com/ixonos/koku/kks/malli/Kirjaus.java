@@ -1,5 +1,6 @@
 package com.ixonos.koku.kks.malli;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,13 +18,28 @@ public class Kirjaus {
   private String rekisteri;
   private KirjausTyyppi tyyppi;
   private List<Luokitus> luokitukset;
+  private List<String> arvot;
+
+  public Kirjaus(String arvo, Date luontiAika, int versio, String rekisteri,
+      KirjausTyyppi tyyppi) {
+    super();
+    this.arvo = arvo;
+    this.luontiAika = luontiAika;
+    this.versio = versio;
+    this.rekisteri = rekisteri;
+    this.tyyppi = tyyppi;
+    this.arvot = new ArrayList<String>();
+    this.arvot.add(arvo);
+  }
 
   public String getArvo() {
     return arvo;
   }
 
   public void setArvo(String arvo) {
+    this.arvot.remove(this.arvo);
     this.arvo = arvo;
+    this.arvot.add(arvo);
   }
 
   public Date getLuontiAika() {
@@ -64,6 +80,14 @@ public class Kirjaus {
 
   public void setLuokitukset(List<Luokitus> luokitukset) {
     this.luokitukset = luokitukset;
+  }
+
+  public List<String> getArvot() {
+    return arvot;
+  }
+
+  public void setArvot(List<String> arvot) {
+    this.arvot = arvot;
   }
 
 }

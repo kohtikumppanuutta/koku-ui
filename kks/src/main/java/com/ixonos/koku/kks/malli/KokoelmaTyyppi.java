@@ -14,6 +14,13 @@ public class KokoelmaTyyppi {
   private String kuvaus;
   private List<KirjausTyyppi> kirjausTyypit;
 
+  public KokoelmaTyyppi(int koodi, String nimi, String kuvaus) {
+    super();
+    this.koodi = koodi;
+    this.nimi = nimi;
+    this.kuvaus = kuvaus;
+  }
+
   public int getKoodi() {
     return koodi;
   }

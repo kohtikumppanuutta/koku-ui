@@ -22,6 +22,20 @@ public class KirjausTyyppi {
   private List<Luokitus> luokitukset;
   private List<Luokitus> kehitysasiaTyypit;
 
+  public KirjausTyyppi(int koodi, String nimi, String kuvaus,
+      boolean moniArvoinen, Tietotyyppi tietoTyyppi, List<String> arvoJoukko,
+      String vastuutaho, String rekisteri) {
+    super();
+    this.koodi = koodi;
+    this.nimi = nimi;
+    this.kuvaus = kuvaus;
+    this.moniArvoinen = moniArvoinen;
+    this.tietoTyyppi = tietoTyyppi;
+    this.arvoJoukko = arvoJoukko;
+    this.vastuutaho = vastuutaho;
+    this.rekisteri = rekisteri;
+  }
+
   public int getKoodi() {
     return koodi;
   }

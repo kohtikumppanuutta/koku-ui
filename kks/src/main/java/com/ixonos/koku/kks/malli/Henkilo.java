@@ -1,4 +1,4 @@
-package com.ixonos.koku.kks.mock;
+package com.ixonos.koku.kks.malli;
 
 public class Henkilo {
 
@@ -12,6 +12,7 @@ public class Henkilo {
     this.etunimi = "";
     this.toinenNimi = "";
     this.sukunimi = "";
+    this.kks = new KKS();
   }
 
   public Henkilo(String etuNimi, String toinenNimi, String sukuNimi, String hetu) {
@@ -19,6 +20,7 @@ public class Henkilo {
     this.toinenNimi = toinenNimi;
     this.sukunimi = sukuNimi;
     this.hetu = hetu;
+    this.kks = new KKS();
   }
 
   public String getEtunimi() {

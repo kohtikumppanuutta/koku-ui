@@ -12,53 +12,42 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 
-import com.ixonos.koku.kks.mock.Aktivointi;
-import com.ixonos.koku.kks.mock.Henkilo;
-import com.ixonos.koku.kks.mock.KKSService;
-import com.ixonos.koku.kks.mock.KehitysTietoTila;
-import com.ixonos.koku.kks.mock.Kehitystieto;
-import com.ixonos.koku.kks.utils.KehitystietoTyyppiEditor;
-import com.ixonos.koku.kks.utils.enums.KehitystietoTyyppi;
+import com.ixonos.koku.kks.malli.Aktivointi;
+import com.ixonos.koku.kks.malli.DemoService;
+import com.ixonos.koku.kks.malli.Henkilo;
+import com.ixonos.koku.kks.malli.Kokoelma;
+import com.ixonos.koku.kks.malli.KokoelmaTila;
 import com.ixonos.koku.kks.utils.enums.Tila;
 
-@Controller(value = "aktivoiKehitystietoController")
+@Controller(value = "aktivoiKokoelmaController")
 @RequestMapping(value = "VIEW")
-public class AktivoiKehitystietoController {
+public class AktivoiKokoelmaController {
 
   @Autowired
-  @Qualifier("myKKSService")
-  private KKSService service;
+  @Qualifier("demoKksService")
+  private DemoService demoService;
 
   private static Logger log = LoggerFactory
-      .getLogger(AktivoiKehitystietoController.class);
+      .getLogger(AktivoiKokoelmaController.class);
 
-  @InitBinder("aktivointi")
-  public void initBinder(WebDataBinder binder) {
-    log.debug("init binder");
-    binder.registerCustomEditor(KehitystietoTyyppi.class,
-        new KehitystietoTyyppiEditor(service));
-  }
-
-  @ActionMapping(params = "toiminto=aktivoiKehitystieto")
+  @ActionMapping(params = "toiminto=aktivoiKokoelma")
   public void aktivoi(@ModelAttribute(value = "lapsi") Henkilo lapsi,
       @ModelAttribute(value = "aktivointi") Aktivointi aktivointi,
       BindingResult bindingResult, ActionResponse response,
       SessionStatus sessionStatus) {
-    log.debug("lapsenTietoihin");
+    log.debug("aktivoi kokoelma");
 
-    Kehitystieto kt = lapsi.getKks().getKehitystieto(
+    Kokoelma kokoelma = lapsi.getKks().getKokoelma(
         aktivointi.getAktivoitavaKentta());
 
-    if (kt != null) {
-      KehitysTietoTila tila = kt.getTila();
+    if (kokoelma != null) {
+      KokoelmaTila tila = kokoelma.getTila();
       tila.setTila(Tila.AKTIIVINEN);
 
       SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -93,7 +82,7 @@ public class AktivoiKehitystietoController {
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
     log.info("getLapsi");
-    return service.haeLapsi(hetu);
+    return demoService.haeLapsi(hetu);
   }
 
   @ModelAttribute("aktivointi")

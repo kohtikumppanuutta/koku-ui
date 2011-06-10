@@ -1,16 +1,16 @@
-package com.ixonos.koku.kks.mock;
+package com.ixonos.koku.kks.malli;
 
 import java.util.Date;
 
 import com.ixonos.koku.kks.utils.enums.Tila;
 
-public class KehitysTietoTila {
+public class KokoelmaTila {
 
   private Tila tila;
   private Date alkuPvm;
   private Date loppuPvm;
 
-  public KehitysTietoTila(Tila tila, Date alkuPvm, Date loppuPvm) {
+  public KokoelmaTila(Tila tila, Date alkuPvm, Date loppuPvm) {
     super();
     this.tila = tila;
     this.alkuPvm = alkuPvm;
@@ -44,6 +44,10 @@ public class KehitysTietoTila {
   public boolean isAktiivinen() {
     if (Tila.LUKITTU.equals(tila))
       return false;
+
+    if (Tila.ESITIEDOT.equals(tila)) {
+      return true;
+    }
 
     if (alkuPvm == null || loppuPvm == null) {
       return true;

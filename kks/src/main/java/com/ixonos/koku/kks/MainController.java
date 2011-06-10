@@ -11,21 +11,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import com.ixonos.koku.kks.mock.KKSService;
+import com.ixonos.koku.kks.malli.DemoService;
 
 @Controller("mainController")
 @RequestMapping(value = "VIEW")
 public class MainController {
 
   @Autowired
-  @Qualifier("myKKSService")
-  private KKSService service;
+  @Qualifier("demoKksService")
+  private DemoService demoService;
 
   private static Logger log = LoggerFactory.getLogger(MainController.class);
 
   @RenderMapping
   public String render(RenderRequest req, Model model) {
-    service.create("");
+
+    if (!demoService.onkoLuotu())
+      demoService.luo("");
     return "valitse";
   }
 
