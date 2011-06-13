@@ -18,6 +18,7 @@ public class KirjausTyyppi {
   private Tietotyyppi tietoTyyppi;
   private List<String> arvoJoukko;
   private String vastuutaho;
+  private String tayttaja;
   private String rekisteri;
   private String ryhma;
   private List<Luokitus> luokitukset;
@@ -25,7 +26,7 @@ public class KirjausTyyppi {
 
   public KirjausTyyppi(int koodi, String nimi, String kuvaus,
       boolean moniArvoinen, Tietotyyppi tietoTyyppi, List<String> arvoJoukko,
-      String vastuutaho, String rekisteri, String ryhma) {
+      String vastuutaho, String rekisteri, String ryhma, String tayttaja) {
     super();
     this.koodi = koodi;
     this.nimi = nimi;
@@ -36,6 +37,7 @@ public class KirjausTyyppi {
     this.vastuutaho = vastuutaho;
     this.rekisteri = rekisteri;
     this.ryhma = ryhma;
+    this.tayttaja = tayttaja;
   }
 
   public int getKoodi() {
@@ -124,6 +126,14 @@ public class KirjausTyyppi {
 
   public void setRyhma(String ryhma) {
     this.ryhma = ryhma;
+  }
+
+  public String getTayttaja() {
+    return tayttaja;
+  }
+
+  public void setTayttaja(String tayttaja) {
+    this.tayttaja = tayttaja;
   }
 
 }

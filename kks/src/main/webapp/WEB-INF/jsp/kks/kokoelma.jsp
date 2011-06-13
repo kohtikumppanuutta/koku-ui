@@ -39,29 +39,47 @@
 
 
 <div id="kirjaus.tyypit">
-	<c:if test="${not empty kokoelma.tyyppi.kirjausTyypit}">
+
+	<c:if test="${not empty kokoelma.tyyppi.kirjausRyhmat}">
+
 
 		<form:form name="kirjausForm" commandName="kirjaus" method="post"
 			action="${tallennaKirjausActionUrl}">
 
-			<c:forEach var="tyyppi" items="${kokoelma.tyyppi.kirjausTyypit}">
+			<c:forEach var="ryhma"
+				items="${kokoelma.tyyppi.kirjausRyhmat.values}">
 
-				<h2>${tyyppi.nimi }</h2>
-				<c:choose>
-					<c:when test="${ tyyppi.tietoTyyppi.nimi eq monivalinta.nimi }">
-						<div class="monivalinta">
-							<c:forEach items="${tyyppi.arvoJoukko}" var="arvo">
-								<form:checkbox path="kirjaukset['${tyyppi.koodi}'].arvot"
-									value="${ arvo }" label="${arvo}" />
-							</c:forEach>
+				<c:if test="${not empty ryhma.nimi}">
+					<h2>${ryhma.nimi } t‰ytt‰‰</h2>
+				</c:if>
+				<c:forEach var="lapsiryhma" items='${ryhma.lapsiryhmat.values}'>
+				
+				    <c:if test="${not empty lapsiryhma.nimi}">
+                    <h3>${lapsiryhma.nimi }</h3>
+                    </c:if>
+					<c:forEach var="tyypit" items='${lapsiryhma.tyypit.values  }'>
+					   <c:forEach var="tyyppi" items='${ tyypit }'>
+						<div class="kirjaus">
+							<strong>${tyyppi.nimi }</strong>
+							<c:choose>
+								<c:when test="${ tyyppi.tietoTyyppi.nimi eq monivalinta.nimi }">
+									<span class="monivalinta"> <c:forEach
+											items="${tyyppi.arvoJoukko}" var="arvo">
+											<form:checkbox path="kirjaukset['${tyyppi.koodi}'].arvot"
+												value="${ arvo }" label="${arvo}" />
+										</c:forEach> </span>
+								</c:when>
+								<c:otherwise>
+									<div class="vapaa.teksti">
+										<form:textarea class="add"
+											path="kirjaukset['${tyyppi.koodi}'].arvo" />
+									</div>
+								</c:otherwise>
+							</c:choose>
 						</div>
-					</c:when>
-					<c:otherwise>
-						<div class="vapaa.teksti">
-							<form:textarea class="add" path="kirjaukset['${tyyppi.koodi}'].arvo"/>
-						</div>
-					</c:otherwise>
-				</c:choose>
+					</c:forEach>
+					</c:forEach>
+				</c:forEach>
 			</c:forEach>
 
 			<input type="submit"
