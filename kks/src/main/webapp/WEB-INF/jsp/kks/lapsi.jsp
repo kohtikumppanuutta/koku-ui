@@ -35,7 +35,10 @@
 	<portlet:param name="toiminto" value="luoKokoelma" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
 </portlet:actionURL>
-
+<portlet:actionURL var="haeKirjausUrl">
+	<portlet:param name="toiminto" value="haeKirjauksia" />
+	<portlet:param name="hetu" value="${lapsi.hetu}" />
+</portlet:actionURL>
 
 <div>
 
@@ -77,10 +80,10 @@
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
 							<portlet:param name="kokoelma" value="${tieto.nimi}" />
 						</portlet:renderURL>">
-										<strong>${ tieto.nimi }</strong> </a> </span>
-							</td>
+										<strong>${ tieto.nimi }</strong> </a> </span></td>
 							<td>${ tieto.muokkaaja } <fmt:formatDate
-									pattern="dd/MM/yyyy" value="${ tieto.luontiAika }" /></td>
+									pattern="dd/MM/yyyy" value="${ tieto.luontiAika }" />
+							</td>
 
 							<c:if test="${ sessionScope.ammattilainen }">
 								<td><c:choose>
@@ -94,8 +97,7 @@
 												pattern="dd/MM/yyyy" value="${ tieto.tila.alkuPvm }" /> - <fmt:formatDate
 												pattern="dd/MM/yyyy" value="${ tieto.tila.loppuPvm }" />)
 									</c:otherwise>
-									</c:choose>
-								</td>
+									</c:choose></td>
 							</c:if>
 						</tr>
 					</c:if>
@@ -103,6 +105,58 @@
 			</c:if>
 
 		</table>
+<br/>
+		<div class="luokittelu">
+			<span class="linkki"> <a href="
+                        <portlet:actionURL>
+                            <portlet:param name="toiminto" value="haeKirjauksia" />
+                            <portlet:param name="hetu" value="${lapsi.hetu}" />
+                            <portlet:param name="luokitus" value="terveys" />
+                            <portlet:param name="kuvaus" value="Terveydentila" />
+                        </portlet:actionURL>">
+					<strong>Näytä terveydentilaan liittyvät tiedot</strong> </a> </span><br/>
+			         <span class="linkki"> <a href="
+                        <portlet:actionURL>
+                            <portlet:param name="toiminto" value="haeKirjauksia" />
+                            <portlet:param name="hetu" value="${lapsi.hetu}" />
+                            <portlet:param name="luokitus" value="koti" />
+                            <portlet:param name="kuvaus" value="Kasvatusta ohjaavat tiedot" />
+                        </portlet:actionURL>">
+                    <strong>Näytä lapsen kasvatusta ohjaavat tiedot</strong> </a> </span><br/>
+                    
+                     <span class="linkki"> <a href="
+                        <portlet:actionURL>
+                            <portlet:param name="toiminto" value="haeKirjauksia" />
+                            <portlet:param name="hetu" value="${lapsi.hetu}" />
+                            <portlet:param name="luokitus" value="tuen_tarve, huolenaiheet" />
+                            <portlet:param name="kuvaus" value="Tuen tarve" />
+                        </portlet:actionURL>">
+                    <strong>Näytä lapsen tukitarpeet</strong> </a> </span>	<br/>
+                    
+                    <c:if test="${ sessionScope.ammattilainen }">
+                    
+                    <span class="linkki"> <a href="
+                        <portlet:actionURL>
+                            <portlet:param name="toiminto" value="haeKirjauksia" />
+                            <portlet:param name="hetu" value="${lapsi.hetu}" />
+                            <portlet:param name="luokitus" value="palaute" />
+                            <portlet:param name="kuvaus" value="Palautteet" />
+                        </portlet:actionURL>">
+                    <strong>Näytä palautteet</strong> </a> </span>  <br/>
+                    
+                    
+                    <span class="linkki"> <a href="
+                        <portlet:actionURL>
+                            <portlet:param name="toiminto" value="haeKirjauksia" />
+                            <portlet:param name="hetu" value="${lapsi.hetu}" />
+                            <portlet:param name="luokitus" value="toive" />
+                            <portlet:param name="kuvaus" value="Toiveet" />
+                        </portlet:actionURL>">
+                    <strong>Näytä toiveet</strong> </a> </span>  <br/>
+                    
+                    
+                    </c:if>	
+		</div>
 
 		<br />
 

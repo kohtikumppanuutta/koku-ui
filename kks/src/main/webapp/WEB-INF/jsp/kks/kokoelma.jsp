@@ -53,31 +53,31 @@
 					<h2>${ryhma.nimi } t‰ytt‰‰</h2>
 				</c:if>
 				<c:forEach var="lapsiryhma" items='${ryhma.lapsiryhmat.values}'>
-				
-				    <c:if test="${not empty lapsiryhma.nimi}">
-                    <h3>${lapsiryhma.nimi }</h3>
-                    </c:if>
+
+					<c:if test="${not empty lapsiryhma.nimi}">
+						<h3>${lapsiryhma.nimi }</h3>
+					</c:if>
 					<c:forEach var="tyypit" items='${lapsiryhma.tyypit.values  }'>
-					   <c:forEach var="tyyppi" items='${ tyypit }'>
-						<div class="kirjaus">
-							<strong>${tyyppi.nimi }</strong>
-							<c:choose>
-								<c:when test="${ tyyppi.tietoTyyppi.nimi eq monivalinta.nimi }">
-									<span class="monivalinta"> <c:forEach
-											items="${tyyppi.arvoJoukko}" var="arvo">
-											<form:checkbox path="kirjaukset['${tyyppi.koodi}'].arvot"
-												value="${ arvo }" label="${arvo}" />
-										</c:forEach> </span>
-								</c:when>
-								<c:otherwise>
-									<div class="vapaa.teksti">
-										<form:textarea class="add"
-											path="kirjaukset['${tyyppi.koodi}'].arvo" />
-									</div>
-								</c:otherwise>
-							</c:choose>
-						</div>
-					</c:forEach>
+						<c:forEach var="tyyppi" items='${ tyypit }'>
+							<div class="kirjaus">
+								<strong>${tyyppi.nimi }</strong>
+								<c:choose>
+									<c:when test="${ tyyppi.tietoTyyppi.nimi eq monivalinta.nimi }">
+										<span class="monivalinta"> <c:forEach
+												items="${tyyppi.arvoJoukko}" var="arvo">
+												<form:checkbox title="${tyyppi.kuvaus }" path="kirjaukset['${tyyppi.koodi}'].arvot"
+													value="${ arvo }" label="${arvo}" />
+											</c:forEach> </span>
+									</c:when>
+									<c:otherwise>
+										<div class="vapaa.teksti">
+											<form:textarea title="${tyyppi.kuvaus }" class="add"
+												path="kirjaukset['${tyyppi.koodi}'].arvo" />
+										</div>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</c:forEach>
 					</c:forEach>
 				</c:forEach>
 			</c:forEach>
@@ -99,10 +99,7 @@
 
 
 
-<script type="text/javascript"
-	src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
-<script type="text/javascript"
-	src="http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.4.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 

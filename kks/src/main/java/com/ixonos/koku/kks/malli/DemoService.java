@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.ixonos.koku.kks.mock.Kayttaja;
+import com.ixonos.koku.kks.utils.HakuTulokset;
 
 @Service(value = "demoKksService")
 public class DemoService {
@@ -89,5 +90,26 @@ public class DemoService {
     tmp.add(DemoFactory.NELI_VUOTIS_TARKASTUS);
     tmp.add(DemoFactory.VASU);
     return tmp;
+  }
+
+  public HakuTulokset haeKirjauksia(Henkilo h, String... luokitus) {
+    HakuTulokset tulos = new HakuTulokset();
+    List<Kokoelma> kokoelmat = h.getKks().getKokoelmat();
+
+    for (Kokoelma k : kokoelmat) {
+      for (Kirjaus ki : k.getKirjaukset().values()) {
+
+        boolean lisatty = false;
+        for (int i = 0; i < luokitus.length && !lisatty; i++) {
+          String tmp = luokitus[i];
+          if (ki.hasLuokitus(tmp) && !ki.getArvo().equals("")) {
+            tulos.lisaaTulos(k.getNimi(), ki);
+            lisatty = true;
+          }
+        }
+      }
+    }
+
+    return tulos;
   }
 }

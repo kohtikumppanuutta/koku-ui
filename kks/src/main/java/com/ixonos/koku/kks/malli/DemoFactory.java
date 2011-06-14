@@ -509,7 +509,7 @@ public class DemoFactory {
     tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
         "Haluan keskustella lisäksi", "Kuvaa keskustelutarpeet", "", "neuvola",
         "potilasrekisteri", "Huoltaja",
-        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KYSELY),
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_TOIVE),
         luoLuokitus(Vakiot.LUOKITUS_HUOLENAIHEET)));
 
     Date nyt = new Date();

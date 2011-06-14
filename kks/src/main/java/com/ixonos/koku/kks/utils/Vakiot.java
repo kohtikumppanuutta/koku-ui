@@ -4,10 +4,11 @@ public class Vakiot {
 
   public final static String KEHITYSASIATYYPPI_KESKUSTELU = "keskustelu";
   public final static String KEHITYSASIATYYPPI_ARVIO = "arvio";
-  public final static String KEHITYSASIATYYPPI_HAVAINTO = "havaintoo";
+  public final static String KEHITYSASIATYYPPI_HAVAINTO = "havainto";
   public final static String KEHITYSASIATYYPPI_KYSELY = "kysely";
   public final static String KEHITYSASIATYYPPI_PALAUTE = "palaute";
   public final static String KEHITYSASIATYYPPI_LAHETE = "lähete";
+  public final static String KEHITYSASIATYYPPI_TOIVE = "toive";
 
   public final static String LUOKITUS_KUMPPANUUS = "kumppanuus";
 

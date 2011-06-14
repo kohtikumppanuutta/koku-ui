@@ -100,4 +100,21 @@ public class Kirjaus {
     this.kirjaaja = kirjaaja;
   }
 
+  public boolean hasLuokitus(String luokitus) {
+
+    for (Luokitus l : tyyppi.getLuokitukset()) {
+      if (l.getNimi().startsWith(luokitus)) {
+        return true;
+      }
+    }
+
+    for (Luokitus l : tyyppi.getKehitysasiaTyypit()) {
+      if (l.getNimi().startsWith(luokitus)) {
+        return true;
+      }
+    }
+    return false;
+
+  }
+
 }
