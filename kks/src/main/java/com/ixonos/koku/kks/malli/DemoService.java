@@ -26,7 +26,6 @@ public class DemoService {
   }
 
   public void luo(String kayttaja) {
-    System.out.println("LUODAAN!!!!!!!!!!!!");
     this.kayttaja = new Kayttaja();
     this.kayttaja.setRole(kayttaja);
     malli = DemoFactory.luo();
@@ -111,5 +110,19 @@ public class DemoService {
     }
 
     return tulos;
+  }
+
+  public List<KokoelmaTyyppi> haeKokoelmaTyypit() {
+    List<KokoelmaTyyppi> tmp = new ArrayList<KokoelmaTyyppi>();
+
+    List<Kokoelma> tmp2 = new ArrayList<Kokoelma>();
+
+    tmp2.add(DemoFactory.luo4VuotisTarkastus());
+    tmp2.add(DemoFactory.luoVarhaiskasvatusSuunnitelma());
+
+    for (Kokoelma k : tmp2) {
+      tmp.add(k.getTyyppi());
+    }
+    return tmp;
   }
 }

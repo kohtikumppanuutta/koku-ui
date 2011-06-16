@@ -4,7 +4,7 @@
 	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_0">
 	
 	<portlet-skin>
-		<application-name>kks-portlet-0.0.1-SNAPSHOT</application-name>
+		<application-name>koku-portlets</application-name>
 		<portlet-name>kks</portlet-name>
 		<skin-name>Default</skin-name>
 		<css-path>/skin/kks-style.CSS</css-path>
@@ -16,6 +16,7 @@
 			<js-path>/js/hello.js</js-path>
 			<js-priority>0</js-priority>
 	</param>
+	       
 	</javascript>
 
 </gatein-resources>

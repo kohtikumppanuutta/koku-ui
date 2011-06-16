@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import com.ixonos.koku.kks.malli.DemoService;
+import com.ixonos.koku.kks.utils.Vakiot;
 
 @Controller("mainController")
 @RequestMapping(value = "VIEW")
@@ -29,6 +30,15 @@ public class MainController {
     // if (!demoService.onkoLuotu())
     demoService.luo("");
     return "valitse";
+  }
+
+  @RenderMapping(params = "toiminto=naytaLuokittelu")
+  public String naytaLuokittelu(RenderRequest req, Model model) {
+
+    model.addAttribute("kokoelmaTyypit", demoService.haeKokoelmaTyypit());
+    model.addAttribute("kehitysAsialajit", Vakiot.kehitysasiaLajit());
+    model.addAttribute("luokitukset", Vakiot.luokittelut());
+    return "luokitukset";
   }
 
 }

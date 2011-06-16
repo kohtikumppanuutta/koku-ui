@@ -38,6 +38,7 @@
 <h1>${lapsi.nimi} ${kokoelma.nimi}</h1>
 
 
+<div id="main" class="wide">
 <div id="kirjaus.tyypit">
 
 	<c:if test="${not empty kokoelma.tyyppi.kirjausRyhmat}">
@@ -69,6 +70,13 @@
 													value="${ arvo }" label="${arvo}" />
 											</c:forEach> </span>
 									</c:when>
+									<c:when test="${ tyyppi.tietoTyyppi.nimi eq valinta.nimi }">
+                                        <span class="monivalinta"> <c:forEach
+                                                items="${tyyppi.arvoJoukko}" var="arvo">
+                                                <form:radiobutton title="${tyyppi.kuvaus }" path="kirjaukset['${tyyppi.koodi}'].arvot"
+                                                    value="${ arvo }" label="${arvo}" />
+                                            </c:forEach> </span>
+                                    </c:when>
 									<c:otherwise>
 										<div class="vapaa.teksti">
 											<form:textarea title="${tyyppi.kuvaus }" class="add"
@@ -82,9 +90,11 @@
 				</c:forEach>
 			</c:forEach>
 
+            <div class="clear"/>
 			<input type="submit"
-				value="<spring:message code="ui.tallenna.tieto"/>" class="tallenna">
+				value="<spring:message code="ui.tallenna.tieto"/>" class="hae">
 
+<div class="clear"/>
 		</form:form>
 
 	</c:if>
@@ -93,7 +103,7 @@
 
 
 </div>
-
+</div>
 
 <br />
 

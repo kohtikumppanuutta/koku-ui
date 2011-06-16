@@ -37,6 +37,19 @@ h3 {
     display: block;
     margin: 0 0 9px;
 }
+
+.kirjaus .teksti {
+    margin: 0 0 9px;
+    padding: 8px 0 0 5px;
+}
+
+.kirjaus .kirjaaja {
+    display: block;
+    margin: 0 0 9px;
+    float: right;
+    padding: 8px 0 0 5px;
+}
+
 .vapaa.teksti{
     display: block;
     margin: 0 0 9px;
@@ -45,7 +58,7 @@ h3 {
     border: 1px solid #CCCCCC;
     color: #333333;
     font-family: Arial,Helvetica,sans-serif;
-    font-size: 13px;
+    font-size: 13px; 
     height: 80px;
     margin: 3px 0 12px 5px;
     padding: 5px;
@@ -108,6 +121,11 @@ a.active .sulje{
     margin-bottom:3px;
     color:#666666;
 }
+
+.pvm a,span {
+	font-size: 13px;
+}
+
 .uusi {
     display:block;
     margin-top:5px;
@@ -220,4 +238,42 @@ table th{
 .chosen{
     color:#262626;
     padding-right:8px;
+}
+
+.hae {
+    float:left;
+}
+input.hae {
+    margin: 12px 10px;
+}
+
+
+#navigation a{
+    text-decoration:none;
+    color:#666666;
+}
+#navigation a:hover, #navigation .current {
+    color:#25aae1;
+}
+#navigation ul.child{
+    
+}
+#navigation ul.open{
+    display:inline;
+}
+
+#page {
+    margin:40px auto;
+    width:961px;
+    background-color:#ffffff;
+    display:block;
+    height: 700px;
+    padding: 20px 0;
+}
+#navigation {
+    padding:0 10px;
+    float:left;
+    width:189px;
+    border-right: 1px solid #999999;
+    height:500px;
 }

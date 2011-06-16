@@ -49,4 +49,62 @@ public class Vakiot {
   public final static String LUOKITUS_VANHEMPIEN_ARVOSTAMAT_ASIAT = "koti.vanhempien_arvostamat_asiat";
   public final static String LUOKITUS_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET = "koti.vanhempien_kasvatukselliset_tavoitteet";
 
+  public static String kehitysasiaLajit() {
+    StringBuffer sb = new StringBuffer();
+
+    sb.append(KEHITYSASIATYYPPI_KESKUSTELU + "</br>");
+    sb.append(KEHITYSASIATYYPPI_ARVIO + "</br>");
+    sb.append(KEHITYSASIATYYPPI_HAVAINTO + "</br>");
+    sb.append(KEHITYSASIATYYPPI_KYSELY + "</br>");
+    sb.append(KEHITYSASIATYYPPI_PALAUTE + "</br>");
+    sb.append(KEHITYSASIATYYPPI_LAHETE + "</br>");
+    sb.append(KEHITYSASIATYYPPI_TOIVE + "</br>");
+
+    return sb.toString();
+  }
+
+  public static String luokittelut() {
+    StringBuffer sb = new StringBuffer();
+
+    sb.append(LUOKITUS_KUMPPANUUS);
+
+    sb.append(LUOKITUS_FYYSINEN_KEHITYS + "</br>");
+    sb.append(LUOKITUS_MOTORIIKKA + "</br>");
+    sb.append(LUOKITUS_MOTORIIKKA_KARKEA + "</br>");
+    sb.append(LUOKITUS_MOTORIIKKA_HIENO + "</br>");
+    sb.append(LUOKITUS_KEHON_HALLINTA + "</br>");
+    sb.append(LUOKITUS_KIELI_JA_KOMMUNIKAATIO + "</br>");
+    sb.append(LUOKITUS_LAPSEN_TOIVEET + "</br>");
+    sb.append(LUOKITUS_VAHVUUDET_JA_KIINNOSTUKSET + "</br>");
+    sb.append(LUOKITUS_LEIKKI + "</br>");
+    sb.append(LUOKITUS_LIIKUNANLLISET_TAIDOT + "</br>");
+    sb.append(LUOKITUS_MATEMAATTISET_TAIDOT + "</br>");
+    sb.append(LUOKITUS_MOTORISTISET_TAIDOT + "</br>");
+    sb.append(LUOKITUS_PSYYKKINEN_KEHITYS + "</br>");
+    sb.append(LUOKITUS_PAIVITTAISET_TOIMINNOT + "</br>");
+    sb.append(LUOKITUS_RAKENTELU + "</br>");
+    sb.append(LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU + "</br>");
+    sb.append(LUOKITUS_TARKKAAVAISUUS + "</br>");
+    sb.append(LUOKITUS_KESKITTYMINEN_JA_MUISTI + "</br>");
+    sb.append(LUOKITUS_ULKOILU + "</br>");
+    sb.append(LUOKITUS_TUEN_TARVE + "</br>");
+    sb.append(LUOKITUS_HUOLENAIHEET + "</br>");
+
+    sb.append(LUOKITUS_TERVEYDENTILA + "</br>");
+    sb.append(LUOKITUS_TERVEYDENTIILA_RUOKAVALIO + "</br>");
+    sb.append(LUOKITUS_TERVEYDENTILA_RUOKAVALIO_PERUSTE + "</br>");
+
+    sb.append(LUOKITUS_TERVEYDENTILA_SAIRAUS + "</br>");
+    sb.append(LUOKITUS_TERVEYDENTILA_SAIRAUS_ALLERGIA + "</br>");
+    sb.append(LUOKITUS_TERVEYDENTILA_SAIRAUS_ALLERGIA_ELAIN + "</br>");
+    sb.append(LUOKITUS_TERVEYDENTILA_SAIRAUS_ALLERGIA_RUOKA + "</br>");
+
+    sb.append(LUOKITUS_TERVEYDENTILA_LAAKEHOITO + "</br>");
+
+    sb.append(LUOKITUS_KOTI + "</br>");
+    sb.append(LUOKITUS_VANHEMPIEN_ARVOSTAMAT_ASIAT + "</br>");
+    sb.append(LUOKITUS_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET + "</br>");
+
+    return sb.toString();
+  }
 }

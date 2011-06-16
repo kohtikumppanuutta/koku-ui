@@ -45,33 +45,329 @@ public class DemoFactory {
     KokoelmaTyyppi tyyppi = new KokoelmaTyyppi(1, VASU,
         "Sisältää lapsen varhaiskasvatussuunnitelman");
 
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Mistä asioista erityisesti haluat keskustella",
+        "Kuvaa lapsen hyvinvointia",
+        "Lapsen hyvinvointi",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Miten lapsesi on viihtynyt päivähoidossa",
+        "Kuvaa lapsen hyvinvointia",
+        "Lapsen hyvinvointi",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Mitä lapsesi kertoo päivähoidosta kotona",
+        "Kuvaa lapsen hyvinvointia",
+        "Lapsen hyvinvointi",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Lapsellesi läheiset ja tärkeät ihmiset", "Kuvaa lapsen hyvinvointia",
+        "Lapsen hyvinvointi", "Päivähoito", "Päivähoidon asiakasrekisteri",
+        "Huoltaja", luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Onko sinulla perushoitoon liittyen jotain ajatuksia tai kysyttävää",
+        "Kuvaa lapsen hyvinvointia",
+        "Lapsen hyvinvointi",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Mietityttääkö sinua jokin asia lapsesi kehityksessä",
+        "Kuvaa lapsen hyvinvointia",
+        "Lapsen hyvinvointi",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Miten lapsesi suhtautuu uusiin tilanteisiin ja asioihin",
+        "Kuvaa lapsen hyvinvointia",
+        "Lapsen hyvinvointi",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Onko lapsellasi pelkoja",
+        "Kuvaa lapsen hyvinvointia",
+        "Lapsen hyvinvointi",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Oletko jostain asiasta huolissasi lapseesi liittyen",
+        "Kuvaa lapsen hyvinvointia",
+        "Lapsen hyvinvointi",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Mitkä asiat erityisesti tuottavat iloa lapsessasi",
+        "Kuvaa lapsen hyvinvointia",
+        "Lapsen hyvinvointi",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU,
+            Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Mistä asioista lapsesi on kiinnostunut",
+        "Kuvaa lapsen hyvinvointia",
+        "Lapsen hyvinvointi",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU,
+            Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Miten lapsesi toiveet huomioidaan",
+        "Kuvaa lapsen hyvinvointia",
+        "Lapsen hyvinvointi",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Yhteiset tavoitteet liittyen lapsen hyvinvointiin",
+        "Kuvaa lapsen hyvinvointia",
+        "",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja ja päivähoito yhdessä",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
+
     tyyppi
         .lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
-            "Yhteiset tavoitteet liittyen lapsen hyvinvointiin",
-            "Lapsen ja vanhemman aiemmat kokemukset päivähoidosta /nMistä asioista erityisesti haluat keskustella /nMiten lapsesi on viihtynyt päivähoidossa /nMitä lapsesi kertoo päivähoidosta kotona /nLapsellesi läheiset ja tärkeät ihmiset /nOnko sinulla perushoitoon liittyen jotain ajatuksia tai kysyttävää /nMietityttääkö sinua jokin asia lapsesi kehityksessä /nMiten lapsesi suhtautuu uusiin tilanteisiin ja asioihin /nOnko lapsellasi pelkoja oletko jostain asiasta huolissasi lapseesi liittyen /nMitkä asiat erityisesti tuottavat iloa lapsessasi /nMistä asioista lapsesi on kiinnostunut /nMiten lapsesi toiveet huomioidaan",
-            "",
+            "Mitä ajatuksia lapsesi päivähoitoon tulo- ja lähtötilanteet sinussa herättävät",
+            "Kuvaa lapsen vuorovaikutusta",
+            "Vuorovaikutus",
             "Päivähoito",
             "Päivähoidon asiakasrekisteri",
-            "",
+            "Huoltaja",
             luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
             luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
-                Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
+                Vakiot.LUOKITUS_HUOLENAIHEET)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Miten ilo tai suru näkyy lapsessasi",
+        "Kuvaa lapsen vuorovaikutusta",
+        "Vuorovaikutus",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET,
+            Vakiot.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Milloin lapsesi haluaa olla yksin",
+        "Kuvaa lapsen vuorovaikutusta",
+        "Vuorovaikutus",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET,
+            Vakiot.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Onko lapsellasi kavereita kotona? päivähoidossa",
+        "Kuvaa lapsen vuorovaikutusta",
+        "Vuorovaikutus",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET,
+            Vakiot.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU,
+            Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Miten lapsesi suhtautuu toisiin lapsiin? lapsesi ryhmän jäsenenä?",
+        "Kuvaa lapsen vuorovaikutusta",
+        "Vuorovaikutus",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET,
+            Vakiot.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Miten lapsesi osaa ottaa toisen lapsen tunteet huomioon?",
+        "Kuvaa lapsen vuorovaikutusta",
+        "Vuorovaikutus",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET,
+            Vakiot.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Miten lapsesi suhtautuu aikuisiin?",
+        "Kuvaa lapsen vuorovaikutusta",
+        "Vuorovaikutus",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET,
+            Vakiot.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU,
+            Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Missä tilanteissa lapsesi pyytää apua?",
+        "Kuvaa lapsen vuorovaikutusta",
+        "Vuorovaikutus",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET,
+            Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Miten lapsesi käyttäytyy ristiriitatilanteissa?",
+        "Kuvaa lapsen vuorovaikutusta",
+        "Vuorovaikutus",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET,
+            Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Mitä lapsesi leikkii? kenen kanssa?",
+        "Kuvaa lapsen vuorovaikutusta",
+        "Vuorovaikutus",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET,
+            Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT,
+            Vakiot.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Miten lapsesi ilmaisee itseään?",
+        "Kuvaa lapsen vuorovaikutusta",
+        "Vuorovaikutus",
+        "Päivähoito",
+        "Päivähoidon asiakasrekisteri",
+        "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI,
+            Vakiot.LUOKITUS_HUOLENAIHEET,
+            Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT,
+            Vakiot.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Yhteiset tavoitteet liittyen vuorovaikutukseen",
+        "Kuvaa lapsen vuorovaikutusta", "", "Päivähoito",
+        "Päivähoidon asiakasrekisteri", "Huoltaja ja päivähoito yhdessä",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS)));
 
     tyyppi
         .lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
-            "Yhteiset tavoitteet liittyen vuorovaikutukseen",
-            "Mitä ajatuksia lapsesi päivähoitoon tulo- ja lähtötilanteet sinussa herättävät /nMiten ilo tai suru näkyy lapsessasi /nMilloin lapsesi haluaa olla yksin /nOnko lapsellasi kavereita kotona? päivähoidossa /nMiten lapsesi suhtautuu toisiin lapsiin? lapsesi ryhmän jäsenenä? /nMiten lapsesi osaa ottaa toisen lapsen tunteet huomioon /nMiten lapsesi suhtautuu aikuisiin /nMissä tilanteissa lapsesi pyytää apua /nMiten lapsesi käyttäytyy ristiriitatilanteissa /nMitä lapsesi leikkii? kenen kanssa? /nMiten lapsesi ilmaisee itseään?",
-            "", "Päivähoito", "Päivähoidon asiakasrekisteri", "",
+            "Millaisia asioita toivoisit kerrottavan päivittäin lapsesi arjesta päivähoidossa",
+            "Kuvaa kodin ja päivähoidon yhteistyötä",
+            "Kodin ja päivähoidon yhteistyö", "Päivähoito",
+            "Päivähoidon asiakasrekisteri", "Huoltaja",
             luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
-            luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS)));
+            luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Miten yhteistyö hoidetaan molempiin vanhempiin",
+        "Kuvaa kodin ja päivähoidon yhteistyötä",
+        "Kodin ja päivähoidon yhteistyö", "Päivähoito",
+        "Päivähoidon asiakasrekisteri", "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Millaisia yhteistyön tapoja toivotte",
+        "Kuvaa kodin ja päivähoidon yhteistyötä",
+        "Kodin ja päivähoidon yhteistyö", "Päivähoito",
+        "Päivähoidon asiakasrekisteri", "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI)));
 
     tyyppi
         .lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
-            "Yhteiset tavoitteet liittyen yhteistyöhön",
-            "Millaisia asioita toivoisit kerrottavan päivittäin lapsesi arjesta päivähoidossa/nMiten yhteistyö hoidetaan molempiin vanhempiin/nMillaisia yhteistyön tapoja toivotte/nMinkälaiset asiat teille on kasvatuksessa tärkeitä? /nMitä toivotte meiltä",
-            "", "Päivähoito", "Päivähoidon asiakasrekisteri", "",
+            "Minkälaiset asiat teille on kasvatuksessa tärkeitä? mitä toivotte meiltä",
+            "Kuvaa kodin ja päivähoidon yhteistyötä",
+            "Kodin ja päivähoidon yhteistyö", "Päivähoito",
+            "Päivähoidon asiakasrekisteri", "Huoltaja",
             luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
-            luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS)));
+            luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Yhteiset tavoitteet liittyen yhteistyöhön",
+        "Kuvaa kodin ja päivähoidon yhteistyötä", "", "Päivähoito",
+        "Päivähoidon asiakasrekisteri", "Huoltaja ja päivähoito yhdessä",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI)));
 
     Date nyt = new Date();
     Date loppuu = new Date();
@@ -88,7 +384,7 @@ public class DemoFactory {
     KokoelmaTyyppi tyyppi = new KokoelmaTyyppi(1, NELI_VUOTIS_TARKASTUS,
         "Sisältää tiedot lapsen 4-vuotistarkastuksesta");
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Pukee ja riisuu itse",
         "kuvaa päivittäistoimintojen sujumista",
         "päivittäistoiminnot",
@@ -100,7 +396,7 @@ public class DemoFactory {
         luoLuokitus(Vakiot.LUOKITUS_MOTORIIKKA, Vakiot.LUOKITUS_KEHON_HALLINTA,
             Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Syö siististi",
         "kuvaa päivittäistoimintojen sujumista",
         "päivittäistoiminnot",
@@ -112,7 +408,7 @@ public class DemoFactory {
         luoLuokitus(Vakiot.LUOKITUS_MOTORIIKKA, Vakiot.LUOKITUS_KEHON_HALLINTA,
             Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Käy omatoimisesti wc:ssä",
         "kuvaa päivittäistoimintojen sujumista",
         "päivittäistoiminnot",
@@ -124,7 +420,7 @@ public class DemoFactory {
         luoLuokitus(Vakiot.LUOKITUS_MOTORIIKKA, Vakiot.LUOKITUS_KEHON_HALLINTA,
             Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Hahmottaa hoitopaikan hoitorytmin",
         "kuvaa päivittäistoimintojen sujumista",
         "päivittäistoiminnot",
@@ -137,7 +433,7 @@ public class DemoFactory {
             Vakiot.LUOKITUS_PSYYKKINEN_KEHITYS,
             Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Siirtyminen toiminnasta toiseen onnistuu",
         "kuvaa päivittäistoimintojen sujumista",
         "päivittäistoiminnot",
@@ -157,7 +453,7 @@ public class DemoFactory {
         luoTyypit(Vakiot.KEHITYSASIATYYPPI_ARVIO),
         luoLuokitus(Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Juoksee sujuvasti",
         "kuvaa fyysistä kehitystä",
         "liikkuminen ja hahmottaminen",
@@ -171,7 +467,7 @@ public class DemoFactory {
             Vakiot.LUOKITUS_LIIKUNANLLISET_TAIDOT,
             Vakiot.LUOKITUS_MOTORIIKKA_KARKEA)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Kävelee kapealla penkillä / narua pitkin",
         "kuvaa fyysistä kehitystä",
         "liikkuminen ja hahmottaminen",
@@ -185,7 +481,7 @@ public class DemoFactory {
             Vakiot.LUOKITUS_LIIKUNANLLISET_TAIDOT,
             Vakiot.LUOKITUS_MOTORIIKKA_KARKEA)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Hyppää tasajalkahyppyä",
         "kuvaa fyysistä kehitystä",
         "liikkuminen ja hahmottaminen",
@@ -199,7 +495,7 @@ public class DemoFactory {
             Vakiot.LUOKITUS_LIIKUNANLLISET_TAIDOT,
             Vakiot.LUOKITUS_MOTORIIKKA_KARKEA)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Kävelee portaita ylös ja alas vuorotahtiin",
         "kuvaa fyysistä kehitystä",
         "liikkuminen ja hahmottaminen",
@@ -213,7 +509,7 @@ public class DemoFactory {
             Vakiot.LUOKITUS_LIIKUNANLLISET_TAIDOT,
             Vakiot.LUOKITUS_MOTORIIKKA_KARKEA)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Kiipeilee",
         "kuvaa fyysistä kehitystä",
         "liikkuminen ja hahmottaminen",
@@ -227,7 +523,7 @@ public class DemoFactory {
             Vakiot.LUOKITUS_LIIKUNANLLISET_TAIDOT,
             Vakiot.LUOKITUS_MOTORIIKKA_KARKEA)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Tunnistaa ja nimeää kehonosia", "kuvaa psyykkistä kehitystä",
         "liikkuminen ja hahmottaminen", "päivähoito",
         "päivähoidon asiakasrekisteri", "Päivähoito",
@@ -235,7 +531,7 @@ public class DemoFactory {
         luoTyypit(Vakiot.KEHITYSASIATYYPPI_HAVAINTO),
         luoLuokitus(Vakiot.LUOKITUS_PSYYKKINEN_KEHITYS)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Piirtää tunnistettavia asioita", "kuvaa psyykkistä kehitystä",
         "liikkuminen ja hahmottaminen", "päivähoito",
         "päivähoidon asiakasrekisteri", "Päivähoito",
@@ -243,7 +539,7 @@ public class DemoFactory {
         luoTyypit(Vakiot.KEHITYSASIATYYPPI_HAVAINTO),
         luoLuokitus(Vakiot.LUOKITUS_PSYYKKINEN_KEHITYS)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Leikkaa saksilla",
         "kuvaa fyysistä ja psyykkistä kehitystä",
         "liikkuminen ja hahmottaminen",
@@ -255,7 +551,7 @@ public class DemoFactory {
         luoLuokitus(Vakiot.LUOKITUS_PSYYKKINEN_KEHITYS,
             Vakiot.LUOKITUS_MOTORIIKKA_HIENO)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Kokoaa palapelejä",
         "kuvaa psyykkistä kehitystä",
         "liikkuminen ja hahmottaminen",
@@ -267,7 +563,7 @@ public class DemoFactory {
         luoLuokitus(Vakiot.LUOKITUS_PSYYKKINEN_KEHITYS,
             Vakiot.LUOKITUS_MOTORIIKKA_HIENO)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi("Kätisyys",
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi("Kätisyys",
         "kuvaa fyysistä ja psyykkistä kehitystä",
         "liikkuminen ja hahmottaminen", "päivähoito",
         "päivähoidon asiakasrekisteri", "Päivähoito",
@@ -275,7 +571,7 @@ public class DemoFactory {
         luoTyypit(Vakiot.KEHITYSASIATYYPPI_ARVIO),
         luoLuokitus(Vakiot.LUOKITUS_PSYYKKINEN_KEHITYS)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Ottaa ja säilyttää katsekontaktin vuorovaikutuksessa",
         "kuvaa vuorovaikutuksen ja kielen kehitystä",
         "kieli ja kommunikaatio",
@@ -288,7 +584,7 @@ public class DemoFactory {
             Vakiot.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU,
             Vakiot.LUOKITUS_KIELI_JA_KOMMUNIKAATIO)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Osaa kuunnella vastavuoroisesti",
         "kuvaa vuorovaikutuksen ja kielen kehitystä",
         "kieli ja kommunikaatio",
@@ -301,7 +597,7 @@ public class DemoFactory {
             Vakiot.LUOKITUS_PSYYKKINEN_KEHITYS,
             Vakiot.LUOKITUS_KIELI_JA_KOMMUNIKAATIO)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Toimii ohjeiden mukaan",
         "kuvaa vuorovaikutuksen ja kielen kehitystä",
         "kieli ja kommunikaatio",
@@ -314,7 +610,7 @@ public class DemoFactory {
             Vakiot.LUOKITUS_PSYYKKINEN_KEHITYS)));
 
     tyyppi
-        .lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+        .lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
             "On kiinnostunut saduista ja kertomuksista",
             "kuvaa vuorovaikutuksen ja kielen kehitystä",
             "kieli ja kommunikaatio",
@@ -327,7 +623,7 @@ public class DemoFactory {
                 Vakiot.LUOKITUS_PSYYKKINEN_KEHITYS,
                 Vakiot.LUOKITUS_TARKKAAVAISUUS)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Puhe on selkeää ja ymmärrettävää",
         "kuvaa kielen kehitystä",
         "kieli ja kommunikaatio",
@@ -352,7 +648,7 @@ public class DemoFactory {
             Vakiot.LUOKITUS_PSYYKKINEN_KEHITYS,
             Vakiot.LUOKITUS_MOTORIIKKA_HIENO)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Ymmärtää lukumäärien 1-4 vastaavuuden",
         "kuvaa matemaattisten taitojen kehitystä", "kieli ja kommunikaatio",
         "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
@@ -360,14 +656,14 @@ public class DemoFactory {
         luoTyypit(Vakiot.KEHITYSASIATYYPPI_ARVIO),
         luoLuokitus(Vakiot.LUOKITUS_MATEMAATTISET_TAIDOT)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Tunnistaa ja nimeää perusvärit", "kuvaa kielen kehitystä",
         "kieli ja kommunikaatio", "päivähoito", "päivähoidon asiakasrekisteri",
         "Päivähoito", luoArvot("Yleensä", "Vaihtelevasti", "Ei vielä"),
         luoTyypit(Vakiot.KEHITYSASIATYYPPI_ARVIO),
         luoLuokitus(Vakiot.LUOKITUS_KIELI_JA_KOMMUNIKAATIO)));
 
-    tyyppi.lisaaKirjausTyyppi(luoMonivalintaKirjausTyyppi(
+    tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Osaa kertoa pieniä tarinoita / osaa kertoa tapahtuneista asioista",
         "kuvaa kielen kehitystä",
         "kieli ja kommunikaatio",
@@ -556,6 +852,21 @@ public class DemoFactory {
     KirjausTyyppi tyyppi = new KirjausTyyppi(codeGenerator, kentta, kuvaus,
         false, Tietotyyppi.MONIVALINTA, arvoJoukko, vastuutaho, rekisteri,
         ryhma, tayttaja);
+
+    tyyppi.setLuokitukset(luokitukset);
+    tyyppi.setKehitysasiaTyypit(tyypit);
+    return tyyppi;
+  }
+
+  public static KirjausTyyppi luoValintaKirjausTyyppi(String kentta,
+      String kuvaus, String ryhma, String vastuutaho, String rekisteri,
+      String tayttaja, List<String> arvoJoukko, List<Luokitus> tyypit,
+      List<Luokitus> luokitukset) {
+    codeGenerator++;
+
+    KirjausTyyppi tyyppi = new KirjausTyyppi(codeGenerator, kentta, kuvaus,
+        false, Tietotyyppi.VALINTA, arvoJoukko, vastuutaho, rekisteri, ryhma,
+        tayttaja);
 
     tyyppi.setLuokitukset(luokitukset);
     tyyppi.setKehitysasiaTyypit(tyypit);

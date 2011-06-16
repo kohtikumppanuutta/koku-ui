@@ -106,7 +106,7 @@
 
 		</table>
 <br/>
-		<div class="luokittelu">
+		<div class="kokoelma">
 			<span class="linkki"> <a href="
                         <portlet:actionURL>
                             <portlet:param name="toiminto" value="haeKirjauksia" />

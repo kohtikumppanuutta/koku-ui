@@ -1,4 +1,3 @@
-<%@page import="com.ixonos.koku.kks.utils.enums.Tietotyyppi"%>
 <%@ taglib prefix="portlet" uri="http://java.sun.com/portlet"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -6,6 +5,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@page import="com.ixonos.koku.kks.utils.enums.Tietotyyppi"%>
 
 <c:set var="vapaa_teksti" value="<%=Tietotyyppi.VAPAA_TEKSTI%>" />
 <c:set var="monivalinta" value="<%=Tietotyyppi.MONIVALINTA%>" />
@@ -21,37 +21,42 @@
 	<portlet:param name="toiminto" value="naytaLapsi" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
 </portlet:renderURL>
-<div>
+<div id="main" class="wide">
+	<div>
 
-	<div class="home">
-		<a href="${kotiUrl}"><spring:message code="ui.takaisin" /> </a>
+		<div class="home">
+			<a href="${kotiUrl}"><spring:message code="ui.takaisin" /> </a>
+		</div>
+
 	</div>
 
-</div>
+
+	<h1>${lapsi.nimi} ${kuvaus}</h1>
 
 
-<h1>${lapsi.nimi} ${kuvaus}</h1>
+	<div id="kirjaus.tyypit.luku">
 
+		<c:if test="${not empty hakutulos }">
 
-<div id="kirjaus.tyypit.luku">
-
-	<c:if test="${not empty hakutulos }">
-
-<c:if test="${empty hakutulos.tulokset}">
+			<c:if test="${empty hakutulos.tulokset}">
     Ei kirjauksia
 </c:if>
-		<c:forEach var="tulos" items="${hakutulos.tulokset}">
+			<c:forEach var="tulos" items="${hakutulos.tulokset}">
 
-			<c:if test="${not empty tulos.nimi}">
-				<h2>${tulos.nimi }</h2>
-			</c:if>
-			<c:forEach var="kirjaus" items='${tulos.kirjaukset}'>
-                <div><strong>${ kirjaus.tyyppi.nimi }:</strong> ${ kirjaus.arvo } (<fmt:formatDate value="${ kirjaus.luontiAika }"/> ${ kirjaus.kirjaaja }) </div>
+				<c:if test="${not empty tulos.nimi}">
+					<h3>${tulos.nimi }</h3>
+				</c:if>
+				<c:forEach var="kirjaus" items='${tulos.kirjaukset}'>
+					<div class="kirjaus">
+						<strong>${ kirjaus.tyyppi.nimi }</strong> <span class="teksti">${
+							kirjaus.arvo } (<fmt:formatDate
+								value="${ kirjaus.luontiAika }" /> ${ kirjaus.kirjaaja })</span>
+					</div>
+				</c:forEach>
 			</c:forEach>
-		</c:forEach>
-	</c:if>
+		</c:if>
+	</div>
 </div>
-
 
 <br />
 

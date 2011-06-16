@@ -136,4 +136,46 @@ public class KirjausTyyppi {
     this.tayttaja = tayttaja;
   }
 
+  public String getKehitysasiaTyypitTekstina() {
+    StringBuffer sb = new StringBuffer();
+    List<Luokitus> tmp = getKehitysasiaTyypit();
+    for (int i = 0; i < tmp.size(); i++) {
+      Luokitus l = tmp.get(i);
+      sb.append(l.getNimi());
+
+      if ((i + 1) < tmp.size())
+        sb.append(", ");
+    }
+    return sb.toString();
+  }
+
+  public String getLuokituksetTekstina() {
+    StringBuffer sb = new StringBuffer();
+    List<Luokitus> tmp = getLuokitukset();
+    for (int i = 0; i < tmp.size(); i++) {
+      Luokitus l = tmp.get(i);
+      sb.append(l.getNimi());
+
+      if ((i + 1) < tmp.size())
+        sb.append(", ");
+    }
+    return sb.toString();
+  }
+
+  public String getArvotTekstina() {
+    StringBuffer sb = new StringBuffer();
+    List<String> tmp = getArvoJoukko();
+
+    if (tmp == null)
+      return "";
+
+    for (int i = 0; i < tmp.size(); i++) {
+      String l = tmp.get(i);
+      sb.append(l);
+
+      if ((i + 1) < tmp.size())
+        sb.append(", ");
+    }
+    return sb.toString();
+  }
 }

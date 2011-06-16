@@ -12,14 +12,14 @@
 </portlet:renderURL>
 
 <c:set var="ammattilainen" value="${false}" scope="session"/>  
-    
-<div>
+
+<div id="main" class="wide">
 
 	<div class="home">
 		<a href="${kotiUrl}">Takaisin</a>
 	</div>
 
-	<div id="main" class="wide">
+	<div>
 		<h1><spring:message code="ui.kks.otsikko"/></h1>
 		<spring:message code="ui.kks.kuvaus"/>
 		<p><spring:message code="ui.valitse.lapsi"/></p>
@@ -28,16 +28,15 @@
 	<div id="childs">
 		<c:if test="${not empty lapset}">
 			<c:forEach var="lapsi" items="${lapset}">
-				<div class="child.name">
+				<span class="pvm">
 					<a
 						href="
 						<portlet:actionURL>
 							<portlet:param name="toiminto" value="lapsenTietoihin" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
 						</portlet:actionURL>">
-						<strong>${ lapsi.sukunimi }, ${lapsi.etunimi}</strong> </a> <span
-						class="hetu">${lapsi.hetu}</span>
-				</div>
+						 ${ lapsi.sukunimi }, ${lapsi.etunimi}  </a>  ${lapsi.hetu}
+				</span>
 			</c:forEach>
 		</c:if>
 	</div>
