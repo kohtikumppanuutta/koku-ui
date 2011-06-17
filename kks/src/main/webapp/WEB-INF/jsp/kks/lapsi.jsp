@@ -54,7 +54,7 @@
 		<spring:message code="ui.kks.otsikko" />
 	</h1>
 
-	<div id="page">
+	<div >
 		<table width="100%" border="0">
 			<tr>
 				<th align="left">TIETOKOKOELMA</th>
@@ -111,7 +111,7 @@
                         <portlet:actionURL>
                             <portlet:param name="toiminto" value="haeKirjauksia" />
                             <portlet:param name="hetu" value="${lapsi.hetu}" />
-                            <portlet:param name="luokitus" value="terveys" />
+                            <portlet:param name="luokitus" value="terveydentila" />
                             <portlet:param name="kuvaus" value="Terveydentila" />
                         </portlet:actionURL>">
 					<strong>Näytä terveydentilaan liittyvät tiedot</strong> </a> </span><br/>
