@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,16 +59,7 @@ public class LapsiController {
 
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam String hetu) {
-    log.info("getLapsi with hetu=" + hetu);// #TODO# Remove hetu from log
     return demoService.haeLapsi(hetu);
-  }
-
-  @InitBinder("aktivointi")
-  public void initBinder(WebDataBinder binder) {
-    log.debug("init binder  ");
-    // binder.registerCustomEditor(KehitystietoTyyppi.class,
-    // new KehitystietoTyyppiEditor(service));
-
   }
 
   @ModelAttribute("aktivointi")

@@ -39,8 +39,8 @@
 		<c:if test="${not empty hakutulos }">
 
 			<c:if test="${empty hakutulos.tulokset}">
-    Ei kirjauksia
-</c:if>
+                <spring:message code="ui.ei.kirjauksia" />
+            </c:if>
 			<c:forEach var="tulos" items="${hakutulos.tulokset}">
 
 				<c:if test="${not empty tulos.nimi}">
@@ -49,8 +49,8 @@
 				<c:forEach var="kirjaus" items='${tulos.kirjaukset}'>
 					<div class="kirjaus">
 						<strong>${ kirjaus.tyyppi.nimi }</strong> <span class="teksti">${
-							kirjaus.arvo } (<fmt:formatDate
-								value="${ kirjaus.luontiAika }" /> ${ kirjaus.kirjaaja })</span>
+							kirjaus.arvo } (<fmt:formatDate value="${ kirjaus.luontiAika }" />
+							${ kirjaus.kirjaaja })</span>
 					</div>
 				</c:forEach>
 			</c:forEach>

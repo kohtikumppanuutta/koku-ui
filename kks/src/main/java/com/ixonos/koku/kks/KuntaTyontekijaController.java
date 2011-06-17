@@ -36,9 +36,14 @@ public class KuntaTyontekijaController {
 
   @RenderMapping(params = "toiminto=naytaTyontekija")
   public String nayta(RenderResponse response,
-      @RequestParam("lapset") String[] childs, Model model) {
+      @RequestParam("lapset") String[] childs,
+      @RequestParam(value = "haku", required = false) String haku, Model model) {
     log.info("nayta kuntatyontekija");
     model.addAttribute("lapset", toChilds(childs));
+
+    if (haku != null) {
+      model.addAttribute("haku", haku);
+    }
     return "hae";
   }
 
@@ -51,6 +56,7 @@ public class KuntaTyontekijaController {
     response.setRenderParameter("toiminto", "naytaTyontekija");
     response.setRenderParameter("lapset",
         toArray(demoService.haeHenkilo(lapsi)));
+    response.setRenderParameter("haku", "true");
     sessionStatus.setComplete();
   }
 

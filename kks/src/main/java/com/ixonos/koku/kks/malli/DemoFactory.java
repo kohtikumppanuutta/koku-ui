@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.ixonos.koku.kks.utils.Vakiot;
-import com.ixonos.koku.kks.utils.enums.Tietotyyppi;
+import com.ixonos.koku.kks.utils.enums.Tietotyyppi; 
 import com.ixonos.koku.kks.utils.enums.Tila;
 
 public class DemoFactory {

@@ -25,49 +25,51 @@
 		<a href="${kotiUrl}">Takaisin</a>
 	</div>
 
-	<div id="search">
 
-		<div id="main" class="wide">
-			<h1>
-				<spring:message code="ui.kks.otsikko" />
-			</h1>
+	<div id="main" class="wide">
+		<h1>
+			<spring:message code="ui.kks.otsikko" />
+		</h1>
 
-			<form:form name="haeLapsiForm" commandName="lapsi" method="post"
-				action="${hakuActionUrl}">
-				<span class="pvm"> HAE LAPSEN TIEDOT: </span>
+		<form:form name="haeLapsiForm" commandName="lapsi" method="post"
+			action="${hakuActionUrl}">
+			<span class="pvm"> <spring:message code="ui.hae.lapsen.tiedot" /> </span>
 
-				<span class="pvm"> <spring:message code="ui.form.etunimi" />
-					<form:input path="etunimi" /> <span class="errors"><form:errors
-							path="etunimi" />
-				</span> <spring:message code="ui.form.sukunimi" />
-					<form:input path="sukunimi" /> <span class="errors"><form:errors
-							path="sukunimi" />
-				</span> <spring:message code="ui.form.hetu" />
-					<form:input path="hetu" /> <span class="errors"><form:errors
-							path="hetu" />
-				</span> 
-				<input value="Hae tiedot" type="submit">
+			<span class="pvm"> <spring:message code="ui.form.etunimi" />
+				<form:input path="etunimi" /> <span class="errors"><form:errors
+						path="etunimi" /> </span> <spring:message code="ui.form.sukunimi" /> <form:input
+					path="sukunimi" /> <span class="errors"><form:errors
+						path="sukunimi" /> </span> <spring:message code="ui.form.hetu" /> <form:input
+					path="hetu" /> <span class="errors"><form:errors
+						path="hetu" /> </span> <input type="submit" value="<spring:message code="ui.hae.tiedot"/>" >
+			</span>
+
+			<div class="clear" />
+		</form:form>
+
+		<br />
+		<div>
+			<c:if test="${not empty lapset}">
+				<c:forEach var="lapsi" items="${lapset}">
+					<span class="pvm"> <a
+						href="
+                        <portlet:actionURL>
+                            <portlet:param name="toiminto" value="lapsenTietoihin" />
+                            <portlet:param name="hetu" value="${lapsi.hetu}" />
+                        </portlet:actionURL>">
+							${lapsi.sukunimi }, ${lapsi.etunimi} </a> <span>${lapsi.hetu}</span>
+					</span>
+				</c:forEach>
+			</c:if>
+			<c:if test="${empty lapset && not empty haku}">
+				<span class="hakutulos"><strong><spring:message code="ui.ei.hakutuloksia" /></strong>
 				</span>
-				
-                <div class="clear"/>
-			</form:form>
+			</c:if>
 		</div>
 	</div>
-	<br />
+
+
 	<div>
-		<c:if test="${not empty lapset}">
-			<c:forEach var="lapsi" items="${lapset}">
-				<span class="pvm">
-					<a
-						href="
-						<portlet:actionURL>
-							<portlet:param name="toiminto" value="lapsenTietoihin" />
-							<portlet:param name="hetu" value="${lapsi.hetu}" />
-						</portlet:actionURL>">
-						${lapsi.sukunimi }, ${lapsi.etunimi} </a> <span>${lapsi.hetu}</span>
-				</span>
-			</c:forEach>
-		</c:if>
+		</br>
 	</div>
-	<div class="clear"/>
 </div>

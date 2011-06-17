@@ -25,7 +25,7 @@
 		<p><spring:message code="ui.valitse.lapsi"/></p>
 	</div>
 
-	<div id="childs">
+	<div id="lapset">
 		<c:if test="${not empty lapset}">
 			<c:forEach var="lapsi" items="${lapset}">
 				<span class="pvm">
@@ -40,5 +40,7 @@
 			</c:forEach>
 		</c:if>
 	</div>
+	<div></br></div>
 
 </div>
+<div></div>
