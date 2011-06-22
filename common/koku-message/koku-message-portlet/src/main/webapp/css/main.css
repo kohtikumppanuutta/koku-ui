@@ -1,0 +1,204 @@
+/*
+ * css file for task manager portlet
+ * @Author: JinhuaChen
+ */
+
+#task-manager-wrap {
+	margin: 5px;
+	position: relative;
+	color:#666666;
+}
+
+#task-manager-navi {
+	margin: 10px;
+	padding: 10px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px solid #cccccc;
+}
+
+#task-manager-navi ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#task-manager-navi ul li {
+	color: #fff;
+	font-weight: bold;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	display: inline;
+	padding: 5px 8px 5px 8px;
+	cursor: pointer;
+}
+
+.task-bg-normal {background-color: #a64a1d;}
+
+.task-bg-focus {background-color: #aaaaaa;}
+
+#task-manager-tasklist {
+	margin: 10px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px solid #cccccc;
+	height: 360px;
+	padding: 2px;
+}
+
+/* main table */
+.task-manager-table {
+	width: 100%; /* table width */
+	color: inherit; /* text color */
+	font-family: Verdana; /* font name */
+	font-size: 12px; /* font size */
+	border: 0px outset; /* border */
+	border-collapse: collapse;
+}
+
+.task-manager-table img {
+	border: 0px;
+}
+
+.task-manager-table tr {
+	border-bottom: 1px solid #EEEEEE;
+}
+
+/* main table data cells */
+.task-manager-table td {
+	padding: 6px; /* cell padding */
+	border: 0px solid; /* cell spacing */
+	border-color: #CCCCCC; /* table background color */
+	text-align: left;
+	word-wrap: break-word;
+	word-break: break-all;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+/* to solve the text overflow in table */
+.task-manager-table td strong {
+	display:block;
+	width:100%;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.task-manager-table td.left {
+	text-align:left;
+}
+
+.task-manager-table td.choose {
+	width: 50px;
+}
+
+.task-manager-table td.from {
+	width: 120px;
+}
+
+.task-manager-table td.date {
+	text-align:right;
+	width: 100px;
+}
+
+
+/* main table header cells */
+.task-manager-table .trheader {
+	font-weight:bold;
+	vertical-align: top;
+	border-bottom: 1px solid #EFEFEF;
+}
+
+.task-manager-table .trheader td a:link {
+	text-decoration: underline;
+	color: #25AAE1;
+}
+
+.task-manager-table .trheader td a:hover {
+	text-decoration: underline;
+	color: #0089C1;
+}
+
+.messageItem {
+	cursor: pointer;
+}
+/* main table row color */
+.task-manager-table tr.new {font-weight:bold;}
+.task-manager-table tr.oddRow {background-color: #FFFFFF; /* for odd row */}
+
+.task-manager-table tr.evenRow {background-color: #EFEFEF; /* #E7F5E7 for even row */}
+
+.task-manager-table tr.focusRow {background-color: #D8D8A8; /* for the current row */	}
+.task-manager-table tr.clickRow {background-color: #ECC57A; /* for the current row */}
+
+.task-config-table {
+	color: inherit; /* text color */
+	font-family: Verdana; /* font name */
+	font-size: 12px; /* font size */
+	border: 0px outset; /* border */
+	border-collapse: collapse;
+}
+
+/* main table data cells */
+.task-config-table td {
+	padding: 4px; /* cell padding */
+	border: 0px solid; /* cell spacing */
+	border-color: #CCCCCC; /* table background color */
+	text-align: left;
+	word-wrap: break-word;
+	word-break: break-all;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+#task-manager-search {
+	display:none;
+}
+
+#task-manager-operation {
+	height:30px;
+	overflow:auto;
+}
+
+.task-manager-operation-part {
+	margin: 5px 10px 5px 10px;
+	padding: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	background: #bbbbbb url('../images/bg.gif');
+}
+
+#task-manager-operation-page {float:left;}
+#task-manager-operation-loading {
+	float:right; 
+	padding: 5px 8px 5px 25px;
+	background: url('../images/load.gif') no-repeat 5px 5px;}
+#task-manager-operation ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#task-manager-operation ul li {
+	font-weight: bold;
+	display: inline;
+	padding: 5px;
+}
+
+#task-manager-operation ul li img{
+	cursor: pointer;
+	vertical-align:middle;
+}
+#task-manager-operation ul li a:hover{
+	background-color: #aaaaaa;
+}
+
+.task-error-message {
+	padding:5px;
+	background-color: #FFB6C1;
+	border: 1px solid #FF3333; /* table background color */
+}
