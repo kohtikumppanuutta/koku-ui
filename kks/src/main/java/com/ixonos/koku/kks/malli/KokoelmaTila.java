@@ -4,6 +4,12 @@ import java.util.Date;
 
 import com.ixonos.koku.kks.utils.enums.Tila;
 
+/**
+ * Kuvaa kokoelman tilaa
+ * 
+ * @author tuomape
+ * 
+ */
 public class KokoelmaTila {
 
   private Tila tila;

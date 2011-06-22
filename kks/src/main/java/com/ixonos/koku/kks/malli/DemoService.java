@@ -8,6 +8,12 @@ import org.springframework.stereotype.Service;
 import com.ixonos.koku.kks.mock.Kayttaja;
 import com.ixonos.koku.kks.utils.HakuTulokset;
 
+/**
+ * Service demoa varten
+ * 
+ * @author tuomape
+ * 
+ */
 @Service(value = "demoKksService")
 public class DemoService {
 

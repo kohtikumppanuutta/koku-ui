@@ -1,5 +1,11 @@
 package com.ixonos.koku.kks.malli;
 
+/**
+ * Luokka lomakkeen aktivointiin
+ * 
+ * @author tuomape
+ * 
+ */
 public class Aktivointi {
 
   private String aktivoitavaKentta;

@@ -7,6 +7,12 @@ import java.util.Map.Entry;
 
 import com.ixonos.koku.kks.malli.Kirjaus;
 
+/**
+ * Sisältää kirjaushaun tulokset
+ * 
+ * @author tuomape
+ * 
+ */
 public class HakuTulokset {
 
   private LinkedMapWrapper<String, Tulos> tulokset;

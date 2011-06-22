@@ -1,5 +1,11 @@
 package com.ixonos.koku.kks.malli;
 
+/**
+ * Sisältää henkilön tiedot ja kokoelmat
+ * 
+ * @author tuomape
+ * 
+ */
 public class Henkilo {
 
   private String etunimi;

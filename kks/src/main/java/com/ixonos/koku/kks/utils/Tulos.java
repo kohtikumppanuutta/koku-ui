@@ -5,6 +5,12 @@ import java.util.List;
 
 import com.ixonos.koku.kks.malli.Kirjaus;
 
+/**
+ * Kuvaa yhtä kirjaushaun tulosta
+ * 
+ * @author tuomape
+ * 
+ */
 public class Tulos {
 
   private String nimi;

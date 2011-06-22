@@ -5,6 +5,12 @@ import java.util.List;
 
 import com.ixonos.koku.kks.utils.LinkedMapWrapper;
 
+/**
+ * Sisältää ryhmän sisällä olevan ryhmän tiedot
+ * 
+ * @author tuomape
+ * 
+ */
 public class LapsiRyhma {
 
   private String nimi;

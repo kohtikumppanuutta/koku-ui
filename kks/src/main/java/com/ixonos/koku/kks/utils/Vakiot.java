@@ -1,5 +1,11 @@
 package com.ixonos.koku.kks.utils;
 
+/**
+ * Sisältää demossa käytettävät luokittelut ja kehitysasiatyypit
+ * 
+ * @author tuomape
+ * 
+ */
 public class Vakiot {
 
   public final static String KEHITYSASIATYYPPI_KESKUSTELU = "keskustelu";

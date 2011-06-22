@@ -2,6 +2,12 @@ package com.ixonos.koku.kks.malli;
 
 import com.ixonos.koku.kks.utils.LinkedMapWrapper;
 
+/**
+ * Sisältää tiedot, jotka kuuluu johonkin ryhmään
+ * 
+ * @author tuomape
+ * 
+ */
 public class Ryhma {
 
   private String nimi;
