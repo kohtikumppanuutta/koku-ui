@@ -82,7 +82,7 @@ public class DemoFactory {
     tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
         "Onko sinulla perushoitoon liittyen jotain ajatuksia tai kysyttävää",
         "pukeminen ja riisuminen, hygienia, ruokailu, ulkoilu, lepohetki",
-        "Lapsen hyvinvointi",
+        "Lapsen hyvinvointi",    
         "Päivähoito",
         "Päivähoidon asiakasrekisteri",
         "Huoltaja",

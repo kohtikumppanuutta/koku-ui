@@ -4,7 +4,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
 	<portlet>
-		<portlet-name>kks</portlet-name>
+		<portlet-name>KKS</portlet-name>
 		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -13,7 +13,7 @@
 		</supports>
 		<resource-bundle>Language-ext</resource-bundle>
 		<portlet-info>
-			<title>KKS</title>
+			<title>Sopimukset ja Suunnitelmat</title>
 		</portlet-info>
 	</portlet>
 </portlet-app>

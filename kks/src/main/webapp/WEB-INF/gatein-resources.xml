@@ -6,14 +6,14 @@
 	<portlet-skin>
 		<!-- <application-name>kks-portlets</application-name>-->
 		<application-name>kks-portlet-0.0.1-SNAPSHOT</application-name> 
-		<portlet-name>kks</portlet-name>
+		<portlet-name>KKS</portlet-name>
 		<skin-name>Default</skin-name>
 		<css-path>/skin/kks-style.CSS</css-path>
 	</portlet-skin>
 
 	<javascript>
 		<param>
-			<js-module>kks</js-module>
+			<js-module>KKS</js-module>
 			<js-path>/js/hello.js</js-path>
 			<js-priority>0</js-priority>
 	</param>
