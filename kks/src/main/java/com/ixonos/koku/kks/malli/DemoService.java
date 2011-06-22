@@ -3,8 +3,11 @@ package com.ixonos.koku.kks.malli;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.ixonos.koku.kks.AktivoiKokoelmaController;
 import com.ixonos.koku.kks.mock.Kayttaja;
 import com.ixonos.koku.kks.utils.HakuTulokset;
 
@@ -25,6 +28,8 @@ public class DemoService {
 
   }
 
+  private static Logger log = LoggerFactory.getLogger(DemoService.class);
+  
   public boolean onkoLuotu() {
     if (malli != null)
       return true;
@@ -62,34 +67,63 @@ public class DemoService {
     return null;
   }
 
+  /**
+   * Creates a collection, if it hasn't already been created for this person. 
+   * @param h Person
+   * @param nimi Name of the collection
+   */
   public void luoKokoelma(Henkilo h, String nimi) {
+    
     Kokoelma k = DemoFactory.luoKokoelma(nimi);
 
-    if (k != null) {
+    // add only if the collection has not been created earlier
+    if (k != null && !(h.getKks().hasKokoelma(nimi))) {
+      
       h.getKks().lisaaKokoelma(k);
+      log.debug("kokoelma lisatty");
+    } else {
+      log.debug("kokoelmaa ei lisatty, koska se oli jo olemassa");
     }
   }
 
   public List<String> haeAktivoitavatKokoelmat(Henkilo h) {
     List<String> nimet = haeKokoelmaNimet();
+
     List<String> tmp = new ArrayList<String>(nimet);
     for (String nimi : tmp) {
       if (!h.getKks().hasKokoelma(nimi))
         nimet.remove(nimi);
     }
+    
     return nimet;
   }
 
+ /**
+  * This method lists all the possible collections for this person
+  * @param h
+  * @return
+  */
+  public List<String> haeHenkilonKokoelmat(Henkilo h) {
+    List<String> nimet = haeKokoelmaNimet();
+    /* TODO 21.6.2011: There are only 2 collections now and every user has these. 
+     * Some code should be added here so that each person gets only the collections
+     * that he/she might have.
+     */ 
+   
+    return nimet;
+  }
+  
+  // 21.6. this method is probably no longer needed
   public List<String> haeLuotavatKokoelmat(Henkilo h) {
     List<String> nimet = haeKokoelmaNimet();
     List<Kokoelma> kokoelmat = h.getKks().getKokoelmat();
-
     for (Kokoelma k : kokoelmat) {
       nimet.remove(k.getNimi());
     }
     return nimet;
   }
 
+  
   public List<String> haeKokoelmaNimet() {
     List<String> tmp = new ArrayList<String>();
     tmp.add(DemoFactory.NELI_VUOTIS_TARKASTUS);

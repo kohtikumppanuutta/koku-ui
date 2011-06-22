@@ -41,6 +41,14 @@ public class AktivoiKokoelmaController {
       @ModelAttribute(value = "aktivointi") Aktivointi aktivointi,
       BindingResult bindingResult, ActionResponse response,
       SessionStatus sessionStatus) {
+    
+    // create a new collection if it hasn't been created earlier
+    log.debug("luoKokoelma");
+
+    demoService.luoKokoelma(lapsi, aktivointi.getAktivoitavaKentta());
+    
+    
+    // activate the collection for a given time period
     log.debug("aktivoi kokoelma");
 
     Kokoelma kokoelma = lapsi.getKks().getKokoelma(

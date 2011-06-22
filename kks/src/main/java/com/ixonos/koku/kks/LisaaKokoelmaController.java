@@ -1,5 +1,5 @@
 package com.ixonos.koku.kks;
-
+// TÄTÄ LUOKKAA EI ENÄÄ TARVITA, KUN KOKOELMAN AKTIVOINTI JA LUONTI ON YHDISTETTY AKTIVOINTILUOKKAAN  
 import javax.portlet.ActionResponse;
 
 import org.slf4j.Logger;

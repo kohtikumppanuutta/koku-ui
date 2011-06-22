@@ -34,7 +34,6 @@ public class DemoFactory {
 
   public static void lisaaKokoelmat(Henkilo h) {
     h.getKks().lisaaKokoelma(luoVarhaiskasvatusSuunnitelma());
-
   }
 
   public static Kokoelma luoKokoelma(String nimi) {

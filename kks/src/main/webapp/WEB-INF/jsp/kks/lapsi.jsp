@@ -31,10 +31,6 @@
 	<portlet:param name="toiminto" value="aktivoiKokoelma" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
 </portlet:actionURL>
-<portlet:actionURL var="uusiActionUrl">
-	<portlet:param name="toiminto" value="luoKokoelma" />
-	<portlet:param name="hetu" value="${lapsi.hetu}" />
-</portlet:actionURL>
 <portlet:actionURL var="haeKirjausUrl">
 	<portlet:param name="toiminto" value="haeKirjauksia" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
@@ -161,42 +157,6 @@
 		<br />
 
 
-		<div class="uusi.kokoelma">
-			<c:if test="${ sessionScope.ammattilainen }">
-
-				<div class="kokoelma">
-
-					<a class="tieto"> <spring:message code="ui.uusi.kokoelma" /><span
-						class="sulje"><spring:message code="ui.piilota" /> </span> </a>
-					<div class="tietokentta ">
-						<form:form name="uusiForm" commandName="aktivointi" method="post"
-							action="${uusiActionUrl}">
-
-
-							<h2>
-								<spring:message code="ui.kokoelma" />
-							</h2>
-
-							<span class="pvm"> <form:select path="aktivoitavaKentta"
-									class="kokoelmavalinta">
-
-									<form:option value="" label="" />
-
-
-									<c:forEach var="kokoelma" items="${luotavat}">
-										<form:option value="${kokoelma}" label="${ kokoelma }" />
-									</c:forEach>
-								</form:select> </span>
-
-							<input type="submit"
-								value="<spring:message code="ui.uusi.kehitystieto.luo"/>"
-								class="tallenna">
-						</form:form>
-					</div>
-				</div>
-			</c:if>
-		</div>
-
 		<div class="aktivoi.kokoelma">
 
 			<div class="kokoelma">
@@ -219,7 +179,7 @@
 											<form:option value="${kokoelma}" label="${ kokoelma }" />
 										</c:forEach>
 									</form:select> </span>
-
+									
 							</div>
 							<br />
 							<div>
@@ -230,6 +190,8 @@
 								<form:input path="loppuu" />
 
 							</div>
+							
+								
 							<span class="viestintiedot"> <input type="submit"
 								class="tallenna" value="<spring:message code="ui.aktivoi.kokoelma"/>"> </span>
 						</form:form>
