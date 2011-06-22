@@ -17,6 +17,8 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import fi.arcusys.koku.message.Message;
 import fi.arcusys.koku.message.MessageHandle;
+import fi.arcusys.koku.requestservice.KokuRequest;
+import fi.arcusys.koku.requestservice.RequestHandle;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
@@ -101,12 +103,23 @@ public class AjaxController {
 			int numPerPage = MessageUtil.PAGE_NUMBER;
 			int totalTasksNum;
 			int totalPages;
-			List<Message> msgs;
+			
 			int first = (page-1)*numPerPage + 1;
 			int max =  page*numPerPage;
 			
-			msgs = msghandle.getMessages(username, taskType, keyword, orderType, first, max);			
-			totalTasksNum = msghandle.getTotalMessageNum(username, taskType, keyword, orderType);
+			if(taskType.equals("valid_request")) {
+				List<KokuRequest> msgs;
+				RequestHandle reqhandle = new RequestHandle();
+				msgs = reqhandle.getRequests(username, "valid", "", first, max);
+				totalTasksNum = reqhandle.getTotalRequestsNum(username, "valid");
+				jsonModel.put("tasks", msgs);
+			} else {
+				List<Message> msgs;
+				msgs = msghandle.getMessages(username, taskType, keyword, orderType, first, max);			
+				totalTasksNum = msghandle.getTotalMessageNum(username, taskType, keyword, orderType);
+				jsonModel.put("tasks", msgs);
+			}
+			
 			/*
 			int fromIndex = (msgs.size()-page*numPerPage) > 0 ?  (msgs.size()-page*numPerPage) : 0;
 			int toIndex = msgs.size() > 0 ? msgs.size()-(page-1)*numPerPage : 0;
@@ -115,7 +128,7 @@ public class AjaxController {
 			totalPages = (totalTasksNum == 0) ? 1:(int) Math.ceil((double)totalTasksNum/numPerPage);	
 			jsonModel.put("totalItems", totalTasksNum);
 			jsonModel.put("totalPages", totalPages);
-			jsonModel.put("tasks", msgs);
+			//jsonModel.put("tasks", msgs);
 			jsonModel.put("loginStatus", "VALID");
 		}		
 		

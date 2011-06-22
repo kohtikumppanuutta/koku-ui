@@ -264,7 +264,7 @@
  </binding> 
  <service name='KokuMessageService'> 
   <port binding='tns:KokuMessageServiceBinding' name='KokuMessageServicePort'> 
-   <soap:address location='http://gatein.intra.arcusys.fi:8080/kv-model-0.1-SNAPSHOT/KokuMessageServiceImpl'/> 
+   <soap:address location='http://127.0.0.1:8180/kv-model-0.1-SNAPSHOT/KokuMessageServiceImpl'/> 
   </port> 
  </service> 
 </definitions>

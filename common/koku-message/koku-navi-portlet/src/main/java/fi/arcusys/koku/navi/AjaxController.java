@@ -80,7 +80,7 @@ public class AjaxController {
 					+ "</soapenv:Body>"
 					+ "</soapenv:Envelope>";
 
-			String soapUrl = "http://gatein.intra.arcusys.fi:8080/kv-model-0.1-SNAPSHOT/KokuMessageServiceImpl";
+			String soapUrl = "http://127.0.0.1:8180/kv-model-0.1-SNAPSHOT/KokuMessageServiceImpl";
 			URL url = new URL(soapUrl);
 			URLConnection con = url.openConnection();
 

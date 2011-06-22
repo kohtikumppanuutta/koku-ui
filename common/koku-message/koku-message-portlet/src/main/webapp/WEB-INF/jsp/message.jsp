@@ -18,6 +18,15 @@
 	<portlet:param name="orderType" value= "CONSTANT_TASK_ORDER_TYPE" />
 </portlet:renderURL>
 
+<portlet:renderURL var="requestURL" windowState="<%= WindowState.MAXIMIZED.toString() %>" >
+	<portlet:param name="myaction" value="showRequest" />
+	<portlet:param name="requestId" value= "CONSTANT_TASK_MESSAGE_ID" />
+	<portlet:param name="currentPage" value= "CONSTANT_TASK_CURRENT_PAGE" />
+	<portlet:param name="taskType" value= "CONSTANT_TASK_TASK_TYPE" />
+	<portlet:param name="keyword" value= "CONSTANT_TASK_KEYWORD" />
+	<portlet:param name="orderType" value= "CONSTANT_TASK_ORDER_TYPE" />
+</portlet:renderURL>
+
 <script type="text/javascript"> 
 /*
  * Handle action for task manager
@@ -87,7 +96,10 @@
 				pageObj.totalPages = json["totalPages"];
 				pageObj.totalItems = json["totalItems"];
 				var tasks = json["tasks"];
-				var taskHtml = createTasksTable(tasks);
+				if(pageObj.taskType == 'valid_request')
+					var taskHtml = createRequestsTable(tasks);
+				else
+					var taskHtml = createTasksTable(tasks);
 				jQuery('#task-manager-tasklist').html(taskHtml);
 				decorateTable();
 				var pageHtml = createTasksPage();
@@ -155,6 +167,48 @@
 		return taskHtml;
 	}
 	
+	function createRequestsTable(tasks) {
+		var taskHtml = "";
+		var formLink = "";
+		
+		taskHtml = '<table class="task-manager-table">'
+				+ '<tr class="task-manager-table trheader">'
+				+ '<td class="choose"><spring:message code="message.choose" /></td>'
+				+ '<td>'+ '<strong>' + 'Subject'+ '</strong>' + '</td>'
+				+ '<td>' + '<strong>' + 'Responded'+ '</strong>' + '</td>'
+				+ '<td>' + '<strong>' + 'Missed'+ '</strong>' + '</td>'
+				+ '<td>' + '<strong>' + 'Start'+ '</strong>' + '</td>'
+				+ '<td>' + '<strong>' + 'End'+ '</strong>' + '</td>'
+				+ '</tr>';
+				 
+		for ( var i = 0; i < tasks.length; i++) {
+			
+			if((i+1)%2 == 0) {
+				if(tasks[i]["messageStatus"] == 'unread') // for new messages
+					taskHtml += '<tr class="evenRow new">';
+				else
+					taskHtml += '<tr class="evenRow">';	
+			}else {
+				if(tasks[i]["messageStatus"] == 'unread')
+					taskHtml += '<tr class="new">';
+				else
+					taskHtml += '<tr>';
+			}
+			
+			taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["requestId"] + '" />' + '</td>'
+					 + '<td class="messageItem" onclick="showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["subject"] + '</td>'
+					 + '<td class="messageItem" onclick="showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["respondedAmount"] + '</td>'
+					 + '<td class="messageItem" onclick="showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["missedAmount"] + '</td>'
+					 + '<td class="messageItem" onclick="showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["creationDate"] + '</td>'
+					 + '<td class="messageItem" onclick="showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["endDate"] + '</td>'
+					 + '</tr>';
+		}
+
+		taskHtml += '</table>';
+
+		return taskHtml;
+	}
+	
 	function formatSender() {
 		
 		if(pageObj.taskType == "inbox" || pageObj.taskType == "archive_inbox")
@@ -182,6 +236,17 @@
 	function showMessage(messageId) {
 		var formUrl = "<%= messageURL %>";
 		var formUrl = formUrl.replace("CONSTANT_TASK_MESSAGE_ID", messageId);
+		var formUrl = formUrl.replace("CONSTANT_TASK_CURRENT_PAGE", pageObj.currentPage);
+		var formUrl = formUrl.replace("CONSTANT_TASK_TASK_TYPE", pageObj.taskType);
+		var formUrl = formUrl.replace("CONSTANT_TASK_KEYWORD", pageObj.keyword);
+		var formUrl = formUrl.replace("CONSTANT_TASK_ORDER_TYPE", pageObj.orderType);
+		
+		window.location = formUrl;
+	}
+	
+	function showRequest(requestId) {
+		var formUrl = "<%= requestURL %>";
+		var formUrl = formUrl.replace("CONSTANT_TASK_MESSAGE_ID", requestId);
 		var formUrl = formUrl.replace("CONSTANT_TASK_CURRENT_PAGE", pageObj.currentPage);
 		var formUrl = formUrl.replace("CONSTANT_TASK_TASK_TYPE", pageObj.taskType);
 		var formUrl = formUrl.replace("CONSTANT_TASK_KEYWORD", pageObj.keyword);

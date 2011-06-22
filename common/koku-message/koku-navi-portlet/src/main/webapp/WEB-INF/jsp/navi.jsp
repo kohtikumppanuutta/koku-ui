@@ -150,7 +150,7 @@
 		<li><a href="#">Pyynnöt (Työntekijä)</a>
 			<ul class="child">
 				<li><a href="#">Uudet</a></li>
-				<li><a href="#">Voimassaolevat</a></li>
+				<li id="message_valid_request"><a href="javascript:void(0)" onclick="getMessage('valid_request')">Voimassaolevat</a></li>
 				<li><a href="#">Vanhentuneet</a></li>
 			</ul></li>			
 		<li><a href="#">Asiointipalvelut</a>
