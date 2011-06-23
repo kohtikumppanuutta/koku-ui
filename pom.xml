@@ -7,12 +7,14 @@
 	<packaging>pom</packaging>
 	<name>koku-ui</name>
 		<properties>
-		<slf4j.version>1.6.1</slf4j.version>
-		<portlet-api.version>2.0</portlet-api.version>
-		<spring.version>3.0.5.RELEASE</spring.version>
-		<servlet.version>2.5</servlet.version>
-		<servlet.jsp.version>2.1</servlet.jsp.version>
-		<jstl.version>1.2</jstl.version>
+			<slf4j.version>1.6.1</slf4j.version>
+			<portlet-api.version>2.0</portlet-api.version>
+			<spring.version>3.0.5.RELEASE</spring.version>
+			<servlet.version>2.5</servlet.version>
+			<servlet.jsp.version>2.1</servlet.jsp.version>
+			<jstl.version>1.2</jstl.version>
+			<jrebel.plugin.version>1.0.7</jrebel.plugin.version>
+			<maven.compiler.plugin.version>2.3.2</maven.compiler.plugin.version>
 		</properties>
 	<build>
 		<plugins>
@@ -20,7 +22,7 @@
 				<inherited>true</inherited>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				
+				<version>${maven.compiler.plugin.version}</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -33,6 +35,7 @@
 			<plugin>
 			  <groupId>org.zeroturnaround</groupId>
 			  <artifactId>jrebel-maven-plugin</artifactId>
+			  <version>${jrebel.plugin.version}</version>
 			  <executions>
 			    <execution>
 			      <id>generate-revel-xml</id>
