@@ -127,7 +127,7 @@
                             <portlet:param name="luokitus" value="tuen_tarve, huolenaiheet" />
                             <portlet:param name="kuvaus" value="Tuen tarve" />
                         </portlet:actionURL>">
-                    <strong><spring:message code="ui.tukitarpeet" /></strong> </a> </span>	<br/>
+                    <strong><spring:message code="ui.tuen.tarpeet" /></strong> </a> </span>	<br/>
                     
                     <c:if test="${ sessionScope.ammattilainen }">
                     
