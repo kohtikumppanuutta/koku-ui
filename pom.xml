@@ -15,6 +15,7 @@
 			<jstl.version>1.2</jstl.version>
 			<jrebel.plugin.version>1.0.7</jrebel.plugin.version>
 			<maven.compiler.plugin.version>2.3.2</maven.compiler.plugin.version>
+			<commons.lang.version>2.6</commons.lang.version>
 		</properties>
 	<build>
 		<plugins>
@@ -27,9 +28,8 @@
 					<source>1.6</source>
 					<target>1.6</target>
 					<optimise>true</optimise>
-					 <encoding>UTF-8</encoding>
+					<encoding>UTF-8</encoding>
 					<debug>true</debug>
-					
 				</configuration>
 			</plugin>
 			<plugin>
@@ -38,7 +38,7 @@
 			  <version>${jrebel.plugin.version}</version>
 			  <executions>
 			    <execution>
-			      <id>generate-revel-xml</id>
+			      <id>generate-rebel-xml</id>
 			      <phase>process-resources</phase>
 			      <goals>
 			        <goal>generate</goal>
@@ -51,6 +51,7 @@
 	<modules>
 		<module>kks</module>
 		<module>pyh</module>
+		<module>lok-portlet</module>
 	</modules>
 	<dependencies>
 		<dependency>
@@ -111,6 +112,13 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.1.0.Final</version>
 		</dependency>
+
+        <dependency>
+          <groupId>commons-lang</groupId>
+          <artifactId>commons-lang</artifactId>
+          <version>${commons.lang.version}</version>
+        </dependency>
+
 	</dependencies>
 
 
