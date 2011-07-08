@@ -51,9 +51,17 @@
 	<modules>
 		<module>kks</module>
 		<module>pyh</module>
-		<module>lok-portlet</module>
+		<module>lok</module>
 	</modules>
 	<dependencies>
+
+        <dependency>
+          <groupId>javax.servlet</groupId>
+          <artifactId>servlet-api</artifactId>
+          <version>${servlet.version}</version>
+          <scope>provided</scope>
+        </dependency>
+
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
