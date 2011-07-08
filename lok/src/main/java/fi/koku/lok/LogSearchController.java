@@ -9,8 +9,11 @@ import java.util.List;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,6 +35,9 @@ public class LogSearchController {
   private static final String CRITERIA_RENDER_PARAM = "log-search-criteria";
   private CriteriaSerializer criteriaSerializer = new CriteriaSerializer();
   
+  @Autowired
+  private ResourceBundleMessageSource resourceBundle;
+  
   // customize form data binding
   @InitBinder
   public void initBinder(WebDataBinder binder) {
@@ -49,8 +55,9 @@ public class LogSearchController {
 
   // portlet render phase
   @RenderMapping
-  public String render(RenderRequest req, Model model) {
+  public String render(RenderRequest req, RenderResponse res, Model model) {
     System.out.println("render phase");
+    res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, LogConstants.LOCALE_FI));
     LogSearchCriteria searchCriteria = null;
     if(req.getParameterValues(CRITERIA_RENDER_PARAM) != null) {
       searchCriteria = criteriaSerializer.getFromRenderParameter(req.getParameterValues(CRITERIA_RENDER_PARAM));
