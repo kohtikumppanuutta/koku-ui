@@ -22,6 +22,14 @@
 	<form:input path="concept" />
 	<span class="errors"><form:errors path="concept" /></span>
 
+    <span class="form-field-label"><spring:message code="koku.common.startTime" /> </span>
+	<form:input path="from" />
+	<span class="errors"><form:errors path="from" /></span>
+
+    <span class="form-field-label"><spring:message code="koku.common.endTime" /> </span>
+	<form:input path="to" />
+	<span class="errors"><form:errors path="to" /></span>
+
 	<input type="submit" value="search"/>
 
 	<div class="clear" />
@@ -30,6 +38,8 @@
 </div>
 
 <div class="log-search-results">
+
+<c:if test="${!empty entries}">
 <p>search results here</p>
 
   <ul>
@@ -37,8 +47,8 @@
     <li>${e.message}
   </c:forEach>
   </ul>
-
-entries
+  
+</c:if>
 
 </div>
 
