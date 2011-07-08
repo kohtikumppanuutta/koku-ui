@@ -57,7 +57,8 @@ public class LogSearchController {
   @RenderMapping
   public String render(RenderRequest req, RenderResponse res, Model model) {
     System.out.println("render phase");
-    res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, LogConstants.LOCALE_FI));
+    
+    res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
     LogSearchCriteria searchCriteria = null;
     if(req.getParameterValues(CRITERIA_RENDER_PARAM) != null) {
       searchCriteria = criteriaSerializer.getFromRenderParameter(req.getParameterValues(CRITERIA_RENDER_PARAM));
