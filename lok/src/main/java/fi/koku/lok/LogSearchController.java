@@ -35,13 +35,10 @@ public class LogSearchController {
   // customize form data binding
   @InitBinder
   public void initBinder(WebDataBinder binder) {
-    binder.registerCustomEditor(Date.class, getDatePropertyEditor());
-  }
-  
-  private CustomDateEditor getDatePropertyEditor() {
     SimpleDateFormat dateFormat = new SimpleDateFormat(LogConstants.DATE_FORMAT);
     dateFormat.setLenient(false);
-    return new CustomDateEditor(dateFormat, true);
+    CustomDateEditor dateEditor = new CustomDateEditor(dateFormat, true);
+    binder.registerCustomEditor(Date.class, dateEditor);
   }
   
   // initialize form backing objects
@@ -68,7 +65,7 @@ public class LogSearchController {
   public void doSearch(@ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, BindingResult result,
       ActionRequest request, ActionResponse response) {
     System.out.println("action phase: criteria: "+criteria);
-    response.setRenderParameter(CRITERIA_RENDER_PARAM, criteriaSerializer.getAsText(criteria));
+    response.setRenderParameter(CRITERIA_RENDER_PARAM, criteriaSerializer.getAsText(criteria)); // pass criteria to render phase
   }
 
   private List<LogEntry> doSearchEntries(LogSearchCriteria searchCriteria) {
@@ -78,6 +75,12 @@ public class LogSearchController {
     return r;
   }
 
+  /**
+   * Helper class for serializing and deserializing LogSearchCriteria objects as text.
+   * 
+   * NB: The class is expecting data to be valid since it's been already validated by the controller so, input errors are not handled. 
+   * @author aspluma
+   */
   private static class CriteriaSerializer {
     public String[] getAsText(LogSearchCriteria c) {
       SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
@@ -94,7 +97,7 @@ public class LogSearchController {
         d1 = text[2].length() > 0 ? df.parse(text[2]) : null;
         d2 = text[3].length() > 0 ? df.parse(text[3]) : null;
       } catch (ParseException e) {
-        throw new IllegalArgumentException("error parsing date string", e); // expecting data to be valid since it's been already validated
+        throw new IllegalArgumentException("error parsing date string", e);
       }
       return new LogSearchCriteria(text[0], text[1], d1, d2);
     }
