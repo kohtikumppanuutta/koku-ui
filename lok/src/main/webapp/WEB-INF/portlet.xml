@@ -10,7 +10,7 @@
       <portlet-mode>view</portlet-mode>
       <portlet-mode>edit</portlet-mode>
     </supports>
-    <resource-bundle>Language-ext</resource-bundle>
+    <resource-bundle>messages</resource-bundle>
     <portlet-info>
       <title>lokitietojen hallinta</title>
     </portlet-info>
