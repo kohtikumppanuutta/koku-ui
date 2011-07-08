@@ -14,7 +14,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import com.ixonos.koku.pyh.mock.User;
 
 /**
- * This is a dummy role controller that is used to select the user role.
+ * This is a dummy role (selector) controller that is used to select the user role.
  * At later phase of implementation the role will be defined elsewhere.
  * 
  * @author hurulmi
@@ -25,14 +25,11 @@ import com.ixonos.koku.pyh.mock.User;
 @RequestMapping(value = "VIEW")
 public class DummyRoleController {
   
-  @Autowired
-  @Qualifier(value = "pyhDemoService")
-  private PyhDemoService pyhDemoService;
+  private static Logger log = LoggerFactory.getLogger(DummyRoleController.class);
   
   @RenderMapping
-  public String render(/*RenderRequest request, Model model*/)
+  public String render(/*RenderRequest request, RenderResponse response*/)
   {
-    pyhDemoService.createAndSetCurrentUser(new User("guardian", "Pekka", "Perustyyppi", "pekka.perustyyppi@meili.com"));
     return "choose";
   }
   

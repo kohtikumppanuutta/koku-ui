@@ -6,19 +6,22 @@ public class Person {
   private String middlename;
   private String surname;
   private String ssn;
+  private String birthdate;
   
   public Person() {
     this.firstname = "";
     this.middlename = "";
     this.surname = "";
     this.ssn = "";
+    this.birthdate = "";
   }
   
-  public Person(String firstname, String middlename, String surname, String ssn) {
+  public Person(String firstname, String middlename, String surname, String ssn, String birthdate) {
     this.firstname = firstname;
     this.middlename = middlename;
     this.surname = surname;
     this.ssn = ssn;
+    this.birthdate = "";
   }
   
   public String getFirstname() {
@@ -51,5 +54,13 @@ public class Person {
   
   public void setSsn(String ssn) {
     this.ssn = ssn;
+  }
+  
+  public String getBirthdate() {
+    return birthdate;
+  }
+  
+  public void setBirthdate(String birthdate) {
+    this.birthdate = birthdate;
   }
 }

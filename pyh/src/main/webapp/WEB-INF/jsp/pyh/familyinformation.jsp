@@ -4,6 +4,8 @@
 
 <portlet:defineObjects/>
 
+<%-- this boolean defines if the user is a guardian and whether guardian specific information should be displayed --%> 
+<%-- TODO: get user's role and enable this flag if the user is a guardian --%>
 <c:set var="guardian" value="${true}" scope="session"/>
 
 <div>
@@ -11,27 +13,29 @@
 <h1>Omat tiedot</h1> 
 
 <p>
+
 <c:if test="${not empty user}">
 	${user.firstname} ${user.surname} <br/>
 	sähköposti: ${user.email} <br/>
 </c:if>
 <br/>
 
-Huollettavat lapset:<br/>
-
 <c:if test="${not empty guardedChildren}">
+	Huollettavat lapset:<br/>
 	<c:forEach var="child" items="${guardedChildren}">
 		${child.firstname} ${child.surname} ${child.ssn} <br/>
 	</c:forEach>
+	<br/>
 </c:if> 
 
-<br/>
-
-Perheyhteisön muut jäsenet<br/>
-
-ETUNIMI SUKUNIMI 311205-123C (rooli)<br/>
-
-<br/>
+<c:if test="${not empty familyMembers}">
+	Perheyhteisön muut jäsenet <br/>
+	<c:forEach var="familyMember" items="${familyMembers}">
+		${familyMember.firstname} ${familyMember.surname} ${familyMember.ssn} <br/>
+		<%-- TODO: add family member role here --%>
+	</c:forEach>
+	<br/>
+</c:if>
 
 </p>
 
@@ -44,19 +48,5 @@ ETUNIMI SUKUNIMI 311205-123C (rooli)<br/>
 		<input type="submit" value="Muokkaa omia tietoja"/>
 	</form:form>
 </div>
-
-<%--
-<p>
-*<span class="wait">ETUNIMI SUKUNIMI 121279-123A</span>
-Uusi perheyhteisötieto.
-<input type="submit" value="Hyväksy">
-<input type="submit" value="Hylkää">
-</p>
-
-<p>
-*<span class="wait">Käyttäjä ETUNIMI2 SUKUNIMI2 on lisännyt sinut perheyhteisön muuksi jäseneksi.<br/>
-Kaikkien opsapuolten on hyväksyttävä uuden jäsenen liittäminen perheyhteisöön.</span>
-</p>
---%>
 
 </div>

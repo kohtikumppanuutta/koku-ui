@@ -2,20 +2,26 @@ package com.ixonos.koku.pyh;
 
 import java.util.List;
 
-import javax.portlet.RenderRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import com.ixonos.koku.pyh.mock.User;
+import com.ixonos.koku.pyh.model.Child;
 import com.ixonos.koku.pyh.model.Person;
+
+/**
+ * Controller for showing user's family information.
+ * This is the controller for the main view of PYH portlet.
+ * 
+ * @author hurulmi
+ *
+ */
 
 @Controller(value = "familyInformationController")
 @RequestMapping(value = "VIEW")
@@ -28,14 +34,10 @@ public class FamilyInformationController {
   private PyhDemoService pyhDemoService;
   
   @RenderMapping(params="action=guardianFamilyInformation")
-  public String render(RenderRequest request, Model model)
+  public String render()
   {
+    pyhDemoService.clearSearchedUsers();
     return "familyinformation";
-  }
-  
-  @ModelAttribute(value = "guardedChildren")
-  private List<Person> getGuardiansChildren() {
-    return pyhDemoService.getGuardiansChildren("guardian ssn here" /* TODO: get guardian by SSN */ );
   }
   
   /**
@@ -45,6 +47,24 @@ public class FamilyInformationController {
   @ModelAttribute(value = "user")
   private User getUser() {
     return pyhDemoService.getUser();
+  }
+  
+  /**
+   * Returns user's children whose guardian the user is.
+   * @return
+   */
+  @ModelAttribute(value = "guardedChildren")
+  private List<Child> getGuardiansChildren() {
+    return pyhDemoService.getGuardiansChildren("guardian ssn here" /* TODO: get guardian by SSN */ );
+  }
+  
+  /**
+   * Returns all members of the user's family.
+   * @return
+   */
+  @ModelAttribute(value = "familyMembers")
+  private List<Person> getFamilyMembers() {
+    return pyhDemoService.getFamilyMembers("user ssn here" /* TODO: get family members by users's SSN */ );
   }
   
 }
