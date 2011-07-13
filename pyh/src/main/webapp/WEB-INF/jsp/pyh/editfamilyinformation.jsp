@@ -178,44 +178,89 @@ LISÄÄ KÄYTTÄJIÄ PERHEYHTEISÖÖSI <br/>
 </span>
 </p>
 
-<%-- TODO: show table (and headers) only when we have search results --%>
-
-<table width="100%" border="0">
-
-<tr>
-<td width="38%">NIMI</td>
-<td width="26%">SOTU</td>
-<td width="10%">LISÄÄ</td>
-<td width="26%"> VALITSE LISÄTTÄVÄN ROOLI</td>
-</tr>
-
 <c:if test="${not empty searchedUsers}">
-<c:forEach var="user" items="${searchedUsers}">
-	<tr>
-	<td>${user.firstname} ${user.surname}</td>
-	<td>${user.ssn}</td>
+	<table width="100%" border="0">
+		
+		<tr>
+		<td width="38%">NIMI</td>
+		<td width="26%">HETU</td>
+		<td width="10%">LISÄÄ</td>
+		<td width="26%"> VALITSE LISÄTTÄVÄN ROOLI</td>
+		</tr>
+		
+		<c:set var="userVar" value="1"/>
+		<c:forEach var="user" items="${searchedUsers}">
+			
+			<tr>
+			<td>${user.firstname} ${user.surname}</td>
+			<td>${user.ssn}</td>
+			<input id="user_ssn_${userVar}" name="userSSN_${userVar}" type="hidden" value="${user.ssn}" />
+			
+			<%-- TODO: checkboxille pitää generoida joku nimi tai tieto, jolla osataan valita oikean rivin tiedot lisättäväksi --%>
+			<td>
+				<%-- <input name="" type="checkbox" onclick="addUserToForm(${userVar})"/> --%>
+				<input name="addUserCheckbox_${userVar}" value="${userVar}" type="checkbox"/>
+			</td>
+			
+			<td>
+			<select id="user_role_${userVar}" class="syntmaika">
+			<option value="">VALITSE ROOLI</option>
+			<option value="aiti">Äiti</option>
+			<option value="isa">Isä</option>
+			<option value="lapsi">Lapsi</option>
+			</select>
+			</td>
+			</tr>
+			
+			<c:set var="userVar" value="${userVar + 1}"/>
+		</c:forEach>
+	</table>
 	
-	<%-- TODO: checkboxille pitää generoida joku nimi tai tieto, jolla osataan valita oikean rivin tiedot lisättäväksi --%>
-	<td><input name="" type="checkbox"/></td>
+	<p>&nbsp;</p>
 	
-	<td>
-	<select name="family_member_role" class="syntmaika">
-	<option>VALITSE ROOLI</option>
-	<option>Äiti</option>
-	<option>Isä</option>
-	<option>Lapsi</option>
-	</select>
-	</td>
-	</tr>
-</c:forEach>
+	<%-- TODO: tietojen lähettäminen eli formin submit --%>
+	
+	<portlet:actionURL var="addUsersToFamily">
+		<portlet:param name="action" value="addUsersToFamily"/>
+	</portlet:actionURL>
+	
+	<form:form name="addUsersToFamily" method="post" action="${addUsersToFamily}" id="addUsersToFamilyForm">
+		
+		<%-- <input type="submit" value="Tallenna tiedot" class="tallenna"/> --%>
+		<input type="button" value="Tallenna tiedot" class="tallenna" onclick="doSubmitForm()"/>
+	</form:form>
+	
 </c:if>
 
-</table>
 
-<p>&nbsp;</p>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.4.js"></script>
+<script type="text/javascript" language="JavaScript">
+	
+	function addUserToForm(user) {
+		
+		$('#addUsersToFamilyForm').append( $('#user_ssn_' + user) );
+		var userRole = $('#user_role_' + user + ' option:selected').val();
+		$('#addUsersToFamilyForm').append('<input name="userRole_' + user + '" type="hidden" value="' + userRole + '"/>');
+		
+	}
+	
+	function doSubmitForm() {
+		
+		var $checkboxes = $('input[name^="addUserCheckbox_"]').filter(":checked");
+		
+		$checkboxes.each(
+			function() {
+				addUserToForm( $(this).val() );
+			}
+		);
+		
+		$('#addUsersToFamilyForm').submit();
+		
+	}
+	
+</script>
 
-<%-- TODO: tietojen lähettäminen eli formin submit --%>
 
-<input type="submit" value="Tallenna tiedot" class="tallenna"/>
 
-</div>
+

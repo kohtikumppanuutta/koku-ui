@@ -1,5 +1,6 @@
 package com.ixonos.koku.pyh;
 
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -124,6 +125,20 @@ public class EditFamilyInformationController {
     
     response.setRenderParameter("action", "editFamilyInformation");
     
+  }
+  
+  @ActionMapping(params = "action=addUsersToFamily")
+  public void addUsersToFamily(ActionRequest request, ActionResponse response) {
+    log.info("calling EditFamilyInformationController.addUsersToFamily");
+    
+    log.info("parametrit:");
+    
+    for (Enumeration<String> e = request.getParameterNames(); e.hasMoreElements();) {
+      String param = e.nextElement();
+      System.out.println(param + ": " + request.getParameter(param));
+    }
+    
+    response.setRenderParameter("action", "editFamilyInformation");
   }
   
 }
