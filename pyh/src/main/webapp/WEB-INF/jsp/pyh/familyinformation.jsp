@@ -31,8 +31,7 @@
 <c:if test="${not empty familyMembers}">
 	Perheyhteisön muut jäsenet <br/>
 	<c:forEach var="familyMember" items="${familyMembers}">
-		${familyMember.firstname} ${familyMember.surname} ${familyMember.ssn} <br/>
-		<%-- TODO: add family member role here --%>
+		${familyMember.firstname} ${familyMember.surname} ${familyMember.ssn} (${familyMember.role}) <br/>
 	</c:forEach>
 	<br/>
 </c:if>

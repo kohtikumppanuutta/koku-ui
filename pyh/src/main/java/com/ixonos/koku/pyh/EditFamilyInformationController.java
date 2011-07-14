@@ -19,6 +19,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import com.ixonos.koku.pyh.mock.User;
 import com.ixonos.koku.pyh.model.Child;
+import com.ixonos.koku.pyh.model.FamilyMember;
 import com.ixonos.koku.pyh.model.Person;
 
 /**
@@ -54,7 +55,7 @@ public class EditFamilyInformationController {
   }
   
   @ModelAttribute(value = "familyMembers")
-  private List<Person> getFamilyMembers() {
+  private List<FamilyMember> getFamilyMembers() {
     return pyhDemoService.getFamilyMembers("user ssn here" /* TODO: get family members by user's SSN */);
   }
   
@@ -95,8 +96,14 @@ public class EditFamilyInformationController {
     log.info("calling EditFamilyInformationController.addNewChild");
     log.info("child name: " + child.getFirstname() + " " + child.getMiddlename() + " " + child.getSurname());
     log.info("child ssn: " + child.getSsn());
+    log.info("birthday: " + child.getBirthday());
+    log.info("birthmonth: " + child.getBirthmonth());
+    log.info("birthyear: " + child.getBirthyear());
     
     // TODO: call service to add a new child
+    child.setBirthdate(child.getBirthday(), child.getBirthmonth(), child.getBirthyear());
+    
+    log.info("birthdate: " + child.getBirthdate());
     
     response.setRenderParameter("action", "editFamilyInformation");
   }
@@ -119,8 +126,8 @@ public class EditFamilyInformationController {
     log.info("sukunimi: " + request.getParameter("searchSurname"));
     log.info("ssn: " + request.getParameter("searchSSN"));
     
-    // TODO: call service to query users and return users as an model attribute object
-    
+    // calling service to query users,
+    // users are returned as an model attribute object searchedUsers
     pyhDemoService.searchUsers("firstname", "surname", "ssn");
     
     response.setRenderParameter("action", "editFamilyInformation");

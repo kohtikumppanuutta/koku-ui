@@ -20,8 +20,8 @@
 	Huollettavat lapset: <br/>
 	<c:forEach var="child" items="${guardedChildren}">
 		
-		<%-- this feature is not used, do not remove the commented code before we are sure we don't need this
-		
+		<%-- this feature is not used, do not remove the commented code before we are sure we don't need this --%>
+		<%--
 		<portlet:actionURL var="removeDependant">
 			<portlet:param name="action" value="removeDependant"/>
 			<portlet:param name="dependantSSN" value="${child.ssn}"/>
@@ -63,75 +63,72 @@
 	Sukunimi: <form:input path="surname"/>
 	</span>
 	
-	<%-- TODO: how to map three select values (birth_dd, birth_mm, birth_yyyy) into one String (Person.birthDate)? --%>
-	<%-- one solution is to use a separate AddChildCommandObject class and create the Person (Child) object in the controller --%>
-	
 	<span class="pvm">
-	Syntymäaika: 
-	<select name="birth_dd" class="syntmaika">
+	Syntymäaika:
 	
-	<option>01</option>
-	<option>02</option>
-	<option>03</option>
-	<option>04</option>
-	<option>05</option>
-	<option>06</option>
-	<option>07</option>
-	<option>08</option>
-	<option>09</option>
-	<option>10</option>
-	<option>11</option>
-	<option>12</option>
-	<option>13</option>
-	<option>14</option>
-	<option>15</option>
-	<option>16</option>
-	<option>17</option>
-	<option>18</option>
-	<option>19</option>
-	<option>20</option>
-	<option>21</option>
-	<option>22</option>
-	<option>23</option>
-	<option>24</option>
-	<option>25</option>
-	<option>26</option>
-	<option>27</option>
-	<option>28</option>
-	<option>29</option>
-	<option>30</option>
-	<option>31</option>
-	</select>
+	<form:select path="birthday" class="syntmaika">
+	<form:option value="01"/>
+	<form:option value="02"/>
+	<form:option value="03"/>
+	<form:option value="04"/>
+	<form:option value="05"/>
+	<form:option value="06"/>
+	<form:option value="07"/>
+	<form:option value="08"/>
+	<form:option value="09"/>
+	<form:option value="10"/>
+	<form:option value="11"/>
+	<form:option value="12"/>
+	<form:option value="13"/>
+	<form:option value="14"/>
+	<form:option value="15"/>
+	<form:option value="16"/>
+	<form:option value="17"/>
+	<form:option value="18"/>
+	<form:option value="19"/>
+	<form:option value="20"/>
+	<form:option value="21"/>
+	<form:option value="22"/>
+	<form:option value="23"/>
+	<form:option value="24"/>
+	<form:option value="25"/>
+	<form:option value="26"/>
+	<form:option value="27"/>
+	<form:option value="28"/>
+	<form:option value="29"/>
+	<form:option value="30"/>
+	<form:option value="31"/>
+	</form:select>
 	
-	<select name="birth_mm" class="syntmaika">
-	<option>01</option>
-	<option>02</option>
-	<option>03</option>
-	<option>04</option>
-	<option>05</option>
-	<option>06</option>
-	<option>07</option>
-	<option>08</option>
-	<option>09</option>
-	<option>10</option>
-	<option>11</option>
-	<option>12</option>
-	</select>
+	<form:select path="birthmonth" class="syntmaika">
+	<form:option value="01"/>
+	<form:option value="02"/>
+	<form:option value="03"/>
+	<form:option value="04"/>
+	<form:option value="05"/>
+	<form:option value="06"/>
+	<form:option value="07"/>
+	<form:option value="08"/>
+	<form:option value="09"/>
+	<form:option value="10"/>
+	<form:option value="11"/>
+	<form:option value="12"/>
+	</form:select>
 	
-	<select name="birth_yyyy" class="syntmaika">
-	<option>2000</option>
-	<option>2001</option>
-	<option>2002</option>
-	<option>2003</option>
-	<option>2004</option>
-	<option>2005</option>
-	<option>2006</option>
-	<option>2007</option>
-	<option>2008</option>
-	<option>2009</option>
-	<option>2010</option>
-	<option>2011</option>
-	</select>
+	<form:select path="birthyear" class="syntmaika">
+	<form:option value="2000"/>
+	<form:option value="2001"/>
+	<form:option value="2002"/>
+	<form:option value="2003"/>
+	<form:option value="2004"/>
+	<form:option value="2005"/>
+	<form:option value="2006"/>
+	<form:option value="2007"/>
+	<form:option value="2008"/>
+	<form:option value="2009"/>
+	<form:option value="2010"/>
+	<form:option value="2011"/>
+	</form:select>
 	
 	HETU: <form:input path="ssn"/>
 	
@@ -150,9 +147,7 @@
 			<portlet:param name="familyMemberSSN" value="${familyMember.ssn}"/>
 		</portlet:actionURL>
 		
-		<%-- TODO: lisää perheenjäsenen rooli --%>
-		
-		${familyMember.firstname} ${familyMember.surname} ${familyMember.ssn} (rooli) 
+		${familyMember.firstname} ${familyMember.surname} ${familyMember.ssn} (${familyMember.role}) 
 		<a href="${removeFamilyMember}">poista jäsenyys</a> <br/>
 		
 	</c:forEach>
@@ -196,9 +191,7 @@ LISÄÄ KÄYTTÄJIÄ PERHEYHTEISÖÖSI <br/>
 			<td>${user.ssn}</td>
 			<input id="user_ssn_${userVar}" name="userSSN_${userVar}" type="hidden" value="${user.ssn}" />
 			
-			<%-- TODO: checkboxille pitää generoida joku nimi tai tieto, jolla osataan valita oikean rivin tiedot lisättäväksi --%>
 			<td>
-				<%-- <input name="" type="checkbox" onclick="addUserToForm(${userVar})"/> --%>
 				<input name="addUserCheckbox_${userVar}" value="${userVar}" type="checkbox"/>
 			</td>
 			
@@ -218,15 +211,14 @@ LISÄÄ KÄYTTÄJIÄ PERHEYHTEISÖÖSI <br/>
 	
 	<p>&nbsp;</p>
 	
-	<%-- TODO: tietojen lähettäminen eli formin submit --%>
-	
 	<portlet:actionURL var="addUsersToFamily">
 		<portlet:param name="action" value="addUsersToFamily"/>
 	</portlet:actionURL>
 	
 	<form:form name="addUsersToFamily" method="post" action="${addUsersToFamily}" id="addUsersToFamilyForm">
 		
-		<%-- <input type="submit" value="Tallenna tiedot" class="tallenna"/> --%>
+		<%-- user information is added to this form dynamically with jQuery before submitting the form --%>
+		
 		<input type="button" value="Tallenna tiedot" class="tallenna" onclick="doSubmitForm()"/>
 	</form:form>
 	

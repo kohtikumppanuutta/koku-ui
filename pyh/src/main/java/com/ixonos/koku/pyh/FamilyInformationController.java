@@ -13,7 +13,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import com.ixonos.koku.pyh.mock.User;
 import com.ixonos.koku.pyh.model.Child;
-import com.ixonos.koku.pyh.model.Person;
+import com.ixonos.koku.pyh.model.FamilyMember;
 
 /**
  * Controller for showing user's family information.
@@ -63,7 +63,7 @@ public class FamilyInformationController {
    * @return
    */
   @ModelAttribute(value = "familyMembers")
-  private List<Person> getFamilyMembers() {
+  private List<FamilyMember> getFamilyMembers() {
     return pyhDemoService.getFamilyMembers("user ssn here" /* TODO: get family members by users's SSN */ );
   }
   

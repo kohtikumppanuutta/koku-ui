@@ -6,7 +6,10 @@ public class Person {
   private String middlename;
   private String surname;
   private String ssn;
-  private String birthdate;
+  private String birthdate; // e.g. "13-05-2000"
+  private String birthday; // e.g. "13"
+  private String birthmonth; // e.g. "05"
+  private String birthyear; // e.g. "2000"
   
   public Person() {
     this.firstname = "";
@@ -14,6 +17,9 @@ public class Person {
     this.surname = "";
     this.ssn = "";
     this.birthdate = "";
+    this.birthday = "";
+    this.birthmonth = "";
+    this.birthyear = "";
   }
   
   public Person(String firstname, String middlename, String surname, String ssn, String birthdate) {
@@ -63,4 +69,33 @@ public class Person {
   public void setBirthdate(String birthdate) {
     this.birthdate = birthdate;
   }
+  
+  public void setBirthdate(String day, String month, String year) {
+    this.birthdate = day + "-" + month + "-" + year;
+  }
+  
+  public String getBirthday() {
+    return birthday;
+  }
+  
+  public void setBirthday(String birthday) {
+    this.birthday = birthday;
+  }
+  
+  public String getBirthmonth() {
+    return birthmonth;
+  }
+  
+  public void setBirthmonth(String birthmonth) {
+    this.birthmonth = birthmonth;
+  }
+  
+  public String getBirthyear() {
+    return birthyear;
+  }
+  
+  public void setBirthyear(String birthyear) {
+    this.birthyear = birthyear;
+  }
+  
 }

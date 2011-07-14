@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ixonos.koku.pyh.mock.User;
 import com.ixonos.koku.pyh.model.Child;
+import com.ixonos.koku.pyh.model.FamilyMember;
 import com.ixonos.koku.pyh.model.Person;
 
 @Service (value = "pyhDemoService")
@@ -46,12 +47,12 @@ public class PyhDemoService {
     return l;
   }
   
-  public List<Person> getFamilyMembers(String userSSN) {
+  public List<FamilyMember> getFamilyMembers(String userSSN) {
     // TODO: how to store user's family members?
     // TODO: add role attribute to family members
-    ArrayList<Person> l = new ArrayList<Person>();
-    l.add(new Person("mem", "ber", "1", "000000-0000", "000000"));
-    l.add(new Person("mem", "ber", "2", "111111-1111", "111111"));
+    ArrayList<FamilyMember> l = new ArrayList<FamilyMember>();
+    l.add(new FamilyMember("mem", "ber", "1", "000000-0000", "000000", "äiti"));
+    l.add(new FamilyMember("mem", "ber", "2", "111111-1111", "111111", "lapsi"));
     return l;
   }
   
