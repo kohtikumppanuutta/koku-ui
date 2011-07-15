@@ -6,7 +6,7 @@
   <portlet>
     <portlet-name>lok</portlet-name>
     <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
-<!-- <portlet-class>fi.koku.demo.CustomDispatcherPortlet</portlet-class>  -->
+<!-- <portlet-class>com.ixonos.koku.demo.CustomDispatcherPortlet</portlet-class>  -->
     <supports>
       <mime-type>text/html</mime-type>
       <portlet-mode>view</portlet-mode>

@@ -1,9 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="portlet" uri="http://java.sun.com/portlet_2_0"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="portlet" uri="http://java.sun.com/portlet"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page contentType="text/html" isELIgnored="false"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <portlet:actionURL var="searchActionUrl">
 	<portlet:param name="op" value="searchLog" />
@@ -39,7 +39,7 @@
 
 <div class="log-search-results">
 
-<c:if test="${!empty entries}">
+<c:if test="${not empty entries}">
 <p>search results here</p>
 
   <ul>
