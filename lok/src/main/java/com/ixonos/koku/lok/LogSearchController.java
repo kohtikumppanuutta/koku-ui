@@ -59,7 +59,6 @@ public class LogSearchController {
   // portlet render phase
   @RenderMapping
   public String render(RenderRequest req, RenderResponse res, Model model) {
- // public String render(RenderRequest req, RenderResponse res, @RequestParam(value ="crite", required=false) String pic, Model model) {
 
   System.out.println("render phase");
  
