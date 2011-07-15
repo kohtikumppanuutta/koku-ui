@@ -1,9 +1,10 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="portlet" uri="http://java.sun.com/portlet"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page contentType="text/html" isELIgnored="false"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<portlet:defineObjects />
 
 <portlet:actionURL var="searchActionUrl">
 	<portlet:param name="op" value="searchLog" />
@@ -30,7 +31,7 @@
 	<form:input path="to" />
 	<span class="errors"><form:errors path="to" /></span>
 
-	<input type="submit" value="search"/>
+	<input type="submit" value="<spring:message code="koku.common.search"/>" >
 
 	<div class="clear" />
   </form:form>
@@ -40,14 +41,17 @@
 <div class="log-search-results">
 
 <c:if test="${not empty entries}">
-<p>search results here</p>
-
+<p><spring:message code="koku.common.searchResults"/></p>
+${searchParams.pic}, ${searchParam.concept}, ${searchParams.from}, ${searchParams.to}:
   <ul>
   <c:forEach var="e" items="${entries}">
-    <li>${e.message}
+    ${e.message}&nbsp;
   </c:forEach>
   </ul>
   
+</c:if>
+<c:if test="${empty entries}">
+<p><spring:message code="koku.common.noResults"/></p>
 </c:if>
 
 </div>
