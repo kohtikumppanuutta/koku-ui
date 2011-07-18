@@ -10,9 +10,12 @@ public class Child extends Person {
   private String guardianSSN;
   private boolean memberOfUserFamily;
   
-  public Child(String firstname, String middlename, String surname, String ssn, String birthdate) {
+  public Child(String firstname, String middlename, String surname, String ssn, String birthdate, String guardianSSN) {
     super(firstname, middlename, surname, ssn, birthdate);
+    this.guardianSSN = guardianSSN;
   }
+  
+  // TODO: instead of 'member of user family' attribute use Family instance
   
   public boolean getMemberOfUserFamily() {
     return memberOfUserFamily;
@@ -21,5 +24,10 @@ public class Child extends Person {
   public void setMemberOfUserFamily(boolean isMember) {
     this.memberOfUserFamily = isMember;
   }
+  
+  public String getGuardianSSN() {
+    return guardianSSN;
+  }
+  
   
 }

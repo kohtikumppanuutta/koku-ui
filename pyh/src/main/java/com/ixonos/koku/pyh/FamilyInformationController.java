@@ -36,7 +36,7 @@ public class FamilyInformationController {
   @RenderMapping(params="action=guardianFamilyInformation")
   public String render()
   {
-    pyhDemoService.clearSearchedUsers();
+    //pyhDemoService.clearSearchedUsers();
     return "familyinformation";
   }
   
@@ -54,8 +54,8 @@ public class FamilyInformationController {
    * @return
    */
   @ModelAttribute(value = "guardedChildren")
-  private List<Child> getGuardiansChildren() {
-    return pyhDemoService.getGuardiansChildren("guardian ssn here" /* TODO: get guardian by SSN */ );
+  private List<Child> getDependants() {
+    return pyhDemoService.getDependants(pyhDemoService.getUser().getSsn());
   }
   
   /**
@@ -64,7 +64,7 @@ public class FamilyInformationController {
    */
   @ModelAttribute(value = "familyMembers")
   private List<FamilyMember> getFamilyMembers() {
-    return pyhDemoService.getFamilyMembers("user ssn here" /* TODO: get family members by users's SSN */ );
+    return pyhDemoService.getFamilyMembers(getUser().getSsn());
   }
   
 }

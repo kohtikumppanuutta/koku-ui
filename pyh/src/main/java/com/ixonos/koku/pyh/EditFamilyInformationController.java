@@ -51,7 +51,7 @@ public class EditFamilyInformationController {
   
   @ModelAttribute(value = "guardedChildren")
   private List<Child> getGuardiansChildren() {
-    return pyhDemoService.getGuardiansChildren("guardian ssn here" /* TODO: get guardian by SSN */);
+    return pyhDemoService.getDependants(pyhDemoService.getUser().getSsn());
   }
   
   @ModelAttribute(value = "familyMembers")
@@ -118,20 +118,26 @@ public class EditFamilyInformationController {
     response.setRenderParameter("action", "editFamilyInformation");
   }
   
+  // TODO: käyttäjien haku: ilmoitus 'ei hakutuloksia' jos käyttäjiä ei löytynyt,
+  // haku tulokset tai ilmoitus näytetään vain kun hakutoiminto on suoritettu
+  
   @ActionMapping(params = "action=searchUsers")
   public void searchUsers(ActionRequest request, ActionResponse response) {
     log.info("calling EditFamilyInformationController.searchUsers");
     
-    log.info("etunimi: " + request.getParameter("searchFirstname"));
-    log.info("sukunimi: " + request.getParameter("searchSurname"));
-    log.info("ssn: " + request.getParameter("searchSSN"));
+    String fn = request.getParameter("searchFirstname");
+    String sn = request.getParameter("searchSurname");
+    String ssn = request.getParameter("searchSSN");
+    
+    log.info("etunimi: " + fn);
+    log.info("sukunimi: " + sn);
+    log.info("ssn: " + ssn);
     
     // calling service to query users,
     // users are returned as an model attribute object searchedUsers
-    pyhDemoService.searchUsers("firstname", "surname", "ssn");
+    pyhDemoService.searchUsers(fn, sn, ssn);
     
     response.setRenderParameter("action", "editFamilyInformation");
-    
   }
   
   @ActionMapping(params = "action=addUsersToFamily")

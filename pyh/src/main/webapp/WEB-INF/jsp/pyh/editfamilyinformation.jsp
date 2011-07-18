@@ -2,6 +2,8 @@
 <%@ taglib prefix="portlet" uri="http://java.sun.com/portlet"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
+<portlet:defineObjects/>
+
 <h1>Perhetiedot</h1>
 
 <portlet:renderURL var="backURL">
@@ -173,55 +175,63 @@ LISÄÄ KÄYTTÄJIÄ PERHEYHTEISÖÖSI <br/>
 </span>
 </p>
 
-<c:if test="${not empty searchedUsers}">
-	<table width="100%" border="0">
-		
-		<tr>
-		<td width="38%">NIMI</td>
-		<td width="26%">HETU</td>
-		<td width="10%">LISÄÄ</td>
-		<td width="26%"> VALITSE LISÄTTÄVÄN ROOLI</td>
-		</tr>
-		
-		<c:set var="userVar" value="1"/>
-		<c:forEach var="user" items="${searchedUsers}">
+<c:if test="${searchedUsers != null}">
+<c:choose>
+	<c:when test="${not empty searchedUsers}">
+		<table width="100%" border="0">
 			
 			<tr>
-			<td>${user.firstname} ${user.surname}</td>
-			<td>${user.ssn}</td>
-			<input id="user_ssn_${userVar}" name="userSSN_${userVar}" type="hidden" value="${user.ssn}" />
-			
-			<td>
-				<input name="addUserCheckbox_${userVar}" value="${userVar}" type="checkbox"/>
-			</td>
-			
-			<td>
-			<select id="user_role_${userVar}" class="syntmaika">
-			<option value="">VALITSE ROOLI</option>
-			<option value="aiti">Äiti</option>
-			<option value="isa">Isä</option>
-			<option value="lapsi">Lapsi</option>
-			</select>
-			</td>
+			<td width="38%">NIMI</td>
+			<td width="26%">HETU</td>
+			<td width="10%">LISÄÄ</td>
+			<td width="26%"> VALITSE LISÄTTÄVÄN ROOLI</td>
 			</tr>
 			
-			<c:set var="userVar" value="${userVar + 1}"/>
-		</c:forEach>
-	</table>
-	
-	<p>&nbsp;</p>
-	
-	<portlet:actionURL var="addUsersToFamily">
-		<portlet:param name="action" value="addUsersToFamily"/>
-	</portlet:actionURL>
-	
-	<form:form name="addUsersToFamily" method="post" action="${addUsersToFamily}" id="addUsersToFamilyForm">
+			<c:set var="userVar" value="1"/>
+			<c:forEach var="user" items="${searchedUsers}">
+				
+				<tr>
+				<td>${user.firstname} ${user.surname}</td>
+				<td>${user.ssn}</td>
+				<input id="user_ssn_${userVar}" name="userSSN_${userVar}" type="hidden" value="${user.ssn}" />
+				
+				<td>
+					<input name="addUserCheckbox_${userVar}" value="${userVar}" type="checkbox"/>
+				</td>
+				
+				<td>
+				<select id="user_role_${userVar}" class="syntmaika">
+				<option value="">VALITSE ROOLI</option>
+				<option value="aiti">Äiti</option>
+				<option value="isa">Isä</option>
+				<option value="lapsi">Lapsi</option>
+				</select>
+				</td>
+				</tr>
+				
+				<c:set var="userVar" value="${userVar + 1}"/>
+			</c:forEach>
+		</table>
 		
-		<%-- user information is added to this form dynamically with jQuery before submitting the form --%>
+		<p>&nbsp;</p>
 		
-		<input type="button" value="Tallenna tiedot" class="tallenna" onclick="doSubmitForm()"/>
-	</form:form>
-	
+		<portlet:actionURL var="addUsersToFamily">
+			<portlet:param name="action" value="addUsersToFamily"/>
+		</portlet:actionURL>
+		
+		<form:form name="addUsersToFamily" method="post" action="${addUsersToFamily}" id="addUsersToFamilyForm">
+			
+			<%-- user information is added to this form dynamically with jQuery before submitting the form --%>
+			
+			<input type="button" value="Tallenna tiedot" class="tallenna" onclick="doSubmitForm()"/>
+		</form:form>
+	</c:when>
+	<c:otherwise>
+		<%-- <c:if test="${searchedUsers != null}"> --%>
+			<p>Ei hakutuloksia.</p>
+		<%-- </c:if> --%>
+	</c:otherwise>
+</c:choose>
 </c:if>
 
 

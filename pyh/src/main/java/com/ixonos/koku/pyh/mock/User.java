@@ -1,21 +1,16 @@
 package com.ixonos.koku.pyh.mock;
 
-public class User {
+import com.ixonos.koku.pyh.model.Person;
+
+public class User extends Person {
   
   private String role;
-  private String firstname;
-  private String surname;
   private String email;
   
-  public User() {
-    
-  }
-  
-  public User(String role, String firstname, String surname, String email) {
-    this.role = role;
-    this.firstname = firstname;
-    this.surname = surname;
+  public User(String firstname, String middlename, String surname, String ssn, String birthdate, String email, String role) {
+    super(firstname, middlename, surname, ssn, birthdate);
     this.email = email;
+    this.role = role;
   }
   
   public String getRole() {
@@ -24,22 +19,6 @@ public class User {
   
   public void setRole(String role) {
     this.role = role;
-  }
-  
-  public String getFirstname() {
-    return firstname;
-  }
-  
-  public void setFirstname(String firstname) {
-    this.firstname = firstname;
-  }
-  
-  public String getSurname() {
-    return surname;
-  }
-  
-  public void setSurname(String surname) {
-    this.surname = surname;
   }
   
   public String getEmail() {

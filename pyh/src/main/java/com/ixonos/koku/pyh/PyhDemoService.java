@@ -1,12 +1,14 @@
 package com.ixonos.koku.pyh;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.ixonos.koku.pyh.mock.User;
 import com.ixonos.koku.pyh.model.Child;
+import com.ixonos.koku.pyh.model.Family;
 import com.ixonos.koku.pyh.model.FamilyMember;
 import com.ixonos.koku.pyh.model.Person;
 
@@ -22,47 +24,72 @@ public class PyhDemoService {
       this.model = PyhDemoFactory.createModel();
     }
     if (user == null) {
-      this.user = new User("guardian", "Pekka", "Perustyyppi", "pekka.perustyyppi@meili.com");
+      this.user = new User("Pekka", "", "Peltola", "010101-1010", "", "pekka.peltola@meili.com", "guardian");
     }
-    
+    searchedUsers = null;
   }
   
   public User getUser() {
     return user;
   }
   
-  public List<Child> getGuardiansChildren(String guardianSSN) {
+  public List<Child> getDependants(String guardianSSN) {
+    List<Child> dependants = new ArrayList<Child>(); 
     
-    // TODO: store children in a map to be retrieved by guardians SSN
-    // set the child's status 'member of the user's family'
-    
-    Child c1 = new Child("Matti", "Tapani", "Meikäläinen", "010203-1234", "010203");
-    Child c2 = new Child("Tiina", "Terhi", "Tavallinen", "040506-4567", "040506");
-    c1.setMemberOfUserFamily(true);
-    c2.setMemberOfUserFamily(false);
-    
-    ArrayList<Child> l = new ArrayList<Child>();
-    l.add(c1);
-    l.add(c2);
-    return l;
+    Iterator<Person> i = model.getPersons().iterator();
+    while (i.hasNext()) {
+      Person p = i.next();
+      if (p instanceof Child) {
+        Child child = (Child) p;
+        if (child.getGuardianSSN().equals(guardianSSN)) {
+          dependants.add(child);
+        }
+      }
+    }
+    return dependants;
   }
   
   public List<FamilyMember> getFamilyMembers(String userSSN) {
-    // TODO: how to store user's family members?
-    // TODO: add role attribute to family members
-    ArrayList<FamilyMember> l = new ArrayList<FamilyMember>();
-    l.add(new FamilyMember("mem", "ber", "1", "000000-0000", "000000", "äiti"));
-    l.add(new FamilyMember("mem", "ber", "2", "111111-1111", "111111", "lapsi"));
-    return l;
+    List<FamilyMember> familyMembers = new ArrayList<FamilyMember>();
+    
+    familyMembers.add(new FamilyMember("test", "test", "test", "test", "test", "test"));
+    familyMembers.add(new FamilyMember("test", "test", "test", "test", "test", "test"));
+    return familyMembers;
+    
+//    Iterator<Family> i = model.getFamilies().iterator();
+//    while (i.hasNext()) {
+//      Family f = i.next();
+//      if (f.isFamilyMember(userSSN)) {
+//        familyMembers = f.getFamilyMembers();
+//        break;
+//      }
+//    }
+//    
+//    return familyMembers;
+    
+    // TODO: remove user and user's dependants from the list because we want to display only other family members
+    // maybe Child and Person can inherit from FamilyMember...? and Child could inherit from Person?
+    
+//    Iterator<FamilyMember> i2 = familyMembers.iterator();
+//    while (i2.hasNext()) {
+//      FamilyMember fm = i2.next();
+//      if (fm.getSsn().equals(userSSN) || (fm instanceof Child && ((Child)fm).getGuardianSSN().equals(userSSN)) ) {
+//        familyMembers.remove(fm);
+//      }
+//    }
+    
   }
   
   public void searchUsers(String firstname, String surname, String ssn) {
-    clearSearchedUsers();
+    searchedUsers = new ArrayList<Person>();
     
     // dummy user list population
-    searchedUsers.add(new Person("matti", "tapani", "mainio", "1234567", "123456"));
-    searchedUsers.add(new Person("mika", "tapani", "mainio", "7654321", "765432"));
-    searchedUsers.add(new Person("pertti", "tapani", "tikka", "019827", "321314"));
+    if (firstname.equals("") == false || surname.equals("") == false || ssn.equals("") == false) {
+      searchedUsers.add(new Person("matti", "tapani", "mainio", "1234567", "123456"));
+      searchedUsers.add(new Person("mika", "tapani", "mainio", "7654321", "765432"));
+      searchedUsers.add(new Person("pertti", "tapani", "tikka", "019827", "321314"));
+    }
+    
   }
   
   public List<Person> getSearchedUsers() {
@@ -70,12 +97,7 @@ public class PyhDemoService {
   }
   
   public void clearSearchedUsers() {
-    if (searchedUsers == null) {
-      searchedUsers = new ArrayList<Person>();
-    }
-    else {
-      searchedUsers.clear();
-    }
+    searchedUsers = null;
   }
   
 }

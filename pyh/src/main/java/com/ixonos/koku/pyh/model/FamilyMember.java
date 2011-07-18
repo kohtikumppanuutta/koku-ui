@@ -9,6 +9,11 @@ public class FamilyMember extends Person {
     this.role = role;
   }
   
+  public FamilyMember(Person person, String role) {
+    super(person.getFirstname(), person.getMiddlename(), person.getSurname(), person.getSsn(), person.getBirthdate());
+    this.role = role;
+  }
+  
   public String getRole() {
     return role;
   }
