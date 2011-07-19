@@ -18,28 +18,28 @@
 	<br/>
 </c:if>
 
-<c:if test="${not empty guardedChildren}">
+<c:if test="${not empty dependants}">
 	Huollettavat lapset: <br/>
-	<c:forEach var="child" items="${guardedChildren}">
+	<c:forEach var="dependant" items="${dependants}">
 		
 		<%-- this feature is not used, do not remove the commented code before we are sure we don't need this --%>
 		<%--
 		<portlet:actionURL var="removeDependant">
 			<portlet:param name="action" value="removeDependant"/>
-			<portlet:param name="dependantSSN" value="${child.ssn}"/>
+			<portlet:param name="dependantSSN" value="${dependant.ssn}"/>
 		</portlet:actionURL>
-		${child.firstname} ${child.surname} ${child.ssn} <a href="${removeDependant}">poista huoltajuus</a> <br/>
+		${dependant.firstname} ${dependant.surname} ${dependant.ssn} <a href="${removeDependant}">poista huoltajuus</a> <br/>
 		--%>
 		
-		${child.firstname} ${child.surname} ${child.ssn}
+		${dependant.firstname} ${dependant.surname} ${dependant.ssn}
 		<c:choose>
-			<c:when test="${child.memberOfUserFamily}">
+			<c:when test="${dependant.memberOfUserFamily}">
 				lisätty perheenjäseneksi
 			</c:when>
 			<c:otherwise>
 				<portlet:actionURL var="addDependantAsFamilyMember">
 					<portlet:param name="action" value="addDependantAsFamilyMember"/>
-					<portlet:param name="dependantSSN" value="${child.ssn}"/>
+					<portlet:param name="dependantSSN" value="${dependant.ssn}"/>
 				</portlet:actionURL>
 				<a href="${addDependantAsFamilyMember}">lisää perheenjäseneksi</a> <br/>
 			</c:otherwise>
@@ -140,9 +140,9 @@
 </form:form>
 <br/>
 
-<c:if test="${not empty familyMembers}">
+<c:if test="${not empty otherFamilyMembers}">
 	Perheyhteisön muut jäsenet <br/>
-	<c:forEach var="familyMember" items="${familyMembers}">
+	<c:forEach var="familyMember" items="${otherFamilyMembers}">
 		
 		<portlet:actionURL var="removeFamilyMember">
 			<portlet:param name="action" value="removeFamilyMember"/>
@@ -175,7 +175,6 @@ LISÄÄ KÄYTTÄJIÄ PERHEYHTEISÖÖSI <br/>
 </span>
 </p>
 
-<c:if test="${searchedUsers != null}">
 <c:choose>
 	<c:when test="${not empty searchedUsers}">
 		<table width="100%" border="0">
@@ -227,12 +226,11 @@ LISÄÄ KÄYTTÄJIÄ PERHEYHTEISÖÖSI <br/>
 		</form:form>
 	</c:when>
 	<c:otherwise>
-		<%-- <c:if test="${searchedUsers != null}"> --%>
+		<c:if test="${search}">
 			<p>Ei hakutuloksia.</p>
-		<%-- </c:if> --%>
+		</c:if>
 	</c:otherwise>
 </c:choose>
-</c:if>
 
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.4.min.js"></script>

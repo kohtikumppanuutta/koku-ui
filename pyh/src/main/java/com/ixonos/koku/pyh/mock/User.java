@@ -1,32 +1,33 @@
 package com.ixonos.koku.pyh.mock;
 
-import com.ixonos.koku.pyh.model.Person;
 
-public class User extends Person {
+public class User {
   
   private String role;
-  private String email;
+  private String ssn;
+  //private String email;
   
-  public User(String firstname, String middlename, String surname, String ssn, String birthdate, String email, String role) {
-    super(firstname, middlename, surname, ssn, birthdate);
-    this.email = email;
+  public User(String ssn, String role) {
+    //this.email = email;
+    
+    this.ssn = ssn;
     this.role = role;
+  }
+  
+  public String getSsn() {
+    return ssn;
   }
   
   public String getRole() {
     return role;
   }
   
-  public void setRole(String role) {
-    this.role = role;
-  }
-  
-  public String getEmail() {
-    return email;
-  }
-  
-  public void setEmail(String email) {
-    this.email = email;
-  }
+//  public String getEmail() {
+//    return email;
+//  }
+//  
+//  public void setEmail(String email) {
+//    this.email = email;
+//  }
   
 }

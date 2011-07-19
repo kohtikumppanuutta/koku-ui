@@ -10,10 +10,16 @@ public class Child extends Person {
   private String guardianSSN;
   private boolean memberOfUserFamily;
   
+  public Child() {
+    
+  }
+  
+  /*
   public Child(String firstname, String middlename, String surname, String ssn, String birthdate, String guardianSSN) {
-    super(firstname, middlename, surname, ssn, birthdate);
+    super(firstname, middlename, surname, ssn, birthdate, "");
     this.guardianSSN = guardianSSN;
   }
+  */
   
   // TODO: instead of 'member of user family' attribute use Family instance
   

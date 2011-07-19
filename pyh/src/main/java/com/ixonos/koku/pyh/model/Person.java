@@ -10,6 +10,7 @@ public class Person {
   private String birthday; // e.g. "13"
   private String birthmonth; // e.g. "05"
   private String birthyear; // e.g. "2000"
+  private String email;
   
   public Person() {
     this.firstname = "";
@@ -20,14 +21,25 @@ public class Person {
     this.birthday = "";
     this.birthmonth = "";
     this.birthyear = "";
+    this.email = "";
   }
   
-  public Person(String firstname, String middlename, String surname, String ssn, String birthdate) {
+  public Person(String firstname, String middlename, String surname, String ssn, String birthdate, String email) {
     this.firstname = firstname;
     this.middlename = middlename;
     this.surname = surname;
     this.ssn = ssn;
     this.birthdate = "";
+    this.email = "";
+  }
+  
+  public Person(Person p) {
+    this.firstname = p.getFirstname();
+    this.middlename = p.getMiddlename();
+    this.surname = p.getSurname();
+    this.ssn = p.getSsn();
+    this.birthdate = p.getBirthdate();
+    this.email = p.getEmail();
   }
   
   public String getFirstname() {
@@ -96,6 +108,14 @@ public class Person {
   
   public void setBirthyear(String birthyear) {
     this.birthyear = birthyear;
+  }
+  
+  public String getEmail() {
+    return email;
+  }
+  
+  public void setEmail(String email) {
+    this.email = email;
   }
   
 }

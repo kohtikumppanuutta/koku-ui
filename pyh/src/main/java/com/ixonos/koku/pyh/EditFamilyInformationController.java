@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.RenderRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import com.ixonos.koku.pyh.mock.User;
-import com.ixonos.koku.pyh.model.Child;
+import com.ixonos.koku.pyh.model.Dependant;
 import com.ixonos.koku.pyh.model.FamilyMember;
 import com.ixonos.koku.pyh.model.Person;
 
@@ -41,22 +41,32 @@ public class EditFamilyInformationController {
   
   @RenderMapping(params = "action=editFamilyInformation")
   public String render() {
+    pyhDemoService.clearSearchedUsers();
+    return "editfamilyinformation";
+  }
+  
+  // this render method does not clear the search results
+  @RenderMapping(params = "action=editFamilyInformationWithSearchResults")
+  public String renderWithSearchResults(RenderRequest request) {
+    log.info("calling EditFamilyInformationController.renderWithSearchResults");
+    
+    request.setAttribute("search", true);
     return "editfamilyinformation";
   }
   
   @ModelAttribute(value = "user")
-  private User getUser() {
+  private Person getUser() {
     return pyhDemoService.getUser();
   }
   
-  @ModelAttribute(value = "guardedChildren")
-  private List<Child> getGuardiansChildren() {
-    return pyhDemoService.getDependants(pyhDemoService.getUser().getSsn());
+  @ModelAttribute(value = "dependants")
+  private List<Dependant> getDependants() {
+    return pyhDemoService.getDependants();
   }
   
-  @ModelAttribute(value = "familyMembers")
+  @ModelAttribute(value = "otherFamilyMembers")
   private List<FamilyMember> getFamilyMembers() {
-    return pyhDemoService.getFamilyMembers("user ssn here" /* TODO: get family members by user's SSN */);
+    return pyhDemoService.getOtherFamilyMembers();
   }
   
   @ModelAttribute(value = "newChild")
@@ -86,6 +96,8 @@ public class EditFamilyInformationController {
   public void addDependantAsFamilyMember(@RequestParam String dependantSSN, ActionResponse response) {
     log.info("calling EditFamilyInformationController.addDependantAsFamilyMember");
     log.info("dependant ssn: " + dependantSSN);
+    
+    pyhDemoService.addDependantAsFamilyMember(dependantSSN);
     
     response.setRenderParameter("action", "editFamilyInformation");
   }
@@ -137,7 +149,9 @@ public class EditFamilyInformationController {
     // users are returned as an model attribute object searchedUsers
     pyhDemoService.searchUsers(fn, sn, ssn);
     
-    response.setRenderParameter("action", "editFamilyInformation");
+    //response.setRenderParameter("action", "editFamilyInformation");
+    response.setRenderParameter("action", "editFamilyInformationWithSearchResults");
+    
   }
   
   @ActionMapping(params = "action=addUsersToFamily")
@@ -148,10 +162,11 @@ public class EditFamilyInformationController {
     
     for (Enumeration<String> e = request.getParameterNames(); e.hasMoreElements();) {
       String param = e.nextElement();
-      System.out.println(param + ": " + request.getParameter(param));
+      log.info(param + ": " + request.getParameter(param));
     }
     
     response.setRenderParameter("action", "editFamilyInformation");
+    
   }
   
 }

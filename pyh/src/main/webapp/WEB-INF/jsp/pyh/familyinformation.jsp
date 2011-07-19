@@ -20,17 +20,17 @@
 </c:if>
 <br/>
 
-<c:if test="${not empty guardedChildren}">
+<c:if test="${not empty dependants}">
 	Huollettavat lapset:<br/>
-	<c:forEach var="child" items="${guardedChildren}">
+	<c:forEach var="child" items="${dependants}">
 		${child.firstname} ${child.surname} ${child.ssn} <br/>
 	</c:forEach>
 	<br/>
 </c:if> 
 
-<c:if test="${not empty familyMembers}">
+<c:if test="${not empty otherFamilyMembers}">
 	Perheyhteisön muut jäsenet <br/>
-	<c:forEach var="familyMember" items="${familyMembers}">
+	<c:forEach var="familyMember" items="${otherFamilyMembers}">
 		${familyMember.firstname} ${familyMember.surname} ${familyMember.ssn} (${familyMember.role}) <br/>
 	</c:forEach>
 	<br/>

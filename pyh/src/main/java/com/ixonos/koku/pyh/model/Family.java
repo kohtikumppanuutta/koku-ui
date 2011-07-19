@@ -4,7 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.ixonos.koku.pyh.EditFamilyInformationController;
+
 public class Family {
+  
+  private static Logger log = LoggerFactory.getLogger(Family.class);
   
   private List<FamilyMember> familyMembers;
   
@@ -13,6 +20,7 @@ public class Family {
   }
   
   public void addFamilyMember(FamilyMember familyMember) {
+    log.info("adding family member: " + familyMember.getFirstname() + " " + familyMember.getSurname());
     familyMembers.add(familyMember);
   }
   
@@ -23,11 +31,24 @@ public class Family {
   public boolean isFamilyMember(String personSSN) {
     Iterator<FamilyMember> i = familyMembers.iterator();
     while (i.hasNext()) {
-      if (i.next().getSsn().equals(personSSN)) {
+      FamilyMember fm = i.next();
+      log.info("family member ssn: " + fm.getSsn());
+      log.info("person ssn: " + personSSN);
+      if (fm.getSsn().equals(personSSN)) {
         return true;
       }
     }
     return false;
+  }
+  
+  public String toString() {
+    String family = "";
+    Iterator<FamilyMember> i = familyMembers.iterator();
+    while (i.hasNext()) {
+      FamilyMember fm = i.next();
+      family += fm.getFirstname() + " " + fm.getSurname() + "; ";
+    }
+    return family;
   }
   
 }

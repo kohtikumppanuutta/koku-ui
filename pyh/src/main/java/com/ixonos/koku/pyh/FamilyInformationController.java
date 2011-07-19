@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import com.ixonos.koku.pyh.mock.User;
-import com.ixonos.koku.pyh.model.Child;
+import com.ixonos.koku.pyh.model.Dependant;
 import com.ixonos.koku.pyh.model.FamilyMember;
+import com.ixonos.koku.pyh.model.Person;
 
 /**
  * Controller for showing user's family information.
@@ -45,7 +45,7 @@ public class FamilyInformationController {
    * @return
    */
   @ModelAttribute(value = "user")
-  private User getUser() {
+  private Person getUser() {
     return pyhDemoService.getUser();
   }
   
@@ -53,18 +53,18 @@ public class FamilyInformationController {
    * Returns user's children whose guardian the user is.
    * @return
    */
-  @ModelAttribute(value = "guardedChildren")
-  private List<Child> getDependants() {
-    return pyhDemoService.getDependants(pyhDemoService.getUser().getSsn());
+  @ModelAttribute(value = "dependants")
+  private List<Dependant> getDependants() {
+    return pyhDemoService.getDependants();
   }
   
   /**
    * Returns all members of the user's family.
    * @return
    */
-  @ModelAttribute(value = "familyMembers")
+  @ModelAttribute(value = "otherFamilyMembers")
   private List<FamilyMember> getFamilyMembers() {
-    return pyhDemoService.getFamilyMembers(getUser().getSsn());
+    return pyhDemoService.getOtherFamilyMembers();
   }
   
 }
