@@ -18,43 +18,24 @@ public class PyhDemoFactory {
   
   public static PyhDemoModel createModel() {
     
-    log.info("calling PyhDemoFactory.createModel");
+    PyhDemoModel model = new PyhDemoModel();
     
     // create persons
     
     Person p1 = new Person("Matti", "Mikael", "Meikäläinen", "010203-1234", "010203", "");
-    
     Person p2 = new Person("Tytti", "Taina", "Järvinen", "020304-2345", "020304", "");
-    
     Person p3 = new Person("Jouni", "Josef", "Merinen", "030405-3456", "030405", "");
-    
     Person p4 = new Person("Tapani", "Toivo", "Ruohonen", "040506-4567", "040506", "");
     Person p5 = new Person("Liisa", "Leila", "Ruohonen", "050607-5678", "050607", "");
-    
     Person p6 = new Person("Pekka", "", "Peltola", "010101-1010", "010101", "pekka.peltola@meili.fi");
     Person p7 = new Person("Piritta", "", "Peltola", "020202-2020", "020202", "");
-    
     Person p8 = new Person("Tero", "Tapani", "Peltola", "111111-1111", "111111", "");
     Person p9 = new Person("Tiina", "Terhi", "Peltola", "222222-2222", "222222", "");
-    
     Person p10 = new Person("Maija", "Mette", "Merinen", "333333-3333", "333333", "");
     Person p11 = new Person("Janne", "Kari", "Merinen", "444444-4444", "444444", "");
     Person p12 = new Person("Laura", "Liina", "Merinen", "555555-5555", "555555", "");
-    
     Person p13 = new Person("Heikki", "Juhani", "Järvinen", "666666-6666", "666666", "");
     
-    /*
-    Child c1 = new Child("Tero", "Tapani", "Peltola", "111111-1111", "111111", "010101-1010");
-    Child c2 = new Child("Tiina", "Terhi", "Peltola", "222222-2222", "222222", "010101-1010");
-    
-    Child c3 = new Child("Maija", "Mette", "Merinen", "333333-3333", "333333", "030405-3456");
-    Child c4 = new Child("Janne", "Kari", "Merinen", "444444-4444", "444444", "030405-3456");
-    Child c5 = new Child("Laura", "Liina", "Merinen", "555555-5555", "555555", "030405-3456");
-    
-    Child c6 = new Child("Heikki", "Juhani", "Järvinen", "666666-6666", "666666", "020304-2345");
-    */
-    
-    PyhDemoModel model = new PyhDemoModel();
     model.addPerson(p1);
     model.addPerson(p2);
     model.addPerson(p3);

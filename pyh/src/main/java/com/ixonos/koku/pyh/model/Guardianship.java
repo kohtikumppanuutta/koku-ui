@@ -25,12 +25,20 @@ public class Guardianship {
     this.dependants = d;
   }
   
+  public void addDependant(Dependant d) {
+    this.dependants.add(d);
+  }
+  
   public List<Guardian> getGuardians() {
     return guardians;
   }
   
   public void setGuardians(List<Guardian> g) {
     this.guardians = g;
+  }
+  
+  public void addGuardian(Guardian g) {
+    this.guardians.add(g);
   }
   
   public boolean guardianshipExists(String guardianSSN, String dependantSSN) {

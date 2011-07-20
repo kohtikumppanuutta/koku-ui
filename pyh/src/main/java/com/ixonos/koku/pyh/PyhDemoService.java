@@ -1,6 +1,7 @@
 package com.ixonos.koku.pyh;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -69,31 +70,19 @@ public class PyhDemoService {
       }
     }
     
-    log.info("calling PyhDemoService.getDependants: returning dependants.size = " + dependants.size());
+    //log.info("calling PyhDemoService.getDependants: returning dependants.size = " + dependants.size());
     return dependants;
   }
   
   public List<FamilyMember> getOtherFamilyMembers() {
     List<FamilyMember> otherFamilyMembers = new ArrayList<FamilyMember>();
     
-    //try {
-    
-    log.info("calling PyhDemoService.getOtherFamilyMembers");
-    log.info("userSSN: " + user.getSsn());
+    //log.info("calling PyhDemoService.getOtherFamilyMembers");
+    //log.info("userSSN: " + user.getSsn());
     
     Family usersFamily = getUsersFamily();
     
-    if (usersFamily == null) {
-      log.info("VIRHE: usersFamily == NULL");
-      return otherFamilyMembers;
-    }
-    
     List<FamilyMember> fmList = usersFamily.getFamilyMembers();
-    
-    if (fmList == null) {
-      log.info("VIRHE: fmList == NULL");
-      return otherFamilyMembers;
-    }
     
     Iterator<FamilyMember> fmi = fmList.iterator();
     while (fmi.hasNext()) {
@@ -103,7 +92,7 @@ public class PyhDemoService {
       }
     }
     
-    log.info("PyhDemoService.getOtherFamilyMembers: otherFamilyMembers.size() = " + otherFamilyMembers.size());
+    //log.info("PyhDemoService.getOtherFamilyMembers: otherFamilyMembers.size() = " + otherFamilyMembers.size());
     
     return otherFamilyMembers;
   }
@@ -113,13 +102,16 @@ public class PyhDemoService {
     
     clearSearchedUsers();
     
-    // dummy user list population
     if (firstname.equals("") == false || surname.equals("") == false || ssn.equals("") == false) {
-      searchedUsers.add(new Person("matti", "tapani", "mainio", "1234567", "123456", ""));
-      searchedUsers.add(new Person("mika", "tapani", "mainio", "7654321", "765432", ""));
-      searchedUsers.add(new Person("pertti", "tapani", "tikka", "019827", "321314", ""));
+      Iterator<Person> pi = model.getPersons().iterator();
+      while (pi.hasNext()) {
+        Person person = pi.next();
+        if (person.getFirstname().equalsIgnoreCase(firstname) || person.getSurname().equalsIgnoreCase(surname) || 
+            person.getSsn().equalsIgnoreCase(ssn)) {
+          searchedUsers.add(person);
+        }
+      }
     }
-    
   }
   
   public List<Person> getSearchedUsers() {
@@ -140,44 +132,8 @@ public class PyhDemoService {
     }
   }
   
-  private Family getUsersFamily() {
-    Iterator<Family> fi = model.getFamilies().iterator();
-    while (fi.hasNext()) {
-      Family f = fi.next();
-      if (f.isFamilyMember(user.getSsn())) {
-        return f;
-      }
-      log.info("-- next family --");
-    }
-    return null;
-  }
-  
-  private Person getPerson(String personSSN) {
-    List<Person> persons = model.getPersons();
-    Iterator<Person> pi = persons.iterator();
-    while (pi.hasNext()) {
-      Person person = pi.next();
-      if (person.getSsn().equals(personSSN)) {
-        return person;
-      }
-    }
-    return null;
-  }
-  
-  private Dependant getDependant(String dependantSSN) {
-    List<Dependant> dependants = model.getAllDependants();
-    Iterator<Dependant> di = dependants.iterator();
-    while (di.hasNext()) {
-      Dependant dependant = di.next();
-      if (dependant.getSsn().equals(dependantSSN)) {
-        return dependant;
-      }
-    }
-    return null;
-  }
-  
   public void addDependantAsFamilyMember(String dependantSSN) {
-    Dependant dependant = getDependant(dependantSSN);
+    Dependant dependant = model.getDependant(dependantSSN);
     dependant.setMemberOfUserFamily(true);
     Family family = getUsersFamily();
     family.addFamilyMember(new FamilyMember(dependant, "lapsi"));
@@ -192,13 +148,59 @@ public class PyhDemoService {
 //    }
   }
   
-  private boolean isUsersDependant(String personSSN) {
+  public void addNewDependant(Person dependant) {
+    model.addPerson(dependant);
+    
+    // TODO: add dependant as user's dependant
+    
+    // get user's guardianship or create if does not exist
+    Guardianship guardianship = model.getGuardianship(user.getSsn());
+    if (guardianship == null) {
+      ArrayList<Dependant> dependants = new ArrayList<Dependant>();
+      ArrayList<Guardian> guardians = new ArrayList<Guardian>();
+      guardianship = new Guardianship(dependants, guardians);
+      
+      Person person = model.getPerson(user.getSsn());
+      // TODO: how to get guardian's role?
+      guardianship.addGuardian(new Guardian(person, "rooli"));
+    }
+    guardianship.addDependant(new Dependant(dependant));
+  }
+  
+  public void removeFamilyMember(String familyMemberSSN) {
+    Family family = getUsersFamily();
+    FamilyMember familyMember = family.getFamilyMember(familyMemberSSN);
+    family.removeFamilyMember(familyMember);
+  }
+  
+  public void addPersonsAsFamilyMembers(HashMap<String, String> personMap) {
+    
+    // TODO: add persons in map as family members
+    
+//    Person person = model.getPerson(personSSN);
+//    Family family = getUsersFamily();
+//    family.addFamilyMember(new FamilyMember(person, role));
+  }
+  
+  private Family getUsersFamily() {
+    Iterator<Family> fi = model.getFamilies().iterator();
+    while (fi.hasNext()) {
+      Family f = fi.next();
+      if (f.isFamilyMember(user.getSsn())) {
+        return f;
+      }
+      log.info("-- next family --");
+    }
+    return null;
+  }
+  
+  private boolean isUsersDependant(String dependantSSN) {
     String userSSN = user.getSsn();
     List<Guardianship> guardianships = model.getGuardianships();
     Iterator<Guardianship> gi = guardianships.iterator();
     while (gi.hasNext()) {
       Guardianship g = gi.next();
-      if (g.guardianshipExists(user.getSsn(), personSSN)) {
+      if (g.guardianshipExists(user.getSsn(), dependantSSN)) {
         return true;
       }
     }

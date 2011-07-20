@@ -20,8 +20,37 @@ public class Family {
   }
   
   public void addFamilyMember(FamilyMember familyMember) {
-    log.info("adding family member: " + familyMember.getFirstname() + " " + familyMember.getSurname());
+    //log.info("adding family member: " + familyMember.getFirstname() + " " + familyMember.getSurname());
     familyMembers.add(familyMember);
+  }
+  
+  public void removeFamilyMember(FamilyMember familyMember) {
+    log.info("family members before removing:");
+    Iterator<FamilyMember> fmi = familyMembers.iterator();
+    while (fmi.hasNext()) {
+      FamilyMember fm = fmi.next();
+      log.info(fm.getFirstname() + " " + fm.getSurname());
+    }
+    
+    familyMembers.remove(familyMember);
+    
+    log.info("family members after removing:");
+    fmi = familyMembers.iterator();
+    while (fmi.hasNext()) {
+      FamilyMember fm = fmi.next();
+      log.info(fm.getFirstname() + " " + fm.getSurname());
+    }
+  }
+  
+  public FamilyMember getFamilyMember(String familyMemberSSN) {
+    Iterator<FamilyMember> fmi = familyMembers.iterator();
+    while (fmi.hasNext()) {
+      FamilyMember fm = fmi.next();
+      if (fm.getSsn().equals(familyMemberSSN)) {
+        return fm;
+      }
+    }
+    return null;
   }
   
   public List<FamilyMember> getFamilyMembers() {

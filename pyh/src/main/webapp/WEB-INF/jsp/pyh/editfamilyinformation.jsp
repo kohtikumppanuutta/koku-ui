@@ -34,7 +34,7 @@
 		${dependant.firstname} ${dependant.surname} ${dependant.ssn}
 		<c:choose>
 			<c:when test="${dependant.memberOfUserFamily}">
-				lisätty perheenjäseneksi
+				lisätty perheenjäseneksi <br/>
 			</c:when>
 			<c:otherwise>
 				<portlet:actionURL var="addDependantAsFamilyMember">
@@ -44,8 +44,6 @@
 				<a href="${addDependantAsFamilyMember}">lisää perheenjäseneksi</a> <br/>
 			</c:otherwise>
 		</c:choose>
-		<br/>
-		
 	</c:forEach>
 </c:if>
 </p>
@@ -53,11 +51,11 @@
 <p>
 + LISÄÄ UUSI LAPSI <br/>
 
-<portlet:actionURL var="addNewChild">
-	<portlet:param name="action" value="addNewChild"/>
+<portlet:actionURL var="addNewDependant">
+	<portlet:param name="action" value="addNewDependant"/>
 </portlet:actionURL>
 
-<form:form name="addNewChildForm" commandName="newChild" method="post" action="${addNewChild}">
+<form:form name="addNewDependantForm" commandName="newDependant" method="post" action="${addNewDependant}">
 	
 	<span class="pvm">
 	Etunimi: <form:input path="firstname"/> 
@@ -169,7 +167,7 @@ LISÄÄ KÄYTTÄJIÄ PERHEYHTEISÖÖSI <br/>
 <form:form name="searchUsersForm" method="post" action="${searchUsers}">
 	Etunimi: <input name="searchFirstname"/>
 	Sukunimi: <input name="searchSurname"/>
-	SOTU: <input name="searchSSN"/>
+	HETU: <input name="searchSSN"/>
 	<input type="submit" value="HAE &gt;"/>
 </form:form>
 </span>

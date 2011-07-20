@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ixonos.koku.pyh.model.Dependant;
 import com.ixonos.koku.pyh.model.Family;
+import com.ixonos.koku.pyh.model.Guardian;
 import com.ixonos.koku.pyh.model.Guardianship;
 import com.ixonos.koku.pyh.model.Person;
 
@@ -32,6 +33,17 @@ public class PyhDemoModel {
     persons.add(person);
   }
   
+  public Person getPerson(String personSSN) {
+    Iterator<Person> pi = persons.iterator();
+    while (pi.hasNext()) {
+      Person person = pi.next();
+      if (person.getSsn().equals(personSSN)) {
+        return person;
+      }
+    }
+    return null;
+  }
+  
   public List<Person> getPersons() {
     return persons;
   }
@@ -51,6 +63,21 @@ public class PyhDemoModel {
   
   public void addGuardianship(Guardianship guardianship) {
     guardianships.add(guardianship);
+  }
+  
+  public Guardianship getGuardianship(String guardianSSN) {
+    Iterator<Guardianship> gsi = guardianships.iterator();
+    while (gsi.hasNext()) {
+      Guardianship gs = gsi.next();
+      Iterator<Guardian> gi = gs.getGuardians().iterator();
+      while (gi.hasNext()) {
+        Guardian g = gi.next();
+        if (g.getSsn().equals(guardianSSN)) {
+          return gs;
+        }
+      }
+    }
+    return null;
   }
   
   public List<Guardianship> getGuardianships() {
@@ -75,6 +102,18 @@ public class PyhDemoModel {
       }
     }
     return dependants;
+  }
+  
+  public Dependant getDependant(String dependantSSN) {
+    List<Dependant> dependants = getAllDependants();
+    Iterator<Dependant> di = dependants.iterator();
+    while (di.hasNext()) {
+      Dependant dependant = di.next();
+      if (dependant.getSsn().equals(dependantSSN)) {
+        return dependant;
+      }
+    }
+    return null;
   }
   
 }
