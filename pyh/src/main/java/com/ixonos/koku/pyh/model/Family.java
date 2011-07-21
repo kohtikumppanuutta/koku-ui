@@ -20,26 +20,13 @@ public class Family {
   }
   
   public void addFamilyMember(FamilyMember familyMember) {
-    //log.info("adding family member: " + familyMember.getFirstname() + " " + familyMember.getSurname());
-    familyMembers.add(familyMember);
+    if (isFamilyMember(familyMember.getSsn()) == false) {
+      familyMembers.add(familyMember);
+    }
   }
   
   public void removeFamilyMember(FamilyMember familyMember) {
-    log.info("family members before removing:");
-    Iterator<FamilyMember> fmi = familyMembers.iterator();
-    while (fmi.hasNext()) {
-      FamilyMember fm = fmi.next();
-      log.info(fm.getFirstname() + " " + fm.getSurname());
-    }
-    
     familyMembers.remove(familyMember);
-    
-    log.info("family members after removing:");
-    fmi = familyMembers.iterator();
-    while (fmi.hasNext()) {
-      FamilyMember fm = fmi.next();
-      log.info(fm.getFirstname() + " " + fm.getSurname());
-    }
   }
   
   public FamilyMember getFamilyMember(String familyMemberSSN) {
@@ -58,16 +45,12 @@ public class Family {
   }
   
   public boolean isFamilyMember(String personSSN) {
-    Iterator<FamilyMember> i = familyMembers.iterator();
-    while (i.hasNext()) {
-      FamilyMember fm = i.next();
-      log.info("family member ssn: " + fm.getSsn());
-      log.info("person ssn: " + personSSN);
-      if (fm.getSsn().equals(personSSN)) {
-        return true;
-      }
+    if (getFamilyMember(personSSN) != null) {
+      return true;
     }
-    return false;
+    else {
+      return false;
+    }
   }
   
   public String toString() {

@@ -51,9 +51,8 @@ public class EditFamilyInformationController {
   // this render method does not clear the search results
   @RenderMapping(params = "action=editFamilyInformationWithSearchResults")
   public String renderWithSearchResults(RenderRequest request) {
-    log.info("calling EditFamilyInformationController.renderWithSearchResults");
-    
     request.setAttribute("search", true);
+    
     return "editfamilyinformation";
   }
   
@@ -82,7 +81,7 @@ public class EditFamilyInformationController {
     return pyhDemoService.getSearchedUsers();
   }
   
-  /* this method is not used, before removing it make sure if it's needed
+  /* this method is not used, before removing it make sure it's not needed
   
   @ActionMapping(params = "action=removeDependant")
   public void removeDependat(@RequestParam String dependantSSN, ActionResponse response) {
@@ -97,9 +96,6 @@ public class EditFamilyInformationController {
   
   @ActionMapping(params = "action=addDependantAsFamilyMember")
   public void addDependantAsFamilyMember(@RequestParam String dependantSSN, ActionResponse response) {
-    log.info("calling EditFamilyInformationController.addDependantAsFamilyMember");
-    log.info("dependant ssn: " + dependantSSN);
-    
     pyhDemoService.addDependantAsFamilyMember(dependantSSN);
     
     response.setRenderParameter("action", "editFamilyInformation");
@@ -116,14 +112,6 @@ public class EditFamilyInformationController {
     String birthYear = dependant.getBirthyear();
     dependant.setBirthdate(dependant.getBirthday(), dependant.getBirthmonth(), dependant.getBirthyear());
     
-//    log.info("calling EditFamilyInformationController.addNewDependant");
-//    log.info("child name: " + firstName + " " + middleName + " " + surname);
-//    log.info("child ssn: " + ssn);
-//    log.info("birthday: " + birthDay);
-//    log.info("birthmonth: " + birthMonth);
-//    log.info("birthyear: " + birthYear);
-//    log.info("birthdate: " + dependant.getBirthdate());
-    
     if (ssn.equals("") == false && firstName.equals("") == false && 
         middleName.equals("") == false && surname.equals("") == false) {
       pyhDemoService.addNewDependant(dependant);
@@ -135,9 +123,6 @@ public class EditFamilyInformationController {
   // TODO: user should disappear from the view immediately after clicking 'poista jäsenyys' 
   @ActionMapping(params = "action=removeFamilyMember")
   public void removeFamilyMember(@RequestParam String familyMemberSSN, ActionResponse response) {
-    log.info("calling EditFamilyInformationController.removeFamilyMember");
-    log.info("family member ssn: " + familyMemberSSN);
-    
     pyhDemoService.removeFamilyMember(familyMemberSSN);
     
     response.setRenderParameter("action", "editFamilyInformation");
@@ -145,29 +130,19 @@ public class EditFamilyInformationController {
   
   @ActionMapping(params = "action=searchUsers")
   public void searchUsers(ActionRequest request, ActionResponse response) {
-    log.info("calling EditFamilyInformationController.searchUsers");
-    
     String fn = request.getParameter("searchFirstname");
     String sn = request.getParameter("searchSurname");
     String ssn = request.getParameter("searchSSN");
     
-    log.info("etunimi: " + fn);
-    log.info("sukunimi: " + sn);
-    log.info("ssn: " + ssn);
-    
     // call service to query users,
-    // users are returned as an model attribute object searchedUsers
+    // users are returned as a model attribute object searchedUsers
     pyhDemoService.searchUsers(fn, sn, ssn);
     
-    //response.setRenderParameter("action", "editFamilyInformation");
     response.setRenderParameter("action", "editFamilyInformationWithSearchResults");
-    
   }
   
   @ActionMapping(params = "action=addUsersToFamily")
   public void addUsersToFamily(ActionRequest request, ActionResponse response) {
-    log.info("calling EditFamilyInformationController.addUsersToFamily");
-    
     HashMap<String, String> parameterMap = new HashMap<String, String>();
     HashMap<String, String> personMap = new HashMap<String, String>();
     String personSSN = "";
@@ -181,83 +156,25 @@ public class EditFamilyInformationController {
       }
     }
     
-    // log.info("parametrit:");
     Set<String> keys = parameterMap.keySet();
     Iterator<String> si = keys.iterator();
     while (si.hasNext()) {
       String key = si.next();
       if (key.startsWith("userSSN")) {
         String[] tokens = key.split("_");
+        // index is the number after '_' in parameter name, e.g. userSSN_1 (index is 1)
         String index = tokens[1];
-        // log.info("index: " + index);
         
-        // log.info(parameterMap.get(key) + " " + parameterMap.get("userRole_" + index));
         personSSN = parameterMap.get(key);
         personRole = parameterMap.get("userRole_" + index);
-        log.info("adding person: " + personSSN + " " + personRole);
         personMap.put(personSSN, personRole);
       }
     }
-    
-    log.info("person map size " + personMap.size());
-    
-//    String parameterName = "userSSN_" + index;
-//    String value = parameterMap.get(parameterName);
-//    log.info("starting parameterName: " + parameterName);
-//    while (value != null) {
-//      personSSN = parameterMap.get("userSSN_" + index);
-//      personRole = parameterMap.get("userRole_" + index);
-//      log.info("adding user: " + personSSN + " " + personRole);
-//      personMap.put(personSSN, personRole);
-//      
-//    }
-    
-    
-    
-    
-//    String personSSN = "";
-//    String role = "";
-//    //String[] person = {"", ""};
-//    ArrayList<String[]> persons = new ArrayList<String[]>();
-//    
-//    for (Enumeration<String> e = request.getParameterNames(); e.hasMoreElements();) {
-//      String param = e.nextElement();
-//      String paramValue = request.getParameter(param);
-//      
-//      if (param.startsWith("userSSN")) {
-//        personSSN = paramValue;
-//      }
-//      else if (param.startsWith("userRole")) {
-//        role = paramValue;
-//      }
-//      
-//      if (personSSN.equals("") == false && role.equals("") == false) {
-//        log.info("adding: " + personSSN + " " + role);
-//        
-//        String[] person = {personSSN, role};
-////        person[0] = personSSN;
-////        person[1] = role;
-//        persons.add(person);
-//        
-//        personSSN = "";
-//        role = "";
-//      }
-//      
-//      log.info(param + ":" + paramValue);
-//    }
-//    
-//    log.info("adding users:");
-//    Iterator<String[]> si = persons.iterator();
-//    while (si.hasNext()) {
-//      String[] p = si.next();
-//      log.info(p[0] + ", " + p[1]);
-//    }
     
     // call service to add users to family
     pyhDemoService.addPersonsAsFamilyMembers(personMap);
     
     response.setRenderParameter("action", "editFamilyInformation");
-    
   }
   
 }

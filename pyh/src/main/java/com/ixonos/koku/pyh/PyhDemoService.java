@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,6 @@ public class PyhDemoService {
       this.user = new User("010101-1010", "guardian");
       //this.user = new User("030405-3456", "guardian");
     }
-    
   }
   
   public Person getUser() {
@@ -46,7 +46,7 @@ public class PyhDemoService {
         return person;
       }
     }
-    return null; // unrecoverable error; user not found
+    return null; // user not found
   }
   
   public List<Dependant> getDependants() {
@@ -69,19 +69,12 @@ public class PyhDemoService {
         }
       }
     }
-    
-    //log.info("calling PyhDemoService.getDependants: returning dependants.size = " + dependants.size());
     return dependants;
   }
   
   public List<FamilyMember> getOtherFamilyMembers() {
     List<FamilyMember> otherFamilyMembers = new ArrayList<FamilyMember>();
-    
-    //log.info("calling PyhDemoService.getOtherFamilyMembers");
-    //log.info("userSSN: " + user.getSsn());
-    
     Family usersFamily = getUsersFamily();
-    
     List<FamilyMember> fmList = usersFamily.getFamilyMembers();
     
     Iterator<FamilyMember> fmi = fmList.iterator();
@@ -91,15 +84,10 @@ public class PyhDemoService {
         otherFamilyMembers.add(fm);
       }
     }
-    
-    //log.info("PyhDemoService.getOtherFamilyMembers: otherFamilyMembers.size() = " + otherFamilyMembers.size());
-    
     return otherFamilyMembers;
   }
   
   public void searchUsers(String firstname, String surname, String ssn) {
-    log.info("calling PyhDemoService.searchUsers: SEARCHING USERS");
-    
     clearSearchedUsers();
     
     if (firstname.equals("") == false || surname.equals("") == false || ssn.equals("") == false) {
@@ -115,11 +103,6 @@ public class PyhDemoService {
   }
   
   public List<Person> getSearchedUsers() {
-    if (searchedUsers == null) {
-      log.info("returning searchedUsers: null");
-    } else {
-      log.info("returning searchedUsers: NOT null, size: " + searchedUsers.size());
-    }
     return searchedUsers;
   }
   
@@ -137,21 +120,10 @@ public class PyhDemoService {
     dependant.setMemberOfUserFamily(true);
     Family family = getUsersFamily();
     family.addFamilyMember(new FamilyMember(dependant, "lapsi"));
-    
-    // testing
-//    log.info("new family member added, members now are:");
-//    List<FamilyMember> members = family.getFamilyMembers();
-//    Iterator<FamilyMember> fmi = members.iterator();
-//    while (fmi.hasNext()) {
-//      FamilyMember fm = fmi.next();
-//      log.info(fm.getFirstname() + " " + fm.getSurname());
-//    }
   }
   
   public void addNewDependant(Person dependant) {
     model.addPerson(dependant);
-    
-    // TODO: add dependant as user's dependant
     
     // get user's guardianship or create if does not exist
     Guardianship guardianship = model.getGuardianship(user.getSsn());
@@ -161,7 +133,7 @@ public class PyhDemoService {
       guardianship = new Guardianship(dependants, guardians);
       
       Person person = model.getPerson(user.getSsn());
-      // TODO: how to get guardian's role?
+      // TODO: get guardian's role
       guardianship.addGuardian(new Guardian(person, "rooli"));
     }
     guardianship.addDependant(new Dependant(dependant));
@@ -174,12 +146,17 @@ public class PyhDemoService {
   }
   
   public void addPersonsAsFamilyMembers(HashMap<String, String> personMap) {
-    
-    // TODO: add persons in map as family members
-    
-//    Person person = model.getPerson(personSSN);
-//    Family family = getUsersFamily();
-//    family.addFamilyMember(new FamilyMember(person, role));
+    Family family = getUsersFamily();
+    Set<String> keys = personMap.keySet();
+    Iterator<String> si = keys.iterator();
+    while (si.hasNext()) {
+      String ssn = si.next();
+      String role = personMap.get(ssn);
+      log.info("(ssn) " + ssn + " ; (role) " + role);
+      
+      Person person = model.getPerson(ssn);
+      family.addFamilyMember(new FamilyMember(person, role));
+    }
   }
   
   private Family getUsersFamily() {
@@ -189,7 +166,6 @@ public class PyhDemoService {
       if (f.isFamilyMember(user.getSsn())) {
         return f;
       }
-      log.info("-- next family --");
     }
     return null;
   }
