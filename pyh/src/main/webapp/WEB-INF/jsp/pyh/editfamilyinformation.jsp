@@ -25,14 +25,14 @@
 		${dependant.firstname} ${dependant.surname} ${dependant.ssn}
 		<c:choose>
 			<c:when test="${dependant.memberOfUserFamily}">
-				lisätty perheenjäseneksi <br/>
+				Lisätty perheenjäseneksi <br/>
 			</c:when>
 			<c:otherwise>
 				<portlet:actionURL var="addDependantAsFamilyMember">
 					<portlet:param name="action" value="addDependantAsFamilyMember"/>
 					<portlet:param name="dependantSSN" value="${dependant.ssn}"/>
 				</portlet:actionURL>
-				<a href="${addDependantAsFamilyMember}">lisää perheenjäseneksi</a> <br/>
+				<a href="${addDependantAsFamilyMember}">Lisää perheenjäseneksi</a> <br/>
 			</c:otherwise>
 		</c:choose>
 	</c:forEach>
@@ -139,7 +139,7 @@
 		</portlet:actionURL>
 		
 		${familyMember.firstname} ${familyMember.surname} ${familyMember.ssn} (${familyMember.role}) 
-		<a href="${removeFamilyMember}">poista jäsenyys</a> <br/>
+		<a href="${removeFamilyMember}">Poista perheenjäsen</a> <br/>
 		
 	</c:forEach>
 <br/>
