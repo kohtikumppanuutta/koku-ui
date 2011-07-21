@@ -39,12 +39,31 @@
 		<c:if test="${not empty hakutulos }">
 
 			<c:if test="${empty hakutulos.tulokset}">
-                <spring:message code="ui.ei.kirjauksia" />
-            </c:if>
+				<spring:message code="ui.ei.kirjauksia" />
+			</c:if>
 			<c:forEach var="tulos" items="${hakutulos.tulokset}">
 
 				<c:if test="${not empty tulos.nimi}">
-					<h3>${tulos.nimi }</h3>
+					<h3>
+						${tulos.nimi }
+
+						<c:if test="${ not tulos.kokoelmaAktiivinen }">
+							<span class="lukittu"> <strong> (<spring:message
+										code="ui.lukittu" />) </strong> </span>
+						</c:if>
+
+						<c:if test="${ tulos.kokoelmaAktiivinen }">
+							<span class="linkki" style="float: right;"> <a
+								href="
+                        <portlet:renderURL>
+                            <portlet:param name="toiminto" value="naytaKokoelma" />
+                            <portlet:param name="hetu" value="${lapsi.hetu}" />
+                            <portlet:param name="kokoelma" value="${tulos.kokoelmaId }" />
+                        </portlet:renderURL>">
+									<strong><spring:message code="ui.muokkaa" /> </strong> </a> </span>
+
+						</c:if>
+					</h3>
 				</c:if>
 				<c:forEach var="kirjaus" items='${tulos.kirjaukset}'>
 					<div class="kirjaus">

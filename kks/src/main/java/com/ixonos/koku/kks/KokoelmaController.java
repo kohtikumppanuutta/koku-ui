@@ -1,5 +1,7 @@
 package com.ixonos.koku.kks;
 
+import java.util.Date;
+
 import javax.portlet.ActionResponse;
 import javax.portlet.RenderResponse;
 
@@ -19,6 +21,8 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import com.ixonos.koku.kks.malli.DemoService;
 import com.ixonos.koku.kks.malli.Henkilo;
+import com.ixonos.koku.kks.malli.Kirjaus;
+import com.ixonos.koku.kks.malli.KirjausTyyppi;
 import com.ixonos.koku.kks.malli.Kokoelma;
 
 @Controller(value = "kokoelmaController")
@@ -33,8 +37,7 @@ public class KokoelmaController {
 
   @RenderMapping(params = "toiminto=naytaKokoelma")
   public String nayta(@ModelAttribute(value = "lapsi") Henkilo lapsi,
-      @RequestParam(value = "kokoelma") String kokoelma,
-      RenderResponse response, Model model) {
+      @RequestParam(value = "kokoelma") String kokoelma, RenderResponse response, Model model) {
     log.info("nayta kokoelma");
     model.addAttribute("lapsi", lapsi);
     model.addAttribute("kokoelma", lapsi.getKks().getKokoelma(kokoelma));
@@ -43,14 +46,12 @@ public class KokoelmaController {
 
   @ModelAttribute("lapsi")
   public Henkilo getLapsi(@RequestParam(value = "hetu") String hetu) {
-    log.info("getLapsi with hetu=" + hetu);// #TODO# Remove hetu from log
     return demoService.haeLapsi(hetu);
   }
 
   @ActionMapping(params = "toiminto=tallennaKokoelma")
   public void tallenna(@ModelAttribute(value = "lapsi") Henkilo lapsi,
-      @ModelAttribute(value = "kirjaus") Kokoelma kirjaus,
-      BindingResult bindingResult, ActionResponse response,
+      @ModelAttribute(value = "kirjaus") Kokoelma kirjaus, BindingResult bindingResult, ActionResponse response,
       SessionStatus sessionStatus) {
     log.info("tallenna kokoelma");
     lapsi.getKks().poistaKokoelma(kirjaus);
@@ -61,8 +62,7 @@ public class KokoelmaController {
   }
 
   @ModelAttribute("kirjaus")
-  public Kokoelma getCommandObject(
-      @RequestParam(value = "kokoelma") String kokoelma,
+  public Kokoelma getCommandObject(@RequestParam(value = "kokoelma") String kokoelma,
       @RequestParam(value = "hetu") String hetu) {
     log.debug("get sairaus command object");
 
@@ -70,4 +70,78 @@ public class KokoelmaController {
     return lapsi.getKks().getKokoelma(kokoelma);
   }
 
+  @ActionMapping(params = "toiminto=lisaaMoniarvoinen")
+  public void tallennaMoniarvoinen(@ModelAttribute(value = "lapsi") Henkilo lapsi,
+      @RequestParam(value = "kirjausTyyppi") String kirjausTyyppi, @RequestParam(value = "kokoelma") String kokoelma,
+      @RequestParam(value = "kirjausId", required = false) String kirjaus, @RequestParam(value = "arvo") String arvo,
+      ActionResponse response, SessionStatus sessionStatus) {
+    log.info("tallenna moniarvoinen");
+
+    Kokoelma kok = lapsi.getKks().getKokoelma(kokoelma);
+
+    if (kirjaus != null && !"".equals(kirjaus)) {
+      Kirjaus k = kok.getKirjaus(kirjaus);
+      k.setArvo(arvo);
+    } else {
+      KirjausTyyppi t = kok.getTyyppi().getKirjausTyyppi(kirjausTyyppi);
+      if (t != null) {
+        Kirjaus k = new Kirjaus(arvo, new Date(), 1, t.getRekisteri(), "Kaisa Kirjaaja", t);
+        kok.lisaaMoniarvoinenKirjaus(k);
+      }
+
+    }
+    response.setRenderParameter("toiminto", "naytaKokoelma");
+    response.setRenderParameter("hetu", lapsi.getHetu());
+    response.setRenderParameter("kokoelma", kokoelma);
+    sessionStatus.setComplete();
+  }
+
+  @ActionMapping(params = "toiminto=poistaMoniarvoinen")
+  public void poistaMoniarvoinen(@ModelAttribute(value = "lapsi") Henkilo lapsi,
+      @RequestParam(value = "kokoelma") String kokoelma, @RequestParam(value = "kirjausId") String kirjaus,
+      ActionResponse response, SessionStatus sessionStatus) {
+    log.info("poista moniarvoinen");
+
+    Kokoelma kok = lapsi.getKks().getKokoelma(kokoelma);
+
+    if (kirjaus != null && !"".equals(kirjaus)) {
+      kok.poistaMoniarvoinenKirjaus(kirjaus);
+    }
+
+    response.setRenderParameter("toiminto", "naytaKokoelma");
+    response.setRenderParameter("hetu", lapsi.getHetu());
+    response.setRenderParameter("kokoelma", kokoelma);
+    sessionStatus.setComplete();
+  }
+
+  @ActionMapping(params = "toiminto=peruMoniarvoinen")
+  public void peruMoniarvoinen(@ModelAttribute(value = "lapsi") Henkilo lapsi,
+      @RequestParam(value = "kokoelma") String kokoelma, ActionResponse response, SessionStatus sessionStatus) {
+    log.info("peru moniarvoinen");
+
+    response.setRenderParameter("toiminto", "naytaKokoelma");
+    response.setRenderParameter("hetu", lapsi.getHetu());
+    response.setRenderParameter("kokoelma", kokoelma);
+    sessionStatus.setComplete();
+  }
+
+  @RenderMapping(params = "toiminto=naytaMoniarvoinen")
+  public String naytaMoniarvoinen(@ModelAttribute(value = "lapsi") Henkilo lapsi,
+      @RequestParam(value = "kokoelma") String kokoelma,
+      @RequestParam(value = "kirjausTyyppi", required = false) String kirjausTyyppi,
+      @RequestParam(value = "kirjausId", required = false) String kirjaus, RenderResponse response, Model model) {
+    log.info("nayta kokoelma");
+
+    Kokoelma kok = lapsi.getKks().getKokoelma(kokoelma);
+    KirjausTyyppi t = kok.getTyyppi().getKirjausTyyppi(kirjausTyyppi);
+
+    model.addAttribute("lapsi", lapsi);
+    model.addAttribute("kokoelma", kok);
+    model.addAttribute("tyyppi", t);
+
+    if (kirjaus != null && !"".equals(kirjaus)) {
+      model.addAttribute("kirjausArvo", kok.getKirjaus(kirjaus));
+    }
+    return "moniarvoinen";
+  }
 }

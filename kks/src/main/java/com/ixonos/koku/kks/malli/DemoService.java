@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.ixonos.koku.kks.AktivoiKokoelmaController;
 import com.ixonos.koku.kks.mock.Kayttaja;
 import com.ixonos.koku.kks.utils.HakuTulokset;
 
@@ -29,7 +28,7 @@ public class DemoService {
   }
 
   private static Logger log = LoggerFactory.getLogger(DemoService.class);
-  
+
   public boolean onkoLuotu() {
     if (malli != null)
       return true;
@@ -50,11 +49,9 @@ public class DemoService {
     List<Henkilo> list = new ArrayList<Henkilo>();
     Henkilo tmp = haeLapsi(target.getHetu());
 
-    if (tmp != null && tmp.getEtunimi().equals(target.getEtunimi())
-        && tmp.getSukunimi().equals(target.getSukunimi())) {
+    if (tmp != null) {
       list.add(tmp);
     }
-
     return list;
   }
 
@@ -68,22 +65,18 @@ public class DemoService {
   }
 
   /**
-   * Creates a collection, if it hasn't already been created for this person. 
-   * @param h Person
-   * @param nimi Name of the collection
+   * Creates a collection for person
+   * 
+   * @param h
+   *          Person
+   * @param nimi
+   *          Name of the collection
    */
-  public void luoKokoelma(Henkilo h, String nimi) {
-    
-    Kokoelma k = DemoFactory.luoKokoelma(nimi);
+  public Kokoelma luoKokoelma(Henkilo h, String nimi, String tyyppi) {
+    Kokoelma k = DemoFactory.luoKokoelma(nimi, tyyppi);
 
-    // add only if the collection has not been created earlier
-    if (k != null && !(h.getKks().hasKokoelma(nimi))) {
-      
-      h.getKks().lisaaKokoelma(k);
-      log.debug("kokoelma lisatty");
-    } else {
-      log.debug("kokoelmaa ei lisatty, koska se oli jo olemassa");
-    }
+    h.getKks().lisaaKokoelma(k);
+    return k;
   }
 
   public List<String> haeAktivoitavatKokoelmat(Henkilo h) {
@@ -94,25 +87,27 @@ public class DemoService {
       if (!h.getKks().hasKokoelma(nimi))
         nimet.remove(nimi);
     }
-    
+
     return nimet;
   }
 
- /**
-  * This method lists all the possible collections for this person
-  * @param h
-  * @return
-  */
+  /**
+   * This method lists all the possible collections for this person
+   * 
+   * @param h
+   * @return
+   */
   public List<String> haeHenkilonKokoelmat(Henkilo h) {
     List<String> nimet = haeKokoelmaNimet();
-    /* TODO 21.6.2011: There are only 2 collections now and every user has these. 
-     * Some code should be added here so that each person gets only the collections
-     * that he/she might have.
-     */ 
-   
+    /*
+     * TODO 21.6.2011: There are only 2 collections now and every user has
+     * these. Some code should be added here so that each person gets only the
+     * collections that he/she might have.
+     */
+
     return nimet;
   }
-  
+
   // 21.6. this method is probably no longer needed
   public List<String> haeLuotavatKokoelmat(Henkilo h) {
     List<String> nimet = haeKokoelmaNimet();
@@ -123,7 +118,6 @@ public class DemoService {
     return nimet;
   }
 
-  
   public List<String> haeKokoelmaNimet() {
     List<String> tmp = new ArrayList<String>();
     tmp.add(DemoFactory.NELI_VUOTIS_TARKASTUS);
@@ -142,7 +136,7 @@ public class DemoService {
         for (int i = 0; i < luokitus.length && !lisatty; i++) {
           String tmp = luokitus[i];
           if (ki.hasLuokitus(tmp) && !ki.getArvo().equals("")) {
-            tulos.lisaaTulos(k.getNimi(), ki);
+            tulos.lisaaTulos(k, ki);
             lisatty = true;
           }
         }
@@ -157,8 +151,8 @@ public class DemoService {
 
     List<Kokoelma> tmp2 = new ArrayList<Kokoelma>();
 
-    tmp2.add(DemoFactory.luo4VuotisTarkastus());
-    tmp2.add(DemoFactory.luoVarhaiskasvatusSuunnitelma());
+    tmp2.add(DemoFactory.luo4VuotisTarkastus(""));
+    tmp2.add(DemoFactory.luoVarhaiskasvatusSuunnitelma(""));
 
     for (Kokoelma k : tmp2) {
       tmp.add(k.getTyyppi());

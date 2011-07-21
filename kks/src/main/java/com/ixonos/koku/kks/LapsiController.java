@@ -32,9 +32,8 @@ public class LapsiController {
   private static Logger log = LoggerFactory.getLogger(LapsiController.class);
 
   @ActionMapping(params = "toiminto=lapsenTietoihin")
-  public void lapsenTietoihin(@ModelAttribute(value = "lapsi") Henkilo lapsi,
-      BindingResult bindingResult, ActionResponse response,
-      SessionStatus sessionStatus) {
+  public void lapsenTietoihin(@ModelAttribute(value = "lapsi") Henkilo lapsi, BindingResult bindingResult,
+      ActionResponse response, SessionStatus sessionStatus) {
     log.debug("lapsenTietoihin");
 
     response.setRenderParameter("toiminto", "naytaLapsi");
@@ -45,14 +44,14 @@ public class LapsiController {
 
   @RenderMapping(params = "toiminto=naytaLapsi")
   public String nayta(@ModelAttribute(value = "lapsi") Henkilo lapsi,
-      @ModelAttribute(value = "aktivointi") Aktivointi aktivointi,
-      RenderResponse response, Model model) {
+      @ModelAttribute(value = "aktivointi") Aktivointi aktivointi, RenderResponse response, Model model) {
     log.info("nayta lapsi");
     model.addAttribute("lapsi", lapsi);
     model.addAttribute("kokoelmat", lapsi.getKks().getKokoelmat());
-    model.addAttribute("aktivoitavat", demoService.haeHenkilonKokoelmat(lapsi)); // muutettu näin 21.6.
-    
-      
+    model.addAttribute("aktivoitavat", demoService.haeHenkilonKokoelmat(lapsi)); // muutettu
+                                                                                 // näin
+                                                                                 // 21.6.
+
     aktivointi = getCommandObject();
     return "lapsi";
   }

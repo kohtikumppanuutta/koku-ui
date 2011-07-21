@@ -29,7 +29,6 @@
 <div>
 
 	<div style="float: left;">
-
 		<div>
 			<form:form name="guardianForm" method="post" action="${viewChilds}">
 				<input type="submit" value="<spring:message code="ui.nayta.huoltaja"/>" />

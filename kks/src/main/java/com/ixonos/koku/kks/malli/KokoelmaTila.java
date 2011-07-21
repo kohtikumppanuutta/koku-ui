@@ -51,10 +51,6 @@ public class KokoelmaTila {
     if (Tila.LUKITTU.equals(tila))
       return false;
 
-    if (Tila.ESITIEDOT.equals(tila)) {
-      return true;
-    }
-
     if (alkuPvm == null || loppuPvm == null) {
       return true;
     }

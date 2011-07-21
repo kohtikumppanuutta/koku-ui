@@ -1,11 +1,9 @@
 package com.ixonos.koku.kks.utils;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import com.ixonos.koku.kks.malli.Kirjaus;
+import com.ixonos.koku.kks.malli.Kokoelma;
 
 /**
  * Sisältää kirjaushaun tulokset
@@ -21,26 +19,21 @@ public class HakuTulokset {
     tulokset = new LinkedMapWrapper<String, Tulos>();
   }
 
-  public void lisaaTulos(String kokoelma, Kirjaus kirjaus) {
-    if (tulokset.get().containsKey(kokoelma)) {
-      Tulos tmp = tulokset.get().get(kokoelma);
+  public void lisaaTulos(Kokoelma kokoelma, Kirjaus kirjaus) {
+    if (tulokset.get().containsKey(kokoelma.getId())) {
+      Tulos tmp = tulokset.get().get(kokoelma.getId());
       tmp.lisaa(kirjaus);
     } else {
-      Tulos tmp = new Tulos(kokoelma);
+      Tulos tmp = new Tulos(kokoelma.getId());
+      tmp.setNimi(kokoelma.getNimi());
+      tmp.setKokoelmaAktiivinen(kokoelma.getTila().isAktiivinen());
       tmp.lisaa(kirjaus);
-      tulokset.get().put(kokoelma, tmp);
+      tulokset.get().put(kokoelma.getId(), tmp);
     }
   }
 
   public Collection<Tulos> getTulokset() {
     return tulokset.getValues();
-  }
-
-  public void setTulokset(Map<String, List<Kirjaus>> tulokset) {
-    for (Entry<String, List<Kirjaus>> tmp : tulokset.entrySet())
-      for (Kirjaus k : tmp.getValue()) {
-        lisaaTulos(tmp.getKey(), k);
-      }
   }
 
 }

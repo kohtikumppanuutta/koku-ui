@@ -1,4 +1,5 @@
 package com.ixonos.koku.kks;
+
 // TÄTÄ LUOKKAA EI ENÄÄ TARVITA, KUN KOKOELMAN AKTIVOINTI JA LUONTI ON YHDISTETTY AKTIVOINTILUOKKAAN  
 import javax.portlet.ActionResponse;
 
@@ -26,17 +27,15 @@ public class LisaaKokoelmaController {
   @Qualifier("demoKksService")
   private DemoService demoService;
 
-  private static Logger log = LoggerFactory
-      .getLogger(LisaaKokoelmaController.class);
+  private static Logger log = LoggerFactory.getLogger(LisaaKokoelmaController.class);
 
   @ActionMapping(params = "toiminto=luoKokoelma")
   public void aktivoi(@ModelAttribute(value = "lapsi") Henkilo lapsi,
-      @ModelAttribute(value = "aktivointi") Aktivointi aktivointi,
-      BindingResult bindingResult, ActionResponse response,
-      SessionStatus sessionStatus) {
+      @ModelAttribute(value = "aktivointi") Aktivointi aktivointi, BindingResult bindingResult,
+      ActionResponse response, SessionStatus sessionStatus) {
     log.debug("luoKokoelma");
 
-    demoService.luoKokoelma(lapsi, aktivointi.getAktivoitavaKentta());
+    // demoService.luoKokoelma(lapsi, aktivointi.getAktivoitavaKentta());
     response.setRenderParameter("toiminto", "naytaLapsi");
     response.setRenderParameter("hetu", lapsi.getHetu());
     aktivointi = getCommandObject();

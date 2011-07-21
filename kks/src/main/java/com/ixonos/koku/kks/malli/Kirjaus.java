@@ -12,6 +12,8 @@ import java.util.List;
  */
 public class Kirjaus {
 
+  private static int idGenerator = 0;
+  private String id;
   private String arvo;
   private Date luontiAika;
   private String kirjaaja;
@@ -21,9 +23,9 @@ public class Kirjaus {
   private List<Luokitus> luokitukset;
   private List<String> arvot;
 
-  public Kirjaus(String arvo, Date luontiAika, int versio, String rekisteri,
-      String kirjaaja, KirjausTyyppi tyyppi) {
+  public Kirjaus(String arvo, Date luontiAika, int versio, String rekisteri, String kirjaaja, KirjausTyyppi tyyppi) {
     super();
+    this.id = "" + idGenerator++;
     this.arvo = arvo;
     this.luontiAika = luontiAika;
     this.versio = versio;
@@ -115,6 +117,14 @@ public class Kirjaus {
     }
     return false;
 
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 
 }

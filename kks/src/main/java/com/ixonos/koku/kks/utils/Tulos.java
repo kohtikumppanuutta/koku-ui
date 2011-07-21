@@ -13,11 +13,14 @@ import com.ixonos.koku.kks.malli.Kirjaus;
  */
 public class Tulos {
 
+  private String kokoelmaId;
+  private boolean kokoelmaAktiivinen;
+
   private String nimi;
   private List<Kirjaus> kirjaukset;
 
-  public Tulos(String nimi) {
-    this.nimi = nimi;
+  public Tulos(String id) {
+    this.kokoelmaId = id;
     kirjaukset = new ArrayList<Kirjaus>();
   }
 
@@ -32,4 +35,21 @@ public class Tulos {
   public void lisaa(Kirjaus k) {
     kirjaukset.add(k);
   }
+
+  public String getKokoelmaId() {
+    return kokoelmaId;
+  }
+
+  public void setNimi(String nimi) {
+    this.nimi = nimi;
+  }
+
+  public boolean isKokoelmaAktiivinen() {
+    return kokoelmaAktiivinen;
+  }
+
+  public void setKokoelmaAktiivinen(boolean kokoelmaAktiivinen) {
+    this.kokoelmaAktiivinen = kokoelmaAktiivinen;
+  }
+
 }

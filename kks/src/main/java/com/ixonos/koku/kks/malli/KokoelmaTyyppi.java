@@ -85,4 +85,12 @@ public class KokoelmaTyyppi {
     return kirjausRyhmat;
   }
 
+  public KirjausTyyppi getKirjausTyyppi(String id) {
+    for (KirjausTyyppi k : kirjausTyypit) {
+      if (k.getKoodi().equals(id)) {
+        return k;
+      }
+    }
+    return null;
+  }
 }

@@ -35,11 +35,9 @@
 			action="${hakuActionUrl}">
 			<span class="pvm"> <spring:message code="ui.hae.lapsen.tiedot" /> </span>
 
-			<span class="pvm"> <spring:message code="ui.form.etunimi" />
-				<form:input path="etunimi" /> <span class="errors"><form:errors
-						path="etunimi" /> </span> <spring:message code="ui.form.sukunimi" /> <form:input
-					path="sukunimi" /> <span class="errors"><form:errors
-						path="sukunimi" /> </span> <spring:message code="ui.form.hetu" /> <form:input
+			<span class="pvm"> 
+			
+			<spring:message code="ui.form.hetu" /> <form:input
 					path="hetu" /> <span class="errors"><form:errors
 						path="hetu" /> </span> <input type="submit" value="<spring:message code="ui.hae.tiedot"/>" >
 			</span>

@@ -1,9 +1,5 @@
 package com.ixonos.koku.kks;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.portlet.ActionResponse;
 
 import org.slf4j.Logger;
@@ -33,50 +29,41 @@ public class AktivoiKokoelmaController {
   @Qualifier("demoKksService")
   private DemoService demoService;
 
-  private static Logger log = LoggerFactory
-      .getLogger(AktivoiKokoelmaController.class);
+  private static Logger log = LoggerFactory.getLogger(AktivoiKokoelmaController.class);
 
   @ActionMapping(params = "toiminto=aktivoiKokoelma")
   public void aktivoi(@ModelAttribute(value = "lapsi") Henkilo lapsi,
-      @ModelAttribute(value = "aktivointi") Aktivointi aktivointi,
-      BindingResult bindingResult, ActionResponse response,
-      SessionStatus sessionStatus) {
-    
+      @ModelAttribute(value = "aktivointi") Aktivointi aktivointi, BindingResult bindingResult,
+      ActionResponse response, SessionStatus sessionStatus) {
+
     // create a new collection if it hasn't been created earlier
     log.debug("luoKokoelma");
 
-    demoService.luoKokoelma(lapsi, aktivointi.getAktivoitavaKentta());
-    
-    
+    String nimi = "".equals(aktivointi.getNimi()) ? aktivointi.getAktivoitavaKentta() : aktivointi.getNimi();
+    Kokoelma kokoelma = demoService.luoKokoelma(lapsi, nimi, aktivointi.getAktivoitavaKentta());
+
     // activate the collection for a given time period
     log.debug("aktivoi kokoelma");
-
-    Kokoelma kokoelma = lapsi.getKks().getKokoelma(
-        aktivointi.getAktivoitavaKentta());
 
     if (kokoelma != null) {
       KokoelmaTila tila = kokoelma.getTila();
       tila.setTila(Tila.AKTIIVINEN);
 
-      SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
-      try {
-
-        if (aktivointi.getAlkaa() == null
-            || "".equals(aktivointi.getAlkaa().trim())) {
-          tila.setAlkuPvm(new Date());
-        } else {
-          tila.setAlkuPvm(dateFormat.parse(aktivointi.getAlkaa()));
-        }
-        if (aktivointi.getAlkaa() == null
-            || "".equals(aktivointi.getLoppuu().trim())) {
-          tila.setLoppuPvm(new Date());
-        } else {
-
-          tila.setLoppuPvm(dateFormat.parse(aktivointi.getLoppuu()));
-        }
-      } catch (ParseException e) {
-      }
+      /*
+       * SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+       * 
+       * try {
+       * 
+       * if (aktivointi.getAlkaa() == null ||
+       * "".equals(aktivointi.getAlkaa().trim())) { tila.setAlkuPvm(new Date());
+       * } else { tila.setAlkuPvm(dateFormat.parse(aktivointi.getAlkaa())); } if
+       * (aktivointi.getAlkaa() == null ||
+       * "".equals(aktivointi.getLoppuu().trim())) { tila.setLoppuPvm(new
+       * Date()); } else {
+       * 
+       * tila.setLoppuPvm(dateFormat.parse(aktivointi.getLoppuu())); } } catch
+       * (ParseException e) { }
+       */
 
     }
     response.setRenderParameter("toiminto", "naytaLapsi");
@@ -84,6 +71,8 @@ public class AktivoiKokoelmaController {
     aktivointi = getCommandObject();
     aktivointi.setAlkaa("");
     aktivointi.setLoppuu("");
+    aktivointi.setNimi("");
+    aktivointi.setAktivoitavaKentta("");
     sessionStatus.setComplete();
   }
 
@@ -97,5 +86,41 @@ public class AktivoiKokoelmaController {
   public Aktivointi getCommandObject() {
     log.debug("get aktivointi command object");
     return new Aktivointi();
+  }
+
+  @ActionMapping(params = "toiminto=aktivoi")
+  public void aktivoi(@ModelAttribute(value = "lapsi") Henkilo lapsi,
+      @RequestParam(value = "kokoelma") String kokoelma, ActionResponse response, SessionStatus sessionStatus) {
+    Kokoelma k = lapsi.getKks().getKokoelma(kokoelma);
+
+    // activate the collection for a given time period
+    log.debug("aktivoi kokoelma");
+
+    if (k != null) {
+      KokoelmaTila tila = k.getTila();
+      tila.setTila(Tila.AKTIIVINEN);
+    }
+
+    response.setRenderParameter("toiminto", "naytaLapsi");
+    response.setRenderParameter("hetu", lapsi.getHetu());
+    sessionStatus.setComplete();
+  }
+
+  @ActionMapping(params = "toiminto=lukitse")
+  public void lukitse(@ModelAttribute(value = "lapsi") Henkilo lapsi,
+      @RequestParam(value = "kokoelma") String kokoelma, ActionResponse response, SessionStatus sessionStatus) {
+    Kokoelma k = lapsi.getKks().getKokoelma(kokoelma);
+
+    // activate the collection for a given time period
+    log.debug("aktivoi kokoelma");
+
+    if (k != null) {
+      KokoelmaTila tila = k.getTila();
+      tila.setTila(Tila.LUKITTU);
+    }
+
+    response.setRenderParameter("toiminto", "naytaLapsi");
+    response.setRenderParameter("hetu", lapsi.getHetu());
+    sessionStatus.setComplete();
   }
 }

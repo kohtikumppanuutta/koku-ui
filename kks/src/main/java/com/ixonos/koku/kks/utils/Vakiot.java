@@ -15,6 +15,7 @@ public class Vakiot {
   public final static String KEHITYSASIATYYPPI_PALAUTE = "palaute";
   public final static String KEHITYSASIATYYPPI_LAHETE = "lähete";
   public final static String KEHITYSASIATYYPPI_TOIVE = "toive";
+  public final static String KEHITYSASIATYYPPI_KAYNTI = "kaynti";
 
   public final static String LUOKITUS_KUMPPANUUS = "kumppanuus";
 
@@ -54,6 +55,12 @@ public class Vakiot {
   public final static String LUOKITUS_KOTI = "koti";
   public final static String LUOKITUS_VANHEMPIEN_ARVOSTAMAT_ASIAT = "koti.vanhempien_arvostamat_asiat";
   public final static String LUOKITUS_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET = "koti.vanhempien_kasvatukselliset_tavoitteet";
+
+  public final static String LUOKITUS_MITTAUS = "mittaus";
+
+  public final static String LUOKITUS_HAVAINTO = "havainto";
+  public final static String LUOKITUS_KOMMENTTI = "kommentti";
+  public final static String LUOKITUS_TAVOITE = "tavoite";
 
   public static String kehitysasiaLajit() {
     StringBuffer sb = new StringBuffer();

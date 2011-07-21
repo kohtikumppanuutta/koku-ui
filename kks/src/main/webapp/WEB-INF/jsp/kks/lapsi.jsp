@@ -50,14 +50,17 @@
 		<spring:message code="ui.kks.otsikko" />
 	</h1>
 
-	<div >
+	<div>
 		<table width="100%" border="0">
 			<tr>
-				<th align="left"><spring:message code="ui.tietokokoelma" /></th>
-				<th align="left"><spring:message code="ui.viimeisin.kirjaus" /></th>
+				<th align="left"><spring:message code="ui.tietokokoelma" />
+				</th>
+				<th align="left"><spring:message code="ui.viimeisin.kirjaus" />
+				</th>
 
 				<c:if test="${ sessionScope.ammattilainen }">
-					<th align="left"><spring:message code="ui.kirjausten.tila" /></th>
+					<th align="left"><spring:message code="ui.kirjausten.tila" />
+					</th>
 				</c:if>
 			</tr>
 
@@ -74,26 +77,43 @@
 						<portlet:renderURL>
 							<portlet:param name="toiminto" value="naytaKokoelma" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
-							<portlet:param name="kokoelma" value="${tieto.nimi}" />
+							<portlet:param name="kokoelma" value="${tieto.id}" />
 						</portlet:renderURL>">
-										<strong>${ tieto.nimi }</strong> </a> </span></td>
-							<td>${ tieto.muokkaaja } <fmt:formatDate
-									pattern="dd/MM/yyyy" value="${ tieto.luontiAika }" />
+										<strong>${ tieto.nimi }</strong> </a> </span>
 							</td>
+							<td>${ tieto.muokkaaja } <fmt:formatDate
+									pattern="dd/MM/yyyy" value="${ tieto.luontiAika }" /></td>
 
 							<c:if test="${ sessionScope.ammattilainen }">
 								<td><c:choose>
 										<c:when test="${tieto.tila.aktiivinen}">
-										<spring:message code="ui.aktiivinen" /> <fmt:formatDate pattern="dd/MM/yyyy"
-												value="${ tieto.tila.alkuPvm }" /> - <fmt:formatDate
-												pattern="dd/MM/yyyy" value="${ tieto.tila.loppuPvm }" />
+											<spring:message code="ui.aktiivinen" />
+											<span class="linkki"> <a
+												href="
+							                        <portlet:actionURL>
+							                            <portlet:param name="toiminto" value="lukitse" />
+							                            <portlet:param name="hetu" value="${lapsi.hetu}" />
+							                            <portlet:param name="kokoelma" value="${tieto.id}" />
+							                        </portlet:actionURL>">
+													<strong><spring:message code="ui.lukitse" />
+												</strong> </a> </span>
 										</c:when>
 										<c:otherwise>
-										<spring:message code="ui.lukittu" /> (<spring:message code="ui.voimassa.viimeksi" /> <fmt:formatDate
-												pattern="dd/MM/yyyy" value="${ tieto.tila.alkuPvm }" /> - <fmt:formatDate
-												pattern="dd/MM/yyyy" value="${ tieto.tila.loppuPvm }" />)
-									</c:otherwise>
-									</c:choose></td>
+											<spring:message code="ui.lukittu" />
+											
+											<span class="linkki"> <a
+                                                href="
+                                                    <portlet:actionURL>
+                                                        <portlet:param name="toiminto" value="aktivoi" />
+                                                        <portlet:param name="hetu" value="${lapsi.hetu}" />
+                                                        <portlet:param name="kokoelma" value="${tieto.id}" />
+                                                    </portlet:actionURL>">
+                                                    <strong><spring:message code="ui.aktivoi" />
+                                                </strong> </a> </span>
+											
+										</c:otherwise>
+									</c:choose>
+								</td>
 							</c:if>
 						</tr>
 					</c:if>
@@ -101,57 +121,80 @@
 			</c:if>
 
 		</table>
-<br/>
+		<br />
 		<div class="kokoelma">
-			<span class="linkki"> <a href="
+			<span class="linkki"> <a
+				href="
                         <portlet:actionURL>
                             <portlet:param name="toiminto" value="haeKirjauksia" />
                             <portlet:param name="hetu" value="${lapsi.hetu}" />
                             <portlet:param name="luokitus" value="terveydentila" />
                             <portlet:param name="kuvaus" value="Terveydentila" />
                         </portlet:actionURL>">
-					<strong><spring:message code="ui.terveydentila" /></strong> </a> </span><br/>
-			         <span class="linkki"> <a href="
+					<strong><spring:message code="ui.terveydentila" />
+				</strong> </a> </span><br /> 
+				
+			   
+            <span class="linkki"> <a
+                href="
+                        <portlet:actionURL>
+                            <portlet:param name="toiminto" value="haeKirjauksia" />
+                            <portlet:param name="hetu" value="${lapsi.hetu}" />
+                            <portlet:param name="luokitus" value="mittaus" />
+                            <portlet:param name="kuvaus" value="Mittaukset" />
+                        </portlet:actionURL>">
+                    <strong><spring:message code="ui.mittaus" />
+                </strong> </a> </span><br /> 
+                	
+			<span class="linkki"> <a
+				href="
                         <portlet:actionURL>
                             <portlet:param name="toiminto" value="haeKirjauksia" />
                             <portlet:param name="hetu" value="${lapsi.hetu}" />
                             <portlet:param name="luokitus" value="koti" />
                             <portlet:param name="kuvaus" value="Kasvatusta ohjaavat tiedot" />
                         </portlet:actionURL>">
-                    <strong><spring:message code="ui.lapsen.kasvatus" /></strong> </a> </span><br/>
-                    
-                     <span class="linkki"> <a href="
+					<strong><spring:message code="ui.lapsen.kasvatus" />
+				</strong> </a> </span><br /> <span class="linkki"> <a
+				href="
                         <portlet:actionURL>
                             <portlet:param name="toiminto" value="haeKirjauksia" />
                             <portlet:param name="hetu" value="${lapsi.hetu}" />
                             <portlet:param name="luokitus" value="tuen_tarve, huolenaiheet" />
                             <portlet:param name="kuvaus" value="Tuen tarve" />
                         </portlet:actionURL>">
-                    <strong><spring:message code="ui.tuen.tarpeet" /></strong> </a> </span>	<br/>
-                    
-                    <c:if test="${ sessionScope.ammattilainen }">
-                    
-                    <span class="linkki"> <a href="
+					<strong><spring:message code="ui.tuen.tarpeet" />
+				</strong> </a> </span> <br />
+
+			<c:if test="${ sessionScope.ammattilainen }">
+
+				<span class="linkki"> <a
+					href="
                         <portlet:actionURL>
                             <portlet:param name="toiminto" value="haeKirjauksia" />
                             <portlet:param name="hetu" value="${lapsi.hetu}" />
                             <portlet:param name="luokitus" value="palaute" />
                             <portlet:param name="kuvaus" value="Palautteet" />
                         </portlet:actionURL>">
-                    <strong><spring:message code="ui.palautteet" /></strong> </a> </span>  <br/>
-                    
-                    
-                    <span class="linkki"> <a href="
+						<strong><spring:message code="ui.palautteet" />
+					</strong> </a> </span>
+				<br />
+
+
+				<span class="linkki"> <a
+					href="
                         <portlet:actionURL>
                             <portlet:param name="toiminto" value="haeKirjauksia" />
                             <portlet:param name="hetu" value="${lapsi.hetu}" />
                             <portlet:param name="luokitus" value="toive" />
                             <portlet:param name="kuvaus" value="Toiveet" />
                         </portlet:actionURL>">
-                    <strong><spring:message code="ui.toiveet" /></strong> </a> </span>  <br/>
-                    
-                    
-                    </c:if>	
+						<strong><spring:message code="ui.toiveet" />
+					</strong> </a> </span>
+				<br />
+
+
+			</c:if>
 		</div>
 
 		<br />
@@ -161,7 +204,7 @@
 
 			<div class="kokoelma">
 				<c:if test="${ sessionScope.ammattilainen }">
-					<a class="tieto"> <spring:message code="ui.aktivoi.kokoelma" /><span
+					<a class="tieto"> <spring:message code="ui.sopimus.uusi" /><span
 						class="sulje"><spring:message code="ui.piilota" /> </span> </a>
 					<div class="tietokentta ">
 
@@ -169,31 +212,28 @@
 							method="post" action="${aktivointiActionUrl}">
 
 							<div>
-								<br> <spring:message code="ui.aktivoi.uusi"/> <span class="pvm">
-									<form:select path="aktivoitavaKentta" class="kokoelmavalinta">
+								<spring:message code="ui.sopimus.nimi" />
+								<span class="pvm"><form:input path="nimi" />
+								</span>
+							</div>
+							<div>
+								<br>
+								<spring:message code="ui.sopimus.tyyppi" />
+								<span class="pvm"> <form:select path="aktivoitavaKentta"
+										class="kokoelmavalinta">
 
 										<form:option value="" label="" />
-
-
 										<c:forEach var="kokoelma" items="${aktivoitavat}">
 											<form:option value="${kokoelma}" label="${ kokoelma }" />
 										</c:forEach>
 									</form:select> </span>
-									
+
 							</div>
 							<br />
-							<div>
-								<spring:message code="ui.aktiivinen.kirjaus.aika"/>
 
-								<form:input path="alkaa" />
-								<strong>-</strong>
-								<form:input path="loppuu" />
 
-							</div>
-							
-								
-							<span class="viestintiedot"> <input type="submit"
-								class="tallenna" value="<spring:message code="ui.aktivoi.kokoelma"/>"> </span>
+							<span> <input type="submit"
+								value="<spring:message code="ui.sopimus.tallenna"/>"> </span>
 						</form:form>
 
 					</div>

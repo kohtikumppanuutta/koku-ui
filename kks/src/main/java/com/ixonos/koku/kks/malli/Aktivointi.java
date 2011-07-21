@@ -8,6 +8,8 @@ package com.ixonos.koku.kks.malli;
  */
 public class Aktivointi {
 
+  private String nimi;
+
   private String aktivoitavaKentta;
 
   private String alkaa;
@@ -36,6 +38,14 @@ public class Aktivointi {
 
   public void setLoppuu(String loppuu) {
     this.loppuu = loppuu;
+  }
+
+  public String getNimi() {
+    return nimi;
+  }
+
+  public void setNimi(String nimi) {
+    this.nimi = nimi;
   }
 
 }

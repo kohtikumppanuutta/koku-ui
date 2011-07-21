@@ -11,9 +11,10 @@ import com.ixonos.koku.kks.utils.enums.Tietotyyppi;
  */
 public class KirjausTyyppi {
 
-  private int koodi;
+  private String koodi;
   private String nimi;
   private String kuvaus;
+  private String luontiKuvaus;
   private boolean moniArvoinen;
   private Tietotyyppi tietoTyyppi;
   private List<String> arvoJoukko;
@@ -24,11 +25,10 @@ public class KirjausTyyppi {
   private List<Luokitus> luokitukset;
   private List<Luokitus> kehitysasiaTyypit;
 
-  public KirjausTyyppi(int koodi, String nimi, String kuvaus,
-      boolean moniArvoinen, Tietotyyppi tietoTyyppi, List<String> arvoJoukko,
-      String vastuutaho, String rekisteri, String ryhma, String tayttaja) {
+  public KirjausTyyppi(int koodi, String nimi, String kuvaus, boolean moniArvoinen, Tietotyyppi tietoTyyppi,
+      List<String> arvoJoukko, String vastuutaho, String rekisteri, String ryhma, String tayttaja) {
     super();
-    this.koodi = koodi;
+    this.koodi = "" + koodi;
     this.nimi = nimi;
     this.kuvaus = kuvaus;
     this.moniArvoinen = moniArvoinen;
@@ -40,11 +40,11 @@ public class KirjausTyyppi {
     this.tayttaja = tayttaja;
   }
 
-  public int getKoodi() {
+  public String getKoodi() {
     return koodi;
   }
 
-  public void setKoodi(int koodi) {
+  public void setKoodi(String koodi) {
     this.koodi = koodi;
   }
 
@@ -178,4 +178,13 @@ public class KirjausTyyppi {
     }
     return sb.toString();
   }
+
+  public String getLuontiKuvaus() {
+    return luontiKuvaus;
+  }
+
+  public void setLuontiKuvaus(String luontiKuvaus) {
+    this.luontiKuvaus = luontiKuvaus;
+  }
+
 }

@@ -20,24 +20,24 @@ public class KKS {
 
   public void lisaaKokoelma(Kokoelma k) {
     assert k != null : "Kokoelma on null";
-    kokoelmat.put(k.getNimi(), k);
+    kokoelmat.put(k.getId(), k);
   }
 
   public void poistaKokoelma(Kokoelma k) {
     assert k != null : "Ei voi poistaa tyhjää kokoelmaa";
-    kokoelmat.remove(k.getNimi());
+    kokoelmat.remove(k.getId());
   }
 
-  public Kokoelma getKokoelma(String nimi) {
-    assert nimi != null : "Kokoelmaa yritetään hakea null nimellä";
-    return kokoelmat.get(nimi);
+  public Kokoelma getKokoelma(String id) {
+    assert id != null : "Kokoelmaa yritetään hakea null nimellä";
+    return kokoelmat.get(id);
   }
 
   public List<Kokoelma> getKokoelmat() {
     return new ArrayList<Kokoelma>(kokoelmat.values());
   }
 
-  public boolean hasKokoelma(String nimi) {
-    return kokoelmat.containsKey(nimi);
+  public boolean hasKokoelma(String id) {
+    return kokoelmat.containsKey(id);
   }
 }

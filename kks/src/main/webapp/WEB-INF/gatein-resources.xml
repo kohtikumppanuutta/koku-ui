@@ -4,8 +4,8 @@
 	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_0">
 	
 	<portlet-skin>
-		<!-- <application-name>kks-portlets</application-name>-->
-		<application-name>kks-portlet-0.0.1-SNAPSHOT</application-name> 
+		<application-name>koku-portlets</application-name>
+		<!--<application-name>kks-portlet-0.0.1-SNAPSHOT</application-name> -->
 		<portlet-name>KKS</portlet-name>
 		<skin-name>Default</skin-name>
 		<css-path>/skin/kks-style.CSS</css-path>
