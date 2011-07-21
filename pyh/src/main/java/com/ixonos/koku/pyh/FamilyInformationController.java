@@ -16,7 +16,7 @@ import com.ixonos.koku.pyh.model.FamilyMember;
 import com.ixonos.koku.pyh.model.Person;
 
 /**
- * Controller for showing user's family information.
+ * Controller for viewing user's family information.
  * This is the controller for the main view of PYH portlet.
  * 
  * @author hurulmi
@@ -34,14 +34,12 @@ public class FamilyInformationController {
   private PyhDemoService pyhDemoService;
   
   @RenderMapping(params="action=guardianFamilyInformation")
-  public String render()
-  {
-    //pyhDemoService.clearSearchedUsers();
+  public String render() {
     return "familyinformation";
   }
   
   /**
-   * Returns the current (login) user and adds it to the model.
+   * Sets the current (login) user as a model attribute.
    * @return
    */
   @ModelAttribute(value = "user")
@@ -50,7 +48,7 @@ public class FamilyInformationController {
   }
   
   /**
-   * Returns user's children whose guardian the user is.
+   * Sets the user's dependants as a model attribute.
    * @return
    */
   @ModelAttribute(value = "dependants")
@@ -59,7 +57,8 @@ public class FamilyInformationController {
   }
   
   /**
-   * Returns all members of the user's family.
+   * Sets other family members as a model attribute.
+   * Other family members means all other except the user and user's dependants.
    * @return
    */
   @ModelAttribute(value = "otherFamilyMembers")

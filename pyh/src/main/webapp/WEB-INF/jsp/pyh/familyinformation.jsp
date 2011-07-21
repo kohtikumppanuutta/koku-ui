@@ -4,10 +4,6 @@
 
 <portlet:defineObjects/>
 
-<%-- this boolean defines if the user is a guardian and whether guardian specific information should be displayed --%> 
-<%-- TODO: get user's role and enable this flag if the user is a guardian --%>
-<c:set var="guardian" value="${true}" scope="session"/>
-
 <div>
 
 <h1>Omat tiedot</h1> 

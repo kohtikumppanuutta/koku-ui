@@ -81,19 +81,6 @@ public class EditFamilyInformationController {
     return pyhDemoService.getSearchedUsers();
   }
   
-  /* this method is not used, before removing it make sure it's not needed
-  
-  @ActionMapping(params = "action=removeDependant")
-  public void removeDependat(@RequestParam String dependantSSN, ActionResponse response) {
-    log.info("calling EditFamilyInformationController.removeDependant");
-    log.info("dependant ssn: " + dependantSSN);
-    
-    // TODO: call service to remove guardian's dependant
-    
-    response.setRenderParameter("action", "editFamilyInformation");
-  }
-  */
-  
   @ActionMapping(params = "action=addDependantAsFamilyMember")
   public void addDependantAsFamilyMember(@RequestParam String dependantSSN, ActionResponse response) {
     pyhDemoService.addDependantAsFamilyMember(dependantSSN);

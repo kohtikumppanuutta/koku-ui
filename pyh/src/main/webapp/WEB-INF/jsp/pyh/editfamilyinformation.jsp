@@ -22,15 +22,6 @@
 	Huollettavat lapset: <br/>
 	<c:forEach var="dependant" items="${dependants}">
 		
-		<%-- this feature is not used, do not remove the commented code before we are sure we don't need this --%>
-		<%--
-		<portlet:actionURL var="removeDependant">
-			<portlet:param name="action" value="removeDependant"/>
-			<portlet:param name="dependantSSN" value="${dependant.ssn}"/>
-		</portlet:actionURL>
-		${dependant.firstname} ${dependant.surname} ${dependant.ssn} <a href="${removeDependant}">poista huoltajuus</a> <br/>
-		--%>
-		
 		${dependant.firstname} ${dependant.surname} ${dependant.ssn}
 		<c:choose>
 			<c:when test="${dependant.memberOfUserFamily}">
@@ -258,7 +249,4 @@ LISÄÄ KÄYTTÄJIÄ PERHEYHTEISÖÖSI <br/>
 	}
 	
 </script>
-
-
-
 

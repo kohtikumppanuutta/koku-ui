@@ -38,15 +38,7 @@ public class PyhDemoService {
   }
   
   public Person getUser() {
-    List<Person> persons = model.getPersons();
-    Iterator<Person> pi = persons.iterator();
-    while (pi.hasNext()) {
-      Person person = pi.next();
-      if (person.getSsn().equals(user.getSsn())) {
-        return person;
-      }
-    }
-    return null; // user not found
+    return model.getPerson(user.getSsn());
   }
   
   public List<Dependant> getDependants() {

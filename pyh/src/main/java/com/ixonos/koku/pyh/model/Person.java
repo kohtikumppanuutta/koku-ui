@@ -29,8 +29,8 @@ public class Person {
     this.middlename = middlename;
     this.surname = surname;
     this.ssn = ssn;
-    this.birthdate = "";
-    this.email = "";
+    this.birthdate = birthdate;
+    this.email = email;
   }
   
   public Person(Person p) {

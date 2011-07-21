@@ -5,7 +5,7 @@ public class Guardian extends Person {
   private String guardianRole;
   
   public Guardian(Person person, String guardianRole) {
-    super(person.getFirstname(), person.getMiddlename(), person.getSurname(), person.getSsn(), person.getBirthdate(), "");
+    super(person.getFirstname(), person.getMiddlename(), person.getSurname(), person.getSsn(), person.getBirthdate(), person.getEmail());
     this.guardianRole = guardianRole;
   }
   
