@@ -72,6 +72,7 @@ public class Vakiot {
     sb.append(KEHITYSASIATYYPPI_PALAUTE + "</br>");
     sb.append(KEHITYSASIATYYPPI_LAHETE + "</br>");
     sb.append(KEHITYSASIATYYPPI_TOIVE + "</br>");
+    sb.append(KEHITYSASIATYYPPI_KAYNTI + "</br>");
 
     return sb.toString();
   }
@@ -117,7 +118,9 @@ public class Vakiot {
     sb.append(LUOKITUS_KOTI + "</br>");
     sb.append(LUOKITUS_VANHEMPIEN_ARVOSTAMAT_ASIAT + "</br>");
     sb.append(LUOKITUS_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET + "</br>");
-
+    sb.append(LUOKITUS_HAVAINTO + "</br>");
+    sb.append(LUOKITUS_KOMMENTTI + "</br>");
+    sb.append(LUOKITUS_TAVOITE + "</br>");
     return sb.toString();
   }
 }

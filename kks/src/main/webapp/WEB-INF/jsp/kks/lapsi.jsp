@@ -9,6 +9,18 @@
 
 <fmt:setBundle basename="com.ixonos.eservices.koku.bundle.KokuBundle" />
 
+<script type="text/javascript">
+	function insertSelection() {
+		var str = document.getElementById("kks.select").value;
+
+		if (str == "") {
+			document.getElementById("kks.nimi").value = "";
+		} else {
+			document.getElementById("kks.nimi").value = str.split("#", 10)[2];
+		}
+	}
+</script>
+
 
 <portlet:defineObjects />
 
@@ -53,8 +65,7 @@
 	<div>
 		<table width="100%" border="0">
 			<tr>
-				<th align="left"><spring:message code="ui.tietokokoelma" />
-				</th>
+				<th align="left"><spring:message code="ui.tietokokoelma" /></th>
 				<th align="left"><spring:message code="ui.viimeisin.kirjaus" />
 				</th>
 
@@ -79,10 +90,10 @@
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
 							<portlet:param name="kokoelma" value="${tieto.id}" />
 						</portlet:renderURL>">
-										<strong>${ tieto.nimi }</strong> </a> </span>
-							</td>
+										<strong>${ tieto.nimi }</strong> </a> </span></td>
 							<td>${ tieto.muokkaaja } <fmt:formatDate
-									pattern="dd/MM/yyyy" value="${ tieto.luontiAika }" /></td>
+									pattern="dd/MM/yyyy" value="${ tieto.luontiAika }" />
+							</td>
 
 							<c:if test="${ sessionScope.ammattilainen }">
 								<td><c:choose>
@@ -95,25 +106,27 @@
 							                            <portlet:param name="hetu" value="${lapsi.hetu}" />
 							                            <portlet:param name="kokoelma" value="${tieto.id}" />
 							                        </portlet:actionURL>">
-													<strong><spring:message code="ui.lukitse" />
-												</strong> </a> </span>
+													<strong><spring:message code="ui.lukitse" /> </strong> </a> </span>
 										</c:when>
 										<c:otherwise>
-											<spring:message code="ui.lukittu" />
-											
-											<span class="linkki"> <a
-                                                href="
-                                                    <portlet:actionURL>
-                                                        <portlet:param name="toiminto" value="aktivoi" />
-                                                        <portlet:param name="hetu" value="${lapsi.hetu}" />
-                                                        <portlet:param name="kokoelma" value="${tieto.id}" />
-                                                    </portlet:actionURL>">
-                                                    <strong><spring:message code="ui.aktivoi" />
-                                                </strong> </a> </span>
-											
+
+
+											<c:if test="${ not tieto.versioitu }">
+												<spring:message code="ui.lukittu" />
+												<span class="linkki"> <a
+													href="
+	                                                    <portlet:actionURL>
+	                                                        <portlet:param name="toiminto" value="aktivoi" />
+	                                                        <portlet:param name="hetu" value="${lapsi.hetu}" />
+	                                                        <portlet:param name="kokoelma" value="${tieto.id}" />
+	                                                    </portlet:actionURL>">
+														<strong><spring:message code="ui.aktivoi" /> </strong> </a> </span>
+											</c:if>
+											<c:if test="${ tieto.versioitu }">
+												<spring:message code="ui.versioitu" />
+											</c:if>
 										</c:otherwise>
-									</c:choose>
-								</td>
+									</c:choose></td>
 							</c:if>
 						</tr>
 					</c:if>
@@ -131,22 +144,19 @@
                             <portlet:param name="luokitus" value="terveydentila" />
                             <portlet:param name="kuvaus" value="Terveydentila" />
                         </portlet:actionURL>">
-					<strong><spring:message code="ui.terveydentila" />
-				</strong> </a> </span><br /> 
-				
-			   
-            <span class="linkki"> <a
-                href="
+					<strong><spring:message code="ui.terveydentila" /> </strong> </a> </span><br />
+
+
+			<span class="linkki"> <a
+				href="
                         <portlet:actionURL>
                             <portlet:param name="toiminto" value="haeKirjauksia" />
                             <portlet:param name="hetu" value="${lapsi.hetu}" />
                             <portlet:param name="luokitus" value="mittaus" />
                             <portlet:param name="kuvaus" value="Mittaukset" />
                         </portlet:actionURL>">
-                    <strong><spring:message code="ui.mittaus" />
-                </strong> </a> </span><br /> 
-                	
-			<span class="linkki"> <a
+					<strong><spring:message code="ui.mittaus" /> </strong> </a> </span><br /> <span
+				class="linkki"> <a
 				href="
                         <portlet:actionURL>
                             <portlet:param name="toiminto" value="haeKirjauksia" />
@@ -154,8 +164,8 @@
                             <portlet:param name="luokitus" value="koti" />
                             <portlet:param name="kuvaus" value="Kasvatusta ohjaavat tiedot" />
                         </portlet:actionURL>">
-					<strong><spring:message code="ui.lapsen.kasvatus" />
-				</strong> </a> </span><br /> <span class="linkki"> <a
+					<strong><spring:message code="ui.lapsen.kasvatus" /> </strong> </a> </span><br />
+			<span class="linkki"> <a
 				href="
                         <portlet:actionURL>
                             <portlet:param name="toiminto" value="haeKirjauksia" />
@@ -163,8 +173,7 @@
                             <portlet:param name="luokitus" value="tuen_tarve, huolenaiheet" />
                             <portlet:param name="kuvaus" value="Tuen tarve" />
                         </portlet:actionURL>">
-					<strong><spring:message code="ui.tuen.tarpeet" />
-				</strong> </a> </span> <br />
+					<strong><spring:message code="ui.tuen.tarpeet" /> </strong> </a> </span> <br />
 
 			<c:if test="${ sessionScope.ammattilainen }">
 
@@ -176,8 +185,7 @@
                             <portlet:param name="luokitus" value="palaute" />
                             <portlet:param name="kuvaus" value="Palautteet" />
                         </portlet:actionURL>">
-						<strong><spring:message code="ui.palautteet" />
-					</strong> </a> </span>
+						<strong><spring:message code="ui.palautteet" /> </strong> </a> </span>
 				<br />
 
 
@@ -189,8 +197,7 @@
                             <portlet:param name="luokitus" value="toive" />
                             <portlet:param name="kuvaus" value="Toiveet" />
                         </portlet:actionURL>">
-						<strong><spring:message code="ui.toiveet" />
-					</strong> </a> </span>
+						<strong><spring:message code="ui.toiveet" /> </strong> </a> </span>
 				<br />
 
 
@@ -212,22 +219,30 @@
 							method="post" action="${aktivointiActionUrl}">
 
 							<div>
-								<spring:message code="ui.sopimus.nimi" />
-								<span class="pvm"><form:input path="nimi" />
-								</span>
-							</div>
-							<div>
 								<br>
 								<spring:message code="ui.sopimus.tyyppi" />
-								<span class="pvm"> <form:select path="aktivoitavaKentta"
-										class="kokoelmavalinta">
+								<span class="pvm"> <form:select id="kks.select"
+										path="aktivoitavaKentta" onchange="insertSelection();"
+										class="kokoelmavalinta" >
 
 										<form:option value="" label="" />
 										<c:forEach var="kokoelma" items="${aktivoitavat}">
-											<form:option value="${kokoelma}" label="${ kokoelma }" />
+											<c:if test="${kokoelma.versioitava}">
+												<form:option value="${kokoelma.tekstina}"
+													label="${ kokoelma.nimi } (luo uuden version)" />
+											</c:if>
+											<c:if test="${not kokoelma.versioitava}">
+                                            <   form:option value="${kokoelma.tekstina}" label="${ kokoelma.nimi }" />
+                                            </c:if>
+
 										</c:forEach>
 									</form:select> </span>
+							</div>
 
+							<div>
+								<spring:message code="ui.sopimus.nimi" />
+								<span class="pvm"><form:input id="kks.nimi" path="nimi" size="40" />
+								</span>
 							</div>
 							<br />
 

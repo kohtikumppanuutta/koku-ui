@@ -15,6 +15,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 
 import com.ixonos.koku.kks.malli.Aktivointi;
+import com.ixonos.koku.kks.malli.Aktivoitava;
 import com.ixonos.koku.kks.malli.DemoService;
 import com.ixonos.koku.kks.malli.Henkilo;
 import com.ixonos.koku.kks.malli.Kokoelma;
@@ -36,11 +37,11 @@ public class AktivoiKokoelmaController {
       @ModelAttribute(value = "aktivointi") Aktivointi aktivointi, BindingResult bindingResult,
       ActionResponse response, SessionStatus sessionStatus) {
 
-    // create a new collection if it hasn't been created earlier
     log.debug("luoKokoelma");
 
-    String nimi = "".equals(aktivointi.getNimi()) ? aktivointi.getAktivoitavaKentta() : aktivointi.getNimi();
-    Kokoelma kokoelma = demoService.luoKokoelma(lapsi, nimi, aktivointi.getAktivoitavaKentta());
+    Aktivoitava a = Aktivoitava.luo(aktivointi.getAktivoitavaKentta());
+    String nimi = "".equals(aktivointi.getNimi()) ? a.getNimi() : aktivointi.getNimi();
+    Kokoelma kokoelma = demoService.luoKokoelma(lapsi, nimi, a);
 
     // activate the collection for a given time period
     log.debug("aktivoi kokoelma");

@@ -13,7 +13,11 @@ import java.util.Map;
  */
 public class Kokoelma {
 
+  private String uudempiVersio;
   private String edellinenVersio;
+  private boolean versioitu;
+  private boolean pohjautuuToiseen;
+
   private String id;
 
   private String nimi;
@@ -24,13 +28,23 @@ public class Kokoelma {
   private int versio;
   private KokoelmaTyyppi tyyppi;
   private List<Luokitus> luokitukset;
-  public Map<String, Kirjaus> kirjaukset;
-  public Map<String, List<Kirjaus>> moniArvoisetKirjaukset;
+  private Map<String, Kirjaus> kirjaukset;
+  private Map<String, List<Kirjaus>> moniArvoisetKirjaukset;
 
   public Kokoelma(String id, Kokoelma edellinen, Date luontiAika, KokoelmaTila tila, int versio) {
     this(id, edellinen.getNimi(), edellinen.getKuvaus(), tila, luontiAika, versio, edellinen.getTyyppi());
+    edellinenVersio = edellinen.getEdellinenVersio();
+    pohjautuuToiseen = true;
+
     for (Kirjaus k : edellinen.getKirjaukset().values()) {
       lisaaKirjaus(new Kirjaus(k.getArvo(), new Date(), k.getVersio(), k.getRekisteri(), k.getKirjaaja(), k.getTyyppi()));
+    }
+
+    for (List<Kirjaus> tmp : edellinen.getMoniArvoisetKirjaukset().values()) {
+      for (Kirjaus k : tmp) {
+        lisaaMoniarvoinenKirjaus(new Kirjaus(k.getArvo(), new Date(), k.getVersio(), k.getRekisteri(), k.getKirjaaja(),
+            k.getTyyppi()));
+      }
     }
   }
 
@@ -38,6 +52,9 @@ public class Kokoelma {
       KokoelmaTyyppi tyyppi) {
     super();
     this.edellinenVersio = null;
+    this.pohjautuuToiseen = false;
+    this.uudempiVersio = null;
+    this.versioitu = false;
     this.id = id;
     this.nimi = nimi;
     this.kuvaus = kuvaus;
@@ -190,6 +207,30 @@ public class Kokoelma {
     }
 
     return null;
+  }
+
+  public boolean isVersioitu() {
+    return versioitu;
+  }
+
+  public void setVersioitu(boolean versioitu) {
+    this.versioitu = versioitu;
+  }
+
+  public String getUudempiVersio() {
+    return uudempiVersio;
+  }
+
+  public void setUudempiVersio(String uudempiVersio) {
+    this.uudempiVersio = uudempiVersio;
+  }
+
+  public boolean isPohjautuuToiseen() {
+    return pohjautuuToiseen;
+  }
+
+  public void setPohjautuuToiseen(boolean pohjautuuToiseen) {
+    this.pohjautuuToiseen = pohjautuuToiseen;
   }
 
 }

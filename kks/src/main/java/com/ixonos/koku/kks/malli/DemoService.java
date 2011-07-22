@@ -1,7 +1,9 @@
 package com.ixonos.koku.kks.malli;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,8 +74,16 @@ public class DemoService {
    * @param nimi
    *          Name of the collection
    */
-  public Kokoelma luoKokoelma(Henkilo h, String nimi, String tyyppi) {
-    Kokoelma k = DemoFactory.luoKokoelma(nimi, tyyppi);
+  public Kokoelma luoKokoelma(Henkilo h, String nimi, Aktivoitava aktivointi) {
+
+    Kokoelma k = null;
+
+    if (aktivointi.isVersioitava()) {
+      Kokoelma kokoelma = h.getKks().getKokoelma(aktivointi.getId());
+      k = DemoFactory.luoUusiVersio(kokoelma, nimi);
+    } else {
+      k = DemoFactory.luoKokoelma(nimi, aktivointi.getNimi());
+    }
 
     h.getKks().lisaaKokoelma(k);
     return k;
@@ -97,15 +107,28 @@ public class DemoService {
    * @param h
    * @return
    */
-  public List<String> haeHenkilonKokoelmat(Henkilo h) {
-    List<String> nimet = haeKokoelmaNimet();
-    /*
-     * TODO 21.6.2011: There are only 2 collections now and every user has
-     * these. Some code should be added here so that each person gets only the
-     * collections that he/she might have.
-     */
+  public List<Aktivoitava> haeHenkilonKokoelmat(Henkilo h) {
+    Set<KokoelmaTyyppi> tyypit = haeKokoelmaTyypit(h);
+    List<Kokoelma> kokoelmat = h.getKks().getKokoelmat();
+    List<Aktivoitava> aktivoitavat = new ArrayList<Aktivoitava>();
 
-    return nimet;
+    for (KokoelmaTyyppi kt : tyypit) {
+      aktivoitavat.add(new Aktivoitava("" + kt.getKoodi(), false, kt.getNimi()));
+    }
+
+    for (Kokoelma k : kokoelmat) {
+      if (!k.isVersioitu()) {
+        aktivoitavat.add(new Aktivoitava("" + k.getId(), true, k.getNimi()));
+      }
+    }
+    return aktivoitavat;
+  }
+
+  public Set<KokoelmaTyyppi> haeKokoelmaTyypit(Henkilo h) {
+    Set<KokoelmaTyyppi> tmp = new LinkedHashSet<KokoelmaTyyppi>();
+    tmp.add(DemoFactory.luoNelivuotisTarkastusTyyppi());
+    tmp.add(DemoFactory.luoVarhaiskasvatusSuunnitelmanTyyppi());
+    return tmp;
   }
 
   // 21.6. this method is probably no longer needed
@@ -131,13 +154,25 @@ public class DemoService {
 
     for (Kokoelma k : kokoelmat) {
       for (Kirjaus ki : k.getKirjaukset().values()) {
-
         boolean lisatty = false;
         for (int i = 0; i < luokitus.length && !lisatty; i++) {
           String tmp = luokitus[i];
           if (ki.hasLuokitus(tmp) && !ki.getArvo().equals("")) {
             tulos.lisaaTulos(k, ki);
             lisatty = true;
+          }
+        }
+      }
+
+      for (List<Kirjaus> tmp : k.getMoniArvoisetKirjaukset().values()) {
+        for (Kirjaus ki : tmp) {
+          boolean lisatty = false;
+          for (int i = 0; i < luokitus.length && !lisatty; i++) {
+            String str = luokitus[i];
+            if (ki.hasLuokitus(str) && !ki.getArvo().equals("")) {
+              tulos.lisaaTulos(k, ki);
+              lisatty = true;
+            }
           }
         }
       }

@@ -19,7 +19,7 @@ public class DemoFactory {
 
   public static final String NELI_VUOTIS_TARKASTUS = "4-vuotistarkastus";
   public static final String VASU = "Varhaiskasvatussuunnitelma";
-  private static int codeGenerator = 0;
+  private static int codeGenerator = 100;
 
   public static KKSDemoMalli luo() {
     Henkilo h1 = new Henkilo("Paavo", "Petteri", "Paavola", "270608-223Z");
@@ -46,8 +46,25 @@ public class DemoFactory {
     return null;
   }
 
+  public static Kokoelma luoUusiVersio(Kokoelma vanha, String nimi) {
+    Kokoelma k = new Kokoelma("" + ++codeGenerator, vanha, new Date(), new KokoelmaTila(Tila.AKTIIVINEN, null, null), 1);
+    k.setNimi(nimi);
+    vanha.setVersioitu(true);
+    vanha.setUudempiVersio(k.getId());
+    vanha.getTila().setTila(Tila.LUKITTU);
+    return k;
+  }
+
+  public static KokoelmaTyyppi luoVarhaiskasvatusSuunnitelmanTyyppi() {
+    return new KokoelmaTyyppi(1, VASU, "Sisältää lapsen varhaiskasvatussuunnitelman");
+  }
+
+  public static KokoelmaTyyppi luoNelivuotisTarkastusTyyppi() {
+    return new KokoelmaTyyppi(2, NELI_VUOTIS_TARKASTUS, "Sisältää tiedot lapsen 4-vuotistarkastuksesta");
+  }
+
   public static Kokoelma luoVarhaiskasvatusSuunnitelma(String nimi) {
-    KokoelmaTyyppi tyyppi = new KokoelmaTyyppi(1, VASU, "Sisältää lapsen varhaiskasvatussuunnitelman");
+    KokoelmaTyyppi tyyppi = luoVarhaiskasvatusSuunnitelmanTyyppi();
 
     tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi("Miten lapsesi on viihtynyt päivähoidossa",
         "Kuvaa lapsen hyvinvointia", "Lapsen hyvinvointi", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
@@ -245,8 +262,7 @@ public class DemoFactory {
   }
 
   public static Kokoelma luo4VuotisTarkastus(String nimi) {
-    KokoelmaTyyppi tyyppi = new KokoelmaTyyppi(1, NELI_VUOTIS_TARKASTUS,
-        "Sisältää tiedot lapsen 4-vuotistarkastuksesta");
+    KokoelmaTyyppi tyyppi = luoNelivuotisTarkastusTyyppi();
 
     tyyppi
         .lisaaKirjausTyyppi(luoValintaKirjausTyyppi(

@@ -48,11 +48,10 @@ public class LapsiController {
     log.info("nayta lapsi");
     model.addAttribute("lapsi", lapsi);
     model.addAttribute("kokoelmat", lapsi.getKks().getKokoelmat());
-    model.addAttribute("aktivoitavat", demoService.haeHenkilonKokoelmat(lapsi)); // muutettu
-                                                                                 // näin
-                                                                                 // 21.6.
+    model.addAttribute("aktivoitavat", demoService.haeHenkilonKokoelmat(lapsi));
 
     aktivointi = getCommandObject();
+    aktivointi.setNimi("");
     return "lapsi";
   }
 

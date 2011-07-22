@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import com.ixonos.koku.kks.malli.DemoService;
@@ -24,8 +25,17 @@ public class EditController {
   private static Logger log = LoggerFactory.getLogger(EditController.class);
 
   @RenderMapping
-  public String render(RenderRequest req, Model model) {
+  public String render(RenderRequest req, @RequestParam(value = "viesti", required = false) String viesti, Model model) {
+
+    if (viesti != null) {
+      model.addAttribute("viesti", "Malli resetoitu");
+    }
     return "edit";
   }
 
+  @RenderMapping(params = "toiminto=resetoiMalli")
+  public String naytaLuokittelu(RenderRequest req, Model model) {
+    demoService.luo("");
+    return "luokitukset";
+  }
 }
