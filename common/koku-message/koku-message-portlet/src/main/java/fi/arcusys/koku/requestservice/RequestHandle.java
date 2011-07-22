@@ -57,10 +57,12 @@ public class RequestHandle {
 		kokuReq.setRequestId(req.getRequestId());
 		kokuReq.setSender(req.getSender());
 		kokuReq.setSubject(req.getSubject());
+		kokuReq.setContent(req.getContent());
 		kokuReq.setCreationDate(formatTaskDate(req.getCreationDate()));
 		kokuReq.setEndDate(formatTaskDate(req.getEndDate()));
 		kokuReq.setRespondedList(req.getResponses());
 		kokuReq.setUnrespondedList(req.getNotResponded());
+		kokuReq.setQuestions(req.getQuestions());
 		
 		return kokuReq;
 	}

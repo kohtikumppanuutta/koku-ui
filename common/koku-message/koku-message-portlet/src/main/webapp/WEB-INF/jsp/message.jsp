@@ -35,10 +35,9 @@
 	var refreshTimer; // global refresh timer
 	var configObj = new config();
 	var pageObj = new paging();	
-	checkPageSession();
 	
 	jQuery(document).ready(function(){		
-
+		checkPageSession();
 		/* Ajax activity support call. Show the ajax loading icon */
 	    jQuery('#task-manager-operation-loading')
 	    .hide()  // hide it initially
@@ -67,14 +66,6 @@
 	});
 
 	/**
-	 * Set task query parameters and execute task query in Ajax way
-	 */
-	function getTasks(type) {
-		pageObj.setTaskParams(type); // set taskType and related initialization		
-		ajaxGetTasks();
-	}
-
-	/**
 	 * Execute ajax query in Post way, and parse the Json format response, and
 	 * then create tasks in table and task page filed.
 	 */
@@ -87,7 +78,7 @@
 		var url="<%= ajaxURL %>";
 
 		jQuery.post(url, {page:pageObj.currentPage, taskType:pageObj.taskType, 
-			keyword:pageObj.keyword, orderType:pageObj.orderType}, function(data) {
+			keyword:pageObj.keyword, orderType:pageObj.orderType, field:pageObj.field}, function(data) {
 			var obj = eval('(' + data + ')');
 			var json = obj.response;
 			pageObj.loginStatus = json["loginStatus"];
@@ -238,7 +229,7 @@
 		var formUrl = formUrl.replace("CONSTANT_TASK_MESSAGE_ID", messageId);
 		var formUrl = formUrl.replace("CONSTANT_TASK_CURRENT_PAGE", pageObj.currentPage);
 		var formUrl = formUrl.replace("CONSTANT_TASK_TASK_TYPE", pageObj.taskType);
-		var formUrl = formUrl.replace("CONSTANT_TASK_KEYWORD", pageObj.keyword);
+		var formUrl = formUrl.replace("CONSTANT_TASK_KEYWORD", pageObj.keyword+'|'+pageObj.field);
 		var formUrl = formUrl.replace("CONSTANT_TASK_ORDER_TYPE", pageObj.orderType);
 		
 		window.location = formUrl;
@@ -249,12 +240,22 @@
 		var formUrl = formUrl.replace("CONSTANT_TASK_MESSAGE_ID", requestId);
 		var formUrl = formUrl.replace("CONSTANT_TASK_CURRENT_PAGE", pageObj.currentPage);
 		var formUrl = formUrl.replace("CONSTANT_TASK_TASK_TYPE", pageObj.taskType);
-		var formUrl = formUrl.replace("CONSTANT_TASK_KEYWORD", pageObj.keyword);
+		var formUrl = formUrl.replace("CONSTANT_TASK_KEYWORD", pageObj.keyword+'|'+pageObj.field);
 		var formUrl = formUrl.replace("CONSTANT_TASK_ORDER_TYPE", pageObj.orderType);
 		
 		window.location = formUrl;
 	}
-	
+	/*
+	function formKeywords(keywordArray) {
+		var keywords = '';
+		
+		for(var i=0; i < keywordArray.length; i++) {
+			keywords += keywordArray[i] + '|';
+		}
+		
+		return keywords;
+	}
+	*/
 	/**
 	 * Decorate the table by adding background class when mousemove, mouseout, etc
 	 */
@@ -305,26 +306,6 @@
 				
 		return taskHtml;
 	}
-	
-	/**
-	 * Create task form Html link for different open form types
-	 */
-	function createFormLink(link, description) {
-		var linkHtml;
-		
-		/* save the page parameters in session for returning back in order to keep the page unchanged*/
-		var formUrl = "<%= messageURL %>";
-		var formUrl = formUrl.replace("CONSTANT_TASK_CONTENT", escape(link));
-		var formUrl = formUrl.replace("CONSTANT_TASK_CURRENT_PAGE", pageObj.currentPage);
-		var formUrl = formUrl.replace("CONSTANT_TASK_TASK_TYPE", pageObj.taskType);
-		var formUrl = formUrl.replace("CONSTANT_TASK_KEYWORD", pageObj.keyword);
-		var formUrl = formUrl.replace("CONSTANT_TASK_ORDER_TYPE", pageObj.orderType);
-		linkHtml = '<a href="'+ formUrl + '">';		
-		
-		linkHtml += description + '</a>';
-		
-		return linkHtml;
-	}
 
 	/**
 	 * Set auto refresh timer, which updates the task list automatically
@@ -362,28 +343,31 @@
 		if(currentPage != '' && currentPage != 'null') {
 			pageObj.currentPage = parseInt(currentPage);
 			pageObj.taskType = taskType;
-			pageObj.keyword = keyword;
+			pageObj.keyword = extractKeyword(keyword);
+			pageObj.field = extractField(keyword);
 			pageObj.orderType = orderType;
-			pageObj.taskTypeNum = getTaskTypeNum(taskType);
-		}
-		
+		}	
 	}
 	
-	/**
-	 * Get task type number for the value in tasks type tab 
-	 */
-	function getTaskTypeNum(taskType) {		
-		var taskTypeNum = 0;
+	/* extract keyword from keyword string, which consists of keyword and field in session, e.g. 'test|1 2 3 4' */
+	function extractKeyword(keywordStr) {
+		var temp = keywordStr.split("|");
+		var keyword = temp[0];
 		
-		if(taskType == 'task') {
-			taskTypeNum = 0;
-		}else if(taskType == 'notification') {
-			taskTypeNum = 1;
-		}else if(taskType == 'process') {
-			taskTypeNum = 2;
+		return keyword;
+	}
+	
+	/* extract keyword from keyword string, which consists of keyword and field in session, e.g. 'test|1 2 3 4' */
+	function extractField(keywordStr) {
+		var temp = keywordStr.split("|");
+		var field = temp[1];
+		var fields = field.split(' ');
+		jQuery('input:checkbox[name="field"]').attr('checked', false);
+		for(var i=0; i < fields.length; i++) {
+			jQuery('input:checkbox[name="field"][value="' + fields[i] + '"]').attr('checked', true);
 		}
 		
-		return taskTypeNum;
+		return field;
 	}
 	/**
 	 * Config object to handle parameters in configuration mode
@@ -403,35 +387,13 @@
 		/* 3 types: task, notification, process */
 		this.taskType = 'inbox';
 		//this.taskType = parseParameter('naviType');
-		/* 0:task, 1:notification, 2: process */
-		this.taskTypeNum = 0;
-		/* keyword for searching and filter */
+		/* keywords for searching and filter fields */
 		this.keyword = '';
+		this.field = '1 2 3 4';
 		/* 6 types: by description_desc, by description_asc, by state_desc, 
 		by state_asc, by creationDate_desc, by creationDate_asc */
 		this.orderType = 'creationDate_desc';
 		this.loginStatus = "${loginStatus}";
-	}
-
-	/**
-	 * Set task type and do initialization to update task list
-	 */
-	paging.prototype.setTaskParams = function(type) {
-		this.taskTypeNum = type;
-		
-		if (this.taskTypeNum == 0) {
-			this.taskType = 'task';
-			this.keyword = configObj.taskFilter;
-		} else if (this.taskTypeNum == 1) {
-			this.taskType = 'notification';
-			this.keyword = configObj.notifFilter;
-		} else if (this.taskTypeNum == 2) {
-			this.taskType = 'process';
-			this.keyword = '';
-			this.setProcessOrderType();
-		}
-		
-		this.currentPage = 1;
 	}
 	
 	/** 
@@ -528,6 +490,7 @@
 	 */
 	function createTasksPage() {
 		var pageHtml = '<ul>';
+		pageHtml += '<li><input type="button" value="<spring:message code="message.search"/>"  onclick="showSearchUI()" /></li>';
 		
 		if(pageObj.taskType == 'inbox' || pageObj.taskType == 'outbox')
 			pageHtml += '<li><input type="button" value="<spring:message code="page.archive"/>"  onclick="archiveMessages()" /></li>';
@@ -673,6 +636,63 @@
 		});
 	}
 	
+
+	/**
+	 * Show/hide search user interface
+	 */
+	function showSearchUI() {
+		jQuery('#task-manager-search').toggle('fast');
+	}
+	
+	function showAdvancedSearchUI() {
+		jQuery('#task-manager-search .basic-search').hide();
+		jQuery('#task-manager-search .advanced-search').show();
+	}
+	
+	function hideAdvancedSearchUI() {
+		jQuery('#task-manager-search .basic-search').show();
+		jQuery('#task-manager-search .advanced-search').hide();
+	}
+	
+	/**
+	 * Perform search tasks
+	 */
+	function searchTasks() {
+		var keyword = jQuery("input#keyword").val();
+		pageObj.keyword = keyword;	
+		var field = '';
+		jQuery('input:checkbox[name="field"]:checked').each(function(){
+			field += jQuery(this).val() + ' ';
+		});
+		/* get rid of the last space letter*/
+		if(field.length > 0)  field = field.substring(0, field.length-1);
+		else return false;
+		
+		pageObj.field = field;	
+		ajaxGetTasks();
+		
+		return false;
+	}
+	
+	function advancedSearchTasks() {
+		var from = jQuery('input:text[name="keyword_from"]').val();
+		var to = jQuery('input:text[name="keyword_to"]').val();
+		var subject = jQuery('input:text[name="keyword_subject"]').val();
+		var content = jQuery('input:text[name="keyword_content"]').val();		
+		pageObj.keywords = [from, to, subject, content];			
+		ajaxGetTasks();
+		
+		return false;
+	}
+ 	/**
+ 	 * Reset the search result and clear the keyword
+ 	 */
+	function resetSearch() {
+		jQuery("input#keyword").val('');
+		jQuery('input:checkbox[name="field"]').attr('checked', true);
+		pageObj.keyword = '';
+		ajaxGetTasks();
+	}
 	
 </script>
 
@@ -681,10 +701,43 @@
 		<table class="task-manager-table">
 		</table>
 	</div>
+	<div id="task-manager-search" class="task-manager-operation-part">
+		<div class="basic-search">
+			<form name="searchForm" onsubmit="searchTasks(); return false;">		
+				<span class="message-keyword" ><spring:message code="message.searchKeyword" /></span>
+				<input type="text" name="keyword" id="keyword" style="width:160px;" />
+				<input type="submit" value="<spring:message code="message.search"/>" />
+				<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
+				<span id="search-fields" >
+					<input type="checkbox" checked="checked" name="field" value="1" />From
+					<input type="checkbox" checked="checked" name="field" value="2" />To
+					<input type="checkbox" checked="checked" name="field" value="3" />Subject
+					<input type="checkbox" checked="checked" name="field" value="4" />Content
+				</span>	
+			</form>
+		</div>
+		<!-- 
+		<span><a href="javascript:void(0)" onclick="showAdvancedSearchUI()">Advanced</a></span>
+		<div class="advanced-search">
+			<form name="searchForm" onsubmit="advancedSearchTasks(); return false;">			
+				<table class="search-table">
+					<tr><td class="search-td-1">From</td><td class="search-td-2"><input type="text" name="keyword_from" style="width:100%;" /></td>
+						<td class="search-td-1">Subject</td><td class="search-td-2"><input type="text" name="keyword_subject" style="width:100%;" /></td>
+					</tr>
+					<tr><td class="search-td-1">To</td><td class="search-td-2"><input type="text" name="keyword_to" style="width:100%;" /></td>
+						<td class="search-td-1">Content</td><td class="search-td-2"><input type="text" name="keyword_content" style="width:100%;" /></td>
+					</tr>
+				</table>		
+				<input type="submit" value="<spring:message code="message.search"/>" />
+				<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
+				<span><a href="javascript:void(0)" onclick="hideAdvancedSearchUI()">Hide search options</a></span>	
+			</form>
+		</div>
+		 -->
+	</div>
 	
 	<div id="task-manager-operation" class="task-manager-operation-part">
-		<div id="task-manager-operation-page">
-		</div>
+		<div id="task-manager-operation-page"></div>
 		<div id="task-manager-operation-loading"><spring:message code="page.loading"/></div>
 	</div>
 </div>

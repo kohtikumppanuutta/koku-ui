@@ -12,8 +12,13 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import fi.arcusys.koku.service.Criteria;
+import fi.arcusys.koku.service.Fields;
 import fi.arcusys.koku.service.FolderType;
+import fi.arcusys.koku.service.MessageQuery;
 import fi.arcusys.koku.service.MessageSummary;
+import fi.arcusys.koku.service.OrderBy;
+import fi.arcusys.koku.service.Type;
 
 public class MessageServiceTest {
 
@@ -47,10 +52,26 @@ public class MessageServiceTest {
 	public void testGetMessages() {
 		String user = "Ville Virkamies";
 		FolderType folderType = FolderType.OUTBOX;
-		String subQuery = "";
-		int startNum = 0;
+		int startNum = 1;
 		int maxNum = 5;
-		List<MessageSummary> messageList = tester.getMessages(user, folderType, subQuery, startNum, maxNum);
+		MessageQuery messageQuery = new MessageQuery();
+		messageQuery.setStartNum(startNum);
+		messageQuery.setMaxNum(maxNum);
+		
+		/* sets the criteria for searching including keyword for each field, default is searching all fields */
+		String keyword="";
+		String field = "1 2 3 4";
+		MessageHandle handle = new MessageHandle();
+		Criteria criteria = handle.createCriteria(keyword, field);
+		messageQuery.setCriteria(criteria);
+		
+		/* sets the order type, default is ordering by created date descending */
+		OrderBy orderby = new OrderBy();
+		orderby.setField(Fields.CREATED_DATE);
+		orderby.setType(Type.DESC);		
+		messageQuery.getOrderBy().add(orderby);
+		
+		List<MessageSummary> messageList = tester.getMessages(user, folderType, messageQuery);
 		int expected = 5;
 		int actual = messageList.size();
 		assertEquals("createTask first creation date failed", expected, actual);	
@@ -63,7 +84,16 @@ public class MessageServiceTest {
 
 	@Ignore("Not Ready to Run")
 	public void testGetTotalMessageNum() {
-		fail("Not yet implemented");
+		String user = "Ville Virkamies";
+		FolderType folderType = FolderType.OUTBOX;
+		String keyword="test";
+		String field = "1 2 3 4";
+		MessageHandle handle = new MessageHandle();
+		Criteria criteria = handle.createCriteria(keyword, field);
+		int num = tester.getTotalMessageNum(user, folderType, criteria);
+		
+		System.out.println("total number: " + num);
+		
 	}
 
 	@Ignore("Not Ready to Run")

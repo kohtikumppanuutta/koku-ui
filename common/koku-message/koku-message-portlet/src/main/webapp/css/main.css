@@ -128,12 +128,11 @@
 /* main table row color */
 .task-manager-table tr.new {font-weight:bold;}
 .task-manager-table tr.oddRow {background-color: #FFFFFF; /* for odd row */}
-
 .task-manager-table tr.evenRow {background-color: #EFEFEF; /* #E7F5E7 for even row */}
-
 .task-manager-table tr.focusRow {background-color: #D8D8A8; /* for the current row */	}
 .task-manager-table tr.clickRow {background-color: #ECC57A; /* for the current row */}
-
+.oddRow {background-color: #FFFFFF; /* for odd row */}
+.evenRow {background-color: #EFEFEF; /* #E7F5E7 for even row */}
 .task-config-table {
 	color: inherit; /* text color */
 	font-family: Verdana; /* font name */
@@ -158,8 +157,35 @@
 	display:none;
 }
 
+#task-manager-search .message-keyword {
+	font-weight:bold;
+}
+
+.advanced-search {
+	display:none;
+}
+.search-table { 
+	width: 100%; /* table width */
+	color: inherit; /* text color */
+	font-family: Verdana; /* font name */
+	font-size: 12px; /* font size */
+	border: 0px outset; /* border */
+	border-collapse: collapse;
+}
+
+.search-table td {
+	padding: 6px; /* cell padding */
+	border: 0px solid; /* cell spacing */
+	text-align: left;
+	word-wrap: break-word;
+	word-break: break-all;
+	overflow: hidden;
+	white-space: nowrap;
+}
+.search-td-1 { width: 100px;}
+.search-td-2 { width: auto;}
+
 #task-manager-operation {
-	height:30px;
 	overflow:auto;
 }
 
@@ -201,4 +227,23 @@
 	padding:5px;
 	background-color: #FFB6C1;
 	border: 1px solid #FF3333; /* table background color */
+}
+
+.request-c-1 {
+	font-weight: bold;
+}
+
+.request-table {
+	width: 100%; /* table width */
+	border: 1px outset; /* border */
+}
+
+.request-table td {
+	padding: 6px; /* cell padding */
+	border: 0px solid; /* cell spacing */
+	text-align: left;
+	word-wrap: break-word;
+	word-break: break-all;
+	overflow: hidden;
+	white-space: nowrap;
 }

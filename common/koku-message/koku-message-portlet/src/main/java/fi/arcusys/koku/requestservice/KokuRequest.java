@@ -2,6 +2,7 @@ package fi.arcusys.koku.requestservice;
 
 import java.util.List;
 
+import fi.arcusys.koku.request.Question;
 import fi.arcusys.koku.request.Response;
 
 public class KokuRequest {
@@ -9,6 +10,7 @@ public class KokuRequest {
 	private long requestId;
 	private String sender;
 	private String subject;
+	private String content;
 	private int respondedAmount;
 	private int missedAmount;
 	private String creationDate;
@@ -16,7 +18,9 @@ public class KokuRequest {
 	private String requestType;
 	private List<Response> respondedList;
 	private List<String> unrespondedList;
+	private List<Question> questions;
 	
+	/* getters */
 	public long getRequestId() {
 		return requestId;
 	}
@@ -27,6 +31,10 @@ public class KokuRequest {
 	
 	public String getSubject() {
 		return subject;
+	}
+	
+	public String getContent() {
+		return content;
 	}
 	
 	public int getRespondedAmount() {
@@ -57,6 +65,10 @@ public class KokuRequest {
 		return unrespondedList;
 	}
 	
+	public List<Question> getQuestions() {
+		return questions;
+	}
+	/* setters */
 	public void setRequestId(long requestId) {
 		this.requestId = requestId;
 	}
@@ -67,6 +79,10 @@ public class KokuRequest {
 	
 	public void setSubject(String subject) {
 		this.subject = subject;
+	}
+	
+	public void setContent(String content) {
+		this.content = content;
 	}
 	
 	public void setRespondedAmount(int respondedAmount) {
@@ -97,4 +113,7 @@ public class KokuRequest {
 		this.unrespondedList = unrespondedList;
 	}
 	
+	public void setQuestions(List<Question> questions) {
+		this.questions = questions;
+	}
 }

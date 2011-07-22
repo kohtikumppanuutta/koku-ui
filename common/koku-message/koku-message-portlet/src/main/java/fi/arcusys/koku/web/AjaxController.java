@@ -35,12 +35,13 @@ public class AjaxController {
 	public String showAjax(@RequestParam(value = "page") int page,
 			@RequestParam(value = "taskType") String taskType,
 			@RequestParam(value = "keyword") String keyword,
+			@RequestParam(value = "field") String field,
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute("USER_username");
 		System.out.println("show ajax for the user " + username );	
-		JSONObject jsonModel = getJsonModel(taskType, page, keyword, orderType, username);
+		JSONObject jsonModel = getJsonModel(taskType, page, keyword, field, orderType, username);
 		modelmap.addAttribute("response", jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
@@ -92,7 +93,7 @@ public class AjaxController {
 	 * @param orderType
 	 * @return task information in Json format
 	 */
-	public JSONObject getJsonModel(String taskType, int page, String keyword, String orderType, String username) {
+	public JSONObject getJsonModel(String taskType, int page, String keyword, String field, String orderType, String username) {
 		JSONObject jsonModel = new JSONObject();
 		
 		if(username == null) {
@@ -115,8 +116,8 @@ public class AjaxController {
 				jsonModel.put("tasks", msgs);
 			} else {
 				List<Message> msgs;
-				msgs = msghandle.getMessages(username, taskType, keyword, orderType, first, max);			
-				totalTasksNum = msghandle.getTotalMessageNum(username, taskType, keyword, orderType);
+				msgs = msghandle.getMessages(username, taskType, keyword, field, orderType, first, max);			
+				totalTasksNum = msghandle.getTotalMessageNum(username, taskType, keyword, field);
 				jsonModel.put("tasks", msgs);
 			}
 			

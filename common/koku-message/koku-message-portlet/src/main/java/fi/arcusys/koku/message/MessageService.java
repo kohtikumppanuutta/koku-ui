@@ -3,9 +3,11 @@ package fi.arcusys.koku.message;
 import java.net.URL;
 import java.util.List;
 
+import fi.arcusys.koku.service.Criteria;
 import fi.arcusys.koku.service.FolderType;
 import fi.arcusys.koku.service.KokuMessageService_Service;
 import fi.arcusys.koku.service.Message;
+import fi.arcusys.koku.service.MessageQuery;
 import fi.arcusys.koku.service.MessageStatus;
 import fi.arcusys.koku.service.MessageSummary;
 import fi.arcusys.koku.util.MessageUtil;
@@ -20,6 +22,16 @@ public class MessageService {
 		this.ms = new KokuMessageService_Service(MESSAGE_WSDL_LOCATION);
 	}
 
+	public List<MessageSummary> getMessages(String user, FolderType folderType, MessageQuery messageQuery) {
+
+		return ms.getKokuMessageServicePort().getMessages(user, folderType, messageQuery);
+	}
+	
+	public int getTotalMessageNum(String user, FolderType folderType, Criteria criteria) {
+		
+		return ms.getKokuMessageServicePort().getTotalMessages(user, folderType, criteria);
+	}
+
 	/**
 	 * Gets the list of message summary.
 	 * @param user Username
@@ -29,9 +41,9 @@ public class MessageService {
 	 * @param maxNum The maximum amount of messages that fulfill the condition
 	 * @return List of messages
 	 */
-	public List<MessageSummary> getMessages(String user, FolderType folderType, String subQuery, int startNum, int maxNum) {
+	public List<MessageSummary> getMessagesOld(String user, FolderType folderType, String subQuery, int startNum, int maxNum) {
 		
-		return ms.getKokuMessageServicePort().getMessages(user, folderType, subQuery, startNum, maxNum);
+		return ms.getKokuMessageServicePort().getMessagesOld(user, folderType, subQuery, startNum, maxNum);
 	}
 	
 	/**
@@ -51,9 +63,9 @@ public class MessageService {
 	 * @param subQuery Basic query for the message, such as 'message_subject like %keyword%' , 'ORDER BY message_creationDate'
 	 * @return The number of messages
 	 */
-	public int getTotalMessageNum(String user, FolderType folderType, String subQuery) {
+	public int getTotalMessageNumOld(String user, FolderType folderType, String subQuery) {
 		
-		return ms.getKokuMessageServicePort().getTotalMessages(user, folderType, subQuery);
+		return ms.getKokuMessageServicePort().getTotalMessagesOld(user, folderType, subQuery);
 	}
 	
 	/**
