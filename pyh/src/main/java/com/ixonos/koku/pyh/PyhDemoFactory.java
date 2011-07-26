@@ -22,8 +22,8 @@ public class PyhDemoFactory {
     
     // create persons
     
-    Person p1 = new Person("Matti", "Mikael", "Meik‰l‰inen", "010203-1234", "010203", "");
-    Person p2 = new Person("Tytti", "Taina", "J‰rvinen", "020304-2345", "020304", "");
+    Person p1 = new Person("Matti", "Mikael", "Meik√§l√§inen", "010203-1234", "010203", "");
+    Person p2 = new Person("Tytti", "Taina", "J√§rvinen", "020304-2345", "020304", "");
     Person p3 = new Person("Jouni", "Josef", "Merinen", "030405-3456", "030405", "");
     Person p4 = new Person("Tapani", "Toivo", "Ruohonen", "040506-4567", "040506", "");
     Person p5 = new Person("Liisa", "Leila", "Ruohonen", "050607-5678", "050607", "");
@@ -34,7 +34,7 @@ public class PyhDemoFactory {
     Person p10 = new Person("Maija", "Mette", "Merinen", "333333-3333", "333333", "");
     Person p11 = new Person("Janne", "Kari", "Merinen", "444444-4444", "444444", "");
     Person p12 = new Person("Laura", "Liina", "Merinen", "555555-5555", "555555", "");
-    Person p13 = new Person("Heikki", "Juhani", "J‰rvinen", "666666-6666", "666666", "");
+    Person p13 = new Person("Heikki", "Juhani", "J√§rvinen", "666666-6666", "666666", "");
     
     model.addPerson(p1);
     model.addPerson(p2);

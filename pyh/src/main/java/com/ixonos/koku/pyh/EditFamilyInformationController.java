@@ -107,7 +107,7 @@ public class EditFamilyInformationController {
     response.setRenderParameter("action", "editFamilyInformation");
   }
   
-  // TODO: user should disappear from the view immediately after clicking 'poista j‰senyys' 
+  // TODO: user should disappear from the view immediately after clicking 'poista j√§senyys' 
   @ActionMapping(params = "action=removeFamilyMember")
   public void removeFamilyMember(@RequestParam String familyMemberSSN, ActionResponse response) {
     pyhDemoService.removeFamilyMember(familyMemberSSN);
