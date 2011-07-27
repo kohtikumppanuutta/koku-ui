@@ -11,20 +11,24 @@ import com.ixonos.koku.pyh.model.FamilyMember;
 import com.ixonos.koku.pyh.model.Guardian;
 import com.ixonos.koku.pyh.model.Guardianship;
 import com.ixonos.koku.pyh.model.Person;
+import com.ixonos.koku.pyh.util.Role;
 
 public class PyhDemoFactory {
-  
+
   private static Logger log = LoggerFactory.getLogger(PyhDemoFactory.class);
-  
+
   public static PyhDemoModel createModel() {
-    
+
     PyhDemoModel model = new PyhDemoModel();
-    
+
     // create persons
-    
-    Person p1 = new Person("Matti", "Mikael", "Meik√§l√§inen", "010203-1234", "010203", "");
-    Person p2 = new Person("Tytti", "Taina", "J√§rvinen", "020304-2345", "020304", "");
-    Person p3 = new Person("Jouni", "Josef", "Merinen", "030405-3456", "030405", "");
+<<<<<<< .mine
+    Person p1 = new Person("Matti", "Mikael", "Meik‰l‰inen", "010203-1234", "010203", "");
+    Person p2 = new Person("Tytti", "Taina", "J‰rvinen", "020304-2345", "020304", "");
+=======    
+    Person p1 = new Person("Matti", "Mikael", "Meik‰l‰inen", "010203-1234", "010203", "");
+    Person p2 = new Person("Tytti", "Taina", "J‰rvinen", "020304-2345", "020304", "");
+>>>>>>> .theirs    Person p3 = new Person("Jouni", "Josef", "Merinen", "030405-3456", "030405", "");
     Person p4 = new Person("Tapani", "Toivo", "Ruohonen", "040506-4567", "040506", "");
     Person p5 = new Person("Liisa", "Leila", "Ruohonen", "050607-5678", "050607", "");
     Person p6 = new Person("Pekka", "", "Peltola", "010101-1010", "010101", "pekka.peltola@meili.fi");
@@ -34,9 +38,11 @@ public class PyhDemoFactory {
     Person p10 = new Person("Maija", "Mette", "Merinen", "333333-3333", "333333", "");
     Person p11 = new Person("Janne", "Kari", "Merinen", "444444-4444", "444444", "");
     Person p12 = new Person("Laura", "Liina", "Merinen", "555555-5555", "555555", "");
-    Person p13 = new Person("Heikki", "Juhani", "J√§rvinen", "666666-6666", "666666", "");
+<<<<<<< .mine    Person p13 = new Person("Heikki", "Juhani", "J‰rvinen", "666666-6666", "666666", "");
+
+=======    Person p13 = new Person("Heikki", "Juhani", "J‰rvinen", "666666-6666", "666666", "");
     
-    model.addPerson(p1);
+>>>>>>> .theirs    model.addPerson(p1);
     model.addPerson(p2);
     model.addPerson(p3);
     model.addPerson(p4);
@@ -49,23 +55,23 @@ public class PyhDemoFactory {
     model.addPerson(p11);
     model.addPerson(p12);
     model.addPerson(p13);
-    
+
     // create families
-    
+
     Family f1 = new Family();
-    f1.addFamilyMember(new FamilyMember(p6, "isa"));
-    f1.addFamilyMember(new FamilyMember(p7, "aiti"));
-    f1.addFamilyMember(new FamilyMember(p8, "lapsi"));
-    
+    f1.addFamilyMember(new FamilyMember(p6, Role.PARENT));
+    f1.addFamilyMember(new FamilyMember(p7, Role.PARENT));
+    f1.addFamilyMember(new FamilyMember(p8, Role.CHILD));
+
     Family f2 = new Family();
-    f2.addFamilyMember(new FamilyMember(p2, "aiti"));
-    f2.addFamilyMember(new FamilyMember(p13, "lapsi"));
-    
+    f2.addFamilyMember(new FamilyMember(p2, Role.PARENT));
+    f2.addFamilyMember(new FamilyMember(p13, Role.CHILD));
+
     model.addFamily(f1);
     model.addFamily(f2);
-    
+
     // create guardianships
-    
+
     ArrayList<Dependant> d1 = new ArrayList<Dependant>();
     Dependant dep1 = new Dependant(p8);
     Dependant dep2 = new Dependant(p9);
@@ -76,11 +82,12 @@ public class PyhDemoFactory {
     ArrayList<Guardian> g1 = new ArrayList<Guardian>();
     g1.add(new Guardian(p6, "isa"));
     g1.add(new Guardian(p7, "aiti"));
-    Guardianship gs1 = new Guardianship(d1, g1);
-    
+    Guardianship gs1 = new Guardianship();
+    gs1.setGuardians(g1);
+    gs1.setDependants(d1);
     model.addGuardianship(gs1);
-    
+
     return model;
   }
-  
+
 }

@@ -10,7 +10,6 @@
 </portlet:renderURL>
 
 <div>
-	
 	<div>
 		<form:form name="guardian" method="post" action="${guardianFamilyInformation}">
 			<input type="submit" value="Huoltaja"/>

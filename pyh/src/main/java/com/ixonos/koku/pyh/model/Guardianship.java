@@ -1,67 +1,61 @@
 package com.ixonos.koku.pyh.model;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Guardianship {
-  
-  private List<Dependant> dependants;
-  private List<Guardian> guardians;
-  
+
+  private Map<String, Dependant> dependants;
+  private Map<String, Guardian> guardians;
+
   public Guardianship() {
-    
+    guardians = new LinkedHashMap<String, Guardian>();
+    dependants = new LinkedHashMap<String, Dependant>();
   }
-  
-  public Guardianship(List<Dependant> d, List<Guardian> g) {
-    this.dependants = d;
-    this.guardians = g;
-  }
-  
+
   public List<Dependant> getDependants() {
-    return dependants;
+    return new ArrayList<Dependant>(dependants.values());
   }
-  
+
   public void setDependants(List<Dependant> d) {
-    this.dependants = d;
-  }
-  
-  public void addDependant(Dependant d) {
-    this.dependants.add(d);
-  }
-  
-  public List<Guardian> getGuardians() {
-    return guardians;
-  }
-  
-  public void setGuardians(List<Guardian> g) {
-    this.guardians = g;
-  }
-  
-  public void addGuardian(Guardian g) {
-    this.guardians.add(g);
-  }
-  
-  public boolean guardianshipExists(String guardianSSN, String dependantSSN) {
-    boolean exists = false;
-    
-    Iterator<Guardian> gi = guardians.iterator();
-    while (gi.hasNext()) {
-      if (gi.next().getSsn().equals(guardianSSN)) {
-        
-        // we have guardian match, next check if dependant match is found
-        Iterator<Dependant> di = dependants.iterator();
-        while (di.hasNext()) {
-          if (di.next().getSsn().equals(dependantSSN)) {
-            
-            // guardianship exists
-            exists = true;
-            return exists;
-          }
-        }
-        
-      }
+    for (Dependant dep : d) {
+      dependants.put(dep.getSsn(), dep);
     }
-    return exists;
   }
-  
+
+  public void removeGuardian(String ssn) {
+    guardians.remove(ssn);
+
+    if (guardians.size() == 0) {
+      dependants.clear();
+    }
+  }
+
+  public void addDependant(Dependant dep) {
+    dependants.put(dep.getSsn(), dep);
+  }
+
+  public List<Guardian> getGuardians() {
+    return new ArrayList<Guardian>(guardians.values());
+  }
+
+  public void setGuardians(List<Guardian> g) {
+    for (Guardian dep : g) {
+      guardians.put(dep.getSsn(), dep);
+    }
+  }
+
+  public void addGuardian(Guardian g) {
+    this.guardians.put(g.getSsn(), g);
+  }
+
+  public boolean guardianshipExists(String guardianSSN, String dependantSSN) {
+    return guardians.containsKey(guardianSSN) && dependants.containsKey(dependantSSN);
+  }
+
+  public boolean isEmpty() {
+    return guardians.size() == 0 && dependants.size() == 0;
+  }
 }
