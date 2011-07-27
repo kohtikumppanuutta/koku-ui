@@ -22,7 +22,11 @@
 	String actionParam = naviURL.substring(pos1);
 	
 %>
-<script type="text/javascript"> 
+<%-- Temporary way to determine if we are in JBoss Portal 2.7 environment.
+     Do not include JS below in EPP env for now. --%>
+<c:if test="${fn:contains(naviURL, '/default/')}">
+<script type="text/javascript">
+
 /*
  * Handle action message navigation
  * @Author: Jinhua Chen
@@ -116,6 +120,7 @@
 	}
 
 </script>
+</c:if>
 
 <div id="koku-navigation">
 	<a href="#"><img src="<%= request.getContextPath() %>/images/kklogo.jpg" width="189"
@@ -123,12 +128,12 @@
 	</a>
 	<ul class="main">
 		<li><a href="javascript:void(0)" >Etusivu</a></li>
-		<li><a href="<%= defaultPath %>/TaskManager">Kasvun ja kehityksen suunnitelma</a>
+		<li><a href="/portal/private/classic/KKS">Kasvun ja kehityksen suunnitelma</a>
 			<ul class="child">
 				<li><a href="#">Lapsen_001_nimi</a></li>
 				<li><a href="#">Lapsen_002_nimi</a></li>
 			</ul></li>
-		<li><a href="javascript:void(0)" >Omat tiedot</a></li>
+		<li><a href="/portal/private/classic/PYH" >Omat tiedot</a></li>
 		<li><a href="javascript:void(0)" onclick="getMessage('inbox')" >Viestit</a>
 			<ul class="open child">
 				<li id="message_new"><a href="javascript:void(0)" onclick="getMessage('new')">Uusi viesti</a> </li>
