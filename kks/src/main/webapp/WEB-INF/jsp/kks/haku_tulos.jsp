@@ -21,20 +21,17 @@
 	<portlet:param name="toiminto" value="naytaLapsi" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
 </portlet:renderURL>
-<div id="main" class="wide">
-	<div>
+<div class="portlet-section-body">
 
 		<div class="home">
 			<a href="${kotiUrl}"><spring:message code="ui.takaisin" /> </a>
 		</div>
 
-	</div>
+
+	<h1 class="portlet-section-header">${lapsi.nimi} ${kuvaus}</h1>
 
 
-	<h1>${lapsi.nimi} ${kuvaus}</h1>
-
-
-	<div id="kirjaus.tyypit.luku">
+	<div id="kirjaus.tyypit" class="portlet-section-text">
 
 		<c:if test="${not empty hakutulos }">
 
@@ -44,7 +41,7 @@
 			<c:forEach var="tulos" items="${hakutulos.tulokset}">
 
 				<c:if test="${not empty tulos.nimi}">
-					<h3>
+					<h3 class="portlet-section-subheader">
 						${tulos.nimi }
 
 						<c:if test="${ not tulos.kokoelmaAktiivinen }">

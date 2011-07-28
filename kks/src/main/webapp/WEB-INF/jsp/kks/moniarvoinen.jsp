@@ -46,6 +46,8 @@
     <portlet:param name="hetu" value="${lapsi.hetu}" />
     <portlet:param name="kokoelma" value="${kokoelma.id}" />
 </portlet:actionURL>
+
+<div class="portlet-section-body">
 <div>
 
 	<div class="home">
@@ -55,19 +57,18 @@
 </div>
 
 
-<h1>${lapsi.nimi} ${kokoelma.nimi}</h1>
+<h1 class="portlet-section-header">${lapsi.nimi} ${kokoelma.nimi}</h1>
 
-<div id="main" class="wide">
-	<div id="kirjaus.tyypit">
+
+	<div class="portlet-section-text">
 
 		<form:form name="lisaaMoniArvoinen" 
 			method="post" action="${lisaaMoniArvoinen}">
 			<input type="hidden" name="kirjausTyyppi" value="${tyyppi.koodi }" />
 
-			<div class="kirjaus">
-			
+			<div class="kirjaus">			
 			         
-				<strong>
+				<span class="portlet-form-field-label">
 				
 				<c:if test="${ not empty kirjausArvo }">
 				    <spring:message code="ui.muokkaa.kirjausta" /> ${tyyppi.nimi}
@@ -78,24 +79,26 @@
                 </c:if>
 				
 				<c:if test="${ not empty kirjausArvo }">
-				    <span style="float: right;"> <a href="${poistaMoniArvoinen}"><spring:message code="ui.poista" /> </a> </span>
+				    <span  class="right"> <a href="${poistaMoniArvoinen}"><spring:message code="ui.poista" /> </a> </span>
 				</c:if>
 				
-				</strong>
+				</span>
 				
-				<div class="vapaa.teksti">
+				<div class="portlet-form-field">
 
                 <c:if test="${ not empty kirjausArvo }">
-                <textarea id="arvo" class="add" title="${tyyppi.kuvaus }" name="arvo">${kirjausArvo.arvo}</textarea>
+                <textarea id="arvo" class="portlet-form-input-field" title="${tyyppi.kuvaus }" name="arvo">${kirjausArvo.arvo}</textarea>
                 </c:if>
                 <c:if test="${ empty kirjausArvo }">
-                <textarea id="arvo" class="add" title="${tyyppi.kuvaus }" name="arvo"></textarea>
+                <textarea id="arvo" class="portlet-form-input-field" title="${tyyppi.kuvaus }" name="arvo"></textarea>
                 </c:if>
 
             </div>
 	</div>
 
-			<span style="float: right;"> <input type="submit"
+			<span class="right"> 
+			
+			 <input type="submit" class="portlet-form-button"
 				value="<spring:message code="ui.sopimus.tallenna"/>"> <span>
 					<strong><a href="${kotiUrl}"><spring:message code="ui.peruuta" /> </a> </strong> </span> 
 			</span>
@@ -103,5 +106,6 @@
 		</form:form>
 	</div>
 	
-	<div style="clear: both;"></div>
+	<div class="reset-floating"></div>
+
 </div>

@@ -20,7 +20,7 @@
 		}
 	}
 </script>
-
+ 
 
 <portlet:defineObjects />
 
@@ -48,22 +48,21 @@
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
 </portlet:actionURL>
 
-<div>
+<div class="portlet-section-body">
 
 	<div class="home">
 		<a href="${kotiUrl}"><spring:message code="ui.takaisin" /> </a>
 	</div>
 
-</div>
 
-<div id="main" class="wide">
-	<h1>
+<div >
+	<h1 class="portlet-section-header">
 		${lapsi.nimi}
 		<spring:message code="ui.kks.otsikko" />
 	</h1>
 
-	<div>
-		<table width="100%" border="0">
+	<div class="table">
+		<table class="portlet-table-body" width="100%" border="0">
 			<tr>
 				<th align="left"><spring:message code="ui.tietokokoelma" /></th>
 				<th align="left"><spring:message code="ui.viimeisin.kirjaus" />
@@ -76,8 +75,6 @@
 			</tr>
 
 			<c:if test="${not empty kokoelmat}">
-
-
 				<c:forEach var="tieto" items="${kokoelmat}">
 
 					<c:if
@@ -109,8 +106,6 @@
 													<strong><spring:message code="ui.lukitse" /> </strong> </a> </span>
 										</c:when>
 										<c:otherwise>
-
-
 											<c:if test="${ not tieto.versioitu }">
 												<spring:message code="ui.lukittu" />
 												<span class="linkki"> <a
@@ -217,15 +212,15 @@
 
 						<form:form name="aktivointiForm" commandName="aktivointi"
 							method="post" action="${aktivointiActionUrl}">
+   
+								<div class="portlet-form-field-label"><spring:message code="ui.sopimus.tyyppi" /></div>
 
-							<div>
-								<br>
-								<spring:message code="ui.sopimus.tyyppi" />
-								<span class="pvm"> <form:select id="kks.select"
+    
+								<span class="portlet-form-field"> <form:select id="kks.select"
 										path="aktivoitavaKentta" onchange="insertSelection();"
 										class="kokoelmavalinta" >
 
-										<form:option value="" label="" />
+										<form:option  value="" label="" />
 										<c:forEach var="kokoelma" items="${aktivoitavat}">
 											<c:if test="${kokoelma.versioitava}">
 												<form:option value="${kokoelma.tekstina}"
@@ -237,17 +232,12 @@
 
 										</c:forEach>
 									</form:select> </span>
-							</div>
-
-							<div>
-								<spring:message code="ui.sopimus.nimi" />
-								<span class="pvm"><form:input id="kks.nimi" path="nimi" size="40" />
+								<div class="portlet-form-field-label"><spring:message code="ui.sopimus.nimi" /></div>
+								<span class="portlet-form-field"><form:input  id="kks.nimi" path="nimi" size="40" />
 								</span>
-							</div>
-							<br />
+							
 
-
-							<span> <input type="submit"
+							<span class="clear"> <input type="submit" class="portlet-form-button"
 								value="<spring:message code="ui.sopimus.tallenna"/>"> </span>
 						</form:form>
 
@@ -263,6 +253,7 @@
 
 
 <div></div>
+</div>
 
 <script type="text/javascript"
 	src="http://code.jquery.com/jquery-1.4.4.min.js"></script>

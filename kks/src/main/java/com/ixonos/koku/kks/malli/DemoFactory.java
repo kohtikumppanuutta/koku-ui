@@ -268,7 +268,7 @@ public class DemoFactory {
         .lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
             "Pukee ja riisuu itse",
             "kuvaa päivittäistoimintojen sujumista",
-            "päivittäistoiminnot",
+            "Päivittäistoiminnot",
             "päivähoito",
             "päivähoidon asiakasrekisteri",
             "Päivähoito",
@@ -281,7 +281,7 @@ public class DemoFactory {
         .lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
             "Syö siististi",
             "kuvaa päivittäistoimintojen sujumista",
-            "päivittäistoiminnot",
+            "Päivittäistoiminnot",
             "päivähoito",
             "päivähoidon asiakasrekisteri",
             "Päivähoito",
@@ -294,7 +294,7 @@ public class DemoFactory {
         .lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
             "Käy omatoimisesti wc:ssä",
             "kuvaa päivittäistoimintojen sujumista",
-            "päivittäistoiminnot",
+            "Päivittäistoiminnot",
             "päivähoito",
             "päivähoidon asiakasrekisteri",
             "Päivähoito",
@@ -306,7 +306,7 @@ public class DemoFactory {
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Hahmottaa hoitopaikan hoitorytmin",
         "kuvaa päivittäistoimintojen sujumista",
-        "päivittäistoiminnot",
+        "Päivittäistoiminnot",
         "päivähoito",
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
@@ -318,7 +318,7 @@ public class DemoFactory {
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Siirtyminen toiminnasta toiseen onnistuu",
         "kuvaa päivittäistoimintojen sujumista",
-        "päivittäistoiminnot",
+        "Päivittäistoiminnot",
         "päivähoito",
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
@@ -328,14 +328,14 @@ public class DemoFactory {
             Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi("Päivälepo", "kuvaa päivittäistoimintojen sujumista",
-        "päivittäistoiminnot", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
+        "Päivittäistoiminnot", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
         luoArvot("Nukkuu päivittäin", "Satunnaisesti", "Ei nuku päiväunia"), luoTyypit(Vakiot.KEHITYSASIATYYPPI_ARVIO),
         luoLuokitus(Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Juoksee sujuvasti",
         "kuvaa fyysistä kehitystä",
-        "liikkuminen ja hahmottaminen",
+        "Liikkuminen ja hahmottaminen",
         "päivähoito",
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
@@ -347,7 +347,7 @@ public class DemoFactory {
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Kävelee kapealla penkillä / narua pitkin",
         "kuvaa fyysistä kehitystä",
-        "liikkuminen ja hahmottaminen",
+        "Liikkuminen ja hahmottaminen",
         "päivähoito",
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
@@ -359,7 +359,7 @@ public class DemoFactory {
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Hyppää tasajalkahyppyä",
         "kuvaa fyysistä kehitystä",
-        "liikkuminen ja hahmottaminen",
+        "Liikkuminen ja hahmottaminen",
         "päivähoito",
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
@@ -371,7 +371,7 @@ public class DemoFactory {
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Kävelee portaita ylös ja alas vuorotahtiin",
         "kuvaa fyysistä kehitystä",
-        "liikkuminen ja hahmottaminen",
+        "Liikkuminen ja hahmottaminen",
         "päivähoito",
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
@@ -383,7 +383,7 @@ public class DemoFactory {
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Kiipeilee",
         "kuvaa fyysistä kehitystä",
-        "liikkuminen ja hahmottaminen",
+        "Liikkuminen ja hahmottaminen",
         "päivähoito",
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
@@ -393,34 +393,34 @@ public class DemoFactory {
             Vakiot.LUOKITUS_LIIKUNANLLISET_TAIDOT, Vakiot.LUOKITUS_MOTORIIKKA_KARKEA)));
 
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi("Tunnistaa ja nimeää kehonosia", "kuvaa psyykkistä kehitystä",
-        "liikkuminen ja hahmottaminen", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
+        "Liikkuminen ja hahmottaminen", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
         luoArvot("kyllä", "vaihtelevasti", "ei vielä"), luoTyypit(Vakiot.KEHITYSASIATYYPPI_HAVAINTO),
         luoLuokitus(Vakiot.LUOKITUS_PSYYKKINEN_KEHITYS)));
 
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi("Piirtää tunnistettavia asioita", "kuvaa psyykkistä kehitystä",
-        "liikkuminen ja hahmottaminen", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
+        "Liikkuminen ja hahmottaminen", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
         luoArvot("kyllä", "vaihtelevasti", "ei vielä"), luoTyypit(Vakiot.KEHITYSASIATYYPPI_HAVAINTO),
         luoLuokitus(Vakiot.LUOKITUS_PSYYKKINEN_KEHITYS)));
 
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi("Leikkaa saksilla", "kuvaa fyysistä ja psyykkistä kehitystä",
-        "liikkuminen ja hahmottaminen", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
+        "Liikkuminen ja hahmottaminen", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
         luoArvot("kyllä", "vaihtelevasti", "ei vielä"), luoTyypit(Vakiot.KEHITYSASIATYYPPI_ARVIO),
         luoLuokitus(Vakiot.LUOKITUS_PSYYKKINEN_KEHITYS, Vakiot.LUOKITUS_MOTORIIKKA_HIENO)));
 
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi("Kokoaa palapelejä", "kuvaa psyykkistä kehitystä",
-        "liikkuminen ja hahmottaminen", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
+        "Liikkuminen ja hahmottaminen", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
         luoArvot("n.12", "n.20", ">20"), luoTyypit(Vakiot.KEHITYSASIATYYPPI_ARVIO),
         luoLuokitus(Vakiot.LUOKITUS_PSYYKKINEN_KEHITYS, Vakiot.LUOKITUS_MOTORIIKKA_HIENO)));
 
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi("Kätisyys", "kuvaa fyysistä ja psyykkistä kehitystä",
-        "liikkuminen ja hahmottaminen", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
+        "Liikkuminen ja hahmottaminen", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
         luoArvot("Oikea", "Vasen", "Vaihtaen"), luoTyypit(Vakiot.KEHITYSASIATYYPPI_ARVIO),
         luoLuokitus(Vakiot.LUOKITUS_PSYYKKINEN_KEHITYS)));
 
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Ottaa ja säilyttää katsekontaktin vuorovaikutuksessa",
         "kuvaa vuorovaikutuksen ja kielen kehitystä",
-        "kieli ja kommunikaatio",
+        "Kieli ja kommunikaatio",
         "päivähoito",
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
@@ -432,7 +432,7 @@ public class DemoFactory {
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Osaa kuunnella vastavuoroisesti",
         "kuvaa vuorovaikutuksen ja kielen kehitystä",
-        "kieli ja kommunikaatio",
+        "Kieli ja kommunikaatio",
         "päivähoito",
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
@@ -442,7 +442,7 @@ public class DemoFactory {
             Vakiot.LUOKITUS_KIELI_JA_KOMMUNIKAATIO)));
 
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi("Toimii ohjeiden mukaan",
-        "kuvaa vuorovaikutuksen ja kielen kehitystä", "kieli ja kommunikaatio", "päivähoito",
+        "kuvaa vuorovaikutuksen ja kielen kehitystä", "Kieli ja kommunikaatio", "päivähoito",
         "päivähoidon asiakasrekisteri", "Päivähoito", luoArvot("Yleensä", "Vaihtelevasti", "Ei vielä"),
         luoTyypit(Vakiot.KEHITYSASIATYYPPI_ARVIO),
         luoLuokitus(Vakiot.LUOKITUS_KIELI_JA_KOMMUNIKAATIO, Vakiot.LUOKITUS_PSYYKKINEN_KEHITYS)));
@@ -450,7 +450,7 @@ public class DemoFactory {
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "On kiinnostunut saduista ja kertomuksista",
         "kuvaa vuorovaikutuksen ja kielen kehitystä",
-        "kieli ja kommunikaatio",
+        "Kieli ja kommunikaatio",
         "päivähoito",
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
@@ -462,7 +462,7 @@ public class DemoFactory {
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Puhe on selkeää ja ymmärrettävää",
         "kuvaa kielen kehitystä",
-        "kieli ja kommunikaatio",
+        "Kieli ja kommunikaatio",
         "päivähoito",
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
@@ -474,7 +474,7 @@ public class DemoFactory {
     tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
         "Huomioita puheesta",
         "esim. äänivirheet, änkytys, käheys, jne",
-        "kieli ja kommunikaatio",
+        "Kieli ja kommunikaatio",
         "päivähoito",
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
@@ -483,19 +483,19 @@ public class DemoFactory {
             Vakiot.LUOKITUS_MOTORIIKKA_HIENO)));
 
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi("Ymmärtää lukumäärien 1-4 vastaavuuden",
-        "kuvaa matemaattisten taitojen kehitystä", "kieli ja kommunikaatio", "päivähoito",
+        "kuvaa matemaattisten taitojen kehitystä", "Kieli ja kommunikaatio", "päivähoito",
         "päivähoidon asiakasrekisteri", "Päivähoito", luoArvot("Yleensä", "Vaihtelevasti", "Ei vielä"),
         luoTyypit(Vakiot.KEHITYSASIATYYPPI_ARVIO), luoLuokitus(Vakiot.LUOKITUS_MATEMAATTISET_TAIDOT)));
 
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi("Tunnistaa ja nimeää perusvärit", "kuvaa kielen kehitystä",
-        "kieli ja kommunikaatio", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
+        "Kieli ja kommunikaatio", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
         luoArvot("Yleensä", "Vaihtelevasti", "Ei vielä"), luoTyypit(Vakiot.KEHITYSASIATYYPPI_ARVIO),
         luoLuokitus(Vakiot.LUOKITUS_KIELI_JA_KOMMUNIKAATIO)));
 
     tyyppi.lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
         "Osaa kertoa pieniä tarinoita / osaa kertoa tapahtuneista asioista",
         "kuvaa kielen kehitystä",
-        "kieli ja kommunikaatio",
+        "Kieli ja kommunikaatio",
         "päivähoito",
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
@@ -617,6 +617,11 @@ public class DemoFactory {
     tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi("Haluan keskustella lisäksi", "Kuvaa keskustelutarpeet", "",
         "neuvola", "potilasrekisteri", "Huoltaja", luoTyypit(Vakiot.KEHITYSASIATYYPPI_TOIVE),
         luoLuokitus(Vakiot.LUOKITUS_HUOLENAIHEET)));
+
+    tyyppi.lisaaKirjausTyyppi(luoMoniarvoinenVapaaTekstiKirjausTyyppi("Kommentit, havainnot ja tavoitteet",
+        "Kirjatut kommentit, havainnot ja tavoitteet", "", "", "", "", "kommentti, havainto tai tavoite",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KOMMENTTI, Vakiot.LUOKITUS_TAVOITE, Vakiot.LUOKITUS_HAVAINTO)));
 
     Date nyt = new Date();
     Date loppuu = new Date();

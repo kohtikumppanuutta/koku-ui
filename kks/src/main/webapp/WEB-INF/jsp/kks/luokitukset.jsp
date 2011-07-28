@@ -15,40 +15,35 @@
 <portlet:renderURL var="kotiUrl">
 
 </portlet:renderURL>
-
-
-<div>
+<div class="portlet-section-body">
 
 	<div class="home">
 		<a href="${kotiUrl}"><spring:message code="ui.takaisin" /> </a>
 	</div>
 
-</div>
-
-<div>
-	<h1>OLEMASSAOLEVAT LUOKITUKSET</h1>
+<div id="kirjaus.tyypit" class="portlet-section-text">
+	<h1 class="portlet-section-header">OLEMASSAOLEVAT LUOKITUKSET</h1>
 
         
-        <div style="float: left;padding: 2px">
-                <h3>Luokitukset</h3>                
+        <div class="custom" style="float: left;padding: 2px">
+                <h3 class="portlet-section-subheader">Luokitukset</h3>                
                 <span>${luokitukset}</span>
         </div>
         
-        <div style="float: left; padding: 2px">
-                <h3>Kehitysasialajit</h3>                
+        <div class="custom" style="float: left; padding: 2px">
+                <h3 class="portlet-section-subheader">Kehitysasialajit</h3>                
                 <span>${kehitysAsialajit}</span>
         </div>
 
         
-        <div style="clear:both"></div>
-        
-            <h1>KOKOELMIEN LUOKITUKSET</h1>
+        <div class="reset"></div>        
+            <h1 class="portlet-section-header">KOKOELMIEN LUOKITUKSET</h1>
 		<div>
 			<c:forEach var="tyyppi" items="${kokoelmaTyypit}">
 
-				<h2>${ tyyppi.nimi }</h2>
+				<h2 class="portlet-section-subheader">${ tyyppi.nimi }</h2>
 
-				<table width="100%" border="0">
+				<table class="portlet-table-body" width="100%" border="0">
 					<tr>
 						<th align="left"><h3>Kentän nimi</h3></th>
 						<th align="left"><h3>Tietotyyppi</h3></th>
@@ -80,4 +75,5 @@
 		</div>
 		
 		<div></br></div>
+</div>
 </div>

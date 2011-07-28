@@ -32,136 +32,141 @@
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
 	<portlet:param name="kokoelma" value="${kokoelma.id}" />
 </portlet:actionURL>
-<div>
 
-	<div class="home">
+<div class="portlet-section-body">
+
+<div class="home">
+
+	<div >
 		<a href="${kotiUrl}"><spring:message code="ui.takaisin" /> </a>
 	</div>
 </div>
 
+<div class="reset-floating"></div>
 
-<h1>
-	${lapsi.nimi} ${kokoelma.nimi} 
-	<c:if test="${not kokoelma.tila.aktiivinen}">
-		(<spring:message code="ui.lukittu" />)
-	</c:if>
-	 <span style="float: right;">  <c:if	  
-			test="${ kokoelma.pohjautuuToiseen }">
-			
-			<a
-				href="
+<div class="left">
+<h1 class="portlet-section-header">
+    ${lapsi.nimi} ${kokoelma.nimi} 
+    <c:if test="${not kokoelma.tila.aktiivinen}">
+        (<spring:message code="ui.lukittu" />)
+    </c:if>
+
+</h1>
+</div>
+<div class="right">
+
+         <c:if      
+            test="${ kokoelma.pohjautuuToiseen }">            
+            <a
+                href="
                         <portlet:renderURL>
                             <portlet:param name="toiminto" value="naytaKokoelma" />
                             <portlet:param name="hetu" value="${lapsi.hetu}" />
                             <portlet:param name="kokoelma" value="${kokoelma.edellinenVersio}" />
                         </portlet:renderURL>">
-				<strong><spring:message code="ui.edellinen.versio" />
-			</strong> </a>
-		</c:if> <c:if test="${kokoelma.versioitu}">
-			<c:if      
+                <strong><spring:message code="ui.edellinen.versio" />
+            </strong> </a>
+        </c:if> <c:if test="${kokoelma.versioitu}">
+            <c:if      
             test="${ kokoelma.pohjautuuToiseen }">
             </br>
             </c:if>
-			<a
-				href="
+            <a
+                href="
                         <portlet:renderURL>
                             <portlet:param name="toiminto" value="naytaKokoelma" />
                             <portlet:param name="hetu" value="${lapsi.hetu}" />
                             <portlet:param name="kokoelma" value="${kokoelma.uudempiVersio}" />
                         </portlet:renderURL>">
-				<strong><spring:message code="ui.seuraava.versio" />
-			</strong> </a>
-		</c:if> </span>
-</h1>
+                <strong><spring:message code="ui.seuraava.versio" />
+            </strong> </a>
+        </c:if> 
+</div>
+<div class="reset-floating"></div>
+    <div class="main">
 
+        <c:if test="${not empty kokoelma.tyyppi.kirjausRyhmat}">
 
-<div id="main" class="wide">
-	<div id="kirjaus.tyypit">
+            <form:form name="kirjausForm" commandName="kirjaus" method="post"
+                action="${tallennaKirjausActionUrl}">
 
-		<c:if test="${not empty kokoelma.tyyppi.kirjausRyhmat}">
+                <c:forEach var="ryhma"
+                    items="${kokoelma.tyyppi.kirjausRyhmat.values}">
 
+                    <c:if test="${not empty ryhma.nimi}">
+                        <h2 class="portlet-section-subheader">${ryhma.nimi } t‰ytt‰‰</h2>
+                    </c:if>
+                    <c:forEach var="lapsiryhma" items='${ryhma.lapsiryhmat.values}'>
 
-			<form:form name="kirjausForm" commandName="kirjaus" method="post"
-				action="${tallennaKirjausActionUrl}">
-
-				<c:forEach var="ryhma"
-					items="${kokoelma.tyyppi.kirjausRyhmat.values}">
-
-					<c:if test="${not empty ryhma.nimi}">
-						<h2>${ryhma.nimi } t‰ytt‰‰</h2>
-					</c:if>
-					<c:forEach var="lapsiryhma" items='${ryhma.lapsiryhmat.values}'>
-
-						<c:if test="${not empty lapsiryhma.nimi}">
-							<h3>${lapsiryhma.nimi }</h3>
-						</c:if>
-						<c:forEach var="tyypit" items='${lapsiryhma.tyypit.values  }'>
-							<c:forEach var="tyyppi" items='${ tyypit }'>
-								<div class="kirjaus">
-									<strong>${tyyppi.nimi } <c:if
-											test="${tyyppi.moniArvoinen && kokoelma.tila.aktiivinen }">
-											<a
-												href="
+                        <c:if test="${not empty lapsiryhma.nimi}">
+                            <h3 class="portlet-section-subheader">${lapsiryhma.nimi }</h3>
+                        </c:if>
+                        <c:forEach var="tyypit" items='${lapsiryhma.tyypit.values  }'>
+                            <c:forEach var="tyyppi" items='${ tyypit }'>
+                                <div class="kirjaus">
+                                    <span class="portlet-form-field-label">${tyyppi.nimi } <c:if
+                                            test="${tyyppi.moniArvoinen && kokoelma.tila.aktiivinen }">
+                                            <a
+                                                href="
                                                           <portlet:renderURL>
                                                               <portlet:param name="toiminto" value="naytaMoniarvoinen" />
                                                               <portlet:param name="hetu" value="${lapsi.hetu}" />
                                                               <portlet:param name="kokoelma" value="${kokoelma.id}" />
                                                               <portlet:param name="kirjausTyyppi" value="${tyyppi.koodi}" />
                                                           </portlet:renderURL>">
-												(<spring:message code="ui.lisaa.moniarvoinen" />...) </a>
-										</c:if>
-									</strong>
+                                                (<spring:message code="ui.lisaa.moniarvoinen" />) </a>
+                                        </c:if>
+                                    </span>
 
-									<c:if test="${ kokoelma.tila.aktiivinen }">
-										<c:choose>
-											<c:when
-												test="${ tyyppi.tietoTyyppi.nimi eq monivalinta.nimi }">
-												<span class="monivalinta"> <c:forEach
-														items="${tyyppi.arvoJoukko}" var="arvo">
-														<form:checkbox title="${tyyppi.kuvaus }"
-															path="kirjaukset['${tyyppi.koodi}'].arvot"
-															value="${ arvo }" label="${arvo}" />
-													</c:forEach> </span>
-											</c:when>
-											<c:when test="${ tyyppi.tietoTyyppi.nimi eq valinta.nimi }">
-												<span class="monivalinta"> <c:forEach
-														items="${tyyppi.arvoJoukko}" var="arvo">
-														<form:radiobutton title="${tyyppi.kuvaus }"
-															path="kirjaukset['${tyyppi.koodi}'].arvot"
-															value="${ arvo }" label="${arvo}" />
-													</c:forEach> </span>
-											</c:when>
-											<c:when test="${ tyyppi.tietoTyyppi.nimi eq teksti.nimi }">
-												<div class="teksti">
-													<form:input title="${tyyppi.kuvaus }" class="add"
-														path="kirjaukset['${tyyppi.koodi}'].arvo" />
-												</div>
-											</c:when>
-											<c:otherwise>
-												<div class="vapaa.teksti">
+                                    <c:if test="${ kokoelma.tila.aktiivinen }">
+                                        <c:choose>
+                                            <c:when
+                                                test="${ tyyppi.tietoTyyppi.nimi eq monivalinta.nimi }">
+                                                <div class="portlet-form-field"> <c:forEach
+                                                        items="${tyyppi.arvoJoukko}" var="arvo">
+                                                        <form:checkbox  class="portlet-form-input-field" title="${tyyppi.kuvaus }"
+                                                            path="kirjaukset['${tyyppi.koodi}'].arvot"
+                                                            value="${ arvo }" label="${arvo}" />
+                                                    </c:forEach> </div>
+                                            </c:when>
+                                            <c:when test="${ tyyppi.tietoTyyppi.nimi eq valinta.nimi }">
+                                                <div class="portlet-form-field"> <c:forEach
+                                                        items="${tyyppi.arvoJoukko}" var="arvo">
+                                                        <form:radiobutton class="portlet-form-input-field" title="${tyyppi.kuvaus }"
+                                                            path="kirjaukset['${tyyppi.koodi}'].arvot"
+                                                            value="${ arvo }" label="${arvo}" />
+                                                    </c:forEach> </div>
+                                            </c:when>
+                                            <c:when test="${ tyyppi.tietoTyyppi.nimi eq teksti.nimi }">
+                                                <div class="portlet-form-field" >
+                                                    <form:input title="${tyyppi.kuvaus }" class="portlet-form-input-field"
+                                                        path="kirjaukset['${tyyppi.koodi}'].arvo" />
+                                                </div>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="portlet-form-field">
+                                                    <c:if test="${not tyyppi.moniArvoinen}">
+                                                        <form:textarea class="portlet-form-input-field" title="${tyyppi.kuvaus }" 
+                                                            path="kirjaukset['${tyyppi.koodi}'].arvo" />
+                                                    </c:if>
+                                                    <c:if test="${tyyppi.moniArvoinen}">
 
-													<c:if test="${not tyyppi.moniArvoinen}">
-														<form:textarea title="${tyyppi.kuvaus }" class="add"
-															path="kirjaukset['${tyyppi.koodi}'].arvo" />
-													</c:if>
-													<c:if test="${tyyppi.moniArvoinen}">
+                                                        <div class="vapaa.teksti">
 
-														<div class="vapaa.teksti">
+                                                            <div class="moniarvoiset">
 
-															<div class="moniarvoiset">
+                                                                <c:if
+                                                                    test="${empty kokoelma.moniArvoisetKirjaukset[tyyppi.koodi]}">
+                                                                    <span class="portlet-section-text"><spring:message
+                                                                            code="ui.ei.merkintoja" />
+                                                                    </span>
+                                                                </c:if>
 
-																<c:if
-																	test="${empty kokoelma.moniArvoisetKirjaukset[tyyppi.koodi]}">
-																	<span class="teksti"><spring:message
-																			code="ui.ei.merkintoja" />
-																	</span>
-																</c:if>
+                                                                <c:forEach var="moniarvoinen"
+                                                                    items='${ kokoelma.moniArvoisetKirjaukset[tyyppi.koodi] }'>
 
-																<c:forEach var="moniarvoinen"
-																	items='${ kokoelma.moniArvoisetKirjaukset[tyyppi.koodi] }'>
-
-																	<span class="teksti">${moniarvoinen.arvo} <span><a
-																			href="
+                                                                    <span class="portlet-section-text">${moniarvoinen.arvo} <span><a
+                                                                            href="
                                                                             <portlet:renderURL>
                                                                                 <portlet:param name="toiminto" value="naytaMoniarvoinen" />
                                                                                 <portlet:param name="hetu" value="${lapsi.hetu}" />
@@ -169,64 +174,62 @@
                                                                                 <portlet:param name="kirjausTyyppi" value="${tyyppi.koodi}" />
                                                                                 <portlet:param name="kirjausId" value="${moniarvoinen.id }" />
                                                                             </portlet:renderURL>">
-																				(<spring:message code="ui.muokkaa" />...) </a>
-																	</span> </span>
-																	</br>
-																</c:forEach>
-															</div>
-														</div>
-													</c:if>
-												</div>
-											</c:otherwise>
-										</c:choose>
-									</c:if>
+                                                                                (<spring:message code="ui.muokkaa" />) </a>
+                                                                    </span> </span>
+                                                                    </br>
+                                                                </c:forEach>
+                                                            </div>
+                                                        </div>
+                                                    </c:if>
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:if>
 
-									<c:if test="${ not kokoelma.tila.aktiivinen }">
+                                    <c:if test="${ not kokoelma.tila.aktiivinen }">
 
-										<div class="vapaa.teksti">
+                                        <div class="portlet-section-text">
+                                            <c:if
+                                                test="${ empty kokoelma.moniArvoisetKirjaukset[tyyppi.koodi] && empty kokoelma.kirjaukset[tyyppi.koodi].arvo }">
+                                                <span class="teksti">-</span>
+                                            </c:if>
 
+                                            <span class="teksti"> <c:if
+                                                    test="${ tyyppi.moniArvoinen }">
+                                                    <c:forEach var="moniarvoinen"
+                                                        items='${ kokoelma.moniArvoisetKirjaukset[tyyppi.koodi] }'>
 
-											<c:if
-												test="${ empty kokoelma.moniArvoisetKirjaukset[tyyppi.koodi] && empty kokoelma.kirjaukset[tyyppi.koodi].arvo }">
-												<span class="teksti">-</span>
-											</c:if>
+                                                        <span class="teksti"> ${moniarvoinen.arvo} </span>
+                                                        </br>
+                                                    </c:forEach>
+                                                </c:if> <c:if test="${ not tyyppi.moniArvoinen }">
+                                                    <c:out value="${kokoelma.kirjaukset[tyyppi.koodi].arvo }"></c:out>
+                                                </c:if> </span>
 
-											<span class="teksti"> <c:if
-													test="${ tyyppi.moniArvoinen }">
-													<c:forEach var="moniarvoinen"
-														items='${ kokoelma.moniArvoisetKirjaukset[tyyppi.koodi] }'>
+                                        </div>
+                                    </c:if>
+                                </div>
+                            </c:forEach>
+                        </c:forEach>
+                    </c:forEach>
+                </c:forEach>
 
-														<span class="teksti"> ${moniarvoinen.arvo} </span>
-														</br>
-													</c:forEach>
-												</c:if> <c:if test="${ not tyyppi.moniArvoinen }">
-													<c:out value="${kokoelma.kirjaukset[tyyppi.koodi].arvo }"></c:out>
-												</c:if> </span>
+                <div class="clear">
+                <c:if test="${ kokoelma.tila.aktiivinen }">
+                    <input type="submit" class="portlet-form-button"
+                        value="<spring:message code="ui.tallenna.tieto"/>" class="hae">
+                </c:if>
+                </div>
+                <div class="reset-floating" />
+            </form:form>
 
-										</div>
-									</c:if>
-								</div>
-							</c:forEach>
-						</c:forEach>
-					</c:forEach>
-				</c:forEach>
-
-				<div class="clear" />
-				<c:if test="${ kokoelma.tila.aktiivinen }">
-					<input type="submit"
-						value="<spring:message code="ui.tallenna.tieto"/>" class="hae">
-				</c:if>
-				<div style="clear: both" class="clear" />
-			</form:form>
-
-		</c:if>
-
+        </c:if>
 
 
 
-	</div>
+
+    </div>
 </div>
-
 <br />
 
 

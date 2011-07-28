@@ -26,16 +26,16 @@
 	<portlet:param name="toiminto" value="naytaLuokittelu" />
 </portlet:renderURL>
 
-<div>
+<div class="portlet-section-body">
 
-	<div style="float: left;">
-		<div>
+	<div  style="float: left">
+		<div >
 			<form:form name="guardianForm" method="post" action="${viewChilds}">
 				<input type="submit" value="<spring:message code="ui.nayta.huoltaja"/>" />
 			</form:form>
 		</div>
 
-		<div>
+		<div >
 			<form:form name="proForm" method="post" action="${showPro}">
 				<input type="submit" value="<spring:message code="ui.nayta.tyontekija"/>" />
 			</form:form>
@@ -43,7 +43,7 @@
 
 	</div>
 
-	<div style="float: right;">
+	<div class="right">
 		<form:form name="luokitteluForm" method="post" action="${luokittelu}">
 		
 		      
@@ -51,6 +51,6 @@
 		</form:form>
 	</div>
 
-    <div style="clear:both"></div>
+    <div class="reset-floating"></div>
 
 </div>

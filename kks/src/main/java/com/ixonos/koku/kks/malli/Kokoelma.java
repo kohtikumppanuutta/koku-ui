@@ -33,7 +33,7 @@ public class Kokoelma {
 
   public Kokoelma(String id, Kokoelma edellinen, Date luontiAika, KokoelmaTila tila, int versio) {
     this(id, edellinen.getNimi(), edellinen.getKuvaus(), tila, luontiAika, versio, edellinen.getTyyppi());
-    edellinenVersio = edellinen.getEdellinenVersio();
+    edellinenVersio = edellinen.getId();
     pohjautuuToiseen = true;
 
     for (Kirjaus k : edellinen.getKirjaukset().values()) {

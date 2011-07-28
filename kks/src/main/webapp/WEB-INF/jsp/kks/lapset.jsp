@@ -13,34 +13,38 @@
 
 <c:set var="ammattilainen" value="${false}" scope="session"/>  
 
-<div id="main" class="wide">
+<div class="portlet-section-body">
 
 	<div class="home">
 		<a href="${kotiUrl}">Takaisin</a>
 	</div>
 
-	<div>
-		<h1><spring:message code="ui.kks.otsikko"/></h1>
+	<div class="title">
+		<h1 class="portlet-section-header"><spring:message code="ui.kks.otsikko"/></h1>
 		<spring:message code="ui.kks.kuvaus"/>
-		<p><spring:message code="ui.valitse.lapsi"/></p>
+		
+		<h3 class="portlet-section-subheader">
+		   <spring:message code="ui.valitse.lapsi"/>
+		 </h3>
 	</div>
 
-	<div id="lapset">
+	<div class="kokoelma">
 		<c:if test="${not empty lapset}">
 			<c:forEach var="lapsi" items="${lapset}">
-				<span class="pvm">
+				<span class="linkki">
 					<a
 						href="
 						<portlet:actionURL>
 							<portlet:param name="toiminto" value="lapsenTietoihin" />
 							<portlet:param name="hetu" value="${lapsi.hetu}" />
 						</portlet:actionURL>">
-						 ${ lapsi.sukunimi }, ${lapsi.etunimi}  </a>  ${lapsi.hetu}
-				</span>
+						 <strong>${ lapsi.sukunimi }, ${lapsi.etunimi} </strong> </a>  ${lapsi.hetu}
+				</span></br>
 			</c:forEach>
 		</c:if>
 	</div>
-	<div></br></div>
+	<div class="spacer"></br></div>
 
 </div>
-<div></div>
+<div class="spacer"></div>
+
