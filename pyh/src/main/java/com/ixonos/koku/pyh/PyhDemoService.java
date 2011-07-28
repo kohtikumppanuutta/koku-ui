@@ -38,6 +38,10 @@ public class PyhDemoService {
     }
   }
 
+  public void reset() {
+    this.model = PyhDemoFactory.createModel();
+  }
+
   public Person getUser() {
     return model.getPerson(user.getSsn());
   }

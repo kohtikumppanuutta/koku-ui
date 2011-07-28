@@ -30,8 +30,8 @@
 <div class="portlet-section-body">
 
 	<h1 class="portlet-section-header">
-		Perhetiedot <span class="takaisin"><a class="takaisin"
-			href="${backURL}"><spring:message code="ui.hide" /></a>
+		<spring:message code="ui.pyh.family.info" /> <span class="takaisin"><a class="takaisin"
+			href="${backURL}"><spring:message code="ui.pyh.back" /></a>
 		</span>
 	</h1>
 
@@ -48,7 +48,7 @@
 					type="text" value="${user.email}" />
 				</span>
 
-				<input class="portlet-form-button" type="submit" value="Tallenna"
+				<input class="portlet-form-button" type="submit" value="<spring:message code="ui.pyh.save.simple" />"
 					onclick="doSubmitForm()" />
 			</form:form>
 		</div>
@@ -57,7 +57,7 @@
 
 	<c:if test="${not empty dependants}">
 		<div class="dependants">
-			<h3 class="portlet-section-subheader">Huollettavat lapset</h3>
+			<h3 class="portlet-section-subheader"><spring:message code="ui.pyh.dependants" /></h3>
 			<c:forEach var="dependant" items="${dependants}">
 				<div class="dependant">
 					<span class="name">${dependant.firstname}
@@ -66,13 +66,13 @@
 
 						<span class="link"> <c:choose>
 								<c:when test="${dependant.memberOfUserFamily}">
-					               (lisätty perheenjäseneksi)
+					               (<spring:message code="ui.pyh.added.into.family" />)
 					               <span class="link"> 
                                          <portlet:actionURL var="removeFamilyMember">
                                         <portlet:param name="action" value="removeFamilyMember" />
                                         <portlet:param name="familyMemberSSN" value="${dependant.ssn}" />
                                     </portlet:actionURL>
-                            <a href="${removeFamilyMember}">Poista jäsenyys</a> </span> 
+                            <a href="${removeFamilyMember}"><spring:message code="ui.pyh.remove.family" /></a> </span> 
 								</c:when>
 								<c:otherwise>
 									<portlet:actionURL var="addDependantAsFamilyMember">
@@ -80,8 +80,7 @@
 											value="addDependantAsFamilyMember" />
 										<portlet:param name="dependantSSN" value="${dependant.ssn}" />
 									</portlet:actionURL>
-									<a href="${addDependantAsFamilyMember}">Lisää
-										perheenjäseneksi</a>
+									<a href="${addDependantAsFamilyMember}"><spring:message code="ui.pyh.add.into.family" /></a>
 								</c:otherwise>
 							</c:choose> </span> </span>
 				</div>
@@ -187,7 +186,7 @@
 
 	<c:if test="${not empty otherFamilyMembers}">
 		<div class="members">
-			<h3 class="portlet-section-subheader">Perheyhteisön muut jäsenet</h3>
+			<h3 class="portlet-section-subheader"><spring:message code="ui.pyh.other.family" /></h3>
 			<c:forEach var="familyMember" items="${otherFamilyMembers}">
 
 				<portlet:actionURL var="removeFamilyMember">
@@ -199,7 +198,7 @@
 					<span class="name">${familyMember.firstname}
 						${familyMember.surname} ${familyMember.ssn}
 						(${familyMember.role.text}) </span> <span class="linkki"><a
-						href="${removeFamilyMember}">Poista perheenjäsen</a>
+						href="${removeFamilyMember}"><spring:message code="ui.pyh.remove.family" /></a>
 					</span>
 				</div>
 
@@ -210,7 +209,7 @@
 	
 	<div class="add">
                     
-		<h3 class="portlet-section-subheader">LISÄÄ KÄYTTÄJIÄ PERHEYHTEISÖÖSI</h3>
+		<h3 class="portlet-section-subheader"><spring:message code="ui.pyh.add.family" /></h3>
 
 		<portlet:actionURL var="searchUsers">
 			<portlet:param name="action" value="searchUsers" />
@@ -218,16 +217,16 @@
 
 		<form:form name="searchUsersForm" method="post"
 			action="${searchUsers}">
-			<span class="portlet-form-field-label"><spring:message code="ui.form.first.name" /></span>
+			<span class="portlet-form-field-label"><spring:message code="ui.pyh.form.first.name" /></span>
 			<span class="portlet-form-input-field"> <input
 				name="searchFirstname" /> </span>
-			<span class="portlet-form-field-label"><spring:message code="ui.form.last.name" /></span>
+			<span class="portlet-form-field-label"><spring:message code="ui.pyh.form.last.name" /></span>
 			<span class="portlet-form-input-field"> <input
 				name="searchSurname" /> </span>
-			<span class="portlet-form-field-label"><spring:message code="ui.table.ssn" />: </span>
+			<span class="portlet-form-field-label"><spring:message code="ui.pyh.table.ssn" />: </span>
 			<span class="portlet-form-input-field"> <input
 				name="searchSSN" /> </span>
-			<input class="portlet-form-button" type="submit" value="HAE &gt;" />
+			<input class="portlet-form-button" type="submit" value="<spring:message code="ui.pyh.seek"/>" />
 		</form:form>
 	</div>
 
@@ -237,10 +236,10 @@
 			<table class="portlet-table-body" width="100%" border="0">
 
 				<tr class="portlet-table-body th">
-					<th width="38%"><spring:message code="ui.table.name" /></th>
-					<th width="26%"><spring:message code="ui.table.ssn" /></th>
-					<th width="10%"><spring:message code="ui.table.add" /></th>
-					<th width="26%"><spring:message code="ui.table.role" /></th>
+					<th width="38%"><spring:message code="ui.pyh.table.name" /></th>
+					<th width="26%"><spring:message code="ui.pyh.table.ssn" /></th>
+					<th width="10%"><spring:message code="ui.pyh.table.add" /></th>
+					<th width="26%"><spring:message code="ui.pyh.table.role" /></th>
 				</tr>
 
 				<c:set var="userVar" value="1" />
@@ -281,12 +280,12 @@
 				<%-- user information is added to this form dynamically with jQuery before submitting the form --%>
 
 				<input class="portlet-form-button" type="button"
-					value="Tallenna tiedot" class="tallenna" onclick="doSubmitForm()" />
+					value="<spring:message code="ui.pyh.save" />" class="tallenna" onclick="doSubmitForm()" />
 			</form:form>
 		</c:when>
 		<c:otherwise>
 			<c:if test="${search}">
-				<p>Ei hakutuloksia.</p>
+				<p><spring:message code="ui.pyh.no.results" /></p>
 			</c:if>
 		</c:otherwise>
 	</c:choose>

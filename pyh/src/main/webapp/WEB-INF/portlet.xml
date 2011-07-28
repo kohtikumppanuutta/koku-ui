@@ -10,8 +10,10 @@
       <portlet-name>pyh</portlet-name>
       <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
       <supports>
-        <mime-type>text/html</mime-type>
-      </supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+            <portlet-mode>edit</portlet-mode>
+        </supports>
       <resource-bundle>Language-ext</resource-bundle>
       <portlet-info>
           <title>pyh-portlet</title>

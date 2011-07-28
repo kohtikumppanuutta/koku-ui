@@ -1,6 +1,7 @@
 <%@ taglib prefix="portlet" uri="http://java.sun.com/portlet"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <portlet:defineObjects />
 
@@ -11,20 +12,20 @@
 <div class="portlet-section-body">
 
 	<h1 class="portlet-section-header">
-		Omat tiedot <span class="takaisin"> <a
+		<spring:message code="ui.pyh.own.info" /> <span class="takaisin"> <a
 			href="${editFamilyInformation}">
-				Muokkaa omia tietoja</a> </span>
+				<spring:message code="ui.pyh.modify.info" /></a> </span>
 	</h1>
 
 	<c:if test="${not empty user}">
 		<div class="name">${user.firstname} ${user.surname}</div>
-		<div class="email">sähköposti: ${user.email}</div>
+		<div class="email"><spring:message code="ui.pyh.email" />  ${user.email}</div>
 	</c:if>
 
 	<c:if test="${not empty dependants}">
 
 
-		<h3 class="portlet-section-subheader">Huollettavat lapset:</h3>
+		<h3 class="portlet-section-subheader"><spring:message code="ui.pyh.dependants" /></h3>
 		<c:forEach var="child" items="${dependants}">
 			<div class="name">
 				${child.firstname} ${child.surname} ${child.ssn} <br />
@@ -34,7 +35,7 @@
 	</c:if>
 
 	<c:if test="${not empty otherFamilyMembers}">
-		<h3 class="portlet-section-subheader">Perheyhteisön muut jäsenet
+		<h3 class="portlet-section-subheader"><spring:message code="ui.pyh.other.family" />
 		</h3>
 		<c:forEach var="familyMember" items="${otherFamilyMembers}">
 			<div class="name">
