@@ -1,0 +1,130 @@
+@charset "UTF-8";
+
+.portlet-section-body {
+    color: #444444;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 13px;
+	margin:0 30px;
+}
+.home a {
+	float:right;
+	margin: 10px;
+}
+a{
+	color:#25AAE1;
+	text-decoration:none;
+}
+a:hover{
+	color:#25AAE1;
+	text-decoration:underline;
+}
+.portlet-section-header {
+	font-size: 24px;
+    font-weight: normal;
+    margin: 12px 0;
+}
+h2.portlet-section-subheader {
+	background-color: #25AAE1;
+    color: #FFFFFF;
+    margin: 12px 0;
+    padding: 8px 15px;
+	font-size:18px;
+	font-weight:normal;
+}
+h3.portlet-section-subheader {
+    margin: 12px 0;
+	font-size:15px;
+	color:#555555;
+}
+.portlet-section-text {
+}
+.portlet-form-field-label{
+	margin: 8px 0 2px;
+	color:#444444;
+}
+textarea.portlet-form-input-field {
+	background-color: #F7F7F7;
+    border: 1px solid #CCCCCC;
+    padding: 5px;
+    width: 98%;
+	color:#555555;
+}
+input.portlet-form-input-field:focus {
+	padding: 5px;
+	background-color:#FCFCFC;
+	border:1px solid #999999;
+	color:#555555;
+}
+input.portlet-form-input-field {
+	background-color: #F7F7F7;
+    border: 1px solid #CCCCCC;
+    padding: 5px;
+	color:#555555;
+}
+select.portlet-form-input-field{
+}
+textarea.portlet-form-input-field:focus {
+	padding: 5px;
+    width: 98%;
+	background-color:#FCFCFC;
+	border:1px solid #999999;
+	color:#555555;
+}
+.clear {
+	float:right;
+	margin:1%;
+}
+.portlet-form-button {
+	
+}
+.portlet-form-field {
+	margin-bottom:12px;
+	color:#797979;
+}
+.portlet-menu{
+	display: block;
+    height: 40px;
+    width: 100%;
+}
+.portlet-menu ul{
+	list-style:none;
+	margin:10px 0;
+	padding:0;
+}
+.portlet-menu li.portlet-menu-item{
+	display: inline;
+    float: left;
+    margin: 0 6px 0 0;
+	padding:6px 16px;
+	background-color:#cccccc;
+	border:1px solid #dedede;
+}
+.portlet-menu li.portlet-menu-item-selected, .portlet-menu li.portlet-menu-item-hover, .portlet-menu li.portlet-menu-item-selected-hover{
+	background-color: #25AAE1;
+    color: #FFFFFF;
+    display: inline;
+    float: left;
+    margin: 0 6px 0 0;
+    padding: 6px 16px;
+	border:1px solid #1f94c5;
+}
+
+.portlet-table-body {
+	color:#444444;
+}
+.portlet-table-body th{
+	background: none repeat scroll 0 0 #DEDEDE;
+    font-weight: normal;
+    padding: 5px;
+	font-size:13px;
+    text-transform: uppercase;
+	text-align: left;
+	
+}
+.portlet-table-body td{
+	border-bottom:1px solid #dedede !important;
+	padding:5px;
+	vertical-align:top;
+	font-size:11px;
+
+}

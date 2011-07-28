@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+//import com.ixonos.koku.kks.utils.Vakiot;
+
 /**
  * Controller for log search (LOK).
  * This implements LOK-3.
@@ -56,11 +58,16 @@ public class LogSearchController {
     return new LogSearchCriteria();
   }
 
-  // portlet render phase
   @RenderMapping
+  public String render(RenderRequest req, Model model){
+    return "menu";
+  }
+  
+  // portlet render phase
+  @RenderMapping(params = "op=searchLog")
   public String render(RenderRequest req, RenderResponse res, Model model) {
 
-  System.out.println("render phase");
+    System.out.println("log search render phase");
  
     res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
 
@@ -70,7 +77,11 @@ public class LogSearchController {
       model.addAttribute("entries", doSearchEntries(searchCriteria));
       model.addAttribute("searchParams", searchCriteria);
     }
-    System.out.println("criteria: "+searchCriteria);
+    if(searchCriteria!=null){
+      System.out.println("criteria: "+searchCriteria.getPic()+", "+searchCriteria.getConcept()+", "+searchCriteria.getFrom()+", "+searchCriteria.getTo());
+    } else{
+      System.out.println("criteria: null");
+    }
     return "search";
   }
   
@@ -78,20 +89,21 @@ public class LogSearchController {
   @ActionMapping(params="op=searchLog")
   public void doSearch(@ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, BindingResult result,
       ActionResponse response) {
-    System.out.println("action phase: criteria: "+criteria);
+    System.out.println("log search action phase");
    
     // TODO:
     // Hausta tallentuu tieto tapahtumalokin käsittelylokiin (tapahtumatietona hakuehdot)
     
  // pass criteria to render phase
     response.setRenderParameter(CRITERIA_RENDER_PARAM, criteriaSerializer.getAsText(criteria));
-    response.setRenderParameter("crite", criteria.getPic());
-    
+  
+    response.setRenderParameter("op", "searchLog");
   }
 
   private List<LogEntry> doSearchEntries(LogSearchCriteria searchCriteria) {
     List<LogEntry> r = null;
     
+    // TEMPORARY solution: 
     // show the results only if something has been written in the pic field
     if(searchCriteria.getPic()!=null && searchCriteria.getPic().length()>0){
      
@@ -103,12 +115,24 @@ public class LogSearchController {
        * kutsuva palvelu
        * 
        */
+ 
+      // TEMPORARY SOLUTION:
+      // Create 5 lines of demo log entries
+      LogDemoFactory factory = new LogDemoFactory();
       r =  new ArrayList<LogEntry>();
-      r.add(new LogEntry("2011-02-01"));
+      LogEntry entry = null;
+      for(int i=0;i<5; i++){
+        r.add(factory.createLogEntry(i));
+      }
+      
+    /*
+      r =  new ArrayList<LogEntry>();
+      r.add(new LogEntry("2011-02-01 17:01:34"));
       r.add(new LogEntry("Utelias Työntekijä"));
       r.add(new LogEntry("Tapahtumatyyppi")); // What does this mean?
       r.add(new LogEntry("4v-tarkastus"));
       r.add(new LogEntry("Järjestelmä Y"));
+      */
     }
     return r;
   }
@@ -120,6 +144,7 @@ public class LogSearchController {
    * @author aspluma
    */
   private static class CriteriaSerializer {
+    
     public String[] getAsText(LogSearchCriteria c) {
       SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
       String [] text = new String[] {c.getPic(), c.getConcept(),
