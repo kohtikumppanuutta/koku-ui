@@ -27,7 +27,7 @@ public class PyhDemoFactory {
     Person p4 = new Person("Tapani", "Toivo", "Ruohonen", "040506-4567", "040506", "");
     Person p5 = new Person("Liisa", "Leila", "Ruohonen", "050607-5678", "050607", "");
     Person p6 = new Person("Pekka", "", "Peltola", "010101-1010", "010101", "pekka.peltola@meili.fi");
-    Person p7 = new Person("Piritta", "", "Peltola", "020202-2020", "020202", "");
+    Person p7 = new Person("Piritta", "", "Peltola", "020202-2020", "020202", "irina.peltola@meili.fi");
     Person p8 = new Person("Tero", "Tapani", "Peltola", "111111-1111", "111111", "");
     Person p9 = new Person("Tiina", "Terhi", "Peltola", "222222-2222", "222222", "");
     Person p10 = new Person("Maija", "Mette", "Merinen", "333333-3333", "333333", "");
@@ -53,8 +53,9 @@ public class PyhDemoFactory {
 
     Family f1 = new Family();
     f1.addFamilyMember(new FamilyMember(p6, Role.PARENT));
-    f1.addFamilyMember(new FamilyMember(p7, Role.PARENT));
-    f1.addFamilyMember(new FamilyMember(p8, Role.CHILD));
+
+    Family f3 = new Family();
+    f3.addFamilyMember(new FamilyMember(p7, Role.PARENT));
 
     Family f2 = new Family();
     f2.addFamilyMember(new FamilyMember(p2, Role.PARENT));
@@ -62,19 +63,19 @@ public class PyhDemoFactory {
 
     model.addFamily(f1);
     model.addFamily(f2);
+    model.addFamily(f3);
 
     // create guardianships
 
     ArrayList<Dependant> d1 = new ArrayList<Dependant>();
     Dependant dep1 = new Dependant(p8);
     Dependant dep2 = new Dependant(p9);
-    dep1.setMemberOfUserFamily(true);
+    dep1.setMemberOfUserFamily(false);
     dep2.setMemberOfUserFamily(false);
     d1.add(dep1);
     d1.add(dep2);
     ArrayList<Guardian> g1 = new ArrayList<Guardian>();
     g1.add(new Guardian(p6, "isa"));
-    g1.add(new Guardian(p7, "aiti"));
     Guardianship gs1 = new Guardianship();
     gs1.setGuardians(g1);
     gs1.setDependants(d1);

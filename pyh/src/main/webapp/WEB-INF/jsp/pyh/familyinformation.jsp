@@ -9,7 +9,18 @@
                             <portlet:param name="action" value="editFamilyInformation" />
 </portlet:renderURL>
 
+<portlet:renderURL var="home">
+    <portlet:param name="action" value="" />
+</portlet:renderURL>
+
+
+
 <div class="portlet-section-body">
+
+<div class="back">
+  <span> <a
+            href="${home}"> Vaihda k‰ytt‰j‰‰</a> </span>
+</div>
 
 	<h1 class="portlet-section-header">
 		<spring:message code="ui.pyh.own.info" /> <span class="takaisin"> <a
@@ -43,7 +54,65 @@
 				${familyMember.ssn} (${familyMember.role.text}) <br />
 			</div>
 		</c:forEach>
-
 	</c:if>
+	
+	
+	 <c:if test="${not empty sentMessages}">
+        <h3 class="portlet-section-subheader"><spring:message code="ui.pyh.sent.messages" />
+        </h3>
+        <c:forEach var="sentMessage" items="${sentMessages}">
+            
+            
+            <div class="sentMessage">
+                ${sentMessage.text} 
+            </div>
+            
+        </c:forEach>
+    </c:if>
+    
+	
+    <c:if test="${not empty messages}">
+        <h3 class="portlet-section-subheader"><spring:message code="ui.pyh.messages" />
+        </h3>
+        <c:forEach var="message" items="${messages}">
+            <div class="message">
+                <strong> ${message.text} </strong>
+                
+                <span class="right"> 
 
+                    <span class="right"> 
+                    
+                    <portlet:actionURL var="reject">
+                            <portlet:param name="action" value="rejectMessage" />
+                            <portlet:param name="messageId" value="${message.id}" />
+                    </portlet:actionURL>
+                    <form:form name="reject" method="post" action="${reject}">
+                        <input type="submit" class="portlet-form-button" value="<spring:message code="ui.pyh.deny" />"/>                        
+                    </form:form>     
+                    </span>  
+                    
+                                        
+                    <span class="right"> 
+                    <portlet:actionURL var="accept">
+                            <portlet:param name="action" value="acceptMessage" />
+                            <portlet:param name="messageId" value="${message.id}" />
+                    </portlet:actionURL>
+                    <form:form name="accept" method="post" action="${accept}">
+                        <input type="submit" class="portlet-form-button" value="<spring:message code="ui.pyh.accept" />"/>                      
+                    </form:form>
+                    </span>
+                          
+                 </span> 
+                 <div class="reset-floating"></div>
+            </div>
+            
+            <div class="portlet-section-text">
+                ${message.description} 
+            </div>
+            
+        </c:forEach>
+    </c:if>
+
+<div class="reset-floating"></div>
+</br>
 </div>

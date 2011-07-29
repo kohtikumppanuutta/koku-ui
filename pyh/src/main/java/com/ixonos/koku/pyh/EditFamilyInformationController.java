@@ -23,6 +23,7 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import com.ixonos.koku.pyh.model.Dependant;
+import com.ixonos.koku.pyh.model.MessageService;
 import com.ixonos.koku.pyh.model.Person;
 
 /**
@@ -42,6 +43,10 @@ public class EditFamilyInformationController {
   @Qualifier(value = "pyhDemoService")
   private PyhDemoService pyhDemoService;
 
+  @Autowired
+  @Qualifier(value = "pyhMessageService")
+  private MessageService messageService;
+
   @RenderMapping(params = "action=editFamilyInformation")
   public String render(Model model) {
     pyhDemoService.clearSearchedUsers();
@@ -49,6 +54,7 @@ public class EditFamilyInformationController {
     model.addAttribute("dependants", pyhDemoService.getDependants());
     model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers());
     model.addAttribute("parentsFull", pyhDemoService.isParentsSet());
+    model.addAttribute("messages", messageService.getSentMessages(pyhDemoService.getUser().getSsn()));
     return "editfamilyinformation";
   }
 
@@ -60,6 +66,7 @@ public class EditFamilyInformationController {
     model.addAttribute("dependants", pyhDemoService.getDependants());
     model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers());
     model.addAttribute("parentsFull", pyhDemoService.isParentsSet());
+    model.addAttribute("messages", messageService.getSentMessages(pyhDemoService.getUser().getSsn()));
     return "editfamilyinformation";
   }
 

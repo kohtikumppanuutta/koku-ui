@@ -14,25 +14,25 @@ import com.ixonos.koku.pyh.model.Guardianship;
 import com.ixonos.koku.pyh.model.Person;
 
 public class PyhDemoModel {
-  
+
   private static Logger log = LoggerFactory.getLogger(PyhDemoModel.class);
-  
+
   private List<Person> persons;
   private List<Family> families;
   private List<Guardianship> guardianships;
-  
+
   public PyhDemoModel() {
     persons = new ArrayList<Person>();
     families = new ArrayList<Family>();
     guardianships = new ArrayList<Guardianship>();
   }
-  
-  /// persons ///
-  
+
+  // / persons ///
+
   public void addPerson(Person person) {
     persons.add(person);
   }
-  
+
   public Person getPerson(String personSSN) {
     Iterator<Person> pi = persons.iterator();
     while (pi.hasNext()) {
@@ -43,28 +43,32 @@ public class PyhDemoModel {
     }
     return null;
   }
-  
+
   public List<Person> getPersons() {
     return persons;
   }
-  
-  /// families ///
-  
+
+  // / families ///
+
   public void addFamily(Family family) {
     families.add(family);
   }
-  
+
+  public void removeFamily(Family family) {
+    families.remove(family);
+  }
+
   public List<Family> getFamilies() {
-    //log.info("PyhDemoModel.getFamilies: families.size = " + families.size());
+    // log.info("PyhDemoModel.getFamilies: families.size = " + families.size());
     return families;
   }
-  
-  /// guardianships ///
-  
+
+  // / guardianships ///
+
   public void addGuardianship(Guardianship guardianship) {
     guardianships.add(guardianship);
   }
-  
+
   public Guardianship getGuardianship(String guardianSSN) {
     Iterator<Guardianship> gsi = guardianships.iterator();
     while (gsi.hasNext()) {
@@ -79,22 +83,23 @@ public class PyhDemoModel {
     }
     return null;
   }
-  
+
   public List<Guardianship> getGuardianships() {
     return guardianships;
   }
-  
-  /// dependants ///
-  
+
+  // / dependants ///
+
   public List<Dependant> getAllDependants() {
     ArrayList<Dependant> dependants = new ArrayList<Dependant>();
-    
+
     Iterator<Guardianship> gi = guardianships.iterator();
     while (gi.hasNext()) {
       Guardianship g = gi.next();
       List<Dependant> dList = g.getDependants();
-      
-      // iterate through guardianship's dependants and add them to the list to be returned
+
+      // iterate through guardianship's dependants and add them to the list to
+      // be returned
       Iterator<Dependant> di = dList.iterator();
       while (di.hasNext()) {
         Dependant d = di.next();
@@ -103,7 +108,7 @@ public class PyhDemoModel {
     }
     return dependants;
   }
-  
+
   public Dependant getDependant(String dependantSSN) {
     List<Dependant> dependants = getAllDependants();
     Iterator<Dependant> di = dependants.iterator();
@@ -115,5 +120,5 @@ public class PyhDemoModel {
     }
     return null;
   }
-  
+
 }

@@ -32,6 +32,15 @@ public class Family {
     }
   }
 
+  public FamilyMember getOtherParent(String notWantedParentSSN) {
+    for (FamilyMember f : getParents()) {
+      if (!f.getSsn().equals(notWantedParentSSN)) {
+        return f;
+      }
+    }
+    return null;
+  }
+
   public void addFamilyMember(FamilyMember familyMember) {
 
     if (Role.CHILD.equals(familyMember.getRole())) {

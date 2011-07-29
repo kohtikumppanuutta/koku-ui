@@ -287,7 +287,7 @@ input.person{
 }
 
 .name{
-    width:300px;
+    width:500px;
     text-transform: uppercase;   
 }
 .viestintiedot .add {
@@ -328,4 +328,7 @@ input.person{
 .chosen{
     color:#262626;
     padding-right:8px;
+}
+.message {
+    margin-bottom:6px;
 }

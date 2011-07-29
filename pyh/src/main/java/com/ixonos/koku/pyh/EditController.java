@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import com.ixonos.koku.pyh.model.MessageService;
+
 @Controller(value = "EditController")
 @RequestMapping(value = "EDIT")
 public class EditController {
@@ -19,6 +21,10 @@ public class EditController {
   @Autowired
   @Qualifier("pyhDemoService")
   private PyhDemoService demoService;
+
+  @Autowired
+  @Qualifier(value = "pyhMessageService")
+  private MessageService messageService;
 
   private static Logger log = LoggerFactory.getLogger(EditController.class);
 
@@ -34,6 +40,7 @@ public class EditController {
   public String naytaLuokittelu(RenderRequest req, @RequestParam(value = "note", required = false) String note,
       Model model) {
     demoService.reset();
+    messageService.reset();
     if (note != null) {
       model.addAttribute("viesti", "Malli resetoitu");
     }

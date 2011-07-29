@@ -27,7 +27,19 @@
 	<portlet:param name="action" value="guardianFamilyInformation" />
 </portlet:renderURL>
 
+
+<portlet:renderURL var="home">
+    <portlet:param name="action" value="" />
+</portlet:renderURL>
+
+
+
 <div class="portlet-section-body">
+
+<div class="back">
+  <span> <a
+            href="${home}"> Vaihda k‰ytt‰j‰‰</a> </span>
+</div>
 
 	<h1 class="portlet-section-header">
 		<spring:message code="ui.pyh.family.info" /> <span class="takaisin"><a class="takaisin"
@@ -69,7 +81,7 @@
 					               (<spring:message code="ui.pyh.added.into.family" />)
 					               <span class="link"> 
                                          <portlet:actionURL var="removeFamilyMember">
-                                        <portlet:param name="action" value="removeFamilyMember" />
+                                        <portlet:param name="action" value="removeDependant" />
                                         <portlet:param name="familyMemberSSN" value="${dependant.ssn}" />
                                     </portlet:actionURL>
                             <a href="${removeFamilyMember}"><spring:message code="ui.pyh.remove.family" /></a> </span> 
@@ -207,6 +219,19 @@
 	</c:if>
 	
 	
+	    <c:if test="${not empty messages}">
+        <h3 class="portlet-section-subheader"><spring:message code="ui.pyh.sent.messages" />
+        </h3>
+        <c:forEach var="message" items="${messages}">            
+            
+            <div class="message">
+                ${message.text}  <spring:message code="ui.pyh.waiting.approval" />
+            </div>
+            
+        </c:forEach>
+    </c:if>
+    
+	</br>
 	<div class="add">
                     
 		<h3 class="portlet-section-subheader"><spring:message code="ui.pyh.add.family" /></h3>
