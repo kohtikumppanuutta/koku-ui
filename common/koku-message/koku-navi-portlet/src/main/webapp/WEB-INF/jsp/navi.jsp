@@ -31,31 +31,38 @@
  * Handle action message navigation
  * @Author: Jinhua Chen
  */
- 
  	var koku_navi_type = "${naviType}";
  	var defaultPath = "<%= defaultPath %>";
  	var naviRefreshTimer;
  	
 	jQuery(document).ready(function(){
-		var currentPage = "<%= currentPage %>";
-		
-		if(koku_navi_type != "") {
-			var obj = "#message_" + koku_navi_type;
-			jQuery(obj).css("font-weight", "bold");
-		}else if(currentPage != ""){
-			if(currentPage == 'Message')
-				jQuery("#message_inbox").css("font-weight", "bold");
-			else if(currentPage == 'NewMessage')
-				jQuery("#message_new").css("font-weight", "bold");
-
-		}
-		
+		focusCurrentItem();	
 		ajaxUpdate();		
 		clearInterval(naviRefreshTimer);
 		var duration = 5 * 1000; // 5 seconds
 		naviRefreshTimer = setInterval('ajaxUpdate()', duration);		
 	});
 
+	/**
+	 * Finds the current item in navigation list and decorates the item, e.g. bold font 
+	 */
+	function focusCurrentItem() {
+		var currentPage = "<%= currentPage %>";
+		
+		if(currentPage == 'Message') {
+			if(koku_navi_type != "") {
+				var obj = "#" + koku_navi_type;
+				jQuery(obj).css("font-weight", "bold");
+					
+			}else jQuery("#msg_inbox").css("font-weight", "bold");
+		}else if(currentPage == 'NewMessage')
+			jQuery("#msg_new").css("font-weight", "bold");
+		else if(currentPage == 'NewRequest')
+			jQuery("#req_new").css("font-weight", "bold");
+		else if(currentPage == 'ValidRequest')
+			jQuery("#req_valid_request").css("font-weight", "bold");		
+	}
+	
 	/**
 	 * Execute ajax query in Post way, and parse the Json format response, and
 	 * then create tasks in table and task page filed.
@@ -111,6 +118,12 @@
 		window.location = url;
 	}
 	
+	function navigateToPage(naviType) {		
+		var url = "<%= defaultPath %>" + "/Message" + "<%= actionParam %>" + '&naviType=' + naviType;	
+		window.location = url;
+	}
+	
+	
 	/**
 	 * Show/hide search user interface
 	 */
@@ -134,30 +147,45 @@
 				<li><a href="#">Lapsen_002_nimi</a></li>
 			</ul></li>
 		<li><a href="/portal/private/classic/PYH" >Omat tiedot</a></li>
-		<li><a href="javascript:void(0)" onclick="getMessage('inbox')" >Viestit</a>
+		<li><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')" >Viestit</a>
 			<ul class="open child">
-				<li id="message_new"><a href="javascript:void(0)" onclick="getMessage('new')">Uusi viesti</a> </li>
-				<li id="message_inbox"><a href="javascript:void(0)" onclick="getMessage('inbox')">Saapuneet <span id="inbox_num" class="message_num"></span></a></li>
-				<li id="message_outbox"><a href="javascript:void(0)" onclick="getMessage('outbox')">Lähetetyt</a></li>
+				<li id="msg_new"><a href="<%= defaultPath %>/Message/NewMessage">Uusi viesti</a> </li>
+				<li id="msg_inbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')">Saapuneet <span id="inbox_num" class="message_num"></span></a></li>
+				<li id="msg_outbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_outbox')">Lähetetyt</a></li>
 				<li><a href="javascript:void(0)" onclick="showArchiveUI()">Arkistoidut</a>
 					<ul id="archive-part">
-						<li id="message_archive_inbox"><a href="javascript:void(0)" onclick="getMessage('archive_inbox')">Saapuneet <span id="archive_inbox_num" class="message_num"></span></a></li>
-						<li id="message_archive_outbox"><a href="javascript:void(0)" onclick="getMessage('archive_outbox')">Lähetetyt</a></li>
+						<li id="msg_archive_inbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_archive_inbox')">Saapuneet <span id="archive_inbox_num" class="message_num"></span></a></li>
+						<li id="msg_archive_outbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_archive_outbox')">Lähetetyt</a></li>
 					</ul>
 				</li>
 			</ul></li>
+		<!-- For citizen -->
 		<li><a href="#">Pyynnöt</a>
 			<ul class="child">
-				<li><a href="#">Uudet</a></li>
-				<li><a href="<%= defaultPath %>/Message/ValidRequest">Voimassaolevat</a></li>
+				<li id="req_valid_request"><a href="<%= defaultPath %>/Message/ValidRequest">Voimassaolevat</a></li>
 				<li><a href="#">Vanhentuneet</a></li>
 			</ul></li>
+		<!-- For employee -->
 		<li><a href="#">Pyynnöt (Työntekijä)</a>
 			<ul class="child">
-				<li><a href="#">Uudet</a></li>
-				<li id="message_valid_request"><a href="javascript:void(0)" onclick="getMessage('valid_request')">Voimassaolevat</a></li>
+				<li id="req_new"><a href="<%= defaultPath %>/Message/NewRequest">Uudet</a></li>
+				<li id="req_valid"><a href="javascript:void(0)" onclick="navigateToPage('req_valid')">Voimassaolevat</a></li>
 				<li><a href="#">Vanhentuneet</a></li>
-			</ul></li>			
+			</ul></li>
+		<!-- For citizen -->
+		<li><a href="#">Tapaaminen</a>
+			<ul class="child">
+				<li id="app_inbox_citizen"><a href="javascript:void(0)" onclick="navigateToPage('app_inbox_citizen')">Saapuneet</a></li>
+				<li id="app_response_citizen"><a href="javascript:void(0)" onclick="navigateToPage('app_response_citizen')">Vastattu</a></li>
+			</ul></li>
+		<!-- For employee -->
+		<li><a href="#">Tapaaminen (Työntekijä)</a>
+			<ul class="child">
+				<li><a href="<%= defaultPath %>/Message/NewAppointment">Uudet</a></li>
+				<li id="app_inbox_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_inbox_employee')">Saapuneet</a></li>
+				<li id="app_response_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_response_employee')">Vastattu</a></li>
+			</ul></li>
+						
 		<li><a href="#">Asiointipalvelut</a>
 			<ul class="child">
 				<li><a href="#">Palveluhakemukset</a></li>
