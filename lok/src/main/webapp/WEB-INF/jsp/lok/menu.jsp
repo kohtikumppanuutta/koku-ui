@@ -14,6 +14,9 @@
 	<portlet:param name="op" value="searchLog" />
 </portlet:renderURL>
 
+<portlet:renderURL var="searchLogViews">
+	<portlet:param name="op" value="viewLog" />
+</portlet:renderURL>
 <div>
 
 
@@ -33,6 +36,9 @@
 			</form:form>
 		</div>
 
+		<div><form:form name="viewForm" method="post" action="${searchLogViews}">
+				<input type="submit" value="<spring:message code="koku.lok.view"/>" />
+			</form:form></div>
 	</div>
 
 	
@@ -40,3 +46,5 @@
     <div style="clear:both"></div>
 
 </div>
+
+<p>

@@ -65,8 +65,8 @@ public class LogSearchController {
   
   // portlet render phase
   @RenderMapping(params = "op=searchLog")
-  public String render(RenderRequest req, RenderResponse res, Model model) {
-
+  public String render(@RequestParam(value = "visited", required = false) String visited, RenderRequest req, RenderResponse res, Model model) {
+   
     System.out.println("log search render phase");
  
     res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
@@ -76,6 +76,7 @@ public class LogSearchController {
       searchCriteria = criteriaSerializer.getFromRenderParameter(req.getParameterValues(CRITERIA_RENDER_PARAM));
       model.addAttribute("entries", doSearchEntries(searchCriteria));
       model.addAttribute("searchParams", searchCriteria);
+      model.addAttribute("visited", "---");
     }
     if(searchCriteria!=null){
       System.out.println("criteria: "+searchCriteria.getPic()+", "+searchCriteria.getConcept()+", "+searchCriteria.getFrom()+", "+searchCriteria.getTo());
@@ -89,7 +90,6 @@ public class LogSearchController {
   @ActionMapping(params="op=searchLog")
   public void doSearch(@ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, BindingResult result,
       ActionResponse response) {
-    System.out.println("log search action phase");
    
     // TODO:
     // Hausta tallentuu tieto tapahtumalokin käsittelylokiin (tapahtumatietona hakuehdot)
@@ -120,19 +120,11 @@ public class LogSearchController {
       // Create 5 lines of demo log entries
       LogDemoFactory factory = new LogDemoFactory();
       r =  new ArrayList<LogEntry>();
-      LogEntry entry = null;
+    
       for(int i=0;i<5; i++){
         r.add(factory.createLogEntry(i));
       }
       
-    /*
-      r =  new ArrayList<LogEntry>();
-      r.add(new LogEntry("2011-02-01 17:01:34"));
-      r.add(new LogEntry("Utelias Työntekijä"));
-      r.add(new LogEntry("Tapahtumatyyppi")); // What does this mean?
-      r.add(new LogEntry("4v-tarkastus"));
-      r.add(new LogEntry("Järjestelmä Y"));
-      */
     }
     return r;
   }

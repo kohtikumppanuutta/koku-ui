@@ -15,6 +15,12 @@ public class LogSearchCriteria {
   public LogSearchCriteria() {
   }
   
+  public LogSearchCriteria(Date from, Date to){
+    super();
+    this.from = from;
+    this.to = to;
+  }
+  
   public LogSearchCriteria(String pic, String concept, Date from, Date to) {
     super();
     this.pic = pic;

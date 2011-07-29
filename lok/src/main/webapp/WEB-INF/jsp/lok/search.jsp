@@ -12,6 +12,7 @@
 
 <portlet:actionURL var="searchActionUrl">
 	<portlet:param name="op" value="searchLog" />
+	<portlet:param name="visited" value="---" />
 </portlet:actionURL>
 
 <portlet:renderURL var="homeUrl">
@@ -29,19 +30,16 @@
 <div>
 
 <div class="home">
-		<a href="${homeUrl}"><spring:message code="koku.common.back" /></a>
+	<a href="${homeUrl}"><spring:message code="koku.common.back" /></a>
 </div>
 	
-
-	
 	<h1 class="portlet-section-header"><spring:message code="koku.lok.header"/></h1>
+<p>	
+<%-- leave portlet-menu and Tarkastele and Arkistoi buttons out for now --%>
 	
-	<%-- leave portlet-menu and Tarkastele and Arkistoi buttons out for now --%>
-	
-<div class="portlet-form-field">	
+<%--  <div class="portlet-form-field">	--%>
 <div class="portlet-form-field-label"><spring:message code="koku.lok.search.parameters"/>
 </div>	
-<%-- <div class="log-search-criteria"> --%>
 
   <form:form name="logSearchForm" commandName="logSearchCriteria" method="post" action="${searchActionUrl}">
     <span class="form-field-label"><spring:message code="koku.common.pic" /> </span>
@@ -52,7 +50,7 @@
 	<form:input path="concept" />
 	<span class="errors"><form:errors path="concept" /></span>
 	
-<!--  TODO: Javascript date picker or something like that will be added here! -->
+<!--  TODO: Javascript date picker will be added here! -->
     <span class="form-field-label"><spring:message code="koku.common.startTime" /> </span>
 	<form:input path="from" value="<%=df.format(starttime.getTime()) %>"/>
 	<span class="errors"><form:errors path="from" /></span>
@@ -67,12 +65,10 @@
   </form:form>
 
 
-
-
 <%-- th { text-align: center; font-weight: bold } --%>
 <c:if test="${not empty entries}">
-<h2 class="portlet-section-subheader"><spring:message code="koku.common.searchResults"/></h2>
-${searchParams.pic}, ${searchParam.concept}, ${searchParams.from}, ${searchParams.to}:
+<h2 class="portlet-section-subheader"><spring:message code="koku.common.searchResults"/>
+${searchParams.pic}, ${searchParam.concept}, ${searchParams.from}, ${searchParams.to}:</h2>
 <table class="portlet-table-body" width="100%" border="0">
 <%--<tr>
 <th width=20% scope="col">Aika</th>
@@ -100,16 +96,12 @@ This should be changed! --%>
 </table>
 </c:if>
 </div>
-<%-- 
-<ul>
-  <c:forEach var="e" items="${entries}">
-    ${e.message}&nbsp;<br>
-  </c:forEach>
-  </ul>
-  --%>
+
 
 <c:if test="${empty entries}">
-<p><spring:message code="koku.common.noResults"/></p>
+ 	<c:if test="${not empty visited}"> <%-- do not show this on the first visit to this page --%>
+		<p><spring:message code="koku.common.noResults"/></p>
+	</c:if>
 </c:if>
 
 <p>

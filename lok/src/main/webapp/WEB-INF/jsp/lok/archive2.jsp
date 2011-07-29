@@ -18,5 +18,10 @@ Lokitietojen arkistointi on käynnissä.</p>
  
   
   <div class="home">
-		<a href="${homeUrl}"><spring:message code="koku.common.lok.begin" /></a>
+   <form:form method="post" action="${homeUrl}">
+   <input type="submit" value="<spring:message code="koku.common.lok.begin"/>" >
+
+  </form:form>
+   <p>
+	
 </div>

@@ -33,7 +33,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 public class LogArchiveController {
   private static final String ARCHIVE_DATE_RENDER_PARAM = "log-archive";
   private ArchiveSerializer archiveSerializer = new ArchiveSerializer();
-  
+  private SimpleDateFormat dateFormat = new SimpleDateFormat(LogConstants.DATE_FORMAT);
   
   @Autowired
   private ResourceBundleMessageSource resourceBundle;
@@ -41,7 +41,6 @@ public class LogArchiveController {
 //customize form data binding
   @InitBinder
   public void initBinder(WebDataBinder binder) {
-    SimpleDateFormat dateFormat = new SimpleDateFormat(LogConstants.DATE_FORMAT);
     dateFormat.setLenient(false);
     CustomDateEditor dateEditor = new CustomDateEditor(dateFormat, true);
     binder.registerCustomEditor(Date.class, dateEditor);
@@ -57,7 +56,6 @@ public class LogArchiveController {
   @RenderMapping(params="op=archiveLog")
   public String render(RenderRequest req, RenderResponse res, Model model) {
 
-  System.out.println("log archive render phase");
  
     res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
 
@@ -65,6 +63,11 @@ public class LogArchiveController {
     if(req.getParameterValues(ARCHIVE_DATE_RENDER_PARAM) != null) {
       archivedate = archiveSerializer.getFromRenderParameter(req.getParameterValues(ARCHIVE_DATE_RENDER_PARAM));
       model.addAttribute("archiveDate", archivedate.getDate());
+     
+      // TODO: Formatoidun päivämäärän välityksessä Controllerin ja JSP-sivun välillä oli
+      // ongelmia, joten arkistointipäivämäärä näytetään nyt käyttäjälle hölmössä muodossa
+      // esim. Wed Jul 29 00:00:00 EEST 2009.
+     
     }    
     
     return "archive";
@@ -80,12 +83,16 @@ public class LogArchiveController {
 
     LogArchiveDate archivedate = null;
     if(req.getParameterValues(ARCHIVE_DATE_RENDER_PARAM) != null) {
+      System.out.println("saatiin archiveDate render param");
+      
       archivedate = archiveSerializer.getFromRenderParameter(req.getParameterValues(ARCHIVE_DATE_RENDER_PARAM));
       model.addAttribute("archiveDate", archivedate.getDate());
+    
     }    
     
     return "archive2";
 }
+  
 //portlet action phase
   @ActionMapping(params="op=archiveLog")
   public void doArchive(@ModelAttribute(value = "logArchiveDate") LogArchiveDate archivedate, BindingResult result,
@@ -120,17 +127,20 @@ public class LogArchiveController {
   }
     
   private static class ArchiveSerializer{
+    
+    SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
+    
     public String getAsText(LogArchiveDate archivedate){
-      SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
+ 
       String date = archivedate.getDate() != null ? df.format(archivedate.getDate()) : ""; 
       
-      System.out.println("getAsText: date: "+date);
+      System.out.println("getAsText alkuperäinen archivedate: "+archivedate);
+      System.out.println("getAsText: formatoitu archivedate: "+date);
      
       return date;
     }
     
     public LogArchiveDate getFromRenderParameter(String[] text) {
-      SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
    
       Date d1 = null;
       try {
