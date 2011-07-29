@@ -1,17 +1,12 @@
-package fi.arcusys.koku.requestservice;
+package fi.arcusys.koku.request;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.TimeZone;
 
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import fi.arcusys.koku.request.Request;
-import fi.arcusys.koku.request.RequestSummary;
-import fi.arcusys.koku.request.RequestType;
+import fi.arcusys.koku.requestservice.Request;
+import fi.arcusys.koku.requestservice.RequestSummary;
+import fi.arcusys.koku.requestservice.RequestType;
 import fi.arcusys.koku.util.MessageUtil;
 
 public class RequestHandle {
@@ -40,8 +35,8 @@ public class RequestHandle {
 			req.setSubject(reqSum.getSubject());
 			req.setRespondedAmount(reqSum.getRespondedAmount());
 			req.setMissedAmount(reqSum.getMissedAmout());
-			req.setCreationDate(formatTaskDate(reqSum.getCreationDate()));
-			req.setEndDate(formatTaskDate(reqSum.getEndDate()));
+			req.setCreationDate(MessageUtil.formatTaskDate(reqSum.getCreationDate()));
+			req.setEndDate(MessageUtil.formatTaskDate(reqSum.getEndDate()));
 		
 			reqList.add(req);
 		}
@@ -58,8 +53,8 @@ public class RequestHandle {
 		kokuReq.setSender(req.getSender());
 		kokuReq.setSubject(req.getSubject());
 		kokuReq.setContent(req.getContent());
-		kokuReq.setCreationDate(formatTaskDate(req.getCreationDate()));
-		kokuReq.setEndDate(formatTaskDate(req.getEndDate()));
+		kokuReq.setCreationDate(MessageUtil.formatTaskDate(req.getCreationDate()));
+		kokuReq.setEndDate(MessageUtil.formatTaskDate(req.getEndDate()));
 		kokuReq.setRespondedList(req.getResponses());
 		kokuReq.setUnrespondedList(req.getNotResponded());
 		kokuReq.setQuestions(req.getQuestions());
@@ -78,20 +73,6 @@ public class RequestHandle {
 		}
 		
 		return rs.getTotalRequestNum(username, requestType);
-	}
-	
-	public String formatTaskDate(XMLGregorianCalendar xmlGregorianCalendar) {
-		
-		if(xmlGregorianCalendar != null ) {
-			Calendar cal = xmlGregorianCalendar.toGregorianCalendar();
-			SimpleDateFormat dataformat = new SimpleDateFormat(MessageUtil.DATE_FORMAT);
-			dataformat.setTimeZone(TimeZone.getTimeZone(MessageUtil.TIME_ZONE));
-			String dateStr = dataformat.format(cal.getTime());
-		
-			return dateStr;	
-		} else {
-			return "";
-		}
 	}
 
 }

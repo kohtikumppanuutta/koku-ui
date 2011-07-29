@@ -1,11 +1,12 @@
-package fi.arcusys.koku.requestservice;
+package fi.arcusys.koku.request;
 
 import java.net.URL;
 import java.util.List;
-import fi.arcusys.koku.request.KokuRequestService_Service;
-import fi.arcusys.koku.request.Request;
-import fi.arcusys.koku.request.RequestSummary;
-import fi.arcusys.koku.request.RequestType;
+
+import fi.arcusys.koku.requestservice.KokuRequestService_Service;
+import fi.arcusys.koku.requestservice.Request;
+import fi.arcusys.koku.requestservice.RequestSummary;
+import fi.arcusys.koku.requestservice.RequestType;
 
 public class RequestService {
 	

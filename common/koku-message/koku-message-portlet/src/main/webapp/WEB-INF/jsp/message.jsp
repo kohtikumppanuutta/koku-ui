@@ -27,6 +27,10 @@
 	<portlet:param name="orderType" value= "CONSTANT_TASK_ORDER_TYPE" />
 </portlet:renderURL>
 
+<portlet:renderURL var="appointmentURL" windowState="<%= WindowState.MAXIMIZED.toString() %>" >
+	<portlet:param name="myaction" value="showAppointment" />
+</portlet:renderURL>
+
 <script type="text/javascript"> 
 /*
  * Handle action for task manager
@@ -76,7 +80,7 @@
 		
 		pageObj.taskType = getTaskTypeFromNavi();	
 		var url="<%= ajaxURL %>";
-
+		var url="/portal/auth/portal/default/Message/MessageServiceNewWindow?id=getTask&action=f&cacheability=PAGE"
 		jQuery.post(url, {page:pageObj.currentPage, taskType:pageObj.taskType, 
 			keyword:pageObj.keyword, orderType:pageObj.orderType, field:pageObj.field}, function(data) {
 			var obj = eval('(' + data + ')');
@@ -87,14 +91,7 @@
 				pageObj.totalPages = json["totalPages"];
 				pageObj.totalItems = json["totalItems"];
 				var tasks = json["tasks"];
-				if(pageObj.taskType == 'valid_request')
-					var taskHtml = createRequestsTable(tasks);
-				else
-					var taskHtml = createTasksTable(tasks);
-				jQuery('#task-manager-tasklist').html(taskHtml);
-				decorateTable();
-				var pageHtml = createTasksPage();
-				jQuery('#task-manager-operation-page').html(pageHtml);
+				presentTasks(tasks);				
 			}else {
 				var message = "<spring:message code="error.unLogin" />";
 				showErrorMessage(message);
@@ -105,16 +102,32 @@
 		
 	}
 
+	function presentTasks(tasks) {
+		if(pageObj.taskType == 'req_valid')
+			var taskHtml = createRequestsTable(tasks);
+		else if(pageObj.taskType.indexOf('app') == 0)
+			var taskHtml = createAppoitmentsTable(tasks);
+		else 
+			var taskHtml = createTasksTable(tasks);
+		
+		jQuery('#task-manager-tasklist').html(taskHtml);
+		decorateTable();
+		var pageHtml = createTasksPage();
+		jQuery('#task-manager-operation-page').html(pageHtml);
+	}
 	/**
 	 * Gets message type from the global variable 'koku_navi_type' in navi portlet
 	 */
 	function getTaskTypeFromNavi() {
-		var type = "inbox"; // default is inbox
+		var type;
 		
-		if(typeof koku_navi_type == 'undefined' || koku_navi_type == '')
-			return type;
-		else
-			return koku_navi_type;
+		if(typeof koku_navi_type == 'undefined' || koku_navi_type == ''){
+			type = "inbox"; // default is inbox
+		}else {
+			type = koku_navi_type;
+		}
+		
+		return type;
 	}
 	
 	/**
@@ -200,9 +213,41 @@
 		return taskHtml;
 	}
 	
+	function createAppoitmentsTable(tasks) {
+		var taskHtml = "";
+		var formLink = "";
+		
+		taskHtml = '<table class="task-manager-table">'
+				+ '<tr class="task-manager-table trheader">'
+				+ '<td class="choose"><spring:message code="message.choose" /></td>'
+				+ '<td class="from">'+ '<strong>' + formatSender() + '</strong>' + '</td>'
+				+ '<td>' + '<strong>' + '<spring:message code="message.subject" />'+ '</strong>' + '</td>'
+				+ '<td>Description</td>'
+				+ '</tr>';
+				 
+		for ( var i = 0; i < tasks.length; i++) {
+			
+			if((i+1)%2 == 0) {
+				taskHtml += '<tr class="evenRow">';	
+			}else {
+				taskHtml += '<tr>';
+			}
+			
+			taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["appointmentId"] + '" />' + '</td>'
+					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\')" >' + formatUser(tasks[i]) + '</td>'
+					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
+					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\')" >' + tasks[i]["description"] + '</td>'
+					 + '</tr>';
+		}
+
+		taskHtml += '</table>';
+
+		return taskHtml;
+	}
+	
 	function formatSender() {
 		
-		if(pageObj.taskType == "inbox" || pageObj.taskType == "archive_inbox")
+		if(pageObj.taskType == "msg_inbox" || pageObj.taskType == "msg_archive_inbox" || pageObj.taskType == "app_inbox_citizen" || pageObj.taskType == "app_inbox_employee")
 			return  "<spring:message code="message.from" />";
 		else 
 			return "<spring:message code="message.receiver" />";		
@@ -210,7 +255,7 @@
 	
 	function formatUser(task) {
 		
-		if(pageObj.taskType == "inbox" || pageObj.taskType == "archive_inbox")
+		if(pageObj.taskType == "msg_inbox" || pageObj.taskType == "msg_archive_inbox" || pageObj.taskType == "app_inbox_citizen" || pageObj.taskType == "app_inbox_employee")
 			return task["sender"];
 		else 
 			return task["recipients"];
@@ -244,6 +289,18 @@
 		var formUrl = formUrl.replace("CONSTANT_TASK_ORDER_TYPE", pageObj.orderType);
 		
 		window.location = formUrl;
+	}
+	
+	function showAppointment(appointmentId) {
+		var formUrl = "<%= appointmentURL %>";
+		formUrl += "&appointmentId=" + appointmentId
+				+ "&currentPage=" + pageObj.currentPage
+				+ "&taskType=" + pageObj.taskType
+				+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
+				+ "&orderType=" + pageObj.orderType;
+		
+		window.location = formUrl;
+		
 	}
 	/*
 	function formKeywords(keywordArray) {
@@ -361,7 +418,7 @@
 	function extractField(keywordStr) {
 		var temp = keywordStr.split("|");
 		var field = temp[1];
-		var fields = field.split(' ');
+		var fields = field.split('_');
 		jQuery('input:checkbox[name="field"]').attr('checked', false);
 		for(var i=0; i < fields.length; i++) {
 			jQuery('input:checkbox[name="field"][value="' + fields[i] + '"]').attr('checked', true);
@@ -384,12 +441,12 @@
 		this.currentPage = 1;
 		this.totalPages = 1;
 		this.totalItems;
-		/* 3 types: task, notification, process */
-		this.taskType = 'inbox';
+		/*  */
+		this.taskType = 'msg_inbox';
 		//this.taskType = parseParameter('naviType');
 		/* keywords for searching and filter fields */
 		this.keyword = '';
-		this.field = '1 2 3 4';
+		this.field = '1_2_3_4';
 		/* 6 types: by description_desc, by description_asc, by state_desc, 
 		by state_asc, by creationDate_desc, by creationDate_asc */
 		this.orderType = 'creationDate_desc';
@@ -492,7 +549,7 @@
 		var pageHtml = '<ul>';
 		pageHtml += '<li><input type="button" value="<spring:message code="message.search"/>"  onclick="showSearchUI()" /></li>';
 		
-		if(pageObj.taskType == 'inbox' || pageObj.taskType == 'outbox')
+		if(pageObj.taskType == 'msg_inbox' || pageObj.taskType == 'msg_outbox')
 			pageHtml += '<li><input type="button" value="<spring:message code="page.archive"/>"  onclick="archiveMessages()" /></li>';
 			
 			pageHtml +='<li><input type="button" value="<spring:message code="page.removeSelected"/>"  onclick="deleteMessages()" /></li>'
@@ -662,7 +719,7 @@
 		pageObj.keyword = keyword;	
 		var field = '';
 		jQuery('input:checkbox[name="field"]:checked').each(function(){
-			field += jQuery(this).val() + ' ';
+			field += jQuery(this).val() + '_';
 		});
 		/* get rid of the last space letter*/
 		if(field.length > 0)  field = field.substring(0, field.length-1);

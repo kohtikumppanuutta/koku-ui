@@ -3,13 +3,12 @@ package fi.arcusys.koku.message;
 import java.net.URL;
 import java.util.List;
 
-import fi.arcusys.koku.service.Criteria;
-import fi.arcusys.koku.service.FolderType;
-import fi.arcusys.koku.service.KokuMessageService_Service;
-import fi.arcusys.koku.service.Message;
-import fi.arcusys.koku.service.MessageQuery;
-import fi.arcusys.koku.service.MessageStatus;
-import fi.arcusys.koku.service.MessageSummary;
+import fi.arcusys.koku.messageservice.Criteria;
+import fi.arcusys.koku.messageservice.FolderType;
+import fi.arcusys.koku.messageservice.KokuMessageService_Service;
+import fi.arcusys.koku.messageservice.MessageQuery;
+import fi.arcusys.koku.messageservice.MessageStatus;
+import fi.arcusys.koku.messageservice.MessageSummary;
 import fi.arcusys.koku.util.MessageUtil;
 
 
@@ -51,7 +50,7 @@ public class MessageService {
 	 * @param messageId
 	 * @return The detailed message
 	 */
-	public Message getMessageById(long messageId) {
+	public fi.arcusys.koku.messageservice.Message getMessageById(long messageId) {
 		
 		return ms.getKokuMessageServicePort().getMessageById(messageId);
 	}

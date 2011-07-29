@@ -1,8 +1,10 @@
 <%@ include file="init.jsp"%>
-<%@ page import="fi.arcusys.koku.requestservice.KokuRequest" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
+<%@ page import="fi.arcusys.koku.request.KokuRequest" %>
 <portlet:renderURL var="homeURL" windowState="<%= WindowState.NORMAL.toString() %>" >
 	<portlet:param name="myaction" value="home" />
 </portlet:renderURL>
+
 <%!
 
 public String htmlToCode(String s)
@@ -23,8 +25,13 @@ public String htmlToCode(String s)
 KokuRequest kokuRequest = (KokuRequest) request.getAttribute("request");
 String srcContent = kokuRequest.getContent();
 String content = htmlToCode(srcContent);
-
+String requestId = String.valueOf(kokuRequest.getRequestId());
 %>
+
+<portlet:resourceURL var="exportURL" id="exportFile">
+	<portlet:param name="newRequestId" value="<%= requestId %>" />
+</portlet:resourceURL>
+
 <script type="text/javascript"> 
 
 window.onload = function() {
@@ -57,6 +64,11 @@ function returnMainPage() {
 	window.location="<%= homeURL %>";
 }
 
+function exportFile() {	
+	window.location = "<%= exportURL %>";
+}
+
+
 </script>
 <div id="task-manager-wrap">
 	<div id="show-message" style="padding:12px">
@@ -70,8 +82,8 @@ function returnMainPage() {
      --> 
     <h3>Response Summary</h3>
     <table class="request-table">
-    	<tr><td></td><c:forEach items="${request.questions}" varStatus="status" ><td colspan=2>Q ${status.count}</td></c:forEach></tr>
-    	<tr><td></td><c:forEach items="${request.questions}" ><td>Answer</td><td>Comment</td></c:forEach></tr>
+    	<tr><td rowspan=2 style="vertical-align: middle;" class="head">Respondent</td><c:forEach items="${request.questions}" varStatus="status" ><td colspan=2 class="head">Q${status.count}</td></c:forEach></tr>
+    	<tr><c:forEach items="${request.questions}" ><td class="head">Answer</td><td class="head">Comment</td></c:forEach></tr>
     	<c:forEach var="response" items="${request.respondedList}" varStatus="loopStatus">
         <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
           <td>${response.name}</td>
@@ -84,15 +96,20 @@ function returnMainPage() {
     </table>  
 
     <h3>Missed:</h3>
-	<table>
-	  <tr style="font-weight:bold;"><td>NAME</td></tr>
-      <c:forEach var="unresponse" items="${request.unrespondedList}">
-        <tr>
-          <td>${unresponse}</td>
-        </tr>
+    <c:choose>
+    	<c:when test="${fn:length(request.unrespondedList) == 0}">None</c:when>
+    	<c:otherwise>
+    		<table>
+	  			<tr style="font-weight:bold;" ><td>NAME</td></tr>
+      			<c:forEach var="unresponse" items="${request.unrespondedList}">
+        		<tr>
+          			<td>${unresponse}</td>
+        		</tr>
       </c:forEach>
     </table>
-    
+  		</c:otherwise>
+    </c:choose>	
+    <div id="export"><input type="button" value="<spring:message code="request.export"/>" onclick="exportFile()"/></div>
 	</div>
 	<div id="task-manager-operation" class="task-manager-operation-part">
 		<input type="button" value="<spring:message code="page.return"/>" onclick="returnMainPage()" />

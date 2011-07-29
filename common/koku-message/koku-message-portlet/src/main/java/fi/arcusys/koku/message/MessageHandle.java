@@ -1,23 +1,17 @@
 package fi.arcusys.koku.message;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.TimeZone;
-
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import fi.arcusys.koku.service.Criteria;
-import fi.arcusys.koku.service.Fields;
-import fi.arcusys.koku.service.FolderType;
-import fi.arcusys.koku.service.MessageQuery;
-import fi.arcusys.koku.service.MessageStatus;
-import fi.arcusys.koku.service.MessageSummary;
-import fi.arcusys.koku.service.OrderBy;
-import fi.arcusys.koku.service.Type;
+import fi.arcusys.koku.messageservice.Criteria;
+import fi.arcusys.koku.messageservice.Fields;
+import fi.arcusys.koku.messageservice.FolderType;
+import fi.arcusys.koku.messageservice.MessageQuery;
+import fi.arcusys.koku.messageservice.MessageStatus;
+import fi.arcusys.koku.messageservice.MessageSummary;
+import fi.arcusys.koku.messageservice.OrderBy;
+import fi.arcusys.koku.messageservice.Type;
 import fi.arcusys.koku.util.MessageUtil;
 
 public class MessageHandle {
@@ -54,7 +48,7 @@ public class MessageHandle {
 			message.setSender(msgSum.getSender());
 			message.SetRecipients(formatRecipients(msgSum.getRecipients()));
 			message.setSubject(msgSum.getSubject());
-			message.setCreationDate(formatTaskDate(msgSum.getCreationDate()));
+			message.setCreationDate(MessageUtil.formatTaskDate(msgSum.getCreationDate()));
 			message.setMessageType(MessageUtil.getMessageType(msgSum.getMessageType()));
 			message.setMessageStatus(msgSum.getMessageStatus().toString().toLowerCase());
 			
@@ -101,7 +95,7 @@ public class MessageHandle {
 			message.setSender(msgSum.getSender());
 			message.SetRecipients(formatRecipients(msgSum.getRecipients()));
 			message.setSubject(msgSum.getSubject());
-			message.setCreationDate(formatTaskDate(msgSum.getCreationDate()));
+			message.setCreationDate(MessageUtil.formatTaskDate(msgSum.getCreationDate()));
 			message.setMessageType(MessageUtil.getMessageType(msgSum.getMessageType()));
 			message.setMessageStatus(msgSum.getMessageStatus().toString().toLowerCase());
 			
@@ -121,14 +115,14 @@ public class MessageHandle {
 		long  msgId = (long) Long.parseLong(messageId);
 		setMessageStatus(msgId);
 		
-		fi.arcusys.koku.service.Message msg = ms.getMessageById(msgId);
+		fi.arcusys.koku.messageservice.Message msg = ms.getMessageById(msgId);
 		Message message = new Message();
 		message.setMessageId(msg.getMessageId());
 		message.setSender(msg.getSender());
 		message.SetRecipients(formatRecipients(msg.getRecipients()));
 		message.setSubject(msg.getSubject());
 		message.setContent(msg.getContent());
-		message.setCreationDate(formatTaskDate(msg.getCreationDate()));
+		message.setCreationDate(MessageUtil.formatTaskDate(msg.getCreationDate()));
 		message.setMessageStatus(msg.getMessageStatus().toString().toLowerCase());	
 		
 		return message;
@@ -185,24 +179,6 @@ public class MessageHandle {
 		
 		return ms.getTotalMessageNumOld(user, folderType, subQuery);		
 	}
-	/**
-	 * Format the task date with given format and Helsinki timezone
-	 * @param xmlGregorianCalendar
-	 * @return formatted date string
-	 */
-	public String formatTaskDate(XMLGregorianCalendar xmlGregorianCalendar) {
-		
-		if(xmlGregorianCalendar != null ) {
-			Calendar cal = xmlGregorianCalendar.toGregorianCalendar();
-			SimpleDateFormat dataformat = new SimpleDateFormat(MessageUtil.DATE_FORMAT);
-			dataformat.setTimeZone(TimeZone.getTimeZone(MessageUtil.TIME_ZONE));
-			String dateStr = dataformat.format(cal.getTime());
-		
-			return dateStr;	
-		} else {
-			return "";
-		}
-	}
 	
 	/**
 	 * Formats the recipients list by presenting with string
@@ -237,7 +213,7 @@ public class MessageHandle {
 			return null;
 		}
 		
-		String[] fields = field.split(" ");
+		String[] fields = field.split("_");
 		
 		for(int i=0; i < fields.length; i++) {
 			if(fields[i].equals("1")) {

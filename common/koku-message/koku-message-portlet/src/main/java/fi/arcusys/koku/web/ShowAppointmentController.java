@@ -10,27 +10,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import fi.arcusys.koku.request.KokuRequest;
-import fi.arcusys.koku.request.RequestHandle;
+import fi.arcusys.koku.appointment.AppointmentHandle;
+import fi.arcusys.koku.appointment.KokuAppointment;
 
 /**
- * Show task form page and store the current query information on the jsp page
+ * Show appointment page and store the current query information on the jsp page
  * @author Jinhua Chen
  *
  */
-@Controller("singleRequestController")
+@Controller("singleAppointmentController")
 @RequestMapping(value = "VIEW")
-public class ShowRequestController {
+public class ShowAppointmentController {
 	
-	@RenderMapping(params = "myaction=showRequest")
+	@RenderMapping(params = "myaction=showAppointment")
 	public String showRequest(RenderResponse response) {
-		System.out.println("show single request");
-		return "showrequest";
+		System.out.println("show single appointment");
+		return "showappointment";
 	}
 		
 	// @ModelAttribute here works as the referenceData method
-	@ModelAttribute(value = "request")
-	public KokuRequest model(@RequestParam String requestId,
+	@ModelAttribute(value = "appointment")
+	public KokuAppointment model(@RequestParam String appointmentId,
 			@RequestParam String currentPage,@RequestParam String taskType, 
 			@RequestParam String keyword, @RequestParam String orderType,
 			RenderRequest request) {
@@ -41,10 +41,10 @@ public class ShowRequestController {
 		request.getPortletSession().setAttribute("keyword", keyword, PortletSession.APPLICATION_SCOPE);
 		request.getPortletSession().setAttribute("orderType", orderType, PortletSession.APPLICATION_SCOPE);
 		
-		RequestHandle reqhandle = new RequestHandle();
-		KokuRequest req = reqhandle.getKokuRequestById(requestId);
+		AppointmentHandle appHandle = new AppointmentHandle();
+		KokuAppointment app = appHandle.getAppointmentById(appointmentId);
 		
-		return req;
+		return app;
 	}
 	
 

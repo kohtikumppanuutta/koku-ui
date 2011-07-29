@@ -10,27 +10,23 @@
 
 	<context:component-scan base-package="fi.arcusys.koku.web" />
 
-	<bean
-		class="org.springframework.web.portlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-	</bean>
+	<bean class="org.springframework.web.portlet.mvc.annotation.AnnotationMethodHandlerAdapter"> </bean>
 
 	<!-- State ajaxViewResolver at first or define order attribute -->
-	<bean id="ajaxViewResolver" class="fi.arcusys.koku.web.AjaxViewResolver">
-	</bean>
-
-	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="viewClass"
-			value="org.springframework.web.servlet.view.InternalResourceView" />
+	<bean id="ajaxViewResolver" class="fi.arcusys.koku.web.AjaxViewResolver"></bean>
+	<bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver"></bean>
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.InternalResourceView" />
 		<property name="prefix" value="/WEB-INF/jsp/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<bean id="messageSource"
-		class="org.springframework.context.support.ResourceBundleMessageSource">
+
+	
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames">
 			<list>
-			    <value>messages</value>
+				<value>messages</value>
 				<value>messages_en_US</value>
 				<value>messages_fi_FI</value>
 			</list>

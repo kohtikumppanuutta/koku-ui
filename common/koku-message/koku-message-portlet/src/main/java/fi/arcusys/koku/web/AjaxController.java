@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import fi.arcusys.koku.appointment.AppointmentHandle;
+import fi.arcusys.koku.appointment.KokuAppointment;
 import fi.arcusys.koku.message.Message;
 import fi.arcusys.koku.message.MessageHandle;
-import fi.arcusys.koku.requestservice.KokuRequest;
-import fi.arcusys.koku.requestservice.RequestHandle;
+import fi.arcusys.koku.request.KokuRequest;
+import fi.arcusys.koku.request.RequestHandle;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
@@ -100,7 +102,7 @@ public class AjaxController {
 			jsonModel.put("loginStatus", "INVALID");
 			System.out.println("Invalid login!");
 		}else {
-			MessageHandle msghandle = new MessageHandle();
+			
 			int numPerPage = MessageUtil.PAGE_NUMBER;
 			int totalTasksNum;
 			int totalPages;
@@ -108,16 +110,24 @@ public class AjaxController {
 			int first = (page-1)*numPerPage + 1;
 			int max =  page*numPerPage;
 			
-			if(taskType.equals("valid_request")) {
+			if(taskType.equals("req_valid")) {
 				List<KokuRequest> msgs;
-				RequestHandle reqhandle = new RequestHandle();
-				msgs = reqhandle.getRequests(username, "valid", "", first, max);
-				totalTasksNum = reqhandle.getTotalRequestsNum(username, "valid");
+				RequestHandle reqHandle = new RequestHandle();
+				msgs = reqHandle.getRequests(username, "valid", "", first, max);
+				totalTasksNum = reqHandle.getTotalRequestsNum(username, "valid");
 				jsonModel.put("tasks", msgs);
+			} else if(taskType.startsWith("app")) {
+				List<KokuAppointment> apps;
+				AppointmentHandle appHandle = new AppointmentHandle();
+				apps = appHandle.getAppointments(username, first, max, taskType);
+				totalTasksNum = appHandle.getTotalAppointmentsNum(username, taskType);
+				jsonModel.put("tasks", apps);				
+				
 			} else {
+				MessageHandle msgHandle = new MessageHandle();
 				List<Message> msgs;
-				msgs = msghandle.getMessages(username, taskType, keyword, field, orderType, first, max);			
-				totalTasksNum = msghandle.getTotalMessageNum(username, taskType, keyword, field);
+				msgs = msgHandle.getMessages(username, taskType, keyword, field, orderType, first, max);			
+				totalTasksNum = msgHandle.getTotalMessageNum(username, taskType, keyword, field);
 				jsonModel.put("tasks", msgs);
 			}
 			

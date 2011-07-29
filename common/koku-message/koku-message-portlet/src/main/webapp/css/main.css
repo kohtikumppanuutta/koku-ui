@@ -199,10 +199,13 @@
 }
 
 #task-manager-operation-page {float:left;}
+
 #task-manager-operation-loading {
 	float:right; 
 	padding: 5px 8px 5px 25px;
-	background: url('../images/load.gif') no-repeat 5px 5px;}
+	background: url('../images/load.gif') no-repeat 5px 5px;
+}
+
 #task-manager-operation ul {
 	margin: 0;
 	padding: 0;
@@ -235,7 +238,17 @@
 
 .request-table {
 	width: 100%; /* table width */
-	border: 1px outset; /* border */
+	border:1px solid #C3C3C3;/* border */
+	border-collapse: collapse;
+	
+}
+
+.request-table td.head {
+	background-color: #D1EEEE;
+	border:1px solid #C3C3C3;
+	vertical-align: top;
+	text-align: left;
+	font-weight: bold;	
 }
 
 .request-table td {

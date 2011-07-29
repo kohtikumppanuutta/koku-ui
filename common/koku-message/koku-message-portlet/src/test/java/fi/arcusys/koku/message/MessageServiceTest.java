@@ -10,15 +10,14 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.junit.Test;
 
-import fi.arcusys.koku.service.Criteria;
-import fi.arcusys.koku.service.Fields;
-import fi.arcusys.koku.service.FolderType;
-import fi.arcusys.koku.service.MessageQuery;
-import fi.arcusys.koku.service.MessageSummary;
-import fi.arcusys.koku.service.OrderBy;
-import fi.arcusys.koku.service.Type;
+import fi.arcusys.koku.messageservice.Criteria;
+import fi.arcusys.koku.messageservice.Fields;
+import fi.arcusys.koku.messageservice.FolderType;
+import fi.arcusys.koku.messageservice.MessageQuery;
+import fi.arcusys.koku.messageservice.MessageSummary;
+import fi.arcusys.koku.messageservice.OrderBy;
+import fi.arcusys.koku.messageservice.Type;
 
 public class MessageServiceTest {
 
