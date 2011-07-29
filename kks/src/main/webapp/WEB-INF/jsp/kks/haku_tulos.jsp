@@ -30,14 +30,16 @@
 
 	<h1 class="portlet-section-header">${lapsi.nimi} ${kuvaus}</h1>
 
+</br>
 
-	<div id="kirjaus.tyypit" class="portlet-section-text">
+	<div class="main">
 
 		<c:if test="${not empty hakutulos }">
 
 			<c:if test="${empty hakutulos.tulokset}">
 				<spring:message code="ui.ei.kirjauksia" />
 			</c:if>
+			
 			<c:forEach var="tulos" items="${hakutulos.tulokset}">
 
 				<c:if test="${not empty tulos.nimi}">
@@ -64,11 +66,12 @@
 				</c:if>
 				<c:forEach var="kirjaus" items='${tulos.kirjaukset}'>
 					<div class="kirjaus">
-						<strong>${ kirjaus.tyyppi.nimi }</strong> <span class="teksti">${
+						<strong>${kirjaus.tyyppi.nimi}</strong> <span class="teksti">${
 							kirjaus.arvo } (<fmt:formatDate value="${ kirjaus.luontiAika }" />
 							${ kirjaus.kirjaaja })</span>
 					</div>
 				</c:forEach>
+				</br>
 			</c:forEach>
 		</c:if>
 	</div>

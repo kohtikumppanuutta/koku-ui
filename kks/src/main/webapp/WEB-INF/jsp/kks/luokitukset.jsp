@@ -21,7 +21,7 @@
 		<a href="${kotiUrl}"><spring:message code="ui.takaisin" /> </a>
 	</div>
 
-<div id="kirjaus.tyypit" class="portlet-section-text">
+<div>
 	<h1 class="portlet-section-header">OLEMASSAOLEVAT LUOKITUKSET</h1>
 
         
@@ -36,7 +36,7 @@
         </div>
 
         
-        <div class="reset"></div>        
+        <div class="reset-floating"></div>        
             <h1 class="portlet-section-header">KOKOELMIEN LUOKITUKSET</h1>
 		<div>
 			<c:forEach var="tyyppi" items="${kokoelmaTyypit}">

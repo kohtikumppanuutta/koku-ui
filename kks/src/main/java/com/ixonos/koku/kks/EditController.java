@@ -34,8 +34,13 @@ public class EditController {
   }
 
   @RenderMapping(params = "toiminto=resetoiMalli")
-  public String naytaLuokittelu(RenderRequest req, Model model) {
+  public String naytaLuokittelu(RenderRequest req, @RequestParam(value = "viesti", required = false) String viesti,
+      Model model) {
     demoService.luo("");
-    return "luokitukset";
+
+    if (viesti != null) {
+      model.addAttribute("viesti", "Malli resetoitu");
+    }
+    return "edit";
   }
 }
