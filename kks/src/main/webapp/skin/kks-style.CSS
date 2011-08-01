@@ -272,10 +272,9 @@ input.portlet-form-input-field {
     padding: 5px;
     color:#555555;
 }
-
-
 select.portlet-form-input-field{
 }
+
 textarea.portlet-form-input-field:focus {
     padding: 5px;
     width: 98%;
@@ -352,6 +351,13 @@ textarea.portlet-form-input-field:focus {
 	clear: both;
 }
 
+.portlet-section-text .merkinta {
+	padding: 5px;
+}
+
+.kommentti {
+    padding-top: 10px;	
+}
 .defaultText { width: 200px; }
 .defaultTextActive { color: #a1a1a1; font-style: italic; }
     

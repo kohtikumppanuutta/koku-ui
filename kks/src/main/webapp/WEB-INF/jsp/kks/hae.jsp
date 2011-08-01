@@ -37,8 +37,12 @@
 			<h3 class="portlet-section-subheader"><spring:message code="ui.hae.lapsen.tiedot" /></h3>
 
             <div class="left">
+            <span class="portlet-form-field-label"> 
+                <spring:message code="ui.form.hetu" />
+            </span>
+            
 			<span class="portlet-form-field"> 
-			 <form:input class="defaultText" title="Sosiaaliturvatunnus" path="hetu" /> 
+			 <form:input class="defaultText"  path="hetu" /> 
 			</span>
 			</div>
 			<span class="left"> <input type="submit" class="portlet-form-button" value="<spring:message code="ui.hae.tiedot"/>" ></span>
@@ -73,31 +77,3 @@
 	</div>
 </div>
 
-<script type="text/javascript"
-    src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
-<script type="text/javascript"
-    src="http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.4.js"></script>
-<script language="javascript">
-$(document).ready(function()
-{
-    $(".defaultText").focus(function(srcc)
-    {
-        if ($(this).val() == $(this)[0].title)
-        {
-            $(this).removeClass("defaultTextActive");
-            $(this).val("");
-        }
-    });
-    
-    $(".defaultText").blur(function()
-    {
-        if ($(this).val() == "")
-        {
-            $(this).addClass("defaultTextActive");
-            $(this).val($(this)[0].title);
-        }
-    });
-    
-    $(".defaultText").blur();        
-});
-</script>

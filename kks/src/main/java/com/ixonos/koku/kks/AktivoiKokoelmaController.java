@@ -32,6 +32,29 @@ public class AktivoiKokoelmaController {
 
   private static Logger log = LoggerFactory.getLogger(AktivoiKokoelmaController.class);
 
+  @ActionMapping(params = "toiminto=versioiKokoelma")
+  public void versioi(@ModelAttribute(value = "lapsi") Henkilo lapsi, @RequestParam String id,
+      @RequestParam String nimi, ActionResponse response, SessionStatus sessionStatus) {
+
+    log.debug("luoKokoelma");
+
+    Aktivoitava a = new Aktivoitava(id, true, nimi);
+    Kokoelma kokoelma = demoService.luoKokoelma(lapsi, nimi, a);
+
+    // activate the collection for a given time period
+    log.debug("aktivoi kokoelma");
+
+    if (kokoelma != null) {
+      KokoelmaTila tila = kokoelma.getTila();
+      tila.setTila(Tila.AKTIIVINEN);
+    }
+    response.setRenderParameter("toiminto", "naytaKokoelma");
+    response.setRenderParameter("hetu", lapsi.getHetu());
+    response.setRenderParameter("kokoelma", kokoelma.getId());
+
+    sessionStatus.setComplete();
+  }
+
   @ActionMapping(params = "toiminto=aktivoiKokoelma")
   public void aktivoi(@ModelAttribute(value = "lapsi") Henkilo lapsi,
       @ModelAttribute(value = "aktivointi") Aktivointi aktivointi, BindingResult bindingResult,

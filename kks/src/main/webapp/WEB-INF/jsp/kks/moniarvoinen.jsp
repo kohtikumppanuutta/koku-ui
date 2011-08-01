@@ -60,13 +60,11 @@
 <h1 class="portlet-section-header">${lapsi.nimi} ${kokoelma.nimi}</h1>
 
 
-	<div class="portlet-section-text">
+	<div class="kirjaus">
 
 		<form:form name="lisaaMoniArvoinen" 
 			method="post" action="${lisaaMoniArvoinen}">
-			<input type="hidden" name="kirjausTyyppi" value="${tyyppi.koodi }" />
-
-			<div class="kirjaus">			
+			<input type="hidden" name="kirjausTyyppi" value="${tyyppi.koodi }" />		
 			         
 				<span class="portlet-form-field-label">
 				
@@ -77,12 +75,12 @@
 				<c:if test="${ empty kirjausArvo }">
                     <spring:message code="ui.lisaa" /> ${tyyppi.luontiKuvaus}
                 </c:if>
-				
+				</span>
 				<c:if test="${ not empty kirjausArvo }">
-				    <span  class="right"> <a href="${poistaMoniArvoinen}"><spring:message code="ui.poista" /> </a> </span>
+				    <span class="right"> <a href="${poistaMoniArvoinen}"><spring:message code="ui.poista" /> </a> </span>
 				</c:if>
 				
-				</span>
+				
 				
 				<div class="portlet-form-field">
 
@@ -94,13 +92,11 @@
                 </c:if>
 
             </div>
-	</div>
 
-			<span class="right"> 
-			
+			<span class="right"> 			
 			 <input type="submit" class="portlet-form-button"
-				value="<spring:message code="ui.sopimus.tallenna"/>"> <span>
-					<strong><a href="${kotiUrl}"><spring:message code="ui.peruuta" /> </a> </strong> </span> 
+				value="<spring:message code="ui.sopimus.tallenna"/>"> <span class="right" style="padding-left: 5px">
+					<a href="${kotiUrl}"><spring:message code="ui.peruuta" /> </a>  </span> 
 			</span>
 
 		</form:form>
