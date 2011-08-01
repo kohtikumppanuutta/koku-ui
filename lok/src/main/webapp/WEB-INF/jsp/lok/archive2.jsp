@@ -12,16 +12,15 @@
 </portlet:renderURL>
 
 
-<div>
-<p>
-Lokitietojen arkistointi on käynnissä.</p>
+<div class="portlet-section-body">
+<p><spring:message code="koku.lok.archivingstatus.running"/></p>
  
   
-  <div class="home">
+ <div class="home">
    <form:form method="post" action="${homeUrl}">
    <input type="submit" value="<spring:message code="koku.common.lok.begin"/>" >
+   </form:form>
+</div>
+<br/>
 
-  </form:form>
-   <p>
-	
 </div>
