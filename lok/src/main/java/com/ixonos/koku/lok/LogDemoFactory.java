@@ -1,5 +1,6 @@
 package com.ixonos.koku.lok;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
@@ -26,9 +27,9 @@ public class LogDemoFactory {
    * Create a demo log entry 
    */
   LogEntry createLogEntry(int id){
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy hh.mm:ss");
     LogEntry entry = new LogEntry();
     
-    Date timenow = new Date();
     user = "user"+id;
     child = "child"+id*2;
     int nr = generator.nextInt(4);
@@ -39,7 +40,8 @@ public class LogDemoFactory {
     calling_system = calling_systems[nr];
     
     entry.setLog_id(""+id);
-    entry.setTimestamp(timenow.toString());
+          
+    entry.setTimestamp(simpleDateFormat.format(new Date()));
     entry.setUser(user);
     entry.setChild(child);
     entry.setEvent_type(event_type);

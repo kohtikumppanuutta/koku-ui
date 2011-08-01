@@ -4,9 +4,9 @@
 <%@ page contentType="text/html" isELIgnored="false"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ page import = "java.util.Calendar" %>
-<%@ page import = "java.text.*" %>
-<%@ page import = "com.ixonos.koku.lok.*" %>
+<%@ page import="java.util.Calendar"%>
+<%@ page import="java.text.*"%>
+<%@ page import="com.ixonos.koku.lok.*"%>
 
 <portlet:defineObjects />
 
@@ -19,92 +19,127 @@
 	<portlet:param name="op" value="choose" />
 </portlet:renderURL>
 
-<%! Calendar starttime = Calendar.getInstance(); %>  
+<%!Calendar starttime = Calendar.getInstance();%>
 <!--  default endtime is now -->
-<%! Calendar endtime = Calendar.getInstance(); %>
- <!--  default starttime is 1 year ago -->
-<% starttime.set(Calendar.YEAR, endtime.get(Calendar.YEAR)-1); %>
+<%!Calendar endtime = Calendar.getInstance();%>
+<!--  default starttime is 1 year ago -->
+<%
+  starttime.set(Calendar.YEAR, endtime.get(Calendar.YEAR) - 1);
+%>
 
-<%! SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT); %>
+<%!SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);%>
 
-<div>
+<div class="portlet-section-body">
 
-<div class="home">
-	<a href="${homeUrl}"><spring:message code="koku.common.back" /></a>
-</div>
+	<div class="home">
+		<a href="${homeUrl}"><spring:message code="koku.common.back" />
+		</a>
+	</div>
+
+	<h1 class="portlet-section-header">
+		<spring:message code="koku.lok.header" />
+	</h1>
 	
-	<h1 class="portlet-section-header"><spring:message code="koku.lok.header"/></h1>
-<p>	
-<%-- leave portlet-menu and Tarkastele and Arkistoi buttons out for now --%>
+	<div class="portlet-menu">
+			<ul>
+
+				<li class="portlet-menu-item-selected"><spring:message code="koku.lok.menu.item.search"/></li>
+				<li class="portlet-menu-item"><spring:message code="koku.lok.menu.item.archive"/></li>
+			</ul>
+		</div>
 	
-<%--  <div class="portlet-form-field">	--%>
-<div class="portlet-form-field-label"><spring:message code="koku.lok.search.parameters"/>
-</div>	
-
-  <form:form name="logSearchForm" commandName="logSearchCriteria" method="post" action="${searchActionUrl}">
-    <span class="form-field-label"><spring:message code="koku.common.pic" /> </span>
-	<form:input path="pic" />
-	<span class="errors"><form:errors path="pic" /></span>
-
-    <span class="form-field-label"><spring:message code="koku.common.concept" /> </span>
-	<form:input path="concept" />
-	<span class="errors"><form:errors path="concept" /></span>
 	
-<!--  TODO: Javascript date picker will be added here! -->
-    <span class="form-field-label"><spring:message code="koku.common.startTime" /> </span>
-	<form:input path="from" value="<%=df.format(starttime.getTime()) %>"/>
-	<span class="errors"><form:errors path="from" /></span>
+		<%-- leave portlet-menu and Tarkastele and Arkistoi buttons out for now --%>
 
-    <span class="form-field-label"><spring:message code="koku.common.endTime" /> </span>
-	<form:input path="to" value="<%=df.format(endtime.getTime()) %>"/>
-	<span class="errors"><form:errors path="to" /></span>
+		<%--  <div class="portlet-form-field">	--%>
+	<div class="portlet-form-field-label">
+		<spring:message code="koku.lok.search.parameters" />
+	</div>
 
-	<input type="submit" value="<spring:message code="koku.common.search"/>" >
+	<form:form name="logSearchForm" commandName="logSearchCriteria"
+		method="post" action="${searchActionUrl}">
+		<span class="form-field-label"><spring:message
+				code="koku.common.pic" /> </span>
+		<form:input path="pic" />
+		<span class="errors"><form:errors path="pic" />
+		</span>
 
-	<div class="clear" />
-  </form:form>
+		<span class="form-field-label"><spring:message
+				code="koku.common.concept" /> </span>
+		<form:input path="concept" />
+		<span class="errors"><form:errors path="concept" />
+		</span>
+
+		<!--  TODO: Javascript date picker will be added here! -->
+		<span class="form-field-label"><spring:message
+				code="koku.common.startTime" /> </span>
+		<form:input path="from" value="<%=df.format(starttime.getTime()) %>" />
+		<span class="errors"><form:errors path="from" />
+		</span>
+
+		<span class="form-field-label"><spring:message
+				code="koku.common.endTime" /> </span>
+		<form:input path="to" value="<%=df.format(endtime.getTime()) %>" />
+		<span class="errors"><form:errors path="to" />
+		</span>
+
+		<input type="submit"
+			value="<spring:message code="koku.common.search"/>">
+
+		<div class="clear"></div>
+	</form:form>
 
 
-<%-- th { text-align: center; font-weight: bold } --%>
-<c:if test="${not empty entries}">
-<h2 class="portlet-section-subheader"><spring:message code="koku.common.searchResults"/>
-${searchParams.pic}, ${searchParam.concept}, ${searchParams.from}, ${searchParams.to}:</h2>
-<table class="portlet-table-body" width="100%" border="0">
-<%--<tr>
+	<%-- th { text-align: center; font-weight: bold } --%>
+	<c:if test="${not empty entries}">
+		<h2 class="portlet-section-subheader">
+			<spring:message code="koku.common.searchResults" />
+			${searchParams.pic}, ${searchParam.concept} <fmt:formatDate pattern="dd.MM.yyyy" value="${searchParams.from}" /> -
+			 <fmt:formatDate pattern="dd.MM.yyyy" value="${ searchParams.to }" />
+		</h2>
+		<table class="portlet-table-body" width="100%" border="0">
+			<%--<tr>
 <th width=20% scope="col">Aika</th>
 <th width=20% scope="col">Käyttäjä</th>
 <th width=20% scope="col">Tapahtumatyyppi</th>
 <th width=40% scope="col">Käsitelty tieto</th>
 </tr> --%>
-<tr>
-<%-- TODO! when using <th> the text won't align to left, that's why we use <td> and <b> here now.
+			<tr>
+				<%-- TODO! when using <th> the text won't align to left, that's why we use <td> and <b> here now.
 This should be changed! --%>
 
-<td width=20% scope="col"><b>Aika</b></th>
-<td width=20% scope="col"><b>Käyttäjä</b></th>
-<td width=20% scope="col"><b>Tapahtumatyyppi</b></th>
-<td width=40% scope="col"><b>Käsitelty tieto</b></th>
-</tr>
+				<th width=20% scope="col"><b>Aika</b>
+				</th>
+				<th width=20% scope="col"><b>Käyttäjä</b>
+				</th>
+				<th width=20% scope="col"><b>Tapahtumatyyppi</b>
+				</th>
+				<th width=40% scope="col"><b>Käsitelty tieto</b>
+				</th>
+			</tr>
 
-<c:forEach var="e" items="${entries}">
-<tr><td width=20%>${e.timestamp}</td>
-<td width=20%>${e.user}</td>
-<td width=20%>${e.event_type}</td>
-<td width=40%>${e.event_description}</td>
-</tr>
-</c:forEach>
-</table>
-</c:if>
-</div>
+			<c:forEach var="e" items="${entries}">
+				<tr>
+					<td width=20%>${e.timestamp}</td>
+					<td width=20%>${e.user}</td>
+					<td width=20%>${e.event_type}</td>
+					<td width=40%>${e.event_description}</td>
+				</tr>
+			</c:forEach>
+		</table>
+	</c:if>
+
 
 
 <c:if test="${empty entries}">
- 	<c:if test="${not empty visited}"> <%-- do not show this on the first visit to this page --%>
-		<p><spring:message code="koku.common.noResults"/></p>
+	<c:if test="${not empty visited}">
+		<%-- do not show this on the first visit to this page --%>
+		<p>
+			<spring:message code="koku.common.noResults" />
+		</p>
 	</c:if>
 </c:if>
 
-<p>
+<br/>
+</div>
 
-</div>
-</div>
