@@ -26,7 +26,7 @@
 
 <%! SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT); %>
 
-
+<div class="portlet-section-body">
 
 <div class="home">
 	<a href="${homeUrl}"><spring:message code="koku.common.back" /></a>
@@ -54,14 +54,15 @@
 
 	<input type="submit" value="<spring:message code="koku.common.search"/>" >
 
-	<div class="clear" />
+	<div class="clear"></div>
   </form:form>
 
 
 <%-- th { text-align: center; font-weight: bold } --%>
 <c:if test="${not empty entries}">
 <h2 class="portlet-section-subheader"><spring:message code="koku.lok.view.results.header"/>
-${searchParams.from} - ${searchParams.to}:</h2>
+<fmt:formatDate pattern="dd.MM.yyyy" value="${searchParams.from}" /> -
+			 <fmt:formatDate pattern="dd.MM.yyyy" value="${ searchParams.to }" />:</h2>
 
 <%-- TODO: Nämä kentät tarvitaan:
 aikaleima
@@ -75,10 +76,10 @@ käsitelty tieto (tapahtumakuvaus ja kohde)
 <%-- TODO! when using <th> the text won't align to left, that's why we use <td> and <b> here now.
 This should be changed! --%>
 
-<td width=20% scope="col"><b>Aikaleima</b></th>
-<td width=20% scope="col"><b>Käsittelijä</b></th>
-<td width=20% scope="col"><b>Tapahtumatyyppi</b></th>
-<td width=40% scope="col"><b>Käsitelty tieto</b></th>
+<th width=20% scope="col"><b>Aikaleima</b></th>
+<th width=20% scope="col"><b>Käsittelijä</b></th>
+<th width=20% scope="col"><b>Tapahtumatyyppi</b></th>
+<th width=40% scope="col"><b>Käsitelty tieto</b></th>
 </tr>
 
 <c:forEach var="e" items="${entries}">
@@ -92,15 +93,11 @@ This should be changed! --%>
 </c:if>
 </div>
 
-
-
 <c:if test="${empty entries}">
  	<c:if test="${not empty visited}"> <%-- do not show this on the first visit to this page --%>
 		<p><spring:message code="koku.common.noResults"/></p>
 	</c:if>
 </c:if>
 
-<p>
-
-</div>
+<br/>
 </div>

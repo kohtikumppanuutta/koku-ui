@@ -30,7 +30,7 @@ public class LogDemoFactory {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy hh.mm:ss");
     LogEntry entry = new LogEntry();
     
-    user = "user"+id;
+    user = "kayttaja"+id;
     child = "child"+id*2;
     int nr = generator.nextInt(4);
     event_type = event_types[nr];
