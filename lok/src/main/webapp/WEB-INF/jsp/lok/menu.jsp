@@ -25,20 +25,25 @@
 	<div style="float: left;">
 	
 		<div>
-			<form:form name="logForm" method="post" action="${archive}">
-				<input type="submit" value="<spring:message code="koku.common.archive"/>" />
-			</form:form>
-		</div>
-
-		<div>
+			<h3>Järjestelmänvalvojan toiminnot</h3>
+			
+			
 			<form:form name="searchForm" method="post" action="${searchArchive}">
 				<input type="submit" value="<spring:message code="koku.common.search"/>" />
 			</form:form>
+			
+			<form:form name="logForm" method="post" action="${archive}">
+				<input type="submit" value="<spring:message code="koku.common.archive"/>" />
+			</form:form>
+		
 		</div>
 
-		<div><form:form name="viewForm" method="post" action="${searchLogViews}">
-				<input type="submit" value="<spring:message code="koku.lok.view"/>" />
-			</form:form></div>
+		<div>
+			<h3>Lokinkäsittelyn valvojan toiminnot</h3>
+				<form:form name="viewForm" method="post" action="${searchLogViews}">
+						<input type="submit" value="<spring:message code="koku.lok.view"/>" />
+				</form:form>
+			</div>
 	</div>
 
 	

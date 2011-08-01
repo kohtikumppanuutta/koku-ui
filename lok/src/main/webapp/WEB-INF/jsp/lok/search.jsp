@@ -19,6 +19,10 @@
 	<portlet:param name="op" value="choose" />
 </portlet:renderURL>
 
+<portlet:renderURL var="archiveURL">
+	<portlet:param name="op" value="archiveLog" />
+</portlet:renderURL>
+
 <%!Calendar starttime = Calendar.getInstance();%>
 <!--  default endtime is now -->
 <%!Calendar endtime = Calendar.getInstance();%>
@@ -44,7 +48,7 @@
 			<ul>
 
 				<li class="portlet-menu-item-selected"><spring:message code="koku.lok.menu.item.search"/></li>
-				<li class="portlet-menu-item"><spring:message code="koku.lok.menu.item.archive"/></li>
+				<li class="portlet-menu-item"><a href="${archiveURL}"><spring:message code="koku.lok.menu.item.archive"/></a></li>
 			</ul>
 		</div>
 	
@@ -139,7 +143,7 @@ This should be changed! --%>
 		</p>
 	</c:if>
 </c:if>
-
+<br/>
 <br/>
 </div>
 

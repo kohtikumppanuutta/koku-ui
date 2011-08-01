@@ -22,6 +22,10 @@
 	<portlet:param name="op" value="choose" />
 </portlet:renderURL>
 
+<portlet:renderURL var="searchLogURL">
+	<portlet:param name="op" value="searchLog" />
+</portlet:renderURL>
+
 <%
   Calendar starttime = Calendar.getInstance();
 %>
@@ -55,15 +59,10 @@
 		<div class="portlet-menu">
 			<ul>
 
-				<li class="portlet-menu-item"><spring:message code="koku.lok.menu.item.search"/></li>
+				<li class="portlet-menu-item"><a href="${searchLogURL}"><spring:message code="koku.lok.menu.item.search"/></a></li>
 				<li class="portlet-menu-item-selected"><spring:message code="koku.lok.menu.item.archive"/></li>
 			</ul>
 		</div>
-
-		
-
-
-
 
 		<c:if test="${empty archiveDate}">
 			<div class="log-archive">
