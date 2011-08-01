@@ -13,7 +13,7 @@
 
 
 <div class="portlet-section-body">
-<p><spring:message code="koku.lok.archivingstatus.running"/></p>
+<p><spring:message code="koku.lok.archivingstatus.success"/></p>
  
   
  <div class="home">
