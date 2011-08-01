@@ -4,8 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-
-
+<c:set var="dp" value="<%=com.ixonos.koku.pyh.util.Role.DEPENDANT%>" />
 <c:set var="CHILD" value="<%=com.ixonos.koku.pyh.util.Role.CHILD%>" />
 <c:set var="PARENT" value="<%=com.ixonos.koku.pyh.util.Role.PARENT%>" />
 <c:set var="MEMBER"
@@ -51,150 +50,92 @@
 		<div class="name">
 			${user.firstname} ${user.surname} <br />
 		</div>
-
-		<div class="email">
-			<form:form name="changeEmail" method="post" action="${changeEmail}"
-				id="emailForm">
-
-				<span class="portlet-form-field"><input name="email"
-					type="text" value="${user.email}" />
-				</span>
-
-				<input class="portlet-form-button" type="submit" value="<spring:message code="ui.pyh.save.simple" />"
-					onclick="doSubmitForm()" />
-			</form:form>
-		</div>
+        <div class="email"><spring:message code="ui.pyh.email" />  ${user.email}</div>
 		<br />
 	</c:if>
-
+	
+	<c:if test="${not empty dependants or not empty otherFamilyMembers}">
+	    <div class="family">
+        <table class="portlet-table-body" width="100%">
+            <tr>
+                <th><spring:message code="ui.pyh.name" /></th>
+                <th><spring:message code="ui.pyh.hetu" /></th>
+                <th><spring:message code="ui.pyh.role" /></th>
+                <th><spring:message code="ui.pyh.action" /></th>
+            </tr>
+            
+            <c:forEach var="child" items="${dependants}">
+            <tr>
+                <td> ${child.fullName} </td>
+                <td> ${child.ssn} </td>
+                <td> ${dp.text} 
+                
+                <c:if test="${child.memberOfUserFamily}">
+                   (<spring:message code="ui.pyh.added.into.family" />)
+                </c:if>
+                </td>
+                <td> 
+                <span class="actions">
+                        <span class="link"> <c:choose>
+		                        <c:when test="${child.requestBending}">
+		                          //nothing at the moment
+		                          Odottaa hyv‰ksynt‰‰
+		                        </c:when>
+                                <c:when test="${child.memberOfUserFamily}">
+                                   <span class="link"> 
+                                         <portlet:actionURL var="removeFamilyMember">
+                                        <portlet:param name="action" value="removeDependant" />
+                                        <portlet:param name="familyMemberSSN" value="${child.ssn}" />
+                                    </portlet:actionURL>
+                            <a href="${removeFamilyMember}"><spring:message code="ui.pyh.remove.family" /></a> </span> 
+                                </c:when>
+                                <c:otherwise>
+                                    <portlet:actionURL var="addDependantAsFamilyMember">
+                                        <portlet:param name="action"
+                                            value="addDependantAsFamilyMember" />
+                                        <portlet:param name="dependantSSN" value="${child.ssn}" />
+                                    </portlet:actionURL>
+                                    <a href="${addDependantAsFamilyMember}"><spring:message code="ui.pyh.add.into.family" /></a>
+                                </c:otherwise>
+                            </c:choose> </span> </span>
+                </td>
+            </tr>
+            </c:forEach>
+            
+            <c:forEach var="familyMember" items="${otherFamilyMembers}">
+                <tr>
+                <td>${familyMember.fullName} </td>
+                <td>${familyMember.ssn} </td>
+                <td>${familyMember.role.text}</td>
+                <td><span class="linkki">
+                    <portlet:actionURL var="removeFamilyMember">
+                    <portlet:param name="action" value="removeFamilyMember" />
+                    <portlet:param name="familyMemberSSN" value="${familyMember.ssn}" />
+                </portlet:actionURL>
+                        <a
+                        href="${removeFamilyMember}"><spring:message code="ui.pyh.remove.family" /></a>
+                    </span></td>
+            </tr>
+            </c:forEach>
+        </table>
+    
+    
+    </div>
+    </br>
+    </c:if>
+<!-- 
 	<c:if test="${not empty dependants}">
 		<div class="dependants">
 			<h3 class="portlet-section-subheader"><spring:message code="ui.pyh.dependants" /></h3>
 			<c:forEach var="dependant" items="${dependants}">
 				<div class="dependant">
 					<span class="name">${dependant.firstname}
-						${dependant.surname} ${dependant.ssn}</span> <span class="actions">
-
-
-						<span class="link"> <c:choose>
-								<c:when test="${dependant.memberOfUserFamily}">
-					               (<spring:message code="ui.pyh.added.into.family" />)
-					               <span class="link"> 
-                                         <portlet:actionURL var="removeFamilyMember">
-                                        <portlet:param name="action" value="removeDependant" />
-                                        <portlet:param name="familyMemberSSN" value="${dependant.ssn}" />
-                                    </portlet:actionURL>
-                            <a href="${removeFamilyMember}"><spring:message code="ui.pyh.remove.family" /></a> </span> 
-								</c:when>
-								<c:otherwise>
-									<portlet:actionURL var="addDependantAsFamilyMember">
-										<portlet:param name="action"
-											value="addDependantAsFamilyMember" />
-										<portlet:param name="dependantSSN" value="${dependant.ssn}" />
-									</portlet:actionURL>
-									<a href="${addDependantAsFamilyMember}"><spring:message code="ui.pyh.add.into.family" /></a>
-								</c:otherwise>
-							</c:choose> </span> </span>
+						${dependant.surname} ${dependant.ssn}</span> 
 				</div>
 			</c:forEach>
 		</div>
+		<br />
 	</c:if>
-
-
-	<!-- 
-+ LISƒƒ UUSI LAPSI <br/>
-
-<portlet:actionURL var="addNewDependant">
-	<portlet:param name="action" value="addNewDependant"/>
-</portlet:actionURL>
-
-<form:form name="addNewDependantForm" commandName="newDependant" method="post" action="${addNewDependant}">
-	
-	<span class="pvm">
-	<span class="portlet-form-field-label">Etunimi:</span>  <span class="portlet-form-input-field"><form:input path="firstname"/> </span>
-	<span class="portlet-form-field-label">Toinen nimi:</span>  <span class="portlet-form-input-field"><form:input path="middlename"/></span>
-	<span class="portlet-form-field-label">Sukunimi:</span>  <span class="portlet-form-input-field"><form:input path="surname"/></span>
-	</span>
-	
-	<span class="pvm">
-	<span class="portlet-form-field-label">Syntym‰aika:</span>
-	
-	<span class="portlet-form-input-field">
-	<form:select path="birthday" class="syntmaika">
-	<form:option value="01"/>
-	<form:option value="02"/>
-	<form:option value="03"/>
-	<form:option value="04"/>
-	<form:option value="05"/>
-	<form:option value="06"/>
-	<form:option value="07"/>
-	<form:option value="08"/>
-	<form:option value="09"/>
-	<form:option value="10"/>
-	<form:option value="11"/>
-	<form:option value="12"/>
-	<form:option value="13"/>
-	<form:option value="14"/>
-	<form:option value="15"/>
-	<form:option value="16"/>
-	<form:option value="17"/>
-	<form:option value="18"/>
-	<form:option value="19"/>
-	<form:option value="20"/>
-	<form:option value="21"/>
-	<form:option value="22"/>
-	<form:option value="23"/>
-	<form:option value="24"/>
-	<form:option value="25"/>
-	<form:option value="26"/>
-	<form:option value="27"/>
-	<form:option value="28"/>
-	<form:option value="29"/>
-	<form:option value="30"/>
-	<form:option value="31"/>
-	</form:select>
-	
-	<form:select path="birthmonth" class="syntmaika">
-	<form:option value="01"/>
-	<form:option value="02"/>
-	<form:option value="03"/>
-	<form:option value="04"/>
-	<form:option value="05"/>
-	<form:option value="06"/>
-	<form:option value="07"/>
-	<form:option value="08"/>
-	<form:option value="09"/>
-	<form:option value="10"/>
-	<form:option value="11"/>
-	<form:option value="12"/>
-	</form:select>
-	
-	<form:select path="birthyear" class="syntmaika">
-	<form:option value="2000"/>
-	<form:option value="2001"/>
-	<form:option value="2002"/>
-	<form:option value="2003"/>
-	<form:option value="2004"/>
-	<form:option value="2005"/>
-	<form:option value="2006"/>
-	<form:option value="2007"/>
-	<form:option value="2008"/>
-	<form:option value="2009"/>
-	<form:option value="2010"/>
-	<form:option value="2011"/>
-	</form:select>
-	</span>
-	
-	<span class="portlet-form-field-label">SOTU:</span> 
-	<span class="portlet-form-input-field">
-	<form:input path="ssn"/>
-	</span>
-	
-	<input class="portlet-form-button" type="submit" value="Lis‰‰ &gt;"/>
-	
-	</span>
-</form:form> -->
-	<br />
 
 	<c:if test="${not empty otherFamilyMembers}">
 		<div class="members">
@@ -218,6 +159,7 @@
 		</div>
 	</c:if>
 	
+	 -->
 	
 	    <c:if test="${not empty messages}">
         <h3 class="portlet-section-subheader"><spring:message code="ui.pyh.sent.messages" />
@@ -229,9 +171,10 @@
             </div>
             
         </c:forEach>
+        </br>
     </c:if>
     
-	</br>
+	
 	<div class="add">
                     
 		<h3 class="portlet-section-subheader"><spring:message code="ui.pyh.add.family" /></h3>

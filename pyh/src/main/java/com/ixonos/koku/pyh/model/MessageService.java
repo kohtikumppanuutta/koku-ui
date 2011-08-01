@@ -52,7 +52,7 @@ public class MessageService implements MessageListener {
     }
 
     for (Message m : tmp) {
-      if (m.getRecipients().contains(ssn)) {
+      if (m.getRecipients().contains(ssn) && !m.isReadBy(ssn)) {
         results.add(m);
       }
     }

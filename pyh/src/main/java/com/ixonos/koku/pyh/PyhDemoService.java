@@ -142,7 +142,11 @@ public class PyhDemoService {
     Person user = getUser();
     List<String> tmp = generateRecipients(dependantSSN, user);
 
-    sendDependantFamilyAdditionMessage(tmp, user, model.getPerson(dependantSSN), Role.CHILD);
+    if (tmp.size() == 0) {
+      insertDependantToFamily(user.getSsn(), dependantSSN, Role.CHILD);
+    } else {
+      sendDependantFamilyAdditionMessage(tmp, user, model.getPerson(dependantSSN), Role.CHILD);
+    }
   }
 
   private List<String> generateRecipients(String targetSSN, Person user) {
@@ -167,6 +171,7 @@ public class PyhDemoService {
   public void insertDependantToFamily(String userSSN, String dependantSSN, Role role) {
     Dependant dependant = model.getDependant(dependantSSN);
     dependant.setMemberOfUserFamily(true);
+    dependant.setRequestBending(false);
     Family family = getFamily(userSSN);
     family.addFamilyMember(new FamilyMember(dependant, role));
   }
@@ -247,6 +252,8 @@ public class PyhDemoService {
 
       if (Role.PARENT.equals(r)) {
         sendParentAdditionMessage(ssn, user, ssn, person, r);
+      } else if (tmp.size() == 0) {
+        insertInto(user.getSsn(), ssn, r);
       } else {
         sendFamilyAdditionMessage(tmp, user, ssn, person, r);
       }
@@ -278,8 +285,9 @@ public class PyhDemoService {
     Message message = Message.createMessage(recipients, user.getSsn(), person.getSsn(), person.getCapFullName()
         + " Uusi perheyhteystieto.", "Käyttäjä " + user.getFullName() + " on lisännyt henkilön " + person.getFullName()
         + " perheyhteisön muuksi jäseneksi. "
-        + "Kaikkien opsapuolten on hyväksyttävä uuden jäsenen liittäminen perheyhteisöön.",
-        new DependantExecutable(user.getSsn(), person.getSsn(), r, this));
+        + "Kaikkien opsapuolten on hyväksyttävä uuden jäsenen liittäminen perheyhteisöön.", new DependantExecutable(
+        user.getSsn(), person.getSsn(), r, this));
+    person.setRequestBending(true);
     messageService.addMessage(message);
   }
 

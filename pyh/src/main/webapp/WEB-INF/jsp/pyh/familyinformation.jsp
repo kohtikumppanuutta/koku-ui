@@ -1,9 +1,12 @@
+<%@page import="com.ixonos.koku.pyh.util.Role"%>
 <%@ taglib prefix="portlet" uri="http://java.sun.com/portlet"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <portlet:defineObjects />
+
+<c:set var="dp" value="<%=com.ixonos.koku.pyh.util.Role.DEPENDANT%>" />
 
 <portlet:renderURL var="editFamilyInformation">
                             <portlet:param name="action" value="editFamilyInformation" />
@@ -29,10 +32,45 @@
 	</h1>
 
 	<c:if test="${not empty user}">
-		<div class="name">${user.firstname} ${user.surname}</div>
+		<div class="name">${user.firstname} ${user.surname} </div>
 		<div class="email"><spring:message code="ui.pyh.email" />  ${user.email}</div>
 	</c:if>
 
+</br>
+
+<c:if test="${not empty dependants or not empty otherFamilyMembers}">
+    <div class="family">
+        <table class="portlet-table-body" width="100%">
+            <tr>
+                <th><spring:message code="ui.pyh.name" /></th>
+                <th><spring:message code="ui.pyh.hetu" /></th>
+                <th><spring:message code="ui.pyh.role" /></th>
+            </tr>
+            
+            <c:forEach var="child" items="${dependants}">
+            <tr>
+                <td> ${child.fullName} </td>
+                <td> ${child.ssn} </td>
+                <td> ${dp.text} 
+                    <c:if test="${child.memberOfUserFamily}">
+                     (<spring:message code="ui.pyh.added.into.family" />)
+                    </c:if>                
+                </td>
+            </tr>
+            </c:forEach>
+            
+            <c:forEach var="familyMember" items="${otherFamilyMembers}">
+             <tr>
+                <td>${familyMember.fullName} </td>
+                <td>${familyMember.ssn} </td>
+                <td>${familyMember.role.text}</td>
+            </tr>
+            </c:forEach>
+        </table>    
+    
+    </div>
+</c:if>
+<!--
 	<c:if test="${not empty dependants}">
 
 
@@ -55,7 +93,7 @@
 			</div>
 		</c:forEach>
 	</c:if>
-	
+	  -->
 	
 	 <c:if test="${not empty sentMessages}">
         <h3 class="portlet-section-subheader"><spring:message code="ui.pyh.sent.messages" />
@@ -90,11 +128,11 @@
                         <input type="submit" class="portlet-form-button" value="<spring:message code="ui.pyh.deny" />"/>                        
                     </form:form>     
                     </span>  
-                    
                                         
                     <span class="right"> 
                     <portlet:actionURL var="accept">
                             <portlet:param name="action" value="acceptMessage" />
+                            <portlet:param name="readerId" value="${user.ssn}" />
                             <portlet:param name="messageId" value="${message.id}" />
                     </portlet:actionURL>
                     <form:form name="accept" method="post" action="${accept}">
@@ -104,10 +142,18 @@
                           
                  </span> 
                  <div class="reset-floating"></div>
-            </div>
+            
             
             <div class="portlet-section-text">
-                ${message.description} 
+                ${message.description}               
+            
+            <span class="mail">
+            <form:form name="accept" method="post" action="${accept}">
+                
+                <a href="mailto:yllapito@kohtikumppanuutta.fi?subject=Asiaton perheyhteyspyyntö (Viesti ID:${ message.id })">Ilmoita asiaton perheyhteyspyyntö</a> 
+                </form:form>
+                </span>
+                </div>
             </div>
             
         </c:forEach>
@@ -116,3 +162,5 @@
 <div class="reset-floating"></div>
 </br>
 </div>
+
+

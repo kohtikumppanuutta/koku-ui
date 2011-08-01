@@ -11,6 +11,7 @@ public class Person {
   private String birthmonth; // e.g. "05"
   private String birthyear; // e.g. "2000"
   private String email;
+  private boolean requestBending;
 
   public Person() {
     this.firstname = "";
@@ -22,6 +23,7 @@ public class Person {
     this.birthmonth = "";
     this.birthyear = "";
     this.email = "";
+    requestBending = false;
   }
 
   public Person(String firstname, String middlename, String surname, String ssn, String birthdate, String email) {
@@ -31,6 +33,7 @@ public class Person {
     this.ssn = ssn;
     this.birthdate = birthdate;
     this.email = email;
+    requestBending = false;
   }
 
   public Person(Person p) {
@@ -40,6 +43,7 @@ public class Person {
     this.ssn = p.getSsn();
     this.birthdate = p.getBirthdate();
     this.email = p.getEmail();
+    requestBending = false;
   }
 
   public String getFirstname() {
@@ -124,6 +128,14 @@ public class Person {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public boolean isRequestBending() {
+    return requestBending;
+  }
+
+  public void setRequestBending(boolean requestBending) {
+    this.requestBending = requestBending;
   }
 
 }

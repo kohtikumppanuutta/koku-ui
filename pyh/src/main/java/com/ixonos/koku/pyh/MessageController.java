@@ -29,9 +29,9 @@ public class MessageController {
   private MessageService messageService;
 
   @ActionMapping(params = "action=acceptMessage")
-  public void accept(@RequestParam String messageId, ActionResponse response) {
+  public void accept(@RequestParam String readerId, @RequestParam String messageId, ActionResponse response) {
     Message m = messageService.getMessage(messageId);
-    m.accept();
+    m.accept(readerId);
     response.setRenderParameter("action", "guardianFamilyInformation");
   }
 

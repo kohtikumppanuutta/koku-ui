@@ -22,7 +22,7 @@ public class PyhDemoFactory {
     PyhDemoModel model = new PyhDemoModel();
 
     Person p1 = new Person("Matti", "Mikael", "Meikäläinen", "010203-1234", "010203", "");
-    Person p2 = new Person("Tytti", "Taina", "Järvinen", "020304-2345", "020304", "");
+    Person p2 = new Person("Tytti", "Taina", "Peltola", "020304-2345", "020304", "tytti@mummula.fi");
     Person p3 = new Person("Jouni", "Josef", "Merinen", "030405-3456", "030405", "");
     Person p4 = new Person("Tapani", "Toivo", "Ruohonen", "040506-4567", "040506", "");
     Person p5 = new Person("Liisa", "Leila", "Ruohonen", "050607-5678", "050607", "");
@@ -59,7 +59,6 @@ public class PyhDemoFactory {
 
     Family f2 = new Family();
     f2.addFamilyMember(new FamilyMember(p2, Role.PARENT));
-    f2.addFamilyMember(new FamilyMember(p13, Role.CHILD));
 
     model.addFamily(f1);
     model.addFamily(f2);

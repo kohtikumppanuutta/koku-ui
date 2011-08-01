@@ -16,10 +16,12 @@ public class Message {
   private Executable executable;
   private int executeCount = 0;
   private int acceptCount = 0;
+  private List<String> read;
 
   private Message(String id) {
     this.id = id;
     listeners = new ArrayList<MessageListener>();
+    read = new ArrayList<String>();
     recipients = new ArrayList<String>();
   }
 
@@ -31,17 +33,22 @@ public class Message {
     listeners.remove(l);
   }
 
-  public void accept() {
+  public void accept(String id) {
     acceptCount++;
+    read.add(id);
 
     if (acceptCount == executeCount && executable != null) {
       executable.execute();
+      notifyRead();
     }
-    notifyRead();
   }
 
   public void reject() {
     notifyRead();
+  }
+
+  public boolean isReadBy(String id) {
+    return read.contains(id);
   }
 
   private void notifyRead() {
