@@ -208,7 +208,7 @@
 				<c:if test="${ sessionScope.ammattilainen }">
 					<a class="tieto"> <spring:message code="ui.sopimus.uusi" /><span
 						class="sulje"><spring:message code="ui.piilota" /> </span> </a>
-					<div class="tietokentta ">
+					<div class="tietokentta " style="display: none;">
 
 						<form:form name="aktivointiForm" commandName="aktivointi"
 							method="post" action="${aktivointiActionUrl}">
@@ -262,7 +262,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 
-		$(".tietokentta").hide();
+		/*TODO $(".tietokentta").hide(); */
 
 		$("a.tieto").click(function() {
 			$(this).toggleClass("active").next().slideToggle("fast");

@@ -44,7 +44,7 @@
                 <c:if test="${ sessionScope.ammattilainen && !kokoelma.versioitu }">
                     <a class="tieto"> <spring:message code="ui.kks.new.version" /><span
                         class="sulje"><spring:message code="ui.piilota" /> </span> </a>
-                    <div class="tietokentta ">
+                    <div class="tietokentta " style="display: none;">
           
                         <form:form name="uusiVersioForm"  method="post" action="${versioiURL}">
                                 <input type="hidden" id="id" name="id" value="${ kokoelma.id }"/>
@@ -277,8 +277,6 @@
 	src="http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.4.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-
-		$(".tietokentta").hide();
 
 		$("a.tieto").click(function() {
 			$(this).toggleClass("active").next().slideToggle("fast");
