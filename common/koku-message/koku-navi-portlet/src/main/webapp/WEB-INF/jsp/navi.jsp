@@ -141,12 +141,9 @@
 	</a>
 	<ul class="main">
 		<li><a href="javascript:void(0)" >Etusivu</a></li>
-		<li><a href="/portal/private/classic/KKS">Kasvun ja kehityksen suunnitelma</a>
-			<ul class="child">
-				<li><a href="#">Lapsen_001_nimi</a></li>
-				<li><a href="#">Lapsen_002_nimi</a></li>
-			</ul></li>
+		<li><a href="/portal/private/classic/KKS">Sopimukset ja suunnitelmat</a>
 		<li><a href="/portal/private/classic/PYH" >Omat tiedot</a></li>
+		<li><a href="/portal/private/classic/LOK" >Lokihallinta</a></li>
 		<li><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')" >Viestit</a>
 			<ul class="open child">
 				<li id="msg_new"><a href="<%= defaultPath %>/Message/NewMessage">Uusi viesti</a> </li>
