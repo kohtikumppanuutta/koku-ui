@@ -109,18 +109,13 @@ public class DemoService {
    */
   public List<Aktivoitava> haeHenkilonKokoelmat(Henkilo h) {
     Set<KokoelmaTyyppi> tyypit = haeKokoelmaTyypit(h);
-    List<Kokoelma> kokoelmat = h.getKks().getKokoelmat();
+
     List<Aktivoitava> aktivoitavat = new ArrayList<Aktivoitava>();
 
     for (KokoelmaTyyppi kt : tyypit) {
       aktivoitavat.add(new Aktivoitava("" + kt.getKoodi(), false, kt.getNimi()));
     }
 
-    for (Kokoelma k : kokoelmat) {
-      if (!k.isVersioitu()) {
-        aktivoitavat.add(new Aktivoitava("" + k.getId(), true, k.getNimi()));
-      }
-    }
     return aktivoitavat;
   }
 

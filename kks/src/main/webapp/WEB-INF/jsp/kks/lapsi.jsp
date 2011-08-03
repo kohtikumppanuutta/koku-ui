@@ -262,8 +262,6 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 
-		/*TODO $(".tietokentta").hide(); */
-
 		$("a.tieto").click(function() {
 			$(this).toggleClass("active").next().slideToggle("fast");
 		});
