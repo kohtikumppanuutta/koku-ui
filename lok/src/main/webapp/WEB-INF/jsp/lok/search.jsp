@@ -64,26 +64,26 @@
 		method="post" action="${searchActionUrl}">
 		<span class="form-field-label"><spring:message
 				code="koku.common.pic" /> </span>
-		<form:input path="pic" />
+		<form:input path="pic" maxlength="11" size="11" />
 		<span class="errors"><form:errors path="pic" />
 		</span>
 
 		<span class="form-field-label"><spring:message
 				code="koku.common.concept" /> </span>
-		<form:input path="concept" />
+		<form:input path="concept" maxlength="15" size="15" />
 		<span class="errors"><form:errors path="concept" />
 		</span>
 
 		<!--  TODO: Javascript date picker will be added here! -->
 		<span class="form-field-label"><spring:message
 				code="koku.common.startTime" /> </span>
-		<form:input path="from" value="<%=df.format(starttime.getTime()) %>" />
+		<form:input path="from" value="<%=df.format(starttime.getTime()) %>" maxlength="10" size="10" />
 		<span class="errors"><form:errors path="from" />
 		</span>
 
 		<span class="form-field-label"><spring:message
 				code="koku.common.endTime" /> </span>
-		<form:input path="to" value="<%=df.format(endtime.getTime()) %>" />
+		<form:input path="to" value="<%=df.format(endtime.getTime()) %>" maxlength="10" size="10" />
 		<span class="errors"><form:errors path="to" />
 		</span>
 
