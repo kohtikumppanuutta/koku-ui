@@ -135,13 +135,7 @@
                                     <span class="portlet-form-field-label">${tyyppi.nimi } <c:if
                                             test="${tyyppi.moniArvoinen && kokoelma.tila.aktiivinen }">
                                             <a
-                                                href="
-                                                          <portlet:renderURL>
-                                                              <portlet:param name="toiminto" value="naytaMoniarvoinen" />
-                                                              <portlet:param name="hetu" value="${lapsi.hetu}" />
-                                                              <portlet:param name="kokoelma" value="${kokoelma.id}" />
-                                                              <portlet:param name="kirjausTyyppi" value="${tyyppi.koodi}" />
-                                                          </portlet:renderURL>">
+                                                href="javascript:void(0)" onclick="doSubmitNewMulti('${tyyppi.koodi}');">
                                                 (<spring:message code="ui.lisaa.moniarvoinen" />) </a>
                                         </c:if>
                                     </span>
@@ -197,14 +191,7 @@
                                                                     <div class="kommentti">
                                                                     <span class="kirjaus">${moniarvoinen.arvo} <span class="right">
                                                                     <a
-                                                                            href="
-                                                                            <portlet:renderURL>
-                                                                                <portlet:param name="toiminto" value="naytaMoniarvoinen" />
-                                                                                <portlet:param name="hetu" value="${lapsi.hetu}" />
-                                                                                <portlet:param name="kokoelma" value="${kokoelma.id}" />
-                                                                                <portlet:param name="kirjausTyyppi" value="${tyyppi.koodi}" />
-                                                                                <portlet:param name="kirjausId" value="${moniarvoinen.id }" />
-                                                                            </portlet:renderURL>">
+                                                                            href="javascript:void(0)" onclick="doSubmitForm('${tyyppi.koodi}', '${moniarvoinen.id }' );">
                                                                                 <spring:message code="ui.muokkaa" /> </a>
                                                                     </span> 
                                                                     </span>
@@ -288,4 +275,30 @@
 	    var index = document.getElementById("aktivoitavaKentta").selectedIndex;
 	    alert("text= " + document.getElementById("aktivoitavaKentta").options[index].text);
 		}
+
+       function addMultivalueIdToForm( multiId ) {
+           $('#kirjaus')
+           .append(
+                   '<input name="multiValueId" type="hidden" value="' + multiId + '"/>');
+       }
+       
+	   function addTypeToForm(type) {
+	        $('#kirjaus')
+	                .append(
+	                        '<input name="type" type="hidden" value="' + type + '"/>');
+
+	    }
+
+	    function doSubmitNewMulti( tyyppi ) {
+	        addTypeToForm(tyyppi);
+	        $('#kirjaus').submit();
+
+	    }
+
+	       function doSubmitForm( type, multiId ) {
+	            addTypeToForm(type);
+	            addMultivalueIdToForm(multiId);
+	            $('#kirjaus').submit();
+
+	        }
 </script>

@@ -51,13 +51,28 @@ public class KokoelmaController {
 
   @ActionMapping(params = "toiminto=tallennaKokoelma")
   public void tallenna(@ModelAttribute(value = "lapsi") Henkilo lapsi,
-      @ModelAttribute(value = "kirjaus") Kokoelma kirjaus, BindingResult bindingResult, ActionResponse response,
-      SessionStatus sessionStatus) {
+      @ModelAttribute(value = "kirjaus") Kokoelma kirjaus, BindingResult bindingResult,
+      @RequestParam(required = false) String multiValueId, @RequestParam(required = false) String type,
+      ActionResponse response, SessionStatus sessionStatus) {
     log.info("tallenna kokoelma");
     lapsi.getKks().poistaKokoelma(kirjaus);
     lapsi.getKks().lisaaKokoelma(kirjaus);
-    response.setRenderParameter("toiminto", "naytaLapsi");
-    response.setRenderParameter("hetu", lapsi.getHetu());
+
+    if (type != null && !"".equals(type)) {
+
+      response.setRenderParameter("toiminto", "naytaMoniarvoinen");
+      response.setRenderParameter("hetu", lapsi.getHetu());
+      response.setRenderParameter("kokoelma", kirjaus.getId());
+      response.setRenderParameter("kirjausTyyppi", type);
+
+      if (multiValueId != null && !"".equals(multiValueId)) {
+        response.setRenderParameter("kirjausId", multiValueId);
+      }
+
+    } else {
+      response.setRenderParameter("toiminto", "naytaLapsi");
+      response.setRenderParameter("hetu", lapsi.getHetu());
+    }
     sessionStatus.setComplete();
   }
 
