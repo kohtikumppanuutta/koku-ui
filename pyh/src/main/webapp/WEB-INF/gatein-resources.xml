@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_0 http://www.gatein.org/xml/ns/gatein_resources_1_0"
+    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_0">
+    
+    <portlet-skin>
+        <application-name>pyh-portlet-0.0.1-SNAPSHOT</application-name>
+        <portlet-name>pyh</portlet-name>
+        <skin-name>Default</skin-name>
+        <css-path>/skin/pyh-style.CSS</css-path>
+    </portlet-skin>
+
+
+</gatein-resources>

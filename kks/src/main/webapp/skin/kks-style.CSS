@@ -1,0 +1,363 @@
+@charset "UTF-8";
+
+.kirjaus {
+    padding: 0 0 0 5px;
+}
+.kirjaus strong{
+    border-top: 1px solid #EFEFEF;
+    display: block;
+    margin: 0 0 0;
+    padding: 8px 0 0 5px;
+}
+.kirjaus .monivalinta {
+    display: block;
+    margin: 0 0 9px;
+}
+
+.kirjaus .teksti {
+    margin: 0 0 9px;
+    padding: 8px 0 0 5px;
+}
+
+.kirjaus .kirjaaja {
+    display: block;
+    margin: 0 0 9px;
+    float: right;
+    padding: 8px 0 0 5px;
+}
+
+.vapaa.teksti{
+    display: block;
+    margin: 0 0 9px;
+}
+.kirjaus textarea{
+    border: 1px solid #CCCCCC;
+    color: #333333;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 13px; 
+    height: 80px;
+    margin: 3px 0 12px 5px;
+    padding: 5px;
+    width: 700px;
+}
+input.tallenna {
+    margin: 12px 10px;
+}
+
+a{
+    text-decoration:none;
+    color:#25aae1;
+}
+a:hover {
+    color:#0089c1;
+}
+.kokoelmavalinta{
+}
+a.tieto {
+    cursor:pointer;
+    text-transform:uppercase;
+    padding: 2px 0;
+    display:block;
+}
+a.small {
+    font-size: 11px;
+    margin-top: -21px;
+    padding-bottom: 10px;
+    padding-left: 310px;
+    text-transform: none;
+}
+a.tieto .sulje{
+    display:none;
+}
+a.active .sulje{
+    display:inline;
+    font-size: 11px;
+    text-transform: none;
+    float:right;
+}
+.tietokentta {
+    padding:5px 0 45px 0;
+    border-bottom:1px solid #999999;
+    margin-bottom:10px;
+    color:#666666;
+}
+.tallenna {
+    float:right;
+}
+.choose{
+    color: #666666;
+    float: left;
+    padding-top: 3px;
+    white-space: nowrap;
+    width: 177px;
+}
+.pvm {
+    display:block;
+    margin-top:10px;
+    margin-bottom:3px;
+    color:#666666;
+}
+
+.pvm a,span {
+    font-size: 13px;
+}
+
+.uusi {
+    display:block;
+    margin-top:5px;
+    margin-bottom:3px;
+    color:#666666;
+}
+.tagit {
+    display: block;
+    font-size: 11px;
+    margin-top: 3px;
+    text-transform: uppercase;
+}
+.tagit a{
+    color: #666666;
+}
+.tagit a:hover{
+    color: #444444;
+}
+
+
+ul {
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+li { 
+    line-height: 15px;
+    margin: 0 0 0 10px;
+    padding: 3px 0;
+}
+
+.line {
+    border-bottom:1px solid #999999;
+}
+
+
+.viestintiedot {
+    color:#666666;
+}
+input.person{
+    margin-bottom:2px;
+    width:300px
+}
+
+.takaisin {
+    display: inline;
+    float: right;
+    font-size: 11px;
+    text-transform: none;
+}
+.wait {
+    color:#cccccc;
+}
+table th{
+    font-weight:normal;
+    text-align:left;
+    padding-bottom: 5px;
+    font-size: 13px;
+}
+.kokoelma {
+    font-size:16px;
+}
+.kirjaaja {
+    float:right;
+    font-size: 13px;
+}
+.kirjaus{
+    margin-bottom:20px;
+}
+
+.chosen{
+    color:#262626;
+    padding-right:8px;
+}
+
+.hae {
+    float:left;
+}
+input.hae {
+    margin: 12px 10px;
+}
+#main {
+    padding: 2px 15px;
+    width: 720px;
+    font-size:13px;
+}
+
+#navigation a{
+    text-decoration:none;
+    color:#666666;
+}
+#navigation a:hover, #navigation .current {
+    color:#25aae1;
+}
+#navigation ul.child{
+    
+}
+#navigation ul.open{
+    display:inline;
+}
+
+#navigation {
+    padding:0 10px;
+    float:left;
+    width:189px;
+    border-right: 1px solid #999999;
+    height:500px;
+}
+
+.portlet-section-body {
+    color: #444444;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 13px;
+    margin:0 30px;
+}
+.home a {
+    float:right;
+}
+a{
+    color:#25AAE1;
+    text-decoration:none;
+}
+a:hover{
+    color:#25AAE1;
+    text-decoration:underline;
+}
+.portlet-section-header {
+    font-size: 24px;
+    font-weight: normal;
+    margin: 12px 0;
+}
+h2.portlet-section-subheader {
+    background-color: #25AAE1;
+    color: #FFFFFF;
+    margin: 12px 0;
+    padding: 8px 15px;
+    font-size:18px;
+    font-weight:normal;
+}
+h3.portlet-section-subheader {
+    margin: 12px 0;
+    font-size:15px;
+    color:#555555;
+}
+.portlet-section-text {
+}
+.portlet-form-field-label{
+    margin: 8px 0 2px;
+    color:#444444;
+    width: 300px
+}
+textarea.portlet-form-input-field {
+    background-color: #F7F7F7;
+    border: 1px solid #CCCCCC;
+    padding: 5px;
+    width: 98%;
+    color:#555555;
+}
+input.portlet-form-input-field:focus {
+    padding: 5px;
+    background-color:#FCFCFC;
+    border:1px solid #999999;
+    color:#555555;
+}
+input.portlet-form-input-field {
+    background-color: #F7F7F7;
+    border: 1px solid #CCCCCC;
+    padding: 5px;
+    color:#555555;
+}
+select.portlet-form-input-field{
+}
+
+textarea.portlet-form-input-field:focus {
+    padding: 5px;
+    width: 98%;
+    background-color:#FCFCFC;
+    border:1px solid #999999;
+    color:#555555;
+}
+.clear {
+    float:right;
+    margin:1%;
+}
+.portlet-form-button {
+    
+}
+.portlet-form-field {
+    margin-bottom:12px;
+    color:#797979;
+}
+.portlet-menu{
+    display: block;
+    height: 40px;
+    width: 100%;
+}
+.portlet-menu ul{
+    list-style:none;
+    margin:10px 0;
+    padding:0;
+}
+.portlet-menu li.portlet-menu-item{
+    display: inline;
+    float: left;
+    margin: 0 6px 0 0;
+    padding:6px 16px;
+    background-color:#cccccc;
+    border:1px solid #dedede;
+}
+.portlet-menu li.portlet-menu-item-selected, .portlet-menu li.portlet-menu-item-hover, .portlet-menu li.portlet-menu-item-selected-hover{
+    background-color: #25AAE1;
+    color: #FFFFFF;
+    display: inline;
+    float: left;
+    margin: 0 6px 0 0;
+    padding: 6px 16px;
+    border:1px solid #1f94c5;
+}
+
+.portlet-table-body {
+    color:#444444;
+}
+.portlet-table-body th{
+    background: none repeat scroll 0 0 #DEDEDE;
+    font-weight: normal;
+    padding: 5px;
+    font-size:13px;
+    text-transform: uppercase;
+    text-align: left;
+}
+.portlet-table-body td{
+    border-bottom:1px solid #dedede !important;
+    padding:5px;
+    vertical-align:top;
+    font-size:11px;
+}
+
+.right {
+	float: right;
+}
+
+.left {
+    float: left;
+}
+
+.reset-floating {
+	clear: both;
+}
+
+.portlet-section-text .merkinta {
+	padding: 5px;
+}
+
+.kommentti {
+    padding-top: 10px;	
+}
+.defaultText { width: 200px; }
+.defaultTextActive { color: #a1a1a1; font-style: italic; }
+    
