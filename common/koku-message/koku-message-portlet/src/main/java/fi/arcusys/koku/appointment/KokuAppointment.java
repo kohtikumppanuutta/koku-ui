@@ -9,8 +9,9 @@ public class KokuAppointment {
 	private String recipients;
 	private String subject;
 	private String description;	
-	private String appointmentStatus;
+	private String status;
 	private List<Slot> slots;
+	private int approvedSlotNumber;
 	
 	/* getters */
 	public long getAppointmentId() {
@@ -33,12 +34,16 @@ public class KokuAppointment {
 		return description;
 	}
 	
-	public String getAppointmentStatus() {
-		return appointmentStatus;
+	public String getStatus() {
+		return status;
 	}
 	
 	public List<Slot> getSlots() {
 		return slots;
+	}
+	
+	public int getApprovedSlotNumber() {
+		return approvedSlotNumber;
 	}
 	
 	/* setters */
@@ -62,11 +67,15 @@ public class KokuAppointment {
 		this.description = description;
 	}
 	
-	public void setAppointmentStatus(String appointmentStatus) {
-		this.appointmentStatus = appointmentStatus;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	public void setSlots(List<Slot> slots) {
 		this.slots = slots;
+	}
+	
+	public void setApprovedSlotNumber(int approvedSlotNumber) {
+		this.approvedSlotNumber = approvedSlotNumber;
 	}
 }

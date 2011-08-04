@@ -11,25 +11,40 @@
 
 <portlet:renderURL var="messageURL" windowState="<%= WindowState.MAXIMIZED.toString() %>" >
 	<portlet:param name="myaction" value="showMessage" />
-	<portlet:param name="messageId" value= "CONSTANT_TASK_MESSAGE_ID" />
-	<portlet:param name="currentPage" value= "CONSTANT_TASK_CURRENT_PAGE" />
-	<portlet:param name="taskType" value= "CONSTANT_TASK_TASK_TYPE" />
-	<portlet:param name="keyword" value= "CONSTANT_TASK_KEYWORD" />
-	<portlet:param name="orderType" value= "CONSTANT_TASK_ORDER_TYPE" />
 </portlet:renderURL>
 
 <portlet:renderURL var="requestURL" windowState="<%= WindowState.MAXIMIZED.toString() %>" >
 	<portlet:param name="myaction" value="showRequest" />
-	<portlet:param name="requestId" value= "CONSTANT_TASK_MESSAGE_ID" />
-	<portlet:param name="currentPage" value= "CONSTANT_TASK_CURRENT_PAGE" />
-	<portlet:param name="taskType" value= "CONSTANT_TASK_TASK_TYPE" />
-	<portlet:param name="keyword" value= "CONSTANT_TASK_KEYWORD" />
-	<portlet:param name="orderType" value= "CONSTANT_TASK_ORDER_TYPE" />
 </portlet:renderURL>
 
 <portlet:renderURL var="appointmentURL" windowState="<%= WindowState.MAXIMIZED.toString() %>" >
 	<portlet:param name="myaction" value="showAppointment" />
 </portlet:renderURL>
+
+<!-- For gatein Portal -->
+<portlet:resourceURL var="messageRenderURL" id="createMessageRenderUrl">
+</portlet:resourceURL>
+
+<portlet:resourceURL var="requestRenderURL" id="createRequestRenderUrl">
+</portlet:resourceURL> 
+
+<portlet:resourceURL var="appointmentRenderURL" id="createAppointmentRenderUrl">
+</portlet:resourceURL> 
+<!-- For gatein Portal ends-->
+
+<%
+	/* Parses the parent path url from the portlet ajaxURL */
+	
+	String defaultPath = "";
+
+	int pos = ajaxURL.indexOf("default");
+	if(pos > -1) { // for Jboss portal
+		defaultPath = ajaxURL.substring(0, pos+7);		
+	}else { // for Gatein portal
+		int pos1 = ajaxURL.indexOf("classic");
+		defaultPath = ajaxURL.substring(0, pos1+7);
+	}
+%>
 
 <script type="text/javascript"> 
 /*
@@ -80,7 +95,7 @@
 		
 		pageObj.taskType = getTaskTypeFromNavi();	
 		var url="<%= ajaxURL %>";
-		var url="/portal/auth/portal/default/Message/MessageServiceNewWindow?id=getTask&action=f&cacheability=PAGE"
+
 		jQuery.post(url, {page:pageObj.currentPage, taskType:pageObj.taskType, 
 			keyword:pageObj.keyword, orderType:pageObj.orderType, field:pageObj.field}, function(data) {
 			var obj = eval('(' + data + ')');
@@ -261,47 +276,110 @@
 			return task["recipients"];
 		
 	}
-	
+
 	function formatSubject(subject) {
 		if(subject == "")		
 			return  "<spring:message code="message.noSubject" />";
 		else
 			return subject;
 	}
+
+	<%  //for jboss portal
+	if(defaultPath.contains("default")) { %>
 	
 	function showMessage(messageId) {
-		var formUrl = "<%= messageURL %>";
-		var formUrl = formUrl.replace("CONSTANT_TASK_MESSAGE_ID", messageId);
-		var formUrl = formUrl.replace("CONSTANT_TASK_CURRENT_PAGE", pageObj.currentPage);
-		var formUrl = formUrl.replace("CONSTANT_TASK_TASK_TYPE", pageObj.taskType);
-		var formUrl = formUrl.replace("CONSTANT_TASK_KEYWORD", pageObj.keyword+'|'+pageObj.field);
-		var formUrl = formUrl.replace("CONSTANT_TASK_ORDER_TYPE", pageObj.orderType);
+		var url = "<%= messageURL %>";
+		url += "&messageId=" + messageId
+		+ "&currentPage=" + pageObj.currentPage
+		+ "&taskType=" + pageObj.taskType
+		+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
+		+ "&orderType=" + pageObj.orderType;
 		
-		window.location = formUrl;
+		window.location = url;
 	}
 	
 	function showRequest(requestId) {
-		var formUrl = "<%= requestURL %>";
-		var formUrl = formUrl.replace("CONSTANT_TASK_MESSAGE_ID", requestId);
-		var formUrl = formUrl.replace("CONSTANT_TASK_CURRENT_PAGE", pageObj.currentPage);
-		var formUrl = formUrl.replace("CONSTANT_TASK_TASK_TYPE", pageObj.taskType);
-		var formUrl = formUrl.replace("CONSTANT_TASK_KEYWORD", pageObj.keyword+'|'+pageObj.field);
-		var formUrl = formUrl.replace("CONSTANT_TASK_ORDER_TYPE", pageObj.orderType);
+		var url = "<%= requestURL %>";
+		url += "&requestId=" + requestId
+		+ "&currentPage=" + pageObj.currentPage
+		+ "&taskType=" + pageObj.taskType
+		+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
+		+ "&orderType=" + pageObj.orderType;
 		
-		window.location = formUrl;
+		window.location = url;
 	}
 	
 	function showAppointment(appointmentId) {
-		var formUrl = "<%= appointmentURL %>";
-		formUrl += "&appointmentId=" + appointmentId
-				+ "&currentPage=" + pageObj.currentPage
-				+ "&taskType=" + pageObj.taskType
-				+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
-				+ "&orderType=" + pageObj.orderType;
+		var url="";
 		
-		window.location = formUrl;
+		if(pageObj.taskType == "app_response_employee" || pageObj.taskType == "app_response_citizen") {
+			url = "<%= appointmentURL %>";
+			url += "&appointmentId=" + appointmentId
+					+ "&currentPage=" + pageObj.currentPage
+					+ "&taskType=" + pageObj.taskType
+					+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
+					+ "&orderType=" + pageObj.orderType;
+		}else if(pageObj.taskType == "app_inbox_employee"){
+			url = "<%= defaultPath %>" + "/Message/NewAppointment" + "?FormID=" + appointmentId;			
+		}else if(pageObj.taskType == "app_inbox_citizen") {
+			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId;				
+		}
+		
+		window.location = url;		
 		
 	}
+	
+	<%}else{ // for gatein %>
+	
+	/************************For Gatein Portal start***************************/
+	// Creates a renderURL by ajax, to show the content of a single message	 
+	function showMessage(messageId) {
+		var url="<%= messageRenderURL %>";
+		
+		jQuery.post(url, {messageId:messageId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+			keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+			var obj = eval('(' + data + ')');
+			var json = obj.response;
+			var renderUrl = json["renderUrl"];
+			window.location = renderUrl;
+		});
+			
+	}
+	
+	//Creates a renderURL by ajax, to show the content of a single request
+	function showRequest(requestId) {
+		var url = "<%= requestRenderURL %>";
+		jQuery.post(url, {requestId:requestId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+			keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+			var obj = eval('(' + data + ')');
+			var json = obj.response;
+			var renderUrl = json["renderUrl"];
+			window.location = renderUrl;
+		});
+	}	
+	
+	function showAppointment(appointmentId) {
+		var url="";
+		
+		if(pageObj.taskType == "app_response_employee" || pageObj.taskType == "app_response_citizen") {
+			url = "<%= appointmentRenderURL %>";
+			jQuery.post(url, {appointmentId:appointmentId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+				keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+				var obj = eval('(' + data + ')');
+				var json = obj.response;
+				var renderUrl = json["renderUrl"];
+				window.location = renderUrl;
+			});
+		}else if(pageObj.taskType == "app_inbox_employee"){
+			url = "<%= defaultPath %>" + "/Message/NewAppointment" + "?FormID=" + appointmentId;			
+		}else if(pageObj.taskType == "app_inbox_citizen") {
+			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId;				
+		}				
+	}
+	
+	/************************For Gatein Portal end****************************/
+   <%}%>
+		
 	/*
 	function formKeywords(keywordArray) {
 		var keywords = '';

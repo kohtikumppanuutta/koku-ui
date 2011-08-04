@@ -52,12 +52,20 @@ window.onload = function() {
         doc = iframe.contentDocument; // For NS6
     else if(iframe.contentWindow)
         doc = iframe.contentWindow.document; // For IE5.5 and IE6
+	
     // Put the content in the iframe
     doc.open();
     doc.writeln(content);
     doc.close(); 
+    var iframeHeight;
     
-    iframe.style.height = doc.body.scrollHeight + "px";
+    if(iframe.contentDocument) {
+    	iframeHeight = iframe.contentDocument.documentElement.scrollHeight+10; //FF 3.0.11, Opera 9.63, and Chrome
+    } else {
+    	iframeHeight = iframe.contentWindow.document.body.scrollHeight+10; //IE6, IE7 and Chrome
+    }
+    
+    iframe.style.height = iframeHeight + "px";
 }
 /**
  * Returns to the main portlet page
@@ -67,7 +75,7 @@ function returnMainPage() {
 }
 
 </script>
-<div id="task-manager-wrap">
+<div id="task-manager-wrap" class="single">
 	<div id="show-message" style="padding:12px">
 	<!-- 
 		<h3>
@@ -78,7 +86,7 @@ function returnMainPage() {
 		<c:out value="${message.subject}" />	
 		<h3>Content</h3>
  	-->
-		<iframe id="msgFrame" name="msgFrame" style="width:100%; height:100%" frameborder="0" scrolling="no"></iframe>
+		<iframe id="msgFrame" name="msgFrame" style="width:100%;" frameborder="0" scrolling="no"></iframe>
 	</div>
 	<div id="task-manager-operation" class="task-manager-operation-part">
 		<input type="button" value="<spring:message code="page.return"/>" onclick="returnMainPage()" />

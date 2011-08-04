@@ -34,7 +34,7 @@ public class ShowAppointmentController {
 			@RequestParam String currentPage,@RequestParam String taskType, 
 			@RequestParam String keyword, @RequestParam String orderType,
 			RenderRequest request) {
-
+	
 		// store parameters in session for returning page from form page	
 		request.getPortletSession().setAttribute("currentPage", currentPage, PortletSession.APPLICATION_SCOPE);
 		request.getPortletSession().setAttribute("taskType", taskType, PortletSession.APPLICATION_SCOPE);

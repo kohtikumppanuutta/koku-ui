@@ -43,12 +43,21 @@ window.onload = function() {
         doc = iframe.contentDocument; // For NS6
     else if(iframe.contentWindow)
         doc = iframe.contentWindow.document; // For IE5.5 and IE6
+        	
     // Put the content in the iframe
     doc.open();
     doc.writeln(content);
     doc.close(); 
+    var iframeHeight;
     
-    iframe.style.height = doc.body.scrollHeight + "px";
+    if(iframe.contentDocument) {
+    	iframeHeight = iframe.contentDocument.documentElement.scrollHeight+10; //FF 3.0.11, Opera 9.63, and Chrome
+    } else {
+    	iframeHeight = iframe.contentWindow.document.body.scrollHeight+10; //IE6, IE7 and Chrome
+    }
+    
+    iframe.style.height = iframeHeight + "px";
+
 }
 
 function htmlToCode(s) {
@@ -70,11 +79,11 @@ function exportFile() {
 
 
 </script>
-<div id="task-manager-wrap">
+<div id="task-manager-wrap" class="single">
 	<div id="show-message" style="padding:12px">
 	<span class="request-c-1"><c:out value="${request.subject}" /> </span><br />
 	<span class="request-c-1">Valid:</span> <c:out value="${request.creationDate}" /> to <c:out value="${request.endDate}" /> <br />
-	<iframe id="msgFrame" name="msgFrame" style="width:100%; height:100%" frameborder="0" scrolling="no"></iframe>
+	<iframe id="msgFrame" name="msgFrame" style="width:100%;" frameborder="0" scrolling="no"></iframe>
 	<!--  
 	<span class="request-c-1">Questions:</span> <c:forEach var="question" items="${request.questions}" varStatus="status">
         <div><span class="request-c-1">Q"${status.count}":</span> ${question.description}</div>

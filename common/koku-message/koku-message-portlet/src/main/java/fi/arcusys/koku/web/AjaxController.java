@@ -6,6 +6,10 @@ import java.util.List;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletSession;
+import javax.portlet.PortletURL;
+import javax.portlet.ResourceResponse;
+import javax.portlet.WindowState;
+import javax.portlet.WindowStateException;
 
 import net.sf.json.JSONObject;
 
@@ -147,4 +151,95 @@ public class AjaxController {
 	}
 
 
+
+	@ResourceMapping(value = "createMessageRenderUrl")
+	public String createMessageRenderUrl(
+			@RequestParam(value = "messageId") String messageId,
+			@RequestParam(value = "currentPage") String currentPage,
+			@RequestParam(value = "taskType") String taskType,
+			@RequestParam(value = "keyword") String keyword,
+			@RequestParam(value = "orderType") String orderType,
+			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
+		PortletURL renderUrlObj = response.createRenderURL();
+		renderUrlObj.setParameter( "myaction", "showMessage");
+		renderUrlObj.setParameter( "messageId", messageId);
+		renderUrlObj.setParameter( "currentPage", currentPage);
+		renderUrlObj.setParameter( "taskType", taskType);
+		renderUrlObj.setParameter( "keyword", keyword);
+		renderUrlObj.setParameter( "orderType", orderType);
+		try {
+			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
+		} catch (WindowStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String renderUrlString = renderUrlObj.toString();
+		
+		JSONObject jsonModel = new JSONObject();
+		jsonModel.put("renderUrl", renderUrlString);
+		modelmap.addAttribute("response", jsonModel);
+		
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
+	
+	@ResourceMapping(value = "createRequestRenderUrl")
+	public String createRequestRenderUrl(
+			@RequestParam(value = "requestId") String requestId,
+			@RequestParam(value = "currentPage") String currentPage,
+			@RequestParam(value = "taskType") String taskType,
+			@RequestParam(value = "keyword") String keyword,
+			@RequestParam(value = "orderType") String orderType,
+			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
+		PortletURL renderUrlObj = response.createRenderURL();
+		renderUrlObj.setParameter( "myaction", "showRequest");
+		renderUrlObj.setParameter( "requestId", requestId);
+		renderUrlObj.setParameter( "currentPage", currentPage);
+		renderUrlObj.setParameter( "taskType", taskType);
+		renderUrlObj.setParameter( "keyword", keyword);
+		renderUrlObj.setParameter( "orderType", orderType);	
+		try {
+			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
+		} catch (WindowStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String renderUrlString = renderUrlObj.toString();
+		
+		JSONObject jsonModel = new JSONObject();
+		jsonModel.put("renderUrl", renderUrlString);
+		modelmap.addAttribute("response", jsonModel);
+		
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
+	
+	@ResourceMapping(value = "createAppointmentRenderUrl")
+	public String createAppointmentRenderUrl(
+			@RequestParam(value = "appointmentId") String appointmentId,
+			@RequestParam(value = "currentPage") String currentPage,
+			@RequestParam(value = "taskType") String taskType,
+			@RequestParam(value = "keyword") String keyword,
+			@RequestParam(value = "orderType") String orderType,
+			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
+
+		PortletURL renderUrlObj = response.createRenderURL();
+		renderUrlObj.setParameter( "myaction", "showAppointment");
+		renderUrlObj.setParameter( "appointmentId", appointmentId);
+		renderUrlObj.setParameter( "currentPage", currentPage);
+		renderUrlObj.setParameter( "taskType", taskType);
+		renderUrlObj.setParameter( "keyword", keyword);
+		renderUrlObj.setParameter( "orderType", orderType);	
+		try {
+			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
+		} catch (WindowStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String renderUrlString = renderUrlObj.toString();
+		
+		JSONObject jsonModel = new JSONObject();
+		jsonModel.put("renderUrl", renderUrlString);
+		modelmap.addAttribute("response", jsonModel);
+		
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
 }

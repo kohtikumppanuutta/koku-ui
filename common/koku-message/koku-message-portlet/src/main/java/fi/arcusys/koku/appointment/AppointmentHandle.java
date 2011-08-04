@@ -57,7 +57,13 @@ public class AppointmentHandle {
 		kokuAppointment.SetRecipients(formatRecipients(appointment.getRecipients()));
 		kokuAppointment.setSubject(appointment.getSubject());
 		kokuAppointment.setDescription(appointment.getDescription());
+		kokuAppointment.setStatus(appointment.getStatus());
 		kokuAppointment.setSlots(formatSlots(appointment.getSlots()));
+		
+		if(appointment.getStatus().equals("Approved"))
+			kokuAppointment.setApprovedSlotNumber(appointment.getApprovedSlotNumber().intValue());
+		else
+			kokuAppointment.setApprovedSlotNumber(-1);
 		
 		return kokuAppointment;		
 	}

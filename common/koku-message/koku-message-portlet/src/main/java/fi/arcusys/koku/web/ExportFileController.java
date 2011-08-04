@@ -57,21 +57,21 @@ public class ExportFileController {
 			if (kokuRequest == null) {
 				return;
 			} else {
-				writer.write("Response Summary");
+				writer.write(addQuote("Response Summary"));
 				writer.newLine();
-				writer.write(",");
+				writer.write(addQuote()+",");
 
 				Iterator<Question> it_q = kokuRequest.getQuestions().iterator();
 
 				while (it_q.hasNext()) {
 					Question q = it_q.next();
-					writer.write(q.getDescription() + "," + ",");
+					writer.write(addQuote(q.getDescription()) + "," +addQuote()+ ",");
 				}
 				writer.newLine();
-				writer.write("Respondent,");
+				writer.write(addQuote("Respondent")+",");
 
 				for (int i = 0; i < kokuRequest.getQuestions().size(); i++) {
-					writer.write("Answer,Comment,");
+					writer.write(addQuote("Answer")+","+addQuote("Comment")+",");
 				}
 				writer.newLine();
 
@@ -79,24 +79,24 @@ public class ExportFileController {
 						.iterator();
 				while (it_res.hasNext()) {
 					Response res = it_res.next();
-					writer.write(res.getName() + ",");
+					writer.write(addQuote(res.getName()) + ",");
 
 					Iterator<Answer> it_ans = res.getAnswers().iterator();
 					while (it_ans.hasNext()) {
 						Answer answer = it_ans.next();
-						writer.write(answer.getAnswer() + ","
-								+ answer.getComment() + ",");
+						writer.write(addQuote(answer.getAnswer()) + ","
+								+ addQuote(answer.getComment()) + ",");
 					}
 					writer.newLine();
 				}
 				writer.newLine();
-				writer.write("Missed");
+				writer.write(addQuote("Missed"));
 				writer.newLine();
 				Iterator<String> it_unres = kokuRequest.getUnrespondedList()
 						.iterator();
 				while (it_unres.hasNext()) {
 					String name = it_unres.next();
-					writer.write(name);
+					writer.write(addQuote(name));
 					writer.newLine();
 				}
 
@@ -107,6 +107,16 @@ public class ExportFileController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	private String addQuote(String s) {
+		String q = "\"";
+		
+		return q+s+q;
+	}
+	
+	private String addQuote() {
+		return "\"\"";
 	}
 
 }

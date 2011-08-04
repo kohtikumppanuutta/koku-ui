@@ -3,7 +3,7 @@
 
 <portlet-app>
 	<portlet>
-		<portlet-name>messageService</portlet-name>
+		<portlet-name>kokuMessageService</portlet-name>
 		<header-content>
 			<link type="text/css" rel="stylesheet" href="/css/main.css" />
 			<script type="text/javascript" src="/js/jquery-1.5.2.min.js" />

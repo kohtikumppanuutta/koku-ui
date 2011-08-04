@@ -84,6 +84,9 @@ public class MessageController {
 			userid = request.getRemoteUser();
 
 			if (userid != null) { // user is logged in
+				if(userid.equals("root")) // for gatein
+					userid = "Ville Virkamies";
+				
 				PortletSession portletSession = request.getPortletSession();
 				String username = (String) portletSession
 						.getAttribute("USER_username");

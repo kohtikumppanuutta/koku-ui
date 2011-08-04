@@ -85,7 +85,7 @@ public class MessageUtil {
 		if(xmlGregorianCalendar != null ) {
 			Calendar cal = xmlGregorianCalendar.toGregorianCalendar();
 			SimpleDateFormat dataformat = new SimpleDateFormat(formatString);
-			dataformat.setTimeZone(TimeZone.getTimeZone(MessageUtil.TIME_ZONE));
+			//dataformat.setTimeZone(TimeZone.getTimeZone(MessageUtil.TIME_ZONE));
 			String timeStr = dataformat.format(cal.getTime());
 		
 			return timeStr;	

@@ -6,17 +6,17 @@
 
 	<portlet>
 		<description>Portlet providing message services</description>
-		<portlet-name>messageService</portlet-name>
-		<display-name>Message Service Portlet</display-name>
+		<portlet-name>kokuMessageService</portlet-name>
+		<display-name>kokuMessageService</display-name>
 		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
 			<portlet-mode>edit</portlet-mode>
-		</supports>
+		</supports>		
 		<resource-bundle>messages</resource-bundle>
 		<portlet-info>
 			<title>Message Service Portlet</title>
-		</portlet-info>
+		</portlet-info>	
 	</portlet>
 </portlet-app>
