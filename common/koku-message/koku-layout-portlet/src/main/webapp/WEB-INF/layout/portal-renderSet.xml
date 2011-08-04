@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<portal-renderSet>
+   <renderSet name="naviRenderer">
+      <set content-type="text/html">
+         <ajax-enabled>true</ajax-enabled>
+         <region-renderer>org.jboss.portal.theme.impl.render.div.DivRegionRenderer</region-renderer>
+         <window-renderer>org.jboss.portal.theme.impl.render.empty.EmptyWindowRenderer</window-renderer>
+         <portlet-renderer>org.jboss.portal.theme.impl.render.div.DivPortletRenderer</portlet-renderer>
+         <decoration-renderer>org.jboss.portal.theme.impl.render.empty.EmptyDecorationRenderer</decoration-renderer>
+      </set>
+   </renderSet>
+</portal-renderSet>
