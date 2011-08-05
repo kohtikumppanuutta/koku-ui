@@ -13,11 +13,14 @@
 
 <c:set var="ammattilainen" value="${false}" scope="session"/>  
 
+<div class="koku-kks"> 
 <div class="portlet-section-body">
 
-	<div class="home">
+	<div class="kks-home">
 		<a href="${kotiUrl}">Takaisin</a>
 	</div>
+	
+	<div class="kks-reset-floating"></div>
 
 	<div class="title">
 		<h1 class="portlet-section-header"><spring:message code="ui.kks.otsikko"/></h1>
@@ -46,5 +49,5 @@
 	<div class="spacer"></br></div>
 
 </div>
-<div class="spacer"></div>
+</div>
 

@@ -47,10 +47,11 @@
     <portlet:param name="kokoelma" value="${kokoelma.id}" />
 </portlet:actionURL>
 
+<div class="koku-kks"> 
 <div class="portlet-section-body">
 <div>
 
-	<div class="home">
+	<div class="kks-home">
 		<a href="${kotiUrl}"><spring:message code="ui.takaisin" /> </a>
 	</div>
 
@@ -77,7 +78,7 @@
                 </c:if>
 				</span>
 				<c:if test="${ not empty kirjausArvo }">
-				    <span class="right"> <a href="${poistaMoniArvoinen}"><spring:message code="ui.poista" /> </a> </span>
+				    <span class="kks-right"> <a href="${poistaMoniArvoinen}"><spring:message code="ui.poista" /> </a> </span>
 				</c:if>
 				
 				
@@ -93,15 +94,16 @@
 
             </div>
 
-			<span class="right"> 			
+			<span class="kks-right"> 			
 			 <input type="submit" class="portlet-form-button"
-				value="<spring:message code="ui.sopimus.tallenna"/>"> <span class="right" style="padding-left: 5px">
+				value="<spring:message code="ui.sopimus.tallenna"/>"> <span class="kks-right" style="padding-left: 5px">
 					<a href="${kotiUrl}"><spring:message code="ui.peruuta" /> </a>  </span> 
 			</span>
 
 		</form:form>
 	</div>
 	
-	<div class="reset-floating"></div>
+	<div class="kks-reset-floating"></div>
 
+</div>
 </div>

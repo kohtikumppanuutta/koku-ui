@@ -21,11 +21,14 @@
 	<portlet:param name="toiminto" value="naytaLapsi" />
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
 </portlet:renderURL>
+
+<div class="koku-kks"> 
 <div class="portlet-section-body">
 
-		<div class="home">
+		<div class="kks-home">
 			<a href="${kotiUrl}"><spring:message code="ui.takaisin" /> </a>
 		</div>
+		<div class="kks-reset-floating"></div>
 
 
 	<h1 class="portlet-section-header">${lapsi.nimi} ${kuvaus}</h1>
@@ -52,7 +55,7 @@
 						</c:if>
 
 						<c:if test="${ tulos.kokoelmaAktiivinen }">
-							<span class="linkki" style="float: right;"> <a
+							<span class="kks-link kks-right" > <a
 								href="
                         <portlet:renderURL>
                             <portlet:param name="toiminto" value="naytaKokoelma" />
@@ -65,10 +68,10 @@
 					</h3>
 				</c:if>
 				<c:forEach var="kirjaus" items='${tulos.kirjaukset}'>
-					<div class="kirjaus">
-						<strong>${kirjaus.tyyppi.nimi}</strong> <span class="teksti">${
+					<div class="kks-entry">
+						<strong>${kirjaus.tyyppi.nimi}</strong> <div class="read-only-text">${
 							kirjaus.arvo } (<fmt:formatDate value="${ kirjaus.luontiAika }" />
-							${ kirjaus.kirjaaja })</span>
+							${ kirjaus.kirjaaja })</div>
 					</div>
 				</c:forEach>
 				</br>
@@ -79,7 +82,7 @@
 
 <br />
 
-
+</div>
 
 <script type="text/javascript"
 	src="http://code.jquery.com/jquery-1.4.4.min.js"></script>

@@ -48,13 +48,15 @@
 	<portlet:param name="hetu" value="${lapsi.hetu}" />
 </portlet:actionURL>
 
+
+<div class="koku-kks"> 
 <div class="portlet-section-body">
 
-	<div class="home">
+	<div class="kks-home">
 		<a href="${kotiUrl}"><spring:message code="ui.takaisin" /> </a>
 	</div>
 
-
+    <div class="kks-reset-floating"></div>
 <div >
 	<h1 class="portlet-section-header">
 		${lapsi.nimi}
@@ -64,12 +66,12 @@
 	<div class="table">
 		<table class="portlet-table-body" width="100%" border="0">
 			<tr>
-				<th align="left"><spring:message code="ui.tietokokoelma" /></th>
-				<th align="left"><spring:message code="ui.viimeisin.kirjaus" />
+				<th align="kks-left"><spring:message code="ui.tietokokoelma" /></th>
+				<th align="kks-left"><spring:message code="ui.viimeisin.kirjaus" />
 				</th>
 
 				<c:if test="${ sessionScope.ammattilainen }">
-					<th align="left"><spring:message code="ui.kirjausten.tila" />
+					<th align="kks-left"><spring:message code="ui.kirjausten.tila" />
 					</th>
 				</c:if>
 			</tr>
@@ -103,7 +105,7 @@
 							                            <portlet:param name="hetu" value="${lapsi.hetu}" />
 							                            <portlet:param name="kokoelma" value="${tieto.id}" />
 							                        </portlet:actionURL>">
-													<strong><spring:message code="ui.lukitse" /> </strong> </a> </span>
+													<spring:message code="ui.lukitse" />  </a> </span>
 										</c:when>
 										<c:otherwise>
 											<c:if test="${ not tieto.versioitu }">
@@ -115,7 +117,7 @@
 	                                                        <portlet:param name="hetu" value="${lapsi.hetu}" />
 	                                                        <portlet:param name="kokoelma" value="${tieto.id}" />
 	                                                    </portlet:actionURL>">
-														<strong><spring:message code="ui.aktivoi" /> </strong> </a> </span>
+														<spring:message code="ui.aktivoi" /> </a> </span>
 											</c:if>
 											<c:if test="${ tieto.versioitu }">
 												<spring:message code="ui.versioitu" />
@@ -139,7 +141,7 @@
                             <portlet:param name="luokitus" value="terveydentila" />
                             <portlet:param name="kuvaus" value="Terveydentila" />
                         </portlet:actionURL>">
-					<strong><spring:message code="ui.terveydentila" /> </strong> </a> </span><br />
+					<spring:message code="ui.terveydentila" />  </a> </span><br />
 
 
 			<span class="linkki"> <a
@@ -150,7 +152,7 @@
                             <portlet:param name="luokitus" value="mittaus" />
                             <portlet:param name="kuvaus" value="Mittaukset" />
                         </portlet:actionURL>">
-					<strong><spring:message code="ui.mittaus" /> </strong> </a> </span><br /> <span
+					<spring:message code="ui.mittaus" /> </a> </span><br /> <span
 				class="linkki"> <a
 				href="
                         <portlet:actionURL>
@@ -159,7 +161,7 @@
                             <portlet:param name="luokitus" value="koti" />
                             <portlet:param name="kuvaus" value="Kasvatusta ohjaavat tiedot" />
                         </portlet:actionURL>">
-					<strong><spring:message code="ui.lapsen.kasvatus" /> </strong> </a> </span><br />
+					<spring:message code="ui.lapsen.kasvatus" /> </a> </span><br />
 			<span class="linkki"> <a
 				href="
                         <portlet:actionURL>
@@ -168,7 +170,7 @@
                             <portlet:param name="luokitus" value="tuen_tarve, huolenaiheet" />
                             <portlet:param name="kuvaus" value="Tuen tarve" />
                         </portlet:actionURL>">
-					<strong><spring:message code="ui.tuen.tarpeet" /> </strong> </a> </span> <br />
+					<spring:message code="ui.tuen.tarpeet" /> </a> </span> <br />
 
 			<c:if test="${ sessionScope.ammattilainen }">
 
@@ -180,7 +182,7 @@
                             <portlet:param name="luokitus" value="palaute" />
                             <portlet:param name="kuvaus" value="Palautteet" />
                         </portlet:actionURL>">
-						<strong><spring:message code="ui.palautteet" /> </strong> </a> </span>
+						<spring:message code="ui.palautteet" />  </a> </span>
 				<br />
 
 
@@ -192,7 +194,7 @@
                             <portlet:param name="luokitus" value="toive" />
                             <portlet:param name="kuvaus" value="Toiveet" />
                         </portlet:actionURL>">
-						<strong><spring:message code="ui.toiveet" /> </strong> </a> </span>
+						<spring:message code="ui.toiveet" />  </a> </span>
 				<br />
 
 
@@ -206,9 +208,9 @@
 
 			<div class="kokoelma">
 				<c:if test="${ sessionScope.ammattilainen }">
-					<a class="tieto"> <spring:message code="ui.sopimus.uusi" /><span
-						class="sulje"><spring:message code="ui.piilota" /> </span> </a>
-					<div class="tietokentta " style="display: none;">
+					<a class="create"> <spring:message code="ui.sopimus.uusi" /><span
+						class="kks-close"><spring:message code="ui.piilota" /> </span> </a>
+					<div class="kks-fields" style="display: none;">
 
 						<form:form name="aktivointiForm" commandName="aktivointi"
 							method="post" action="${aktivointiActionUrl}">
@@ -220,14 +222,14 @@
 										path="aktivoitavaKentta" onchange="insertSelection();"
 										class="kokoelmavalinta" >
 
-										<form:option  value="" label="" />
+										<form:option class="portlet-form-input-field" value="" label="" />
 										<c:forEach var="kokoelma" items="${aktivoitavat}">
 											<c:if test="${kokoelma.versioitava}">
 												<form:option value="${kokoelma.tekstina}"
 													label="${ kokoelma.nimi } (luo uuden version)" />
 											</c:if>
 											<c:if test="${not kokoelma.versioitava}">
-                                            <   form:option value="${kokoelma.tekstina}" label="${ kokoelma.nimi }" />
+                                            <   form:option class="portlet-form-input-field" value="${kokoelma.tekstina}" label="${ kokoelma.nimi }" />
                                             </c:if>
 
 										</c:forEach>
@@ -237,7 +239,7 @@
 								</span>
 							
 
-							<span class="clear"> <input type="submit" class="portlet-form-button"
+							<span class="kks-right"> <input type="submit" class="portlet-form-button"
 								value="<spring:message code="ui.sopimus.tallenna"/>"> </span>
 						</form:form>
 
@@ -254,6 +256,7 @@
 
 <div></div>
 </div>
+</div>
 
 <script type="text/javascript"
 	src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
@@ -262,7 +265,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 
-		$("a.tieto").click(function() {
+		$("a.create").click(function() {
 			$(this).toggleClass("active").next().slideToggle("fast");
 		});
 

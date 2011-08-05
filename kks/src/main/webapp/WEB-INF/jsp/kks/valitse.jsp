@@ -26,9 +26,10 @@
 	<portlet:param name="toiminto" value="naytaLuokittelu" />
 </portlet:renderURL>
 
+<div class="koku-kks"> 
 <div class="portlet-section-body">
 
-	<div  style="float: left">
+	<div class="kks-left">
 		<div >
 			<form:form name="guardianForm" method="post" action="${viewChilds}">
 				<input type="submit" value="<spring:message code="ui.nayta.huoltaja"/>" />
@@ -43,7 +44,7 @@
 
 	</div>
 
-	<div class="right">
+	<div class="kks-right">
 		<form:form name="luokitteluForm" method="post" action="${luokittelu}">
 		
 		      
@@ -51,6 +52,7 @@
 		</form:form>
 	</div>
 
-    <div class="reset-floating"></div>
+    <div class="kks-reset-floating"></div>
 
+</div>
 </div>

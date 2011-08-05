@@ -37,14 +37,15 @@
     <portlet:param name="hetu" value="${lapsi.hetu}" />
 </portlet:actionURL>
 
+<div class="koku-kks"> 
 <div class="portlet-section-body">
 
-    <div class="left">
+    <div class="kks-left">
     <div class="kokoelma">
                 <c:if test="${ sessionScope.ammattilainen && !kokoelma.versioitu }">
-                    <a class="tieto"> <spring:message code="ui.kks.new.version" /><span
-                        class="sulje"><spring:message code="ui.piilota" /> </span> </a>
-                    <div class="tietokentta " style="display: none;">
+                    <a class="create"> <spring:message code="ui.kks.new.version" /><span
+                        class="kks-close"><spring:message code="ui.piilota" /> </span> </a>
+                    <div class="kks-fields" style="display: none;">
           
                         <form:form name="uusiVersioForm"  method="post" action="${versioiURL}">
                                 <input type="hidden" id="id" name="id" value="${ kokoelma.id }"/>
@@ -52,7 +53,7 @@
                                 <div class="portlet-form-field" style="width: 98%"><input type="text" id="nimi" name="nimi" style="width: 100%" value="${ kokoelma.nimi }"/>
                                  
                                 </div>
-                                <span class="right">
+                                <span class="kks-right">
                                 <input type="submit" class="portlet-form-button"
                                 value="<spring:message code="ui.sopimus.luo"/>">
                                 </span>
@@ -64,15 +65,15 @@
             </div>
     </div>
     
-<div class="home">
-	<div class="right">
+<div class="kks-home">
+	<div class="kks-right">
 		<a href="${kotiUrl}"><spring:message code="ui.takaisin" /> </a>
 	</div>
 </div>
 
-<div class="reset-floating"></div>
+<div class="kks-reset-floating"></div>
 
-<div class="left">
+<div class="kks-left">
 <h1 class="portlet-section-header">
     ${lapsi.nimi} ${kokoelma.nimi} 
     <c:if test="${not kokoelma.tila.aktiivinen}">
@@ -81,7 +82,7 @@
 
 </h1>
 </div>
-<div class="right">
+<div class="kks-right">
 
          <c:if      
             test="${ kokoelma.pohjautuuToiseen }">            
@@ -110,12 +111,12 @@
             </strong> </a>
         </c:if> 
 </div>
-<div class="reset-floating"></div>
-    <div class="main">
+<div class="kks-reset-floating"></div>
+    <div class="kks-content">
 
         <c:if test="${not empty kokoelma.tyyppi.kirjausRyhmat}">
 
-            <form:form name="kirjausForm" commandName="kirjaus" method="post"
+            <form:form class="form-wrapper" name="kirjausForm" commandName="kirjaus" method="post"
                 action="${tallennaKirjausActionUrl}">
 
                 <c:forEach var="ryhma"
@@ -131,7 +132,7 @@
                         </c:if>
                         <c:forEach var="tyypit" items='${lapsiryhma.tyypit.values  }'>
                             <c:forEach var="tyyppi" items='${ tyypit }'>
-                                <div class="kirjaus">
+                                <div class="kks-entry">
                                     <span class="portlet-form-field-label">${tyyppi.nimi } <c:if
                                             test="${tyyppi.moniArvoinen && kokoelma.tila.aktiivinen }">
                                             <a
@@ -179,26 +180,25 @@
 
                                                                 <c:if
                                                                     test="${empty kokoelma.moniArvoisetKirjaukset[tyyppi.koodi]}">
-                                                                    </br>
-                                                                    <span class="portlet-section-text"><spring:message
+                                                                    <div class="portlet-section-text"><spring:message
                                                                             code="ui.ei.merkintoja" />
-                                                                    </span>
+                                                                    </div>
                                                                 </c:if>
 
                                                                 <c:forEach var="moniarvoinen"
                                                                     items='${ kokoelma.moniArvoisetKirjaukset[tyyppi.koodi] }'>
                                                                     
-                                                                    <div class="kommentti">
-                                                                    <span class="kirjaus">${moniarvoinen.arvo} <span class="right">
-                                                                    <a
-                                                                            href="javascript:void(0)" onclick="doSubmitForm('${tyyppi.koodi}', '${moniarvoinen.id }' );">
-                                                                                <spring:message code="ui.muokkaa" /> </a>
-                                                                    </span> 
-                                                                    </span>
-                                                                    <div class="portlet-section-text">
-                                                                     <span class="merkinta">${moniarvoinen.kirjaaja} <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${moniarvoinen.luontiAika}"/>
-                                                                        </span> 
-                                                                    </div>
+                                                                    <div class="kks-comment">
+	                                                                    <span class="kks-entry-value">${moniarvoinen.arvo} <span class="kks-right">
+	                                                                    <a
+	                                                                            href="javascript:void(0)" onclick="doSubmitForm('${tyyppi.koodi}', '${moniarvoinen.id }' );">
+	                                                                                <spring:message code="ui.muokkaa" /> </a>
+	                                                                    </span> 
+	                                                                    </span>
+	                                                                    <div class="portlet-section-text">
+	                                                                     <span class="kks-commenter">${moniarvoinen.kirjaaja} <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${moniarvoinen.luontiAika}"/>
+	                                                                        </span> 
+	                                                                    </div>
                                                                     </div>
                                                                 </c:forEach>
                                                             </div>
@@ -212,24 +212,28 @@
                                     <c:if test="${ not kokoelma.tila.aktiivinen }">
                                        
                                         <div class="portlet-section-text">
-                                            <c:if
+                                        
+                                        <c:choose>
+                                            <c:when
                                                 test="${ empty kokoelma.moniArvoisetKirjaukset[tyyppi.koodi] && empty kokoelma.kirjaukset[tyyppi.koodi].arvo }">
-                                                <span class="teksti">-</span>
-                                            </c:if>
-
-                                            <div class="merkinta"> <c:if
+                                                <span class="read-only-text">-</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                             <c:if
                                                     test="${ tyyppi.moniArvoinen }">
                                                     <c:forEach var="moniarvoinen"
                                                         items='${ kokoelma.moniArvoisetKirjaukset[tyyppi.koodi] }'>
 
-                                                        <span class="arvo"> ${moniarvoinen.arvo} (${moniarvoinen.kirjaaja} <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${moniarvoinen.luontiAika}"/>)</span>
-                                                        </br>
+                                                        <span class="read-only-text"> ${moniarvoinen.arvo} (${moniarvoinen.kirjaaja} <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${moniarvoinen.luontiAika}"/>)</span>
+                                                        
                                                     </c:forEach>
                                                 </c:if> <c:if test="${ not tyyppi.moniArvoinen }">
-                                                    <c:out value="${kokoelma.kirjaukset[tyyppi.koodi].arvo }"></c:out>
-                                                </c:if> </div>
-
-                                        </div>
+                                                    <span class="read-only-text"> <c:out value="${kokoelma.kirjaukset[tyyppi.koodi].arvo }"></c:out> </span>
+                                                </c:if> 
+                                                </c:otherwise>
+                                        </c:choose>
+                                           </div>
+                                        
                                     </c:if>
                                 </div>
                             </c:forEach>
@@ -237,13 +241,13 @@
                     </c:forEach>
                 </c:forEach>
 
-                <div class="clear">
+                <div class="kks-right">
                 <c:if test="${ kokoelma.tila.aktiivinen }">
                     <input type="submit" class="portlet-form-button"
-                        value="<spring:message code="ui.tallenna.tieto"/>" class="hae">
+                        value="<spring:message code="ui.tallenna.tieto"/>" >
                 </c:if>
                 </div>
-                <div class="reset-floating" />
+                <div class="kks-reset-floating" />
             </form:form>
 
         </c:if>
@@ -255,7 +259,7 @@
 </div>
 <br />
 
-
+</div>
 
 
 <script type="text/javascript"
@@ -265,7 +269,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 
-		$("a.tieto").click(function() {
+		$("a.create").click(function() {
 			$(this).toggleClass("active").next().slideToggle("fast");
 		});
 

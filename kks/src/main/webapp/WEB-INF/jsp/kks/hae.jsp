@@ -20,12 +20,14 @@
 
 <c:set var="ammattilainen" value="${true}" scope="session" />
 
+<div class="koku-kks"> 
 <div  class="portlet-section-body">
-	<div class="home">
+	<div class="kks-home">
 		<a href="${kotiUrl}">Takaisin</a>
 	</div>
 
-
+    <div class="kks-reset-floating"></div>
+    
 	<div class="main">
 		<h1 class="portlet-section-header">
 			<spring:message code="ui.kks.otsikko" />
@@ -36,7 +38,7 @@
 			
 			<h3 class="portlet-section-subheader"><spring:message code="ui.hae.lapsen.tiedot" /></h3>
 
-            <div class="left">
+            <div class="kks-left">
             <span class="portlet-form-field-label"> 
                 <spring:message code="ui.form.hetu" />
             </span>
@@ -45,9 +47,9 @@
 			 <form:input class="defaultText"  path="hetu" /> 
 			</span>
 			</div>
-			<span class="left"> <input type="submit" class="portlet-form-button" value="<spring:message code="ui.hae.tiedot"/>" ></span>
+			<span class="kks-left"> <input type="submit" class="portlet-form-button" value="<spring:message code="ui.hae.tiedot"/>" ></span>
 
-			<div class="reset-floating" />
+			<div class="kks-reset-floating" />
 		</form:form>
 		</div>
 </br>
@@ -75,5 +77,6 @@
 	<div class="spacer">
 		</br>
 	</div>
+</div>
 </div>
 
