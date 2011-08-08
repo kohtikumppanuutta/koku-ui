@@ -6,13 +6,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.springframework.web.bind.annotation.RequestParam;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
@@ -37,6 +37,9 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 @Controller
 @RequestMapping(value = "VIEW")
 public class LogSearchController {
+  
+  private static Logger log = LoggerFactory.getLogger(LogSearchController.class);
+  
   private static final String CRITERIA_RENDER_PARAM = "log-search-criteria";
   private CriteriaSerializer criteriaSerializer = new CriteriaSerializer();
   
@@ -65,10 +68,10 @@ public class LogSearchController {
   
   // portlet render phase
   @RenderMapping(params = "op=searchLog")
-  public String render(@RequestParam(value = "visited", required = false) String visited, RenderRequest req, RenderResponse res, Model model) {
-   
-    System.out.println("log search render phase");
- 
+  public String render(@RequestParam(value = "visited", required = false) String visited,@RequestParam(value = "ssn", required = false) String ssn, RenderRequest req, RenderResponse res, Model model) {
+    log.info("log search render phase");
+    log.info("req.ssn="+ssn);
+
     res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
 
     LogSearchCriteria searchCriteria = null;
@@ -77,11 +80,18 @@ public class LogSearchController {
       model.addAttribute("entries", doSearchEntries(searchCriteria));
       model.addAttribute("searchParams", searchCriteria);
       model.addAttribute("visited", "---");
-    }
+    }  
+    
     if(searchCriteria!=null){
-      System.out.println("criteria: "+searchCriteria.getPic()+", "+searchCriteria.getConcept()+", "+searchCriteria.getFrom()+", "+searchCriteria.getTo());
+      log.info("criteria: "+searchCriteria.getPic()+", "+searchCriteria.getConcept()+", "+searchCriteria.getFrom()+", "+searchCriteria.getTo());
     } else{
-      System.out.println("criteria: null");
+      log.info("criteria: null");
+           
+      //Create new logsearchcriteria if there was ssn in request params
+      if(ssn!=null && !"".equals(ssn)){
+        model.addAttribute("logSearchCriteria", new LogSearchCriteria(ssn,"", null, null));
+      }
+      
     }
     return "search";
   }

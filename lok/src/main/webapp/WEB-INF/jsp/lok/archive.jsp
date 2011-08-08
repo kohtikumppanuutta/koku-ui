@@ -22,8 +22,8 @@
 	<portlet:param name="op" value="choose" />
 </portlet:renderURL>
 
-<portlet:renderURL var="searchLogURL">
-	<portlet:param name="op" value="searchLog" />
+<portlet:renderURL var="searchUserUrl">
+	<portlet:param name="op" value="searchUser" />
 </portlet:renderURL>
 
 <%
@@ -59,7 +59,7 @@
 		<div class="portlet-menu">
 			<ul>
 
-				<li class="portlet-menu-item"><a href="${searchLogURL}"><spring:message code="koku.lok.menu.item.search"/></a></li>
+				<li class="portlet-menu-item"><a href="${searchUserUrl}"><spring:message code="koku.lok.menu.item.search"/></a></li>
 				<li class="portlet-menu-item-selected"><spring:message code="koku.lok.menu.item.archive"/></li>
 			</ul>
 		</div>

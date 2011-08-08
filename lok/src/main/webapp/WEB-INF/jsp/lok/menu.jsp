@@ -10,6 +10,10 @@
 	<portlet:param name="op" value="archiveLog" />
 </portlet:renderURL>
 
+<portlet:renderURL var="searchUser">
+	<portlet:param name="op" value="searchUser" />
+</portlet:renderURL>
+
 <portlet:renderURL var="searchArchive">
 	<portlet:param name="op" value="searchLog" />
 </portlet:renderURL>
@@ -28,7 +32,7 @@
 			<h3>Järjestelmänvalvojan toiminnot</h3>
 			
 			
-			<form:form name="searchForm" method="post" action="${searchArchive}">
+			<form:form name="searchForm" method="post" action="${searchUser}">
 				<input type="submit" value="<spring:message code="koku.common.search"/>" />
 			</form:form>
 			

@@ -15,8 +15,8 @@
 	<portlet:param name="visited" value="---" />
 </portlet:actionURL>
 
-<portlet:renderURL var="homeUrl">
-	<portlet:param name="op" value="choose" />
+<portlet:renderURL var="searchUser">
+	<portlet:param name="op" value="searchUser" />
 </portlet:renderURL>
 
 <portlet:renderURL var="archiveURL">
@@ -36,7 +36,7 @@
 <div class="portlet-section-body">
 
 	<div class="home">
-		<a href="${homeUrl}"><spring:message code="koku.common.back" />
+		<a href="${searchUser}"><spring:message code="koku.common.back" />
 		</a>
 	</div>
 
