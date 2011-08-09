@@ -109,22 +109,21 @@
 	border:1px solid #1f94c5;
 }
 
-/* .koku-lok .portlet-table-body { */
-/* 	color:#444444; */
-/* } */
-.koku-lok .portlet-table-body th{
-	background: none repeat scroll 0 0 #DEDEDE;
-/*     font-weight: normal; */
-    padding: 5px;
-/* 	font-size:13px; */
-/*     text-transform: uppercase; */
-	text-align: left;
-	
+.koku-lok .portlet-table-body {
+	color:#444444;
 }
-.koku-lok .portlet-table-body td{
-/* 	border-bottom:1px solid #dedede !important; */
-	padding:5px;
-	vertical-align:top;
-/* 	font-size:11px; */
+.koku-lok .portlet-table-body th{
+ 	background: none repeat scroll 0 0 #DEDEDE;
+    font-weight: normal; 
+    padding: 5px;
+    font-size:13px; 
+    text-transform: uppercase;
+    text-align: left;
+}
 
+.koku-lok .portlet-table-body td{
+    border-bottom:1px solid #dedede !important;
+    padding:5px;
+    vertical-align:top;
+    font-size:11px;
 }
