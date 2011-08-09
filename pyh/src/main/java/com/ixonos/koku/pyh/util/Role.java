@@ -2,7 +2,8 @@ package com.ixonos.koku.pyh.util;
 
 public enum Role {
 
-  FAMILY_MEMBER("Perheyhteisön jäsen"), DEPENDANT("Huollettava lapsi"), CHILD("Lapsi"), PARENT("Vanhempi");
+  FATHER("Isä"), MOTHER("Äiti"), FAMILY_MEMBER("Perheyhteisön jäsen"), DEPENDANT("Huollettava lapsi"), CHILD("Lapsi"), PARENT(
+      "Vanhempi");
 
   private String text;
 
@@ -23,4 +24,5 @@ public enum Role {
     }
     return Role.FAMILY_MEMBER;
   }
+
 }

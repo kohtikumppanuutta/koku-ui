@@ -36,6 +36,7 @@ public class FamilyInformationController {
 
   @RenderMapping(params = "action=guardianFamilyInformation")
   public String render(Model model) {
+
     String ssn = pyhDemoService.getUser().getSsn();
     model.addAttribute("user", pyhDemoService.getUser());
     model.addAttribute("dependants", pyhDemoService.getDependants());

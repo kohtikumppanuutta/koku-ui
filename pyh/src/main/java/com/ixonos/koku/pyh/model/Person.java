@@ -138,4 +138,9 @@ public class Person {
     this.requestBending = requestBending;
   }
 
+  @Override
+  public String toString() {
+    return "Person [firstname=" + firstname + ", surname=" + surname + ", ssn=" + ssn + "]";
+  }
+
 }

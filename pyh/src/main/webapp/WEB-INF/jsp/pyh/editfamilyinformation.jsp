@@ -7,10 +7,10 @@
 <c:set var="dp" value="<%=com.ixonos.koku.pyh.util.Role.DEPENDANT%>" />
 <c:set var="CHILD" value="<%=com.ixonos.koku.pyh.util.Role.CHILD%>" />
 <c:set var="PARENT" value="<%=com.ixonos.koku.pyh.util.Role.PARENT%>" />
-<c:set var="MEMBER"
-	value="<%=com.ixonos.koku.pyh.util.Role.FAMILY_MEMBER%>" />
-<c:set var="DEPENDANT"
-	value="<%=com.ixonos.koku.pyh.util.Role.DEPENDANT%>" />
+<c:set var="MEMBER"	value="<%=com.ixonos.koku.pyh.util.Role.FAMILY_MEMBER%>" />
+<c:set var="DEPENDANT" value="<%=com.ixonos.koku.pyh.util.Role.DEPENDANT%>" />
+<c:set var="FATHER" value="<%=com.ixonos.koku.pyh.util.Role.FATHER%>" />
+<c:set var="MOTHER" value="<%=com.ixonos.koku.pyh.util.Role.MOTHER%>" />
 
 <portlet:defineObjects />
 
@@ -21,12 +21,9 @@
 <portlet:actionURL var="changeEmail">
 	<portlet:param name="action" value="changeEmail" />
 </portlet:actionURL>
-
 <portlet:renderURL var="backURL">
 	<portlet:param name="action" value="guardianFamilyInformation" />
 </portlet:renderURL>
-
-
 <portlet:renderURL var="home">
     <portlet:param name="action" value="" />
 </portlet:renderURL>
@@ -229,7 +226,10 @@
 								<option value="${ CHILD }">${ CHILD.text }</option>
 								
 								<c:if test="${ not parentsFull }">
-								<option value="${ PARENT }">${ PARENT.text }</option>
+								<option value="${ FATHER }">${ FATHER.text }</option>
+								<option value="${ MOTHER }">${ MOTHER.text }</option>
+								    <option value="${ PARENT }">${ PARENT.text }</option>
+								    
 								</c:if>
 						</select></td>
 					</tr>

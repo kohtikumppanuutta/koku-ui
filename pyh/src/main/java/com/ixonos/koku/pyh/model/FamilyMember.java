@@ -20,4 +20,9 @@ public class FamilyMember extends Person {
     this.role = role;
   }
 
+  @Override
+  public String toString() {
+    return super.toString() + " FamilyMember [role=" + role + "]";
+  }
+
 }

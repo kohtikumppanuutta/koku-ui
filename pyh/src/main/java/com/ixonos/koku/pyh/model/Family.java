@@ -45,7 +45,8 @@ public class Family {
 
     if (Role.CHILD.equals(familyMember.getRole())) {
       childs.put(familyMember.getSsn(), familyMember);
-    } else if (Role.PARENT.equals(familyMember.getRole())) {
+    } else if (Role.PARENT.equals(familyMember.getRole()) || Role.FATHER.equals(familyMember.getRole())
+        || Role.MOTHER.equals(familyMember.getRole())) {
       parents.put(familyMember.getSsn(), familyMember);
     } else {
       otherFamilyMembers.put(familyMember.getSsn(), familyMember);
@@ -59,7 +60,8 @@ public class Family {
 
     if (Role.CHILD.equals(familyMember.getRole())) {
       childs.remove(familyMember.getSsn());
-    } else if (Role.PARENT.equals(familyMember.getRole())) {
+    } else if (Role.PARENT.equals(familyMember.getRole()) || Role.FATHER.equals(familyMember.getRole())
+        || Role.MOTHER.equals(familyMember.getRole())) {
       parents.remove(familyMember.getSsn());
     } else {
       otherFamilyMembers.remove(familyMember.getSsn());

@@ -218,7 +218,8 @@ public class PyhDemoService {
     FamilyMember familyMember = family.getFamilyMember(familyMemberSSN);
     family.removeFamilyMember(familyMember);
 
-    if (Role.PARENT.equals(familyMember.getRole())) {
+    if (Role.PARENT.equals(familyMember.getRole()) || Role.FATHER.equals(familyMember.getRole())
+        || Role.MOTHER.equals(familyMember.getRole())) {
 
       // Remove childs when parent is removed (both needs to set up childs
       // again)
@@ -250,7 +251,7 @@ public class PyhDemoService {
 
       List<String> tmp = generateRecipients(ssn, user);
 
-      if (Role.PARENT.equals(r)) {
+      if (Role.PARENT.equals(r) || Role.FATHER.equals(r) || Role.MOTHER.equals(r)) {
         sendParentAdditionMessage(ssn, user, ssn, person, r);
       } else if (tmp.size() == 0) {
         insertInto(user.getSsn(), ssn, r);
@@ -308,8 +309,9 @@ public class PyhDemoService {
     Family family = getFamily(toFamilySSN);
     Family combine = getFamily(personSSN);
     Person person = model.getPerson(personSSN);
-    family.addFamilyMember(new FamilyMember(person, role));
+
     family.combineFamily(combine);
+    family.addFamilyMember(new FamilyMember(person, role));
     model.removeFamily(combine);
   }
 
