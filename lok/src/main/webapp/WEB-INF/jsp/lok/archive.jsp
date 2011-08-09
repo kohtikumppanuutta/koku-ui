@@ -37,8 +37,7 @@
 
 <%!SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);%>
 
-<!-- STARTTI -->
-
+<div class="koku-lok">
 <div class="portlet-section-body">
 
 	<div class="home">
@@ -108,7 +107,5 @@
 	<br/>
 	<br/>
 	</div>
-<!-- STOPPI -->
-<%--  	
-<form:form name="logArchiveDateForm" commandName="startArchiveDate" method="post" action="${startArchiveActionUrl}">
-	 --%>
+
+</div><!-- end of koku-lok-div -->

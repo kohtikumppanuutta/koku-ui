@@ -21,39 +21,40 @@
 <portlet:renderURL var="searchLogViews">
 	<portlet:param name="op" value="viewLog" />
 </portlet:renderURL>
-<div>
 
-
-<h1 class="portlet-section-header"><spring:message code="koku.lok.portlet.title"/></h1>
+<div class="koku-lok">
+	<h1 class="portlet-section-header">
+		<spring:message code="koku.lok.portlet.title" />
+	</h1>
 
 	<div style="float: left;">
-	
+
 		<div>
 			<h3>Järjestelmänvalvojan toiminnot</h3>
-			
-			
+
+
 			<form:form name="searchForm" method="post" action="${searchUser}">
-				<input type="submit" value="<spring:message code="koku.common.search"/>" />
+				<input type="submit"
+					value="<spring:message code="koku.common.search"/>" />
 			</form:form>
-			
+
 			<form:form name="logForm" method="post" action="${archive}">
-				<input type="submit" value="<spring:message code="koku.common.archive"/>" />
+				<input type="submit"
+					value="<spring:message code="koku.common.archive"/>" />
 			</form:form>
-		
+
 		</div>
 
 		<div>
 			<h3>Lokinkäsittelyn valvojan toiminnot</h3>
-				<form:form name="viewForm" method="post" action="${searchLogViews}">
-						<input type="submit" value="<spring:message code="koku.lok.view"/>" />
-				</form:form>
-			</div>
+			<form:form name="viewForm" method="post" action="${searchLogViews}">
+				<input type="submit" value="<spring:message code="koku.lok.view"/>" />
+			</form:form>
+		</div>
 	</div>
 
-	
 
-    <div style="clear:both"></div>
 
-</div>
+	<div style="clear: both"></div>
 
-<p>
+</div><!-- end of koku-lok-div -->

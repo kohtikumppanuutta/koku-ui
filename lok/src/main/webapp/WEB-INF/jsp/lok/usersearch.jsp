@@ -13,6 +13,7 @@
 	<portlet:param name="op" value="archiveLog" />
 </portlet:renderURL>
 
+<div class="koku-lok">
 <div class="portlet-section-body">
 
 	<div class="home">
@@ -58,9 +59,9 @@
 			<table class="portlet-table-body" width="100%" border="0">
 
 				<tr class="portlet-table-body th">
-					<th width="38%"><spring:message code="ui.lok.table.name" /></th>
-					<th width="26%"><spring:message code="ui.lok.table.ssn" /></th>
-					<th width="26%"></th>
+					<th><spring:message code="ui.lok.table.name" /></th>
+					<th><spring:message code="ui.lok.table.ssn" /></th>
+					<th></th>
 				</tr>
 
 				<c:forEach var="user" items="${searchedUsers}">
@@ -107,3 +108,4 @@
 
 </script>
 
+</div><!-- end of koku-lok-div -->

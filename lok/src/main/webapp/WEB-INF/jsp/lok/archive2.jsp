@@ -11,16 +11,20 @@
 	<portlet:param name="op" value="choose" />
 </portlet:renderURL>
 
+<div class="koku-lok">
+	<div class="portlet-section-body">
+		<p>
+			<spring:message code="koku.lok.archivingstatus.success" />
+		</p>
 
-<div class="portlet-section-body">
-<p><spring:message code="koku.lok.archivingstatus.success"/></p>
- 
-  
- <div class="home">
-   <form:form method="post" action="${homeUrl}">
-   <input type="submit" value="<spring:message code="koku.common.lok.begin"/>" >
-   </form:form>
-</div>
-<br/>
 
-</div>
+		<div class="home">
+			<form:form method="post" action="${homeUrl}">
+				<input type="submit"
+					value="<spring:message code="koku.common.lok.begin"/>">
+			</form:form>
+		</div>
+		<br />
+
+	</div>
+</div><!-- end of koku-lok-div -->
