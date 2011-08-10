@@ -34,6 +34,7 @@ public class Kirjaus {
     this.arvot = new ArrayList<String>();
     this.kirjaaja = kirjaaja;
     this.arvot.add(arvo);
+    this.luokitukset = new ArrayList<Luokitus>();
   }
 
   public String getArvo() {
@@ -79,7 +80,11 @@ public class Kirjaus {
   }
 
   public List<Luokitus> getLuokitukset() {
-    return luokitukset;
+
+    List<Luokitus> tmp = new ArrayList<Luokitus>(luokitukset);
+
+    tmp.addAll(getTyyppi().getLuokitukset());
+    return tmp;
   }
 
   public void setLuokitukset(List<Luokitus> luokitukset) {

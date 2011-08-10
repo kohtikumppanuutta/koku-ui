@@ -31,12 +31,10 @@ public class KuntaTyontekijaController {
   @Qualifier("demoKksService")
   private DemoService demoService;
 
-  private static Logger log = LoggerFactory
-      .getLogger(KuntaTyontekijaController.class);
+  private static Logger log = LoggerFactory.getLogger(KuntaTyontekijaController.class);
 
   @RenderMapping(params = "toiminto=naytaTyontekija")
-  public String nayta(RenderResponse response,
-      @RequestParam("lapset") String[] childs,
+  public String nayta(RenderResponse response, @RequestParam("lapset") String[] childs,
       @RequestParam(value = "haku", required = false) String haku, Model model) {
     log.info("nayta kuntatyontekija");
     model.addAttribute("lapset", toChilds(childs));
@@ -48,14 +46,12 @@ public class KuntaTyontekijaController {
   }
 
   @ActionMapping(params = "toiminto=haeLapsi")
-  public void haeLapsi(@ModelAttribute(value = "lapsi") Henkilo lapsi,
-      BindingResult bindingResult, ActionResponse response,
-      SessionStatus sessionStatus) {
+  public void haeLapsi(@ModelAttribute(value = "lapsi") Henkilo lapsi, BindingResult bindingResult,
+      ActionResponse response, SessionStatus sessionStatus) {
     log.info("hae lapsi");
 
     response.setRenderParameter("toiminto", "naytaTyontekija");
-    response.setRenderParameter("lapset",
-        toArray(demoService.haeHenkilo(lapsi)));
+    response.setRenderParameter("lapset", toArray(demoService.haeHenkilo(lapsi)));
     response.setRenderParameter("haku", "true");
     sessionStatus.setComplete();
   }

@@ -49,7 +49,7 @@ public class DemoService {
 
   public List<Henkilo> haeHenkilo(Henkilo target) {
     List<Henkilo> list = new ArrayList<Henkilo>();
-    Henkilo tmp = haeLapsi(target.getHetu());
+    Henkilo tmp = haeLapsi(target.getHetu().trim());
 
     if (tmp != null) {
       list.add(tmp);
@@ -59,7 +59,7 @@ public class DemoService {
 
   public Henkilo haeLapsi(String socialSecurityNumber) {
     for (Henkilo tmp : malli.getHenkilot()) {
-      if (tmp.getHetu().equals(socialSecurityNumber)) {
+      if (tmp.getHetu().equals(socialSecurityNumber.trim())) {
         return tmp;
       }
     }

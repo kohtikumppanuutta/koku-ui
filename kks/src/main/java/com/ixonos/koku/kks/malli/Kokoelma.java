@@ -1,10 +1,13 @@
 package com.ixonos.koku.kks.malli;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.ixonos.koku.kks.utils.Vakiot;
 
 /**
  * Sisältää yhden kasvatuksen ja kehityksen kokoelman tiedot
@@ -42,10 +45,23 @@ public class Kokoelma {
 
     for (List<Kirjaus> tmp : edellinen.getMoniArvoisetKirjaukset().values()) {
       for (Kirjaus k : tmp) {
-        lisaaMoniarvoinenKirjaus(new Kirjaus(k.getArvo(), new Date(), k.getVersio(), k.getRekisteri(), k.getKirjaaja(),
-            k.getTyyppi()));
+
+        if (!containsClassification(k.getLuokitukset(), Vakiot.LUOKITUS_KOMMENTTI)) {
+          lisaaMoniarvoinenKirjaus(new Kirjaus(k.getArvo(), new Date(), k.getVersio(), k.getRekisteri(),
+              k.getKirjaaja(), k.getTyyppi()));
+        }
       }
     }
+  }
+
+  private boolean containsClassification(List<Luokitus> luokitukset, String... checkedStrings) {
+    List<String> tmp = new ArrayList<String>(Arrays.asList(checkedStrings));
+    for (Luokitus l : luokitukset) {
+      if (tmp.contains(l.getNimi())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public Kokoelma(String id, String nimi, String kuvaus, KokoelmaTila tila, Date luontiAika, int versio,
