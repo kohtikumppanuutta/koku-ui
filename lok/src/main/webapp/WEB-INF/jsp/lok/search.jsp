@@ -122,6 +122,7 @@ This should be changed! --%>
 					<th width=20% scope="col"><b>Käyttäjä</b></th>
 					<th width=20% scope="col"><b>Tapahtumatyyppi</b></th>
 					<th width=40% scope="col"><b>Käsitelty tieto</b></th>
+					<th width=20% scope="col"><b>Palvelu</b></th>
 				</tr>
 
 				<c:forEach var="e" items="${entries}">
@@ -130,6 +131,7 @@ This should be changed! --%>
 						<td width=20%>${e.user}</td>
 						<td width=20%>${e.event_type}</td>
 						<td width=40%>${e.event_description}</td>
+						<td width=20%>${e.calling_system}</td>
 					</tr>
 				</c:forEach>
 			</table>
