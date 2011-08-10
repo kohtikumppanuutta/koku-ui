@@ -60,7 +60,7 @@ public class DemoFactory {
   }
 
   public static KokoelmaTyyppi luoNelivuotisTarkastusTyyppi() {
-    return new KokoelmaTyyppi(2, NELI_VUOTIS_TARKASTUS, "Sisältää tiedot lapsen 4-vuotistarkastuksesta");
+    return new KokoelmaTyyppi(2, NELI_VUOTIS_TARKASTUS, "Sisältää tiedot lapsen 4-vuotiaan terveystarkastuksesta");
   }
 
   public static Kokoelma luoVarhaiskasvatusSuunnitelma(String nimi) {
@@ -264,6 +264,51 @@ public class DemoFactory {
   public static Kokoelma luo4VuotisTarkastus(String nimi) {
     KokoelmaTyyppi tyyppi = luoNelivuotisTarkastusTyyppi();
 
+    /********************************/
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Mikä 4 – vuotiaassanne on parasta ja missä asioissa hän on hyvä?", "Kuvaa lapsen vahvuuksia", "", "neuvola",
+        "potilasrekisteri", "Huoltaja", luoTyypit(Vakiot.KEHITYSASIATYYPPI_KYSELY),
+        luoLuokitus(Vakiot.LUOKITUS_VANHEMPIEN_ARVOSTAMAT_ASIAT)));
+
+    tyyppi
+        .lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi("Mitä asioita teette yhdessä perheen kanssa?",
+            "Kuvaa perheen arvoja", "", "neuvola", "potilasrekisteri", "Huoltaja",
+            luoTyypit(Vakiot.KEHITYSASIATYYPPI_KYSELY),
+            luoLuokitus(Vakiot.LUOKITUS_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Mitä teette yhdessä 4-vuotiaanne kanssa ja mitkä tilanteet tuntuvat mukavilta?", "Kuvaa perheen arvoja", "",
+        "neuvola", "potilasrekisteri", "Huoltaja", luoTyypit(Vakiot.KEHITYSASIATYYPPI_KYSELY),
+        luoLuokitus(Vakiot.LUOKITUS_VANHEMPIEN_ARVOSTAMAT_ASIAT)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Miten perheessänne arki sujuu ja miten käsittelette ristiriitatilanteita?",
+        "Kuvaa perheen kasvatuksellisia keinoja", "", "neuvola", "potilasrekisteri", "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KYSELY),
+        luoLuokitus(Vakiot.LUOKITUS_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET, Vakiot.LUOKITUS_HUOLENAIHEET)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Onko perheessänne tapahtunut viime aikoina jotain erityistä, mistä haluatte kertoa?",
+        "Kuvaa perheen nykytilannetta/muutosta", "", "neuvola", "potilasrekisteri", "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KYSELY), luoLuokitus(Vakiot.LUOKITUS_HUOLENAIHEET)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Oletteko huolissanne jostain lapsenne käyttäytymiseen tai kehitykseen liittyvästä asiasta?",
+        "Kuvaa huolenaiheita", "", "neuvola", "potilasrekisteri", "Huoltaja",
+        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KYSELY),
+        luoLuokitus(Vakiot.LUOKITUS_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET, Vakiot.LUOKITUS_HUOLENAIHEET)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
+        "Onko lapsenne päivähoidossa tai kerhossa ja miten ryhmässä toimiminen sujuu?", "Kuvaa lasta ryhmässä", "",
+        "neuvola", "potilasrekisteri", "Huoltaja", luoTyypit(Vakiot.KEHITYSASIATYYPPI_KYSELY),
+        luoLuokitus(Vakiot.LUOKITUS_HUOLENAIHEET)));
+
+    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi("Haluan keskustella lisäksi", "Kuvaa keskustelutarpeet", "",
+        "neuvola", "potilasrekisteri", "Huoltaja", luoTyypit(Vakiot.KEHITYSASIATYYPPI_TOIVE),
+        luoLuokitus(Vakiot.LUOKITUS_HUOLENAIHEET)));
+
+    /***************************************/
     tyyppi
         .lisaaKirjausTyyppi(luoValintaKirjausTyyppi(
             "Pukee ja riisuu itse",
@@ -573,50 +618,6 @@ public class DemoFactory {
         .lisaaKirjausTyyppi(luoTekstiKirjausTyyppi("Paino", "lapsen paino kiloina", "Mittaukset", "neuvola",
             "potilasrekisteri", "Neuvola", luoTyypit(Vakiot.KEHITYSASIATYYPPI_KAYNTI),
             luoLuokitus(Vakiot.LUOKITUS_MITTAUS)));
-
-    /********************************/
-
-    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
-        "Mikä 4 – vuotiaassanne on parasta ja missä asioissa hän on hyvä?", "Kuvaa lapsen vahvuuksia", "", "neuvola",
-        "potilasrekisteri", "Huoltaja", luoTyypit(Vakiot.KEHITYSASIATYYPPI_KYSELY),
-        luoLuokitus(Vakiot.LUOKITUS_VANHEMPIEN_ARVOSTAMAT_ASIAT)));
-
-    tyyppi
-        .lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi("Mitä asioita teette yhdessä perheen kanssa?",
-            "Kuvaa perheen arvoja", "", "neuvola", "potilasrekisteri", "Huoltaja",
-            luoTyypit(Vakiot.KEHITYSASIATYYPPI_KYSELY),
-            luoLuokitus(Vakiot.LUOKITUS_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET)));
-
-    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
-        "Mitä teette yhdessä 4-vuotiaanne kanssa ja mitkä tilanteet tuntuvat mukavilta?", "Kuvaa perheen arvoja", "",
-        "neuvola", "potilasrekisteri", "Huoltaja", luoTyypit(Vakiot.KEHITYSASIATYYPPI_KYSELY),
-        luoLuokitus(Vakiot.LUOKITUS_VANHEMPIEN_ARVOSTAMAT_ASIAT)));
-
-    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
-        "Miten perheessänne arki sujuu ja miten käsittelette ristiriitatilanteita?",
-        "Kuvaa perheen kasvatuksellisia keinoja", "", "neuvola", "potilasrekisteri", "Huoltaja",
-        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KYSELY),
-        luoLuokitus(Vakiot.LUOKITUS_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET, Vakiot.LUOKITUS_HUOLENAIHEET)));
-
-    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
-        "Onko perheessänne tapahtunut viime aikoina jotain erityistä, mistä haluatte kertoa?",
-        "Kuvaa perheen nykytilannetta/muutosta", "", "neuvola", "potilasrekisteri", "Huoltaja",
-        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KYSELY), luoLuokitus(Vakiot.LUOKITUS_HUOLENAIHEET)));
-
-    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
-        "Oletteko huolissanne jostain lapsenne käyttäytymiseen tai kehitykseen liittyvästä asiasta?",
-        "Kuvaa huolenaiheita", "", "neuvola", "potilasrekisteri", "Huoltaja",
-        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KYSELY),
-        luoLuokitus(Vakiot.LUOKITUS_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET, Vakiot.LUOKITUS_HUOLENAIHEET)));
-
-    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
-        "Onko lapsenne päivähoidossa tai kerhossa ja miten ryhmässä toimiminen sujuu?", "Kuvaa lasta ryhmässä", "",
-        "neuvola", "potilasrekisteri", "Huoltaja", luoTyypit(Vakiot.KEHITYSASIATYYPPI_KYSELY),
-        luoLuokitus(Vakiot.LUOKITUS_HUOLENAIHEET)));
-
-    tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi("Haluan keskustella lisäksi", "Kuvaa keskustelutarpeet", "",
-        "neuvola", "potilasrekisteri", "Huoltaja", luoTyypit(Vakiot.KEHITYSASIATYYPPI_TOIVE),
-        luoLuokitus(Vakiot.LUOKITUS_HUOLENAIHEET)));
 
     tyyppi.lisaaKirjausTyyppi(luoMoniarvoinenVapaaTekstiKirjausTyyppi("Kommentit, havainnot ja tavoitteet",
         "Kirjatut kommentit, havainnot ja tavoitteet", "", "", "", "", "kommentti, havainto tai tavoite",
