@@ -17,7 +17,7 @@ import com.ixonos.koku.kks.utils.enums.Tila;
  */
 public class DemoFactory {
 
-  public static final String NELI_VUOTIS_TARKASTUS = "4-vuotistarkastus";
+  public static final String NELI_VUOTIS_TARKASTUS = "4-vuotiaan terveystarkastus";
   public static final String VASU = "Varhaiskasvatussuunnitelma";
   private static int codeGenerator = 100;
 
