@@ -93,7 +93,7 @@ public class LogViewController {
     r =  new ArrayList<LogEntry>();
   
     for(int i=0;i<5; i++){
-      r.add(factory.createLogEntry(i));
+      r.add(factory.createLogEntry(i, LogDemoFactory.MANIPULATION_LOG));
     }
     
     return r;
