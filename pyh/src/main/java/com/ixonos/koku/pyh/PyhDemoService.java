@@ -140,28 +140,42 @@ public class PyhDemoService {
 
   public void addDependantAsFamilyMember(String dependantSSN) {
     Person user = getUser();
-    List<String> tmp = generateRecipients(dependantSSN, user);
 
-    if (tmp.size() == 0) {
-      insertDependantToFamily(user.getSsn(), dependantSSN, Role.CHILD);
-    } else {
-      sendDependantFamilyAdditionMessage(tmp, user, model.getPerson(dependantSSN), Role.CHILD);
-    }
+    // REMOVE COMMENTS, IF CONFIRMATION MESSAGES ARE NEED ALSO FOR DEPENDANT >
+    // FAMILY INSERTION
+    // List<String> tmp = generateRecipients(dependantSSN, user, Role.CHILD);
+
+    // if (tmp.size() == 0) {
+    insertDependantToFamily(user.getSsn(), dependantSSN, Role.CHILD);
+    // } else {
+    // sendDependantFamilyAdditionMessage(tmp, user,
+    // model.getPerson(dependantSSN), Role.CHILD);
+    // }
   }
 
-  private List<String> generateRecipients(String targetSSN, Person user) {
+  private List<String> generateRecipients(String targetSSN, Person user, Role role) {
     List<String> tmp = new ArrayList<String>();
-    FamilyMember f = getUsersFamily().getOtherParent(user.getSsn());
 
-    if (f != null) {
-      tmp.add(f.getSsn());
-    }
-    Family fam = getFamily(targetSSN);
+    if (Role.CHILD.equals(role)) {
+      List<Guardian> guardians = model.getDependantGuardians(targetSSN);
 
-    if (fam != null) {
-      for (FamilyMember fm : fam.getParents()) {
-        if (!fm.getSsn().equals(user.getSsn()) && !tmp.contains(fm.getSsn())) {
-          tmp.add(fm.getSsn());
+      for (Guardian g : guardians) {
+        tmp.add(g.getSsn());
+      }
+    } else {
+
+      FamilyMember f = getUsersFamily().getOtherParent(user.getSsn());
+
+      if (f != null) {
+        tmp.add(f.getSsn());
+      }
+      Family fam = getFamily(targetSSN);
+
+      if (fam != null) {
+        for (FamilyMember fm : fam.getParents()) {
+          if (!fm.getSsn().equals(user.getSsn()) && !tmp.contains(fm.getSsn())) {
+            tmp.add(fm.getSsn());
+          }
         }
       }
     }
@@ -214,6 +228,8 @@ public class PyhDemoService {
   }
 
   public void removeFamilyMember(String familyMemberSSN) {
+
+    log.debug("remove fm");
     Family family = getUsersFamily();
     FamilyMember familyMember = family.getFamilyMember(familyMemberSSN);
     family.removeFamilyMember(familyMember);
@@ -238,7 +254,7 @@ public class PyhDemoService {
   }
 
   public void addPersonsAsFamilyMembers(HashMap<String, String> personMap) {
-    Family family = getUsersFamily();
+
     Set<String> keys = personMap.keySet();
     Iterator<String> si = keys.iterator();
     Person user = getUser();
@@ -249,7 +265,7 @@ public class PyhDemoService {
       Person person = model.getPerson(ssn);
       Role r = Role.create(role);
 
-      List<String> tmp = generateRecipients(ssn, user);
+      List<String> tmp = generateRecipients(ssn, user, r);
 
       if (Role.PARENT.equals(r) || Role.FATHER.equals(r) || Role.MOTHER.equals(r)) {
         sendParentAdditionMessage(ssn, user, ssn, person, r);

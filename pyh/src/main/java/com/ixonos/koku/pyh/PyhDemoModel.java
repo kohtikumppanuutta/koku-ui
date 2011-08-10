@@ -1,8 +1,10 @@
 package com.ixonos.koku.pyh;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,6 +84,30 @@ public class PyhDemoModel {
       }
     }
     return null;
+  }
+
+  public List<Guardian> getDependantGuardians(String dependantSSN) {
+    Set<Guardian> tmp = new HashSet<Guardian>();
+
+    Iterator<Guardianship> gsi = guardianships.iterator();
+    while (gsi.hasNext()) {
+      Guardianship gs = gsi.next();
+      Iterator<Dependant> gi = gs.getDependants().iterator();
+
+      boolean add = false;
+      while (gi.hasNext()) {
+        Dependant g = gi.next();
+        if (g.getSsn().equals(dependantSSN)) {
+          add = true;
+        }
+      }
+
+      if (add) {
+        tmp.addAll(gs.getGuardians());
+      }
+    }
+
+    return new ArrayList<Guardian>(tmp);
   }
 
   public List<Guardianship> getGuardianships() {
