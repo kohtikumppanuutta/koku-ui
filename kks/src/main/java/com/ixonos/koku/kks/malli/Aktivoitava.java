@@ -11,6 +11,7 @@ public class Aktivoitava {
 
   private String id;
   private boolean versioitava;
+  private boolean noCopy;
   private String nimi;
 
   public Aktivoitava(String id, boolean versioitava, String nimi) {
@@ -42,6 +43,14 @@ public class Aktivoitava {
 
   public void setNimi(String nimi) {
     this.nimi = nimi;
+  }
+
+  public boolean isNoCopy() {
+    return noCopy;
+  }
+
+  public void setNoCopy(boolean noCopy) {
+    this.noCopy = noCopy;
   }
 
   public String getTekstina() {

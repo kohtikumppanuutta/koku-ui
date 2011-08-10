@@ -80,7 +80,7 @@ public class DemoService {
 
     if (aktivointi.isVersioitava()) {
       Kokoelma kokoelma = h.getKks().getKokoelma(aktivointi.getId());
-      k = DemoFactory.luoUusiVersio(kokoelma, nimi);
+      k = DemoFactory.luoUusiVersio(kokoelma, nimi, aktivointi.isNoCopy());
     } else {
       k = DemoFactory.luoKokoelma(nimi, aktivointi.getNimi());
     }

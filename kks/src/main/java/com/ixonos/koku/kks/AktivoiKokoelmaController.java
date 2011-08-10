@@ -34,11 +34,13 @@ public class AktivoiKokoelmaController {
 
   @ActionMapping(params = "toiminto=versioiKokoelma")
   public void versioi(@ModelAttribute(value = "lapsi") Henkilo lapsi, @RequestParam String id,
-      @RequestParam String nimi, ActionResponse response, SessionStatus sessionStatus) {
+      @RequestParam String nimi, @RequestParam(required = false) String tyhjenna, ActionResponse response,
+      SessionStatus sessionStatus) {
 
     log.debug("luoKokoelma");
 
     Aktivoitava a = new Aktivoitava(id, true, nimi);
+    a.setNoCopy(Boolean.valueOf(tyhjenna));
     Kokoelma kokoelma = demoService.luoKokoelma(lapsi, nimi, a);
 
     // activate the collection for a given time period

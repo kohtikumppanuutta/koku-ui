@@ -34,24 +34,26 @@ public class Kokoelma {
   private Map<String, Kirjaus> kirjaukset;
   private Map<String, List<Kirjaus>> moniArvoisetKirjaukset;
 
-  public Kokoelma(String id, Kokoelma edellinen, Date luontiAika, KokoelmaTila tila, int versio) {
+  public Kokoelma(String id, Kokoelma edellinen, boolean tyhjenna, Date luontiAika, KokoelmaTila tila, int versio) {
     this(id, edellinen.getNimi(), edellinen.getKuvaus(), tila, luontiAika, versio, edellinen.getTyyppi());
     edellinenVersio = edellinen.getId();
     pohjautuuToiseen = true;
 
     for (Kirjaus k : edellinen.getKirjaukset().values()) {
-      lisaaKirjaus(new Kirjaus(k.getArvo(), new Date(), k.getVersio(), k.getRekisteri(), k.getKirjaaja(), k.getTyyppi()));
+      lisaaKirjaus(new Kirjaus(tyhjenna ? "" : k.getArvo(), new Date(), k.getVersio(), k.getRekisteri(),
+          k.getKirjaaja(), k.getTyyppi()));
     }
 
     for (List<Kirjaus> tmp : edellinen.getMoniArvoisetKirjaukset().values()) {
       for (Kirjaus k : tmp) {
 
         if (!containsClassification(k.getLuokitukset(), Vakiot.LUOKITUS_KOMMENTTI)) {
-          lisaaMoniarvoinenKirjaus(new Kirjaus(k.getArvo(), new Date(), k.getVersio(), k.getRekisteri(),
-              k.getKirjaaja(), k.getTyyppi()));
+          lisaaMoniarvoinenKirjaus(new Kirjaus(tyhjenna ? "" : k.getArvo(), new Date(), k.getVersio(),
+              k.getRekisteri(), k.getKirjaaja(), k.getTyyppi()));
         }
       }
     }
+
   }
 
   private boolean containsClassification(List<Luokitus> luokitukset, String... checkedStrings) {

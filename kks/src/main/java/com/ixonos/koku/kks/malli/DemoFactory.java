@@ -46,8 +46,9 @@ public class DemoFactory {
     return null;
   }
 
-  public static Kokoelma luoUusiVersio(Kokoelma vanha, String nimi) {
-    Kokoelma k = new Kokoelma("" + ++codeGenerator, vanha, new Date(), new KokoelmaTila(Tila.AKTIIVINEN, null, null), 1);
+  public static Kokoelma luoUusiVersio(Kokoelma vanha, String nimi, boolean tyhjenna) {
+    Kokoelma k = new Kokoelma("" + ++codeGenerator, vanha, tyhjenna, new Date(), new KokoelmaTila(Tila.AKTIIVINEN,
+        null, null), 1);
     k.setNimi(nimi);
     vanha.setVersioitu(true);
     vanha.setUudempiVersio(k.getId());
