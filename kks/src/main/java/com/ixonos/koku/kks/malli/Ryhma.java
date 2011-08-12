@@ -1,6 +1,7 @@
 package com.ixonos.koku.kks.malli;
 
 import com.ixonos.koku.kks.utils.LinkedMapWrapper;
+import com.ixonos.koku.kks.utils.RyhmaKey;
 
 /**
  * Sisältää tiedot, jotka kuuluu johonkin ryhmään
@@ -8,13 +9,22 @@ import com.ixonos.koku.kks.utils.LinkedMapWrapper;
  * @author tuomape
  * 
  */
-public class Ryhma {
+public class Ryhma implements Comparable<Ryhma> {
 
-  private String nimi;
+  private RyhmaKey id;
+  private String kuvaus;
+  private String rekisteri;
+
   private LinkedMapWrapper<String, LapsiRyhma> lapsiryhmat;
 
-  public Ryhma(String nimi) {
-    this.nimi = nimi;
+  public Ryhma(RyhmaKey id, String rekisteri) {
+    this(id, rekisteri, null);
+  }
+
+  public Ryhma(RyhmaKey id, String rekisteri, String kuvaus) {
+    this.id = id;
+    this.rekisteri = rekisteri;
+    this.kuvaus = kuvaus;
     lapsiryhmat = new LinkedMapWrapper<String, LapsiRyhma>();
   }
 
@@ -40,11 +50,40 @@ public class Ryhma {
   }
 
   public String getNimi() {
-    return nimi;
+    return id.getName();
   }
 
   public void setNimi(String nimi) {
-    this.nimi = nimi;
+    id.setName(nimi);
+  }
+
+  public RyhmaKey getId() {
+    return id;
+  }
+
+  public void setId(RyhmaKey id) {
+    this.id = id;
+  }
+
+  public String getKuvaus() {
+    return kuvaus;
+  }
+
+  public void setKuvaus(String kuvaus) {
+    this.kuvaus = kuvaus;
+  }
+
+  public String getRekisteri() {
+    return rekisteri;
+  }
+
+  public void setRekisteri(String rekisteri) {
+    this.rekisteri = rekisteri;
+  }
+
+  @Override
+  public int compareTo(Ryhma o) {
+    return getId().compareTo(o.getId());
   }
 
 }

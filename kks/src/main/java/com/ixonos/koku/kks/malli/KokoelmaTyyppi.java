@@ -1,9 +1,11 @@
 package com.ixonos.koku.kks.malli;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.ixonos.koku.kks.utils.LinkedMapWrapper;
+import com.ixonos.koku.kks.utils.RyhmaComaparator;
 
 /**
  * Kuvaa kokoelman sisällön, edellytykset ja mahdollisuudet
@@ -17,6 +19,7 @@ public class KokoelmaTyyppi {
   private String kuvaus;
   private List<KirjausTyyppi> kirjausTyypit;
   private LinkedMapWrapper<String, Ryhma> kirjausRyhmat;
+  private RyhmaComaparator groupComparator;
 
   public KokoelmaTyyppi(int koodi, String nimi, String kuvaus) {
     super();
@@ -25,6 +28,7 @@ public class KokoelmaTyyppi {
     this.kuvaus = kuvaus;
     this.kirjausTyypit = new ArrayList<KirjausTyyppi>();
     this.kirjausRyhmat = new LinkedMapWrapper<String, Ryhma>();
+    this.groupComparator = new RyhmaComaparator();
   }
 
   public int getKoodi() {
@@ -75,14 +79,22 @@ public class KokoelmaTyyppi {
       Ryhma tmp = kirjausRyhmat.get().get(tyyppi.getTayttaja());
       tmp.lisaa(tyyppi);
     } else {
-      Ryhma tmp = new Ryhma(tyyppi.getTayttaja());
-      tmp.lisaa(tyyppi);
-      kirjausRyhmat.get().put(tyyppi.getTayttaja(), tmp);
+      System.out.println("ERROR: WRONG GROUP!!!: " + tyyppi.getNimi() + " " + tyyppi.getTayttaja());
     }
+  }
+
+  public void lisaaKirjausRyhma(Ryhma ryhma) {
+    kirjausRyhmat.get().put(ryhma.getNimi(), ryhma);
   }
 
   public LinkedMapWrapper<String, Ryhma> getKirjausRyhmat() {
     return kirjausRyhmat;
+  }
+
+  public List<Ryhma> getSortedGroups() {
+    List<Ryhma> tmp = new ArrayList<Ryhma>(kirjausRyhmat.getValues());
+    Collections.sort(tmp, groupComparator);
+    return tmp;
   }
 
   public KirjausTyyppi getKirjausTyyppi(String id) {

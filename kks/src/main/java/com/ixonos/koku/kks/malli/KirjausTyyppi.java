@@ -9,7 +9,7 @@ import com.ixonos.koku.kks.utils.enums.Tietotyyppi;
  * 
  * @author tuomape
  */
-public class KirjausTyyppi {
+public class KirjausTyyppi implements Comparable<KirjausTyyppi> {
 
   private String koodi;
   private String nimi;
@@ -185,6 +185,11 @@ public class KirjausTyyppi {
 
   public void setLuontiKuvaus(String luontiKuvaus) {
     this.luontiKuvaus = luontiKuvaus;
+  }
+
+  @Override
+  public int compareTo(KirjausTyyppi o) {
+    return koodi.compareTo(o.getKoodi());
   }
 
 }

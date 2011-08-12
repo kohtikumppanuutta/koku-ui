@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.ixonos.koku.kks.utils.RyhmaKey;
 import com.ixonos.koku.kks.utils.Vakiot;
 import com.ixonos.koku.kks.utils.enums.Tietotyyppi;
 import com.ixonos.koku.kks.utils.enums.Tila;
@@ -66,6 +67,9 @@ public class DemoFactory {
 
   public static Kokoelma luoVarhaiskasvatusSuunnitelma(String nimi) {
     KokoelmaTyyppi tyyppi = luoVarhaiskasvatusSuunnitelmanTyyppi();
+
+    tyyppi.lisaaKirjausRyhma(new Ryhma(new RyhmaKey(1, "Huoltaja"), "Päivähoidon asiakasrekisteri"));
+    tyyppi.lisaaKirjausRyhma(new Ryhma(new RyhmaKey(2, "Päivähoito"), "Päivähoidon asiakasrekisteri"));
 
     tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi("Miten lapsesi on viihtynyt päivähoidossa",
         "Kuvaa lapsen hyvinvointia", "Lapsen hyvinvointi", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
@@ -143,8 +147,7 @@ public class DemoFactory {
 
     tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi("Yhteiset tavoitteet liittyen lapsen hyvinvointiin",
         "Kirjataan yhteiset tavoitteet liittyen lapsen hyvinvointiin", "", "Päivähoito",
-        "Päivähoidon asiakasrekisteri", "Huoltaja ja päivähoito yhdessä",
-        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        "Päivähoidon asiakasrekisteri", "Päivähoito", luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
         luoLuokitus(Vakiot.LUOKITUS_KOTI, Vakiot.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
     tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
@@ -217,8 +220,8 @@ public class DemoFactory {
 
     tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi("Yhteiset tavoitteet liittyen vuorovaikutukseen",
         "Kirjataan yhteiset tavoitteet liittyen lapsen vuorovaikutukseen", "", "Päivähoito",
-        "Päivähoidon asiakasrekisteri", "Huoltaja ja päivähoito yhdessä",
-        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU), luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI)));
+        "Päivähoidon asiakasrekisteri", "Päivähoito", luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS, Vakiot.LUOKITUS_KOTI)));
 
     tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi(
         "Millaisia asioita toivoisit kerrottavan päivittäin lapsesi arjesta päivähoidossa",
@@ -244,12 +247,11 @@ public class DemoFactory {
 
     tyyppi.lisaaKirjausTyyppi(luoVapaaTekstiKirjausTyyppi("Yhteiset tavoitteet liittyen yhteistyöhön",
         "Kirjataan yhteiset tavoitteet liittyen yhteistyöhön", "", "Päivähoito", "Päivähoidon asiakasrekisteri",
-        "Huoltaja ja päivähoito yhdessä", luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
-        luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS)));
+        "Päivähoito", luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU), luoLuokitus(Vakiot.LUOKITUS_KUMPPANUUS)));
 
     tyyppi.lisaaKirjausTyyppi(luoMoniarvoinenVapaaTekstiKirjausTyyppi("Kommentit, havainnot ja tavoitteet",
-        "Kirjatut kommentit, havainnot ja tavoitteet", "", "", "", "", "kommentti, havainto tai tavoite",
-        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        "Kirjatut kommentit, havainnot ja tavoitteet", "", "Päivähoito", "Päivähoidon asiakasrekisteri", "Päivähoito",
+        "kommentti, havainto tai tavoite", luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
         luoLuokitus(Vakiot.LUOKITUS_KOMMENTTI, Vakiot.LUOKITUS_TAVOITE, Vakiot.LUOKITUS_HAVAINTO)));
 
     Date nyt = new Date();
@@ -264,6 +266,10 @@ public class DemoFactory {
 
   public static Kokoelma luo4VuotisTarkastus(String nimi) {
     KokoelmaTyyppi tyyppi = luoNelivuotisTarkastusTyyppi();
+
+    tyyppi.lisaaKirjausRyhma(new Ryhma(new RyhmaKey(1, "Huoltaja"), "potilasrekisteri"));
+    tyyppi.lisaaKirjausRyhma(new Ryhma(new RyhmaKey(2, "Päivähoito"), "päivähoidon asiakasrekisteri"));
+    tyyppi.lisaaKirjausRyhma(new Ryhma(new RyhmaKey(3, "Neuvola"), "potilasrekisteri"));
 
     /********************************/
 
@@ -621,8 +627,8 @@ public class DemoFactory {
             luoLuokitus(Vakiot.LUOKITUS_MITTAUS)));
 
     tyyppi.lisaaKirjausTyyppi(luoMoniarvoinenVapaaTekstiKirjausTyyppi("Kommentit, havainnot ja tavoitteet",
-        "Kirjatut kommentit, havainnot ja tavoitteet", "", "", "", "", "kommentti, havainto tai tavoite",
-        luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
+        "Kirjatut kommentit, havainnot ja tavoitteet", "", "neuvola", "potilasrekisteri", "Neuvola",
+        "kommentti, havainto tai tavoite", luoTyypit(Vakiot.KEHITYSASIATYYPPI_KESKUSTELU),
         luoLuokitus(Vakiot.LUOKITUS_KOMMENTTI, Vakiot.LUOKITUS_TAVOITE, Vakiot.LUOKITUS_HAVAINTO)));
 
     Date nyt = new Date();

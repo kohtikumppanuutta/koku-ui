@@ -50,9 +50,17 @@
                         <form:form name="uusiVersioForm"  method="post" action="${versioiURL}">
                                 <input type="hidden" id="id" name="id" value="${ kokoelma.id }"/>
                                 <div class="portlet-form-field-label"><spring:message code="ui.sopimus.nimi" /></div>
-                                <div class="portlet-form-field" style="width: 98%"><input type="text" id="nimi" name="nimi" style="width: 100%" value="${ kokoelma.nimi }"/>
+                                <div class="portlet-form-field" style="width: 98%"><input  class="portlet-form-input-field" type="text" id="nimi" name="nimi" style="width: 100%" value="${ kokoelma.nimi }"/>
                                  
                                 </div>
+                                <div class="portlet-form-field-label">
+                                   <span class="portlet-form-field"><input class="portlet-form-input-field" type="checkbox" id="tyhjenna" name="tyhjenna" value="true"/>
+                                    <label class="portlet-form-field-label" for="tyhjenna"> <spring:message code="ui.tyhjenna.kentat" /> </label>
+                                   </span>
+                                </div>
+                                
+                                 
+                                </span>
                                 <span class="kks-right">
                                 <input type="submit" class="portlet-form-button"
                                 value="<spring:message code="ui.sopimus.luo"/>">
@@ -120,10 +128,15 @@
                 action="${tallennaKirjausActionUrl}">
 
                 <c:forEach var="ryhma"
-                    items="${kokoelma.tyyppi.kirjausRyhmat.values}">
+                    items="${kokoelma.tyyppi.sortedGroups}">
 
                     <c:if test="${not empty ryhma.nimi}">
                         <h2 class="portlet-section-subheader">${ryhma.nimi } t‰ytt‰‰</h2>
+                    </c:if>
+                    <c:if test="${not empty ryhma.kuvaus}">
+                        <div class="portlet-section-text">
+                             <span class="kks-read-only-description">${ryhma.kuvaus}</span>
+                        </div>
                     </c:if>
                     <c:forEach var="lapsiryhma" items='${ryhma.lapsiryhmat.values}'>
 
@@ -216,7 +229,7 @@
                                         <c:choose>
                                             <c:when
                                                 test="${ empty kokoelma.moniArvoisetKirjaukset[tyyppi.koodi] && empty kokoelma.kirjaukset[tyyppi.koodi].arvo }">
-                                                <span class="read-only-text">-</span>
+                                                <span class="kks-read-only-text">-</span>
                                             </c:when>
                                             <c:otherwise>
                                              <c:if
@@ -224,11 +237,11 @@
                                                     <c:forEach var="moniarvoinen"
                                                         items='${ kokoelma.moniArvoisetKirjaukset[tyyppi.koodi] }'>
 
-                                                        <span class="read-only-text"> ${moniarvoinen.arvo} (${moniarvoinen.kirjaaja} <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${moniarvoinen.luontiAika}"/>)</span>
+                                                        <span class="kks-read-only-text"> ${moniarvoinen.arvo} (${moniarvoinen.kirjaaja} <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${moniarvoinen.luontiAika}"/>)</span>
                                                         
                                                     </c:forEach>
                                                 </c:if> <c:if test="${ not tyyppi.moniArvoinen }">
-                                                    <span class="read-only-text"> <c:out value="${kokoelma.kirjaukset[tyyppi.koodi].arvo }"></c:out> </span>
+                                                    <span class="kks-read-only-text"> <c:out value="${kokoelma.kirjaukset[tyyppi.koodi].arvo }"></c:out> </span>
                                                 </c:if> 
                                                 </c:otherwise>
                                         </c:choose>
