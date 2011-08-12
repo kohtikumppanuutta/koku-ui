@@ -37,10 +37,12 @@ public class Message {
     acceptCount++;
     read.add(id);
 
-    if (acceptCount == executeCount && executable != null) {
-      executable.execute();
-      notifyRead();
-    }
+    // IF ALL RECIPIENTS SHOULD ACCEPT THE MESSAGE BEFORE
+    // ACTION, REMOVE COMMENTS
+    // if (acceptCount == executeCount && executable != null) {
+    executable.execute();
+    notifyRead();
+
   }
 
   public void reject() {

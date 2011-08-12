@@ -18,7 +18,7 @@
     <portlet:param name="ssn" value="020304-2345"/>
 </portlet:renderURL>
 
-<div>
+<div class="koku-pyh">
 	<div>
 		<form:form name="guardian" method="post" action="${pekka}">
 			<input type="submit" value="Pekka Peltola"/>

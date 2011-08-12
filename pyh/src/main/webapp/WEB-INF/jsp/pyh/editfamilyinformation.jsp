@@ -4,7 +4,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<c:set var="dp" value="<%=com.ixonos.koku.pyh.util.Role.DEPENDANT%>" />
 <c:set var="CHILD" value="<%=com.ixonos.koku.pyh.util.Role.CHILD%>" />
 <c:set var="PARENT" value="<%=com.ixonos.koku.pyh.util.Role.PARENT%>" />
 <c:set var="MEMBER"	value="<%=com.ixonos.koku.pyh.util.Role.FAMILY_MEMBER%>" />
@@ -29,18 +28,22 @@
 </portlet:renderURL>
 
 
-
+<div class="koku-pyh">
 <div class="portlet-section-body">
 
-<div class="back">
+<div class="pyh-temp">
   <span> <a
             href="${home}"> Vaihda k‰ytt‰j‰‰</a> </span>
+   <span class="pyh-right"> <a
+            href="${backURL}">
+                <spring:message code="ui.pyh.back"/></a> </span>
+          
 </div>
 
+<div class="pyh-reset-floating"></div>
+
 	<h1 class="portlet-section-header">
-		<spring:message code="ui.pyh.family.info" /> <span class="takaisin"><a class="takaisin"
-			href="${backURL}"><spring:message code="ui.pyh.back" /></a>
-		</span>
+		<spring:message code="ui.pyh.family.info" /> 
 	</h1>
 
 	<c:if test="${not empty user}">
@@ -52,7 +55,7 @@
 	</c:if>
 	
 	<c:if test="${not empty dependants or not empty otherFamilyMembers}">
-	    <div class="family">
+	    <div class="pyh-family">
         <table class="portlet-table-body" width="100%">
             <tr>
                 <th><spring:message code="ui.pyh.name" /></th>
@@ -65,7 +68,7 @@
             <tr>
                 <td> ${child.fullName} </td>
                 <td> ${child.ssn} </td>
-                <td> ${dp.text} 
+                <td> ${DEPENDANT.text} 
                 
                 <c:if test="${child.memberOfUserFamily}">
                    (<spring:message code="ui.pyh.added.into.family" />)
@@ -73,13 +76,13 @@
                 </td>
                 <td> 
                 <span class="actions">
-                        <span class="link"> <c:choose>
+                        <span class="pyh-link"> <c:choose>
 		                        <c:when test="${child.requestBending}">
 		                          //nothing at the moment
 		                          Odottaa hyv‰ksynt‰‰
 		                        </c:when>
                                 <c:when test="${child.memberOfUserFamily}">
-                                   <span class="link"> 
+                                   <span class="pyh-link"> 
                                          <portlet:actionURL var="removeFamilyMember">
                                         <portlet:param name="action" value="removeDependant" />
                                         <portlet:param name="familyMemberSSN" value="${child.ssn}" />
@@ -104,7 +107,7 @@
                 <td>${familyMember.fullName} </td>
                 <td>${familyMember.ssn} </td>
                 <td>${familyMember.role.text}</td>
-                <td><span class="linkki">
+                <td><span class="pyh-linkki">
                     <portlet:actionURL var="removeFamilyMember">
                     <portlet:param name="action" value="removeFamilyMember" />
                     <portlet:param name="familyMemberSSN" value="${familyMember.ssn}" />
@@ -120,50 +123,14 @@
     </div>
     </br>
     </c:if>
-<!-- 
-	<c:if test="${not empty dependants}">
-		<div class="dependants">
-			<h3 class="portlet-section-subheader"><spring:message code="ui.pyh.dependants" /></h3>
-			<c:forEach var="dependant" items="${dependants}">
-				<div class="dependant">
-					<span class="name">${dependant.firstname}
-						${dependant.surname} ${dependant.ssn}</span> 
-				</div>
-			</c:forEach>
-		</div>
-		<br />
-	</c:if>
 
-	<c:if test="${not empty otherFamilyMembers}">
-		<div class="members">
-			<h3 class="portlet-section-subheader"><spring:message code="ui.pyh.other.family" /></h3>
-			<c:forEach var="familyMember" items="${otherFamilyMembers}">
-
-				<portlet:actionURL var="removeFamilyMember">
-					<portlet:param name="action" value="removeFamilyMember" />
-					<portlet:param name="familyMemberSSN" value="${familyMember.ssn}" />
-				</portlet:actionURL>
-
-				<div class="member">
-					<span class="name">${familyMember.firstname}
-						${familyMember.surname} ${familyMember.ssn}
-						(${familyMember.role.text}) </span> <span class="linkki"><a
-						href="${removeFamilyMember}"><spring:message code="ui.pyh.remove.family" /></a>
-					</span>
-				</div>
-
-			</c:forEach>
-		</div>
-	</c:if>
 	
-	 -->
-	
-	    <c:if test="${not empty messages}">
+   <c:if test="${not empty messages}">
         <h3 class="portlet-section-subheader"><spring:message code="ui.pyh.sent.messages" />
         </h3>
         <c:forEach var="message" items="${messages}">            
             
-            <div class="message">
+            <div class="pyh-message">
                 ${message.text}  <spring:message code="ui.pyh.waiting.approval" />
             </div>
             
@@ -172,7 +139,7 @@
     </c:if>
     
 	
-	<div class="add">
+	<div class="pyh-add-family">
                     
 		<h3 class="portlet-section-subheader"><spring:message code="ui.pyh.add.family" /></h3>
 
@@ -258,6 +225,7 @@
 		</c:otherwise>
 	</c:choose>
 
+</div>
 </div>
 
 <script type="text/javascript"

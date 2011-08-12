@@ -354,7 +354,6 @@ public class PyhDemoService {
   }
 
   private boolean isUsersDependant(String dependantSSN) {
-    String userSSN = user.getSsn();
     List<Guardianship> guardianships = model.getGuardianships();
     Iterator<Guardianship> gi = guardianships.iterator();
     while (gi.hasNext()) {

@@ -17,18 +17,22 @@
 </portlet:renderURL>
 
 
-
+<div class="koku-pyh">
 <div class="portlet-section-body">
 
-<div class="back">
+<div class="pyh-temp">
   <span> <a
             href="${home}"> Vaihda käyttäjää</a> </span>
+   <span class="pyh-right"> <a
+            href="${editFamilyInformation}">
+                <spring:message code="ui.pyh.modify.info" /></a> </span>
+          
 </div>
 
+<div class="pyh-reset-floating"></div>
+
 	<h1 class="portlet-section-header">
-		<spring:message code="ui.pyh.own.info" /> <span class="takaisin"> <a
-			href="${editFamilyInformation}">
-				<spring:message code="ui.pyh.modify.info" /></a> </span>
+		<spring:message code="ui.pyh.own.info" />
 	</h1>
 
 	<c:if test="${not empty user}">
@@ -39,7 +43,7 @@
 </br>
 
 <c:if test="${not empty dependants or not empty otherFamilyMembers}">
-    <div class="family">
+    <div class="pyh-family">
         <table class="portlet-table-body" width="100%">
             <tr>
                 <th><spring:message code="ui.pyh.name" /></th>
@@ -54,7 +58,10 @@
                 <td> ${dp.text} 
                     <c:if test="${child.memberOfUserFamily}">
                      (<spring:message code="ui.pyh.added.into.family" />)
-                    </c:if>                
+                    </c:if>   
+                    <c:if test="${!child.memberOfUserFamily}">
+                     (<spring:message code="ui.pyh.not.added.into.family" />)
+                    </c:if>               
                 </td>
             </tr>
             </c:forEach>
@@ -70,30 +77,6 @@
     
     </div>
 </c:if>
-<!--
-	<c:if test="${not empty dependants}">
-
-
-		<h3 class="portlet-section-subheader"><spring:message code="ui.pyh.dependants" /></h3>
-		<c:forEach var="child" items="${dependants}">
-			<div class="name">
-				${child.firstname} ${child.surname} ${child.ssn} <br />
-			</div>
-		</c:forEach>
-
-	</c:if>
-
-	<c:if test="${not empty otherFamilyMembers}">
-		<h3 class="portlet-section-subheader"><spring:message code="ui.pyh.other.family" />
-		</h3>
-		<c:forEach var="familyMember" items="${otherFamilyMembers}">
-			<div class="name">
-				${familyMember.firstname} ${familyMember.surname}
-				${familyMember.ssn} (${familyMember.role.text}) <br />
-			</div>
-		</c:forEach>
-	</c:if>
-	  -->
 	
 	 <c:if test="${not empty sentMessages}">
         <h3 class="portlet-section-subheader"><spring:message code="ui.pyh.sent.messages" />
@@ -116,9 +99,9 @@
             <div class="message">
                 <strong> ${message.text} </strong>
                 
-                <span class="right"> 
+                <span class="pyh-right"> 
 
-                    <span class="right"> 
+                    <span class="pyh-right"> 
                     
                     <portlet:actionURL var="reject">
                             <portlet:param name="action" value="rejectMessage" />
@@ -129,7 +112,7 @@
                     </form:form>     
                     </span>  
                                         
-                    <span class="right"> 
+                    <span class="pyh-right"> 
                     <portlet:actionURL var="accept">
                             <portlet:param name="action" value="acceptMessage" />
                             <portlet:param name="readerId" value="${user.ssn}" />
@@ -141,13 +124,13 @@
                     </span>
                           
                  </span> 
-                 <div class="reset-floating"></div>
+                 <div class="pyh-reset-floating"></div>
             
             
             <div class="portlet-section-text">
                 ${message.description}               
             
-            <span class="mail">
+            <span class="pyh-mail">
             <form:form name="accept" method="post" action="${accept}">
                 
                 <a href="mailto:yllapito@kohtikumppanuutta.fi?subject=Asiaton perheyhteyspyyntö (Viesti ID:${ message.id })">Ilmoita asiaton perheyhteyspyyntö</a> 
@@ -159,8 +142,9 @@
         </c:forEach>
     </c:if>
 
-<div class="reset-floating"></div>
+<div class="pyh-reset-floating"></div>
 </br>
+</div>
 </div>
 
 

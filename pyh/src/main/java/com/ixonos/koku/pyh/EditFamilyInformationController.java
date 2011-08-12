@@ -126,28 +126,12 @@ public class EditFamilyInformationController {
     response.setRenderParameter("action", "editFamilyInformation");
   }
 
-  /*
-   * @ActionMapping(params = "action=removeChild") public void
-   * removeFamilyChild(@RequestParam String familyMemberSSN, ActionResponse
-   * response) { pyhDemoService.removeFamilyChild(familyMemberSSN);
-   * 
-   * response.setRenderParameter("action", "editFamilyInformation"); }
-   */
-
   @ActionMapping(params = "action=changeEmail")
   public void changeEmail(@RequestParam String email, ActionResponse response) {
     pyhDemoService.getUser().setEmail(email);
 
     response.setRenderParameter("action", "editFamilyInformation");
   }
-
-  /*
-   * @ActionMapping(params = "action=removeDependant") public void
-   * removeDependant(@RequestParam String dependant, ActionResponse response) {
-   * pyhDemoService.removeGuardianShip(dependant);
-   * 
-   * response.setRenderParameter("action", "editFamilyInformation"); }
-   */
 
   @ActionMapping(params = "action=searchUsers")
   public void searchUsers(ActionRequest request, ActionResponse response) {
