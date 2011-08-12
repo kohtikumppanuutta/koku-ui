@@ -7,24 +7,34 @@
 	<portlet:param name="myaction" value="showNavi" />
 </portlet:renderURL>
 
+<portlet:resourceURL var="naviRenderURL" id="createNaviRenderUrl">
+</portlet:resourceURL>
+
 <%
 	/* Parses the parent path url from the portlet renderURL */
+	String defaultPath = "";
+	String currentPage = "";
+	String actionParam = "";
+	
 	int pos = naviURL.indexOf("default");
-	String defaultPath = naviURL.substring(0, pos+7);
-	
-	int pos1 = naviURL.lastIndexOf("/");
-	String currentPath = naviURL.substring(0, pos1);
-	
-	int pos2 = currentPath.lastIndexOf("/");
-	String parentPath = currentPath.substring(0, pos2);	
-	String currentPage = currentPath.substring(pos2+1);
-	
-	String actionParam = naviURL.substring(pos1);
-	
+	if(pos > -1) { // for Jboss portal
+		defaultPath = naviURL.substring(0, pos+7);
+		int pos1 = naviURL.lastIndexOf("/");
+		actionParam = naviURL.substring(pos1);
+		String currentPath = naviURL.substring(0, pos1);
+		int pos2 = currentPath.lastIndexOf("/");
+		currentPage = currentPath.substring(pos2+1);		
+	}else { // for Gatein portal
+		int pos1 = naviURL.indexOf("classic");
+		defaultPath = naviURL.substring(0, pos1+7);
+		int pos2 = naviURL.indexOf("?");
+		String currentPath = naviURL.substring(0, pos2);
+		int pos3 = currentPath.lastIndexOf("/");
+		currentPage = currentPath.substring(pos3+1);
+	}
+			
 %>
-<%-- Temporary way to determine if we are in JBoss Portal 2.7 environment.
-     Do not include JS below in EPP env for now. --%>
-<c:if test="${fn:contains(naviURL, '/default/')}">
+
 <script type="text/javascript">
 
 /*
@@ -60,7 +70,11 @@
 		else if(currentPage == 'NewRequest')
 			jQuery("#req_new").css("font-weight", "bold");
 		else if(currentPage == 'ValidRequest')
-			jQuery("#req_valid_request").css("font-weight", "bold");		
+			jQuery("#req_valid_request").css("font-weight", "bold");
+		else if(currentPage == 'NewAppointment')
+			jQuery("#app_new").css("font-weight", "bold");
+		else if(currentPage == 'NewKindergarten')
+			jQuery("#kid_new").css("font-weight", "bold");
 	}
 	
 	/**
@@ -106,24 +120,25 @@
 		else
 			jQuery('#archive_inbox_num').html("");
 	}
-	
-	function getMessage(naviType) {
-		
-		if(naviType == 'new') {
-			var url = "<%= defaultPath %>" + "/Message/NewMessage" + "<%= actionParam %>" + '&naviType=' + naviType;;
-		}else {
-			var url = "<%= defaultPath %>" + "/Message" + "<%= actionParam %>" + '&naviType=' + naviType;
-		}
-			
-		window.location = url;
-	}
-	
+	<%  //for jboss portal
+	if(defaultPath.contains("default")) { %>
 	function navigateToPage(naviType) {		
 		var url = "<%= defaultPath %>" + "/Message" + "<%= actionParam %>" + '&naviType=' + naviType;	
 		window.location = url;
 	}
-	
-	
+	<%}else{ // for gatein portal %>
+	function navigateToPage(naviType) {
+		var url = "<%= naviRenderURL %>";		
+		jQuery.post(url, {'newNaviType':naviType}, function(data) {
+			var obj = eval('(' + data + ')');
+			var json = obj.response;
+			var renderUrl = json["renderUrl"];
+			var temp = renderUrl.split("?");
+			var naviUrl = "<%= defaultPath %>" + "/Message?" + temp[1];
+			window.location = naviUrl;
+		});		
+	}
+	<%}%>
 	/**
 	 * Show/hide search user interface
 	 */
@@ -133,7 +148,7 @@
 	}
 
 </script>
-</c:if>
+
 
 <div id="koku-navigation">
 	<a href="#"><img src="<%= request.getContextPath() %>/images/kklogo.jpg" width="189"
@@ -156,33 +171,44 @@
 					</ul>
 				</li>
 			</ul></li>
-		<!-- For citizen -->
+		<!-- For citizen in Jboss portal-->
+		<c:if test="${fn:contains(naviURL, '/default/')}">
 		<li><a href="#">Pyynnöt</a>
 			<ul class="child">
 				<li id="req_valid_request"><a href="<%= defaultPath %>/Message/ValidRequest">Voimassaolevat</a></li>
 				<li><a href="#">Vanhentuneet</a></li>
 			</ul></li>
-		<!-- For employee -->
-		<li><a href="#">Pyynnöt (Työntekijä)</a>
+		</c:if>
+		<!-- For employee in Gatein portal -->
+		<c:if test="${fn:contains(naviURL, '/classic/')}">
+		<li><a href="#">Pyynnöt</a>
 			<ul class="child">
 				<li id="req_new"><a href="<%= defaultPath %>/Message/NewRequest">Uudet</a></li>
 				<li id="req_valid"><a href="javascript:void(0)" onclick="navigateToPage('req_valid')">Voimassaolevat</a></li>
 				<li><a href="#">Vanhentuneet</a></li>
 			</ul></li>
-		<!-- For citizen -->
+		</c:if>
+		<!-- For citizen in Jboss portal-->
+		<c:if test="${fn:contains(naviURL, '/default/')}">
 		<li><a href="#">Tapaaminen</a>
 			<ul class="child">
 				<li id="app_inbox_citizen"><a href="javascript:void(0)" onclick="navigateToPage('app_inbox_citizen')">Saapuneet</a></li>
 				<li id="app_response_citizen"><a href="javascript:void(0)" onclick="navigateToPage('app_response_citizen')">Vastattu</a></li>
 			</ul></li>
-		<!-- For employee -->
-		<li><a href="#">Tapaaminen (Työntekijä)</a>
+		<li><a href="#">Päivähoitohakemus</a>
 			<ul class="child">
-				<li><a href="<%= defaultPath %>/Message/NewAppointment">Uudet</a></li>
+				<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Uudet</a></li>
+			</ul></li>
+		</c:if>
+		<!-- For employee in Gatein portal-->
+		<c:if test="${fn:contains(naviURL, '/classic/')}">
+		<li><a href="#">Tapaaminen</a>
+			<ul class="child">
+				<li id="app_new"><a href="<%= defaultPath %>/Message/NewAppointment">Uudet</a></li>
 				<li id="app_inbox_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_inbox_employee')">Saapuneet</a></li>
 				<li id="app_response_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_response_employee')">Vastattu</a></li>
 			</ul></li>
-						
+		</c:if>				
 		<li><a href="#">Asiointipalvelut</a>
 			<ul class="child">
 				<li><a href="#">Palveluhakemukset</a></li>
