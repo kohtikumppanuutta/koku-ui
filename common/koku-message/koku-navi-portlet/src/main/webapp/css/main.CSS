@@ -72,3 +72,6 @@ li {
 .message_num {
 	font-weight:bold;
 }
+
+/* used for Gatein mode selection View/Edit mode */
+.UIPopupCategory {z-index:2;}
