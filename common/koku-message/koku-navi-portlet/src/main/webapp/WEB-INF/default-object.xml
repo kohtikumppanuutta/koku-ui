@@ -24,8 +24,8 @@
                 </property>
             </properties>
          <window>
-            <window-name>MessageNaviWindow</window-name>
-            <instance-ref>MessageNaviInstance</instance-ref>
+            <window-name>MessageNavigationWindow</window-name>
+            <instance-ref>MessageNavigationInstance</instance-ref>
             <region>left</region>
             <height>0</height>
          </window>

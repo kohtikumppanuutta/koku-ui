@@ -6,7 +6,7 @@
 
 	<portlet>
 		<description>Portlet providing message navigation</description>
-		<portlet-name>messageNavi</portlet-name>
+		<portlet-name>messageNavigation</portlet-name>
 		<display-name>Message Navigation Portlet</display-name>
 		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
 		<supports>

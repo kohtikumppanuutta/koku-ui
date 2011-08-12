@@ -2,8 +2,8 @@
 <deployments>
    <deployment>
       <instance>
-         <instance-id>MessageNaviInstance</instance-id>
-         <portlet-ref>messageNavi</portlet-ref>
+         <instance-id>MessageNavigationInstance</instance-id>
+         <portlet-ref>messageNavigation</portlet-ref>
       </instance>
    </deployment>
 </deployments>

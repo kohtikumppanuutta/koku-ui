@@ -4,8 +4,18 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
 	version="2.4">
 
-	<display-name>Message Navigation Portlet</display-name>
+	<display-name>koku-navi-portlet</display-name>
+	<!-- This part is only for gatein skin, it must be quoted for jboss portal  -->
+<!-- 	<filter>
+		<filter-name>ResourceRequestFilter</filter-name>
+		<filter-class>org.exoplatform.portal.application.ResourceRequestFilter</filter-class>
+	</filter>
 
+	<filter-mapping>
+		<filter-name>ResourceRequestFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping> -->
+	<!-- For gatein skin ends -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
