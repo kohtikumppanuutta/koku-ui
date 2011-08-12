@@ -1,4 +1,3 @@
-
 <definitions name='KokuAppointmentService' targetNamespace='http://soa.av.koku.arcusys.fi/'
 	xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:ns1='http://soa.kv.koku.arcusys.fi/'
 	xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://soa.av.koku.arcusys.fi/'

@@ -1,0 +1,228 @@
+<definitions name='KokuLooraSuostumusService'
+	targetNamespace='http://soa.tiva.koku.arcusys.fi/' xmlns='http://schemas.xmlsoap.org/wsdl/'
+	xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://soa.tiva.koku.arcusys.fi/'
+	xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+	<types>
+		<xs:schema targetNamespace='http://soa.tiva.koku.arcusys.fi/'
+			version='1.0' xmlns:tns='http://soa.tiva.koku.arcusys.fi/' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+			<xs:element name='getConsentDetails' type='tns:getConsentDetails' />
+			<xs:element name='getConsentDetailsResponse' type='tns:getConsentDetailsResponse' />
+			<xs:element name='getConsents' type='tns:getConsents' />
+			<xs:element name='getConsentsResponse' type='tns:getConsentsResponse' />
+			<xs:element name='getTotalConsents' type='tns:getTotalConsents' />
+			<xs:element name='getTotalConsentsResponse' type='tns:getTotalConsentsResponse' />
+			<xs:element name='searchConsentTemplates' type='tns:searchConsentTemplates' />
+			<xs:element name='searchConsentTemplatesResponse' type='tns:searchConsentTemplatesResponse' />
+			<xs:complexType name='getTotalConsents'>
+				<xs:sequence>
+					<xs:element minOccurs='0' name='user' type='xs:string' />
+					<xs:element minOccurs='0' name='query' type='tns:consentQuery' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='consentQuery'>
+				<xs:sequence>
+					<xs:element minOccurs='0' name='criteria' type='tns:consentCriteria' />
+					<xs:element name='maxNum' type='xs:int' />
+					<xs:element name='startNum' type='xs:int' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='consentCriteria'>
+				<xs:sequence>
+					<xs:element minOccurs='0' name='consentTemplateId' type='xs:long' />
+					<xs:element minOccurs='0' name='receipientUid' type='xs:string' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='getTotalConsentsResponse'>
+				<xs:sequence>
+					<xs:element name='return' type='xs:int' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='getConsents'>
+				<xs:sequence>
+					<xs:element minOccurs='0' name='user' type='xs:string' />
+					<xs:element minOccurs='0' name='query' type='tns:consentQuery' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='getConsentsResponse'>
+				<xs:sequence>
+					<xs:element maxOccurs='unbounded' minOccurs='0' name='return'
+						type='tns:consentSummary' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='consentSummary'>
+				<xs:complexContent>
+					<xs:extension base='tns:consentShortSummary'>
+						<xs:sequence>
+							<xs:element minOccurs='0' name='createType' type='tns:consentCreateType' />
+							<xs:element minOccurs='0' name='givenAt' type='xs:anySimpleType' />
+							<xs:element minOccurs='0' name='status' type='tns:consentStatus' />
+							<xs:element minOccurs='0' name='validTill' type='xs:anySimpleType' />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='consentShortSummary'>
+				<xs:sequence>
+					<xs:element minOccurs='0' name='anotherPermitterUid'
+						type='xs:string' />
+					<xs:element minOccurs='0' name='requestor' type='xs:string' />
+					<xs:element minOccurs='0' name='templateName' type='xs:string' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='searchConsentTemplates'>
+				<xs:sequence>
+					<xs:element minOccurs='0' name='searchString' type='xs:string' />
+					<xs:element name='limit' type='xs:int' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='searchConsentTemplatesResponse'>
+				<xs:sequence>
+					<xs:element maxOccurs='unbounded' minOccurs='0' name='return'
+						type='tns:consentTemplateSummary' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='consentTemplateSummary'>
+				<xs:sequence>
+					<xs:element name='consentTemplateId' type='xs:long' />
+					<xs:element minOccurs='0' name='name' type='xs:string' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='getConsentDetails'>
+				<xs:sequence>
+					<xs:element name='suostumusId' type='xs:long' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='getConsentDetailsResponse'>
+				<xs:sequence>
+					<xs:element minOccurs='0' name='return' type='tns:consentTO' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='consentTO'>
+				<xs:complexContent>
+					<xs:extension base='tns:consentSummary'>
+						<xs:sequence>
+							<xs:element maxOccurs='unbounded' minOccurs='0'
+								name='actionRequests' nillable='true' type='tns:actionRequestSummary' />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='actionRequestSummary'>
+				<xs:sequence>
+					<xs:element minOccurs='0' name='description' type='xs:string' />
+					<xs:element minOccurs='0' name='status' type='tns:actionRequestStatus' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:simpleType name='consentCreateType'>
+				<xs:restriction base='xs:string'>
+					<xs:enumeration value='Electronic' />
+					<xs:enumeration value='NonElectronic' />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name='consentStatus'>
+				<xs:restriction base='xs:string'>
+					<xs:enumeration value='Open' />
+					<xs:enumeration value='PartiallyGiven' />
+					<xs:enumeration value='Valid' />
+					<xs:enumeration value='Expired' />
+					<xs:enumeration value='Revoked' />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name='actionRequestStatus'>
+				<xs:restriction base='xs:string'>
+					<xs:enumeration value='Given' />
+					<xs:enumeration value='Declined' />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:schema>
+	</types>
+	<message name='KokuLooraSuostumusService_getConsentsResponse'>
+		<part element='tns:getConsentsResponse' name='getConsentsResponse'></part>
+	</message>
+	<message name='KokuLooraSuostumusService_getTotalConsents'>
+		<part element='tns:getTotalConsents' name='getTotalConsents'></part>
+	</message>
+	<message name='KokuLooraSuostumusService_getConsents'>
+		<part element='tns:getConsents' name='getConsents'></part>
+	</message>
+	<message name='KokuLooraSuostumusService_getConsentDetails'>
+		<part element='tns:getConsentDetails' name='getConsentDetails'></part>
+	</message>
+	<message name='KokuLooraSuostumusService_getConsentDetailsResponse'>
+		<part element='tns:getConsentDetailsResponse' name='getConsentDetailsResponse'></part>
+	</message>
+	<message name='KokuLooraSuostumusService_searchConsentTemplates'>
+		<part element='tns:searchConsentTemplates' name='searchConsentTemplates'></part>
+	</message>
+	<message name='KokuLooraSuostumusService_getTotalConsentsResponse'>
+		<part element='tns:getTotalConsentsResponse' name='getTotalConsentsResponse'></part>
+	</message>
+	<message name='KokuLooraSuostumusService_searchConsentTemplatesResponse'>
+		<part element='tns:searchConsentTemplatesResponse' name='searchConsentTemplatesResponse'></part>
+	</message>
+	<portType name='KokuLooraSuostumusService'>
+		<operation name='getConsentDetails' parameterOrder='getConsentDetails'>
+			<input message='tns:KokuLooraSuostumusService_getConsentDetails'></input>
+			<output message='tns:KokuLooraSuostumusService_getConsentDetailsResponse'></output>
+		</operation>
+		<operation name='getConsents' parameterOrder='getConsents'>
+			<input message='tns:KokuLooraSuostumusService_getConsents'></input>
+			<output message='tns:KokuLooraSuostumusService_getConsentsResponse'></output>
+		</operation>
+		<operation name='getTotalConsents' parameterOrder='getTotalConsents'>
+			<input message='tns:KokuLooraSuostumusService_getTotalConsents'></input>
+			<output message='tns:KokuLooraSuostumusService_getTotalConsentsResponse'></output>
+		</operation>
+		<operation name='searchConsentTemplates' parameterOrder='searchConsentTemplates'>
+			<input message='tns:KokuLooraSuostumusService_searchConsentTemplates'></input>
+			<output
+				message='tns:KokuLooraSuostumusService_searchConsentTemplatesResponse'></output>
+		</operation>
+	</portType>
+	<binding name='KokuLooraSuostumusServiceBinding' type='tns:KokuLooraSuostumusService'>
+		<soap:binding style='document'
+			transport='http://schemas.xmlsoap.org/soap/http' />
+		<operation name='getConsentDetails'>
+			<soap:operation soapAction='' />
+			<input>
+				<soap:body use='literal' />
+			</input>
+			<output>
+				<soap:body use='literal' />
+			</output>
+		</operation>
+		<operation name='getConsents'>
+			<soap:operation soapAction='' />
+			<input>
+				<soap:body use='literal' />
+			</input>
+			<output>
+				<soap:body use='literal' />
+			</output>
+		</operation>
+		<operation name='getTotalConsents'>
+			<soap:operation soapAction='' />
+			<input>
+				<soap:body use='literal' />
+			</input>
+			<output>
+				<soap:body use='literal' />
+			</output>
+		</operation>
+		<operation name='searchConsentTemplates'>
+			<soap:operation soapAction='' />
+			<input>
+				<soap:body use='literal' />
+			</input>
+			<output>
+				<soap:body use='literal' />
+			</output>
+		</operation>
+	</binding>
+	<service name='KokuLooraSuostumusService'>
+		<port binding='tns:KokuLooraSuostumusServiceBinding' name='KokuLooraSuostumusServicePort'>
+			<soap:address
+				location='http://gatein.intra.arcusys.fi:8080/tiva-model-0.1-SNAPSHOT/KokuLooraSuostumusServiceImpl' />
+		</port>
+	</service>
+</definitions>
