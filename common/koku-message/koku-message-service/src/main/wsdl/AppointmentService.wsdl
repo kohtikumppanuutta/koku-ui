@@ -321,7 +321,7 @@
 	<service name='KokuAppointmentService'>
 		<port binding='tns:KokuAppointmentServiceBinding' name='KokuAppointmentServicePort'>
 			<soap:address
-				location='http://gatein.intra.arcusys.fi:8080/kv-model-0.1-SNAPSHOT/KokuAppointmentServiceImpl' />
+				location='http://127.0.0.1:8180/kv-model-0.1-SNAPSHOT/KokuAppointmentServiceImpl' />
 		</port>
 	</service>
 </definitions>

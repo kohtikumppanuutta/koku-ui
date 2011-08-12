@@ -173,7 +173,7 @@
 	<service name='KokuRequestService'>
 		<port binding='tns:KokuRequestServiceBinding' name='KokuRequestServicePort'>
 			<soap:address
-				location='http://gatein.intra.arcusys.fi:8080/kv-model-0.1-SNAPSHOT/KokuRequestServiceImpl' />
+				location='http://127.0.0.1:8180/kv-model-0.1-SNAPSHOT/KokuRequestServiceImpl' />
 		</port>
 	</service>
 </definitions>
