@@ -44,5 +44,6 @@
 		<module>koku-message-portlet</module>
 		<module>koku-message-service</module>
 		<module>koku-navi-portlet</module>
+		<module>koku-layout-portlet</module>
 	</modules>
 </project>
