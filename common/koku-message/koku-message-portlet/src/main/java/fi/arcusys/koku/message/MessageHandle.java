@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
 import fi.arcusys.koku.messageservice.Criteria;
 import fi.arcusys.koku.messageservice.Fields;
 import fi.arcusys.koku.messageservice.FolderType;

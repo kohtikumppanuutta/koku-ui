@@ -1,6 +1,7 @@
 package fi.arcusys.koku.web;
 
 import java.util.Locale;
+
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.AbstractCachingViewResolver;
 

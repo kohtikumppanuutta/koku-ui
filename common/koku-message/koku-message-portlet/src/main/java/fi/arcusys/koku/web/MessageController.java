@@ -72,7 +72,7 @@ public class MessageController {
 	}
 
 	/**
-	 * Check user logged in or not
+	 * Check user logged in or not, and put user info to session
 	 * 
 	 * @param request
 	 * @return true if user is login, otherwise false
@@ -84,17 +84,11 @@ public class MessageController {
 			userid = request.getRemoteUser();
 
 			if (userid != null) { // user is logged in
-				if(userid.equals("root")) // for gatein
-					userid = "Ville Virkamies";
+//				if(userid.equals("root")) // for gatein
+//					userid = "Ville Virkamies";
 				
 				PortletSession portletSession = request.getPortletSession();
-				String username = (String) portletSession
-						.getAttribute("USER_username");
-				
-				// not existing in session, then put it to session
-				if (username == null) { 
-					portletSession.setAttribute("USER_username", userid);
-				}
+				portletSession.setAttribute("USER_username", userid);
 			}
 
 		} catch (Exception e) {

@@ -135,22 +135,14 @@ public class AjaxController {
 				jsonModel.put("tasks", msgs);
 			}
 			
-			/*
-			int fromIndex = (msgs.size()-page*numPerPage) > 0 ?  (msgs.size()-page*numPerPage) : 0;
-			int toIndex = msgs.size() > 0 ? msgs.size()-(page-1)*numPerPage : 0;
-			List<Message> subMsgs = msgs.subList(fromIndex, toIndex);
-			*/
 			totalPages = (totalTasksNum == 0) ? 1:(int) Math.ceil((double)totalTasksNum/numPerPage);	
 			jsonModel.put("totalItems", totalTasksNum);
 			jsonModel.put("totalPages", totalPages);
-			//jsonModel.put("tasks", msgs);
 			jsonModel.put("loginStatus", "VALID");
 		}		
 		
 		return jsonModel;	
 	}
-
-
 
 	@ResourceMapping(value = "createMessageRenderUrl")
 	public String createMessageRenderUrl(
