@@ -8,10 +8,14 @@ import java.net.URLConnection;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
+import javax.portlet.PortletURL;
+import javax.portlet.ResourceResponse;
+
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 /**
@@ -123,5 +127,21 @@ public class AjaxController {
 		return num;
 	}
 
+	@ResourceMapping(value = "createNaviRenderUrl")
+	public String createNaviRenderUrl(
+			@RequestParam(value = "newNaviType") String newNaviType,
+			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
+		System.out.println("create navi render url" + newNaviType);
+		PortletURL renderUrlObj = response.createRenderURL();
+		renderUrlObj.setParameter( "myaction", "showNavi");
+		renderUrlObj.setParameter( "naviType", newNaviType);	
+		String renderUrlString = renderUrlObj.toString();
+		
+		JSONObject jsonModel = new JSONObject();
+		jsonModel.put("renderUrl", renderUrlString);
+		modelmap.addAttribute("response", jsonModel);
+		
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
 
 }
