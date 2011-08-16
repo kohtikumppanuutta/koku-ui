@@ -1,20 +1,8 @@
-<%@ taglib prefix="portlet" uri="http://java.sun.com/portlet"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ page contentType="text/html" isELIgnored="false"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-
+<%@ include file="imports.jsp" %>
 
 <portlet:renderURL var="viewChilds">
 	<portlet:param name="toiminto" value="naytaLapset" />
 </portlet:renderURL>
-
-<portlet:renderURL var="showPro">
-	<portlet:param name="toiminto" value="naytaTyontekija" />
-	<portlet:param name="lapset" value="" />
-</portlet:renderURL>
-
 
 <portlet:renderURL var="showPro">
 	<portlet:param name="toiminto" value="naytaTyontekija" />

@@ -34,7 +34,7 @@ public class KuntaTyontekijaController {
   private static Logger log = LoggerFactory.getLogger(KuntaTyontekijaController.class);
 
   @RenderMapping(params = "toiminto=naytaTyontekija")
-  public String nayta(RenderResponse response, @RequestParam("lapset") String[] childs,
+  public String nayta(RenderResponse response, @RequestParam(value = "lapset", required = false) String[] childs,
       @RequestParam(value = "haku", required = false) String haku, Model model) {
     log.info("nayta kuntatyontekija");
     model.addAttribute("lapset", toChilds(childs));

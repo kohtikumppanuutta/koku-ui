@@ -24,7 +24,9 @@ public class HuoltajaController {
   @Autowired
   @Qualifier("demoKksService")
   private DemoService demoService;
-
+ /**
+  * 
+  */
   private static Logger log = LoggerFactory.getLogger(HuoltajaController.class);
 
   @RenderMapping(params = "toiminto=naytaLapset")

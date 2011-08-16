@@ -1,11 +1,5 @@
-<%@ taglib prefix="portlet" uri="http://java.sun.com/portlet"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ page contentType="text/html" isELIgnored="false"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@page import="com.ixonos.koku.kks.utils.enums.Tietotyyppi"%>
+<%@ include file="imports.jsp" %>
 
 <c:set var="vapaa_teksti" value="<%=Tietotyyppi.VAPAA_TEKSTI%>" />
 <c:set var="monivalinta" value="<%=Tietotyyppi.MONIVALINTA%>" />
