@@ -3,9 +3,9 @@
 
 <portlet-app>
     <portlet>
-        <portlet-name>messageNavi</portlet-name>
+        <portlet-name>KKS</portlet-name>
         <header-content>
-            <link type="text/css" rel="stylesheet" href="/css/kks-style.css" />
+            <link type="text/css" rel="stylesheet" href="/css/kks.CSS" />
         </header-content>
     </portlet>
 </portlet-app>
