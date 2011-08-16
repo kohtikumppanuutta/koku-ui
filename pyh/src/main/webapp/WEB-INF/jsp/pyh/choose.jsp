@@ -1,5 +1,4 @@
-<%@ taglib prefix="portlet" uri="http://java.sun.com/portlet" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ include file="imports.jsp" %>
 
 
 

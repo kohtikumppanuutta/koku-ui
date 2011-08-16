@@ -1,8 +1,5 @@
 <%@page import="com.ixonos.koku.pyh.util.Role"%>
-<%@ taglib prefix="portlet" uri="http://java.sun.com/portlet"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ include file="imports.jsp" %>
 
 <portlet:defineObjects />
 

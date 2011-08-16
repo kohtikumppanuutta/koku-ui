@@ -1,8 +1,4 @@
-<%@page import="com.ixonos.koku.pyh.util.Role"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="portlet" uri="http://java.sun.com/portlet"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ include file="imports.jsp" %>
 
 <c:set var="CHILD" value="<%=com.ixonos.koku.pyh.util.Role.CHILD%>" />
 <c:set var="PARENT" value="<%=com.ixonos.koku.pyh.util.Role.PARENT%>" />
