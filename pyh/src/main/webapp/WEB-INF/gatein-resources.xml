@@ -7,7 +7,7 @@
         <application-name>pyh-portlet-0.0.1-SNAPSHOT</application-name>
         <portlet-name>pyh</portlet-name>
         <skin-name>Default</skin-name>
-        <css-path>/skin/pyh-style.CSS</css-path>
+        <css-path>/css/pyh.CSS</css-path>
     </portlet-skin>
 
 

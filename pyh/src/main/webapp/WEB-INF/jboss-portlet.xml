@@ -3,9 +3,9 @@
 
 <portlet-app>
     <portlet>
-        <portlet-name>messageNavi</portlet-name>
+        <portlet-name>pyh</portlet-name>
         <header-content>
-            <link type="text/css" rel="stylesheet" href="/css/pyh-style.css" />
+            <link type="text/css" rel="stylesheet" href="/css/pyh.CSS" />
         </header-content>
     </portlet>
 </portlet-app>
