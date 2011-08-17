@@ -8,6 +8,8 @@ import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -31,7 +33,11 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 @Controller
 @RequestMapping(value = "VIEW")
 public class LogArchiveController {
+  
   private static final String ARCHIVE_DATE_RENDER_PARAM = "log-archive";
+
+  private static Logger log = LoggerFactory.getLogger(LogArchiveController.class);
+    
   private ArchiveSerializer archiveSerializer = new ArchiveSerializer();
   private SimpleDateFormat dateFormat = new SimpleDateFormat(LogConstants.DATE_FORMAT);
   
@@ -77,13 +83,13 @@ public class LogArchiveController {
   @RenderMapping(params="op=startArchiveLog")
   public String renderStart(RenderRequest req, RenderResponse res, Model model) {
 
-  System.out.println("log archive render phase: archiving started");
+  log.debug("log archive render phase: archiving started");
  
     res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
 
     LogArchiveDate archivedate = null;
     if(req.getParameterValues(ARCHIVE_DATE_RENDER_PARAM) != null) {
-      System.out.println("saatiin archiveDate render param");
+      log.debug("saatiin archiveDate render param");
       
       archivedate = archiveSerializer.getFromRenderParameter(req.getParameterValues(ARCHIVE_DATE_RENDER_PARAM));
       model.addAttribute("archiveDate", archivedate.getDate());
@@ -97,7 +103,7 @@ public class LogArchiveController {
   @ActionMapping(params="op=archiveLog")
   public void doArchive(@ModelAttribute(value = "logArchiveDate") LogArchiveDate archivedate, BindingResult result,
       ActionResponse response) {
-    System.out.println("log archive action phase");
+    log.debug("log archive action phase");
    
     // TODO:
     
@@ -117,7 +123,7 @@ public class LogArchiveController {
   @ActionMapping(params="op=startArchiveLog")
   public void startArchive(@ModelAttribute(value = "logArchiveDate") LogArchiveDate archivedate, BindingResult result,
       ActionResponse response) {
-    System.out.println("log archive action phase: starting archiving");
+    log.debug("log archive action phase: starting archiving");
    
     // TODO: ADD HERE THE ACTUAL ARCHIVING COMMAND
     
@@ -134,8 +140,8 @@ public class LogArchiveController {
  
       String date = archivedate.getDate() != null ? df.format(archivedate.getDate()) : ""; 
       
-      System.out.println("getAsText alkuperäinen archivedate: "+archivedate);
-      System.out.println("getAsText: formatoitu archivedate: "+date);
+      log.debug("getAsText alkuperäinen archivedate: "+archivedate);
+      log.debug("getAsText: formatoitu archivedate: "+date);
      
       return date;
     }

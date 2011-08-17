@@ -14,18 +14,18 @@ public class LogDemoFactory {
 
   private String user = "";
   private String child = "";
-  private String event_type = "";
-  private String event_description = "";
-  private String calling_system = "";
+  private String eventType = "";
+  private String eventDescription = "";
+  private String callingSystem = "";
 
-  public static int BASIC_LOG = 0; //Tapahtumaloki
-  public static int MANIPULATION_LOG = 1; //Tapahtumalokin kasittelyloki
+  public static final int BASIC_LOG = 0; //Tapahtumaloki
+  public static final int MANIPULATION_LOG = 1; //Tapahtumalokin kasittelyloki
   
-  Random generator = new Random();
-  String[] event_types = {"luku", "kirjoitus", "poisto", "luonti"};
-  String[] manipulation_log_event_types = {"arkistointi", "luku"};
-  String[] event_descriptions = {"4v-suunnitelma", "erityisruokavalio", "vasu", "osoitetiedot", "perhetiedot"};
-  String[] calling_systems = {"KKS", "PYH", "TIVA", "KV"};
+  private Random generator = new Random();
+  private String[] eventTypes = {"luku", "kirjoitus", "poisto", "luonti"};
+  private String[] manipulationLogEventTypes = {"arkistointi", "luku"};
+  private String[] eventDescriptions = {"4v-suunnitelma", "erityisruokavalio", "vasu", "osoitetiedot", "perhetiedot"};
+  private String[] callingSystems = {"KKS", "PYH", "TIVA", "KV"};
  
   /*
    * Create a demo log entry 
@@ -39,24 +39,24 @@ public class LogDemoFactory {
     int nr = generator.nextInt(4);
  
     if(MANIPULATION_LOG==logType){
-      nr = generator.nextInt(manipulation_log_event_types.length);
-      event_type = manipulation_log_event_types[nr];
+      nr = generator.nextInt(manipulationLogEventTypes.length);
+      eventType = manipulationLogEventTypes[nr];
     }else{
-      event_type = event_types[nr];
+      eventType = eventTypes[nr];
     }
     nr = generator.nextInt(5);
-    event_description = event_descriptions[nr];
+    eventDescription = eventDescriptions[nr];
     nr = generator.nextInt(4);
-    calling_system = calling_systems[nr];
+    callingSystem = callingSystems[nr];
     
-    entry.setLog_id(""+id);
+    entry.setLogId(""+id);
           
     entry.setTimestamp(simpleDateFormat.format(new Date()));
     entry.setUser(user);
     entry.setChild(child);
-    entry.setEvent_type(event_type);
-    entry.setEvent_description(event_description);
-    entry.setCalling_system(calling_system);
+    entry.setEventType(eventType);
+    entry.setEventDescription(eventDescription);
+    entry.setCallingSystem(callingSystem);
     
     return entry;
   }

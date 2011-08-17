@@ -10,6 +10,8 @@ import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -34,6 +36,9 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 @RequestMapping(value = "VIEW")
 public class LogViewController {
   private static final String CRITERIA_RENDER_PARAM = "log-search-criteria";
+  
+  private static Logger log = LoggerFactory.getLogger(LogViewController.class);
+  
   private CriteriaSerializer criteriaSerializer = new CriteriaSerializer();
   
   @Autowired
@@ -68,9 +73,9 @@ public class LogViewController {
     }
     
     if(searchCriteria!=null){
-      System.out.println("criteria: "+searchCriteria.getFrom()+", "+searchCriteria.getTo());
+      log.debug("criteria: "+searchCriteria.getFrom()+", "+searchCriteria.getTo());
     } else{
-      System.out.println("criteria: null");
+      log.debug("criteria: null");
     }
     
     return "view";

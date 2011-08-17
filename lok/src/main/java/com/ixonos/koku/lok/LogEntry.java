@@ -6,21 +6,21 @@ package com.ixonos.koku.lok;
  */
 public class LogEntry {
   private String message;
-  private String log_id;
+  private String logId;
   private String timestamp;
   private String user;
   private String child;
-  private String event_type;
-  private String event_description;
-  private String calling_system;
+  private String eventType;
+  private String eventDescription;
+  private String callingSystem;
   
 
-  public String getLog_id() {
-    return log_id;
+  public String getLogId() {
+    return logId;
   }
 
-  public void setLog_id(String log_id) {
-    this.log_id = log_id;
+  public void setLogId(String logId) {
+    this.logId = logId;
   }
 
   public String getTimestamp() {
@@ -47,28 +47,28 @@ public class LogEntry {
     this.child = child;
   }
 
-  public String getEvent_type() {
-    return event_type;
+  public String getEventType() {
+    return eventType;
   }
 
-  public void setEvent_type(String event_type) {
-    this.event_type = event_type;
+  public void setEventType(String eventType) {
+    this.eventType = eventType;
   }
 
-  public String getEvent_description() {
-    return event_description;
+  public String getEventDescription() {
+    return eventDescription;
   }
 
-  public void setEvent_description(String event_description) {
-    this.event_description = event_description;
+  public void setEventDescription(String eventDescription) {
+    this.eventDescription = eventDescription;
   }
 
-  public String getCalling_system() {
-    return calling_system;
+  public String getCallingSystem() {
+    return callingSystem;
   }
 
-  public void setCalling_system(String calling_system) {
-    this.calling_system = calling_system;
+  public void setCallingSystem(String callingSystem) {
+    this.callingSystem = callingSystem;
   }
 
   public void setMessage(String message) {
@@ -83,8 +83,8 @@ public class LogEntry {
   }
   
   public String getMessage() {
-    message = log_id +" "+ timestamp +" "+ user +" "+ child +" "+ event_type +" "+ 
-      event_description +" "+ calling_system;
+    message = logId +" "+ timestamp +" "+ user +" "+ child +" "+ eventType +" "+ 
+      eventDescription +" "+ callingSystem;
     
     return message;
   }

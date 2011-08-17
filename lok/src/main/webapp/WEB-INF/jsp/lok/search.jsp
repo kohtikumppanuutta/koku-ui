@@ -129,9 +129,9 @@ This should be changed! --%>
 					<tr>
 						<td width=20%>${e.timestamp}</td>
 						<td width=20%>${e.user}</td>
-						<td width=20%>${e.event_type}</td>
-						<td width=40%>${e.event_description}</td>
-						<td width=20%>${e.calling_system}</td>
+						<td width=20%>${e.eventType}</td>
+						<td width=40%>${e.eventDescription}</td>
+						<td width=20%>${e.callingSystem}</td>
 					</tr>
 				</c:forEach>
 			</table>

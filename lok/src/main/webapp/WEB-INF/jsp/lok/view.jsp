@@ -109,8 +109,8 @@
 							<tr>
 								<td width=20%>${e.timestamp}</td>
 								<td width=20%>${e.user}</td>
-								<td width=20%>${e.event_type}</td>
-								<td width=40%>${e.event_description}</td>
+								<td width=20%>${e.eventType}</td>
+								<td width=40%>${e.eventDescription}</td>
 							</tr>
 						</c:forEach>
 					</table>
