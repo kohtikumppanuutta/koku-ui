@@ -1,0 +1,13 @@
+<Context>
+        <Resource
+                name="jdbc/veera"
+                auth="Container"
+                type="javax.sql.DataSource"
+                driverClassName="com.mysql.jdbc.Driver"
+                url="jdbc:mysql://localhost:3306/lportal?useUnicode=true&amp;characterEncoding=UTF-8"
+                username="oulu"
+                password="oulu"
+                maxActive="20"
+              
+        />
+</Context>

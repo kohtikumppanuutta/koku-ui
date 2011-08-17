@@ -1,0 +1,30 @@
+<Context>
+        <!-- Resource
+                name="jdbc/veera"
+                auth="Container"
+                type="javax.sql.DataSource"
+                driverClassName="com.mysql.jdbc.Driver"
+                url="jdbc:mysql://localhost/veera?useUnicode=true&amp;characterEncoding=UTF-8"
+                username="lfuser"
+                password="kfaBV63b8M"
+                maxActive="20"
+              
+        /-->
+        <Resource name="jdbc/annapura"
+                auth="Container"
+                type="javax.sql.DataSource"
+                driverClassName="org.postgresql.Driver"
+                url="jdbc:postgresql://127.0.0.1:5432/annapura"
+                username="annapura"
+                password="gnorfed543jio"
+                maxActive="5" maxIdle="-1" maxWait="10000"/>
+        
+<!--        <Resource name="jdbc/veera"-->
+<!--                auth="Container"-->
+<!--                type="javax.sql.DataSource"-->
+<!--                driverClassName="org.postgresql.Driver"-->
+<!--                url="jdbc:postgresql://127.0.0.1:5432/pttk"-->
+<!--                username="jnspttk"-->
+<!--                password="bd4kR2"-->
+<!--                maxActive="20" />-->
+</Context>

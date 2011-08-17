@@ -52,6 +52,7 @@
 		<module>kks</module>
 		<module>pyh</module>
 		<module>lok</module>
+		<module>intalio</module>
 	</modules>
 	<dependencies>
 

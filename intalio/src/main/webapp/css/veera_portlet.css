@@ -1,0 +1,77 @@
+#portlet-wrapper-palvelut_WAR_palvelutportlet .portlet-content-container{
+  padding:0px 10px 35px;
+}
+
+#search-list{
+  min-height: 400px;
+}
+
+#search-result-backurl{
+  padding: 0 0 5px 3px;
+}
+
+#search-result-title{
+  font-weight:bold;
+  padding: 15px 0 5px 3px;
+  font-size:13px;
+}
+
+.text-field{ 
+  margin-top: 10px;
+}
+
+div.search_bar{
+  margin-bottom:10px;
+}
+
+.btn_lisaa_linkki {
+	display: inline;	
+}
+
+.btn_luo_kansio {
+	display: inline;	
+}
+
+.veera_form_window_header {
+	height: 40px;
+}
+
+.veera_form_window_header .form_help_link {
+	float: right;
+	margin: 0 20px 0 0;
+}
+
+.xforms_container_iframe {
+	width: 100%;
+	height: 1500px;
+}
+
+.breadcrumbs {
+	display: inline;
+}
+
+#veeraCategoryListLeft {
+	float: left;
+}
+
+#veeraCategoryListRight {
+	float: right;
+}
+
+#p_p_id_cmsticket_WAR_cmsticketportlet_ div.portlet { 
+	margin-top:0px !important;
+}
+
+#p_p_id_cmsticket_WAR_cmsticketportlet_ div.portlet-content-container {
+	padding-top: 0px !important;
+}
+
+.categoryInfo {
+    background: transparent url(../images/info_icon.png) top left no-repeat;
+    padding-left: 20px;
+    cursor: pointer;
+}
+
+.veeraCategoryTable {
+	width: 100%;
+}
