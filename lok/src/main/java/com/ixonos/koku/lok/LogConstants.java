@@ -7,7 +7,7 @@ import java.util.Locale;
  * 
  * @author aspluma
  */
-public class LogConstants {
+public final class LogConstants {
   public static final String DATE_FORMAT = "yyyy-MM-dd";
   public static final Locale LOCALE_FI = new Locale("fi");
 

@@ -134,7 +134,7 @@ public class LogArchiveController {
     
   private static class ArchiveSerializer{
     
-    SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
+    private SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
     
     public String getAsText(LogArchiveDate archivedate){
  

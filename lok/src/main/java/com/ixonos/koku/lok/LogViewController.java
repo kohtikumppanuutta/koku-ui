@@ -93,6 +93,11 @@ public class LogViewController {
   }
   
   private List<LogEntry> doSearchEntries(LogSearchCriteria searchCriteria) {
+    
+    if(searchCriteria!=null){
+      log.debug("searchCriteria="+searchCriteria.toString());
+    }
+    
     List<LogEntry> r = null;
     LogDemoFactory factory = new LogDemoFactory();
     r =  new ArrayList<LogEntry>();
@@ -100,6 +105,7 @@ public class LogViewController {
     for(int i=0;i<5; i++){
       r.add(factory.createLogEntry(i, LogDemoFactory.MANIPULATION_LOG));
     }
+    
     
     return r;
     
