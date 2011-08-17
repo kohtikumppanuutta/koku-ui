@@ -2,8 +2,8 @@
 
 
 <portlet:renderURL var="Resetoi">
-    <portlet:param name="toiminto" value="resetoiMalli" />
-    <portlet:param name="viesti" value="---" />
+    <portlet:param name="action" value="resetModel" />
+    <portlet:param name="message" value="---" />
 </portlet:renderURL>
 
 <div class="koku-kks"> 
@@ -15,7 +15,7 @@
             </form:form>
         </div>
         <div class="teksti">
-            ${viesti}
+            ${message}
         </div>
 
 
