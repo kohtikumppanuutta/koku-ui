@@ -9,6 +9,9 @@
 <portlet:resourceURL var="deleteURL" id="deleteMessage">
 </portlet:resourceURL>
 
+<portlet:resourceURL var="revokeURL" id="revokeConsent">
+</portlet:resourceURL>
+
 <portlet:renderURL var="messageURL" windowState="<%= WindowState.MAXIMIZED.toString() %>" >
 	<portlet:param name="myaction" value="showMessage" />
 </portlet:renderURL>
@@ -21,6 +24,10 @@
 	<portlet:param name="myaction" value="showAppointment" />
 </portlet:renderURL>
 
+<portlet:renderURL var="consentURL" windowState="<%= WindowState.MAXIMIZED.toString() %>" >
+	<portlet:param name="myaction" value="showConsent" />
+</portlet:renderURL>
+
 <!-- For gatein Portal -->
 <portlet:resourceURL var="messageRenderURL" id="createMessageRenderUrl">
 </portlet:resourceURL>
@@ -30,6 +37,7 @@
 
 <portlet:resourceURL var="appointmentRenderURL" id="createAppointmentRenderUrl">
 </portlet:resourceURL> 
+
 <!-- For gatein Portal ends-->
 
 <%
@@ -118,11 +126,13 @@
 	}
 
 	function presentTasks(tasks) {
-		if(pageObj.taskType == 'req_valid')
+		if(pageObj.taskType == 'req_valid') // for request
 			var taskHtml = createRequestsTable(tasks);
-		else if(pageObj.taskType.indexOf('app') == 0)
+		else if(pageObj.taskType.indexOf('app') == 0) // for appointment
 			var taskHtml = createAppoitmentsTable(tasks);
-		else 
+		else if(pageObj.taskType.indexOf('cst') == 0) // for consent
+			var taskHtml = createConsentsTable(tasks);
+		else // for message
 			var taskHtml = createTasksTable(tasks);
 		
 		jQuery('#task-manager-tasklist').html(taskHtml);
@@ -155,8 +165,8 @@
 		taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
 				+ '<td class="choose"><spring:message code="message.choose" /></td>'
-				+ '<td class="from">'+ '<strong>' + formatSender() + '</strong>' + '</td>'
-				+ '<td>' + '<strong>' + '<spring:message code="message.subject" />'+ '</strong>' + '</td>'
+				+ '<td class="from">' + formatSender() + '</td>'
+				+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
 				+ '<td class="date"><spring:message code="message.received" /></td>'
 				+ '</tr>';
 				 
@@ -193,11 +203,11 @@
 		taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
 				+ '<td class="choose"><spring:message code="message.choose" /></td>'
-				+ '<td>'+ '<strong>' + 'Subject'+ '</strong>' + '</td>'
-				+ '<td>' + '<strong>' + 'Responded'+ '</strong>' + '</td>'
-				+ '<td>' + '<strong>' + 'Missed'+ '</strong>' + '</td>'
-				+ '<td>' + '<strong>' + 'Start'+ '</strong>' + '</td>'
-				+ '<td>' + '<strong>' + 'End'+ '</strong>' + '</td>'
+				+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
+				+ '<td>' + '<spring:message code="request.responded"/>' + '</td>'
+				+ '<td>' + '<spring:message code="request.missed"/>'+ '</td>'
+				+ '<td>' + '<spring:message code="request.start"/>'+ '</td>'
+				+ '<td>' + '<spring:message code="request.end"/>'+ '</td>'
 				+ '</tr>';
 				 
 		for ( var i = 0; i < tasks.length; i++) {
@@ -235,9 +245,9 @@
 		taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
 				+ '<td class="choose"><spring:message code="message.choose" /></td>'
-				+ '<td class="from">'+ '<strong>' + formatSender() + '</strong>' + '</td>'
-				+ '<td>' + '<strong>' + '<spring:message code="message.subject" />'+ '</strong>' + '</td>'
-				+ '<td>Description</td>'
+				+ '<td class="from">' + formatSender() + '</td>'
+				+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
+				+ '<td><spring:message code="message.description" /></td>'
 				+ '</tr>';
 				 
 		for ( var i = 0; i < tasks.length; i++) {
@@ -256,6 +266,72 @@
 		}
 
 		taskHtml += '</table>';
+
+		return taskHtml;
+	}
+	
+	function createConsentsTable(tasks) {
+		var taskHtml = "";
+		var formLink = "";
+		
+		if(pageObj.taskType == "cst_assigned_citizen") {
+			taskHtml = '<table class="task-manager-table">'
+				+ '<tr class="task-manager-table trheader">'
+				+ '<td>' + '<spring:message code="consent.requester" />' + '</td>'
+				+ '<td>' + '<spring:message code="consent.templateName" />'+ '</td>'
+				+ '</tr>';
+				 
+			for ( var i = 0; i < tasks.length; i++) {
+			
+				if((i+1)%2 == 0) {
+					taskHtml += '<tr class="evenRow" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')">';	
+				}else {
+				taskHtml += '<tr onclick="showConsent(\''+ tasks[i]["consentId"] + '\')">';
+				}
+			
+				taskHtml += '<td class="messageItem">' + tasks[i]["requester"] + '</td>'
+					 	 + '<td class="messageItem">' + tasks[i]["templateName"] + '</td>'
+					 	 + '</tr>';
+			}
+
+			taskHtml += '</table>';
+			
+		}else if(pageObj.taskType == "cst_own_citizen") {
+			taskHtml = '<table class="task-manager-table">'
+				+ '<tr class="task-manager-table trheader">'
+				+ '<td class="choose"><spring:message code="message.choose" /></td>'
+				+ '<td>' + '<spring:message code="consent.requester" />' + '</td>'
+				+ '<td>' + '<spring:message code="consent.templateName" />' + '</td>'
+				+ '<td>' + '<spring:message code="consent.status" />' + '</td>'
+				+ '<td>' + '<spring:message code="consent.createType" />' + '</td>'
+				+ '<td>' + '<spring:message code="consent.givenDate" />' + '</td>'
+				+ '<td>' + '<spring:message code="consent.validDate" />' + '</td>'
+				+ '<td>' + '<spring:message code="consent.secondApprover" />' + '</td>'
+				+ '</tr>';
+				 
+			for ( var i = 0; i < tasks.length; i++) {
+			
+				if((i+1)%2 == 0) {
+					taskHtml += '<tr class="evenRow">';	
+				}else {
+				taskHtml += '<tr>';
+				}
+			
+				taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["consentId"] + '" />' + '</td>'
+						 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["requester"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["templateName"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["status"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["createType"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["assignedDate"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["validDate"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["anotherPermitterUid"] + '</td>'
+					 	 + '</tr>';
+			}
+
+			taskHtml += '</table>';
+			
+		}
+		
 
 		return taskHtml;
 	}
@@ -325,8 +401,24 @@
 			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId;				
 		}
 		
-		window.location = url;		
+		window.location = url;				
+	}
+	
+	function showConsent(consentId) {
+		var url="";
 		
+		if(pageObj.taskType == "cst_own_citizen" || pageObj.taskType == "cst_own_employee") {
+			url = "<%= consentURL %>";
+			url += "&consentId=" + consentId
+					+ "&currentPage=" + pageObj.currentPage
+					+ "&taskType=" + pageObj.taskType
+					+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
+					+ "&orderType=" + pageObj.orderType;
+		}else if(pageObj.taskType == "cst_assigned_citizen"){
+			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;			
+		}
+				
+		window.location = url;
 	}
 	
 	<%}else{ // for gatein %>
@@ -629,9 +721,13 @@
 		
 		if(pageObj.taskType == 'msg_inbox' || pageObj.taskType == 'msg_outbox')
 			pageHtml += '<li><input type="button" value="<spring:message code="page.archive"/>"  onclick="archiveMessages()" /></li>';
+		
+		if(pageObj.taskType == 'cst_own_citizen' || pageObj.taskType == 'cst_own_employee')
+			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="revokeConsents()" /></li>';
+		else
+			pageHtml += '<li><input type="button" value="<spring:message code="page.removeSelected"/>"  onclick="deleteMessages()" /></li>';
 			
-			pageHtml +='<li><input type="button" value="<spring:message code="page.removeSelected"/>"  onclick="deleteMessages()" /></li>'
-					 + '<li><a><img src="<%= request.getContextPath() %>/images/first.gif" onclick="movePage(\'first\')"/></a></li>'
+		pageHtml     += '<li><a><img src="<%= request.getContextPath() %>/images/first.gif" onclick="movePage(\'first\')"/></a></li>'
 					 + '<li><a><img src="<%= request.getContextPath() %>/images/prev.gif" onclick="movePage(\'previous\')"/></a></li>'
 					 + '<li><spring:message code="page.page"/> ' + pageObj.currentPage + '/' + pageObj.totalPages + '</li>'
 					 + '<li><a><img src="<%= request.getContextPath() %>/images/next.gif" onclick="movePage(\'next\')"/></a></li>'
@@ -675,21 +771,6 @@
 		return displayTask;
 	}
 	
-	/**
-	 * Create 'Return' button Html
-	 */
-	function createFormPage() {
-		var pageHtml = '<ul><li><input type="button" value="Return" onclick="returnPage()" /></li></ul>';
-		return pageHtml;
-	}
-	
-	/**
-	 * Return from task form page to main page
-	 */
-	function returnPage() {
-		setRefreshTimer();
-		ajaxGetTasks();
-	}
 	
 	/**
 	 * Parses the value with given parameter from page url, which is a global variable:koku_currentUrl 
@@ -752,7 +833,7 @@
 		
 		if(messageList.length == 0) return; // no message selected
 		
-		var conf = confirm("Are you sure to delete messages?");
+		var conf = confirm("<spring:message code="info.conformWarning"/>");
 		if(!conf)	return;
 		
 		var url="<%= deleteURL %>";
@@ -771,22 +852,41 @@
 		});
 	}
 	
+	/**
+	 * Revokes a list of consents selected by user
+	 */
+	function revokeConsents() {		
+		var messageList = [];		
+		jQuery('input:checkbox[name="message"]:checked').each(function(){
+		    messageList.push(jQuery(this).val());
+		});
+		
+		if(messageList.length == 0) return; // no message selected
+		
+		var conf = confirm("<spring:message code="info.conformWarning"/>");
+		if(!conf)	return;
+		
+		var url="<%= revokeURL %>";
+		
+		jQuery.post(url, {'messageList':messageList}, function(data) {
+			var obj = eval('(' + data + ')');
+			var json = obj.response;
+			var result = json["result"];
+			
+			if(result == 'OK') {
+				ajaxGetTasks();
+			}else {
+				var message = "<spring:message code="error.unLogin" />";
+				showErrorMessage(message);
+			}
+		});
+	}
 
 	/**
 	 * Show/hide search user interface
 	 */
 	function showSearchUI() {
 		jQuery('#task-manager-search').toggle('fast');
-	}
-	
-	function showAdvancedSearchUI() {
-		jQuery('#task-manager-search .basic-search').hide();
-		jQuery('#task-manager-search .advanced-search').show();
-	}
-	
-	function hideAdvancedSearchUI() {
-		jQuery('#task-manager-search .basic-search').show();
-		jQuery('#task-manager-search .advanced-search').hide();
 	}
 	
 	/**
@@ -809,16 +909,6 @@
 		return false;
 	}
 	
-	function advancedSearchTasks() {
-		var from = jQuery('input:text[name="keyword_from"]').val();
-		var to = jQuery('input:text[name="keyword_to"]').val();
-		var subject = jQuery('input:text[name="keyword_subject"]').val();
-		var content = jQuery('input:text[name="keyword_content"]').val();		
-		pageObj.keywords = [from, to, subject, content];			
-		ajaxGetTasks();
-		
-		return false;
-	}
  	/**
  	 * Reset the search result and clear the keyword
  	 */
@@ -851,24 +941,6 @@
 				</span>	
 			</form>
 		</div>
-		<!-- 
-		<span><a href="javascript:void(0)" onclick="showAdvancedSearchUI()">Advanced</a></span>
-		<div class="advanced-search">
-			<form name="searchForm" onsubmit="advancedSearchTasks(); return false;">			
-				<table class="search-table">
-					<tr><td class="search-td-1">From</td><td class="search-td-2"><input type="text" name="keyword_from" style="width:100%;" /></td>
-						<td class="search-td-1">Subject</td><td class="search-td-2"><input type="text" name="keyword_subject" style="width:100%;" /></td>
-					</tr>
-					<tr><td class="search-td-1">To</td><td class="search-td-2"><input type="text" name="keyword_to" style="width:100%;" /></td>
-						<td class="search-td-1">Content</td><td class="search-td-2"><input type="text" name="keyword_content" style="width:100%;" /></td>
-					</tr>
-				</table>		
-				<input type="submit" value="<spring:message code="message.search"/>" />
-				<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
-				<span><a href="javascript:void(0)" onclick="hideAdvancedSearchUI()">Hide search options</a></span>	
-			</form>
-		</div>
-		 -->
 	</div>
 	
 	<div id="task-manager-operation" class="task-manager-operation-part">

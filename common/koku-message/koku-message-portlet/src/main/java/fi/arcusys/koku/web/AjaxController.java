@@ -25,6 +25,8 @@ import fi.arcusys.koku.message.Message;
 import fi.arcusys.koku.message.MessageHandle;
 import fi.arcusys.koku.request.KokuRequest;
 import fi.arcusys.koku.request.RequestHandle;
+import fi.arcusys.koku.tiva.CitizenConsent;
+import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
@@ -91,6 +93,23 @@ public class AjaxController {
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
+	@ResourceMapping(value = "revokeConsent")
+	public String revokeConsent(@RequestParam(value = "messageList[]") String[] messageList,
+			ModelMap modelmap, PortletRequest request, PortletResponse response) {
+		TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();		
+		
+		for(String consentId : messageList) {
+			tivaHandle.revokeOwnConsent(consentId);
+		}
+		
+		JSONObject jsonModel = new JSONObject();
+
+		jsonModel.put("result", MessageUtil.RESPONSE_OK);
+		modelmap.addAttribute("response", jsonModel);
+		
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
+	
 	/**
 	 * Process task query and get task list from intalio server
 	 * @param taskType
@@ -108,26 +127,41 @@ public class AjaxController {
 		}else {
 			
 			int numPerPage = MessageUtil.PAGE_NUMBER;
-			int totalTasksNum;
+			int totalTasksNum = 0;
 			int totalPages;
 			
-			int first = (page-1)*numPerPage + 1;
-			int max =  page*numPerPage;
+			int first = (page-1)*numPerPage + 1; // the start index of task
+			int max =  page*numPerPage; // max amount of tasks
 			
-			if(taskType.equals("req_valid")) {
+			if(taskType.equals("req_valid")) { // for request
 				List<KokuRequest> msgs;
 				RequestHandle reqHandle = new RequestHandle();
 				msgs = reqHandle.getRequests(username, "valid", "", first, max);
 				totalTasksNum = reqHandle.getTotalRequestsNum(username, "valid");
 				jsonModel.put("tasks", msgs);
-			} else if(taskType.startsWith("app")) {
+			} else if(taskType.startsWith("app")) { // for appointment
 				List<KokuAppointment> apps;
 				AppointmentHandle appHandle = new AppointmentHandle();
 				apps = appHandle.getAppointments(username, first, max, taskType);
 				totalTasksNum = appHandle.getTotalAppointmentsNum(username, taskType);
 				jsonModel.put("tasks", apps);				
 				
-			} else {
+			} else if(taskType.startsWith("cst")) { // for consent
+				if(taskType.equals("cst_assigned_citizen")) {
+					List<CitizenConsent> csts;
+					TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
+					csts = tivaHandle.getAssignedConsents(username, first, max);
+					totalTasksNum = tivaHandle.getTotalAssignedConsents(username);
+					jsonModel.put("tasks", csts);
+				}else if(taskType.equals("cst_own_citizen")) {
+					List<CitizenConsent> csts;
+					TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
+					csts = tivaHandle.getOwnConsents(username, first, max);
+					totalTasksNum = tivaHandle.getTotalOwnConsents(username);
+					jsonModel.put("tasks", csts);
+				}	
+				
+			} else { // for message
 				MessageHandle msgHandle = new MessageHandle();
 				List<Message> msgs;
 				msgs = msgHandle.getMessages(username, taskType, keyword, field, orderType, first, max);			

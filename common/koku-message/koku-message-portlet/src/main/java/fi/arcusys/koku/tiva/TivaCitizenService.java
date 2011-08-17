@@ -33,7 +33,7 @@ public class TivaCitizenService {
 		return kks.getKokuKunpoSuostumusServicePort().getOwnConsents(user, startNum, maxNum);
 	}
 	
-	public int getTatalAssignedConsents(String user) {
+	public int getTotalAssignedConsents(String user) {
 		return kks.getKokuKunpoSuostumusServicePort().getTotalAssignedConsents(user);
 	}
 	

@@ -1,5 +1,10 @@
 package fi.arcusys.koku.message;
 
+/**
+ * Message data model
+ * @author Jinhua Chen
+ * Jun 22, 2011
+ */
 public class Message {
 	
 	private long messageId;

@@ -208,7 +208,14 @@
 				<li id="app_inbox_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_inbox_employee')">Saapuneet</a></li>
 				<li id="app_response_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_response_employee')">Vastattu</a></li>
 			</ul></li>
-		</c:if>				
+		</c:if>			
+		
+		<li><a href="#">Suostumus</a>
+			<ul class="child">
+				<li id="cst_assigned_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_assigned_citizen')">Suostumus</a></li>
+				<li id="cst_own_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_citizen')">Oma suostumukset</a></li>
+			</ul></li>
+						
 		<li><a href="#">Asiointipalvelut</a>
 			<ul class="child">
 				<li><a href="#">Palveluhakemukset</a></li>

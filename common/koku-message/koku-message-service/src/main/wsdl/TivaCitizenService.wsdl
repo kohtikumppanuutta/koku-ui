@@ -44,6 +44,7 @@
 				<xs:sequence>
 					<xs:element minOccurs='0' name='anotherPermitterUid'
 						type='xs:string' />
+					<xs:element minOccurs='0' name='consentId' type='xs:long' />
 					<xs:element minOccurs='0' name='requestor' type='xs:string' />
 					<xs:element minOccurs='0' name='templateName' type='xs:string' />
 				</xs:sequence>
@@ -76,9 +77,9 @@
 					<xs:extension base='tns:consentShortSummary'>
 						<xs:sequence>
 							<xs:element minOccurs='0' name='createType' type='tns:consentCreateType' />
-							<xs:element minOccurs='0' name='givenAt' type='xs:anySimpleType' />
+							<xs:element minOccurs='0' name='givenAt' type='xs:date' />
 							<xs:element minOccurs='0' name='status' type='tns:consentStatus' />
-							<xs:element minOccurs='0' name='validTill' type='xs:anySimpleType' />
+							<xs:element minOccurs='0' name='validTill' type='xs:date' />
 						</xs:sequence>
 					</xs:extension>
 				</xs:complexContent>

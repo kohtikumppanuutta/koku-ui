@@ -15,10 +15,26 @@ import fi.arcusys.koku.messageservice.OrderBy;
 import fi.arcusys.koku.messageservice.Type;
 import fi.arcusys.koku.util.MessageUtil;
 
+/**
+ * Handles request of messages and retrieves messages
+ * @author Jinhua Chen
+ * Jun 22, 2011
+ */
 public class MessageHandle {
 	
 	public MessageHandle() {}
 	
+	/**
+	 * Gets messages with filtering conditions
+	 * @param user username
+	 * @param messageType type of messages
+	 * @param keyword keyword string for filtering
+	 * @param field field string for filtering
+	 * @param orderType type of message order
+	 * @param start start index of message
+	 * @param max maximum amount of messages
+	 * @return a list of messages
+	 */
 	public List<Message> getMessages(String user, String messageType, String keyword, String field, String orderType, int start, int max) {
 		MessageService ms = new MessageService();
 		FolderType folderType = MessageUtil.getFolderType(messageType);
@@ -59,6 +75,14 @@ public class MessageHandle {
 		return msgList;
 	}
 	
+	/**
+	 * Gets the total amount of messages with given filtering conditions
+	 * @param user username
+	 * @param messageType type of message
+	 * @param keyword keyword string for filtering
+	 * @param field field string for filtering
+	 * @return number of messages
+	 */
 	public int getTotalMessageNum(String user, String messageType, String keyword, String field) {
 		MessageService ms = new MessageService();
 		FolderType folderType = MessageUtil.getFolderType(messageType);
@@ -69,14 +93,15 @@ public class MessageHandle {
 	}
 	
 	/**
-	 * Gets user summary messages without detailed content, and converts to the message model for web interface
-	 * @param user
-	 * @param messageType
-	 * @param keyword
-	 * @param orderType
-	 * @param start
-	 * @param max
-	 * @return
+	 * @deprecated
+	 * Gets user summary messages
+	 * @param user username 
+	 * @param messageType type of message
+	 * @param keyword keyword for filtering
+	 * @param orderType type of message order
+	 * @param start start index of message
+	 * @param max maximum amount of messages
+	 * @return a list of messages
 	 */
 	public List<Message> getMessagesOld(String user, String messageType, String keyword, String orderType, int start, int max) {
 		MessageService ms = new MessageService();
@@ -108,8 +133,8 @@ public class MessageHandle {
 	
 	/**
 	 * Gets detailed message with content
-	 * @param messageId
-	 * @return
+	 * @param messageId message id
+	 * @return detailed message
 	 */
 	public Message getMessageById(String messageId) {
 		MessageService ms = new MessageService();		
@@ -131,22 +156,19 @@ public class MessageHandle {
 	
 	/**
 	 * Sets message status to read
-	 * @param messageId
-	 * @return
+	 * @param messageId message id
 	 */
 	public void setMessageStatus(long messageId) {
 		MessageService ms = new MessageService();
-		List<Long> messageIds = new ArrayList<Long>();
-		
-		messageIds.add(messageId);
-		
+		List<Long> messageIds = new ArrayList<Long>();	
+		messageIds.add(messageId);	
 		ms.setMessageStatus(messageIds, MessageStatus.READ);
 	}
 	
 	/**
 	 * Archives messages
-	 * @param messageIds
-	 * @return
+	 * @param messageIds a list of message ids
+	 * @return operation response information
 	 */
 	public String archiveMessages(List<Long> messageIds) {		
 		MessageService ms = new MessageService();
@@ -156,8 +178,8 @@ public class MessageHandle {
 	
 	/**
 	 * Deletes messages
-	 * @param messageIds
-	 * @return
+	 * @param messageIds a list of message ids
+	 * @return operation response information
 	 */
 	public String deleteMessages(List<Long> messageIds) {		
 		MessageService ms = new MessageService();
@@ -166,12 +188,13 @@ public class MessageHandle {
 	}
 	
 	/**
+	 * @deprecated
 	 * Gets the amount of messages
-	 * @param user
-	 * @param messageType
-	 * @param keyword
-	 * @param orderType
-	 * @return
+	 * @param user username
+	 * @param messageType type of message
+	 * @param keyword keyword string for filtering
+	 * @param orderType type of message order
+	 * @return the amount of messages
 	 */
 	public int getTotalMessageNumOld(String user, String messageType, String keyword, String orderType) {
 		MessageService ms = new MessageService();
@@ -182,9 +205,9 @@ public class MessageHandle {
 	}
 	
 	/**
-	 * Formats the recipients list by presenting with string
-	 * @param recipients
-	 * @return
+	 * Formats the recipients list to be presented with string
+	 * @param recipients a list of recipients of message
+	 * @return recipient string to be presented
 	 */
 	public String formatRecipients(List<String> recipients) {
 		Iterator<String> it = recipients.iterator();
@@ -204,6 +227,12 @@ public class MessageHandle {
 		return recipientStr;
 	}
 	
+	/**
+	 * Creates filtering criteria
+	 * @param keyword
+	 * @param field
+	 * @return
+	 */
 	public Criteria createCriteria(String keyword, String field) {
 		Criteria criteria = new Criteria();
 		

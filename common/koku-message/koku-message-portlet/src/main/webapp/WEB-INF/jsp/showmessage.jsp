@@ -77,15 +77,6 @@ function returnMainPage() {
 </script>
 <div id="task-manager-wrap" class="single">
 	<div id="show-message" style="padding:12px">
-	<!-- 
-		<h3>
-		<% if(messageType.equals("1")) { %> From </h3> <c:out value="${message.sender}" /> <% }  else if(messageType.equals("2")) { %> To
-		<% } else { %> To </h3> <c:out value="${message.recipients}" /> <% } %>
-		
-		<h3>Subject</h3>
-		<c:out value="${message.subject}" />	
-		<h3>Content</h3>
- 	-->
 		<iframe id="msgFrame" name="msgFrame" style="width:100%;" frameborder="0" scrolling="no"></iframe>
 	</div>
 	<div id="task-manager-operation" class="task-manager-operation-part">
