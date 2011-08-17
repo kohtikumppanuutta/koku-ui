@@ -19,63 +19,63 @@ public class TivaCitizenServiceHandle {
 	
 	public TivaCitizenServiceHandle() {}
 	
-	public List<CitizenConsent> getAssignedConsents(String user, int startNum, int maxNum) {
+	public List<KokuConsent> getAssignedConsents(String user, int startNum, int maxNum) {
 		TivaCitizenService tcs = new TivaCitizenService();
 		List<ConsentShortSummary> consentSummary = tcs.getAssignedConsents(user, startNum, maxNum);
-		List<CitizenConsent> consentList = new ArrayList<CitizenConsent>();
-		CitizenConsent citizenConsent;		
+		List<KokuConsent> consentList = new ArrayList<KokuConsent>();
+		KokuConsent kokuConsent;		
 		Iterator<ConsentShortSummary> it = consentSummary.iterator();
 		
 		while(it.hasNext()) {
 			ConsentShortSummary consent = it.next();
-			citizenConsent = new CitizenConsent();
-			citizenConsent.setConsentId(consent.getConsentId());
-			citizenConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
-			citizenConsent.setRequester(consent.getRequestor());
-			citizenConsent.setTemplateName(consent.getTemplateName());
-			consentList.add(citizenConsent);
+			kokuConsent = new KokuConsent();
+			kokuConsent.setConsentId(consent.getConsentId());
+			kokuConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
+			kokuConsent.setRequester(consent.getRequestor());
+			kokuConsent.setTemplateName(consent.getTemplateName());
+			consentList.add(kokuConsent);
 		}
 		
 		return consentList;
 	}
 	
-	public CitizenConsent getConsentById(String consentIdStr) {
+	public KokuConsent getConsentById(String consentIdStr) {
 		long  consentId = (long) Long.parseLong(consentIdStr);
 		TivaCitizenService tcs = new TivaCitizenService();
-		CitizenConsent citizenConsent = new CitizenConsent();		
+		KokuConsent kokuConsent = new KokuConsent();		
 		ConsentTO consent = tcs.getConsentById(consentId);
-		citizenConsent.setConsentId(consent.getConsentId());
-		citizenConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
-		citizenConsent.setRequester(consent.getRequestor());
-		citizenConsent.setTemplateName(consent.getTemplateName());
-		citizenConsent.setCreateType(consent.getCreateType().toString());
-		citizenConsent.setStatus(consent.getStatus().toString());
-		citizenConsent.setAssignedDate(MessageUtil.formatTaskDate(consent.getGivenAt()));
-		citizenConsent.setValidDate(MessageUtil.formatTaskDate(consent.getValidTill()));
-		citizenConsent.setActionRequests(convertActionRequests(consent.getActionRequests()));
+		kokuConsent.setConsentId(consent.getConsentId());
+		kokuConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
+		kokuConsent.setRequester(consent.getRequestor());
+		kokuConsent.setTemplateName(consent.getTemplateName());
+		kokuConsent.setCreateType(consent.getCreateType().value());
+		kokuConsent.setStatus(consent.getStatus().toString());
+		kokuConsent.setAssignedDate(MessageUtil.formatTaskDate(consent.getGivenAt()));
+		kokuConsent.setValidDate(MessageUtil.formatTaskDate(consent.getValidTill()));
+		kokuConsent.setActionRequests(convertActionRequests(consent.getActionRequests()));
 		
-		return citizenConsent;
+		return kokuConsent;
 	}
 	
-	public List<CitizenConsent> getOwnConsents(String user, int startNum, int maxNum) {
+	public List<KokuConsent> getOwnConsents(String user, int startNum, int maxNum) {
 		TivaCitizenService tcs = new TivaCitizenService();
 		List<ConsentSummary> consentSummary = tcs.getOwnConsents(user, startNum, maxNum);
-		List<CitizenConsent> consentList = new ArrayList<CitizenConsent>();
-		CitizenConsent citizenConsent;	
+		List<KokuConsent> consentList = new ArrayList<KokuConsent>();
+		KokuConsent kokuConsent;	
 		Iterator<ConsentSummary> it = consentSummary.iterator();
 		
 		while(it.hasNext()) {
 			ConsentSummary consent = it.next();
-			citizenConsent = new CitizenConsent();
-			citizenConsent.setConsentId(consent.getConsentId());
-			citizenConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
-			citizenConsent.setRequester(consent.getRequestor());
-			citizenConsent.setTemplateName(consent.getTemplateName());
-			citizenConsent.setCreateType(consent.getCreateType().toString());
-			citizenConsent.setStatus(consent.getStatus().toString());
-			citizenConsent.setAssignedDate(MessageUtil.formatTaskDate(consent.getGivenAt()));
-			citizenConsent.setValidDate(MessageUtil.formatTaskDate(consent.getValidTill()));
-			consentList.add(citizenConsent);
+			kokuConsent = new KokuConsent();
+			kokuConsent.setConsentId(consent.getConsentId());
+			kokuConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
+			kokuConsent.setRequester(consent.getRequestor());
+			kokuConsent.setTemplateName(consent.getTemplateName());
+			kokuConsent.setCreateType(consent.getCreateType().value());
+			kokuConsent.setStatus(consent.getStatus().toString());
+			kokuConsent.setAssignedDate(MessageUtil.formatTaskDate(consent.getGivenAt()));
+			kokuConsent.setValidDate(MessageUtil.formatTaskDate(consent.getValidTill()));
+			consentList.add(kokuConsent);
 		}
 		
 		return consentList;

@@ -25,7 +25,7 @@ import fi.arcusys.koku.message.Message;
 import fi.arcusys.koku.message.MessageHandle;
 import fi.arcusys.koku.request.KokuRequest;
 import fi.arcusys.koku.request.RequestHandle;
-import fi.arcusys.koku.tiva.CitizenConsent;
+import fi.arcusys.koku.tiva.KokuConsent;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.util.MessageUtil;
 
@@ -148,13 +148,13 @@ public class AjaxController {
 				
 			} else if(taskType.startsWith("cst")) { // for consent
 				if(taskType.equals("cst_assigned_citizen")) {
-					List<CitizenConsent> csts;
+					List<KokuConsent> csts;
 					TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
 					csts = tivaHandle.getAssignedConsents(username, first, max);
 					totalTasksNum = tivaHandle.getTotalAssignedConsents(username);
 					jsonModel.put("tasks", csts);
 				}else if(taskType.equals("cst_own_citizen")) {
-					List<CitizenConsent> csts;
+					List<KokuConsent> csts;
 					TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
 					csts = tivaHandle.getOwnConsents(username, first, max);
 					totalTasksNum = tivaHandle.getTotalOwnConsents(username);

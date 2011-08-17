@@ -7,7 +7,7 @@ import java.util.List;
  * @author Jinhua Chen
  * Aug 11, 2011
  */
-public class CitizenConsent {
+public class KokuConsent {
 	 
 	private long consentId;
 	private String anotherPermitterUid;

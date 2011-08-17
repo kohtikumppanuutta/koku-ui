@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import fi.arcusys.koku.tiva.CitizenConsent;
+import fi.arcusys.koku.tiva.KokuConsent;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 
 /**
@@ -30,7 +30,7 @@ public class ShowConsentController {
 		
 	// @ModelAttribute here works as the referenceData method
 	@ModelAttribute(value = "consent")
-	public CitizenConsent model(@RequestParam String consentId,
+	public KokuConsent model(@RequestParam String consentId,
 			@RequestParam String currentPage,@RequestParam String taskType, 
 			@RequestParam String keyword, @RequestParam String orderType,
 			RenderRequest request) {
@@ -42,7 +42,7 @@ public class ShowConsentController {
 		request.getPortletSession().setAttribute("orderType", orderType, PortletSession.APPLICATION_SCOPE);
 		
 		TivaCitizenServiceHandle handle = new TivaCitizenServiceHandle();
-		CitizenConsent consent = handle.getConsentById(consentId);
+		KokuConsent consent = handle.getConsentById(consentId);
 		
 		return consent;
 	}	
