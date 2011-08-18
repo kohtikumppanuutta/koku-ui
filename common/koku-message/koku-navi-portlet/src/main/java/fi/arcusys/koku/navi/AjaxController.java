@@ -12,6 +12,8 @@ import javax.portlet.PortletURL;
 import javax.portlet.ResourceResponse;
 
 import net.sf.json.JSONObject;
+
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,7 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 @RequestMapping(value = "VIEW")
 public class AjaxController {
 
+	private Logger logger = Logger.getLogger(AjaxController.class);
 	/**
 	 * Gets the amount of new unread messages for user
 	 * @param modelmap ModelMap
@@ -51,18 +54,19 @@ public class AjaxController {
 	 */
 	public JSONObject getJsonModel(String username) {
 		JSONObject jsonModel = new JSONObject();
-		String newMessageNum = "0";
+		String newInboxMessageNum = "0";
+		String  newArchiveMessageNum = "0";
 		
 		if(username == null) {
 			jsonModel.put("loginStatus", "INVALID");
 		}else {
 			jsonModel.put("loginStatus", "VALID");
-			newMessageNum = getNewMessageNum(username, "Inbox");
-			jsonModel.put("inbox", newMessageNum);
+			newInboxMessageNum = getNewMessageNum(username, "Inbox");
+			jsonModel.put("inbox", newInboxMessageNum);
 			
-			newMessageNum = getNewMessageNum(username, "Archive_Inbox");
-			jsonModel.put("archive_inbox", newMessageNum);
-			
+			newArchiveMessageNum = getNewMessageNum(username, "Archive_Inbox");
+			jsonModel.put("archive_inbox", newArchiveMessageNum);
+						
 		}		
 		
 		return jsonModel;	
@@ -122,6 +126,7 @@ public class AjaxController {
 			num = xmlStr.substring(pos1+8, pos2);			
 			
 		} catch (Exception e) {
+			logger.info("Getting the number of new messages service failed");
 			//e.printStackTrace();
 		}
 		
