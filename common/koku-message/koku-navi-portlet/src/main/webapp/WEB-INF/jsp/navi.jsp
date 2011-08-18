@@ -75,6 +75,8 @@
 			jQuery("#app_new").css("font-weight", "bold");
 		else if(currentPage == 'NewKindergarten')
 			jQuery("#kid_new").css("font-weight", "bold");
+		else if(currentPage == 'NewConsent')
+			jQuery("#cst_new").css("font-weight", "bold");
 	}
 	
 	/**
@@ -140,7 +142,7 @@
 	}
 	<%}%>
 	/**
-	 * Show/hide search user interface
+	 * Shows/hides search user interface
 	 */
 	function showArchiveUI() {
 
@@ -215,7 +217,11 @@
 				<li id="cst_assigned_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_assigned_citizen')">Suostumus</a></li>
 				<li id="cst_own_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_citizen')">Oma suostumukset</a></li>
 			</ul></li>
-						
+		<li><a href="#">Suostumus (työntekijä)</a>
+			<ul class="child">
+				<li id="cst_new"><a href="<%= defaultPath %>/Message/NewConsent">Uudet</a></li>
+				<li id="cst_own_employee"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_employee')">Oma suostumus</a></li>
+			</ul></li>				
 		<li><a href="#">Asiointipalvelut</a>
 			<ul class="child">
 				<li><a href="#">Palveluhakemukset</a></li>
