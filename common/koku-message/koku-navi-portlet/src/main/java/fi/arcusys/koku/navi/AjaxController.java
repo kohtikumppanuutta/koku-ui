@@ -19,15 +19,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 /**
- * Hanlde ajax request and return the response with json string
+ * Hanldes ajax request and return the response with json string
  * @author Jinhua Chen
- *
+ * Jun 22, 2011
  */
 
 @Controller("ajaxController")
 @RequestMapping(value = "VIEW")
 public class AjaxController {
 
+	/**
+	 * Gets the amount of new unread messages for user
+	 * @param modelmap ModelMap
+	 * @param request PortletRequest
+	 * @param response PortletResponse
+	 * @return amount of new unread messages in Json
+	 */
 	@ResourceMapping(value = "update")
 	public String showAjax(ModelMap modelmap, PortletRequest request, PortletResponse response) {				
 		String username = request.getRemoteUser();	
@@ -36,12 +43,11 @@ public class AjaxController {
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
-	
-	
+		
 	/**
-	 * Gets the amount of new messages and puts values to model
-	 * @param username
-	 * @return
+	 * Gets the amount of new messages of Inbox and Archive_Inbox and puts values to model
+	 * @param username user that message belong to
+	 * @return Json object contains result
 	 */
 	public JSONObject getJsonModel(String username) {
 		JSONObject jsonModel = new JSONObject();
@@ -64,13 +70,12 @@ public class AjaxController {
 	}
 	
 	/**
-	 * Gets number of new messages in the given folder type
-	 * @param username
-	 * @param folderType: Inbox, Archive_Inbox
-	 * @return
+	 * Gets number of new messages in the given folder type from web services
+	 * @param username  user that message belong to
+	 * @param folderType: message folder type such as Inbox, Archive_Inbox
+	 * @return number of messages
 	 */
 	public String getNewMessageNum(String username, String folderType) {
-		//String username = "rocky";
 		String num = "0";
 		
 		try {
@@ -91,13 +96,10 @@ public class AjaxController {
 			// specify that we will send output and accept input
 			con.setDoInput(true);
 			con.setDoOutput(true);
-
 			con.setConnectTimeout(20000); // long timeout, but not infinite
 			con.setReadTimeout(20000);
-			//
 			// con.setUseCaches (false);
 			// con.setDefaultUseCaches (false);
-
 			// tell the web server what we are sending
 			con.setRequestProperty("Content-Type", "text/xml");
 
@@ -107,14 +109,14 @@ public class AjaxController {
 			writer.flush();
 			writer.close();
 			
-			BufferedReader rd = new BufferedReader(new InputStreamReader(
-					con.getInputStream()));
+			BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String xmlStr = "";
 			String line;
 			
-			while ((line = rd.readLine()) != null)
+			while ((line = rd.readLine()) != null) {
 				xmlStr += line;
-						
+			}
+									
 			int pos1 = xmlStr.indexOf("<return>");
 			int pos2 = xmlStr.indexOf("</return>");
 			
@@ -127,6 +129,14 @@ public class AjaxController {
 		return num;
 	}
 
+	/**
+	 * Creates render url mainly for gatein portal container
+	 * @param newNaviType navigation tab name
+	 * @param modelmap ModelMap
+	 * @param request PortletRequest
+	 * @param response ResourceResponse
+	 * @return render url in Json 
+	 */
 	@ResourceMapping(value = "createNaviRenderUrl")
 	public String createNaviRenderUrl(
 			@RequestParam(value = "newNaviType") String newNaviType,

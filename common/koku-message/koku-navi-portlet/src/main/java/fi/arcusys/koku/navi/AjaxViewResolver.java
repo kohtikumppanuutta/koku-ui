@@ -5,9 +5,9 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.AbstractCachingViewResolver;
 
 /**
- * Implement Ajaxview resolver for ajax view
+ * Implements Ajaxview resolver for ajax view
  * @author Jinhua Chen
- *
+ * May 11, 2011
  */
 public class AjaxViewResolver extends AbstractCachingViewResolver  {  
     

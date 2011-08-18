@@ -10,16 +10,15 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * Handle the main message page
- * 
+ * Handles the controller for navigation page
  * @author Jinhua Chen
- * 
+ * Jun 22, 2011
  */
 @Controller("naviController")
 @RequestMapping(value = "VIEW")
 public class NaviController {
 
-	// --maps the incoming portlet request to this method
+	// maps the incoming portlet request to this method, returns the default page
 	@RenderMapping
 	public String home(RenderRequest request, RenderResponse response,
 			ModelMap modelmap) {
@@ -27,7 +26,7 @@ public class NaviController {
 		return "navi";
 	}
 
-	// -- @ModelAttribute here works as the referenceData method
+	// @ModelAttribute here works as the referenceData method
 	@ModelAttribute(value = "loginStatus")
 	public String model(RenderRequest request) {
 		String user = request.getRemoteUser();
@@ -37,6 +36,14 @@ public class NaviController {
 			return "INVALID";
 	}
 	
+	/**
+	 * Shows navigation page according to portlet request and stores the navigation type
+	 * @param naviType page name in navigation
+	 * @param request RenderRequest
+	 * @param response RenderResponse
+	 * @param modelmap ModelMap
+	 * @return navigation page with navigation type
+	 */
 	@RenderMapping(params = "myaction=showNavi")
 	public String showNavi(@RequestParam(value = "naviType", required = false) String naviType,
 			RenderRequest request, RenderResponse response, ModelMap modelmap) {
