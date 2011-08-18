@@ -47,7 +47,7 @@
 <div>
 
 	<div class="kks-home">
-		<a href="${homeUrl}"><spring:message code="ui.takaisin" /> </a>
+		<a href="${homeUrl}"><spring:message code="ui.kks.back" /> </a>
 	</div>
 
 </div>
@@ -65,15 +65,15 @@
 				<span class="portlet-form-field-label">
 				
 				<c:if test="${ not empty entryvalue }">
-				    <spring:message code="ui.muokkaa.kirjausta" /> ${type.name }
+				    <spring:message code="ui.kks.modify.entry" /> ${type.name }
 				</c:if>
 				
 				<c:if test="${ empty entryvalue }">
-                    <spring:message code="ui.lisaa" /> ${type.creationDesc }
+                    <spring:message code="ui.kks.add" /> ${type.creationDesc }
                 </c:if>
 				</span>
 				<c:if test="${ not empty entryvalue }">
-				    <span class="kks-right"> <a href="${removeMultivalue}"><spring:message code="ui.poista" /> </a> </span>
+				    <span class="kks-right"> <a href="${removeMultivalue}"><spring:message code="ui.kks.remove" /> </a> </span>
 				</c:if>
 				
 				
@@ -91,8 +91,8 @@
 
 			<span class="kks-right"> 			
 			 <input type="submit" class="portlet-form-button"
-				value="<spring:message code="ui.sopimus.tallenna"/>"> <span class="kks-right" style="padding-left: 5px">
-					<a href="${homeUrl}"><spring:message code="ui.peruuta" /> </a>  </span> 
+				value="<spring:message code="ui.kks.contract.save"/>"> <span class="kks-right" style="padding-left: 5px">
+					<a href="${homeUrl}"><spring:message code="ui.kks.cancel" /> </a>  </span> 
 			</span>
 
 		</form:form>

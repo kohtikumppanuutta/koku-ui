@@ -38,18 +38,18 @@
     <div class="kks-collection">
                 <c:if test="${ sessionScope.ammattilainen && !collection.versioned }">
                     <a class="create"> <spring:message code="ui.kks.new.version" /><span
-                        class="kks-close"><spring:message code="ui.piilota" /> </span> </a>
+                        class="kks-close"><spring:message code="ui.kks.hide" /> </span> </a>
                     <div class="kks-fields" style="display: none;">
           
                         <form:form name="newVersionForm"  method="post" action="${createVersionURL}">
                                 <input type="hidden" id="id" name="id" value="${ collection.id }"/>
-                                <div class="portlet-form-field-label"><spring:message code="ui.sopimus.nimi" /></div>
+                                <div class="portlet-form-field-label"><spring:message code="ui.kks.contract.name" /></div>
                                 <div class="portlet-form-field" style="width: 98%"><input  class="portlet-form-input-field" type="text" id="name" name="name" style="width: 100%" value="${ collection.name }"/>
                                  
                                 </div>
                                 <div class="portlet-form-field-label">
                                    <span class="portlet-form-field"><input class="portlet-form-input-field" type="checkbox" id="clean" name="clean" value="true"/>
-                                    <label class="portlet-form-field-label" for="clean"> <spring:message code="ui.tyhjenna.kentat" /> </label>
+                                    <label class="portlet-form-field-label" for="clean"> <spring:message code="ui.kks.clear.fields" /> </label>
                                    </span>
                                 </div>
                                 
@@ -57,7 +57,7 @@
                                 </span>
                                 <span class="kks-right">
                                 <input type="submit" class="portlet-form-button"
-                                value="<spring:message code="ui.sopimus.luo"/>">
+                                value="<spring:message code="ui.kks.contract.create"/>">
                                 </span>
 
                         </form:form>
@@ -69,7 +69,7 @@
     
 <div class="kks-home">
 	<div class="kks-right">
-		<a href="${homeUrl}"><spring:message code="ui.takaisin" /> </a>
+		<a href="${homeUrl}"><spring:message code="ui.kks.back" /> </a>
 	</div>
 </div>
 
@@ -79,7 +79,7 @@
 <h1 class="portlet-section-header">
     ${child.name} ${collection.name} 
     <c:if test="${not collection.state.active}">
-        (<spring:message code="ui.lukittu" />)
+        (<spring:message code="ui.kks.locked" />)
     </c:if>
 
 </h1>
@@ -95,7 +95,7 @@
                             <portlet:param name="pic" value="${child.pic}" />
                             <portlet:param name="collection" value="${collection.prevVersion}" />
                         </portlet:renderURL>">
-                <strong><spring:message code="ui.edellinen.versio" />
+                <strong><spring:message code="ui.kks.prev.version" />
             </strong> </a>
         </c:if> <c:if test="${collection.versioned}">
             <c:if test="${ collection.buildFromExisting }">
@@ -108,7 +108,7 @@
                             <portlet:param name="pic" value="${child.pic}" />
                             <portlet:param name="collection" value="${collection.nextVersion}" />
                         </portlet:renderURL>">
-                <strong><spring:message code="ui.seuraava.versio" />
+                <strong><spring:message code="ui.kks.next.version" />
             </strong> </a>
         </c:if> 
 </div>
@@ -123,7 +123,7 @@
                 <c:forEach var="group" items="${collection.type.sortedGroups}">
 
                     <c:if test="${not empty group.name}">
-                        <h2 class="portlet-section-subheader">${group.name } t‰ytt‰‰</h2>
+                        <h2 class="portlet-section-subheader">${group.name } <spring:message code="ui.kks.fills" /></h2>
                     </c:if>
                     <c:if test="${not empty group.description}">
                         <div class="portlet-section-text">
@@ -142,7 +142,7 @@
                                             test="${type.multiValue && collection.state.active }">
                                             <a
                                                 href="javascript:void(0)" onclick="doSubmitNewMulti('${type.id }');">
-                                                (<spring:message code="ui.lisaa.moniarvoinen" />) </a>
+                                                (<spring:message code="ui.kks.add.multivalue" />) </a>
                                         </c:if>
                                     </span>
 
@@ -186,7 +186,7 @@
                                                                 <c:if
                                                                     test="${empty collection.multiValueEntries[type.id]}">
                                                                     <div class="portlet-section-text"><spring:message
-                                                                            code="ui.ei.merkintoja" />
+                                                                            code="ui.kks.no.entries" />
                                                                     </div>
                                                                 </c:if>
 
@@ -197,7 +197,7 @@
 	                                                                    <span class="kks-entry-value">${monivalueinen.value} <span class="kks-right">
 	                                                                    <a
 	                                                                            href="javascript:void(0)" onclick="doSubmitForm('${type.id}', '${multivalue.id }' );">
-	                                                                                <spring:message code="ui.muokkaa" /> </a>
+	                                                                                <spring:message code="ui.kks.modify" /> </a>
 	                                                                    </span> 
 	                                                                    </span>
 	                                                                    <div class="portlet-section-text">
@@ -249,7 +249,7 @@
                 <div class="kks-right">
                 <c:if test="${ collection.state.active }">
                     <input type="submit" class="portlet-form-button"
-                        value="<spring:message code="ui.tallenna.tieto"/>" >
+                        value="<spring:message code="ui.kks.save"/>" >
                 </c:if>
                 </div>
                 <div class="kks-reset-floating" />
@@ -279,11 +279,6 @@
 		});
 
 	});
-
-	function insertSelection() {
-	    var index = document.getElementById("activatetavaKentta").selectedIndex;
-	    alert("text= " + document.getElementById("activatetavaKentta").options[index].text);
-		}
 
        function addMultivalueIdToForm( multiId ) {
            $('#entry')

@@ -13,7 +13,7 @@
 <div class="portlet-section-body">
 
 		<div class="kks-home">
-			<a href="${homeUrl}"><spring:message code="ui.takaisin" /> </a>
+			<a href="${homeUrl}"><spring:message code="ui.kks.back" /> </a>
 		</div>
 		<div class="kks-reset-floating"></div>
 
@@ -22,12 +22,12 @@
 
 </br>
 
-	<div class="main">
+	<div class="kks-content">
 
 		<c:if test="${not empty searchResult }">
 
 			<c:if test="${empty searchResult.results}">
-				<spring:message code="ui.ei.kirjauksia" />
+				<spring:message code="ui.kks.no.entries" />
 			</c:if>
 			
 			<c:forEach var="result" items="${searchResult.results}">
@@ -38,7 +38,7 @@
 
 						<c:if test="${ not result.collectionActive }">
 							<span class="lukittu"> <strong> (<spring:message
-										code="ui.lukittu" />) </strong> </span>
+										code="ui.kks.locked" />) </strong> </span>
 						</c:if>
 
 						<c:if test="${ result.collectionActive }">
@@ -49,14 +49,14 @@
                             <portlet:param name="pic" value="${child.pic}" />
                             <portlet:param name="collection" value="${result.collectionId }" />
                         </portlet:renderURL>">
-									<strong><spring:message code="ui.muokkaa" /> </strong> </a> </span>
+									<spring:message code="ui.kks.modify" />  </a> </span>
 
 						</c:if>
 					</h3>
 				</c:if>
 				<c:forEach var="entry" items='${result.entries}'>
-					<div class="kks-entry">
-						<strong>${entry.type.name}</strong> <div class="read-only-text">${
+					<div class="kks-content">
+						<strong>${entry.type.name}</strong> <div class="kks-read-only-text">${
 							entry.value } (<fmt:formatDate value="${ entry.creationTime }" />
 							${ entry.recorder })</div>
 					</div>
@@ -70,19 +70,3 @@
 <br />
 
 </div>
-
-<script type="text/javascript"
-	src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
-<script type="text/javascript"
-	src="http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.4.js"></script>
-<script type="text/javascript">
-	$(document).ready(function() {
-
-		$(".tietokentta").hide();
-
-		$("a.tieto").click(function() {
-			$(this).toggleClass("active").next().slideToggle("fast");
-		});
-
-	});
-</script>

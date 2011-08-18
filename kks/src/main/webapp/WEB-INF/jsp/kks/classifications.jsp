@@ -11,7 +11,7 @@
 <div class="portlet-section-body">
 
 	<div class="kks-home">
-		<a href="${kotiUrl}"><spring:message code="ui.takaisin" /> </a>
+		<a href="${kotiUrl}"><spring:message code="ui.kks.back" /> </a>
 	</div>
 	<div class="kks-reset-floating"></div>
 

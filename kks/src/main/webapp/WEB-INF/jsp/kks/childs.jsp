@@ -10,17 +10,17 @@
 <div class="portlet-section-body">
 
 	<div class="kks-home">
-		<a href="${homeUrl}">Takaisin</a>
+		<a href="${homeUrl}"> <spring:message code="ui.kks.back" /> </a>
 	</div>
 	
 	<div class="kks-reset-floating"></div>
 
 	<div class="title">
-		<h1 class="portlet-section-header"><spring:message code="ui.kks.otsikko"/></h1>
+		<h1 class="portlet-section-header"><spring:message code="ui.kks.title"/></h1>
 		<spring:message code="ui.kks.kuvaus"/>
 		
 		<h3 class="portlet-section-subheader">
-		   <spring:message code="ui.valitse.lapsi"/>
+		   <spring:message code="ui.kks.choose.child"/>
 		 </h3>
 	</div>
 
@@ -39,7 +39,7 @@
 			</c:forEach>
 		</c:if>
 	</div>
-	<div class="spacer"></br></div>
+	<div class="kks-spacer"></br></div>
 
 </div>
 </div>

@@ -20,13 +20,13 @@
 	<div class="kks-left">
 		<div >
 			<form:form name="guardianForm" method="post" action="${viewChilds}">
-				<input type="submit" value="<spring:message code="ui.nayta.huoltaja"/>" />
+				<input type="submit" value="<spring:message code="ui.kks.show.guardian"/>" />
 			</form:form>
 		</div>
 
 		<div >
 			<form:form name="proForm" method="post" action="${showPro}">
-				<input type="submit" value="<spring:message code="ui.nayta.tyontekija"/>" />
+				<input type="submit" value="<spring:message code="ui.kks.show.employee"/>" />
 			</form:form>
 		</div>
 
@@ -36,7 +36,7 @@
 		<form:form name="classificationForm" method="post" action="${classification}">
 		
 		      
-			<input type="submit" value="<spring:message code="ui.nayta.luokittelu"/>" />
+			<input type="submit" value="<spring:message code="ui.kks.show.classification"/>" />
 		</form:form>
 	</div>
 

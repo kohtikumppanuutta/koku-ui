@@ -8,9 +8,9 @@
 		var str = document.getElementById("kks.select").value;
 
 		if (str == "") {
-			document.getElementById("kks.nimi").value = "";
+			document.getElementById("kks.name").value = "";
 		} else {
-			document.getElementById("kks.nimi").value = str.split("#", 10)[2];
+			document.getElementById("kks.name").value = str.split("#", 10)[2];
 		}
 	}
 </script>
@@ -39,25 +39,25 @@
 <div class="portlet-section-body">
 
 	<div class="kks-home">
-		<a href="${homeUrl}"><spring:message code="ui.takaisin" /> </a>
+		<a href="${homeUrl}"><spring:message code="ui.kks.back" /> </a>
 	</div>
 
     <div class="kks-reset-floating"></div>
 <div >
 	<h1 class="portlet-section-header">
 		${child.name}
-		<spring:message code="ui.kks.otsikko" />
+		<spring:message code="ui.kks.title" />
 	</h1>
 
 	<div class="table">
 		<table class="portlet-table-body" width="100%" border="0">
 			<tr>
-				<th align="kks-left"><spring:message code="ui.tietokokoelma" /></th>
-				<th align="kks-left"><spring:message code="ui.viimeisin.kirjaus" />
+				<th align="kks-left"><spring:message code="ui.kks.collection" /></th>
+				<th align="kks-left"><spring:message code="ui.kks.last.entry" />
 				</th>
 
 				<c:if test="${ sessionScope.ammattilainen }">
-					<th align="kks-left"><spring:message code="ui.kirjausten.tila" />
+					<th align="kks-left"><spring:message code="ui.kks.entry.state" />
 					</th>
 				</c:if>
 			</tr>
@@ -83,7 +83,7 @@
 							<c:if test="${ sessionScope.ammattilainen }">
 								<td><c:choose>
 										<c:when test="${collection.state.active }">
-											<spring:message code="ui.aktiivinen" />
+											<spring:message code="ui.kks.active" />
 											<span class="linkki"> <a
 												href="
 							                        <portlet:actionURL>
@@ -91,22 +91,22 @@
 							                            <portlet:param name="pic" value="${child.pic}" />
 							                            <portlet:param name="collection" value="${collection.id}" />
 							                        </portlet:actionURL>">
-													<spring:message code="ui.lukittu" />  </a> </span>
+													<spring:message code="ui.kks.lock" />  </a> </span>
 										</c:when>
 										<c:otherwise>
 											<c:if test="${ not collection.versioned }">
-												<spring:message code="ui.lukittu" />
-												<span class="linkki"> <a
+												<spring:message code="ui.kks.locked" />
+												<span class="kks-link"> <a
 													href="
 	                                                    <portlet:actionURL>
 	                                                        <portlet:param name="action" value="activate" />
 	                                                        <portlet:param name="pic" value="${child.pic}" />
 	                                                        <portlet:param name="collection" value="${collection.id}" />
 	                                                    </portlet:actionURL>">
-														<spring:message code="ui.aktiivinen" /> </a> </span>
+														<spring:message code="ui.kks.activate" /> </a> </span>
 											</c:if>
 											<c:if test="${ collection.versioned }">
-												<spring:message code="ui.versioitu" />
+												<spring:message code="ui.kks.versioned" />
 											</c:if>
 										</c:otherwise>
 									</c:choose></td>
@@ -127,7 +127,7 @@
                             <portlet:param name="classification" value="terveydentila" />
                             <portlet:param name="description" value="Terveydentila" />
                         </portlet:actionURL>">
-					<spring:message code="ui.terveydentila" />  </a> </span><br />
+					<spring:message code="ui.kks.healthcare" />  </a> </span><br />
 
 
 			<span class="kks-link"> <a
@@ -138,7 +138,7 @@
                             <portlet:param name="classification" value="mittaus" />
                             <portlet:param name="description" value="Mittaukset" />
                         </portlet:actionURL>">
-					<spring:message code="ui.mittaus" /> </a> </span><br /> <span
+					<spring:message code="ui.kks.measurement" /> </a> </span><br /> <span
 				class="kks-link"> <a
 				href="
                         <portlet:actionURL>
@@ -147,7 +147,7 @@
                             <portlet:param name="classification" value="koti" />
                             <portlet:param name="description" value="Kasvatusta ohjaavat tiedot" />
                         </portlet:actionURL>">
-					<spring:message code="ui.lapsen.kasvatus" /> </a> </span><br />
+					<spring:message code="ui.kks.child.rase" /> </a> </span><br />
 			<span class="kks-link"> <a
 				href="
                         <portlet:actionURL>
@@ -156,7 +156,7 @@
                             <portlet:param name="classification" value="tuen_tarve, huolenaiheet" />
                             <portlet:param name="description" value="Tuen tarve" />
                         </portlet:actionURL>">
-					<spring:message code="ui.tuen.tarpeet" /> </a> </span> <br />
+					<spring:message code="ui.kks.support.needs" /> </a> </span> <br />
 
 			<c:if test="${ sessionScope.ammattilainen }">
 
@@ -168,7 +168,7 @@
                             <portlet:param name="classification" value="palaute" />
                             <portlet:param name="description" value="Palautteet" />
                         </portlet:actionURL>">
-						<spring:message code="ui.palautteet" />  </a> </span>
+						<spring:message code="ui.kks.feedback" />  </a> </span>
 				<br />
 
 
@@ -180,7 +180,7 @@
                             <portlet:param name="classification" value="toive" />
                             <portlet:param name="description" value="Toiveet" />
                         </portlet:actionURL>">
-						<spring:message code="ui.toiveet" />  </a> </span>
+						<spring:message code="ui.kks.wishes" />  </a> </span>
 				<br />
 
 
@@ -194,14 +194,14 @@
 
 			<div class="collection">
 				<c:if test="${ sessionScope.ammattilainen }">
-					<a class="create"> <spring:message code="ui.sopimus.uusi" /><span
-						class="kks-close"><spring:message code="ui.piilota" /> </span> </a>
+					<a class="create"> <spring:message code="ui.kks.new.contract" /><span
+						class="kks-close"><spring:message code="ui.kks.hide" /> </span> </a>
 					<div class="kks-fields" style="display: none;">
 
 						<form:form name="creationForm" commandName="creation"
 							method="post" action="${creationActionUrl}">
    
-								<div class="portlet-form-field-label"><spring:message code="ui.sopimus.tyyppi" /></div>
+								<div class="portlet-form-field-label"><spring:message code="ui.kks.contract.type" /></div>
 
     
 								<span class="portlet-form-field"> <form:select id="kks.select"
@@ -212,7 +212,7 @@
 										<c:forEach var="creatable" items="${creatables}">
 											<c:if test="${creatable.needsVersioning}">
 												<form:option value="${creatable.asText}"
-													label="${ creatable.name } (luo uuden version)" />
+													label="${ creatable.name }" />
 											</c:if>
 											<c:if test="${not creatable.needsVersioning}">
                                             <form:option class="portlet-form-input-field" value="${creatable.asText}" label="${ creatable.name }" />
@@ -220,13 +220,13 @@
 
 										</c:forEach>
 									</form:select> </span>
-								<div class="portlet-form-field-label"><spring:message code="ui.sopimus.nimi" /></div>
-								<span class="portlet-form-field"><form:input  id="kks.nimi" path="name" size="40" />
+								<div class="portlet-form-field-label"><spring:message code="ui.kks.contract.name" /></div>
+								<span class="portlet-form-field"><form:input  id="kks.name" path="name" size="40" />
 								</span>
 							
 
 							<span class="kks-right"> <input type="submit" class="portlet-form-button"
-								value="<spring:message code="ui.sopimus.tallenna"/>"> </span>
+								value="<spring:message code="ui.kks.contract.save"/>"> </span>
 						</form:form>
 
 					</div>
