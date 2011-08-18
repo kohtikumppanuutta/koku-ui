@@ -55,7 +55,6 @@ public class AjaxController {
 		
 		if(username == null) {
 			jsonModel.put("loginStatus", "INVALID");
-			System.out.println("Invalid login!");
 		}else {
 			jsonModel.put("loginStatus", "VALID");
 			newMessageNum = getNewMessageNum(username, "Inbox");
@@ -141,7 +140,6 @@ public class AjaxController {
 	public String createNaviRenderUrl(
 			@RequestParam(value = "newNaviType") String newNaviType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
-		System.out.println("create navi render url" + newNaviType);
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( "myaction", "showNavi");
 		renderUrlObj.setParameter( "naviType", newNaviType);	

@@ -48,7 +48,6 @@ public class NaviController {
 	public String showNavi(@RequestParam(value = "naviType", required = false) String naviType,
 			RenderRequest request, RenderResponse response, ModelMap modelmap) {
 		modelmap.addAttribute("naviType", naviType);
-		System.out.println("show navi home page");
 		
 		return "navi";
 	}
