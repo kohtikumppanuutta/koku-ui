@@ -14,9 +14,9 @@ import fi.arcusys.koku.appointment.AppointmentHandle;
 import fi.arcusys.koku.appointment.KokuAppointment;
 
 /**
- * Show appointment page and store the current query information on the jsp page
+ * Shows appointment page and store the current query information on the jsp page
  * @author Jinhua Chen
- *
+ * Aug 4, 2011
  */
 @Controller("singleAppointmentController")
 @RequestMapping(value = "VIEW")
@@ -24,7 +24,7 @@ public class ShowAppointmentController {
 	
 	@RenderMapping(params = "myaction=showAppointment")
 	public String showRequest(RenderResponse response) {
-		System.out.println("show single appointment");
+
 		return "showappointment";
 	}
 		

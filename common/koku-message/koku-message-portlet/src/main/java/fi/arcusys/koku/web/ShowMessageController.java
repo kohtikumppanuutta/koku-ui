@@ -14,9 +14,9 @@ import fi.arcusys.koku.message.Message;
 import fi.arcusys.koku.message.MessageHandle;
 
 /**
- * Show task form page and store the current query information on the jsp page
+ * Shows message details page and store the current query information on the jsp page
  * @author Jinhua Chen
- *
+ * Jun 22, 2011
  */
 @Controller("singleMessageController")
 @RequestMapping(value = "VIEW")
@@ -24,7 +24,7 @@ public class ShowMessageController {
 	
 	@RenderMapping(params = "myaction=showMessage")
 	public String showForm(RenderResponse response) {
-		System.out.println("show single message");
+
 		return "showmessage";
 	}
 		

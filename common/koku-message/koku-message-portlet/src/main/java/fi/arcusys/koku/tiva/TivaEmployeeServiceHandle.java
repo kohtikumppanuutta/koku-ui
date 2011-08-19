@@ -12,6 +12,11 @@ import fi.arcusys.koku.tiva.employeeservice.ConsentTO;
 import fi.arcusys.koku.tiva.employeeservice.ConsentTemplateSummary;
 import fi.arcusys.koku.util.MessageUtil;
 
+/**
+ * 
+ * @author Jinhua Chen
+ * Aug 18, 2011
+ */
 public class TivaEmployeeServiceHandle {
 
 	public TivaEmployeeServiceHandle() {}

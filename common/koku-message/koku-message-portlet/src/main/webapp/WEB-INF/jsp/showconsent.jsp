@@ -22,8 +22,9 @@ function returnMainPage() {
 	<span class="text-bold"><spring:message code="consent.createType"/>:</span> <c:out value="${consent.createType}" /><br />
 	<span class="text-bold"><spring:message code="consent.givenDate"/>:</span> <c:out value="${consent.assignedDate}" /><br />
 	<span class="text-bold"><spring:message code="consent.validDate"/>:</span> <c:out value="${consent.validDate}" /><br />
+	<c:if test="${consent.anotherPermitterUid != '' && consent.anotherPermitterUid != null}">
 	<span class="text-bold"><spring:message code="consent.secondApprover"/>:</span> <c:out value="${consent.anotherPermitterUid}" /><br />
-	
+	</c:if>
     <h3>Action requests</h3>
     <table class="request-table">
     	<tr><td class="head"><spring:message code="consent.description"/></td><td class="head"><spring:message code="consent.status"/></td></tr>

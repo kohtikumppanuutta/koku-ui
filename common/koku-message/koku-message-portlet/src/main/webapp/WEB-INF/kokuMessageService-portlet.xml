@@ -14,7 +14,6 @@
 
 	<!-- State ajaxViewResolver at first or define order attribute -->
 	<bean id="ajaxViewResolver" class="fi.arcusys.koku.web.AjaxViewResolver"></bean>
-	<bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver"></bean>
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass" value="org.springframework.web.servlet.view.InternalResourceView" />
 		<property name="prefix" value="/WEB-INF/jsp/" />

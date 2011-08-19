@@ -13,6 +13,7 @@ import javax.portlet.WindowStateException;
 
 import net.sf.json.JSONObject;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,20 +28,35 @@ import fi.arcusys.koku.request.KokuRequest;
 import fi.arcusys.koku.request.RequestHandle;
 import fi.arcusys.koku.tiva.KokuConsent;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
+import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
- * Hanlde ajax request and return the response with json string
+ * Hanldes ajax request from portlet and returns the response with json string
  * @author Jinhua Chen
- *
+ * Jun 22, 2011
  */
 
 @Controller("ajaxController")
 @RequestMapping(value = "VIEW")
 public class AjaxController {
 
+	private Logger logger = Logger.getLogger(AjaxController.class);
+	/**
+	 * Handles portlet ajax request of tasks such as messages, requests,
+	 * appointments, consents and so on, distinguished by task type
+	 * @param page the page number
+	 * @param taskType type of requested task
+	 * @param keyword keyword for filtering
+	 * @param field field for filtering
+	 * @param orderType order of tasks
+	 * @param modelmap ModelMap
+	 * @param request PortletRequest
+	 * @param response PortletResponse
+	 * @return tasks in Json format
+	 */
 	@ResourceMapping(value = "getTask")
-	public String showAjax(@RequestParam(value = "page") int page,
+	public String getTasks(@RequestParam(value = "page") int page,
 			@RequestParam(value = "taskType") String taskType,
 			@RequestParam(value = "keyword") String keyword,
 			@RequestParam(value = "field") String field,
@@ -48,13 +64,20 @@ public class AjaxController {
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute("USER_username");
-		System.out.println("show ajax for the user " + username );	
 		JSONObject jsonModel = getJsonModel(taskType, page, keyword, field, orderType, username);
 		modelmap.addAttribute("response", jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
+	/**
+	 * Archives the messages
+	 * @param messageList a list of message ids to be archived
+	 * @param modelmap ModelMap
+	 * @param request PortletRequest
+	 * @param response PortletResponse
+	 * @return action response 'OK' or 'FAIL'
+	 */
 	@ResourceMapping(value = "archiveMessage")
 	public String doArchive(@RequestParam(value = "messageList[]") String[] messageList,
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
@@ -67,13 +90,20 @@ public class AjaxController {
 		
 		String result = msghandle.archiveMessages(messageIds); // OK or FAIL
 		JSONObject jsonModel = new JSONObject();
-
 		jsonModel.put("result", result);
 		modelmap.addAttribute("response", jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
+	/**
+	 * Deletes the messages
+	 * @param messageList a list of message ids to be deleted
+	 * @param modelmap ModelMap
+	 * @param request PortletRequest
+	 * @param response PortletResponse
+	 * @return action response 'OK' or 'FAIL'
+	 */
 	@ResourceMapping(value = "deleteMessage")
 	public String doDelete(@RequestParam(value = "messageList[]") String[] messageList,
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
@@ -86,13 +116,20 @@ public class AjaxController {
 		
 		String result = msghandle.deleteMessages(messageIds); // OK or FAIL
 		JSONObject jsonModel = new JSONObject();
-
 		jsonModel.put("result", result);
 		modelmap.addAttribute("response", jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
+	/**
+	 * Revokes the consents
+	 * @param messageList a list of message/consent ids to be deleted
+	 * @param modelmap ModelMap
+	 * @param request PortletRequest
+	 * @param response PortletResponse
+	 * @return action response 'OK' or 'FAIL'
+	 */
 	@ResourceMapping(value = "revokeConsent")
 	public String revokeConsent(@RequestParam(value = "messageList[]") String[] messageList,
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
@@ -103,7 +140,6 @@ public class AjaxController {
 		}
 		
 		JSONObject jsonModel = new JSONObject();
-
 		jsonModel.put("result", MessageUtil.RESPONSE_OK);
 		modelmap.addAttribute("response", jsonModel);
 		
@@ -111,11 +147,13 @@ public class AjaxController {
 	}
 	
 	/**
-	 * Process task query and get task list from intalio server
-	 * @param taskType
-	 * @param page
-	 * @param keyword
-	 * @param orderType
+	 * Processes tasks query and get task list from web services
+	 * @param taskType type of requested task
+	 * @param page the page number
+	 * @param keyword keyword for filtering
+	 * @param field field for filtering
+	 * @param orderType order of tasks
+	 * @param username the user to which the tasks belong 
 	 * @return task information in Json format
 	 */
 	public JSONObject getJsonModel(String taskType, int page, String keyword, String field, String orderType, String username) {
@@ -123,7 +161,7 @@ public class AjaxController {
 		
 		if(username == null) {
 			jsonModel.put("loginStatus", "INVALID");
-			System.out.println("Invalid login!");
+			logger.info("No logged in user");
 		}else {
 			
 			int numPerPage = MessageUtil.PAGE_NUMBER;
@@ -159,6 +197,12 @@ public class AjaxController {
 					csts = tivaHandle.getOwnConsents(username, first, max);
 					totalTasksNum = tivaHandle.getTotalOwnConsents(username);
 					jsonModel.put("tasks", csts);
+				}else if(taskType.equals("cst_own_employee")) {
+					List<KokuConsent> csts;
+					TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
+					csts = tivaHandle.getConsents(username, keyword, first, max);
+					totalTasksNum = tivaHandle.getTotalConsents(username, keyword);
+					jsonModel.put("tasks", csts);
 				}	
 				
 			} else { // for message
@@ -178,6 +222,19 @@ public class AjaxController {
 		return jsonModel;	
 	}
 
+	/**
+	 * Creates message render url mainly for gatein portal, and keeps the page
+	 * parameters such as page id, task type, keyword
+	 * @param messageId message id
+	 * @param currentPage current page
+	 * @param taskType request task type
+	 * @param keyword keyword
+	 * @param orderType order type
+	 * @param modelmap ModelMap
+	 * @param request PortletRequest
+	 * @param response ResourceResponse
+	 * @return Message render url in Json format
+	 */
 	@ResourceMapping(value = "createMessageRenderUrl")
 	public String createMessageRenderUrl(
 			@RequestParam(value = "messageId") String messageId,
@@ -196,8 +253,7 @@ public class AjaxController {
 		try {
 			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
 		} catch (WindowStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Create message render url failed");
 		}
 		String renderUrlString = renderUrlObj.toString();
 		
@@ -208,6 +264,19 @@ public class AjaxController {
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
+	/**
+	 * Creates request render url mainly for gatein portal, and keeps the page
+	 * parameters such as page id, task type, keyword
+	 * @param requestId request id
+	 * @param currentPage current page
+	 * @param taskType request task type
+	 * @param keyword keyword
+	 * @param orderType order type
+	 * @param modelmap ModelMap
+	 * @param request PortletRequest
+	 * @param response ResourceResponse
+	 * @return Request render url in Json format
+	 */
 	@ResourceMapping(value = "createRequestRenderUrl")
 	public String createRequestRenderUrl(
 			@RequestParam(value = "requestId") String requestId,
@@ -226,8 +295,7 @@ public class AjaxController {
 		try {
 			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
 		} catch (WindowStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Create request render url failed");
 		}
 		String renderUrlString = renderUrlObj.toString();
 		
@@ -238,6 +306,19 @@ public class AjaxController {
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
+	/**
+	 * Creates appointment render url mainly for gatein portal, and keeps the page
+	 * parameters such as page id, task type, keyword
+	 * @param appointmentId appointment id
+	 * @param currentPage current page
+	 * @param taskType request task type
+	 * @param keyword keyword
+	 * @param orderType order type
+	 * @param modelmap ModelMap
+	 * @param request PortletRequest
+	 * @param response ResourceResponse
+	 * @return Appointment render url in Json format
+	 */
 	@ResourceMapping(value = "createAppointmentRenderUrl")
 	public String createAppointmentRenderUrl(
 			@RequestParam(value = "appointmentId") String appointmentId,
@@ -257,8 +338,7 @@ public class AjaxController {
 		try {
 			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
 		} catch (WindowStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Create appointment render url failed");
 		}
 		String renderUrlString = renderUrlObj.toString();
 		

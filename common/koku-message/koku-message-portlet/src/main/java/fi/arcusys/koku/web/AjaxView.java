@@ -13,9 +13,9 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.web.servlet.view.AbstractView;
 
 /**
- * Implement ajax view for ajax response in json format
+ * Implements ajax view for ajax response in json format
  * @author Jinhua Chen
- *
+ * May 11, 2011
  */
 public class AjaxView extends AbstractView {
 

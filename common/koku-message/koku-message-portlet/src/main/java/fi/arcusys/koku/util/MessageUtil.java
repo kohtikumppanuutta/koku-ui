@@ -8,6 +8,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import fi.arcusys.koku.messageservice.FolderType;
 
+/**
+ * Utilities used in the message portlet
+ * @author Jinhua Chen
+ * Aug 4, 2011
+ */
 public class MessageUtil {
 
 	private MessageUtil() {
@@ -62,7 +67,7 @@ public class MessageUtil {
 	}
 
 	/**
-	 * Format the date with given format and Helsinki timezone
+	 * Formats the date with given format and Helsinki timezone
 	 * @param xmlGregorianCalendar
 	 * @return formatted date string
 	 */	
@@ -80,6 +85,12 @@ public class MessageUtil {
 		}
 	}
 
+	/**
+	 * Formats the date with given format with given format string
+	 * @param xmlGregorianCalendar
+	 * @param formatString
+	 * @return formatted date string
+	 */
 	public static String formatDateByString(XMLGregorianCalendar xmlGregorianCalendar, String formatString) {
 		
 		if(xmlGregorianCalendar != null ) {

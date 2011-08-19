@@ -2,17 +2,15 @@ package fi.arcusys.koku.web;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import fi.arcusys.koku.request.KokuRequest;
@@ -22,27 +20,16 @@ import fi.arcusys.koku.requestservice.Question;
 import fi.arcusys.koku.requestservice.Response;
 
 /**
- * Show task form page and store the current query information on the jsp page
- * 
+ * Generates csv file containing response summary information
  * @author Jinhua Chen
- * 
+ * Aug 4, 2011
  */
 @Controller("exportFileController")
 @RequestMapping(value = "VIEW")
 public class ExportFileController {
 
-	@ResourceMapping(value = "exportFileOld")
-	public ModelAndView download_old(@RequestParam(value = "newRequestId") String requestId) {
-
-		RequestHandle reqhandle = new RequestHandle();
-		KokuRequest req = reqhandle.getKokuRequestById(requestId);
-		Map map = new HashMap();
-		map.put("kokuRequest", req);
-
-		return new ModelAndView("downloadView", map);
-
-	}
-
+	private Logger logger = Logger.getLogger(ExportFileController.class);
+	
 	@ResourceMapping(value = "exportFile")
 	public void download(@RequestParam(value = "newRequestId") String requestId,
 			ResourceRequest resourceRequest, ResourceResponse response) {
@@ -104,8 +91,7 @@ public class ExportFileController {
 				writer.close();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Generate csv file failed");
 		}
 	}
 	

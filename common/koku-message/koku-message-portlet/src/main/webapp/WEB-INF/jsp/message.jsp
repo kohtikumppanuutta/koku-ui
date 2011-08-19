@@ -330,6 +330,38 @@
 
 			taskHtml += '</table>';
 			
+		}else if(pageObj.taskType == "cst_own_employee") {
+			taskHtml = '<table class="task-manager-table">'
+				+ '<tr class="task-manager-table trheader">'
+				+ '<td class="choose"><spring:message code="message.choose" /></td>'
+				+ '<td>' + '<spring:message code="consent.requester" />' + '</td>'
+				+ '<td>' + '<spring:message code="consent.templateName" />' + '</td>'
+				+ '<td>' + '<spring:message code="consent.status" />' + '</td>'
+				+ '<td>' + '<spring:message code="consent.createType" />' + '</td>'
+				+ '<td>' + '<spring:message code="consent.givenDate" />' + '</td>'
+				+ '<td>' + '<spring:message code="consent.validDate" />' + '</td>'
+				+ '</tr>';
+				 
+			for ( var i = 0; i < tasks.length; i++) {
+			
+				if((i+1)%2 == 0) {
+					taskHtml += '<tr class="evenRow">';	
+				}else {
+				taskHtml += '<tr>';
+				}
+			
+				taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["consentId"] + '" />' + '</td>'
+						 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["requester"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["templateName"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["status"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["createType"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["assignedDate"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["validDate"] + '</td>'
+					 	 + '</tr>';
+			}
+
+			taskHtml += '</table>';
+			
 		}
 		
 

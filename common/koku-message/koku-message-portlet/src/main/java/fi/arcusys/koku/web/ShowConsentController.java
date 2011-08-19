@@ -12,11 +12,12 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.arcusys.koku.tiva.KokuConsent;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
+import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
 
 /**
- * Show task form page and store the current query information on the jsp page
+ * Shows task form page and store the current query information on the jsp page
  * @author Jinhua Chen
- *
+ * Aug 17, 2011
  */
 @Controller("singleConsentController")
 @RequestMapping(value = "VIEW")
@@ -24,7 +25,7 @@ public class ShowConsentController {
 	
 	@RenderMapping(params = "myaction=showConsent")
 	public String showConsent(RenderResponse response) {
-		System.out.println("show single consent");
+
 		return "showconsent";
 	}
 		
@@ -41,9 +42,16 @@ public class ShowConsentController {
 		request.getPortletSession().setAttribute("keyword", keyword, PortletSession.APPLICATION_SCOPE);
 		request.getPortletSession().setAttribute("orderType", orderType, PortletSession.APPLICATION_SCOPE);
 		
-		TivaCitizenServiceHandle handle = new TivaCitizenServiceHandle();
-		KokuConsent consent = handle.getConsentById(consentId);
+		KokuConsent consent = null;
 		
+		if(taskType.equals("cst_own_citizen")) {
+			TivaCitizenServiceHandle handle = new TivaCitizenServiceHandle();
+			consent = handle.getConsentById(consentId);
+		} else if(taskType.equals("cst_own_employee")) {
+			TivaEmployeeServiceHandle handle = new TivaEmployeeServiceHandle();
+			consent = handle.getConsentDetails(consentId);
+		}
+				
 		return consent;
 	}	
 

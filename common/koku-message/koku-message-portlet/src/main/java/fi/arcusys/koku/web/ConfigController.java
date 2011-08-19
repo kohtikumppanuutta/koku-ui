@@ -8,6 +8,7 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.WindowState;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +18,13 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 /**
  * 
  * @author Jinhua Chen
- *
+ * Jun 22, 2011
  */
 @Controller("configController")
 @RequestMapping(value = "EDIT")
 public class ConfigController {
-
+	
+	private Logger logger = Logger.getLogger(ConfigController.class);
 	
 	@RenderMapping
 	public String showConfig(RenderRequest request, RenderResponse response, ModelMap modelmap) {	
@@ -47,11 +49,8 @@ public class ConfigController {
             response.setWindowState(WindowState.NORMAL);
  
         } catch (Exception e) { 
- 
-        } 
- 	 
-        
-        
+        	logger.error("Configuration edit mode failed with exception");
+        }         
 	}	
 
 }

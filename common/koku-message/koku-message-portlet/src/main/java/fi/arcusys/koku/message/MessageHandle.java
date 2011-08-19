@@ -229,9 +229,9 @@ public class MessageHandle {
 	
 	/**
 	 * Creates filtering criteria
-	 * @param keyword
-	 * @param field
-	 * @return
+	 * @param keyword keyword string
+	 * @param field filed string
+	 * @return filtering criteria
 	 */
 	public Criteria createCriteria(String keyword, String field) {
 		Criteria criteria = new Criteria();

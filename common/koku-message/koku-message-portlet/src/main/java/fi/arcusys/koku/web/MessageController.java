@@ -4,6 +4,7 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -11,24 +12,38 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 /**
- * Handle the main message page
- * 
+ * Handles the main message page
  * @author Jinhua Chen
- * 
+ * Aug 12, 2011
  */
 @Controller("messageController")
 @RequestMapping(value = "VIEW")
 public class MessageController {
 
-	// --maps the incoming portlet request to this method
+	Logger logger = Logger.getLogger(MessageController.class);
+	
+	/**
+	 * Handles the portlet request to show the default page
+	 * @param request RenderRequest
+	 * @param response RenderResponse
+	 * @param modelmap ModelMap
+	 * @return message page
+	 */
 	@RenderMapping
 	public String home(RenderRequest request, RenderResponse response,
 			ModelMap modelmap) {		
-		System.out.println("show default homepage");
+		logger.info("show default page message");
 		
 		return "message";
 	}
 
+	/**
+	 * Returns the default home page and  stores page parameters
+	 * @param request RenderRequest
+	 * @param response RenderResponse
+	 * @param modelmap ModelMap
+	 * @return home page with page parameters
+	 */
 	@RenderMapping(params = "myaction=home")
 	public String showHome(RenderRequest request, RenderResponse response,
 			ModelMap modelmap) {
@@ -48,10 +63,13 @@ public class MessageController {
 		modelmap.addAttribute("keyword", keyword);
 		modelmap.addAttribute("orderType", orderType);
 
-		System.out.println("return homepage");
 		return "message";
 	}
 
+	/**
+	 * Clears page parameters in session
+	 * @param request RenderRequest
+	 */
 	public void clearSession(RenderRequest request) {
 		PortletSession ps = request.getPortletSession();
 		ps.removeAttribute("currentPage", PortletSession.APPLICATION_SCOPE);
@@ -73,8 +91,7 @@ public class MessageController {
 
 	/**
 	 * Check user logged in or not, and put user info to session
-	 * 
-	 * @param request
+	 * @param request RenderRequest
 	 * @return true if user is login, otherwise false
 	 */
 	public boolean checkUserToken(RenderRequest request) {
@@ -83,16 +100,13 @@ public class MessageController {
 		try {
 			userid = request.getRemoteUser();
 
-			if (userid != null) { // user is logged in
-//				if(userid.equals("root")) // for gatein
-//					userid = "Ville Virkamies";
-				
+			if (userid != null) { // user is logged in				
 				PortletSession portletSession = request.getPortletSession();
 				portletSession.setAttribute("USER_username", userid);
 			}
 
 		} catch (Exception e) {
-			// e.printStackTrace();
+			logger.error("Exception when getting user id");
 		}
 
 		if (userid != null) {

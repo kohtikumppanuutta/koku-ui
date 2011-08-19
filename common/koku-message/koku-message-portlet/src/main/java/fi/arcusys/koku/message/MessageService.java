@@ -11,30 +11,52 @@ import fi.arcusys.koku.messageservice.MessageStatus;
 import fi.arcusys.koku.messageservice.MessageSummary;
 import fi.arcusys.koku.util.MessageUtil;
 
-
+/**
+ * Retrieves messages data from message web services
+ * @author Jinhua Chen
+ * Jul 29, 2011
+ */
 public class MessageService {
 	
-	public final URL MESSAGE_WSDL_LOCATION = getClass().getClassLoader().getResource("MessageService.wsdl");
+	private final URL MESSAGE_WSDL_LOCATION = getClass().getClassLoader().getResource("MessageService.wsdl");
 	private KokuMessageService_Service ms;
 	
+	/**
+	 * Constructor
+	 */
 	public MessageService() {
 		this.ms = new KokuMessageService_Service(MESSAGE_WSDL_LOCATION);
 	}
 
+	/**
+	 * 
+	 * @param user username
+	 * @param folderType Message folder type such as inbox, outbox and archive
+	 * @param messageQuery query for filtering messages
+	 * @return a list of messages
+	 */
 	public List<MessageSummary> getMessages(String user, FolderType folderType, MessageQuery messageQuery) {
 
 		return ms.getKokuMessageServicePort().getMessages(user, folderType, messageQuery);
 	}
 	
+	/**
+	 * 
+	 * @param user username
+	 * @param folderType  Message folder type such as inbox, outbox and archive
+	 * @param criteria criteria for filtering messages
+	 * @return the amount of messages
+	 */
 	public int getTotalMessageNum(String user, FolderType folderType, Criteria criteria) {
 		
 		return ms.getKokuMessageServicePort().getTotalMessages(user, folderType, criteria);
 	}
 
 	/**
+	 * @deprecated
 	 * Gets the list of message summary.
 	 * @param user Username
-	 * @param messageType Message Type such as inbox, outbox and archive
+	 * @param FolderType Message folder type such as inbox, outbox and archive
 	 * @param subQuery Basic query for the message, such as 'message_subject like %keyword%' , 'ORDER BY message_creationDate'
 	 * @param startNum The start message number that fulfill the condition
 	 * @param maxNum The maximum amount of messages that fulfill the condition
@@ -56,9 +78,10 @@ public class MessageService {
 	}
 	
 	/**
+	 * @deprecated
 	 * Gets the total message number
 	 * @param user Username
-	 * @param messageType Message Type such as inbox, outbox and archive
+	 * @param FolderType Message folder type such as inbox, outbox and archive
 	 * @param subQuery Basic query for the message, such as 'message_subject like %keyword%' , 'ORDER BY message_creationDate'
 	 * @return The number of messages
 	 */
@@ -70,7 +93,7 @@ public class MessageService {
 	/**
 	 * Gets unread messages
 	 * @param user Username
-	 * @param messageType Message Type such as inbox, outbox and archive
+	 * @param FolderType Message folder type such as inbox, outbox and archive
 	 * @return Unread messages
 	 */
 	public int getUnreadMessageNum(String user, FolderType folderType) {
@@ -96,7 +119,7 @@ public class MessageService {
 	/**
 	 * Sets the message status: read or unread
 	 * @param messageIds List of message ids
-	 * @param messageStatus
+	 * @param messageStatus message status
 	 * @return Operation status
 	 */
 	public String setMessageStatus(List<Long> messageIds, MessageStatus messageStatus) {
@@ -112,7 +135,7 @@ public class MessageService {
 	
 	/**
 	 * Archives messages
-	 * @param messageIds
+	 * @param messageIds a list of message ids
 	 * @return Operation status
 	 */
 	public String archiveMessages(List<Long> messageIds){

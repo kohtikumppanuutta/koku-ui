@@ -14,9 +14,9 @@ import fi.arcusys.koku.request.KokuRequest;
 import fi.arcusys.koku.request.RequestHandle;
 
 /**
- * Show task form page and store the current query information on the jsp page
+ * Shows request details page and store the current query information on the jsp page
  * @author Jinhua Chen
- *
+ * Jul 29, 2011
  */
 @Controller("singleRequestController")
 @RequestMapping(value = "VIEW")
@@ -24,7 +24,7 @@ public class ShowRequestController {
 	
 	@RenderMapping(params = "myaction=showRequest")
 	public String showRequest(RenderResponse response) {
-		System.out.println("show single request");
+
 		return "showrequest";
 	}
 		
