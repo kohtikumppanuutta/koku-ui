@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.portlet.PortletContext;
 import javax.portlet.PortletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.intalio.tempo.workflow.task.Task;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.portlet.mvc.AbstractController;
 
 import fi.arcusys.koku.palvelut.model.client.FormHolder;
@@ -21,8 +23,12 @@ import fi.arcusys.koku.palvelut.util.URLUtil;
  * @author Dmitry Kudinov (dmitry.kudinov@arcusys.fi)
  * Jul 21, 2011
  */
-public abstract class FormHolderController extends AbstractController {
-
+public abstract class FormHolderController
+//extends AbstractController 
+{
+	@Autowired(required = false)
+	private PortletContext portletContext;
+	
 	private static Log log = LogFactory.getLog(FormHolderController.class);
 
 	/**
@@ -61,6 +67,8 @@ public abstract class FormHolderController extends AbstractController {
 					while (scanner.hasNext()) {
 						action = action + scanner.next() + "_";
 					}
+					
+					// Does not work.. 
 					String actionString = action.substring(0, action.length());
 					String customerId = getPortletContext().getInitParameter(
 							"loggingCustomer");
@@ -72,6 +80,7 @@ public abstract class FormHolderController extends AbstractController {
 							+ actionString;
 					log.warn(message);
 				} catch (Exception e) {
+					log.error("Something went wrong" +e);
 				}
 				return new FormHolder(description, taskFormURL);
 			}
@@ -80,9 +89,12 @@ public abstract class FormHolderController extends AbstractController {
 	
 		return null;
 	}
+	
+	private PortletContext getPortletContext() {
+		return this.portletContext;
+	}
 
-	private String getFormUrlByTask(PortletRequest request, String token,
-			Task task) {
+	private String getFormUrlByTask(PortletRequest request, String token, Task task) {
 		return URLUtil.getFormURLForTask(task, token, request);
 	}
 

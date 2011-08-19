@@ -1,12 +1,10 @@
 package fi.arcusys.koku.palvelut.controller;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletPreferences;
@@ -14,24 +12,35 @@ import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.intalio.tempo.workflow.task.Task;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.ModelAndView;
-import org.springframework.web.portlet.mvc.AbstractController;
+import org.springframework.web.portlet.bind.annotation.ActionMapping;
+import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.arcusys.koku.palvelut.model.client.TaskHolder;
 import fi.arcusys.koku.palvelut.util.TaskUtil;
 import fi.arcusys.koku.palvelut.util.TokenUtil;
 import fi.arcusys.koku.palvelut.util.URLUtil;
 
-@Resource(mappedName = "configurationController")
-public class ConfigurationController extends AbstractController {
+//@Resource(mappedName = "configurationController")
+@Controller("configurationController")
+@RequestMapping(value = "EDIT")
+public class ConfigurationController { 
+//extends AbstractController {
 	
 	public static final String EDIT_ACTION = "configuration";
+	private static final Logger log = Logger.getLogger(ConfigurationController.class.getName());
+
 	
-	@Override
+	@RenderMapping
 	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {
-		System.out.println("handleRenderRequestInternal");
+		log.debug("handleRenderRequestInternal");
 		Map<String, Object> map = new HashMap<String, Object>();
 //		map.put("taskList", getTaskHolders(request));
 		ModelAndView mav = new ModelAndView(EDIT_ACTION, "model", map);
@@ -40,14 +49,14 @@ public class ConfigurationController extends AbstractController {
 		return mav;
 	}
 	
-	@Override
+	@ActionMapping
 	protected void handleActionRequestInternal(ActionRequest request,
 			ActionResponse response) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("handleActionRequestInternal");
+		log.debug("handleActionRequestInternal");
 		PortletPreferences prefs = request.getPreferences();
-		System.out.println(prefs.getValue("showOnlyChecked", null));
-		System.out.println(prefs.getValue("showOnlyForm", null));
+		log.debug("showOnlyChecked: " + prefs.getValue("showOnlyChecked", null));
+		log.debug("showOnlyForm: " + prefs.getValue("showOnlyForm", null));
 		prefs.setValue("showOnlyChecked", request.getParameter("showOnlyChecked"));
 		prefs.setValue("showOnlyForm", request.getParameter("showOnlyForm"));
 		prefs.store();
@@ -56,9 +65,9 @@ public class ConfigurationController extends AbstractController {
 	
 	private List<TaskHolder<Task>> getTaskHolders(PortletRequest request) {
 		String token = TokenUtil.getAuthenticationToken(request);
-		System.out.println(token);
+		log.debug("Token: "+token);
 		List<Task> taskList = TaskUtil.getPIPATaskList(token);
-		System.out.println(taskList.size());
+		log.debug("taskList size: "+ taskList.size());
 		List<TaskHolder<Task>> tasks = new ArrayList<TaskHolder<Task>>();
 		for (Task task : taskList) {
 			String taskFormURL = URLUtil

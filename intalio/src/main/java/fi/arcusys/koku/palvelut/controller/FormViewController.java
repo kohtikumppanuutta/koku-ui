@@ -3,33 +3,29 @@ package fi.arcusys.koku.palvelut.controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 
-import javax.annotation.Resource;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.bouncycastle.util.encoders.Base64;
-import org.intalio.tempo.workflow.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.ModelAndView;
-import org.springframework.web.portlet.mvc.AbstractController;
+import org.springframework.web.portlet.bind.annotation.ActionMapping;
+import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.arcusys.koku.palvelut.model.client.FormHolder;
 import fi.arcusys.koku.palvelut.model.client.VeeraCategoryImpl;
 import fi.arcusys.koku.palvelut.model.client.VeeraFormImpl;
 import fi.arcusys.koku.palvelut.services.VeeraServicesFacade;
 import fi.arcusys.koku.palvelut.util.MigrationUtil;
-import fi.arcusys.koku.palvelut.util.TaskUtil;
-import fi.arcusys.koku.palvelut.util.TokenUtil;
-import fi.arcusys.koku.palvelut.util.URLUtil;
 
-@Resource(mappedName = "formViewController")
+@Controller("formViewController")
+@RequestMapping(value = "VIEW")
 public class FormViewController extends FormHolderController {
 	public static final String VIEW_ACTION = "formview";
 	public static final String TYPE_PARAMETER_NAME = "type";
@@ -38,14 +34,17 @@ public class FormViewController extends FormHolderController {
 	public static final String ID2_PARAMETER_NAME = "identity2";
 	public static final String HELP_CONTENT_MODEL_NAME = "helpContent";
 	public static final String FORMHOLDER_MODEL_NAME = "formholder";
-	private static Log log = LogFactory.getLog(FormViewController.class);
+	private static Logger log = Logger.getLogger(FormViewController.class);
 	
-//	@Resource
 	@Autowired
 	private VeeraServicesFacade servicesFacade;
+		
 	
+	// FIXME: action=???
+//	@RenderMapping(params="action=???")
 	public ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {
+		log.debug("handleRenderRequestInternal");
 		FormHolder fh = null;
 		long companyId = MigrationUtil.getCompanyId(request);
 		String type = request.getParameter("type");
@@ -81,6 +80,8 @@ public class FormViewController extends FormHolderController {
 		return mav;
 	}
 
+//	@ActionMapping(params="action=???")
+	@ActionMapping
 	public void handleActionRequestInternal(ActionRequest request,
 			ActionResponse response) throws Exception {
 		log.info("action = " + request.getParameter("action"));

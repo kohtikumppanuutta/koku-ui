@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletRequest;
@@ -15,10 +14,14 @@ import javax.portlet.RenderResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.intalio.tempo.workflow.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.ModelAndView;
-import org.springframework.web.portlet.mvc.AbstractController;
+import org.springframework.web.portlet.bind.annotation.ActionMapping;
+import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.arcusys.koku.palvelut.model.client.TaskHolder;
 import fi.arcusys.koku.palvelut.model.client.VeeraCategoryImpl;
@@ -29,8 +32,11 @@ import fi.arcusys.koku.palvelut.util.TaskUtil;
 import fi.arcusys.koku.palvelut.util.TokenUtil;
 import fi.arcusys.koku.palvelut.util.URLUtil;
 
-@Resource(mappedName = "editController")
-public class EditController extends AbstractController {
+//@Resource(mappedName = "editController")
+@Controller("editController")
+@RequestMapping(value = "VIEW")
+public class EditController { 
+//extends AbstractController {
 	public static final String EDIT_TYPE = "editType";
 	public static final String SHOW_RESULTS = "showResults";
 	public static final String SHOW_ADD_CATEGORY = "addCategory";
@@ -50,14 +56,14 @@ public class EditController extends AbstractController {
 	public static final String RESULTCODE = "resultCode";
 	public static final String RESULTCODE_SUCCESS = "0";
 	public static final String RESULTCODE_FAIL = "1";
-	private static Log logger = LogFactory.getLog(EditController.class);
+	private static Logger logger = Logger.getLogger(EditController.class);
 
 //	@Resource
 	@Autowired
 	private VeeraServicesFacade servicesFacade;
-	
-	
 
+	
+	@RenderMapping(params="action=edit")
 	public ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {
 		long companyId = MigrationUtil.getCompanyId(request);
@@ -151,6 +157,7 @@ public class EditController extends AbstractController {
 		return new ModelAndView("view");
 	}
 
+	@ActionMapping(params="action=edit")
 	public void handleActionRequestInternal(ActionRequest request,
 			ActionResponse response) throws Exception {
 		String editType = request.getParameter("editType");

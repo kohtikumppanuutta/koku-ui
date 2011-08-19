@@ -12,38 +12,43 @@
 
 	<import resource="config.xml"/>
 	
+<!-- 	<bean id="webServiceClient" class="WebServiceClient"> -->
+<!--         <property name="defaultUri" value="http://gatein.intra.arcusys.fi:8080/kv-model-0.1-SNAPSHOT/KokuAppointmentProcessingServiceImpl"/> -->
+<!--     </bean> -->
+	
+	
 	<!-- Handler Mapping -->
 	
 	<bean id="parameterMappingInterceptor" class="org.springframework.web.portlet.handler.ParameterMappingInterceptor"/>
 
-	<bean id="portletModeParameterHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping">
-        <property name="order" value="10"/>
-		<property name="interceptors">
-			<list>
-				<ref bean="parameterMappingInterceptor"/>
-			</list>
-		</property>
-		<property name="portletModeParameterMap">
-			<map>
-				<entry key="view">
-					<map>
-						<entry key="view"><ref bean="viewController"/></entry>
-						<entry key="formview"><ref bean="formViewController"/></entry>
-						<entry key="edit"><ref bean="editController"/></entry>
-						<entry key="search"><ref bean="searchController"/></entry>
-					</map>
-				</entry>
-			</map>
-		</property>
-	</bean>
+<!-- 	<bean id="portletModeParameterHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeParameterHandlerMapping"> -->
+<!--         <property name="order" value="10"/> -->
+<!-- 		<property name="interceptors"> -->
+<!-- 			<list> -->
+<!-- 				<ref bean="parameterMappingInterceptor"/> -->
+<!-- 			</list> -->
+<!-- 		</property> -->
+<!-- 		<property name="portletModeParameterMap"> -->
+<!-- 			<map> -->
+<!-- 				<entry key="view"> -->
+<!-- 					<map> -->
+<!-- 						<entry key="view"><ref bean="viewController"/></entry> -->
+<!-- 						<entry key="formview"><ref bean="formViewController"/></entry> -->
+<!-- 						<entry key="edit"><ref bean="editController"/></entry> -->
+<!-- 						<entry key="search"><ref bean="searchController"/></entry> -->
+<!-- 					</map> -->
+<!-- 				</entry> -->
+<!-- 			</map> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
 
-	<bean id="portletModeHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
-        <property name="order" value="20"/>
-		<property name="portletModeMap">
-			<map>
-				<entry key="view"><ref bean="viewController"/></entry>
-				<entry key="edit"><ref bean="configurationController"/></entry>
-			</map>
-		</property>
-	</bean>
+<!-- 	<bean id="portletModeHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeHandlerMapping"> -->
+<!--         <property name="order" value="20"/> -->
+<!-- 		<property name="portletModeMap"> -->
+<!-- 			<map> -->
+<!-- 				<entry key="view"><ref bean="viewController"/></entry> -->
+<!-- 				<entry key="edit"><ref bean="configurationController"/></entry> -->
+<!-- 			</map> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
 </beans>

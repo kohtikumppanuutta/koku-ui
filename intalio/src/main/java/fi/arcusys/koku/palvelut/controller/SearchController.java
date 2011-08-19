@@ -11,15 +11,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Resource;
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.ModelAndView;
-import org.springframework.web.portlet.mvc.AbstractController;
+import org.springframework.web.portlet.bind.annotation.ActionMapping;
+import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.arcusys.koku.palvelut.model.client.VeeraCategoryImpl;
 import fi.arcusys.koku.palvelut.model.client.VeeraFormImpl;
@@ -27,8 +32,9 @@ import fi.arcusys.koku.palvelut.services.VeeraServicesFacade;
 import fi.arcusys.koku.palvelut.util.MigrationUtil;
 import fi.arcusys.koku.palvelut.util.VeeraFormComparator;
 
-@Resource(mappedName = "searchController")
-public class SearchController extends AbstractController {
+@Controller("searchController")
+@RequestMapping(value = "VIEW")
+public class SearchController {
 	
 	public static final String SEARCH_ACTION = "searchresults";
 	public static final String SEARCH_RESULT_FORMS_ATTR = "forms";
@@ -37,7 +43,7 @@ public class SearchController extends AbstractController {
 	//User given search text
 	public static final String SEARCH_TEXT_PARAM = "searchTextParam";
 
-	private static final Log log = LogFactory.getLog(SearchController.class);
+	private static final Logger log = Logger.getLogger(SearchController.class);
 	
 //	@Resource
 	@Autowired
@@ -47,7 +53,9 @@ public class SearchController extends AbstractController {
 	 * @see org.springframework.web.portlet.mvc.AbstractController#handleRenderRequestInternal(javax.portlet.RenderRequest,
 	 *      javax.portlet.RenderResponse)
 	 */
+	
 	@SuppressWarnings("unchecked")
+	@RenderMapping(params="action=search")
 	public ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView(SEARCH_ACTION);
@@ -80,6 +88,12 @@ public class SearchController extends AbstractController {
 				.getParameter("categoryId")), companyId));
 		return mav;
 	}
+	
+	@ActionMapping(params="action=search")
+	public void handleActionRequestInternal( ActionRequest request, ActionResponse response ) throws Exception {
+	}
+
+	
 	private List<VeeraCategoryImpl> getPath(RenderRequest request, Integer rootFolderId, long companyId) {
 		String currentFolderArg = request.getParameter(ViewController.VIEW_CURRENT_FOLDER);
 		if (currentFolderArg == null) {

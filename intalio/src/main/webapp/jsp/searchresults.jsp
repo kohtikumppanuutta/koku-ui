@@ -6,7 +6,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.math.BigDecimal"%>
 <%@page import="javax.portlet.WindowState"%>
-<%@page import="fi.arcusys.koku.palvelukanava.palvelut.model.VeeraForm"%>
+<%@page import="fi.arcusys.koku.palvelut.model.client.VeeraForm"%>
 
 <%
 

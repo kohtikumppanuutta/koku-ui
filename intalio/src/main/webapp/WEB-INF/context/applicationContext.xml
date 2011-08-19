@@ -8,8 +8,11 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 		
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>
+
 	<context:component-scan base-package="fi.arcusys.koku.palvelut">
-		<context:include-filter type="annotation" expression="javax.annotation.Resource"/>
+<!-- 		<context:include-filter type="annotation" expression="javax.annotation.Resource"/> -->
 	</context:component-scan>
 	
 	<!-- Message source for this context, loaded from localized "messages_xx" files -->
@@ -20,6 +23,16 @@
 			</list>
 		</property>										
 	</bean>
+		
+	<bean id="ajaxViewResolver"
+        class="fi.arcusys.koku.palvelut.util.AjaxViewResolver">
+        <property name="ajaxView">
+            <bean class="fi.arcusys.koku.palvelut.util.AjaxView" />
+        </property>
+        <property name="ajaxPrefix" value="ajax_"></property>
+    </bean>
+	
+<!-- 	<bean id="ajaxViewResolver" class="fi.arcusys.koku.palvelut.util.AjaxViewResolver"></bean> -->
 
 	<!-- Default View Resolver -->
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
