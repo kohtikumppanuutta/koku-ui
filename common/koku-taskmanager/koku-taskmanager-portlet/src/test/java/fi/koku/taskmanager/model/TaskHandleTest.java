@@ -1,4 +1,4 @@
-package fi.koko.taskmanager.model;
+package fi.koku.taskmanager.model;
 
 
 import static org.junit.Assert.*;
