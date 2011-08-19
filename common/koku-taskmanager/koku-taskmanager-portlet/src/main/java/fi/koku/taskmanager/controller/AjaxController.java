@@ -106,7 +106,7 @@ public class AjaxController {
 			List<Task> tasks;
 			String first = String.valueOf((page-1)*numPerPage);
 			String max =  String.valueOf(numPerPage);
-			tasks = taskhandle.GetTasksByParams(taskType, keyword, orderType, first, max);
+			tasks = taskhandle.getTasksByParams(taskType, keyword, orderType, first, max);
 			totalTasksNum = taskhandle.getTotalTasksNumber(taskType, keyword);
 			System.out.println("total number is: " + totalTasksNum);
 			totalPages = (totalTasksNum == 0) ? 1:(int) Math.ceil((double)totalTasksNum/numPerPage);	

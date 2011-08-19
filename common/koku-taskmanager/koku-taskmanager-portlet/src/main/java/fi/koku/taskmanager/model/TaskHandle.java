@@ -52,7 +52,7 @@ public class TaskHandle {
 	 * @param max the maximum tasks to be queried
 	 * @return available task list
 	 */
-	public List<Task> GetTasksByParams(int taskType, String keyword, 
+	public List<Task> getTasksByParams(int taskType, String keyword, 
 			String orderType, String first, String max) {
 		List<Task> tasks = null;
 		String taskTypeStr = TaskUtil.getTaskType(taskType);
