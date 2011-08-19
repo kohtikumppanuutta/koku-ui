@@ -6,7 +6,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>koku-ui</name>
-		<properties>
+	<properties>
 			<slf4j.version>1.6.1</slf4j.version>
 			<portlet-api.version>2.0</portlet-api.version>
 			<spring.version>3.0.5.RELEASE</spring.version>
@@ -74,6 +74,7 @@
 			<artifactId>jstl</artifactId>
 			<version>${jstl.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>javax.portlet</groupId>
 			<artifactId>portlet-api</artifactId>
@@ -162,6 +163,12 @@
 			</repository> <repository> <id>maven2-repository.java.net</id> <name>Java.net 
 			Repository for Maven 2</name> <url>http://download.java.net/maven/2/</url> 
 			</repository> -->
+
+      <repository>
+        <id>ElasticService.com</id>
+        <name>ElasticService.com-releases</name>
+        <url>https://m2.elasticservice.com/artifactory/koku</url>
+      </repository>
 
 	</repositories>
 
