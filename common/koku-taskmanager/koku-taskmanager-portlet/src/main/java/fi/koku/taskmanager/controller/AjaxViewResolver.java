@@ -1,4 +1,4 @@
-package fi.arcusys.oulu.web;
+package fi.koku.taskmanager.controller;
 
 import java.util.Locale;
 import org.springframework.web.servlet.View;

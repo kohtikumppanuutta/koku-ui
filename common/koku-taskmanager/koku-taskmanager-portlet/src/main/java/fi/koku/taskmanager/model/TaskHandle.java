@@ -1,4 +1,4 @@
-package fi.arcusys.oulu.intalio;
+package fi.koku.taskmanager.model;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -13,7 +13,7 @@ import java.util.TimeZone;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import fi.arcusys.intalio.tms.TaskMetadata;
-import fi.arcusys.oulu.util.TaskUtil;
+import fi.koku.taskmanager.util.TaskUtil;
 
 /**
  * Handles the intalio task processing including querying tasks, formatting task

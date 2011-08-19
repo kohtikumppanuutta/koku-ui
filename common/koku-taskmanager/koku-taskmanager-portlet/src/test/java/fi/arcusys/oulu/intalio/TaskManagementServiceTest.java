@@ -9,6 +9,8 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import fi.koku.taskmanager.model.TaskManagementService;
+
 public class TaskManagementServiceTest {
 	TaskManagementService tester;
 

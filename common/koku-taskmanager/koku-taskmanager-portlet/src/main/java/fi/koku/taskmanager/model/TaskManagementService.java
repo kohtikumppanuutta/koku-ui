@@ -1,4 +1,4 @@
-package fi.arcusys.oulu.intalio;
+package fi.koku.taskmanager.model;
 
 import java.net.URL;
 import java.util.ArrayList;

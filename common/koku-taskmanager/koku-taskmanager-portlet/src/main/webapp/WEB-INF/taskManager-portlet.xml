@@ -8,14 +8,14 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<context:component-scan base-package="fi.arcusys.oulu.web" />
+	<context:component-scan base-package="fi.koku.taskmanager.controller" />
 
 	<bean
 		class="org.springframework.web.portlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 	</bean>
 
 	<!-- State ajaxViewResolver at first or define order attribute -->
-	<bean id="ajaxViewResolver" class="fi.arcusys.oulu.web.AjaxViewResolver">
+	<bean id="ajaxViewResolver" class="fi.koku.taskmanager.controller.AjaxViewResolver">
 	</bean>
 
 	<bean id="viewResolver"

@@ -1,4 +1,4 @@
-package fi.arcusys.oulu.web;
+package fi.koku.taskmanager.controller;
 
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import fi.arcusys.oulu.intalio.TaskHandle;
+import fi.koku.taskmanager.model.TaskHandle;
 
 /**
  * Handles the main task manager page

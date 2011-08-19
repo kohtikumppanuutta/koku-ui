@@ -1,4 +1,4 @@
-package fi.arcusys.oulu.web;
+package fi.koku.taskmanager.controller;
 
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
