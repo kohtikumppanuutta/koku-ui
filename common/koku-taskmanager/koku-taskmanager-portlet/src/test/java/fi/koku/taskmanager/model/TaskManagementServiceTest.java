@@ -45,6 +45,7 @@ public class TaskManagementServiceTest {
 		
     }
 	
+	@Ignore
 	@Test
 	public void getParticipantToken() {
 		String username = TEST_USERNAME;
@@ -58,6 +59,7 @@ public class TaskManagementServiceTest {
 		assertNull("Incorrect account, authentication failed", participantToken);
 	}
 
+	@Ignore
 	@Test
 	public void getAvailableTasks() {
 		String participantToken = getToken();
@@ -78,6 +80,7 @@ public class TaskManagementServiceTest {
 		
 	}
 	
+	@Ignore
 	@Test
 	public void getTotalTasksNumber() {
 		String participantToken = getToken();

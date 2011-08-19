@@ -49,6 +49,7 @@ public class TaskHandleTest{
     public void tearDown() throws Exception {
     }
 	
+	@Ignore
 	@Test
 	public void getTasksByParams() {			
 		int taskType = 1;
@@ -60,6 +61,7 @@ public class TaskHandleTest{
 		assertTrue("GetTasksByParams failed", tasklist.size() > 0);
 	}
 
+	@Ignore
 	@Test
 	public void getTasksFromServ() {
 		String taskType = "PATask";
@@ -141,7 +143,7 @@ public class TaskHandleTest{
 		String url = "http://localhost:8080/form.htm";
 		task.setFormUrl(url);
 		tester.setToken("testtoken");
-		String expected = "http://localhost:8080/form.htm?id=task-id-1&type=PATask&url=http%3A%2F%2Flocalhost%3A8080%2Fform.htm&token=testtoken&user=oulu_virkailija%5Cstkaistoa&claimTaskOnOpen=false";
+		String expected = "http://localhost:8080/form.htm?id=task-id-1&type=PATask&url=http%3A%2F%2Flocalhost%3A8080%2Fform.htm&token=testtoken&user=Ville+Virkamies&claimTaskOnOpen=false";
 		String actual = tester.createTaskLink(task);
 		assertEquals("createTask task link failed", expected, actual);
 	}
@@ -250,6 +252,7 @@ public class TaskHandleTest{
 		
 	}
 
+	@Ignore
 	@Test
 	public void getTokenByUser() {
 		String username = TEST_USERNAME;
