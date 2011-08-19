@@ -5,6 +5,8 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletSession;
 import net.sf.json.JSONObject;
+
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,7 @@ import fi.koku.taskmanager.util.TaskUtil;
 @RequestMapping(value = "VIEW")
 public class AjaxController {
 
+	Logger logger = Logger.getLogger(AjaxController.class);
 	/**
 	 * Shows ajax for retrieving intalio tasks
 	 * @param page page id
@@ -41,10 +44,10 @@ public class AjaxController {
 			@RequestParam(value = "keyword") String keyword,
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
+		
 		PortletSession portletSession = request.getPortletSession();				
 		String token = (String) portletSession.getAttribute("USER_token");
 		String username = (String) portletSession.getAttribute("USER_username");
-		System.out.println("show ajax for the user " + username );
 		int taskType = getTaskType(taskTypeStr);	
 		JSONObject jsonModel = getJsonModel(taskType, page, keyword, orderType, token, username);
 		modelmap.addAttribute("response", jsonModel);
@@ -63,15 +66,15 @@ public class AjaxController {
 	@ResourceMapping(value = "getState")
 	public String getTaskState(@RequestParam(value = "taskId") String taskId,
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
+		
 		PortletSession portletSession = request.getPortletSession();				
 		String token = (String) portletSession.getAttribute("USER_token");
 		String username = (String) portletSession.getAttribute("USER_username");
-		System.out.println("show ajax get task state");	
 		JSONObject jsonModel = new JSONObject();
 		
 		if(token == null) {
 			jsonModel.put("tokenStatus", "INVALID");
-			System.out.println("Intalio token is invalid!");
+			logger.info("Intalio token is invalid!");
 		}else {
 			TaskHandle taskhandle = new TaskHandle(token, username);
 			String taskState = taskhandle.getTaskStatus(taskId);
@@ -97,7 +100,7 @@ public class AjaxController {
 		
 		if(token == null) {
 			jsonModel.put("tokenStatus", "INVALID");
-			System.out.println("Intalio token is invalid!");
+			logger.info("Intalio token is invalid!");
 		}else {
 			TaskHandle taskhandle = new TaskHandle(token, username);
 			int numPerPage = TaskUtil.PAGE_NUMBER;
@@ -108,7 +111,6 @@ public class AjaxController {
 			String max =  String.valueOf(numPerPage);
 			tasks = taskhandle.getTasksByParams(taskType, keyword, orderType, first, max);
 			totalTasksNum = taskhandle.getTotalTasksNumber(taskType, keyword);
-			System.out.println("total number is: " + totalTasksNum);
 			totalPages = (totalTasksNum == 0) ? 1:(int) Math.ceil((double)totalTasksNum/numPerPage);	
 			jsonModel.put("totalItems", totalTasksNum);
 			jsonModel.put("totalPages", totalPages);		

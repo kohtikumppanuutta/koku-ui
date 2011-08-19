@@ -12,6 +12,8 @@ import java.util.TimeZone;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.log4j.Logger;
+
 import fi.arcusys.intalio.tms.TaskMetadata;
 import fi.koku.taskmanager.util.TaskUtil;
 
@@ -23,6 +25,8 @@ import fi.koku.taskmanager.util.TaskUtil;
  */
 
 public class TaskHandle {
+	
+	private Logger logger = Logger.getLogger(TaskHandle.class);
 	private String message;
 	private String participantToken;
 	private String username;
@@ -58,7 +62,6 @@ public class TaskHandle {
 		String taskTypeStr = TaskUtil.getTaskType(taskType);
 		String subQuery = "";				
 		subQuery = createTaskSubQuery(taskType, keyword, orderType);
-		System.out.println("sub query: " + subQuery);
 		tasks = getTasksFromServ(taskTypeStr, subQuery, first, max);
 		
 		return tasks;
@@ -168,8 +171,7 @@ public class TaskHandle {
 			params = new Object[] { url, task.getTaskId(), taskType, URLEncoder.encode(url, "UTF-8"), participantToken,
 			        URLEncoder.encode(username, "UTF-8"), false };
 		} catch (UnsupportedEncodingException e) {
-			System.out.println("Unsupported Encoding Exception");
-			//e.printStackTrace();
+			logger.error("Unsupported Encoding Exception");
 		}
 		link =  MessageFormat.format("{0}?id={1}&type={2}&url={3}&token={4}&user={5}&claimTaskOnOpen={6}", params);
 

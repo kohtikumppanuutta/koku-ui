@@ -21,7 +21,7 @@ public class FormController {
 	
 	@RenderMapping(params = "myaction=taskform")
 	public String showForm(RenderResponse response) {
-		System.out.println("show task form");
+		
 		return "taskform";
 	}
 		

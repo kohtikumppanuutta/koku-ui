@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import fi.arcusys.intalio.tms.CountAvailableTasksRequest;
 import fi.arcusys.intalio.tms.GetAvailableTasksRequest;
 import fi.arcusys.intalio.tms.GetAvailableTasksResponse;
@@ -24,6 +26,7 @@ import fi.arcusys.intalio.token.TokenService;
  */
 public class TaskManagementService {
 	
+	private Logger logger = Logger.getLogger(TaskManagementService.class);
 	private final  URL TMS_WSDL_LOCATION = getClass().getClassLoader().getResource("TaskManagement.wsdl");
 	private final  URL TOKEN_WSDL_LOCATION = getClass().getClassLoader().getResource("TokenService.wsdl");
 	
@@ -48,7 +51,7 @@ public class TaskManagementService {
 			TokenService ts = new TokenService(TOKEN_WSDL_LOCATION);
 			participantToken = ts.getService().authenticateUser(username, password);
 		} catch (Exception e) {
-			//e.printStackTrace();
+			logger.error("Get intalio token failed");
 		}
 				
 		return participantToken;
@@ -80,14 +83,12 @@ public class TaskManagementService {
 			GetAvailableTasksResponse availTasksRes;
 			availTasksRes = tms.getTaskManagementServicesSOAP().getAvailableTasks(getAvailTasksReq);
 			taskList = availTasksRes.getTask();
-		} catch (InvalidParticipantTokenFault_Exception e1) {
-			// TODO Auto-generated catch block
-			//e1.printStackTrace();
-		} catch (InvalidInputMessageFault_Exception e1) {
-			// TODO Auto-generated catch block
-			//e1.printStackTrace();
+		} catch (InvalidParticipantTokenFault_Exception e) {
+			logger.error("InvalidParticipantTokenFault_Exception");
+		} catch (InvalidInputMessageFault_Exception e) {
+			logger.error("InvalidInputMessageFault_Exception");
 		} catch (Exception e) {
-			//e.printStackTrace();
+			logger.error("Intalio exception");
 		}
 		
 		return taskList;
@@ -112,13 +113,11 @@ public class TaskManagementService {
 			countAvailTasksReq.setSubQuery(subQuery);
 			totalNum = tms.getTaskManagementServicesSOAP().countAvailableTasks(countAvailTasksReq);
 		} catch (InvalidParticipantTokenFault_Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("InvalidParticipantTokenFault_Exception");
 		} catch (InvalidInputMessageFault_Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("InvalidInputMessageFault_Exception");
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			logger.error("Intalio exception");
 		}
 			
 		
@@ -143,14 +142,11 @@ public class TaskManagementService {
 			GetTaskResponse res = tms.getTaskManagementServicesSOAP().getTask(req);
 			task = res.getTask();
 		} catch (InvalidParticipantTokenFault_Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			logger.error("InvalidParticipantTokenFault_Exception");
 		} catch (InvalidInputMessageFault_Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			logger.error("InvalidInputMessageFault_Exception");
 		} catch (UnavailableTaskFault_Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			logger.error("Intalio exception");
 		}
 		
 		return task;		

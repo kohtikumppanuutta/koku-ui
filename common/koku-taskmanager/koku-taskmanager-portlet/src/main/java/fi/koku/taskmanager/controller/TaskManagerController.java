@@ -4,6 +4,7 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,13 +22,28 @@ import fi.koku.taskmanager.model.TaskHandle;
 @RequestMapping(value = "VIEW")
 public class TaskManagerController {
 
-	// --maps the incoming portlet request to this method
+	Logger logger = Logger.getLogger(TaskManagerController.class);
+
+	/**
+	 * Handles the portlet request to show default page
+	 * @param request RenderRequest
+	 * @param response RenderResponse
+	 * @param modelmap ModelMap
+	 * @return default page taskmanager
+	 */
 	@RenderMapping
 	public String home(RenderRequest request, RenderResponse response, ModelMap modelmap) {		
-		System.out.println("show default homepage");
+
 		return "taskmanager";
 	}
 
+	/**
+	 * Returns to default page and set the page variable
+	 * @param request RenderRequest
+	 * @param response RenderResponse
+	 * @param modelmap ModelMap
+	 * @return taskmanager page with page parameters
+	 */
 	@RenderMapping(params = "myaction=home")
 	public String showHome(RenderRequest request, RenderResponse response, ModelMap modelmap) {
 		//get parameters from 
@@ -40,8 +56,7 @@ public class TaskManagerController {
 		modelmap.addAttribute("taskType", taskType);
 		modelmap.addAttribute("keyword", keyword);
 		modelmap.addAttribute("orderType", orderType);
-		
-		System.out.println("show homepage");
+
 		return "taskmanager";
 	}
 	
@@ -82,19 +97,18 @@ public class TaskManagerController {
 					portletSession.setAttribute("USER_username", username);
 				}
 				
-				System.out.println("Login user:" + userid);
+				logger.info("Login user:" + userid);
 			}
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Exception when getting user id");
 		}
 		
 		if(token != null) {
-			System.out.println("Intalio token is valid!");
+			logger.info("Intalio token is valid!");
 			return true;
 		}else {
-			System.out.println("Intalio token is invalid!");
+			logger.info("Intalio token is invalid!");
 			return false;
 		}
 	}

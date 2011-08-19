@@ -22,7 +22,7 @@ public class PopupController {
 	
 	@RenderMapping(params = "myaction=popup")
 	public String showForm(RenderResponse response) {
-		System.out.println("show popup form");
+
 		return "popupform";
 	}
 	
@@ -30,7 +30,7 @@ public class PopupController {
 	public String showPopupForm(@RequestParam(value = "tasklink") String tasklink,
 			ModelMap modelmap, PortletRequest req, PortletResponse res) {
 		modelmap.addAttribute("tasklink", tasklink);
-		System.out.println("show popup form");
+
 		return "popupform";
 	}
 	

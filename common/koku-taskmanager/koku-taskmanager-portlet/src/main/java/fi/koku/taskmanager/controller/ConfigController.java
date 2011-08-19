@@ -8,6 +8,7 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.WindowState;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +24,10 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 @RequestMapping(value = "EDIT")
 public class ConfigController {
 
-	
+	private Logger logger = Logger.getLogger(ConfigController.class);
 	@RenderMapping
 	public String showConfig(RenderRequest request, RenderResponse response, ModelMap modelmap) {	
-		System.out.println("show edit mode");
+		
 		return "config";
 	}
 	
@@ -39,9 +40,6 @@ public class ConfigController {
     		String notifFilter = request.getParameter("notifFilter");
     		String refreshDuration = request.getParameter("refreshDuration");
     		String openForm = request.getParameter("openForm");
-    		System.out.println("taskFilter: " + taskFilter + "notifFilter: " 
-    				+ notifFilter + "refresh: " + refreshDuration
-    				+ "openForm: " + openForm);
     		pref.setValue("taskFilter", taskFilter);
     		pref.setValue("notifFilter", notifFilter);
     		pref.setValue("refreshDuration", refreshDuration);
@@ -52,7 +50,7 @@ public class ConfigController {
             response.setWindowState(WindowState.NORMAL);
  
         } catch (Exception e) { 
- 
+        	logger.error("Configure exception");
         }        
         
 	}	
