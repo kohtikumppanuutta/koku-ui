@@ -5,9 +5,7 @@
     <groupId>kohti-kumppanuutta</groupId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>kohti-kumppanuutta</groupId>
   <artifactId>pyh-portlet</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>pyh-portlet</name>
   <dependencies>
