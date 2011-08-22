@@ -39,7 +39,7 @@
 	 
 	/* add the formId to the intalio form for editting appointment form */
 	window.onload = function() {
-		
+	/* 	
 		 if(koku_currentUrl.indexOf("FormID=") > 0) {
 			var temp = koku_currentUrl.split("FormID=");
 			var formId = temp[1];
@@ -48,21 +48,21 @@
 		}else {
 			jQuery('#<portlet:namespace />xforms_iframe').attr('src', "${formholder.url}");
 		} 
-		 
-	 /*
+	 */	
+	 
+	 <%-- Temporary solution --%>
+		var formUrl = "${formholder.url}";
 		if(koku_currentUrl.indexOf("FormID=") > 0) {
 			var temp = koku_currentUrl.split("FormID=");
 			var formId = temp[1];
-			var formUrl = "${formholder.url}";
 			formUrl = formUrl.replace('/palvelut-portlet/ajaxforms','http://intalio.intra.arcusys.fi:8080/gi');
+			formUrl = formUrl.replace('%2Fpalvelut-portlet%2Fajaxforms%2F','%2Fgi%2F');
 			jQuery('#<portlet:namespace />xforms_iframe').attr('src', formUrl + "&FormID=" + formId);
 		}else {
-			var formUrl = "${formholder.url}";
 			formUrl = formUrl.replace('/palvelut-portlet/ajaxforms','http://intalio.intra.arcusys.fi:8080/gi');
+			formUrl = formUrl.replace('%2Fpalvelut-portlet%2Fajaxforms%2F','%2Fgi%2F');
 			jQuery('#<portlet:namespace />xforms_iframe').attr('src', formUrl);
-		}
-	*/
-		
+		}		
 	}
 
         function scrollToTop() {

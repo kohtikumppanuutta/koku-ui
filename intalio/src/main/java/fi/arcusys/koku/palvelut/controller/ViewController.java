@@ -53,12 +53,21 @@ public class ViewController extends FormHolderController {
 	public static final String ROOT_CATEGORY_LIST_MODEL_NAME = "rootCategories";
 	
 
-	public static final String APPOINTMENT_SERVICE_NAME = "AppoimentService";
-	public static final String MESSAGE_SERVICE_NAME = "MessageService";
+	public static final String APPOINTMENT_SERVICE_CITIZEN_NAME 		= "AppointmentServiceCitizen";
+	public static final String APPOINTMENT_SERVICE_EMPLOYEE_NAME 		= "AppointmentServiceEmployee";
+	public static final String MESSAGE_SERVICE_NAME 					= "MessageService";
+	public static final String REQUEST_SERVICE_NAME						= "RequestService";
+	public static final String TIVA_CITIZEN_SERVICE_NAME				= "TivaServiceCitizen";
+	public static final String TIVA_EMPLOYEE_SERVICE_NAME				= "TivaServiceEmployee";
 	
-	
-	private static final String APPOINTMENT_SERIVICE = "http://gatein.intra.arcusys.fi:8080/kv-model-0.1-SNAPSHOT/KokuAppointmentProcessingServiceImpl";	
-	
+	private static final String APPOINTMENT_SERVICE_CITIZEN		= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuKunpoAppointmentServiceImpl";
+	private static final String APPOINTMENT_SERVICE_EMPLOYEE	= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuLooraAppointmentServiceImpl";
+	private static final String REQUEST_SERVICE		 			= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuRequestServiceImpl";
+	private static final String MESSAGE_SERVICE					= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuMessageServiceImpl";	
+	private static final String TIVA_CITIZEN_SERVICE			= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuLooraSuostumusServiceImpl";
+	private static final String TIVA_EMPLOYEE_SERVICE			= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuKunpoSuostumusServiceImpl";
+
+
 	@Autowired
 	private VeeraServicesFacade servicesFacade;
 	
@@ -81,12 +90,7 @@ public class ViewController extends FormHolderController {
 		}
 		
 		String result = null;
-		XmlProxy proxy = null;
-		if (service.equals(APPOINTMENT_SERVICE_NAME)) {
-			proxy = new XmlProxy("", APPOINTMENT_SERIVICE, data);	
-		} else if (service.equals(MESSAGE_SERVICE_NAME)) {
-			// TODO create MessageService proxy
-		}
+		XmlProxy proxy = getProxy(service, data);
 		
 		if (proxy != null) {
 			try {
@@ -105,6 +109,24 @@ public class ViewController extends FormHolderController {
 		}
 		modelmap.addAttribute("response", obj);
 		return AjaxViewResolver.AJAX_PREFIX;
+	}
+	
+	private XmlProxy getProxy(String service, String data) {
+		if (service.equals(APPOINTMENT_SERVICE_CITIZEN_NAME)) {
+			return new XmlProxy("", APPOINTMENT_SERVICE_CITIZEN, data);	
+		} else if (service.equals(APPOINTMENT_SERVICE_EMPLOYEE_NAME)) {
+			return new XmlProxy("", APPOINTMENT_SERVICE_EMPLOYEE, data);	
+		} else if (service.equals(MESSAGE_SERVICE_NAME)) {
+			return new XmlProxy("", REQUEST_SERVICE, data);
+		} else if (service.equals(REQUEST_SERVICE_NAME)) {
+			return new XmlProxy("", MESSAGE_SERVICE, data);
+		} else if (service.equals(TIVA_CITIZEN_SERVICE_NAME)) {
+			return new XmlProxy("", TIVA_CITIZEN_SERVICE, data);
+		} else if (service.equals(TIVA_EMPLOYEE_SERVICE_NAME)) {
+			return new XmlProxy("", TIVA_EMPLOYEE_SERVICE, data);	
+		} else {
+			return null;
+		}
 	}
 	
 	private ModelMap returnEmptyString(ModelMap modelmap) {
