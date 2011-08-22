@@ -70,12 +70,14 @@ public class ViewController extends FormHolderController {
 		
 		if (service.isEmpty()) {
 			log.error("AjaxMessage Command is empty");
-			throw new IllegalArgumentException();
+			returnEmptyString(modelmap);
+			return AjaxViewResolver.AJAX_PREFIX;
 		}
 		
 		if (data.isEmpty()) {
 			log.error("AjaxMessage Data is empty");
-			throw new IllegalArgumentException();
+			returnEmptyString(modelmap);
+			return AjaxViewResolver.AJAX_PREFIX;
 		}
 		
 		String result = null;
@@ -104,6 +106,14 @@ public class ViewController extends FormHolderController {
 		modelmap.addAttribute("response", obj);
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
+	
+	private ModelMap returnEmptyString(ModelMap modelmap) {
+		JSONObject obj = new JSONObject();
+		obj.element("result", "");
+		modelmap.addAttribute("response", obj);
+		return modelmap;
+	}
+	
 	
 	/*
 	 * @see org.springframework.web.portlet.mvc.AbstractController#handleRenderRequestInternal(javax.portlet.RenderRequest,

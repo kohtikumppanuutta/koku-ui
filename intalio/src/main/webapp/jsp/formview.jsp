@@ -17,8 +17,8 @@
 		var json = obj.response;
 		var test1 = json["result"];
 		jQuery(".test").append("<div><pre>"+test1+"</pre></div>")
-
 	}
+	
 	
 	/**
 	 * Simple function to send some example ajax data 
@@ -36,9 +36,20 @@
 		jQuery.post(url, ajaxObject, returnFunction);
 	}
 
+	 
 	/* add the formId to the intalio form for editting appointment form */
 	window.onload = function() {
 		
+		 if(koku_currentUrl.indexOf("FormID=") > 0) {
+			var temp = koku_currentUrl.split("FormID=");
+			var formId = temp[1];
+			
+			jQuery('#<portlet:namespace />xforms_iframe').attr('src', "${formholder.url}" + "&FormID=" + formId);
+		}else {
+			jQuery('#<portlet:namespace />xforms_iframe').attr('src', "${formholder.url}");
+		} 
+		 
+	 /*
 		if(koku_currentUrl.indexOf("FormID=") > 0) {
 			var temp = koku_currentUrl.split("FormID=");
 			var formId = temp[1];
@@ -50,6 +61,7 @@
 			formUrl = formUrl.replace('/palvelut-portlet/ajaxforms','http://intalio.intra.arcusys.fi:8080/gi');
 			jQuery('#<portlet:namespace />xforms_iframe').attr('src', formUrl);
 		}
+	*/
 		
 	}
 
