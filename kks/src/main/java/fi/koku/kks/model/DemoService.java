@@ -5,8 +5,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import fi.koku.kks.ui.common.User;
@@ -21,25 +19,20 @@ import fi.koku.kks.ui.common.utils.SearchResult;
 @Service(value = "demoKksService")
 public class DemoService {
 
-  private User kayttaja;
-
   private KKSDemoModel malli;
 
   public DemoService() {
 
   }
 
-  private static Logger log = LoggerFactory.getLogger(DemoService.class);
-
   public boolean onkoLuotu() {
-    if (malli != null)
+    if (malli != null) {
       return true;
+    }
     return false;
   }
 
   public void luo(String kayttaja) {
-    this.kayttaja = new User();
-    this.kayttaja.setRole(kayttaja);
     malli = DemoFactory.luo();
   }
 
@@ -94,8 +87,9 @@ public class DemoService {
 
     List<String> tmp = new ArrayList<String>(nimet);
     for (String nimi : tmp) {
-      if (!h.getKks().hasCollection(nimi))
+      if (!h.getKks().hasCollection(nimi)) {
         nimet.remove(nimi);
+      }
     }
 
     return nimet;
@@ -138,32 +132,40 @@ public class DemoService {
     List<KKSCollection> collections = h.getKks().getCollections();
 
     for (KKSCollection k : collections) {
-      for (Entry ki : k.getEntries().values()) {
+      searchEntries(result, k, classification);
+
+      searchMultivalueEntries(result, k, classification);
+    }
+
+    return result;
+  }
+
+  private void searchMultivalueEntries(SearchResult result, KKSCollection k, String... classification) {
+    for (List<Entry> tmp : k.getMultiValueEntries().values()) {
+      for (Entry ki : tmp) {
         boolean lisatty = false;
         for (int i = 0; i < classification.length && !lisatty; i++) {
-          String tmp = classification[i];
-          if (ki.hasClassification(tmp) && !ki.getValue().equals("")) {
+          String str = classification[i];
+          if (ki.hasClassification(str) && !ki.getValue().equals("")) {
             result.lisaaresult(k, ki);
             lisatty = true;
           }
         }
       }
+    }
+  }
 
-      for (List<Entry> tmp : k.getMultiValueEntries().values()) {
-        for (Entry ki : tmp) {
-          boolean lisatty = false;
-          for (int i = 0; i < classification.length && !lisatty; i++) {
-            String str = classification[i];
-            if (ki.hasClassification(str) && !ki.getValue().equals("")) {
-              result.lisaaresult(k, ki);
-              lisatty = true;
-            }
-          }
+  private void searchEntries(SearchResult result, KKSCollection k, String... classification) {
+    for (Entry ki : k.getEntries().values()) {
+      boolean lisatty = false;
+      for (int i = 0; i < classification.length && !lisatty; i++) {
+        String tmp = classification[i];
+        if (ki.hasClassification(tmp) && !ki.getValue().equals("")) {
+          result.lisaaresult(k, ki);
+          lisatty = true;
         }
       }
     }
-
-    return result;
   }
 
   public List<CollectionType> haecollectionTypes() {

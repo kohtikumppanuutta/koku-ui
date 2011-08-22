@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fi.koku.kks.ui.common.utils.GroupComparator;
 import fi.koku.kks.ui.common.utils.LinkedMapWrapper;
 
@@ -20,6 +23,8 @@ public class CollectionType {
   private List<EntryType> entryTypes;
   private LinkedMapWrapper<String, Group> entryGroups;
   private GroupComparator groupComparator;
+
+  private static Logger log = LoggerFactory.getLogger(CollectionType.class);
 
   public CollectionType(int id, String name, String description) {
     super();
@@ -77,7 +82,7 @@ public class CollectionType {
       Group tmp = entryGroups.get().get(type.getGroup());
       tmp.add(type);
     } else {
-      System.out.println("ERROR: WRONG GROUP!!!: " + type.getName() + " " + type.getGroup());
+      log.error("Wrong group for entry: " + type.getName() + " " + type.getGroup());
     }
   }
 

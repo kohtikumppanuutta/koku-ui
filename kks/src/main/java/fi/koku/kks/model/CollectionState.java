@@ -26,8 +26,9 @@ public class CollectionState {
   }
 
   public boolean isActive() {
-    if (State.LOCKED.equals(state))
+    if (State.LOCKED.equals(state)) {
       return false;
+    }
 
     return true;
   }

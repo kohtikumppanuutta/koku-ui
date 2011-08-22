@@ -146,8 +146,9 @@ public class EntryType implements Comparable<EntryType> {
       Classification l = tmp.get(i);
       sb.append(l.getName());
 
-      if ((i + 1) < tmp.size())
+      if ((i + 1) < tmp.size()) {
         sb.append(", ");
+      }
     }
     return sb.toString();
   }
@@ -159,8 +160,9 @@ public class EntryType implements Comparable<EntryType> {
       Classification l = tmp.get(i);
       sb.append(l.getName());
 
-      if ((i + 1) < tmp.size())
+      if ((i + 1) < tmp.size()) {
         sb.append(", ");
+      }
     }
     return sb.toString();
   }
@@ -169,15 +171,17 @@ public class EntryType implements Comparable<EntryType> {
     StringBuffer sb = new StringBuffer();
     List<String> tmp = getValues();
 
-    if (tmp == null)
+    if (tmp == null) {
       return "";
+    }
 
     for (int i = 0; i < tmp.size(); i++) {
       String l = tmp.get(i);
       sb.append(l);
 
-      if ((i + 1) < tmp.size())
+      if ((i + 1) < tmp.size()) {
         sb.append(", ");
+      }
     }
     return sb.toString();
   }

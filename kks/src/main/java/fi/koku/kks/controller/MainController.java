@@ -2,8 +2,6 @@ package fi.koku.kks.controller;
 
 import javax.portlet.RenderRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -22,13 +20,12 @@ public class MainController {
   @Qualifier("demoKksService")
   private DemoService demoService;
 
-  private static Logger log = LoggerFactory.getLogger(MainController.class);
-
   @RenderMapping
   public String render(RenderRequest req, Model model) {
 
-    if (!demoService.onkoLuotu())
+    if (!demoService.onkoLuotu()) {
       demoService.luo("");
+    }
     return "choose";
   }
 

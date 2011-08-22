@@ -47,7 +47,7 @@ public class KKSCollection {
     for (List<Entry> tmp : previous.getMultiValueEntries().values()) {
       for (Entry k : tmp) {
 
-        if (!containsClassification(k.getClassifications(), Constants.classification_KOMMENTTI)) {
+        if (!containsClassification(k.getClassifications(), Constants.LUOKITUS_KOMMENTTI)) {
           addMultivalue(new Entry(clear ? "" : k.getValue(), new Date(), k.getVersion(), k.getRegister(),
               k.getRecorder(), k.getType()));
         }
@@ -148,7 +148,7 @@ public class KKSCollection {
     this.modifier = modifier;
   }
 
-  public void addEntry(Entry entry) {
+  public final void addEntry(Entry entry) {
     entries.put("" + entry.getType().getId(), entry);
   }
 
@@ -184,7 +184,7 @@ public class KKSCollection {
     this.multiValueEntries = multiValueEntries;
   }
 
-  public void addMultivalue(Entry entry) {
+  public final void addMultivalue(Entry entry) {
 
     String key = "" + entry.getType().getId();
     if (multiValueEntries.containsKey(key)) {

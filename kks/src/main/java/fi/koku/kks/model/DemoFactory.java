@@ -21,6 +21,10 @@ public class DemoFactory {
   public static final String VASU = "Varhaiskasvatussuunnitelma";
   private static int codeGenerator = 100;
 
+  private DemoFactory() {
+
+  }
+
   public static KKSDemoModel luo() {
     Person h1 = new Person("Paavo", "Petteri", "Paavola", "270608-223Z");
     Person h2 = new Person("Sanna", "Maria", "Paavola", "200107-211Y");
@@ -70,26 +74,75 @@ public class DemoFactory {
     type.addEntryGroup(new Group(new GroupKey(1, "Huoltaja"), "Päivähoidon asiakasrekisteri"));
     type.addEntryGroup(new Group(new GroupKey(2, "Päivähoito"), "Päivähoidon asiakasrekisteri"));
 
-    type.addEntryType(luoVapaaTekstientryType("Miten lapsesi on viihtynyt päivähoidossa",
-        "Kuvaa lapsen hyvinvointia", "Lapsen hyvinvointi", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_KYSELY),
-        luoclassification(Constants.classification_KUMPPANUUS, Constants.classification_KOTI, Constants.classification_HUOLENAIHEET)));
+    luoVarhaiskasvatusSuunnitelmaHuoltajaGroup(type);
 
-    type.addEntryType(luoVapaaTekstientryType("Mitä lapsesi kertoo päivähoidosta kotona",
-        "Kuvaa lapsen hyvinvointia", "Lapsen hyvinvointi", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_HAVAINTO),
-        luoclassification(Constants.classification_KUMPPANUUS, Constants.classification_KOTI, Constants.classification_HUOLENAIHEET)));
+    luoVarhaiskasvatusSuunnitelmaPaivahoitoGroup(type);
 
-    type.addEntryType(luoVapaaTekstientryType("Lapsellesi läheiset ja tärkeät ihmiset",
-        "Kuvaa lapsen hyvinvointia", "Lapsen hyvinvointi", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_KYSELY),
-        luoclassification(Constants.classification_KUMPPANUUS, Constants.classification_KOTI)));
+    CollectionState tila = new CollectionState(State.ACTIVE);
+    KKSCollection k = new KKSCollection("" + codeGenerator, nimi, type.getDescription(), tila, new Date(), 1, type);
+    luoTyhjatKirjaukset(k);
+    return k;
+  }
+
+  private static void luoVarhaiskasvatusSuunnitelmaPaivahoitoGroup(CollectionType type) {
+    type.addEntryType(luoVapaaTekstientryType("Yhteiset tavoitteet liittyen vuorovaikutukseen",
+        "Kirjataan yhteiset tavoitteet liittyen lapsen vuorovaikutukseen", "", "Päivähoito",
+        "Päivähoidon asiakasrekisteri", "Päivähoito", luoTyypit(Constants.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoclassification(Constants.LUOKITUS_KUMPPANUUS, Constants.LUOKITUS_KOTI)));
 
     type.addEntryType(luoVapaaTekstientryType(
-        "Onko sinulla perushoitoon liittyen jotain ajatuksia tai kysyttävää",
+        "Millaisia asioita toivoisit kerrottavan päivittäin lapsesi arjesta päivähoidossa",
+        "Kuvaa kodin ja päivähoidon yhteistyötä", "Kodin ja päivähoidon yhteistyö", "Päivähoito",
+        "Päivähoidon asiakasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
+        luoclassification(Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT, Constants.LUOKITUS_KOTI)));
+
+    type.addEntryType(luoVapaaTekstientryType("Miten yhteistyö hoidetaan molempiin vanhempiin",
+        "Kuvaa kodin ja päivähoidon yhteistyötä", "Kodin ja päivähoidon yhteistyö", "Päivähoito",
+        "Päivähoidon asiakasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
+        luoclassification(Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT, Constants.LUOKITUS_KOTI)));
+
+    type.addEntryType(luoVapaaTekstientryType("Millaisia yhteistyön tapoja toivotte",
+        "Kuvaa kodin ja päivähoidon yhteistyötä", "Kodin ja päivähoidon yhteistyö", "Päivähoito",
+        "Päivähoidon asiakasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
+        luoclassification(Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT, Constants.LUOKITUS_KOTI)));
+
+    type.addEntryType(luoVapaaTekstientryType(
+        "Minkälaiset asiat teille on kasvatuksessa tärkeitä? mitä toivotte meiltä",
+        "Kuvaa kodin ja päivähoidon yhteistyötä", "Kodin ja päivähoidon yhteistyö", "Päivähoito",
+        "Päivähoidon asiakasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
+        luoclassification(Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT, Constants.LUOKITUS_KOTI)));
+
+    type.addEntryType(luoVapaaTekstientryType("Yhteiset tavoitteet liittyen yhteistyöhön",
+        "Kirjataan yhteiset tavoitteet liittyen yhteistyöhön", "", "Päivähoito", "Päivähoidon asiakasrekisteri",
+        "Päivähoito", luoTyypit(Constants.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoclassification(Constants.LUOKITUS_KUMPPANUUS)));
+
+    type.addEntryType(luoMonivalueinenVapaaTekstientryType("Kommentit, havainnot ja tavoitteet",
+        "Kirjatut kommentit, havainnot ja tavoitteet", "", "Päivähoito", "Päivähoidon asiakasrekisteri", "Päivähoito",
+        "kommentti, havainto tai tavoite", luoTyypit(Constants.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoclassification(Constants.LUOKITUS_KOMMENTTI, Constants.LUOKITUS_TAVOITE, Constants.LUOKITUS_HAVAINTO)));
+  }
+
+  private static void luoVarhaiskasvatusSuunnitelmaHuoltajaGroup(CollectionType type) {
+    type.addEntryType(luoVapaaTekstientryType("Miten lapsesi on viihtynyt päivähoidossa", "Kuvaa lapsen hyvinvointia",
+        "Lapsen hyvinvointi", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
+        luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
+        luoclassification(Constants.LUOKITUS_KUMPPANUUS, Constants.LUOKITUS_KOTI, Constants.LUOKITUS_HUOLENAIHEET)));
+
+    type.addEntryType(luoVapaaTekstientryType("Mitä lapsesi kertoo päivähoidosta kotona", "Kuvaa lapsen hyvinvointia",
+        "Lapsen hyvinvointi", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
+        luoTyypit(Constants.KEHITYSASIATYYPPI_HAVAINTO),
+        luoclassification(Constants.LUOKITUS_KUMPPANUUS, Constants.LUOKITUS_KOTI, Constants.LUOKITUS_HUOLENAIHEET)));
+
+    type.addEntryType(luoVapaaTekstientryType("Lapsellesi läheiset ja tärkeät ihmiset", "Kuvaa lapsen hyvinvointia",
+        "Lapsen hyvinvointi", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
+        luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
+        luoclassification(Constants.LUOKITUS_KUMPPANUUS, Constants.LUOKITUS_KOTI)));
+
+    type.addEntryType(luoVapaaTekstientryType("Onko sinulla perushoitoon liittyen jotain ajatuksia tai kysyttävää",
         "pukeminen ja riisuminen, hygienia, ruokailu, ulkoilu, lepohetki", "Lapsen hyvinvointi", "Päivähoito",
-        "Päivähoidon asiakasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_KOTI, Constants.classification_PAIVITTAISET_TOIMINNOT)));
+        "Päivähoidon asiakasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_KOTI, Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
     type.addEntryType(luoVapaaTekstientryType(
         "Mietityttääkö sinua jokin asia lapsesi kehityksessä",
@@ -98,20 +151,20 @@ public class DemoFactory {
         "Päivähoito",
         "Päivähoidon asiakasrekisteri",
         "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_HUOLENAIHEET, Constants.classification_TERVEYDENTILA,
-            Constants.classification_PSYYKKINEN_KEHITYS, Constants.classification_FYYSINEN_KEHITYS,
-            Constants.classification_KIELI_JA_KOMMUNIKAATIO)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_HUOLENAIHEET, Constants.LUOKITUS_TERVEYDENTILA,
+            Constants.LUOKITUS_PSYYKKINEN_KEHITYS, Constants.LUOKITUS_FYYSINEN_KEHITYS,
+            Constants.LUOKITUS_KIELI_JA_KOMMUNIKAATIO)));
 
     type.addEntryType(luoVapaaTekstientryType("Miten lapsesi suhtautuu uusiin tilanteisiin ja asioihin",
         "Kuvaa lapsen hyvinvointia", "Lapsen hyvinvointi", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_KOTI, Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_KOTI, Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU)));
 
     type.addEntryType(luoVapaaTekstientryType("Onko lapsellasi pelkoja", "Kuvaa lapsen hyvinvointia",
         "Lapsen hyvinvointi", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_PSYYKKINEN_KEHITYS, Constants.classification_HUOLENAIHEET)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_PSYYKKINEN_KEHITYS, Constants.LUOKITUS_HUOLENAIHEET)));
 
     type.addEntryType(luoVapaaTekstientryType(
         "Oletko jostain asiasta huolissasi lapseesi liittyen",
@@ -120,10 +173,10 @@ public class DemoFactory {
         "Päivähoito",
         "Päivähoidon asiakasrekisteri",
         "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_TERVEYDENTILA, Constants.classification_PSYYKKINEN_KEHITYS,
-            Constants.classification_FYYSINEN_KEHITYS, Constants.classification_KIELI_JA_KOMMUNIKAATIO,
-            Constants.classification_HUOLENAIHEET)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_TERVEYDENTILA, Constants.LUOKITUS_PSYYKKINEN_KEHITYS,
+            Constants.LUOKITUS_FYYSINEN_KEHITYS, Constants.LUOKITUS_KIELI_JA_KOMMUNIKAATIO,
+            Constants.LUOKITUS_HUOLENAIHEET)));
 
     type.addEntryType(luoVapaaTekstientryType(
         "Mitkä asiat erityisesti tuottavat iloa lapsessasi",
@@ -132,41 +185,41 @@ public class DemoFactory {
         "Päivähoito",
         "Päivähoidon asiakasrekisteri",
         "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_PSYYKKINEN_KEHITYS, Constants.classification_TERVEYDENTILA,
-            Constants.classification_FYYSINEN_KEHITYS, Constants.classification_KIELI_JA_KOMMUNIKAATIO,
-            Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU, Constants.classification_PAIVITTAISET_TOIMINNOT)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_PSYYKKINEN_KEHITYS, Constants.LUOKITUS_TERVEYDENTILA,
+            Constants.LUOKITUS_FYYSINEN_KEHITYS, Constants.LUOKITUS_KIELI_JA_KOMMUNIKAATIO,
+            Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU, Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
-    type.addEntryType(luoVapaaTekstientryType("Mistä asioista lapsesi on kiinnostunut",
-        "Kuvaa lapsen hyvinvointia", "Lapsen hyvinvointi", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_VAHVUUDET_JA_KIINNOSTUKSET, Constants.classification_PAIVITTAISET_TOIMINNOT)));
+    type.addEntryType(luoVapaaTekstientryType("Mistä asioista lapsesi on kiinnostunut", "Kuvaa lapsen hyvinvointia",
+        "Lapsen hyvinvointi", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_VAHVUUDET_JA_KIINNOSTUKSET, Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
     type.addEntryType(luoVapaaTekstientryType("Miten lapsesi toiveet huomioidaan", "Kuvaa lapsen hyvinvointia",
         "Lapsen hyvinvointi", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_KYSELY),
-        luoclassification(Constants.classification_VAHVUUDET_JA_KIINNOSTUKSET, Constants.classification_PAIVITTAISET_TOIMINNOT)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
+        luoclassification(Constants.LUOKITUS_VAHVUUDET_JA_KIINNOSTUKSET, Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
     type.addEntryType(luoVapaaTekstientryType("Yhteiset tavoitteet liittyen lapsen hyvinvointiin",
         "Kirjataan yhteiset tavoitteet liittyen lapsen hyvinvointiin", "", "Päivähoito",
-        "Päivähoidon asiakasrekisteri", "Päivähoito", luoTyypit(Constants.KEHITYSASIAtype_KESKUSTELU),
-        luoclassification(Constants.classification_KOTI, Constants.classification_PAIVITTAISET_TOIMINNOT)));
+        "Päivähoidon asiakasrekisteri", "Päivähoito", luoTyypit(Constants.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoclassification(Constants.LUOKITUS_KOTI, Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
     type.addEntryType(luoVapaaTekstientryType(
         "Mitä ajatuksia lapsesi päivähoitoon tulo- ja lähtötilanteet sinussa herättävät",
         "Kuvaa lapsen vuorovaikutusta", "Vuorovaikutus", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_KYSELY),
-        luoclassification(Constants.classification_PAIVITTAISET_TOIMINNOT, Constants.classification_KOTI)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
+        luoclassification(Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT, Constants.LUOKITUS_KOTI)));
 
-    type.addEntryType(luoVapaaTekstientryType("Miten ilo tai suru näkyy lapsessasi",
-        "Kuvaa lapsen vuorovaikutusta", "Vuorovaikutus", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_PSYYKKINEN_KEHITYS, Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU)));
+    type.addEntryType(luoVapaaTekstientryType("Miten ilo tai suru näkyy lapsessasi", "Kuvaa lapsen vuorovaikutusta",
+        "Vuorovaikutus", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_PSYYKKINEN_KEHITYS, Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU)));
 
-    type.addEntryType(luoVapaaTekstientryType("Milloin lapsesi haluaa olla yksin",
-        "Kuvaa lapsen vuorovaikutusta", "Vuorovaikutus", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_HAVAINTO),
-        luoclassification(Constants.classification_PSYYKKINEN_KEHITYS, Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU)));
+    type.addEntryType(luoVapaaTekstientryType("Milloin lapsesi haluaa olla yksin", "Kuvaa lapsen vuorovaikutusta",
+        "Vuorovaikutus", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
+        luoTyypit(Constants.KEHITYSASIATYYPPI_HAVAINTO),
+        luoclassification(Constants.LUOKITUS_PSYYKKINEN_KEHITYS, Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU)));
 
     type.addEntryType(luoVapaaTekstientryType(
         "Onko lapsellasi kavereita kotona? päivähoidossa",
@@ -175,9 +228,9 @@ public class DemoFactory {
         "Päivähoito",
         "Päivähoidon asiakasrekisteri",
         "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_KYSELY),
-        luoclassification(Constants.classification_PSYYKKINEN_KEHITYS, Constants.classification_KOTI,
-            Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU, Constants.classification_PAIVITTAISET_TOIMINNOT)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
+        luoclassification(Constants.LUOKITUS_PSYYKKINEN_KEHITYS, Constants.LUOKITUS_KOTI,
+            Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU, Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
     type.addEntryType(luoVapaaTekstientryType(
         "Miten lapsesi suhtautuu toisiin childin? lapsesi ryhmän jäsenenä?",
@@ -186,84 +239,39 @@ public class DemoFactory {
         "Päivähoito",
         "Päivähoidon asiakasrekisteri",
         "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_PSYYKKINEN_KEHITYS, Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU,
-            Constants.classification_LEIKKI, Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_PSYYKKINEN_KEHITYS, Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU,
+            Constants.LUOKITUS_LEIKKI, Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU)));
 
     type.addEntryType(luoVapaaTekstientryType("Miten lapsesi osaa ottaa toisen lapsen tunteet huomioon?",
         "Kuvaa lapsen vuorovaikutusta", "Vuorovaikutus", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_LEIKKI, Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_LEIKKI, Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU)));
 
-    type.addEntryType(luoVapaaTekstientryType("Miten lapsesi suhtautuu aikuisiin?",
-        "Kuvaa lapsen vuorovaikutusta", "Vuorovaikutus", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU, Constants.classification_PSYYKKINEN_KEHITYS)));
+    type.addEntryType(luoVapaaTekstientryType("Miten lapsesi suhtautuu aikuisiin?", "Kuvaa lapsen vuorovaikutusta",
+        "Vuorovaikutus", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU, Constants.LUOKITUS_PSYYKKINEN_KEHITYS)));
 
-    type.addEntryType(luoVapaaTekstientryType("Missä tilanteissa lapsesi pyytää apua?",
-        "Kuvaa lapsen vuorovaikutusta", "Vuorovaikutus", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU, Constants.classification_PAIVITTAISET_TOIMINNOT)));
+    type.addEntryType(luoVapaaTekstientryType("Missä tilanteissa lapsesi pyytää apua?", "Kuvaa lapsen vuorovaikutusta",
+        "Vuorovaikutus", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU, Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
     type.addEntryType(luoVapaaTekstientryType("Miten lapsesi käyttäytyy ristiriitatilanteissa?",
         "Kuvaa lapsen vuorovaikutusta", "Vuorovaikutus", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU, Constants.classification_PAIVITTAISET_TOIMINNOT)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU, Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
-    type.addEntryType(luoVapaaTekstientryType("Mitä lapsesi leikkii? kenen kanssa?",
-        "Kuvaa lapsen vuorovaikutusta", "Vuorovaikutus", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_HAVAINTO),
-        luoclassification(Constants.classification_LEIKKI, Constants.classification_PAIVITTAISET_TOIMINNOT)));
+    type.addEntryType(luoVapaaTekstientryType("Mitä lapsesi leikkii? kenen kanssa?", "Kuvaa lapsen vuorovaikutusta",
+        "Vuorovaikutus", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
+        luoTyypit(Constants.KEHITYSASIATYYPPI_HAVAINTO),
+        luoclassification(Constants.LUOKITUS_LEIKKI, Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
     type.addEntryType(luoVapaaTekstientryType("Miten lapsesi ilmaisee itseään?", "Kuvaa lapsen vuorovaikutusta",
         "Vuorovaikutus", "Päivähoito", "Päivähoidon asiakasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU, Constants.classification_PAIVITTAISET_TOIMINNOT)));
-
-    type.addEntryType(luoVapaaTekstientryType("Yhteiset tavoitteet liittyen vuorovaikutukseen",
-        "Kirjataan yhteiset tavoitteet liittyen lapsen vuorovaikutukseen", "", "Päivähoito",
-        "Päivähoidon asiakasrekisteri", "Päivähoito", luoTyypit(Constants.KEHITYSASIAtype_KESKUSTELU),
-        luoclassification(Constants.classification_KUMPPANUUS, Constants.classification_KOTI)));
-
-    type.addEntryType(luoVapaaTekstientryType(
-        "Millaisia asioita toivoisit kerrottavan päivittäin lapsesi arjesta päivähoidossa",
-        "Kuvaa kodin ja päivähoidon yhteistyötä", "Kodin ja päivähoidon yhteistyö", "Päivähoito",
-        "Päivähoidon asiakasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIAtype_KYSELY),
-        luoclassification(Constants.classification_PAIVITTAISET_TOIMINNOT, Constants.classification_KOTI)));
-
-    type.addEntryType(luoVapaaTekstientryType("Miten yhteistyö hoidetaan molempiin vanhempiin",
-        "Kuvaa kodin ja päivähoidon yhteistyötä", "Kodin ja päivähoidon yhteistyö", "Päivähoito",
-        "Päivähoidon asiakasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIAtype_KYSELY),
-        luoclassification(Constants.classification_PAIVITTAISET_TOIMINNOT, Constants.classification_KOTI)));
-
-    type.addEntryType(luoVapaaTekstientryType("Millaisia yhteistyön tapoja toivotte",
-        "Kuvaa kodin ja päivähoidon yhteistyötä", "Kodin ja päivähoidon yhteistyö", "Päivähoito",
-        "Päivähoidon asiakasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIAtype_KYSELY),
-        luoclassification(Constants.classification_PAIVITTAISET_TOIMINNOT, Constants.classification_KOTI)));
-
-    type.addEntryType(luoVapaaTekstientryType(
-        "Minkälaiset asiat teille on kasvatuksessa tärkeitä? mitä toivotte meiltä",
-        "Kuvaa kodin ja päivähoidon yhteistyötä", "Kodin ja päivähoidon yhteistyö", "Päivähoito",
-        "Päivähoidon asiakasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIAtype_KYSELY),
-        luoclassification(Constants.classification_PAIVITTAISET_TOIMINNOT, Constants.classification_KOTI)));
-
-    type.addEntryType(luoVapaaTekstientryType("Yhteiset tavoitteet liittyen yhteistyöhön",
-        "Kirjataan yhteiset tavoitteet liittyen yhteistyöhön", "", "Päivähoito", "Päivähoidon asiakasrekisteri",
-        "Päivähoito", luoTyypit(Constants.KEHITYSASIAtype_KESKUSTELU), luoclassification(Constants.classification_KUMPPANUUS)));
-
-    type.addEntryType(luoMonivalueinenVapaaTekstientryType("Kommentit, havainnot ja tavoitteet",
-        "Kirjatut kommentit, havainnot ja tavoitteet", "", "Päivähoito", "Päivähoidon asiakasrekisteri", "Päivähoito",
-        "kommentti, havainto tai tavoite", luoTyypit(Constants.KEHITYSASIAtype_KESKUSTELU),
-        luoclassification(Constants.classification_KOMMENTTI, Constants.classification_TAVOITE, Constants.classification_HAVAINTO)));
-
-    Date nyt = new Date();
-    Date loppuu = new Date();
-    loppuu.setYear(loppuu.getYear() + 1);
-
-    CollectionState tila = new CollectionState(State.ACTIVE);
-    KKSCollection k = new KKSCollection("" + codeGenerator, nimi, type.getDescription(), tila, new Date(), 1, type);
-    luoTyhjatKirjaukset(k);
-    return k;
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU, Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
   }
 
   public static KKSCollection luo4VuotisTarkastus(String nimi) {
@@ -275,47 +283,110 @@ public class DemoFactory {
 
     /********************************/
 
+    luo4vuotisHuoltajaGroup(type);
+
+    /***************************************/
+    luo4vuotisPaivahoitoGroup(type);
+
+    /********************************/
+
+    luo4vuotisNeuvolaGroup(type);
+
+    CollectionState tila = new CollectionState(State.ACTIVE);
+    KKSCollection k = new KKSCollection("" + codeGenerator, nimi, type.getDescription(), tila, new Date(), 1, type);
+    luoTyhjatKirjaukset(k);
+    return k;
+  }
+
+  private static void luo4vuotisNeuvolaGroup(CollectionType type) {
+    type.addEntryType(luoVapaaTekstientryType("Yleistä neuvolakäynnin sujumisesta", "kuvaa neuvolakäynnin sujumisen",
+        "", "neuvola", "potilasrekisteri", "Neuvola", luoTyypit(Constants.KEHITYSASIATYYPPI_HAVAINTO),
+        luoclassification(Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU)));
+
+    type.addEntryType(luoVapaaTekstientryType(
+        "Onko huolenaiheita ja miten mahdolliset huolenaiheet on huomioitu",
+        "mm. pelot, arkuus, sosiaaliset taidot, puhe, motoriikka, siisteyskasvatus, perhetilanne, kasvatuskysymykset",
+        "",
+        "neuvola",
+        "potilasrekisteri",
+        "Neuvola",
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU, Constants.LUOKITUS_HUOLENAIHEET,
+            Constants.LUOKITUS_TERVEYDENTILA, Constants.LUOKITUS_PSYYKKINEN_KEHITYS,
+            Constants.LUOKITUS_FYYSINEN_KEHITYS, Constants.LUOKITUS_KIELI_JA_KOMMUNIKAATIO)));
+
+    type.addEntryType(luoVapaaTekstientryType("Neuvola ohjannut jatkoselvityksiin", "lähetteet", "", "neuvola",
+        "potilasrekisteri", "Neuvola", luoTyypit(Constants.KEHITYSASIATYYPPI_LAHETE),
+        luoclassification(Constants.LUOKITUS_TERVEYDENTILA)));
+
+    type.addEntryType(luoVapaaTekstientryType("Terveiset päivähoitoon", "neuvolan terveiset päivähoidolle", "",
+        "neuvola", "potilasrekisteri", "Neuvola", luoTyypit(Constants.KEHITYSASIATYYPPI_PALAUTE),
+        luoclassification(Constants.LUOKITUS_TERVEYDENTILA)));
+
+    type.addEntryType(luoVapaaTekstientryType("Terveiset päivähoitoon", "neuvolan terveiset päivähoidolle", "",
+        "neuvola", "potilasrekisteri", "Neuvola", luoTyypit(Constants.KEHITYSASIATYYPPI_PALAUTE),
+        luoclassification(Constants.LUOKITUS_TERVEYDENTILA)));
+
+    type.addEntryType(luoTekstientryType("Päänympärys", "lapsen päänympärys sentteinä", "Mittaukset", "neuvola",
+        "potilasrekisteri", "Neuvola", luoTyypit(Constants.KEHITYSASIATYYPPI_KAYNTI),
+        luoclassification(Constants.LUOKITUS_MITTAUS)));
+
+    type.addEntryType(luoTekstientryType("Pituus", "lapsen pituus sentteinä", "Mittaukset", "neuvola",
+        "potilasrekisteri", "Neuvola", luoTyypit(Constants.KEHITYSASIATYYPPI_KAYNTI),
+        luoclassification(Constants.LUOKITUS_MITTAUS)));
+
+    type.addEntryType(luoTekstientryType("Paino", "lapsen paino kiloina", "Mittaukset", "neuvola", "potilasrekisteri",
+        "Neuvola", luoTyypit(Constants.KEHITYSASIATYYPPI_KAYNTI), luoclassification(Constants.LUOKITUS_MITTAUS)));
+
+    type.addEntryType(luoMonivalueinenVapaaTekstientryType("Kommentit, havainnot ja tavoitteet",
+        "Kirjatut kommentit, havainnot ja tavoitteet", "", "neuvola", "potilasrekisteri", "Neuvola",
+        "kommentti, havainto tai tavoite", luoTyypit(Constants.KEHITYSASIATYYPPI_KESKUSTELU),
+        luoclassification(Constants.LUOKITUS_KOMMENTTI, Constants.LUOKITUS_TAVOITE, Constants.LUOKITUS_HAVAINTO)));
+  }
+
+  private static void luo4vuotisHuoltajaGroup(CollectionType type) {
     type.addEntryType(luoVapaaTekstientryType("Mikä 4 – vuotiaassanne on parasta ja missä asioissa hän on hyvä?",
         "Kuvaa lapsen vahvuuksia", "", "neuvola", "potilasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_KYSELY), luoclassification(Constants.classification_VANHEMPIEN_valueSTAMAT_ASIAT)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
+        luoclassification(Constants.LUOKITUS_VANHEMPIEN_valueSTAMAT_ASIAT)));
 
-    type.addEntryType(luoVapaaTekstientryType("Mitä asioita teette yhdessä perheen kanssa?",
-        "Kuvaa perheen valueja", "", "neuvola", "potilasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_KYSELY),
-        luoclassification(Constants.classification_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET)));
+    type.addEntryType(luoVapaaTekstientryType("Mitä asioita teette yhdessä perheen kanssa?", "Kuvaa perheen valueja",
+        "", "neuvola", "potilasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
+        luoclassification(Constants.LUOKITUS_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET)));
 
     type.addEntryType(luoVapaaTekstientryType(
         "Mitä teette yhdessä 4-vuotiaanne kanssa ja mitkä tilanteet tuntuvat mukavilta?", "Kuvaa perheen valueja", "",
-        "neuvola", "potilasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIAtype_KYSELY),
-        luoclassification(Constants.classification_VANHEMPIEN_valueSTAMAT_ASIAT)));
+        "neuvola", "potilasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
+        luoclassification(Constants.LUOKITUS_VANHEMPIEN_valueSTAMAT_ASIAT)));
 
     type.addEntryType(luoVapaaTekstientryType(
         "Miten perheessänne arki sujuu ja miten käsittelette ristiriitatilanteita?",
         "Kuvaa perheen kasvatuksellisia keinoja", "", "neuvola", "potilasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_KYSELY),
-        luoclassification(Constants.classification_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET, Constants.classification_HUOLENAIHEET)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
+        luoclassification(Constants.LUOKITUS_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET, Constants.LUOKITUS_HUOLENAIHEET)));
 
     type.addEntryType(luoVapaaTekstientryType(
         "Onko perheessänne tapahtunut viime aikoina jotain erityistä, mistä haluatte kertoa?",
         "Kuvaa perheen nykytilannetta/muutosta", "", "neuvola", "potilasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_KYSELY), luoclassification(Constants.classification_HUOLENAIHEET)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY), luoclassification(Constants.LUOKITUS_HUOLENAIHEET)));
 
     type.addEntryType(luoVapaaTekstientryType(
         "Oletteko huolissanne jostain lapsenne käyttäytymiseen tai kehitykseen liittyvästä asiasta?",
         "Kuvaa huolenaiheita", "", "neuvola", "potilasrekisteri", "Huoltaja",
-        luoTyypit(Constants.KEHITYSASIAtype_KYSELY),
-        luoclassification(Constants.classification_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET, Constants.classification_HUOLENAIHEET)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
+        luoclassification(Constants.LUOKITUS_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET, Constants.LUOKITUS_HUOLENAIHEET)));
 
     type.addEntryType(luoVapaaTekstientryType(
         "Onko lapsenne päivähoidossa tai kerhossa ja miten ryhmässä toimiminen sujuu?", "Kuvaa lasta ryhmässä", "",
-        "neuvola", "potilasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIAtype_KYSELY),
-        luoclassification(Constants.classification_HUOLENAIHEET)));
+        "neuvola", "potilasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
+        luoclassification(Constants.LUOKITUS_HUOLENAIHEET)));
 
-    type.addEntryType(luoVapaaTekstientryType("Haluan keskustella lisäksi", "Kuvaa keskustelutarpeet", "",
-        "neuvola", "potilasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIAtype_TOIVE),
-        luoclassification(Constants.classification_HUOLENAIHEET)));
+    type.addEntryType(luoVapaaTekstientryType("Haluan keskustella lisäksi", "Kuvaa keskustelutarpeet", "", "neuvola",
+        "potilasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIATYYPPI_TOIVE),
+        luoclassification(Constants.LUOKITUS_HUOLENAIHEET)));
+  }
 
-    /***************************************/
+  private static void luo4vuotisPaivahoitoGroup(CollectionType type) {
     type.addEntryType(luoValintaentryType(
         "Pukee ja riisuu itse",
         "kuvaa päivittäisactionjen sujumista",
@@ -324,9 +395,9 @@ public class DemoFactory {
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
         luovaluet("kyllä", "opettelee", "ei vielä"),
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_MOTORIIKKA, Constants.classification_KEHON_HALLINTA,
-            Constants.classification_PAIVITTAISET_TOIMINNOT)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_MOTORIIKKA, Constants.LUOKITUS_KEHON_HALLINTA,
+            Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
     type.addEntryType(luoValintaentryType(
         "Syö siististi",
@@ -336,9 +407,9 @@ public class DemoFactory {
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
         luovaluet("kyllä", "opettelee", "ei vielä"),
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_MOTORIIKKA, Constants.classification_KEHON_HALLINTA,
-            Constants.classification_PAIVITTAISET_TOIMINNOT)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_MOTORIIKKA, Constants.LUOKITUS_KEHON_HALLINTA,
+            Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
     type.addEntryType(luoValintaentryType(
         "Käy omatoimisesti wc:ssä",
@@ -348,9 +419,9 @@ public class DemoFactory {
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
         luovaluet("kyllä", "opettelee", "ei vielä"),
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_MOTORIIKKA, Constants.classification_KEHON_HALLINTA,
-            Constants.classification_PAIVITTAISET_TOIMINNOT)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_MOTORIIKKA, Constants.LUOKITUS_KEHON_HALLINTA,
+            Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
     type.addEntryType(luoValintaentryType(
         "Hahmottaa hoitopaikan hoitorytmin",
@@ -360,9 +431,9 @@ public class DemoFactory {
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
         luovaluet("kyllä", "opettelee", "ei vielä"),
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_TARKKAAVAISUUS, Constants.classification_PSYYKKINEN_KEHITYS,
-            Constants.classification_PAIVITTAISET_TOIMINNOT)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_TARKKAAVAISUUS, Constants.LUOKITUS_PSYYKKINEN_KEHITYS,
+            Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
     type.addEntryType(luoValintaentryType(
         "Siirtyminen toiminnasta toiseen onnistuu",
@@ -372,14 +443,14 @@ public class DemoFactory {
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
         luovaluet("kyllä", "opettelee", "ei vielä"),
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_TARKKAAVAISUUS, Constants.classification_PSYYKKINEN_KEHITYS,
-            Constants.classification_PAIVITTAISET_TOIMINNOT)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_TARKKAAVAISUUS, Constants.LUOKITUS_PSYYKKINEN_KEHITYS,
+            Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
-    type.addEntryType(luoValintaentryType("Päivälepo", "kuvaa päivittäisactionjen sujumista",
-        "Päivittäistoiminnot", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
+    type.addEntryType(luoValintaentryType("Päivälepo", "kuvaa päivittäisactionjen sujumista", "Päivittäistoiminnot",
+        "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
         luovaluet("Nukkuu päivittäin", "Satunnaisesti", "Ei nuku päiväunia"),
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO), luoclassification(Constants.classification_PAIVITTAISET_TOIMINNOT)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO), luoclassification(Constants.LUOKITUS_PAIVITTAISET_TOIMINNOT)));
 
     type.addEntryType(luoValintaentryType(
         "Juoksee sujuvasti",
@@ -389,9 +460,9 @@ public class DemoFactory {
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
         luovaluet("kyllä", "vaihtelevasti", "ei vielä"),
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_FYYSINEN_KEHITYS, Constants.classification_KEHON_HALLINTA,
-            Constants.classification_LIIKUNANLLISET_TAIDOT, Constants.classification_MOTORIIKKA_KARKEA)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_FYYSINEN_KEHITYS, Constants.LUOKITUS_KEHON_HALLINTA,
+            Constants.LUOKITUS_LIIKUNANLLISET_TAIDOT, Constants.LUOKITUS_MOTORIIKKA_KARKEA)));
 
     type.addEntryType(luoValintaentryType(
         "Kävelee kapealla penkillä / narua pitkin",
@@ -401,9 +472,9 @@ public class DemoFactory {
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
         luovaluet("kyllä", "vaihtelevasti", "ei vielä"),
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_FYYSINEN_KEHITYS, Constants.classification_KEHON_HALLINTA,
-            Constants.classification_LIIKUNANLLISET_TAIDOT, Constants.classification_MOTORIIKKA_KARKEA)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_FYYSINEN_KEHITYS, Constants.LUOKITUS_KEHON_HALLINTA,
+            Constants.LUOKITUS_LIIKUNANLLISET_TAIDOT, Constants.LUOKITUS_MOTORIIKKA_KARKEA)));
 
     type.addEntryType(luoValintaentryType(
         "Hyppää tasajalkahyppyä",
@@ -413,9 +484,9 @@ public class DemoFactory {
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
         luovaluet("kyllä", "vaihtelevasti", "ei vielä"),
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_FYYSINEN_KEHITYS, Constants.classification_KEHON_HALLINTA,
-            Constants.classification_LIIKUNANLLISET_TAIDOT, Constants.classification_MOTORIIKKA_KARKEA)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_FYYSINEN_KEHITYS, Constants.LUOKITUS_KEHON_HALLINTA,
+            Constants.LUOKITUS_LIIKUNANLLISET_TAIDOT, Constants.LUOKITUS_MOTORIIKKA_KARKEA)));
 
     type.addEntryType(luoValintaentryType(
         "Kävelee portaita ylös ja alas vuorotahtiin",
@@ -425,9 +496,9 @@ public class DemoFactory {
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
         luovaluet("kyllä", "vaihtelevasti", "ei vielä"),
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_FYYSINEN_KEHITYS, Constants.classification_KEHON_HALLINTA,
-            Constants.classification_LIIKUNANLLISET_TAIDOT, Constants.classification_MOTORIIKKA_KARKEA)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_FYYSINEN_KEHITYS, Constants.LUOKITUS_KEHON_HALLINTA,
+            Constants.LUOKITUS_LIIKUNANLLISET_TAIDOT, Constants.LUOKITUS_MOTORIIKKA_KARKEA)));
 
     type.addEntryType(luoValintaentryType(
         "Kiipeilee",
@@ -437,34 +508,34 @@ public class DemoFactory {
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
         luovaluet("kyllä", "vaihtelevasti", "ei vielä"),
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_FYYSINEN_KEHITYS, Constants.classification_KEHON_HALLINTA,
-            Constants.classification_LIIKUNANLLISET_TAIDOT, Constants.classification_MOTORIIKKA_KARKEA)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_FYYSINEN_KEHITYS, Constants.LUOKITUS_KEHON_HALLINTA,
+            Constants.LUOKITUS_LIIKUNANLLISET_TAIDOT, Constants.LUOKITUS_MOTORIIKKA_KARKEA)));
 
     type.addEntryType(luoValintaentryType("Tunnistaa ja nimeää kehonosia", "kuvaa psyykkistä kehitystä",
         "Liikkuminen ja hahmottaminen", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
-        luovaluet("kyllä", "vaihtelevasti", "ei vielä"), luoTyypit(Constants.KEHITYSASIAtype_HAVAINTO),
-        luoclassification(Constants.classification_PSYYKKINEN_KEHITYS)));
+        luovaluet("kyllä", "vaihtelevasti", "ei vielä"), luoTyypit(Constants.KEHITYSASIATYYPPI_HAVAINTO),
+        luoclassification(Constants.LUOKITUS_PSYYKKINEN_KEHITYS)));
 
     type.addEntryType(luoValintaentryType("Piirtää tunnistettavia asioita", "kuvaa psyykkistä kehitystä",
         "Liikkuminen ja hahmottaminen", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
-        luovaluet("kyllä", "vaihtelevasti", "ei vielä"), luoTyypit(Constants.KEHITYSASIAtype_HAVAINTO),
-        luoclassification(Constants.classification_PSYYKKINEN_KEHITYS)));
+        luovaluet("kyllä", "vaihtelevasti", "ei vielä"), luoTyypit(Constants.KEHITYSASIATYYPPI_HAVAINTO),
+        luoclassification(Constants.LUOKITUS_PSYYKKINEN_KEHITYS)));
 
     type.addEntryType(luoValintaentryType("Leikkaa saksilla", "kuvaa fyysistä ja psyykkistä kehitystä",
         "Liikkuminen ja hahmottaminen", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
-        luovaluet("kyllä", "vaihtelevasti", "ei vielä"), luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_PSYYKKINEN_KEHITYS, Constants.classification_MOTORIIKKA_HIENO)));
+        luovaluet("kyllä", "vaihtelevasti", "ei vielä"), luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_PSYYKKINEN_KEHITYS, Constants.LUOKITUS_MOTORIIKKA_HIENO)));
 
     type.addEntryType(luoValintaentryType("Kokoaa palapelejä", "kuvaa psyykkistä kehitystä",
         "Liikkuminen ja hahmottaminen", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
-        luovaluet("n.12", "n.20", ">20"), luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_PSYYKKINEN_KEHITYS, Constants.classification_MOTORIIKKA_HIENO)));
+        luovaluet("n.12", "n.20", ">20"), luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_PSYYKKINEN_KEHITYS, Constants.LUOKITUS_MOTORIIKKA_HIENO)));
 
     type.addEntryType(luoValintaentryType("Kätisyys", "kuvaa fyysistä ja psyykkistä kehitystä",
         "Liikkuminen ja hahmottaminen", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
-        luovaluet("Oikea", "Vasen", "Vaihtaen"), luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_PSYYKKINEN_KEHITYS)));
+        luovaluet("Oikea", "Vasen", "Vaihtaen"), luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_PSYYKKINEN_KEHITYS)));
 
     type.addEntryType(luoValintaentryType(
         "Ottaa ja säilyttää katsekontaktin vuorovaikutuksessa",
@@ -474,9 +545,9 @@ public class DemoFactory {
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
         luovaluet("Yleensä", "Vaihtelevasti", "Ei vielä"),
-        luoTyypit(Constants.KEHITYSASIAtype_HAVAINTO),
-        luoclassification(Constants.classification_PSYYKKINEN_KEHITYS, Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU,
-            Constants.classification_KIELI_JA_KOMMUNIKAATIO)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_HAVAINTO),
+        luoclassification(Constants.LUOKITUS_PSYYKKINEN_KEHITYS, Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU,
+            Constants.LUOKITUS_KIELI_JA_KOMMUNIKAATIO)));
 
     type.addEntryType(luoValintaentryType(
         "Osaa kuunnella vastavuoroisesti",
@@ -486,14 +557,14 @@ public class DemoFactory {
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
         luovaluet("Yleensä", "Vaihtelevasti", "Ei vielä"),
-        luoTyypit(Constants.KEHITYSASIAtype_HAVAINTO),
-        luoclassification(Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU, Constants.classification_PSYYKKINEN_KEHITYS,
-            Constants.classification_KIELI_JA_KOMMUNIKAATIO)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_HAVAINTO),
+        luoclassification(Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU, Constants.LUOKITUS_PSYYKKINEN_KEHITYS,
+            Constants.LUOKITUS_KIELI_JA_KOMMUNIKAATIO)));
 
     type.addEntryType(luoValintaentryType("Toimii ohjeiden mukaan", "kuvaa vuorovaikutuksen ja kielen kehitystä",
         "Kieli ja kommunikaatio", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
-        luovaluet("Yleensä", "Vaihtelevasti", "Ei vielä"), luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_KIELI_JA_KOMMUNIKAATIO, Constants.classification_PSYYKKINEN_KEHITYS)));
+        luovaluet("Yleensä", "Vaihtelevasti", "Ei vielä"), luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_KIELI_JA_KOMMUNIKAATIO, Constants.LUOKITUS_PSYYKKINEN_KEHITYS)));
 
     type.addEntryType(luoValintaentryType(
         "On kiinnostunut saduista ja kertomuksista",
@@ -503,9 +574,9 @@ public class DemoFactory {
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
         luovaluet("Yleensä", "Vaihtelevasti", "Ei vielä"),
-        luoTyypit(Constants.KEHITYSASIAtype_HAVAINTO),
-        luoclassification(Constants.classification_KIELI_JA_KOMMUNIKAATIO, Constants.classification_PSYYKKINEN_KEHITYS,
-            Constants.classification_TARKKAAVAISUUS)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_HAVAINTO),
+        luoclassification(Constants.LUOKITUS_KIELI_JA_KOMMUNIKAATIO, Constants.LUOKITUS_PSYYKKINEN_KEHITYS,
+            Constants.LUOKITUS_TARKKAAVAISUUS)));
 
     type.addEntryType(luoValintaentryType(
         "Puhe on selkeää ja ymmärrettävää",
@@ -515,9 +586,9 @@ public class DemoFactory {
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
         luovaluet("Yleensä", "Vaihtelevasti", "Ei vielä"),
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_KIELI_JA_KOMMUNIKAATIO, Constants.classification_PSYYKKINEN_KEHITYS,
-            Constants.classification_MOTORIIKKA_HIENO)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_KIELI_JA_KOMMUNIKAATIO, Constants.LUOKITUS_PSYYKKINEN_KEHITYS,
+            Constants.LUOKITUS_MOTORIIKKA_HIENO)));
 
     type.addEntryType(luoVapaaTekstientryType(
         "Huomioita puheesta",
@@ -526,19 +597,19 @@ public class DemoFactory {
         "päivähoito",
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_KIELI_JA_KOMMUNIKAATIO, Constants.classification_PSYYKKINEN_KEHITYS,
-            Constants.classification_MOTORIIKKA_HIENO)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_KIELI_JA_KOMMUNIKAATIO, Constants.LUOKITUS_PSYYKKINEN_KEHITYS,
+            Constants.LUOKITUS_MOTORIIKKA_HIENO)));
 
     type.addEntryType(luoValintaentryType("Ymmärtää lukumäärien 1-4 vastaavuuden",
         "kuvaa matemaattisten taitojen kehitystä", "Kieli ja kommunikaatio", "päivähoito",
         "päivähoidon asiakasrekisteri", "Päivähoito", luovaluet("Yleensä", "Vaihtelevasti", "Ei vielä"),
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO), luoclassification(Constants.classification_MATEMAATTISET_TAIDOT)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO), luoclassification(Constants.LUOKITUS_MATEMAATTISET_TAIDOT)));
 
     type.addEntryType(luoValintaentryType("Tunnistaa ja nimeää perusvärit", "kuvaa kielen kehitystä",
         "Kieli ja kommunikaatio", "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito",
-        luovaluet("Yleensä", "Vaihtelevasti", "Ei vielä"), luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_KIELI_JA_KOMMUNIKAATIO)));
+        luovaluet("Yleensä", "Vaihtelevasti", "Ei vielä"), luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_KIELI_JA_KOMMUNIKAATIO)));
 
     type.addEntryType(luoValintaentryType(
         "Osaa kertoa pieniä tarinoita / osaa kertoa tapahtuneista asioista",
@@ -548,9 +619,9 @@ public class DemoFactory {
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
         luovaluet("Yleensä", "Vaihtelevasti", "Ei vielä"),
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_KIELI_JA_KOMMUNIKAATIO, Constants.classification_TARKKAAVAISUUS,
-            Constants.classification_KESKITTYMINEN_JA_MUISTI, Constants.classification_PSYYKKINEN_KEHITYS)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_ARVIO),
+        luoclassification(Constants.LUOKITUS_KIELI_JA_KOMMUNIKAATIO, Constants.LUOKITUS_TARKKAAVAISUUS,
+            Constants.LUOKITUS_KESKITTYMINEN_JA_MUISTI, Constants.LUOKITUS_PSYYKKINEN_KEHITYS)));
 
     type.addEntryType(luoVapaaTekstientryType(
         "Vahvuudet ja vaikeudet leikeissä",
@@ -559,9 +630,9 @@ public class DemoFactory {
         "päivähoito",
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
-        luoTyypit(Constants.KEHITYSASIAtype_HAVAINTO),
-        luoclassification(Constants.classification_HUOLENAIHEET, Constants.classification_VAHVUUDET_JA_KIINNOSTUKSET,
-            Constants.classification_LEIKKI, Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_HAVAINTO),
+        luoclassification(Constants.LUOKITUS_HUOLENAIHEET, Constants.LUOKITUS_VAHVUUDET_JA_KIINNOSTUKSET,
+            Constants.LUOKITUS_LEIKKI, Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU)));
 
     type.addEntryType(luoVapaaTekstientryType(
         "Vahvuudet ja vaikeudet sosiaalisissa tilanteissa",
@@ -570,69 +641,13 @@ public class DemoFactory {
         "päivähoito",
         "päivähoidon asiakasrekisteri",
         "Päivähoito",
-        luoTyypit(Constants.KEHITYSASIAtype_HAVAINTO),
-        luoclassification(Constants.classification_HUOLENAIHEET, Constants.classification_VAHVUUDET_JA_KIINNOSTUKSET,
-            Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU)));
+        luoTyypit(Constants.KEHITYSASIATYYPPI_HAVAINTO),
+        luoclassification(Constants.LUOKITUS_HUOLENAIHEET, Constants.LUOKITUS_VAHVUUDET_JA_KIINNOSTUKSET,
+            Constants.LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU)));
 
-    type.addEntryType(luoVapaaTekstientryType("Terveiset neuvolaan", "kerro terveiset neuvolaan", "",
-        "päivähoito", "päivähoidon asiakasrekisteri", "Päivähoito", luoTyypit(Constants.KEHITYSASIAtype_PALAUTE),
-        luoclassification(Constants.classification_KOTI)));
-
-    /********************************/
-
-    type.addEntryType(luoVapaaTekstientryType("Yleistä neuvolakäynnin sujumisesta",
-        "kuvaa neuvolakäynnin sujumisen", "", "neuvola", "potilasrekisteri", "Neuvola",
-        luoTyypit(Constants.KEHITYSASIAtype_HAVAINTO), luoclassification(Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU)));
-
-    type.addEntryType(luoVapaaTekstientryType(
-        "Onko huolenaiheita ja miten mahdolliset huolenaiheet on huomioitu",
-        "mm. pelot, arkuus, sosiaaliset taidot, puhe, motoriikka, siisteyskasvatus, perhetilanne, kasvatuskysymykset",
-        "",
-        "neuvola",
-        "potilasrekisteri",
-        "Neuvola",
-        luoTyypit(Constants.KEHITYSASIAtype_ARVIO),
-        luoclassification(Constants.classification_SOSIAALISUUS_JA_TUNNEILMAISU, Constants.classification_HUOLENAIHEET,
-            Constants.classification_TERVEYDENTILA, Constants.classification_PSYYKKINEN_KEHITYS,
-            Constants.classification_FYYSINEN_KEHITYS, Constants.classification_KIELI_JA_KOMMUNIKAATIO)));
-
-    type.addEntryType(luoVapaaTekstientryType("Neuvola ohjannut jatkoselvityksiin", "lähetteet", "", "neuvola",
-        "potilasrekisteri", "Neuvola", luoTyypit(Constants.KEHITYSASIAtype_LAHETE),
-        luoclassification(Constants.classification_TERVEYDENTILA)));
-
-    type.addEntryType(luoVapaaTekstientryType("Terveiset päivähoitoon", "neuvolan terveiset päivähoidolle", "",
-        "neuvola", "potilasrekisteri", "Neuvola", luoTyypit(Constants.KEHITYSASIAtype_PALAUTE),
-        luoclassification(Constants.classification_TERVEYDENTILA)));
-
-    type.addEntryType(luoVapaaTekstientryType("Terveiset päivähoitoon", "neuvolan terveiset päivähoidolle", "",
-        "neuvola", "potilasrekisteri", "Neuvola", luoTyypit(Constants.KEHITYSASIAtype_PALAUTE),
-        luoclassification(Constants.classification_TERVEYDENTILA)));
-
-    type.addEntryType(luoTekstientryType("Päänympärys", "lapsen päänympärys sentteinä", "Mittaukset", "neuvola",
-        "potilasrekisteri", "Neuvola", luoTyypit(Constants.KEHITYSASIAtype_KAYNTI),
-        luoclassification(Constants.classification_MITTAUS)));
-
-    type.addEntryType(luoTekstientryType("Pituus", "lapsen pituus sentteinä", "Mittaukset", "neuvola",
-        "potilasrekisteri", "Neuvola", luoTyypit(Constants.KEHITYSASIAtype_KAYNTI),
-        luoclassification(Constants.classification_MITTAUS)));
-
-    type.addEntryType(luoTekstientryType("Paino", "lapsen paino kiloina", "Mittaukset", "neuvola",
-        "potilasrekisteri", "Neuvola", luoTyypit(Constants.KEHITYSASIAtype_KAYNTI),
-        luoclassification(Constants.classification_MITTAUS)));
-
-    type.addEntryType(luoMonivalueinenVapaaTekstientryType("Kommentit, havainnot ja tavoitteet",
-        "Kirjatut kommentit, havainnot ja tavoitteet", "", "neuvola", "potilasrekisteri", "Neuvola",
-        "kommentti, havainto tai tavoite", luoTyypit(Constants.KEHITYSASIAtype_KESKUSTELU),
-        luoclassification(Constants.classification_KOMMENTTI, Constants.classification_TAVOITE, Constants.classification_HAVAINTO)));
-
-    Date nyt = new Date();
-    Date loppuu = new Date();
-    loppuu.setYear(loppuu.getYear() + 1);
-
-    CollectionState tila = new CollectionState(State.ACTIVE);
-    KKSCollection k = new KKSCollection("" + codeGenerator, nimi, type.getDescription(), tila, new Date(), 1, type);
-    luoTyhjatKirjaukset(k);
-    return k;
+    type.addEntryType(luoVapaaTekstientryType("Terveiset neuvolaan", "kerro terveiset neuvolaan", "", "päivähoito",
+        "päivähoidon asiakasrekisteri", "Päivähoito", luoTyypit(Constants.KEHITYSASIATYYPPI_PALAUTE),
+        luoclassification(Constants.LUOKITUS_KOTI)));
   }
 
   public static List<String> luovaluet(String... joukko) {
@@ -659,13 +674,13 @@ public class DemoFactory {
     return l;
   }
 
-  public static EntryType luoMonivalintaentryType(String kentta, String classification, String ryhma, String vastuutaho,
-      String rekisteri, String tayttaja, List<String> valueJoukko, List<Classification> tyypit,
+  public static EntryType luoMonivalintaentryType(String kentta, String classification, String ryhma,
+      String vastuutaho, String rekisteri, String tayttaja, List<String> valueJoukko, List<Classification> tyypit,
       List<Classification> classifications) {
     codeGenerator++;
 
-    EntryType type = new EntryType("" + codeGenerator, kentta, classification, false, DataType.MULTI_SELECT, valueJoukko,
-        vastuutaho, tayttaja, rekisteri, ryhma);
+    EntryType type = new EntryType("" + codeGenerator, kentta, classification, false, DataType.MULTI_SELECT,
+        valueJoukko, vastuutaho, tayttaja, rekisteri, ryhma);
 
     type.setClassifications(classifications);
     type.setDevelopmentTypes(tyypit);
@@ -685,12 +700,13 @@ public class DemoFactory {
     return type;
   }
 
-  public static EntryType luoVapaaTekstientryType(String kentta, String classification, String ryhma, String vastuutaho,
-      String rekisteri, String tayttaja, List<Classification> tyypit, List<Classification> classifications) {
+  public static EntryType luoVapaaTekstientryType(String kentta, String classification, String ryhma,
+      String vastuutaho, String rekisteri, String tayttaja, List<Classification> tyypit,
+      List<Classification> classifications) {
     codeGenerator++;
 
-    EntryType type = new EntryType("" + codeGenerator, kentta, classification, false, DataType.FREE_TEXT, null, vastuutaho,
-        tayttaja, rekisteri, ryhma);
+    EntryType type = new EntryType("" + codeGenerator, kentta, classification, false, DataType.FREE_TEXT, null,
+        vastuutaho, tayttaja, rekisteri, ryhma);
 
     type.setClassifications(classifications);
     type.setDevelopmentTypes(tyypit);
@@ -702,8 +718,8 @@ public class DemoFactory {
       List<Classification> classifications) {
     codeGenerator++;
 
-    EntryType type = new EntryType("" + codeGenerator, kentta, classification, true, DataType.FREE_TEXT, null, vastuutaho,
-        tayttaja, rekisteri, ryhma);
+    EntryType type = new EntryType("" + codeGenerator, kentta, classification, true, DataType.FREE_TEXT, null,
+        vastuutaho, tayttaja, rekisteri, ryhma);
 
     type.setClassifications(classifications);
     type.setDevelopmentTypes(tyypit);
@@ -730,7 +746,6 @@ public class DemoFactory {
   }
 
   public static Entry luoentry(EntryType t, String entry) {
-    Entry k = new Entry(entry, new Date(), 1, t.getRegister(), "Kaisa Kirjaaja", t);
-    return k;
+    return new Entry(entry, new Date(), 1, t.getRegister(), "Kaisa Kirjaaja", t);
   }
 }

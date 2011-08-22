@@ -76,7 +76,6 @@ public class CreateCollectionController {
     }
     response.setRenderParameter("action", "showChild");
     response.setRenderParameter("pic", child.getPic());
-    creation = getCommandObject();
     creation.setName("");
     creation.setField("");
     sessionStatus.setComplete();

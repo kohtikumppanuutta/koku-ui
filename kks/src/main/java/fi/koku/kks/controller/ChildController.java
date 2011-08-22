@@ -56,7 +56,6 @@ public class ChildController {
     model.addAttribute("collections", child.getKks().getCollections());
     model.addAttribute("creatables", demoService.searchPersonCreatableCollections(child));
 
-    creation = getCommandObject();
     creation.setName("");
     return "child";
   }
