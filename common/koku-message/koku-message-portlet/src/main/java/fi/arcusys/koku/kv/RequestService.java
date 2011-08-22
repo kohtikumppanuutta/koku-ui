@@ -1,16 +1,16 @@
-package fi.arcusys.koku.request;
+package fi.arcusys.koku.kv;
 
 import java.net.URL;
 import java.util.List;
 
-import fi.arcusys.koku.requestservice.KokuRequestService_Service;
-import fi.arcusys.koku.requestservice.Request;
-import fi.arcusys.koku.requestservice.RequestSummary;
-import fi.arcusys.koku.requestservice.RequestType;
+import fi.arcusys.koku.kv.requestservice.KokuRequestService_Service;
+import fi.arcusys.koku.kv.requestservice.Request;
+import fi.arcusys.koku.kv.requestservice.RequestSummary;
+import fi.arcusys.koku.kv.requestservice.RequestType;
 
 public class RequestService {
 	
-	public final URL REQUEST_WSDL_LOCATION = getClass().getClassLoader().getResource("RequestService.wsdl");
+	public final URL REQUEST_WSDL_LOCATION = getClass().getClassLoader().getResource("KvRequestService.wsdl");
 	private KokuRequestService_Service rs;
 	
 	public RequestService() {

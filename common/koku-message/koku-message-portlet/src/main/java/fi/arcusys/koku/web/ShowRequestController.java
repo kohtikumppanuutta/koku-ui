@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import fi.arcusys.koku.request.KokuRequest;
-import fi.arcusys.koku.request.RequestHandle;
+import fi.arcusys.koku.kv.KokuRequest;
+import fi.arcusys.koku.kv.RequestHandle;
 
 /**
  * Shows request details page and store the current query information on the jsp page

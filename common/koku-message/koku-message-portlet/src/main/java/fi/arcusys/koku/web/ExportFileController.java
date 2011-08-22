@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
-import fi.arcusys.koku.request.KokuRequest;
-import fi.arcusys.koku.request.RequestHandle;
-import fi.arcusys.koku.requestservice.Answer;
-import fi.arcusys.koku.requestservice.Question;
-import fi.arcusys.koku.requestservice.Response;
+import fi.arcusys.koku.kv.KokuRequest;
+import fi.arcusys.koku.kv.RequestHandle;
+import fi.arcusys.koku.kv.requestservice.Answer;
+import fi.arcusys.koku.kv.requestservice.Question;
+import fi.arcusys.koku.kv.requestservice.Response;
 
 /**
  * Generates csv file containing response summary information

@@ -1,9 +1,10 @@
-package fi.arcusys.koku.request;
+package fi.arcusys.koku.kv;
 
 import java.util.List;
 
-import fi.arcusys.koku.requestservice.Question;
-import fi.arcusys.koku.requestservice.Response;
+import fi.arcusys.koku.kv.requestservice.Question;
+import fi.arcusys.koku.kv.requestservice.Response;
+
 
 public class KokuRequest {
 

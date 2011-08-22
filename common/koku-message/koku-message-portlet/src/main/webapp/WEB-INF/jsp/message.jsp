@@ -245,7 +245,7 @@
 		taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
 				+ '<td class="choose"><spring:message code="message.choose" /></td>'
-				+ '<td class="from">' + formatSender() + '</td>'
+				+ '<td class="from">' + '<spring:message code="message.from" />' + '</td>'
 				+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
 				+ '<td><spring:message code="message.description" /></td>'
 				+ '</tr>';
@@ -259,7 +259,7 @@
 			}
 			
 			taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["appointmentId"] + '" />' + '</td>'
-					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\')" >' + formatUser(tasks[i]) + '</td>'
+					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\')" >' + tasks[i]["sender"] + '</td>'
 					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
 					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\')" >' + tasks[i]["description"] + '</td>'
 					 + '</tr>';
@@ -370,7 +370,7 @@
 	
 	function formatSender() {
 		
-		if(pageObj.taskType == "msg_inbox" || pageObj.taskType == "msg_archive_inbox" || pageObj.taskType == "app_inbox_citizen" || pageObj.taskType == "app_inbox_employee")
+		if(pageObj.taskType == "msg_inbox" || pageObj.taskType == "msg_archive_inbox")
 			return  "<spring:message code="message.from" />";
 		else 
 			return "<spring:message code="message.receiver" />";		
@@ -378,7 +378,7 @@
 	
 	function formatUser(task) {
 		
-		if(pageObj.taskType == "msg_inbox" || pageObj.taskType == "msg_archive_inbox" || pageObj.taskType == "app_inbox_citizen" || pageObj.taskType == "app_inbox_employee")
+		if(pageObj.taskType == "msg_inbox" || pageObj.taskType == "msg_archive_inbox")
 			return task["sender"];
 		else 
 			return task["recipients"];

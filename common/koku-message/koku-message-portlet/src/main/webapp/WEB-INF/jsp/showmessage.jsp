@@ -1,5 +1,5 @@
 <%@ include file="init.jsp"%>
-<%@ page import="fi.arcusys.koku.message.Message" %>
+<%@ page import="fi.arcusys.koku.kv.Message" %>
 <portlet:renderURL var="homeURL" windowState="<%= WindowState.NORMAL.toString() %>" >
 	<portlet:param name="myaction" value="home" />
 </portlet:renderURL>

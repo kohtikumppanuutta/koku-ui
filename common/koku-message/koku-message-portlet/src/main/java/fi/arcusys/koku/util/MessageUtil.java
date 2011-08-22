@@ -6,7 +6,7 @@ import java.util.TimeZone;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import fi.arcusys.koku.messageservice.FolderType;
+import fi.arcusys.koku.kv.messageservice.FolderType;
 
 /**
  * Utilities used in the message portlet

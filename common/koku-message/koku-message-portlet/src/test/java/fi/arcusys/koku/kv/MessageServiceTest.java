@@ -1,4 +1,4 @@
-package fi.arcusys.koku.message;
+package fi.arcusys.koku.kv;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -11,13 +11,15 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 
-import fi.arcusys.koku.messageservice.Criteria;
-import fi.arcusys.koku.messageservice.Fields;
-import fi.arcusys.koku.messageservice.FolderType;
-import fi.arcusys.koku.messageservice.MessageQuery;
-import fi.arcusys.koku.messageservice.MessageSummary;
-import fi.arcusys.koku.messageservice.OrderBy;
-import fi.arcusys.koku.messageservice.Type;
+import fi.arcusys.koku.kv.MessageHandle;
+import fi.arcusys.koku.kv.MessageService;
+import fi.arcusys.koku.kv.messageservice.Criteria;
+import fi.arcusys.koku.kv.messageservice.Fields;
+import fi.arcusys.koku.kv.messageservice.FolderType;
+import fi.arcusys.koku.kv.messageservice.MessageQuery;
+import fi.arcusys.koku.kv.messageservice.MessageSummary;
+import fi.arcusys.koku.kv.messageservice.OrderBy;
+import fi.arcusys.koku.kv.messageservice.Type;
 
 public class MessageServiceTest {
 

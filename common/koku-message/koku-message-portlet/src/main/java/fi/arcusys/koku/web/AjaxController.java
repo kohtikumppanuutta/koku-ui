@@ -20,12 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
-import fi.arcusys.koku.appointment.AppointmentHandle;
-import fi.arcusys.koku.appointment.KokuAppointment;
-import fi.arcusys.koku.message.Message;
-import fi.arcusys.koku.message.MessageHandle;
-import fi.arcusys.koku.request.KokuRequest;
-import fi.arcusys.koku.request.RequestHandle;
+import fi.arcusys.koku.av.AvCitizenServiceHandle;
+import fi.arcusys.koku.av.AvEmployeeServiceHandle;
+import fi.arcusys.koku.av.KokuAppointment;
+import fi.arcusys.koku.kv.KokuRequest;
+import fi.arcusys.koku.kv.Message;
+import fi.arcusys.koku.kv.MessageHandle;
+import fi.arcusys.koku.kv.RequestHandle;
 import fi.arcusys.koku.tiva.KokuConsent;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
@@ -178,11 +179,21 @@ public class AjaxController {
 				totalTasksNum = reqHandle.getTotalRequestsNum(username, "valid");
 				jsonModel.put("tasks", msgs);
 			} else if(taskType.startsWith("app")) { // for appointment
-				List<KokuAppointment> apps;
-				AppointmentHandle appHandle = new AppointmentHandle();
-				apps = appHandle.getAppointments(username, first, max, taskType);
-				totalTasksNum = appHandle.getTotalAppointmentsNum(username, taskType);
-				jsonModel.put("tasks", apps);				
+				
+				
+				if(taskType.equals("app_inbox_citizen") || taskType.equals("app_response_citizen")) {
+					List<KokuAppointment> apps;
+					AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
+					apps = handle.getAppointments(username, first, max, taskType);
+					totalTasksNum = handle.getTotalAppointmentsNum(username, taskType);
+					jsonModel.put("tasks", apps);
+				}else if(taskType.equals("app_inbox_employee") || taskType.equals("app_response_employee")) {
+					List<KokuAppointment> apps;
+					AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
+					apps = handle.getAppointments(username, first, max, taskType);
+					totalTasksNum = handle.getTotalAppointmentsNum(username, taskType);
+					jsonModel.put("tasks", apps);
+				}			
 				
 			} else if(taskType.startsWith("cst")) { // for consent
 				if(taskType.equals("cst_assigned_citizen")) {

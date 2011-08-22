@@ -1,6 +1,5 @@
 <%@ include file="init.jsp"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
-<%@ page import="fi.arcusys.koku.request.KokuRequest" %>
+<%@ page import="fi.arcusys.koku.kv.KokuRequest" %>
 <portlet:renderURL var="homeURL" windowState="<%= WindowState.NORMAL.toString() %>" >
 	<portlet:param name="myaction" value="home" />
 </portlet:renderURL>

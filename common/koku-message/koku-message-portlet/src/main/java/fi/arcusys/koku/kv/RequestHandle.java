@@ -1,12 +1,12 @@
-package fi.arcusys.koku.request;
+package fi.arcusys.koku.kv;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import fi.arcusys.koku.requestservice.Request;
-import fi.arcusys.koku.requestservice.RequestSummary;
-import fi.arcusys.koku.requestservice.RequestType;
+import fi.arcusys.koku.kv.requestservice.Request;
+import fi.arcusys.koku.kv.requestservice.RequestSummary;
+import fi.arcusys.koku.kv.requestservice.RequestType;
 import fi.arcusys.koku.util.MessageUtil;
 
 public class RequestHandle {

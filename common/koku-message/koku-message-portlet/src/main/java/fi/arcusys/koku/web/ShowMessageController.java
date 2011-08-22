@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import fi.arcusys.koku.message.Message;
-import fi.arcusys.koku.message.MessageHandle;
+import fi.arcusys.koku.kv.Message;
+import fi.arcusys.koku.kv.MessageHandle;
 
 /**
  * Shows message details page and store the current query information on the jsp page

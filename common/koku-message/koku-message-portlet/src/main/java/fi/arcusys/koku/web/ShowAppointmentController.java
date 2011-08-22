@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import fi.arcusys.koku.appointment.AppointmentHandle;
-import fi.arcusys.koku.appointment.KokuAppointment;
+import fi.arcusys.koku.av.AvCitizenServiceHandle;
+import fi.arcusys.koku.av.AvEmployeeServiceHandle;
+import fi.arcusys.koku.av.KokuAppointment;
 
 /**
  * Shows appointment page and store the current query information on the jsp page
@@ -23,9 +24,17 @@ import fi.arcusys.koku.appointment.KokuAppointment;
 public class ShowAppointmentController {
 	
 	@RenderMapping(params = "myaction=showAppointment")
-	public String showRequest(RenderResponse response) {
+	public String showRequest(@RequestParam String taskType, RenderResponse response) {
 
-		return "showappointment";
+		String page = "showcitizenappointment";
+		
+		if(taskType.equals("app_response_citizen")) {
+			page = "showcitizenappointment";
+		} else if(taskType.equals("app_response_employee")) {
+			page = "showemployeeappointment";
+		}
+		
+		return page;
 	}
 		
 	// @ModelAttribute here works as the referenceData method
@@ -41,8 +50,16 @@ public class ShowAppointmentController {
 		request.getPortletSession().setAttribute("keyword", keyword, PortletSession.APPLICATION_SCOPE);
 		request.getPortletSession().setAttribute("orderType", orderType, PortletSession.APPLICATION_SCOPE);
 		
-		AppointmentHandle appHandle = new AppointmentHandle();
-		KokuAppointment app = appHandle.getAppointmentById(appointmentId);
+		KokuAppointment app = null;
+		
+		if(taskType.equals("app_response_citizen")) {
+			AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
+			app = handle.getAppointmentById(appointmentId);
+		} else if(taskType.equals("app_response_employee")) {
+			AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
+			app = handle.getAppointmentById(appointmentId);
+
+		}
 		
 		return app;
 	}

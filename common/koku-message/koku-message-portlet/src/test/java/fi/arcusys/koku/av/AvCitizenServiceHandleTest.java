@@ -1,4 +1,4 @@
-package fi.arcusys.koku.appointment;
+package fi.arcusys.koku.av;
 
 
 import static org.junit.Assert.assertEquals;
@@ -12,9 +12,9 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class AppointmentHandleTest {
+public class AvCitizenServiceHandleTest {
 
-	AppointmentHandle tester;
+	AvCitizenServiceHandle tester;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -26,7 +26,7 @@ public class AppointmentHandleTest {
 
 	@Before
 	public void setUp() throws Exception {
-		tester = new AppointmentHandle();
+		tester = new AvCitizenServiceHandle();
 	}
 
 	@After
