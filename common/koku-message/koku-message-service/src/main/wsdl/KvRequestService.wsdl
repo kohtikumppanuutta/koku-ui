@@ -97,6 +97,7 @@
 				<xs:restriction base='xs:string'>
 					<xs:enumeration value='YES_NO' />
 					<xs:enumeration value='FREE_TEXT' />
+					<xs:enumeration value='MULTIPLE_CHOICE' />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType name='requestType'>
@@ -173,7 +174,7 @@
 	<service name='KokuRequestService'>
 		<port binding='tns:KokuRequestServiceBinding' name='KokuRequestServicePort'>
 			<soap:address
-				location='http://127.0.0.1:8180/kv-model-0.1-SNAPSHOT/KokuRequestServiceImpl' />
+				location='http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuRequestServiceImpl' />
 		</port>
 	</service>
 </definitions>

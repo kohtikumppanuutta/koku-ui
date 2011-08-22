@@ -57,38 +57,50 @@
 							<sourceRoot>${project.build.directory}/generated/cxf</sourceRoot>
 							<wsdlOptions>
 								<wsdlOption>
-									<wsdl>${basedir}/src/main/wsdl/MessageService.wsdl</wsdl>
-									<wsdlLocation>classpath:MessageService.wsdl</wsdlLocation>
+									<wsdl>${basedir}/src/main/wsdl/KvMessageService.wsdl</wsdl>
+									<wsdlLocation>classpath:KvMessageService.wsdl</wsdlLocation>
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-server</extraarg>
 										<extraarg>-impl</extraarg>
 										<extraarg>-p</extraarg>
-										<extraarg>fi.arcusys.koku.messageservice</extraarg>
+										<extraarg>fi.arcusys.koku.kv.messageservice</extraarg>
 										<extraarg>-autoNameResolution</extraarg>
 									</extraargs>
 								</wsdlOption>
 								<wsdlOption>
-									<wsdl>${basedir}/src/main/wsdl/RequestService.wsdl</wsdl>
-									<wsdlLocation>classpath:RequestService.wsdl</wsdlLocation>
+									<wsdl>${basedir}/src/main/wsdl/KvRequestService.wsdl</wsdl>
+									<wsdlLocation>classpath:KvRequestService.wsdl</wsdlLocation>
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-server</extraarg>
 										<extraarg>-impl</extraarg>
 										<extraarg>-p</extraarg>
-										<extraarg>fi.arcusys.koku.requestservice</extraarg>
+										<extraarg>fi.arcusys.koku.kv.requestservice</extraarg>
 										<extraarg>-autoNameResolution</extraarg>
 									</extraargs>
 								</wsdlOption>
 								<wsdlOption>
-									<wsdl>${basedir}/src/main/wsdl/AppointmentService.wsdl</wsdl>
-									<wsdlLocation>classpath:AppointmentService.wsdl</wsdlLocation>
+									<wsdl>${basedir}/src/main/wsdl/AvCitizenService.wsdl</wsdl>
+									<wsdlLocation>classpath:AvCitizenService.wsdl</wsdlLocation>
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-server</extraarg>
 										<extraarg>-impl</extraarg>
 										<extraarg>-p</extraarg>
-										<extraarg>fi.arcusys.koku.appointmentservice</extraarg>
+										<extraarg>fi.arcusys.koku.av.citizenservice</extraarg>
+										<extraarg>-autoNameResolution</extraarg>
+									</extraargs>
+								</wsdlOption>
+								<wsdlOption>
+									<wsdl>${basedir}/src/main/wsdl/AvEmployeeService.wsdl</wsdl>
+									<wsdlLocation>classpath:AvEmployeeService.wsdl</wsdlLocation>
+									<extraargs>
+										<extraarg>-client</extraarg>
+										<extraarg>-server</extraarg>
+										<extraarg>-impl</extraarg>
+										<extraarg>-p</extraarg>
+										<extraarg>fi.arcusys.koku.av.employeeservice</extraarg>
 										<extraarg>-autoNameResolution</extraarg>
 									</extraargs>
 								</wsdlOption>

@@ -265,7 +265,7 @@
 	<service name='KokuKunpoSuostumusService'>
 		<port binding='tns:KokuKunpoSuostumusServiceBinding' name='KokuKunpoSuostumusServicePort'>
 			<soap:address
-				location='http://gatein.intra.arcusys.fi:8080/tiva-model-0.1-SNAPSHOT/KokuKunpoSuostumusServiceImpl' />
+				location='http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuKunpoSuostumusServiceImpl' />
 		</port>
 	</service>
 </definitions>

@@ -22,24 +22,6 @@
 			<xs:element name='getUnreadMessagesResponse' type='tns:getUnreadMessagesResponse' />
 			<xs:element name='setMessagesStatus' type='tns:setMessagesStatus' />
 			<xs:element name='setMessagesStatusResponse' type='tns:setMessagesStatusResponse' />
-			<xs:complexType name='archiveMessages'>
-				<xs:sequence>
-					<xs:element maxOccurs='unbounded' minOccurs='0' name='messageId'
-						type='xs:long' />
-				</xs:sequence>
-			</xs:complexType>
-			<xs:complexType name='archiveMessagesResponse'>
-				<xs:sequence />
-			</xs:complexType>
-			<xs:complexType name='deleteMessages'>
-				<xs:sequence>
-					<xs:element maxOccurs='unbounded' minOccurs='0' name='messageId'
-						type='xs:long' />
-				</xs:sequence>
-			</xs:complexType>
-			<xs:complexType name='deleteMessagesResponse'>
-				<xs:sequence />
-			</xs:complexType>
 			<xs:complexType name='getMessageById'>
 				<xs:sequence>
 					<xs:element name='messageId' type='xs:long' />
@@ -107,6 +89,51 @@
 						type='tns:messageSummary' />
 				</xs:sequence>
 			</xs:complexType>
+			<xs:complexType name='archiveMessages'>
+				<xs:sequence>
+					<xs:element maxOccurs='unbounded' minOccurs='0' name='messageId'
+						type='xs:long' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='archiveMessagesResponse'>
+				<xs:sequence />
+			</xs:complexType>
+			<xs:complexType name='deleteMessages'>
+				<xs:sequence>
+					<xs:element maxOccurs='unbounded' minOccurs='0' name='messageId'
+						type='xs:long' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='deleteMessagesResponse'>
+				<xs:sequence />
+			</xs:complexType>
+			<xs:complexType name='getMessagesOld'>
+				<xs:sequence>
+					<xs:element minOccurs='0' name='user' type='xs:string' />
+					<xs:element minOccurs='0' name='folderType' type='tns:folderType' />
+					<xs:element minOccurs='0' name='subQuery' type='xs:string' />
+					<xs:element name='startNum' type='xs:int' />
+					<xs:element name='maxNum' type='xs:int' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='getMessagesOldResponse'>
+				<xs:sequence>
+					<xs:element maxOccurs='unbounded' minOccurs='0' name='return'
+						type='tns:messageSummary' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='getTotalMessagesOld'>
+				<xs:sequence>
+					<xs:element minOccurs='0' name='user' type='xs:string' />
+					<xs:element minOccurs='0' name='folderType' type='tns:folderType' />
+					<xs:element minOccurs='0' name='subQuery' type='xs:string' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='getTotalMessagesOldResponse'>
+				<xs:sequence>
+					<xs:element name='return' type='xs:int' />
+				</xs:sequence>
+			</xs:complexType>
 			<xs:complexType name='getTotalMessages'>
 				<xs:sequence>
 					<xs:element minOccurs='0' name='user' type='xs:string' />
@@ -139,33 +166,6 @@
 			</xs:complexType>
 			<xs:complexType name='setMessagesStatusResponse'>
 				<xs:sequence />
-			</xs:complexType>
-			<xs:complexType name='getMessagesOld'>
-				<xs:sequence>
-					<xs:element minOccurs='0' name='user' type='xs:string' />
-					<xs:element minOccurs='0' name='folderType' type='tns:folderType' />
-					<xs:element minOccurs='0' name='subQuery' type='xs:string' />
-					<xs:element name='startNum' type='xs:int' />
-					<xs:element name='maxNum' type='xs:int' />
-				</xs:sequence>
-			</xs:complexType>
-			<xs:complexType name='getMessagesOldResponse'>
-				<xs:sequence>
-					<xs:element maxOccurs='unbounded' minOccurs='0' name='return'
-						type='tns:messageSummary' />
-				</xs:sequence>
-			</xs:complexType>
-			<xs:complexType name='getTotalMessagesOld'>
-				<xs:sequence>
-					<xs:element minOccurs='0' name='user' type='xs:string' />
-					<xs:element minOccurs='0' name='folderType' type='tns:folderType' />
-					<xs:element minOccurs='0' name='subQuery' type='xs:string' />
-				</xs:sequence>
-			</xs:complexType>
-			<xs:complexType name='getTotalMessagesOldResponse'>
-				<xs:sequence>
-					<xs:element name='return' type='xs:int' />
-				</xs:sequence>
 			</xs:complexType>
 			<xs:simpleType name='messageStatus'>
 				<xs:restriction base='xs:string'>
@@ -378,7 +378,7 @@
 	<service name='KokuMessageService'>
 		<port binding='tns:KokuMessageServiceBinding' name='KokuMessageServicePort'>
 			<soap:address
-				location='http://127.0.0.1:8180/kv-model-0.1-SNAPSHOT/KokuMessageServiceImpl' />
+				location='http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuMessageServiceImpl' />
 		</port>
 	</service>
 </definitions>
