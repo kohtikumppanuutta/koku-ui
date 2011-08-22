@@ -1,6 +1,8 @@
 package fi.koku.kks.ui.common.utils;
 
-public class Constants {
+public final class Constants {
+
+  private static final String LINE_BREAK = "</br>";
 
   private Constants() {
 
@@ -51,7 +53,7 @@ public class Constants {
   public static final String LUOKITUS_TERVEYDENTILA_LAAKEHOITO = "terveydentila.lääkehoito";
 
   public static final String LUOKITUS_KOTI = "koti";
-  public static final String LUOKITUS_VANHEMPIEN_valueSTAMAT_ASIAT = "koti.vanhempien_valuestamat_asiat";
+  public static final String LUOKITUS_VANHEMPIEN_ARVOSTAMAT_ASIAT = "koti.vanhempien_valuestamat_asiat";
   public static final String LUOKITUS_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET = "koti.vanhempien_kasvatukselliset_tavoitteet";
 
   public static final String LUOKITUS_MITTAUS = "mittaus";
@@ -63,14 +65,14 @@ public class Constants {
   public static String developmentIssues() {
     StringBuffer sb = new StringBuffer();
 
-    sb.append(KEHITYSASIATYYPPI_KESKUSTELU + "</br>");
-    sb.append(KEHITYSASIATYYPPI_ARVIO + "</br>");
-    sb.append(KEHITYSASIATYYPPI_HAVAINTO + "</br>");
-    sb.append(KEHITYSASIATYYPPI_KYSELY + "</br>");
-    sb.append(KEHITYSASIATYYPPI_PALAUTE + "</br>");
-    sb.append(KEHITYSASIATYYPPI_LAHETE + "</br>");
-    sb.append(KEHITYSASIATYYPPI_TOIVE + "</br>");
-    sb.append(KEHITYSASIATYYPPI_KAYNTI + "</br>");
+    sb.append(KEHITYSASIATYYPPI_KESKUSTELU + LINE_BREAK);
+    sb.append(KEHITYSASIATYYPPI_ARVIO + LINE_BREAK);
+    sb.append(KEHITYSASIATYYPPI_HAVAINTO + LINE_BREAK);
+    sb.append(KEHITYSASIATYYPPI_KYSELY + LINE_BREAK);
+    sb.append(KEHITYSASIATYYPPI_PALAUTE + LINE_BREAK);
+    sb.append(KEHITYSASIATYYPPI_LAHETE + LINE_BREAK);
+    sb.append(KEHITYSASIATYYPPI_TOIVE + LINE_BREAK);
+    sb.append(KEHITYSASIATYYPPI_KAYNTI + LINE_BREAK);
 
     return sb.toString();
   }
@@ -80,45 +82,45 @@ public class Constants {
 
     sb.append(LUOKITUS_KUMPPANUUS);
 
-    sb.append(LUOKITUS_FYYSINEN_KEHITYS + "</br>");
-    sb.append(LUOKITUS_MOTORIIKKA + "</br>");
-    sb.append(LUOKITUS_MOTORIIKKA_KARKEA + "</br>");
-    sb.append(LUOKITUS_MOTORIIKKA_HIENO + "</br>");
-    sb.append(LUOKITUS_KEHON_HALLINTA + "</br>");
-    sb.append(LUOKITUS_KIELI_JA_KOMMUNIKAATIO + "</br>");
-    sb.append(LUOKITUS_LAPSEN_TOIVEET + "</br>");
-    sb.append(LUOKITUS_VAHVUUDET_JA_KIINNOSTUKSET + "</br>");
-    sb.append(LUOKITUS_LEIKKI + "</br>");
-    sb.append(LUOKITUS_LIIKUNANLLISET_TAIDOT + "</br>");
-    sb.append(LUOKITUS_MATEMAATTISET_TAIDOT + "</br>");
-    sb.append(LUOKITUS_MOTORISTISET_TAIDOT + "</br>");
-    sb.append(LUOKITUS_PSYYKKINEN_KEHITYS + "</br>");
-    sb.append(LUOKITUS_PAIVITTAISET_TOIMINNOT + "</br>");
-    sb.append(LUOKITUS_RAKENTELU + "</br>");
-    sb.append(LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU + "</br>");
-    sb.append(LUOKITUS_TARKKAAVAISUUS + "</br>");
-    sb.append(LUOKITUS_KESKITTYMINEN_JA_MUISTI + "</br>");
-    sb.append(LUOKITUS_ULKOILU + "</br>");
-    sb.append(LUOKITUS_TUEN_TARVE + "</br>");
-    sb.append(LUOKITUS_HUOLENAIHEET + "</br>");
+    sb.append(LUOKITUS_FYYSINEN_KEHITYS + LINE_BREAK);
+    sb.append(LUOKITUS_MOTORIIKKA + LINE_BREAK);
+    sb.append(LUOKITUS_MOTORIIKKA_KARKEA + LINE_BREAK);
+    sb.append(LUOKITUS_MOTORIIKKA_HIENO + LINE_BREAK);
+    sb.append(LUOKITUS_KEHON_HALLINTA + LINE_BREAK);
+    sb.append(LUOKITUS_KIELI_JA_KOMMUNIKAATIO + LINE_BREAK);
+    sb.append(LUOKITUS_LAPSEN_TOIVEET + LINE_BREAK);
+    sb.append(LUOKITUS_VAHVUUDET_JA_KIINNOSTUKSET + LINE_BREAK);
+    sb.append(LUOKITUS_LEIKKI + LINE_BREAK);
+    sb.append(LUOKITUS_LIIKUNANLLISET_TAIDOT + LINE_BREAK);
+    sb.append(LUOKITUS_MATEMAATTISET_TAIDOT + LINE_BREAK);
+    sb.append(LUOKITUS_MOTORISTISET_TAIDOT + LINE_BREAK);
+    sb.append(LUOKITUS_PSYYKKINEN_KEHITYS + LINE_BREAK);
+    sb.append(LUOKITUS_PAIVITTAISET_TOIMINNOT + LINE_BREAK);
+    sb.append(LUOKITUS_RAKENTELU + LINE_BREAK);
+    sb.append(LUOKITUS_SOSIAALISUUS_JA_TUNNEILMAISU + LINE_BREAK);
+    sb.append(LUOKITUS_TARKKAAVAISUUS + LINE_BREAK);
+    sb.append(LUOKITUS_KESKITTYMINEN_JA_MUISTI + LINE_BREAK);
+    sb.append(LUOKITUS_ULKOILU + LINE_BREAK);
+    sb.append(LUOKITUS_TUEN_TARVE + LINE_BREAK);
+    sb.append(LUOKITUS_HUOLENAIHEET + LINE_BREAK);
 
-    sb.append(LUOKITUS_TERVEYDENTILA + "</br>");
-    sb.append(LUOKITUS_TERVEYDENTIILA_RUOKAVALIO + "</br>");
-    sb.append(LUOKITUS_TERVEYDENTILA_RUOKAVALIO_PERUSTE + "</br>");
+    sb.append(LUOKITUS_TERVEYDENTILA + LINE_BREAK);
+    sb.append(LUOKITUS_TERVEYDENTIILA_RUOKAVALIO + LINE_BREAK);
+    sb.append(LUOKITUS_TERVEYDENTILA_RUOKAVALIO_PERUSTE + LINE_BREAK);
 
-    sb.append(LUOKITUS_TERVEYDENTILA_SAIRAUS + "</br>");
-    sb.append(LUOKITUS_TERVEYDENTILA_SAIRAUS_ALLERGIA + "</br>");
-    sb.append(LUOKITUS_TERVEYDENTILA_SAIRAUS_ALLERGIA_ELAIN + "</br>");
-    sb.append(LUOKITUS_TERVEYDENTILA_SAIRAUS_ALLERGIA_RUOKA + "</br>");
+    sb.append(LUOKITUS_TERVEYDENTILA_SAIRAUS + LINE_BREAK);
+    sb.append(LUOKITUS_TERVEYDENTILA_SAIRAUS_ALLERGIA + LINE_BREAK);
+    sb.append(LUOKITUS_TERVEYDENTILA_SAIRAUS_ALLERGIA_ELAIN + LINE_BREAK);
+    sb.append(LUOKITUS_TERVEYDENTILA_SAIRAUS_ALLERGIA_RUOKA + LINE_BREAK);
 
-    sb.append(LUOKITUS_TERVEYDENTILA_LAAKEHOITO + "</br>");
+    sb.append(LUOKITUS_TERVEYDENTILA_LAAKEHOITO + LINE_BREAK);
 
-    sb.append(LUOKITUS_KOTI + "</br>");
-    sb.append(LUOKITUS_VANHEMPIEN_valueSTAMAT_ASIAT + "</br>");
-    sb.append(LUOKITUS_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET + "</br>");
-    sb.append(LUOKITUS_HAVAINTO + "</br>");
-    sb.append(LUOKITUS_KOMMENTTI + "</br>");
-    sb.append(LUOKITUS_TAVOITE + "</br>");
+    sb.append(LUOKITUS_KOTI + LINE_BREAK);
+    sb.append(LUOKITUS_VANHEMPIEN_ARVOSTAMAT_ASIAT + LINE_BREAK);
+    sb.append(LUOKITUS_VANHEMPIEN_KASVATUKSELLISET_TAVOITTEET + LINE_BREAK);
+    sb.append(LUOKITUS_HAVAINTO + LINE_BREAK);
+    sb.append(LUOKITUS_KOMMENTTI + LINE_BREAK);
+    sb.append(LUOKITUS_TAVOITE + LINE_BREAK);
     return sb.toString();
   }
 }

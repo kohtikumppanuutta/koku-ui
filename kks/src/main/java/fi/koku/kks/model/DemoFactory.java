@@ -15,7 +15,7 @@ import fi.koku.kks.ui.common.utils.Constants;
  * @author tuomape
  * 
  */
-public class DemoFactory {
+public final class DemoFactory {
 
   public static final String NELI_VUOTIS_TARKASTUS = "4-vuotiaan terveystarkastus";
   public static final String VASU = "Varhaiskasvatussuunnitelma";
@@ -348,7 +348,7 @@ public class DemoFactory {
     type.addEntryType(luoVapaaTekstientryType("Mikä 4 – vuotiaassanne on parasta ja missä asioissa hän on hyvä?",
         "Kuvaa lapsen vahvuuksia", "", "neuvola", "potilasrekisteri", "Huoltaja",
         luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
-        luoclassification(Constants.LUOKITUS_VANHEMPIEN_valueSTAMAT_ASIAT)));
+        luoclassification(Constants.LUOKITUS_VANHEMPIEN_ARVOSTAMAT_ASIAT)));
 
     type.addEntryType(luoVapaaTekstientryType("Mitä asioita teette yhdessä perheen kanssa?", "Kuvaa perheen valueja",
         "", "neuvola", "potilasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
@@ -357,7 +357,7 @@ public class DemoFactory {
     type.addEntryType(luoVapaaTekstientryType(
         "Mitä teette yhdessä 4-vuotiaanne kanssa ja mitkä tilanteet tuntuvat mukavilta?", "Kuvaa perheen valueja", "",
         "neuvola", "potilasrekisteri", "Huoltaja", luoTyypit(Constants.KEHITYSASIATYYPPI_KYSELY),
-        luoclassification(Constants.LUOKITUS_VANHEMPIEN_valueSTAMAT_ASIAT)));
+        luoclassification(Constants.LUOKITUS_VANHEMPIEN_ARVOSTAMAT_ASIAT)));
 
     type.addEntryType(luoVapaaTekstientryType(
         "Miten perheessänne arki sujuu ja miten käsittelette ristiriitatilanteita?",
