@@ -78,7 +78,6 @@
 	    	jQuery(this).hide();
 	    });
 		
-		//changeTasks();
 		/* User is logged in and participant token for intalio is valid */
 		if(pageObj.loginStatus == 'VALID') {
 			ajaxGetTasks();		
@@ -100,6 +99,7 @@
 	 * then create tasks in table and task page filed.
 	 */
 	function ajaxGetTasks() {
+		
 		if(pageObj.loginStatus != 'VALID') {
 			return;
 		}
@@ -122,12 +122,11 @@
 				var message = "<spring:message code="error.unLogin" />";
 				showErrorMessage(message);
 			}
-			
-
-		});
-		
+		});		
 	}
-
+	/**
+	 * Represents the tasks in table list view and creates page operatonal part
+	 */
 	function presentTasks(tasks) {
 		if(pageObj.taskType == 'req_valid') // for request
 			var taskHtml = createRequestsTable(tasks);
@@ -136,7 +135,7 @@
 		else if(pageObj.taskType.indexOf('cst') == 0) // for consent
 			var taskHtml = createConsentsTable(tasks);
 		else // for message
-			var taskHtml = createTasksTable(tasks);
+			var taskHtml = createMessagesTable(tasks);
 		
 		jQuery('#task-manager-tasklist').html(taskHtml);
 		decorateTable();
@@ -159,9 +158,9 @@
 	}
 	
 	/**
-	 * Create tasks table in Html
+	 * Create messages table in Html
 	 */
-	function createTasksTable(tasks) {
+	function createMessagesTable(tasks) {
 		var taskHtml = "";
 		var formLink = "";
 		
@@ -199,6 +198,9 @@
 		return taskHtml;
 	}
 	
+	/**
+	 * Create requests table in Html
+	 */
 	function createRequestsTable(tasks) {
 		var taskHtml = "";
 		var formLink = "";
@@ -241,6 +243,9 @@
 		return taskHtml;
 	}
 	
+	/**
+	 * Create appointments table in Html
+	 */
 	function createAppoitmentsTable(tasks) {
 		var taskHtml = "";
 		var formLink = "";
@@ -273,6 +278,9 @@
 		return taskHtml;
 	}
 	
+	/**
+	 * Create consents table in Html
+	 */
 	function createConsentsTable(tasks) {
 		var taskHtml = "";
 		var formLink = "";
@@ -289,7 +297,7 @@
 				if((i+1)%2 == 0) {
 					taskHtml += '<tr class="evenRow" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')">';	
 				}else {
-				taskHtml += '<tr onclick="showConsent(\''+ tasks[i]["consentId"] + '\')">';
+					taskHtml += '<tr onclick="showConsent(\''+ tasks[i]["consentId"] + '\')">';
 				}
 			
 				taskHtml += '<td class="messageItem">' + tasks[i]["requester"] + '</td>'
@@ -317,7 +325,7 @@
 				if((i+1)%2 == 0) {
 					taskHtml += '<tr class="evenRow">';	
 				}else {
-				taskHtml += '<tr>';
+					taskHtml += '<tr>';
 				}
 			
 				taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["consentId"] + '" />' + '</td>'
@@ -350,7 +358,7 @@
 				if((i+1)%2 == 0) {
 					taskHtml += '<tr class="evenRow">';	
 				}else {
-				taskHtml += '<tr>';
+					taskHtml += '<tr>';
 				}
 			
 				taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["consentId"] + '" />' + '</td>'
@@ -367,10 +375,9 @@
 			
 		}
 		
-
 		return taskHtml;
-	}
-	
+	}	
+	/* Formats sender field */
 	function formatSender() {
 		
 		if(pageObj.taskType == "msg_inbox" || pageObj.taskType == "msg_archive_inbox")
@@ -378,7 +385,7 @@
 		else 
 			return "<spring:message code="message.receiver" />";		
 	}
-	
+	/* Formats user field */
 	function formatUser(task) {
 		
 		if(pageObj.taskType == "msg_inbox" || pageObj.taskType == "msg_archive_inbox")
@@ -387,7 +394,7 @@
 			return task["recipients"];
 		
 	}
-
+	/* Formats subject field */
 	function formatSubject(subject) {
 		if(subject == "")		
 			return  "<spring:message code="message.noSubject" />";
@@ -398,6 +405,7 @@
 	<%  //for jboss portal
 	if(defaultPath.contains("default")) { %>
 	
+	/* Shows detailed message page */
 	function showMessage(messageId) {
 		var url = "<%= messageURL %>";
 		url += "&messageId=" + messageId
@@ -408,7 +416,7 @@
 		
 		window.location = url;
 	}
-	
+	/* Shows detailed request page */
 	function showRequest(requestId) {
 		var url = "<%= requestURL %>";
 		url += "&requestId=" + requestId
@@ -419,7 +427,7 @@
 		
 		window.location = url;
 	}
-	
+	/* Shows detailed appointment page */
 	function showAppointment(appointmentId) {
 		var url="";
 		
@@ -438,7 +446,7 @@
 		
 		window.location = url;				
 	}
-	
+	/* Shows detailed consent page */
 	function showConsent(consentId) {
 		var url="";
 		
@@ -459,7 +467,7 @@
 	<%}else{ // for gatein %>
 	
 	/************************For Gatein Portal start***************************/
-	// Creates a renderURL by ajax, to show the content of a single message	 
+	// Creates a renderURL by ajax, to show the detailed message page 
 	function showMessage(messageId) {
 		var url="<%= messageRenderURL %>";
 		
@@ -473,7 +481,7 @@
 			
 	}
 	
-	//Creates a renderURL by ajax, to show the content of a single request
+	//Creates a renderURL by ajax, to show the detailed request page
 	function showRequest(requestId) {
 		var url = "<%= requestRenderURL %>";
 		jQuery.post(url, {requestId:requestId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
@@ -484,7 +492,7 @@
 			window.location = renderUrl;
 		});
 	}	
-	
+	//Creates a renderURL by ajax,to show the detailed appointment page
 	function showAppointment(appointmentId) {
 		var url="";
 		
@@ -503,7 +511,7 @@
 			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId;				
 		}				
 	}
-	
+	//Creates a renderURL by ajax,to show the detailed consent page
 	function showConsent(consentId) {
 		var url="";
 		
@@ -568,12 +576,8 @@
 				jQuery(this).parent().parent().removeClass('clickRow');
 		});
 
-	}
-	
-	
-	/**
-	 * Create initial tasks table Html
-	 */
+	}		
+	/* Create initial tasks table Html */
 	function createInitTable() {
 		var taskHtml = "";
 		taskHtml = '<table class="task-manager-table">'
@@ -823,8 +827,7 @@
 		
 		return displayTask;
 	}
-	
-	
+		
 	/**
 	 * Parses the value with given parameter from page url, which is a global variable:koku_currentUrl 
 	 */
