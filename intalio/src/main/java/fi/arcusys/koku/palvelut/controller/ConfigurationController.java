@@ -44,8 +44,15 @@ public class ConfigurationController {
 		Map<String, Object> map = new HashMap<String, Object>();
 //		map.put("taskList", getTaskHolders(request));
 		ModelAndView mav = new ModelAndView(EDIT_ACTION, "model", map);
-		mav.addObject("formList", getTaskHolders(request));
-		mav.addObject("prefs", request.getPreferences());
+		try {
+			mav.addObject("formList", getTaskHolders(request));
+			mav.addObject("prefs", request.getPreferences());			
+		} catch (Exception e) {
+			log.error("Failure while trying to get TaskHolders. See following log for more information: ", e);
+			ModelAndView failureMav = new ModelAndView("failureView", "model", null);
+			failureMav.addObject("prefs", request.getPreferences());
+			return failureMav;
+		}
 		return mav;
 	}
 	
