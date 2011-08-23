@@ -6,7 +6,7 @@ import fi.arcusys.koku.av.employeeservice.Appointment.AcceptedSlots;
 import fi.arcusys.koku.av.employeeservice.AppointmentReceipientTO;
 
 /**
- * 
+ * Appointment data model for employee
  * @author Jinhua Chen
  * Aug 22, 2011
  */

@@ -22,13 +22,27 @@ import fi.arcusys.koku.kv.RequestHandle;
 @RequestMapping(value = "VIEW")
 public class ShowRequestController {
 	
+	/**
+	 * Shows request page
+	 * @param response RenderResponse
+	 * @return request page
+	 */
 	@RenderMapping(params = "myaction=showRequest")
-	public String showRequest(RenderResponse response) {
+	public String showPageView(RenderResponse response) {
 
 		return "showrequest";
 	}
 		
-	// @ModelAttribute here works as the referenceData method
+	/**
+	 * Creates data model integrated into the page and stores the page
+	 * @param requestId request id
+	 * @param currentPage current page id
+	 * @param taskType task type requested
+	 * @param keyword page parameter keyword
+	 * @param orderType page parameter order type
+	 * @param request RenderRequest
+	 * @return request data model
+	 */
 	@ModelAttribute(value = "request")
 	public KokuRequest model(@RequestParam String requestId,
 			@RequestParam String currentPage,@RequestParam String taskType, 

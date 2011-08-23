@@ -359,4 +359,48 @@ public class AjaxController {
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
+	
+	/**
+	 * Creates consent render url mainly for gatein portal, and keeps the page
+	 * parameters such as page id, task type, keyword
+	 * @param consentId consent id
+	 * @param currentPage current page
+	 * @param taskType request task type
+	 * @param keyword keyword
+	 * @param orderType order type
+	 * @param modelmap ModelMap
+	 * @param request PortletRequest
+	 * @param response ResourceResponse
+	 * @return Consent render url in Json format
+	 */
+	@ResourceMapping(value = "createConsentRenderUrl")
+	public String createConsentRenderUrl(
+			@RequestParam(value = "consentId") String consentId,
+			@RequestParam(value = "currentPage") String currentPage,
+			@RequestParam(value = "taskType") String taskType,
+			@RequestParam(value = "keyword") String keyword,
+			@RequestParam(value = "orderType") String orderType,
+			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
+
+		PortletURL renderUrlObj = response.createRenderURL();
+		renderUrlObj.setParameter( "myaction", "showConsent");
+		renderUrlObj.setParameter( "consentId", consentId);
+		renderUrlObj.setParameter( "currentPage", currentPage);
+		renderUrlObj.setParameter( "taskType", taskType);
+		renderUrlObj.setParameter( "keyword", keyword);
+		renderUrlObj.setParameter( "orderType", orderType);	
+		try {
+			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
+		} catch (WindowStateException e) {
+			logger.error("Create consent render url failed");
+		}
+		String renderUrlString = renderUrlObj.toString();
+		
+		JSONObject jsonModel = new JSONObject();
+		jsonModel.put("renderUrl", renderUrlString);
+		modelmap.addAttribute("response", jsonModel);
+		
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
+	
 }

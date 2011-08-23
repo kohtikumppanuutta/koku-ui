@@ -30,6 +30,13 @@ public class ExportFileController {
 
 	private Logger logger = Logger.getLogger(ExportFileController.class);
 	
+	/**
+	 * Generates the request summary with given request id in csv format 
+	 * for downloading
+	 * @param requestId
+	 * @param resourceRequest
+	 * @param response
+	 */
 	@ResourceMapping(value = "exportFile")
 	public void download(@RequestParam(value = "newRequestId") String requestId,
 			ResourceRequest resourceRequest, ResourceResponse response) {
@@ -95,12 +102,21 @@ public class ExportFileController {
 		}
 	}
 	
+	/**
+	 * Adds the quotation mark char '"' to the string
+	 * @param s
+	 * @return
+	 */
 	private String addQuote(String s) {
 		String q = "\"";
 		
 		return q+s+q;
 	}
 	
+	/**
+	 * Generates quotation mark char '"'
+	 * @return
+	 */
 	private String addQuote() {
 		return "\"\"";
 	}

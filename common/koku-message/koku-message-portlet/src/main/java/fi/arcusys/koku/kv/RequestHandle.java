@@ -9,12 +9,32 @@ import fi.arcusys.koku.kv.requestservice.RequestSummary;
 import fi.arcusys.koku.kv.requestservice.RequestType;
 import fi.arcusys.koku.util.MessageUtil;
 
+/**
+ * Handles request related operations
+ * @author Jinhua Chen
+ * Aug 22, 2011
+ */
 public class RequestHandle {
 	
-	public RequestHandle() {}
+	private RequestService rs;
 	
-	public List<KokuRequest> getRequests(String username, String requestTypeStr, String subQuery, int startNum, int maxNum) {	
-		RequestService rs = new RequestService();
+	/**
+	 * Constructor and initialization
+	 */
+	public RequestHandle() {
+		rs = new RequestService();
+	}
+	
+	/**
+	 * Gets request summary and generates koku request data model
+	 * @param username user name
+	 * @param requestTypeStr request type string
+	 * @param subQuery query string for quering
+	 * @param startNum start index of request
+	 * @param maxNum maximum number of requests
+	 * @return a list of requests
+	 */
+	public List<KokuRequest> getRequests(String user, String requestTypeStr, String subQuery, int startNum, int maxNum) {	
 		RequestType requestType;
 		
 		if(requestTypeStr.equals("valid")) {
@@ -23,7 +43,7 @@ public class RequestHandle {
 			requestType = RequestType.OUTDATED;
 		}
 		List<KokuRequest> reqList = new ArrayList<KokuRequest>();
-		List<RequestSummary> reqs = rs.getRequests(username, requestType, subQuery, startNum, maxNum);
+		List<RequestSummary> reqs = rs.getRequests(user, requestType, subQuery, startNum, maxNum);
 		Iterator<RequestSummary> it = reqs.iterator();
 		KokuRequest req;
 		
@@ -44,8 +64,12 @@ public class RequestHandle {
 		return reqList;
 	}
 	
-	public KokuRequest getKokuRequestById(String requestId) {
-		RequestService rs = new RequestService();		
+	/**
+	 * Gets request in detail
+	 * @param requestId request id
+	 * @return detailed request
+	 */
+	public KokuRequest getKokuRequestById(String requestId) {	
 		long  reqId = (long) Long.parseLong(requestId);
 		Request req = rs.getRequestById(reqId);
 		KokuRequest kokuReq = new KokuRequest();
@@ -62,8 +86,13 @@ public class RequestHandle {
 		return kokuReq;
 	}
 	
-	public int getTotalRequestsNum(String username, String requestTypeStr) {
-		RequestService rs = new RequestService();
+	/**
+	 * Gets total number of requests
+	 * @param user user name
+	 * @param requestTypeStr request type string
+	 * @return the total number of requests
+	 */
+	public int getTotalRequestsNum(String user, String requestTypeStr) {
 		RequestType requestType;
 		
 		if(requestTypeStr.equals("valid")) {
@@ -72,7 +101,7 @@ public class RequestHandle {
 			requestType = RequestType.OUTDATED;
 		}
 		
-		return rs.getTotalRequestNum(username, requestType);
+		return rs.getTotalRequestNum(user, requestType);
 	}
 
 }

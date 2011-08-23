@@ -12,7 +12,7 @@ import fi.arcusys.koku.kv.messageservice.MessageSummary;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
- * Retrieves messages data from message web services
+ * Retrieves messages data and related operations via web services
  * @author Jinhua Chen
  * Jul 29, 2011
  */
@@ -22,14 +22,14 @@ public class MessageService {
 	private KokuMessageService_Service ms;
 	
 	/**
-	 * Constructor
+	 * Constructor and initialization
 	 */
 	public MessageService() {
 		this.ms = new KokuMessageService_Service(MESSAGE_WSDL_LOCATION);
 	}
 
 	/**
-	 * 
+	 * Gets messages
 	 * @param user username
 	 * @param folderType Message folder type such as inbox, outbox and archive
 	 * @param messageQuery query for filtering messages
@@ -41,7 +41,7 @@ public class MessageService {
 	}
 	
 	/**
-	 * 
+	 * Gets total number of messages
 	 * @param user username
 	 * @param folderType  Message folder type such as inbox, outbox and archive
 	 * @param criteria criteria for filtering messages
@@ -58,8 +58,8 @@ public class MessageService {
 	 * @param user Username
 	 * @param FolderType Message folder type such as inbox, outbox and archive
 	 * @param subQuery Basic query for the message, such as 'message_subject like %keyword%' , 'ORDER BY message_creationDate'
-	 * @param startNum The start message number that fulfill the condition
-	 * @param maxNum The maximum amount of messages that fulfill the condition
+	 * @param startNum The start message number that fulfills the condition
+	 * @param maxNum The maximum amount of messages that fulfills the condition
 	 * @return List of messages
 	 */
 	public List<MessageSummary> getMessagesOld(String user, FolderType folderType, String subQuery, int startNum, int maxNum) {

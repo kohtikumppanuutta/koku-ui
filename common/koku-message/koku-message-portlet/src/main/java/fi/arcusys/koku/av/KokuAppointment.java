@@ -1,5 +1,10 @@
 package fi.arcusys.koku.av;
 
+/**
+ * Summary appointment data model
+ * @author Jinhua Chen
+ * Aug 23, 2011
+ */
 public class KokuAppointment {
 
 	private long appointmentId;

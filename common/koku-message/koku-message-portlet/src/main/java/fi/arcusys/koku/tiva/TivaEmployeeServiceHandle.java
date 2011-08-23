@@ -13,16 +13,30 @@ import fi.arcusys.koku.tiva.employeeservice.ConsentTemplateSummary;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
- * 
+ * Handles tiva consents related operations for employee
  * @author Jinhua Chen
  * Aug 18, 2011
  */
 public class TivaEmployeeServiceHandle {
 
-	public TivaEmployeeServiceHandle() {}
+	private TivaEmployeeService tes;
 	
+	/**
+	 * Constructor and initialization
+	 */
+	public TivaEmployeeServiceHandle() {
+		tes = new TivaEmployeeService();
+	}
+	
+	/**
+	 * Gets consents and generates koku consent data model for use
+	 * @param user user name
+	 * @param keyword keyword for filtering
+	 * @param startNum start index of consent
+	 * @param maxNum maximum number of consents
+	 * @return
+	 */
 	public List<KokuConsent> getConsents(String user, String keyword, int startNum, int maxNum) {
-		TivaEmployeeService tes = new TivaEmployeeService();
 		ConsentQuery query = new ConsentQuery();
 		query.setStartNum(startNum);
 		query.setMaxNum(maxNum);		
@@ -50,8 +64,13 @@ public class TivaEmployeeServiceHandle {
 		return consentList;
 	}
 	
+	/**
+	 * Gets total number of consents
+	 * @param user user name
+	 * @param keyword keyword for filtering
+	 * @return the total number of consents
+	 */
 	public int getTotalConsents(String user, String keyword) {
-		TivaEmployeeService tes = new TivaEmployeeService();
 		ConsentQuery query = new ConsentQuery();	
 		ConsentCriteria criteria = createCriteria(keyword);	
 		query.setCriteria(criteria);
@@ -59,9 +78,13 @@ public class TivaEmployeeServiceHandle {
 		return tes.getTotalConsents(user, query);
 	}
 	
+	/**
+	 * Gets consent in detail
+	 * @param consentIdStr consent id string
+	 * @return detailed consent
+	 */
 	public KokuConsent getConsentDetails(String consentIdStr) {
 		long  consentId = (long) Long.parseLong(consentIdStr);
-		TivaEmployeeService tes = new TivaEmployeeService();
 		KokuConsent kokuConsent = new KokuConsent();		
 		ConsentTO consent = tes.getConsentDetails(consentId);
 		kokuConsent.setConsentId(consent.getConsentId());
@@ -77,12 +100,22 @@ public class TivaEmployeeServiceHandle {
 		return kokuConsent;
 	}
 	
+	/**
+	 * Searches consent templates
+	 * @param searchStr search string
+	 * @param limit limited number of results
+	 * @return a list of templates
+	 */
 	public List<ConsentTemplateSummary> searchConsentTemplates(String searchStr, int limit) {
-		TivaEmployeeService tes = new TivaEmployeeService();
 		
 		return tes.searchConsentTemplates(searchStr, limit);
 	}
 	
+	/**
+	 * Creates criteria for filtering consents
+	 * @param keyword keyword string
+	 * @return ConsentCriteria object
+	 */
 	private ConsentCriteria createCriteria(String keyword) {
 		ConsentCriteria criteria = new ConsentCriteria();
 		
@@ -100,6 +133,11 @@ public class TivaEmployeeServiceHandle {
 		
 	}
 	
+	/**
+	 * Converts the ActionRequestSummary object to ActionRequest
+	 * @param actionSummaryList a list of ActionRequestSummary objects
+	 * @return a list of ActionRequest objects
+	 */
 	private List<ActionRequest> convertActionRequests(List<ActionRequestSummary> actionSummaryList) {
 		List<ActionRequest> actionList = new ArrayList<ActionRequest>();
 		ActionRequest actionReq;
@@ -113,7 +151,6 @@ public class TivaEmployeeServiceHandle {
 			actionList.add(actionReq);
 		}
 		
-		return actionList;
-	
+		return actionList;	
 	}
 }

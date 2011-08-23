@@ -5,7 +5,11 @@ import java.util.List;
 import fi.arcusys.koku.kv.requestservice.Question;
 import fi.arcusys.koku.kv.requestservice.Response;
 
-
+/**
+ * Request data model
+ * @author Jinhua Chen
+ * Aug 22, 2011
+ */
 public class KokuRequest {
 
 	private long requestId;

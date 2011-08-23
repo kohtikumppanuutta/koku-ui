@@ -23,13 +23,27 @@ import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
 @RequestMapping(value = "VIEW")
 public class ShowConsentController {
 	
+	/**
+	 * Shows consent page
+	 * @param response RenderResponse
+	 * @return consent page
+	 */
 	@RenderMapping(params = "myaction=showConsent")
-	public String showConsent(RenderResponse response) {
+	public String showPageView(RenderResponse response) {
 
 		return "showconsent";
 	}
 		
-	// @ModelAttribute here works as the referenceData method
+	/**
+	 * Creates data model integrated into the page and stores the page
+	 * @param consentId consent id
+	 * @param currentPage current page id
+	 * @param taskType task type requested
+	 * @param keyword page parameter keyword
+	 * @param orderType page parameter order type
+	 * @param request RenderRequest
+	 * @return consent data model
+	 */
 	@ModelAttribute(value = "consent")
 	public KokuConsent model(@RequestParam String consentId,
 			@RequestParam String currentPage,@RequestParam String taskType, 

@@ -30,7 +30,7 @@ public class MessageController {
 	 * @return message page
 	 */
 	@RenderMapping
-	public String home(RenderRequest request, RenderResponse response,
+	public String showPageView(RenderRequest request, RenderResponse response,
 			ModelMap modelmap) {		
 		logger.info("show default page message");
 		

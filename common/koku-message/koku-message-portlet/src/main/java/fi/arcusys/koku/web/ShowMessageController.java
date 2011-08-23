@@ -22,13 +22,27 @@ import fi.arcusys.koku.kv.MessageHandle;
 @RequestMapping(value = "VIEW")
 public class ShowMessageController {
 	
+	/**
+	 * Shows message page
+	 * @param response RenderResponse
+	 * @return message page
+	 */
 	@RenderMapping(params = "myaction=showMessage")
-	public String showForm(RenderResponse response) {
+	public String showPageView(RenderResponse response) {
 
 		return "showmessage";
 	}
 		
-	// @ModelAttribute here works as the referenceData method
+	/**
+	 * Creates data model integrated into the page and stores the page
+	 * @param messageId message id
+	 * @param currentPage current page id
+	 * @param taskType task type requested
+	 * @param keyword page parameter keyword
+	 * @param orderType page parameter order type
+	 * @param request RenderRequest
+	 * @return message data model
+	 */
 	@ModelAttribute(value = "message")
 	public Message model(@RequestParam String messageId,
 			@RequestParam String currentPage,@RequestParam String taskType, 

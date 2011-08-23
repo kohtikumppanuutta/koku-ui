@@ -38,6 +38,9 @@
 <portlet:resourceURL var="appointmentRenderURL" id="createAppointmentRenderUrl">
 </portlet:resourceURL> 
 
+<portlet:resourceURL var="consentRenderURL" id="createConsentRenderUrl">
+</portlet:resourceURL>
+
 <!-- For gatein Portal ends-->
 
 <%
@@ -501,6 +504,24 @@
 		}				
 	}
 	
+	function showConsent(consentId) {
+		var url="";
+		
+		if(pageObj.taskType == "cst_own_citizen" || pageObj.taskType == "cst_own_employee") {
+			url = "<%= consentRenderURL %>";
+			jQuery.post(url, {consentId:consentId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+				keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+				var obj = eval('(' + data + ')');
+				var json = obj.response;
+				var renderUrl = json["renderUrl"];
+				window.location = renderUrl;
+			});
+		}else if(pageObj.taskType == "cst_assigned_citizen"){
+			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;			
+		}
+				
+		window.location = url;
+	}
 	/************************For Gatein Portal end****************************/
    <%}%>
 		

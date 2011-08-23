@@ -21,6 +21,9 @@ import fi.arcusys.koku.util.MessageUtil;
 public class AvEmployeeServiceHandle {
 	private AvEmployeeService aes;
 	
+	/**
+	 * Constructor and initialization
+	 */
 	public AvEmployeeServiceHandle() {
 		aes = new AvEmployeeService();
 	}
@@ -41,7 +44,7 @@ public class AvEmployeeServiceHandle {
 		if(taskType.equals("app_inbox_employee"))
 			appSummaryList = aes.getCreatedAppointments(user, startNum, maxNum);
 		else if(taskType.equals("app_response_employee"))
-			appSummaryList = aes.getRespondedAppointments(user, startNum, maxNum);
+			appSummaryList = aes.getProcessedAppointments(user, startNum, maxNum);
 		else
 			return appList;
 			

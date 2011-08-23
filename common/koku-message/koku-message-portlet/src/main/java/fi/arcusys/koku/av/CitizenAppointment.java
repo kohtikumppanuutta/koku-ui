@@ -1,6 +1,10 @@
 package fi.arcusys.koku.av;
 
-
+/**
+ * Appointment data model for citizen
+ * @author Jinhua Chen
+ * Aug 22, 2011
+ */
 public class CitizenAppointment extends KokuAppointment{
 
 	private String status;

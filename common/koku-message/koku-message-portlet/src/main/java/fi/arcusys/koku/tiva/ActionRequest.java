@@ -1,7 +1,7 @@
 package fi.arcusys.koku.tiva;
 
 /**
- * 
+ * Action request data model
  * @author Jinhua Chen
  * Aug 15, 2011
  */

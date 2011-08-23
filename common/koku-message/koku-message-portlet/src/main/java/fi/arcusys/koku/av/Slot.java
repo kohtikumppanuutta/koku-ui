@@ -1,5 +1,10 @@
 package fi.arcusys.koku.av;
 
+/**
+ * Slot data model
+ * @author Jinhua Chen
+ * Aug 22, 2011
+ */
 public class Slot {
 
     private long appointmentId;

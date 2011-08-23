@@ -22,11 +22,15 @@ import fi.arcusys.koku.util.MessageUtil;
  */
 public class MessageHandle {
 	
-	public MessageHandle() {}
+	MessageService ms;
+	
+	public MessageHandle() {
+		ms = new MessageService();
+	}
 	
 	/**
 	 * Gets messages with filtering conditions
-	 * @param user username
+	 * @param user user name
 	 * @param messageType type of messages
 	 * @param keyword keyword string for filtering
 	 * @param field field string for filtering
@@ -36,7 +40,6 @@ public class MessageHandle {
 	 * @return a list of messages
 	 */
 	public List<Message> getMessages(String user, String messageType, String keyword, String field, String orderType, int start, int max) {
-		MessageService ms = new MessageService();
 		FolderType folderType = MessageUtil.getFolderType(messageType);
 		MessageQuery messageQuery = new MessageQuery();
 		messageQuery.setStartNum(start);
@@ -84,7 +87,6 @@ public class MessageHandle {
 	 * @return number of messages
 	 */
 	public int getTotalMessageNum(String user, String messageType, String keyword, String field) {
-		MessageService ms = new MessageService();
 		FolderType folderType = MessageUtil.getFolderType(messageType);
 		/* sets the criteria for searching including keyword for each field, default is searching all fields */
 		Criteria criteria = createCriteria(keyword, field);		
@@ -104,7 +106,6 @@ public class MessageHandle {
 	 * @return a list of messages
 	 */
 	public List<Message> getMessagesOld(String user, String messageType, String keyword, String orderType, int start, int max) {
-		MessageService ms = new MessageService();
 		FolderType folderType = MessageUtil.getFolderType(messageType);
 		String subQuery = "";
 		
@@ -136,8 +137,7 @@ public class MessageHandle {
 	 * @param messageId message id
 	 * @return detailed message
 	 */
-	public Message getMessageById(String messageId) {
-		MessageService ms = new MessageService();		
+	public Message getMessageById(String messageId) {	
 		long  msgId = (long) Long.parseLong(messageId);
 		setMessageStatus(msgId);
 		
@@ -159,7 +159,6 @@ public class MessageHandle {
 	 * @param messageId message id
 	 */
 	public void setMessageStatus(long messageId) {
-		MessageService ms = new MessageService();
 		List<Long> messageIds = new ArrayList<Long>();	
 		messageIds.add(messageId);	
 		ms.setMessageStatus(messageIds, MessageStatus.READ);
@@ -171,7 +170,6 @@ public class MessageHandle {
 	 * @return operation response information
 	 */
 	public String archiveMessages(List<Long> messageIds) {		
-		MessageService ms = new MessageService();
 		
 		return ms.archiveMessages(messageIds);		
 	}
@@ -182,7 +180,6 @@ public class MessageHandle {
 	 * @return operation response information
 	 */
 	public String deleteMessages(List<Long> messageIds) {		
-		MessageService ms = new MessageService();
 		
 		return ms.deleteMessages(messageIds);		
 	}
@@ -197,7 +194,6 @@ public class MessageHandle {
 	 * @return the amount of messages
 	 */
 	public int getTotalMessageNumOld(String user, String messageType, String keyword, String orderType) {
-		MessageService ms = new MessageService();
 		FolderType folderType = MessageUtil.getFolderType(messageType);
 		String subQuery = "";
 		

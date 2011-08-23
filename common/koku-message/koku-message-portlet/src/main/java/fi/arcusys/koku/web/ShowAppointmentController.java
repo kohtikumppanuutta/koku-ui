@@ -23,8 +23,15 @@ import fi.arcusys.koku.av.KokuAppointment;
 @RequestMapping(value = "VIEW")
 public class ShowAppointmentController {
 	
+	/**
+	 * Shows the page that presents appointment in detail for either employee
+	 * or citizen according to task type
+	 * @param taskType task type requested
+	 * @param response RenderResponse
+	 * @return appointment page
+	 */
 	@RenderMapping(params = "myaction=showAppointment")
-	public String showRequest(@RequestParam String taskType, RenderResponse response) {
+	public String showPageView(@RequestParam String taskType, RenderResponse response) {
 
 		String page = "showcitizenappointment";
 		
@@ -37,7 +44,17 @@ public class ShowAppointmentController {
 		return page;
 	}
 		
-	// @ModelAttribute here works as the referenceData method
+	/**
+	 * Creates data model integrated into the page and stores the page
+	 * parameters in the session
+	 * @param appointmentId appointment id
+	 * @param currentPage current page id
+	 * @param taskType task type requested
+	 * @param keyword page parameter keyword
+	 * @param orderType page parameter order type
+	 * @param request RenderRequest
+	 * @return appointment data model
+	 */
 	@ModelAttribute(value = "appointment")
 	public KokuAppointment model(@RequestParam String appointmentId,
 			@RequestParam String currentPage,@RequestParam String taskType, 

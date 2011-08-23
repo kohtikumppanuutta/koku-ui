@@ -16,7 +16,7 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 /**
- * 
+ * Handles the action in configuration mode,
  * @author Jinhua Chen
  * Jun 22, 2011
  */

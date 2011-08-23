@@ -11,16 +11,29 @@ import fi.arcusys.koku.tiva.citizenservice.ConsentTO;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
- * 
+ * Handles tiva consents related operations for citizen
  * @author Jinhua Chen
  * Aug 15, 2011
  */
 public class TivaCitizenServiceHandle {
 	
-	public TivaCitizenServiceHandle() {}
+	private TivaCitizenService tcs;
 	
+	/**
+	 * Constructor and initialization
+	 */
+	public TivaCitizenServiceHandle() {
+		tcs = new TivaCitizenService();
+	}
+	
+	/**
+	 * Gets assigned consents and generates koku consent data model for use
+	 * @param user user name
+	 * @param startNum start index of consent
+	 * @param maxNum maximum number of consents
+	 * @return a list of assigned consents
+	 */
 	public List<KokuConsent> getAssignedConsents(String user, int startNum, int maxNum) {
-		TivaCitizenService tcs = new TivaCitizenService();
 		List<ConsentShortSummary> consentSummary = tcs.getAssignedConsents(user, startNum, maxNum);
 		List<KokuConsent> consentList = new ArrayList<KokuConsent>();
 		KokuConsent kokuConsent;		
@@ -39,9 +52,13 @@ public class TivaCitizenServiceHandle {
 		return consentList;
 	}
 	
+	/**
+	 * Gets consent in detail and generates koku consent data model for use
+	 * @param consentIdStr consent id string
+	 * @return detailed consent
+	 */
 	public KokuConsent getConsentById(String consentIdStr) {
 		long  consentId = (long) Long.parseLong(consentIdStr);
-		TivaCitizenService tcs = new TivaCitizenService();
 		KokuConsent kokuConsent = new KokuConsent();		
 		ConsentTO consent = tcs.getConsentById(consentId);
 		kokuConsent.setConsentId(consent.getConsentId());
@@ -57,8 +74,14 @@ public class TivaCitizenServiceHandle {
 		return kokuConsent;
 	}
 	
+	/**
+	 * Gets own consents and generates koku consent data model for use
+	 * @param user user name
+	 * @param startNum start index of consent
+	 * @param maxNum maximum number of consents
+	 * @return a list of consents
+	 */
 	public List<KokuConsent> getOwnConsents(String user, int startNum, int maxNum) {
-		TivaCitizenService tcs = new TivaCitizenService();
 		List<ConsentSummary> consentSummary = tcs.getOwnConsents(user, startNum, maxNum);
 		List<KokuConsent> consentList = new ArrayList<KokuConsent>();
 		KokuConsent kokuConsent;	
@@ -81,20 +104,32 @@ public class TivaCitizenServiceHandle {
 		return consentList;
 	}
 	
+	/**
+	 * Gets the total number of assigned consents
+	 * @param user user name
+	 * @return the total number of assigned consents
+	 */
 	public int getTotalAssignedConsents(String user) {
-		TivaCitizenService tcs = new TivaCitizenService();
 		
 		return tcs.getTotalAssignedConsents(user);
 	}
 	
+	/**
+	 * Gets the total number of own consents
+	 * @param user user name
+	 * @return the total number of own consents
+	 */
 	public int getTotalOwnConsents(String user) {
-		TivaCitizenService tcs = new TivaCitizenService();
 		
 		return tcs.getTotalOwnConsents(user);
 	}
 	
+	/**
+	 * Revokes the consent
+	 * @param consentIdStr consent id string
+	 * @return operation response
+	 */
 	public String revokeOwnConsent(String consentIdStr) {
-		TivaCitizenService tcs = new TivaCitizenService();
 		long  consentId = (long) Long.parseLong(consentIdStr);
 		
 		try {
@@ -105,6 +140,11 @@ public class TivaCitizenServiceHandle {
 		}
 	}
 	
+	/**
+	 * Converts the ActionRequestSummary object to ActionRequest
+	 * @param actionSummaryList a list of ActionRequestSummary objects
+	 * @return a list of ActionRequest objects
+	 */
 	private List<ActionRequest> convertActionRequests(List<ActionRequestSummary> actionSummaryList) {
 		List<ActionRequest> actionList = new ArrayList<ActionRequest>();
 		ActionRequest actionReq;
@@ -118,7 +158,6 @@ public class TivaCitizenServiceHandle {
 			actionList.add(actionReq);
 		}
 		
-		return actionList;
-	
+		return actionList;	
 	}
 }
