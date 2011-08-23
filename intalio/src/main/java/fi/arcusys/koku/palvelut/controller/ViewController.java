@@ -99,7 +99,7 @@ public class ViewController extends FormHolderController {
 			try {
 				result = proxy.send();				
 			} catch (IllegalOperationCall ioc) {
-				log.error("Illegal operation call. User " + request.getUserPrincipal().getName() + " tried to call restricted method that he/she doesn't have sufficient permission. ");
+				log.error("Illegal operation call. User '" + request.getUserPrincipal().getName() + "' tried to call restricted method that he/she doesn't have sufficient permission. ");
 			} catch (Exception e) {
 				log.error("Coulnd't send given message. Parsing error propably. ", e);
 			}

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
-import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.arcusys.koku.palvelut.model.client.FormHolder;
 import fi.arcusys.koku.palvelut.model.client.VeeraCategoryImpl;
