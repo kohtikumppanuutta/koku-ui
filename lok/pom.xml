@@ -10,4 +10,15 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>lok-portlet</name>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>kohti-kumppanuutta</groupId>
+      <artifactId>lokservice-api</artifactId>
+      <version>0.0.2</version>
+    </dependency>    
+
+  </dependencies>
+
 </project>
