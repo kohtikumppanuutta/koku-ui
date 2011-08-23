@@ -22,7 +22,7 @@ public class KoKuWSFactory {
   public KoKuWSFactory() {
     uid = "marko"; // TODO: parameterize
     pwd = "marko";
-    epBaseUrl = "http://localhost:8080";
+    epBaseUrl = "http://kohtikumppanuutta-dev.dmz:8180";
   }
   
   public LogServicePortType getLogService() {
