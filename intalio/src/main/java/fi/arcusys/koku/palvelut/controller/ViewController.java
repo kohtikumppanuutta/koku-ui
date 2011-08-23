@@ -157,7 +157,15 @@ public class ViewController extends FormHolderController {
 		if (prefs.getValue("showOnlyChecked", null) != null) {
 			ModelAndView mav = new ModelAndView(FORM_VIEW_ACTION, "model", null);
 			mav.addObject("prefs", request.getPreferences());
-			Task t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue("showOnlyForm", null));
+			Task t = null;
+			try {
+				t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue("showOnlyForm", null));				
+			} catch (Exception e) {
+				log.error("Failure while trying to get Task. See following log for more information: ", e);
+				ModelAndView failureMav = new ModelAndView("failureView", "model", null);
+				failureMav.addObject("prefs", request.getPreferences());
+				return failureMav;
+			}
 			FormHolder fh = getFormHolderFromTask(request, t.getDescription());
 			mav.addObject("formholder", fh);
 			return mav;
