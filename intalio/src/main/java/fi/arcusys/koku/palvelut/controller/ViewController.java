@@ -162,16 +162,17 @@ public class ViewController extends FormHolderController {
 				t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue("showOnlyForm", null));				
 			} catch (Exception e) {
 				log.error("Failure while trying to get Task. See following log for more information: ", e);
-				ModelAndView failureMav = new ModelAndView("failureView", "model", null);
-				failureMav.addObject("prefs", request.getPreferences());
-				return failureMav;
+				return getFailureView(request);
 			}
-			FormHolder fh = getFormHolderFromTask(request, t.getDescription());
-			mav.addObject("formholder", fh);
-			return mav;
 		}
 		long companyId = MigrationUtil.getCompanyId(request);
-		Integer rootFolderId = getRootFolderId(companyId);
+		Integer rootFolderId = null;
+		try {
+			rootFolderId = getRootFolderId(companyId);			
+		} catch (Exception e) {
+			log.error("Failure while trying to get RootFolderId. See following log for more information: ", e);
+			return getFailureView(request);
+		}
 		String folderId = request.getParameter(ViewController.VIEW_CURRENT_FOLDER);
 		if (folderId == null) {
 			folderId = (String) request.getAttribute(EditController.CURRENT_CATEGORY);
@@ -241,6 +242,13 @@ public class ViewController extends FormHolderController {
 		mav.addObject("breadcrumb", path);
 		mav.addObject("prefs", request.getPreferences());
 		return mav;
+	}
+	
+	private ModelAndView getFailureView(RenderRequest request) {
+		ModelAndView failureMav = new ModelAndView("failureView", "model", null);
+		failureMav.addObject("prefs", request.getPreferences());
+		return failureMav;
+
 	}
 	
 	private Integer getRootFolderId(long companyId) {
