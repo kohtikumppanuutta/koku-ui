@@ -75,3 +75,13 @@ div.search_bar{
 .veeraCategoryTable {
 	width: 100%;
 }
+
+.failureJsp {
+	padding: 10px;
+	padding-left: 20px;
+	background: transparent url(../images/info_icon.png) center left no-repeat;
+}
+
+.failureMessage {
+	color: red;
+}

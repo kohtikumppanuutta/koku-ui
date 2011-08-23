@@ -11,18 +11,12 @@
 <%@ page import="fi.arcusys.koku.palvelut.controller.ViewController"%>
 
 
-<%@page import="javax.portlet.PortletPreferences"%><div class="portlet-linkit-container">
+<%@page import="javax.portlet.PortletPreferences"%>
 
-	<!-- UI-messages -->
-	<jsp:include page="/jsp/messages.jsp" />
-	
-	<!-- Portlet Header -->
-	
+<div class="portlet-linkit-container">		
 	<div class="portlet-header">
-	
-		<jsp:include page="/jsp/breadCrumb.jsp" />	
-		
 		<div class="failureJsp">
-			<div class="failureMessage" style="color: red;">Oops.. Something went wrong in the server. Please refresh the page and try again or contact to Administrator.</div>			
+			<div class="failureMessage">Oops.. Something went wrong on the server. Please refresh the page and try again or contact to Administrator.</div>			
 		</div>
 	</div>
+</div>
