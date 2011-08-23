@@ -29,6 +29,7 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import fi.arcusys.koku.palvelut.exceptions.IllegalOperationCall;
 import fi.arcusys.koku.palvelut.model.client.FormHolder;
 import fi.arcusys.koku.palvelut.model.client.VeeraCategoryImpl;
 import fi.arcusys.koku.palvelut.model.client.VeeraFormImpl;
@@ -36,6 +37,8 @@ import fi.arcusys.koku.palvelut.services.VeeraServicesFacade;
 import fi.arcusys.koku.palvelut.util.AjaxViewResolver;
 import fi.arcusys.koku.palvelut.util.CategoryUtil;
 import fi.arcusys.koku.palvelut.util.MigrationUtil;
+import fi.arcusys.koku.palvelut.util.OperationsValidator;
+import fi.arcusys.koku.palvelut.util.OperationsValidatorImpl;
 import fi.arcusys.koku.palvelut.util.TaskUtil;
 import fi.arcusys.koku.palvelut.util.TokenUtil;
 import fi.arcusys.koku.palvelut.util.XmlProxy;
@@ -94,10 +97,11 @@ public class ViewController extends FormHolderController {
 		
 		if (proxy != null) {
 			try {
-				result = proxy.send();			
+				result = proxy.send();				
+			} catch (IllegalOperationCall ioc) {
+				log.error("Illegal operation call. User " + request.getUserPrincipal().getName() + " tried to call restricted method that he/she doesn't have sufficient permission. ");
 			} catch (Exception e) {
 				log.error("Coulnd't send given message. Parsing error propably. ", e);
-				result = null;
 			}
 		}
 		
@@ -112,18 +116,20 @@ public class ViewController extends FormHolderController {
 	}
 	
 	private XmlProxy getProxy(String service, String data) {
+		
+		OperationsValidator validator = new OperationsValidatorImpl();
 		if (service.equals(APPOINTMENT_SERVICE_CITIZEN_NAME)) {
-			return new XmlProxy("", APPOINTMENT_SERVICE_CITIZEN, data);	
+			return new XmlProxy("", APPOINTMENT_SERVICE_CITIZEN, data, validator);	
 		} else if (service.equals(APPOINTMENT_SERVICE_EMPLOYEE_NAME)) {
-			return new XmlProxy("", APPOINTMENT_SERVICE_EMPLOYEE, data);	
+			return new XmlProxy("", APPOINTMENT_SERVICE_EMPLOYEE, data, validator);	
 		} else if (service.equals(MESSAGE_SERVICE_NAME)) {
-			return new XmlProxy("", REQUEST_SERVICE, data);
+			return new XmlProxy("", REQUEST_SERVICE, data, validator);
 		} else if (service.equals(REQUEST_SERVICE_NAME)) {
-			return new XmlProxy("", MESSAGE_SERVICE, data);
+			return new XmlProxy("", MESSAGE_SERVICE, data, validator);
 		} else if (service.equals(TIVA_CITIZEN_SERVICE_NAME)) {
-			return new XmlProxy("", TIVA_CITIZEN_SERVICE, data);
+			return new XmlProxy("", TIVA_CITIZEN_SERVICE, data, validator);
 		} else if (service.equals(TIVA_EMPLOYEE_SERVICE_NAME)) {
-			return new XmlProxy("", TIVA_EMPLOYEE_SERVICE, data);	
+			return new XmlProxy("", TIVA_EMPLOYEE_SERVICE, data, validator);	
 		} else {
 			return null;
 		}

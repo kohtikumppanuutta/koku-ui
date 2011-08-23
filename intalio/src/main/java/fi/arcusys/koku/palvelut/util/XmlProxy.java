@@ -16,6 +16,8 @@ import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
 import org.apache.log4j.Logger;
 
+import fi.arcusys.koku.palvelut.exceptions.IllegalOperationCall;
+
 /**
  * XmlProxy <br/><br/>
  * Copied functionality from WsProxyServletRestricted (koku project)
@@ -30,25 +32,32 @@ public class XmlProxy {
 	private final String message;
 	private final String action;
 	private final String endpoint;
+	private final OperationsValidator validator;
 	
 	public XmlProxy(String action, String endpoint, String message) {
+		this(action, endpoint, message, null);
+	}
+	
+	public XmlProxy(String action, String endpoint, String message, OperationsValidator validator) {
 		
 		if (message == null || action == null || endpoint == null) {
 			log.error("One of given constructor parameter was null");
 			throw new IllegalStateException();
-		}
-		
+		}		
 		this.action = action;
 		this.message = message;
 		this.endpoint = endpoint;
-	}	
+		this.validator = validator;
+	}
 	
-	public String send() throws Exception {
-		
+	public String send() throws IllegalOperationCall, Exception {
+		if (validator != null && !validator.isValid(message)) {
+			throw new IllegalOperationCall();
+		}		
 		OMElement omelement = parseRequest(message);	
 		Options options = new Options();
 		options.setTo(new EndpointReference(endpoint));
-		options.setAction(action);
+		options.setAction(action);		
 		return send(omelement, options);
 	}
 	
@@ -134,6 +143,10 @@ public class XmlProxy {
 
 	public final String getEndpoint() {
 		return endpoint;
+	}
+
+	public final OperationsValidator getValidator() {
+		return validator;
 	}
 	
 }
