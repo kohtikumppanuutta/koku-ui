@@ -1,6 +1,5 @@
 package com.ixonos.koku.lok;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.xml.namespace.QName;
@@ -12,35 +11,39 @@ import fi.koku.services.utility.log.v1.LogServicePortType;
 /**
  * Helper class for creating WS endpoints.
  * 
- * @author aspluma
+ * @author Ixonos / laukksa
+ * @author Ixonos / aspluma
  */
 public class KoKuWSFactory {
   private String uid;
   private String pwd;
-  private String epBaseUrl;
+  private String endpointBaseUrl;
+  
+  private final URL LOG_WSDL_LOCATION = getClass().getClassLoader().getResource("/wsdl/logService.wsdl");
+  private static final String LOG_SERVICE_VERSION = "0.0.1-SNAPSHOT";
 
+
+  @Deprecated
   public KoKuWSFactory() {
-    uid = "marko"; // TODO: parameterize
-    pwd = "marko";
-    epBaseUrl = "http://kohtikumppanuutta-dev.dmz:8180";
+    this("marko", "marko", "http://kohtikumppanuutta-dev.dmz:8180");
   }
   
-  public LogServicePortType getLogService() {
-    String ep = epBaseUrl+"/lok-service-0.0.1-SNAPSHOT/LogServiceBean?wsdl"; // TODO: parameterize
+  public KoKuWSFactory(String uid, String pwd, String endpointBaseUrl) {
+    this.uid = uid;
+    this.pwd = pwd;
+    this.endpointBaseUrl = endpointBaseUrl;
+  }
 
-    URL wsdlLocation;
-    try {
-      wsdlLocation = new URL(ep);
-    } catch (MalformedURLException e) {
-      throw new RuntimeException("invalid url", e);
-    }
-    QName serviceName = new QName("http://services.koku.fi/utility/log/v1", "logService");
-    LogService logService = new LogService(wsdlLocation, serviceName);
-    
-    LogServicePortType port = logService.getLogServiceSoap11Port();
-    ((BindingProvider)port).getRequestContext().put(BindingProvider.USERNAME_PROPERTY, uid);
-    ((BindingProvider)port).getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, pwd);
-    return port;
+  public LogServicePortType getLogService() {
+    LogService service = new LogService(LOG_WSDL_LOCATION, new QName(
+        "http://services.koku.fi/utility/log/v1", "logService"));
+    LogServicePortType logServicePort = service.getLogServiceSoap11Port();
+    String epAddr = endpointBaseUrl + "/lok-service-"+LOG_SERVICE_VERSION+"/LogServiceBean";
+
+    ((BindingProvider)logServicePort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, epAddr);
+    ((BindingProvider)logServicePort).getRequestContext().put(BindingProvider.USERNAME_PROPERTY, uid);
+    ((BindingProvider)logServicePort).getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, pwd);
+    return logServicePort;
   }
   
 }
