@@ -60,6 +60,13 @@ public class ChildController {
     return "child";
   }
 
+  @RenderMapping(params = "action=showPegasos")
+  public String showPegasos(@ModelAttribute(value = "child") Person child, RenderResponse response, Model model) {
+    log.info("nayta child");
+    model.addAttribute("child", child);
+    return "pegasos";
+  }
+
   @ModelAttribute("child")
   public Person getChild(@RequestParam String pic) {
     return demoService.searchChild(pic);

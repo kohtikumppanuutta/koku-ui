@@ -49,15 +49,15 @@
 		<spring:message code="ui.kks.title" />
 	</h1>
 
-	<div class="table">
+	<div class="kks-table">
 		<table class="portlet-table-body" width="100%" border="0">
 			<tr>
-				<th align="kks-left"><spring:message code="ui.kks.collection" /></th>
-				<th align="kks-left"><spring:message code="ui.kks.last.entry" />
+				<th><spring:message code="ui.kks.collection" /></th>
+				<th><spring:message code="ui.kks.last.entry" />
 				</th>
 
 				<c:if test="${ sessionScope.ammattilainen }">
-					<th align="kks-left"><spring:message code="ui.kks.entry.state" />
+					<th><spring:message code="ui.kks.entry.state" />
 					</th>
 				</c:if>
 			</tr>
@@ -118,19 +118,26 @@
 
 		</table>
 		<br />
-		<div class="collection">
-			<span class="kks-link"> <a
+		<div class="kks-collection">
+			<div class="kks-link"> <a
 				href="
+                        <portlet:renderURL>
+                            <portlet:param name="action" value="showPegasos" />
+                            <portlet:param name="pic" value="${child.pic}" />
+                        </portlet:renderURL>">
+					<spring:message code="ui.kks.patient.healthcare" /> </a> </div>
+
+            <div class="kks-link"> <a
+                href="
                         <portlet:actionURL>
                             <portlet:param name="action" value="searchEntries" />
                             <portlet:param name="pic" value="${child.pic}" />
                             <portlet:param name="classification" value="terveydentila" />
                             <portlet:param name="description" value="Terveydentila" />
                         </portlet:actionURL>">
-					<spring:message code="ui.kks.healthcare" />  </a> </span><br />
-
-
-			<span class="kks-link"> <a
+                    <spring:message code="ui.kks.healthcare" />  </a> </div>
+                    
+			<div class="kks-link"> <a
 				href="
                         <portlet:actionURL>
                             <portlet:param name="action" value="searchEntries" />
@@ -138,7 +145,8 @@
                             <portlet:param name="classification" value="mittaus" />
                             <portlet:param name="description" value="Mittaukset" />
                         </portlet:actionURL>">
-					<spring:message code="ui.kks.measurement" /> </a> </span><br /> <span
+					<spring:message code="ui.kks.measurement" /> </a> </div>
+			 <div
 				class="kks-link"> <a
 				href="
                         <portlet:actionURL>
@@ -147,8 +155,8 @@
                             <portlet:param name="classification" value="koti" />
                             <portlet:param name="description" value="Kasvatusta ohjaavat tiedot" />
                         </portlet:actionURL>">
-					<spring:message code="ui.kks.child.rase" /> </a> </span><br />
-			<span class="kks-link"> <a
+					<spring:message code="ui.kks.child.rase" /> </a> </div>
+			<div class="kks-link"> <a
 				href="
                         <portlet:actionURL>
                             <portlet:param name="action" value="searchEntries" />
@@ -156,7 +164,7 @@
                             <portlet:param name="classification" value="tuen_tarve, huolenaiheet" />
                             <portlet:param name="description" value="Tuen tarve" />
                         </portlet:actionURL>">
-					<spring:message code="ui.kks.support.needs" /> </a> </span> <br />
+					<spring:message code="ui.kks.support.needs" /> </a> </div> 
 
 			<c:if test="${ sessionScope.ammattilainen }">
 
