@@ -164,6 +164,9 @@ public class ViewController extends FormHolderController {
 				log.error("Failure while trying to get Task. See following log for more information: ", e);
 				return getFailureView(request);
 			}
+			FormHolder fh = getFormHolderFromTask(request, t.getDescription());
+			mav.addObject("formholder", fh);
+			return mav;
 		}
 		long companyId = MigrationUtil.getCompanyId(request);
 		Integer rootFolderId = null;

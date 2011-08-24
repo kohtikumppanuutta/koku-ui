@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
+import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.arcusys.koku.palvelut.model.client.FormHolder;
 import fi.arcusys.koku.palvelut.model.client.VeeraCategoryImpl;
@@ -39,8 +40,7 @@ public class FormViewController extends FormHolderController {
 	private VeeraServicesFacade servicesFacade;
 		
 	
-	// FIXME: action=???
-//	@RenderMapping(params="action=???")
+	@RenderMapping(params="action=formview")
 	public ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {
 		log.debug("handleRenderRequestInternal");
@@ -79,8 +79,7 @@ public class FormViewController extends FormHolderController {
 		return mav;
 	}
 
-//	@ActionMapping(params="action=???")
-	@ActionMapping
+	@ActionMapping(params="action=formview")
 	public void handleActionRequestInternal(ActionRequest request,
 			ActionResponse response) throws Exception {
 		log.info("action = " + request.getParameter("action"));
