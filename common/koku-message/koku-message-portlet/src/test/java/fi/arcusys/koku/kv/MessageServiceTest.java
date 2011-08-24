@@ -10,9 +10,8 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
+import org.junit.Test;
 
-import fi.arcusys.koku.kv.MessageHandle;
-import fi.arcusys.koku.kv.MessageService;
 import fi.arcusys.koku.kv.messageservice.Criteria;
 import fi.arcusys.koku.kv.messageservice.Fields;
 import fi.arcusys.koku.kv.messageservice.FolderType;
@@ -61,7 +60,7 @@ public class MessageServiceTest {
 		
 		/* sets the criteria for searching including keyword for each field, default is searching all fields */
 		String keyword="";
-		String field = "1 2 3 4";
+		String field = "1_2_3_4";
 		MessageHandle handle = new MessageHandle();
 		Criteria criteria = handle.createCriteria(keyword, field);
 		messageQuery.setCriteria(criteria);
@@ -88,7 +87,7 @@ public class MessageServiceTest {
 		String user = "Ville Virkamies";
 		FolderType folderType = FolderType.OUTBOX;
 		String keyword="test";
-		String field = "1 2 3 4";
+		String field = "1_2_3_4";
 		MessageHandle handle = new MessageHandle();
 		Criteria criteria = handle.createCriteria(keyword, field);
 		int num = tester.getTotalMessageNum(user, folderType, criteria);

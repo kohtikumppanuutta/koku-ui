@@ -506,9 +506,11 @@
 				window.location = renderUrl;
 			});
 		}else if(pageObj.taskType == "app_inbox_employee"){
-			url = "<%= defaultPath %>" + "/Message/NewAppointment" + "?FormID=" + appointmentId;			
+			url = "<%= defaultPath %>" + "/Message/NewAppointment" + "?FormID=" + appointmentId;
+			window.location = url;
 		}else if(pageObj.taskType == "app_inbox_citizen") {
-			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId;				
+			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId;	
+			window.location = url;
 		}				
 	}
 	//Creates a renderURL by ajax,to show the detailed consent page
@@ -525,10 +527,10 @@
 				window.location = renderUrl;
 			});
 		}else if(pageObj.taskType == "cst_assigned_citizen"){
-			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;			
+			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;	
+			window.location = url;
 		}
-				
-		window.location = url;
+						
 	}
 	/************************For Gatein Portal end****************************/
    <%}%>
