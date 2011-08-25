@@ -267,10 +267,11 @@
 			}
 			
 			taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["appointmentId"] + '" />' + '</td>'
-					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\')" >' + tasks[i]["sender"] + '</td>'
-					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
-					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\')" >' + tasks[i]["description"] + '</td>'
+					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\',\'' + tasks[i]["targetPerson"] + '\')" >' + tasks[i]["sender"] + '</td>'
+					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\',\'' + tasks[i]["targetPerson"] + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
+					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\',\'' + tasks[i]["targetPerson"] + '\')" >' + tasks[i]["description"] + '</td>'
 					 + '</tr>';
+
 		}
 
 		taskHtml += '</table>';
@@ -428,7 +429,7 @@
 		window.location = url;
 	}
 	/* Shows detailed appointment page */
-	function showAppointment(appointmentId) {
+	function showAppointment(appointmentId, targetPerson) {
 		var url="";
 		
 		if(pageObj.taskType == "app_response_employee" || pageObj.taskType == "app_response_citizen") {
@@ -441,7 +442,7 @@
 		}else if(pageObj.taskType == "app_inbox_employee"){
 			url = "<%= defaultPath %>" + "/Message/NewAppointment" + "?FormID=" + appointmentId;			
 		}else if(pageObj.taskType == "app_inbox_citizen") {
-			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId;				
+			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId + "&TargetPerson=" + targetPerson;				
 		}
 		
 		window.location = url;				

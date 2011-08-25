@@ -4,7 +4,7 @@ import java.net.URL;
 import java.util.List;
 
 import fi.arcusys.koku.av.citizenservice.AppointmentRespondedTO;
-import fi.arcusys.koku.av.citizenservice.AppointmentSummary;
+import fi.arcusys.koku.av.citizenservice.AppointmentWithTarget;
 import fi.arcusys.koku.av.citizenservice.KokuKunpoAppointmentService_Service;
 
 /**
@@ -31,7 +31,7 @@ public class AvCitizenService {
 	 * @param maxNum the maximum number
 	 * @return a list of summary of appointments
 	 */
-	public List<AppointmentSummary> getAssignedAppointments(String user, int startNum, int maxNum) {
+	public List<AppointmentWithTarget> getAssignedAppointments(String user, int startNum, int maxNum) {
 		return as.getKokuKunpoAppointmentServicePort().getAssignedAppointments(user, startNum, maxNum);
 	}
 	
@@ -42,7 +42,7 @@ public class AvCitizenService {
 	 * @param maxNum the maximum number
 	 * @return a list of summary of appointments
 	 */
-	public List<AppointmentSummary> getRespondedAppointments(String user, int startNum, int maxNum) {
+	public List<AppointmentWithTarget> getRespondedAppointments(String user, int startNum, int maxNum) {
 		return as.getKokuKunpoAppointmentServicePort().getRespondedAppointments(user, startNum, maxNum);
 	}
 	

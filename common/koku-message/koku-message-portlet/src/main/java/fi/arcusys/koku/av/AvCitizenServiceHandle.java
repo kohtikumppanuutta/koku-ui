@@ -6,7 +6,7 @@ import java.util.List;
 
 import fi.arcusys.koku.av.citizenservice.AppointmentRespondedTO;
 import fi.arcusys.koku.av.citizenservice.AppointmentSlot;
-import fi.arcusys.koku.av.citizenservice.AppointmentSummary;
+import fi.arcusys.koku.av.citizenservice.AppointmentWithTarget;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
@@ -34,7 +34,7 @@ public class AvCitizenServiceHandle {
 	 * @return a list of appointments
 	 */
 	public List<KokuAppointment> getAppointments(String user, int startNum, int maxNum, String taskType) {
-		List<AppointmentSummary> appSummaryList;
+		List<AppointmentWithTarget> appSummaryList;
 		List<KokuAppointment> appList = new ArrayList<KokuAppointment>();
 		
 		if(taskType.equals("app_inbox_citizen"))
@@ -44,17 +44,17 @@ public class AvCitizenServiceHandle {
 		else
 			return appList;
 				
-		KokuAppointment kokuAppointment;
-		
-		Iterator<AppointmentSummary> it = appSummaryList.iterator();
+		//KokuAppointment kokuAppointment;
+		CitizenAppointment kokuAppointment;
+		Iterator<AppointmentWithTarget> it = appSummaryList.iterator();
 		while(it.hasNext()) {
-			AppointmentSummary appSummary = it.next();
-			kokuAppointment = new KokuAppointment();
+			AppointmentWithTarget appSummary = it.next();
+			kokuAppointment = new CitizenAppointment();
 			kokuAppointment.setAppointmentId(appSummary.getAppointmentId());
 			kokuAppointment.setSender(appSummary.getSender());
 			kokuAppointment.setSubject(appSummary.getSubject());
 			kokuAppointment.setDescription(appSummary.getDescription());
-			
+			kokuAppointment.setTargetPerson(appSummary.getTargetPerson());
 			appList.add(kokuAppointment);		
 		}
 		
@@ -108,7 +108,6 @@ public class AvCitizenServiceHandle {
 		Slot slot = new Slot();
 		String dateString = "d.M.yyyy";
 		String timeString = "HH:mm:ss";
-		slot.setAppointmentId(appSlot.getAppointmentId());
 		slot.setSlotNumber(appSlot.getSlotNumber());
 		slot.setAppointmentDate(MessageUtil.formatDateByString(appSlot.getAppointmentDate(), dateString));
 		slot.setStartTime(MessageUtil.formatDateByString(appSlot.getStartTime(), timeString));

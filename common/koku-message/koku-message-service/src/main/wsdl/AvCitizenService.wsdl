@@ -1,34 +1,10 @@
 <definitions name='KokuKunpoAppointmentService'
 	targetNamespace='http://soa.av.koku.arcusys.fi/' xmlns='http://schemas.xmlsoap.org/wsdl/'
-	xmlns:ns1='http://soa.kv.koku.arcusys.fi/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/'
-	xmlns:tns='http://soa.av.koku.arcusys.fi/' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+	xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://soa.av.koku.arcusys.fi/'
+	xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
 	<types>
-		<xs:schema targetNamespace='http://soa.kv.koku.arcusys.fi/'
-			version='1.0' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
-			<xs:complexType name='appointmentSummary'>
-				<xs:sequence>
-					<xs:element name='appointmentId' type='xs:long' />
-					<xs:element minOccurs='0' name='sender' type='xs:string' />
-					<xs:element minOccurs='0' name='subject' type='xs:string' />
-					<xs:element minOccurs='0' name='description' type='xs:string' />
-				</xs:sequence>
-			</xs:complexType>
-			<xs:complexType name='appointmentSlot'>
-				<xs:sequence>
-					<xs:element name='appointmentId' type='xs:long' />
-					<xs:element name='slotNumber' type='xs:int' />
-					<xs:element minOccurs='0' name='appointmentDate' type='xs:date' />
-					<xs:element minOccurs='0' name='startTime' type='xs:time' />
-					<xs:element minOccurs='0' name='endTime' type='xs:time' />
-					<xs:element minOccurs='0' name='location' type='xs:string' />
-					<xs:element minOccurs='0' name='comment' type='xs:string' />
-				</xs:sequence>
-			</xs:complexType>
-		</xs:schema>
 		<xs:schema targetNamespace='http://soa.av.koku.arcusys.fi/'
-			version='1.0' xmlns:ns1='http://soa.kv.koku.arcusys.fi/' xmlns:tns='http://soa.av.koku.arcusys.fi/'
-			xmlns:xs='http://www.w3.org/2001/XMLSchema'>
-			<xs:import namespace='http://soa.kv.koku.arcusys.fi/' />
+			version='1.0' xmlns:tns='http://soa.av.koku.arcusys.fi/' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
 			<xs:element name='getAppointmentRespondedById' type='tns:getAppointmentRespondedById' />
 			<xs:element name='getAppointmentRespondedByIdResponse'
 				type='tns:getAppointmentRespondedByIdResponse' />
@@ -52,7 +28,24 @@
 			<xs:complexType name='getAssignedAppointmentsResponse'>
 				<xs:sequence>
 					<xs:element maxOccurs='unbounded' minOccurs='0' name='return'
-						type='ns1:appointmentSummary' />
+						type='tns:appointmentWithTarget' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='appointmentWithTarget'>
+				<xs:complexContent>
+					<xs:extension base='tns:appointmentBase'>
+						<xs:sequence>
+							<xs:element minOccurs='0' name='targetPerson' type='xs:string' />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='appointmentBase'>
+				<xs:sequence>
+					<xs:element name='appointmentId' type='xs:long' />
+					<xs:element minOccurs='0' name='sender' type='xs:string' />
+					<xs:element minOccurs='0' name='subject' type='xs:string' />
+					<xs:element minOccurs='0' name='description' type='xs:string' />
 				</xs:sequence>
 			</xs:complexType>
 			<xs:complexType name='getTotalAssignedAppointments'>
@@ -85,7 +78,7 @@
 			<xs:complexType name='getRespondedAppointmentsResponse'>
 				<xs:sequence>
 					<xs:element maxOccurs='unbounded' minOccurs='0' name='return'
-						type='ns1:appointmentSummary' />
+						type='tns:appointmentWithTarget' />
 				</xs:sequence>
 			</xs:complexType>
 			<xs:complexType name='getAppointmentRespondedById'>
@@ -101,9 +94,9 @@
 			</xs:complexType>
 			<xs:complexType name='appointmentRespondedTO'>
 				<xs:complexContent>
-					<xs:extension base='ns1:appointmentSummary'>
+					<xs:extension base='tns:appointmentSummary'>
 						<xs:sequence>
-							<xs:element minOccurs='0' name='approvedSlot' type='ns1:appointmentSlot' />
+							<xs:element minOccurs='0' name='approvedSlot' type='tns:appointmentSlot' />
 							<xs:element minOccurs='0' name='replier' type='xs:string' />
 							<xs:element minOccurs='0' name='replierComment' type='xs:string' />
 							<xs:element minOccurs='0' name='status' type='xs:string' />
@@ -111,6 +104,23 @@
 						</xs:sequence>
 					</xs:extension>
 				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='appointmentSummary'>
+				<xs:complexContent>
+					<xs:extension base='tns:appointmentBase'>
+						<xs:sequence />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='appointmentSlot'>
+				<xs:sequence>
+					<xs:element name='slotNumber' type='xs:int' />
+					<xs:element minOccurs='0' name='appointmentDate' type='xs:date' />
+					<xs:element minOccurs='0' name='startTime' type='xs:time' />
+					<xs:element minOccurs='0' name='endTime' type='xs:time' />
+					<xs:element minOccurs='0' name='location' type='xs:string' />
+					<xs:element minOccurs='0' name='comment' type='xs:string' />
+				</xs:sequence>
 			</xs:complexType>
 		</xs:schema>
 	</types>
@@ -230,7 +240,7 @@
 	<service name='KokuKunpoAppointmentService'>
 		<port binding='tns:KokuKunpoAppointmentServiceBinding' name='KokuKunpoAppointmentServicePort'>
 			<soap:address
-				location='http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuKunpoAppointmentServiceImpl' />
+				location='http://127.0.0.1:8180/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuKunpoAppointmentServiceImpl' />
 		</port>
 	</service>
 </definitions>

@@ -251,7 +251,7 @@
 	<service name='KokuLooraAppointmentService'>
 		<port binding='tns:KokuLooraAppointmentServiceBinding' name='KokuLooraAppointmentServicePort'>
 			<soap:address
-				location='http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuLooraAppointmentServiceImpl' />
+				location='http://127.0.0.1:8180/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuLooraAppointmentServiceImpl' />
 		</port>
 	</service>
 </definitions>

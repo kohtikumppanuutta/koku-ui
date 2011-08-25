@@ -23,6 +23,8 @@ function returnMainPage() {
 	<span class="request-c-1"><spring:message code="appointment.targetPerson"/>:</span> <c:out value="${appointment.targetPerson}" /><br />
 	<span class="request-c-1"><spring:message code="appointment.replier"/>:</span> <c:out value="${appointment.replier}" /><br />
 	<span class="request-c-1"><spring:message code="appointment.replierComment"/>:</span> <c:out value="${appointment.replierComment}" /><br />
+	
+	<c:if test="${appointment.slot != null}" >
     <h3><spring:message code="appointment.approvedSlots"/></h3>   
     <table class="request-table">
     	<tr>
@@ -40,7 +42,7 @@ function returnMainPage() {
           <td>${appointment.slot.comment}</td>  
         </tr>
     </table>  
-	
+	</c:if>
 	</div>
 	<div id="task-manager-operation" class="task-manager-operation-part">
 		<input type="button" value="<spring:message code="page.return"/>" onclick="returnMainPage()" />

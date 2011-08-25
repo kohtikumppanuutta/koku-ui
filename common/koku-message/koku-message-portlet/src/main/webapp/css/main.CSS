@@ -245,14 +245,17 @@
 
 .request-table {
 	width: 100%; /* table width */
-	border:1px solid #C3C3C3;/* border */
+	border:0;
+	border-width: 1px; 
+	border-color:#C3C3C3;
+	border-style: solid;
 	border-collapse: collapse;
 	
 }
 
 .request-table td.head {
 	background-color: #D1EEEE;
-	border:1px solid #C3C3C3;
+	border:0;
 	vertical-align: top;
 	text-align: left;
 	font-weight: bold;	
