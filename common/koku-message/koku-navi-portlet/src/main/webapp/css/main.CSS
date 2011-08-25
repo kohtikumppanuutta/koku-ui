@@ -1,0 +1,77 @@
+body{
+	background-color:#ffffff;
+	font-size:13px;
+	font-family:Arial, Helvetica, sans-serif;
+	color:#666666;
+}
+a{
+	text-decoration:none;
+	color:#25aae1;
+}
+a:hover {
+	color:#0089c1;
+}
+
+img {
+	border:0;
+}
+#koku-navigation a{
+	text-decoration:none;
+	color:#666666;
+}
+#koku-navigation a:hover, #koku-navigation .current {
+	color:#25aae1;
+}
+#koku-navigation ul.child{
+	
+}
+#koku-navigation ul.open{
+	display:inline;
+}
+
+#koku-navigation {
+	padding:0 10px;
+	float:left;
+	width:189px;
+	border-right: 1px solid #999999;
+}
+
+ul {
+	list-style:none;
+	padding:0;
+	margin:0;
+}
+li { 
+	line-height: 15px;
+    margin: 0 0 0 10px;
+    padding: 3px 0;
+}
+
+.add {
+	height: 80px;
+    width: 716px;
+	color: #262626;
+}
+
+#koku-navigation .main li, #right-column .main li  {
+	text-transform:uppercase;
+}
+#koku-navigation .child li, #right-column .child li {
+	text-transform:none;
+}
+
+.clear{
+	color:#cccccc;
+	padding-right:8px;
+}
+.chosen{
+	color:#262626;
+	padding-right:8px;
+}
+
+.message_num {
+	font-weight:bold;
+}
+
+/* used for Gatein mode selection View/Edit mode */
+.UIPopupCategory {z-index:2;}
