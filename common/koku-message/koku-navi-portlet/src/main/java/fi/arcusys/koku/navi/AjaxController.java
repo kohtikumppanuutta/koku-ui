@@ -39,7 +39,7 @@ public class AjaxController {
 	 * @return amount of new unread messages in Json
 	 */
 	@ResourceMapping(value = "update")
-	public String showAjax(ModelMap modelmap, PortletRequest request, PortletResponse response) {				
+	public String showAjax(ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		String username = request.getRemoteUser();	
 		JSONObject jsonModel = getJsonModel(username);
 		modelmap.addAttribute("response", jsonModel);
@@ -92,7 +92,7 @@ public class AjaxController {
 					+ "</soapenv:Body>"
 					+ "</soapenv:Envelope>";
 
-			String soapUrl = "http://127.0.0.1:8180/kv-model-0.1-SNAPSHOT/KokuMessageServiceImpl";
+			String soapUrl = "http://127.0.0.1:8180/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuMessageServiceImpl";
 			URL url = new URL(soapUrl);
 			URLConnection con = url.openConnection();
 
