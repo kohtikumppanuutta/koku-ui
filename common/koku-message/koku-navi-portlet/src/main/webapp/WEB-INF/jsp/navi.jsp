@@ -34,7 +34,7 @@
 	}
 			
 %>
-
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
 <script type="text/javascript">
 
 /*
@@ -77,6 +77,11 @@
 			jQuery("#kid_new").css("font-weight", "bold");
 		else if(currentPage == 'NewConsent')
 			jQuery("#cst_new").css("font-weight", "bold");
+		else {
+			var obj = "#" + currentPage.toLowerCase();
+			jQuery(obj).css("font-weight", "bold");
+		}
+			
 	}
 	
 	/**
@@ -158,9 +163,19 @@
 	</a>
 	<ul class="main">
 		<li><a href="javascript:void(0)" >Etusivu</a></li>
-		<li><a href="/portal/private/classic/KKS">Sopimukset ja suunnitelmat</a>
-		<li><a href="/portal/private/classic/PYH" >Omat tiedot</a></li>
-		<li><a href="/portal/private/classic/LOK" >Lokihallinta</a></li>
+		<!-- For citizen in Gatein portal-->
+		<c:if test="${fn:contains(naviURL, '/classic/')}">
+		<li id="kks"><a href="/portal/private/classic/KKS">Sopimukset ja suunnitelmat</a>
+		<li id="pyh"><a href="/portal/private/classic/PYH" >Omat tiedot</a></li>
+		<li id="lok"><a href="/portal/private/classic/LOK" >Lokihallinta</a></li>
+		</c:if>
+		<!-- For employee in Jboss portal -->
+		<c:if test="${fn:contains(naviURL, '/default/')}">
+		<li id="kks"><a href="/portal/auth/portal/default/KKS">Sopimukset ja suunnitelmat</a>
+		<li id="pyh"><a href="/portal/auth/portal/default/PYH" >Omat tiedot</a></li>
+		<li id="lok"><a href="/portal/auth/portal/default/LOK" >Lokihallinta</a></li>
+		</c:if>
+		
 		<li><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')" >Viestit</a>
 			<ul class="open child">
 				<li id="msg_new"><a href="<%= defaultPath %>/Message/NewMessage">Uusi viesti</a> </li>
@@ -173,16 +188,16 @@
 					</ul>
 				</li>
 			</ul></li>
-		<!-- For citizen in Jboss portal-->
-		<c:if test="${fn:contains(naviURL, '/default/')}">
+		<!-- For citizen in Gatein portal-->
+		<c:if test="${fn:contains(naviURL, '/classic/')}">
 		<li><a href="#">Pyynnöt</a>
 			<ul class="child">
 				<li id="req_valid_request"><a href="<%= defaultPath %>/Message/ValidRequest">Voimassaolevat</a></li>
 				<li><a href="#">Vanhentuneet</a></li>
 			</ul></li>
 		</c:if>
-		<!-- For employee in Gatein portal -->
-		<c:if test="${fn:contains(naviURL, '/classic/')}">
+		<!-- For employee in Jboss portal -->
+		<c:if test="${fn:contains(naviURL, '/default/')}">
 		<li><a href="#">Pyynnöt</a>
 			<ul class="child">
 				<li id="req_new"><a href="<%= defaultPath %>/Message/NewRequest">Uudet</a></li>
@@ -190,8 +205,9 @@
 				<li><a href="#">Vanhentuneet</a></li>
 			</ul></li>
 		</c:if>
-		<!-- For citizen in Jboss portal-->
-		<c:if test="${fn:contains(naviURL, '/default/')}">
+		
+		<!-- For citizen in Gatein portal-->
+		<c:if test="${fn:contains(naviURL, '/classic/')}">
 		<li><a href="#">Tapaaminen</a>
 			<ul class="child">
 				<li id="app_inbox_citizen"><a href="javascript:void(0)" onclick="navigateToPage('app_inbox_citizen')">Saapuneet</a></li>
@@ -202,8 +218,8 @@
 				<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Uudet</a></li>
 			</ul></li>
 		</c:if>
-		<!-- For employee in Gatein portal-->
-		<c:if test="${fn:contains(naviURL, '/classic/')}">
+		<!-- For employee in Jboss portal-->
+		<c:if test="${fn:contains(naviURL, '/default/')}">
 		<li><a href="#">Tapaaminen</a>
 			<ul class="child">
 				<li id="app_new"><a href="<%= defaultPath %>/Message/NewAppointment">Uudet</a></li>
@@ -212,16 +228,22 @@
 			</ul></li>
 		</c:if>			
 		
+		<!-- For citizen in Gatein portal-->
+		<c:if test="${fn:contains(naviURL, '/classic/')}">
 		<li><a href="#">Suostumus</a>
 			<ul class="child">
 				<li id="cst_assigned_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_assigned_citizen')">Suostumus</a></li>
 				<li id="cst_own_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_citizen')">Oma suostumukset</a></li>
 			</ul></li>
-		<li><a href="#">Suostumus (työntekijä)</a>
+		</c:if>
+		<!-- For employee in Jboss portal-->
+		<c:if test="${fn:contains(naviURL, '/default/')}">
+		<li><a href="#">Suostumus</a>
 			<ul class="child">
 				<li id="cst_new"><a href="<%= defaultPath %>/Message/NewConsent">Uudet</a></li>
 				<li id="cst_own_employee"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_employee')">Oma suostumus</a></li>
-			</ul></li>				
+			</ul></li>		
+		</c:if>		
 		<li><a href="#">Asiointipalvelut</a>
 			<ul class="child">
 				<li><a href="#">Palveluhakemukset</a></li>
