@@ -3,6 +3,7 @@ package com.ixonos.koku.lok;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import com.ixonos.koku.lok.model.User;
 @Service(value = "lokDemoService")
 public class LokDemoService {
 
-  private static Logger log = LoggerFactory.getLogger(LokDemoService.class);
+  private static final Logger log = LoggerFactory.getLogger(LokDemoService.class);
 
   private List<User> searchedUsers;
 
@@ -31,7 +32,7 @@ public class LokDemoService {
   public List<User> findUsers(String ssn, String uid, String fname, String sname){
     log.info("ssn="+ssn+", fname="+fname+", sname="+sname);
     //Return list of users if one of the search params is not null and not empty string. Else return empty arraylist.
-    if( isNotNullAndEmpty(ssn) | isNotNullAndEmpty(fname) | isNotNullAndEmpty(sname) ){
+    if(StringUtils.isNotBlank(ssn) | StringUtils.isNotBlank(fname) | StringUtils.isNotBlank(sname)){  
       log.info("Returning searchedUsers.size="+searchedUsers.size());
       return searchedUsers;
     }else {
@@ -39,10 +40,6 @@ public class LokDemoService {
     }
     
     
-  }
-
-  private boolean isNotNullAndEmpty(String str) {
-    return (str!=null && !"".equals(str));
   }
   
 }

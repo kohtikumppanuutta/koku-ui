@@ -18,7 +18,7 @@ import org.w3c.dom.Element;
  */
 public class CustomDispatcherPortlet extends DispatcherPortlet {
 
-  private static Logger log = LoggerFactory.getLogger(CustomDispatcherPortlet.class);
+  private static final Logger log = LoggerFactory.getLogger(CustomDispatcherPortlet.class);
   
   @Override
   protected void doHeaders(RenderRequest request, RenderResponse response) {

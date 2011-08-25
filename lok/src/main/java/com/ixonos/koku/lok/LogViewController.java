@@ -37,7 +37,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 public class LogViewController {
   private static final String CRITERIA_RENDER_PARAM = "log-search-criteria";
   
-  private static Logger log = LoggerFactory.getLogger(LogViewController.class);
+  private static final Logger log = LoggerFactory.getLogger(LogViewController.class);
   
   private CriteriaSerializer criteriaSerializer = new CriteriaSerializer();
   

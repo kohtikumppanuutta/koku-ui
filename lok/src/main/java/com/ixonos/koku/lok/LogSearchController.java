@@ -1,5 +1,7 @@
 package com.ixonos.koku.lok;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,7 +11,10 @@ import java.util.List;
 import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.xml.namespace.QName;
+import javax.xml.ws.BindingProvider;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +31,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.koku.services.utility.log.v1.LogService;
+import fi.koku.services.utility.log.v1.LogServicePortType;
+
 //import com.ixonos.koku.kks.utils.Vakiot;
 
 /**
@@ -38,7 +46,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 @RequestMapping(value = "VIEW")
 public class LogSearchController {
   
-  private static Logger log = LoggerFactory.getLogger(LogSearchController.class);
+  private static final Logger log = LoggerFactory.getLogger(LogSearchController.class);
   
   private static final String CRITERIA_RENDER_PARAM = "log-search-criteria";
   private CriteriaSerializer criteriaSerializer = new CriteriaSerializer();
@@ -66,6 +74,21 @@ public class LogSearchController {
     return "menu";
   }
   
+  private LogServicePortType getLogService() throws MalformedURLException {
+    String uid = "marko";
+    String pwd = "marko";
+    String ep = "http://localhost:8080/log-service-0.0.1-SNAPSHOT/LogServiceBean?wsdl";
+
+    URL wsdlLocation = new URL(ep);
+    QName serviceName = new QName("http://services.koku.fi/utility/log/v1", "logService");
+    LogService logService = new LogService(wsdlLocation, serviceName);
+
+    LogServicePortType port = logService.getLogServiceSoap11Port();
+    ((BindingProvider)port).getRequestContext().put(BindingProvider.USERNAME_PROPERTY, uid);
+    ((BindingProvider)port).getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, pwd);
+    return port;
+  }
+  
   // portlet render phase
   @RenderMapping(params = "op=searchLog")
   public String render(@RequestParam(value = "visited", required = false) String visited,@RequestParam(value = "ssn", required = false) String ssn, RenderRequest req, RenderResponse res, Model model) {
@@ -88,7 +111,7 @@ public class LogSearchController {
       log.info("criteria: null");
            
       //Create new logsearchcriteria if there was ssn in request params
-      if(ssn!=null && !"".equals(ssn)){
+      if(StringUtils.isNotBlank(ssn)){
         model.addAttribute("logSearchCriteria", new LogSearchCriteria(ssn,"", null, null));
       }
       

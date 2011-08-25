@@ -30,7 +30,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 @RequestMapping(value = "VIEW")
 public class UserSearchController {
   
-  private static Logger log = LoggerFactory.getLogger(UserSearchController.class);
+  private static final Logger log = LoggerFactory.getLogger(UserSearchController.class);
   
   @Autowired
   @Qualifier(value = "lokDemoService")

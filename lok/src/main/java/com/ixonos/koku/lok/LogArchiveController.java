@@ -8,6 +8,8 @@ import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
@@ -36,7 +39,7 @@ public class LogArchiveController {
   
   private static final String ARCHIVE_DATE_RENDER_PARAM = "log-archive";
 
-  private static Logger log = LoggerFactory.getLogger(LogArchiveController.class);
+  private static final Logger log = LoggerFactory.getLogger(LogArchiveController.class);
     
   private ArchiveSerializer archiveSerializer = new ArchiveSerializer();
   private SimpleDateFormat dateFormat = new SimpleDateFormat(LogConstants.DATE_FORMAT);
@@ -58,10 +61,19 @@ public class LogArchiveController {
     return new LogArchiveDate();
   }
   
+  /**
+   * public String show(@ModelAttribute(value = "child") Person child,
+      @RequestParam(value = "collection") String collection, RenderResponse response, Model model) {
+   * @param req
+   * @param res
+   * @param model
+   * @return
+   */
   // portlet render phase
   @RenderMapping(params="op=archiveLog")
-  public String render(RenderRequest req, RenderResponse res, Model model) {
-
+  public String render(RenderRequest req,  RenderResponse res, Model model) {
+  //  public String render(RenderRequest req, @RequestParam("ARCHIVE_DATE_RENDER_PARAM") String archivedate, RenderResponse res, Model model) {
+//TODO: tähän sisään tulevan archivedaten pitäisi olla jo getDate()-muodossa!!!
  
     res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
 
@@ -69,7 +81,10 @@ public class LogArchiveController {
     if(req.getParameterValues(ARCHIVE_DATE_RENDER_PARAM) != null) {
       archivedate = archiveSerializer.getFromRenderParameter(req.getParameterValues(ARCHIVE_DATE_RENDER_PARAM));
       model.addAttribute("archiveDate", archivedate.getDate());
-     
+  // TODO: Pitää muuttaa tähän muotoon, mutta se vaatii muutoksen jossain muuallakin, muuten
+      // "Required String parameter 'ARCHIVE_DATE_RENDER_PARAM' is not present"
+      //  model.addAttribute("archivedate", archivedate);
+    
       // TODO: Formatoidun päivämäärän välityksessä Controllerin ja JSP-sivun välillä oli
       // ongelmia, joten arkistointipäivämäärä näytetään nyt käyttäjälle hölmössä muodossa
       // esim. Wed Jul 29 00:00:00 EEST 2009.
@@ -83,7 +98,7 @@ public class LogArchiveController {
   @RenderMapping(params="op=startArchiveLog")
   public String renderStart(RenderRequest req, RenderResponse res, Model model) {
 
-  log.debug("log archive render phase: archiving started");
+    log.debug("log archive render phase: archiving started");
  
     res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
 
@@ -150,7 +165,9 @@ public class LogArchiveController {
    
       Date d1 = null;
       try {
-        d1 = text[0].length() > 0 ? df.parse(text[0]) : null;
+        if(ArrayUtils.isNotEmpty(text) && StringUtils.isNotEmpty(text[0])){
+          d1 = df.parse(text[0]);
+        } 
       } catch (ParseException e) {
         throw new IllegalArgumentException("error parsing date string", e);
       }
