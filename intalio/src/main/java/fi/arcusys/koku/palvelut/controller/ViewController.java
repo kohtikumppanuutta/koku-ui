@@ -47,13 +47,13 @@ import fi.arcusys.koku.palvelut.util.XmlProxy;
 @RequestMapping(value = "VIEW")
 public class ViewController extends FormHolderController {
 	private static Logger log = Logger.getLogger(ViewController.class);
-	public static final String FORM_VIEW_ACTION = "formview";
-	public static final String VIEW_ACTION = "view";
-	public static final String VIEW_CURRENT_FOLDER = "folderId";
-	public static final String ADMIN_ACTION = "action";
-	public static final String ADMIN_REMOVE_CATEGORY_ACTION = "removeCategory";
-	public static final String ADMIN_REMOVE_FORM_ACTION = "removeForm";	
-	public static final String ROOT_CATEGORY_LIST_MODEL_NAME = "rootCategories";
+	public static final String FORM_VIEW_ACTION 						= "formview";
+	public static final String VIEW_ACTION 								= "view";
+	public static final String VIEW_CURRENT_FOLDER 						= "folderId";
+	public static final String ADMIN_ACTION 							= "action";
+	public static final String ADMIN_REMOVE_CATEGORY_ACTION 			= "removeCategory";
+	public static final String ADMIN_REMOVE_FORM_ACTION 				= "removeForm";	
+	public static final String ROOT_CATEGORY_LIST_MODEL_NAME 			= "rootCategories";
 	
 
 	public static final String APPOINTMENT_SERVICE_CITIZEN_NAME 		= "AppointmentServiceCitizen";
@@ -164,6 +164,9 @@ public class ViewController extends FormHolderController {
 				log.error("Failure while trying to get Task. See following log for more information: ", e);
 				return getFailureView(request);
 			}
+			FormHolder fh = getFormHolderFromTask(request, t.getDescription());
+			mav.addObject("formholder", fh);
+			return mav;
 		}
 		long companyId = MigrationUtil.getCompanyId(request);
 		Integer rootFolderId = null;

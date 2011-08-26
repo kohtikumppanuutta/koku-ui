@@ -7,10 +7,12 @@ import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.WindowState;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -68,6 +70,10 @@ public class ConfigurationController {
 		prefs.setValue("showOnlyForm", request.getParameter("showOnlyForm"));
 		prefs.store();
 		request.setAttribute("prefs", prefs);
+		
+		/* Return back to VIEW mode */
+		response.setPortletMode(PortletMode.VIEW);
+        response.setWindowState(WindowState.NORMAL);
 	}
 	
 	private List<TaskHolder<Task>> getTaskHolders(PortletRequest request) {
