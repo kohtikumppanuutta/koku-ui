@@ -3,6 +3,10 @@
 
 <portlet:resourceURL var="ajax" id="intalioAjax"></portlet:resourceURL>
 
+<%-- Load jQuery --%>
+<%-- This just temporary fix, because jQuery should be made available from theme or by portal not in portlet. --%>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.5.2.min.js"></script>
+
 <script type="text/javascript">
 
 	/* Simple function to send some example ajax data */
@@ -39,9 +43,10 @@
 	 
 	/* add the formId to the intalio form for editting appointment form */
 	window.onload = function() {
-	 	
-		 if(koku_currentUrl.indexOf("FormID=") > 0) {
-			var temp = koku_currentUrl.split("FormID=");
+		var global_url = document.URL;
+
+		 if(global_url.indexOf("FormID=") > 0) {
+			var temp = global_url.split("FormID=");
 			var formId = temp[1];
 			
 			jQuery('#<portlet:namespace />xforms_iframe').attr('src', "${formholder.url}" + "&FormID=" + formId);
@@ -63,8 +68,8 @@
 			formUrl = formUrl.replace('%2Fpalvelut-portlet%2Fajaxforms%2F','%2Fgi%2F');
 			jQuery('#<portlet:namespace />xforms_iframe').attr('src', formUrl);
 		}		
-	}
 	--%>
+	}
 
         function scrollToTop() {
 // 		var iframe = document.getElementById('hiddenIframe');
