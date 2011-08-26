@@ -39,7 +39,7 @@
 	 
 	/* add the formId to the intalio form for editting appointment form */
 	window.onload = function() {
-	/* 	
+	 	
 		 if(koku_currentUrl.indexOf("FormID=") > 0) {
 			var temp = koku_currentUrl.split("FormID=");
 			var formId = temp[1];
@@ -48,9 +48,9 @@
 		}else {
 			jQuery('#<portlet:namespace />xforms_iframe').attr('src', "${formholder.url}");
 		} 
-	 */	
 	 
-	 <%-- Temporary solution --%>
+	 
+	 <%-- Temporary solution 
 		var formUrl = "${formholder.url}";
 		if(koku_currentUrl.indexOf("FormID=") > 0) {
 			var temp = koku_currentUrl.split("FormID=");
@@ -64,6 +64,7 @@
 			jQuery('#<portlet:namespace />xforms_iframe').attr('src', formUrl);
 		}		
 	}
+	--%>
 
         function scrollToTop() {
 // 		var iframe = document.getElementById('hiddenIframe');

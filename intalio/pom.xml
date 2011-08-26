@@ -51,6 +51,8 @@
 	</repositories>
 
 	<build>
+	    <!-- Keep war filename consistent! -->
+	    <finalName>${project.artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -92,7 +94,7 @@
 						<configuration>
 							<classesDirectory>${project.build.directory}/tempo-tms-common/</classesDirectory>
 							<finalName>tempo-tms-common-${intalio.tempo.version}-noJPA</finalName>
-							<outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/WEB-INF/lib</outputDirectory>
+							<outputDirectory>${project.build.directory}/${project.artifactId}/WEB-INF/lib</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>

@@ -164,9 +164,6 @@ public class ViewController extends FormHolderController {
 				log.error("Failure while trying to get Task. See following log for more information: ", e);
 				return getFailureView(request);
 			}
-			FormHolder fh = getFormHolderFromTask(request, t.getDescription());
-			mav.addObject("formholder", fh);
-			return mav;
 		}
 		long companyId = MigrationUtil.getCompanyId(request);
 		Integer rootFolderId = null;
@@ -193,58 +190,66 @@ public class ViewController extends FormHolderController {
 			currentFolder = rootFolderId;
 		}
 
-		// Category currently selected
-		VeeraCategoryImpl currentCategory = servicesFacade.findCategoryByEntryAndCompanyId(currentFolder, companyId);
-		if (currentCategory == null) {
-			// If category doesn't exist, use root category
-			currentCategory =  servicesFacade.findCategoryByEntryAndCompanyId(rootFolderId, companyId);
-		}
-
-		// Child categories & forms of currently selected category
-		List<VeeraCategoryImpl> categories = servicesFacade.findChildCategories(currentFolder, companyId);
-		for (VeeraCategoryImpl vc : categories) {
-			vc.setFormCount(servicesFacade.findChildForms(vc.getEntryId()).size());
-		}
-		List<VeeraFormImpl> forms = servicesFacade.findChildFormsByFormHolders(currentFolder, companyId, getFormHoldersFromTasks(request));
-		List<Object[]> formCount = (List<Object[]>) servicesFacade.findChildFormsCount(currentFolder, companyId);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("categories", categories);
-		map.put("forms", forms);
-		map.put("rootFolderId", rootFolderId);
-		map.put("currentFolder", currentFolder);
-		map.put("currentCategory", currentCategory);
-		map.put("childFormCount", formCount);
-		String currentFolderArg = request.getParameter(ViewController.VIEW_CURRENT_FOLDER);
-		if (currentFolderArg == null) {
-			if (currentFolderArg == null) {
-				// Form/Category edit/view or redirect from EditController
-				currentFolderArg = (String) request.getAttribute(EditController.CURRENT_CATEGORY);
-			}
-		}
-
-		int currentFolderId = -1;
-		VeeraCategoryImpl category = null;
 		try {
-			currentFolderId = Integer.parseInt(currentFolderArg);
-			category = servicesFacade.findCategoryByEntryAndCompanyId(currentFolderId, companyId);
-		} catch (NumberFormatException e) {
-			// category remains as null
-		}
-
-		boolean currentCategoryIsRoot = currentFolderId == rootFolderId;
-		List<VeeraCategoryImpl> path = new ArrayList<VeeraCategoryImpl>();
-		if (category != null && !currentCategoryIsRoot) {
-			while (category != null && category.getEntryId() != rootFolderId) {
-				path.add(category);
-				category = servicesFacade.findCategoryByEntryAndCompanyId(category.getParent(), companyId);
+		
+			// Category currently selected
+			VeeraCategoryImpl currentCategory = servicesFacade.findCategoryByEntryAndCompanyId(currentFolder, companyId);
+			if (currentCategory == null) {
+				// If category doesn't exist, use root category
+				currentCategory =  servicesFacade.findCategoryByEntryAndCompanyId(rootFolderId, companyId);
 			}
-			path.add(category);
+	
+			// Child categories & forms of currently selected category
+			List<VeeraCategoryImpl> categories = servicesFacade.findChildCategories(currentFolder, companyId);
+			for (VeeraCategoryImpl vc : categories) {
+				vc.setFormCount(servicesFacade.findChildForms(vc.getEntryId()).size());
+			}
+		
+			List<VeeraFormImpl> forms = servicesFacade.findChildFormsByFormHolders(currentFolder, companyId, getFormHoldersFromTasks(request));
+			List<Object[]> formCount = (List<Object[]>) servicesFacade.findChildFormsCount(currentFolder, companyId);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("categories", categories);
+			map.put("forms", forms);
+			map.put("rootFolderId", rootFolderId);
+			map.put("currentFolder", currentFolder);
+			map.put("currentCategory", currentCategory);
+			map.put("childFormCount", formCount);
+			String currentFolderArg = request.getParameter(ViewController.VIEW_CURRENT_FOLDER);
+			if (currentFolderArg == null) {
+				if (currentFolderArg == null) {
+					// Form/Category edit/view or redirect from EditController
+					currentFolderArg = (String) request.getAttribute(EditController.CURRENT_CATEGORY);
+				}
+			}
+			
+	
+			int currentFolderId = -1;
+			VeeraCategoryImpl category = null;
+			try {
+				currentFolderId = Integer.parseInt(currentFolderArg);
+				category = servicesFacade.findCategoryByEntryAndCompanyId(currentFolderId, companyId);
+			} catch (NumberFormatException e) {
+				// category remains as null
+			}
+	
+			boolean currentCategoryIsRoot = currentFolderId == rootFolderId;
+			List<VeeraCategoryImpl> path = new ArrayList<VeeraCategoryImpl>();
+			if (category != null && !currentCategoryIsRoot) {
+				while (category != null && category.getEntryId() != rootFolderId) {
+					path.add(category);
+					category = servicesFacade.findCategoryByEntryAndCompanyId(category.getParent(), companyId);
+				}
+				path.add(category);
+			}
+			Collections.reverse(path);
+			ModelAndView mav = new ModelAndView(VIEW_ACTION, "model", map);
+			mav.addObject("breadcrumb", path);
+			mav.addObject("prefs", request.getPreferences());
+			return mav;
+		} catch (Exception e) {
+			log.error("VeeraServicesFacade failure. See following log for more information: ", e);
+			return getFailureView(request);
 		}
-		Collections.reverse(path);
-		ModelAndView mav = new ModelAndView(VIEW_ACTION, "model", map);
-		mav.addObject("breadcrumb", path);
-		mav.addObject("prefs", request.getPreferences());
-		return mav;
 	}
 	
 	private ModelAndView getFailureView(RenderRequest request) {
