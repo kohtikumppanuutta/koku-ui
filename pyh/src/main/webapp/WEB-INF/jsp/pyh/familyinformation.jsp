@@ -52,7 +52,7 @@
             <tr>
                 <td> ${child.fullName} </td>
                 <td> ${child.ssn} </td>
-                <td> ${dp.text} 
+                <td> <spring:message code="${dp.bundleId}"/> 
                     <c:if test="${child.memberOfUserFamily}">
                      (<spring:message code="ui.pyh.added.into.family" />)
                     </c:if>   
@@ -67,7 +67,7 @@
              <tr>
                 <td>${familyMember.fullName} </td>
                 <td>${familyMember.ssn} </td>
-                <td>${familyMember.role.text}</td>
+                <td><spring:message code="${familyMember.role.bundleId}"/></td>
             </tr>
             </c:forEach>
         </table>    

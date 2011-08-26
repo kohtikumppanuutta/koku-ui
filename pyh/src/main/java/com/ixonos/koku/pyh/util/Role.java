@@ -2,17 +2,17 @@ package com.ixonos.koku.pyh.util;
 
 public enum Role {
 
-  FATHER("Isä"), MOTHER("Äiti"), FAMILY_MEMBER("Perheyhteisön jäsen"), DEPENDANT("Huollettava lapsi"), CHILD("Lapsi"), PARENT(
-      "Vanhempi");
+  FATHER("ui.pyh.father"), MOTHER("ui.pyh.mother"), FAMILY_MEMBER("ui.pyh.family"), DEPENDANT("ui.pyh.dependant"), CHILD(
+      "ui.pyh.child"), PARENT("ui.pyh.parent");
 
-  private String text;
+  private String bundleId;
 
   private Role(String text) {
-    this.text = text;
+    this.bundleId = text;
   }
 
-  public String getText() {
-    return text;
+  public String getBundleId() {
+    return bundleId;
   }
 
   public static Role create(String text) {

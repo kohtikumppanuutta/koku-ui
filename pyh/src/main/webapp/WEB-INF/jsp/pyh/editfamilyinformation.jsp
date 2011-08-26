@@ -64,7 +64,7 @@
             <tr>
                 <td> ${child.fullName} </td>
                 <td> ${child.ssn} </td>
-                <td> ${DEPENDANT.text} 
+                <td> <spring:message code="${DEPENDANT.bundleId}"/>
                 
                 <c:if test="${child.memberOfUserFamily}">
                    (<spring:message code="ui.pyh.added.into.family" />)
@@ -102,7 +102,7 @@
                 <tr>
                 <td>${familyMember.fullName} </td>
                 <td>${familyMember.ssn} </td>
-                <td>${familyMember.role.text}</td>
+                <td><spring:message code="${familyMember.role.bundleId}"/></td>
                 <td><span class="pyh-linkki">
                     <portlet:actionURL var="removeFamilyMember">
                     <portlet:param name="action" value="removeFamilyMember" />
@@ -184,14 +184,14 @@
 							value="${userVar}" type="checkbox" /></td>
 
 						<td><select id="user_role_${userVar}" class="syntmaika">
-								<option value="${ MEMBER }">${MEMBER.text}</option>
-								<option value="${ DEPENDANT }">${DEPENDANT.text}</option>
-								<option value="${ CHILD }">${ CHILD.text }</option>
+								<option value="${ MEMBER }"><spring:message code="${MEMBER.bundleId}"/></option>
+								<option value="${ DEPENDANT }"><spring:message code="${DEPENDANT.bundleId}"/></option>
+								<option value="${ CHILD }"><spring:message code="${CHILD.bundleId }"/></option>
 								
 								<c:if test="${ not parentsFull }">
-								<option value="${ FATHER }">${ FATHER.text }</option>
-								<option value="${ MOTHER }">${ MOTHER.text }</option>
-								    <option value="${ PARENT }">${ PARENT.text }</option>
+								<option value="${ FATHER }"><spring:message code="${FATHER.bundleId}"/></option>
+								<option value="${ MOTHER }"><spring:message code="${MOTHER.bundleId}"/></option>
+								    <option value="${ PARENT }"><spring:message code="${PARENT.bundleId}"/></option>
 								    
 								</c:if>
 						</select></td>
