@@ -31,7 +31,7 @@ public class EditController {
   @RenderMapping
   public String render(RenderRequest req, @RequestParam(value = "note", required = false) String note, Model model) {
     if (note != null) {
-      model.addAttribute("viesti", "Malli resetoitu");
+      model.addAttribute("note", "Malli resetoitu");
     }
     return "edit";
   }
@@ -42,7 +42,7 @@ public class EditController {
     demoService.reset();
     messageService.reset();
     if (note != null) {
-      model.addAttribute("viesti", "Malli resetoitu");
+      model.addAttribute("note", "Malli resetoitu");
     }
     return "edit";
   }
