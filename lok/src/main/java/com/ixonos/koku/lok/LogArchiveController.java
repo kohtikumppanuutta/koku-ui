@@ -70,53 +70,59 @@ public class LogArchiveController {
    * @return
    */
   // portlet render phase
-  @RenderMapping(params="op=archiveLog")
+  @RenderMapping(params="action=archiveLog")
   public String render(RenderRequest req,  RenderResponse res, Model model) {
-  //  public String render(RenderRequest req, @RequestParam("ARCHIVE_DATE_RENDER_PARAM") String archivedate, RenderResponse res, Model model) {
+    //TODO: Pitäisi saada tällaiseen muotoon:
+    // 28.8. ongelmia daten välityksessä jsp-sivulle, joten revertoidaan.
+/*   public String render(RenderRequest req, @RequestParam(required=false, value="ARCHIVE_DATE_RENDER_PARAM") LogArchiveDate archivedate, RenderResponse res, Model model) {
 //TODO: tähän sisään tulevan archivedaten pitäisi olla jo getDate()-muodossa!!!
- 
+//  if(archivedate != null){ 
+    //     model.addAttribute("archivedate", archivedate.getDate());
+  */
+    
     res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
 
     LogArchiveDate archivedate = null;
     if(req.getParameterValues(ARCHIVE_DATE_RENDER_PARAM) != null) {
       archivedate = archiveSerializer.getFromRenderParameter(req.getParameterValues(ARCHIVE_DATE_RENDER_PARAM));
       model.addAttribute("archiveDate", archivedate.getDate());
-  // TODO: Pitää muuttaa tähän muotoon, mutta se vaatii muutoksen jossain muuallakin, muuten
-      // "Required String parameter 'ARCHIVE_DATE_RENDER_PARAM' is not present"
-      //  model.addAttribute("archivedate", archivedate);
-    
-      // TODO: Formatoidun päivämäärän välityksessä Controllerin ja JSP-sivun välillä oli
-      // ongelmia, joten arkistointipäivämäärä näytetään nyt käyttäjälle hölmössä muodossa
-      // esim. Wed Jul 29 00:00:00 EEST 2009.
-     
+
     }    
+    // TODO: Formatoidun päivämäärän välityksessä Controllerin ja JSP-sivun välillä oli
+    // ongelmia, joten arkistointipäivämäärä näytetään nyt käyttäjälle hölmössä muodossa
+    // esim. Wed Jul 29 00:00:00 EEST 2009.
     
     return "archive";
 }
 
 //portlet render phase
-  @RenderMapping(params="op=startArchiveLog")
+  @RenderMapping(params="action=startArchiveLog")
   public String renderStart(RenderRequest req, RenderResponse res, Model model) {
-
+    //TODO: Muutettava tällaiseen muotoon:
+ /* public String renderStart(RenderRequest req, @RequestParam("ARCHIVE_DATE_RENDER_PARAM") LogArchiveDate archivedate, RenderResponse res, Model model){
+    if(archivedate != null){   
+     log.debug("saatiin archiveDate render param");
+     model.addAttribute("archivedate", archivedate); 
+    }    
+ */ 
+    
     log.debug("log archive render phase: archiving started");
  
     res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
 
     LogArchiveDate archivedate = null;
     if(req.getParameterValues(ARCHIVE_DATE_RENDER_PARAM) != null) {
-      log.debug("saatiin archiveDate render param");
-      
       archivedate = archiveSerializer.getFromRenderParameter(req.getParameterValues(ARCHIVE_DATE_RENDER_PARAM));
       model.addAttribute("archiveDate", archivedate.getDate());
+    }
     
-    }    
-    
+
     return "archive2";
 }
   
 //portlet action phase
-  @ActionMapping(params="op=archiveLog")
-  public void doArchive(@ModelAttribute(value = "logArchiveDate") LogArchiveDate archivedate, BindingResult result,
+  @ActionMapping(params="action=archiveLog")
+  public void doArchive(@ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate, BindingResult result,
       ActionResponse response) {
     log.debug("log archive action phase");
    
@@ -130,20 +136,21 @@ public class LogArchiveController {
     // 5) ilmoita käyttäjälle, että arkistointi onnistui
     
     
-    response.setRenderParameter(ARCHIVE_DATE_RENDER_PARAM, archiveSerializer.getAsText(archivedate));
-    response.setRenderParameter("op", "archiveLog");
+    response.setRenderParameter(ARCHIVE_DATE_RENDER_PARAM, archiveSerializer.getAsText(logarchivedate));
+    log.debug("render-parametriksi asetettu "+archiveSerializer.getAsText(logarchivedate));
+    response.setRenderParameter("action", "archiveLog");
    
   }
   
-  @ActionMapping(params="op=startArchiveLog")
-  public void startArchive(@ModelAttribute(value = "logArchiveDate") LogArchiveDate archivedate, BindingResult result,
+  @ActionMapping(params="action=startArchiveLog")
+  public void startArchive(@ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate, BindingResult result,
       ActionResponse response) {
     log.debug("log archive action phase: starting archiving");
    
     // TODO: ADD HERE THE ACTUAL ARCHIVING COMMAND
     
-    response.setRenderParameter(ARCHIVE_DATE_RENDER_PARAM, archiveSerializer.getAsText(archivedate));
-    response.setRenderParameter("op", "startArchiveLog");
+    response.setRenderParameter(ARCHIVE_DATE_RENDER_PARAM, archiveSerializer.getAsText(logarchivedate));
+    response.setRenderParameter("action", "startArchiveLog");
   
   }
     
@@ -151,13 +158,16 @@ public class LogArchiveController {
     
     private SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
     
-    public String getAsText(LogArchiveDate archivedate){
- 
-      String date = archivedate.getDate() != null ? df.format(archivedate.getDate()) : ""; 
+    public String getAsText(LogArchiveDate logarchivedate){
+      String date = null;
+    
+      if(logarchivedate != null){
+        date = logarchivedate.getDate() != null ? df.format(logarchivedate.getDate()) : ""; 
       
-      log.debug("getAsText alkuperäinen archivedate: "+archivedate);
-      log.debug("getAsText: formatoitu archivedate: "+date);
-     
+        log.debug("getAsText alkuperäinen archivedate: "+logarchivedate);
+        log.debug("getAsText: formatoitu archivedate: "+date);
+      } 
+      
       return date;
     }
     

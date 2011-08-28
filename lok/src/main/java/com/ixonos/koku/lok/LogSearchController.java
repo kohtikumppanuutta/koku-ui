@@ -37,23 +37,22 @@ import fi.koku.services.utility.log.v1.LogServicePortType;
 //import com.ixonos.koku.kks.utils.Vakiot;
 
 /**
- * Controller for log search (LOK).
- * This implements LOK-3.
+ * Controller for log search (LOK). This implements LOK-3.
  * 
  * @author aspluma
  */
 @Controller
 @RequestMapping(value = "VIEW")
 public class LogSearchController {
-  
+
   private static final Logger log = LoggerFactory.getLogger(LogSearchController.class);
-  
+
   private static final String CRITERIA_RENDER_PARAM = "log-search-criteria";
   private CriteriaSerializer criteriaSerializer = new CriteriaSerializer();
-  
+
   @Autowired
   private ResourceBundleMessageSource resourceBundle;
-  
+
   // customize form data binding
   @InitBinder
   public void initBinder(WebDataBinder binder) {
@@ -62,7 +61,7 @@ public class LogSearchController {
     CustomDateEditor dateEditor = new CustomDateEditor(dateFormat, true);
     binder.registerCustomEditor(Date.class, dateEditor);
   }
-  
+
   // initialize form backing objects
   @ModelAttribute("logSearchCriteria")
   public LogSearchCriteria getCommandObject() {
@@ -70,10 +69,10 @@ public class LogSearchController {
   }
 
   @RenderMapping
-  public String render(RenderRequest req, Model model){
+  public String render(RenderRequest req, Model model) {
     return "menu";
   }
-  
+
   private LogServicePortType getLogService() throws MalformedURLException {
     String uid = "marko";
     String pwd = "marko";
@@ -84,100 +83,106 @@ public class LogSearchController {
     LogService logService = new LogService(wsdlLocation, serviceName);
 
     LogServicePortType port = logService.getLogServiceSoap11Port();
-    ((BindingProvider)port).getRequestContext().put(BindingProvider.USERNAME_PROPERTY, uid);
-    ((BindingProvider)port).getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, pwd);
+    ((BindingProvider) port).getRequestContext().put(BindingProvider.USERNAME_PROPERTY, uid);
+    ((BindingProvider) port).getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, pwd);
     return port;
   }
-  
+
   // portlet render phase
-  @RenderMapping(params = "op=searchLog")
-  public String render(@RequestParam(value = "visited", required = false) String visited,@RequestParam(value = "ssn", required = false) String ssn, RenderRequest req, RenderResponse res, Model model) {
+  @RenderMapping(params = "action=searchLog")
+  // OLI: public String render(@RequestParam(value = "visited", required =
+  // false) String visited,@RequestParam(value = "ssn", required = false) String
+  // ssn, RenderRequest req, RenderResponse res, Model model) {
+  public String render(@RequestParam(value = "visited", required = false) String visited,
+      @RequestParam(value = "ssn", required = false) String ssn, RenderRequest req, RenderResponse res, Model model) {
+
     log.info("log search render phase");
-    log.info("req.ssn="+ssn);
+    log.info("req.ssn=" + ssn);
 
     res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
 
     LogSearchCriteria searchCriteria = null;
-    if(req.getParameterValues(CRITERIA_RENDER_PARAM) != null) {
+    if (req.getParameterValues(CRITERIA_RENDER_PARAM) != null) {
       searchCriteria = criteriaSerializer.getFromRenderParameter(req.getParameterValues(CRITERIA_RENDER_PARAM));
       model.addAttribute("entries", doSearchEntries(searchCriteria));
       model.addAttribute("searchParams", searchCriteria);
       model.addAttribute("visited", "---");
-    }  
-    
-    if(searchCriteria!=null){
-      log.info("criteria: "+searchCriteria.getPic()+", "+searchCriteria.getConcept()+", "+searchCriteria.getFrom()+", "+searchCriteria.getTo());
-    } else{
+    }
+
+    if (searchCriteria != null) {
+      log.info("criteria: " + searchCriteria.getPic() + ", " + searchCriteria.getConcept() + ", "
+          + searchCriteria.getFrom() + ", " + searchCriteria.getTo());
+    } else {
       log.info("criteria: null");
-           
-      //Create new logsearchcriteria if there was ssn in request params
-      if(StringUtils.isNotBlank(ssn)){
-        model.addAttribute("logSearchCriteria", new LogSearchCriteria(ssn,"", null, null));
+
+      // Create new logsearchcriteria if there was ssn in request params
+      if (StringUtils.isNotBlank(ssn)) {
+        model.addAttribute("logSearchCriteria", new LogSearchCriteria(ssn, "", null, null));
       }
-      
+
     }
     return "search";
   }
-  
+
   // portlet action phase
-  @ActionMapping(params="op=searchLog")
+  @ActionMapping(params = "action=searchLog")
   public void doSearch(@ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, BindingResult result,
       ActionResponse response) {
-   
+
     // TODO:
-    // Hausta tallentuu tieto tapahtumalokin käsittelylokiin (tapahtumatietona hakuehdot)
-    
- // pass criteria to render phase
+    // Hausta tallentuu tieto tapahtumalokin käsittelylokiin (tapahtumatietona
+    // hakuehdot)
+
+    // pass criteria to render phase
     response.setRenderParameter(CRITERIA_RENDER_PARAM, criteriaSerializer.getAsText(criteria));
-  
-    response.setRenderParameter("op", "searchLog");
+
+    response.setRenderParameter("action", "searchLog");
   }
 
   private List<LogEntry> doSearchEntries(LogSearchCriteria searchCriteria) {
     List<LogEntry> r = null;
-    
-    // TEMPORARY solution: 
+
+    // TEMPORARY solution:
     // show the results only if something has been written in the pic field
-    if(searchCriteria.getPic()!=null && searchCriteria.getPic().length()>0){
-     
-      /*TODO:
-       * time stamp 
-       * name of the user
-       * type of entry (? tapahtumatyyppi)
-       * information that has been viewed or edited (käsitelty tieto tapahtumakuvauksesta ja kohteesta)
-       * kutsuva palvelu
-       * 
+    if (searchCriteria.getPic() != null && searchCriteria.getPic().length() > 0) {
+
+      /*
+       * TODO: time stamp name of the user type of entry (? tapahtumatyyppi)
+       * information that has been viewed or edited (käsitelty tieto
+       * tapahtumakuvauksesta ja kohteesta) kutsuva palvelu
        */
- 
+
       // TEMPORARY SOLUTION:
       // Create 5 lines of demo log entries
       LogDemoFactory factory = new LogDemoFactory();
-      r =  new ArrayList<LogEntry>();
-    
-      for(int i=0;i<5; i++){
+      r = new ArrayList<LogEntry>();
+
+      for (int i = 0; i < 5; i++) {
         r.add(factory.createLogEntry(i, LogDemoFactory.BASIC_LOG));
       }
-      
+
     }
     return r;
   }
 
   /**
-   * Helper class for serializing and deserializing LogSearchCriteria objects as text.
+   * Helper class for serializing and deserializing LogSearchCriteria objects as
+   * text.
    * 
-   * NB: The class is expecting data to be valid since it's been already validated by the controller so, input errors are not handled. 
+   * NB: The class is expecting data to be valid since it's been already
+   * validated by the controller so, input errors are not handled.
+   * 
    * @author aspluma
    */
   private static class CriteriaSerializer {
-    
+
     public String[] getAsText(LogSearchCriteria c) {
       SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
-      String [] text = new String[] {c.getPic(), c.getConcept(),
-          c.getFrom() != null ? df.format(c.getFrom()) : "",
-          c.getTo() != null ? df.format(c.getTo()) : ""};
+      String[] text = new String[] { c.getPic(), c.getConcept(), c.getFrom() != null ? df.format(c.getFrom()) : "",
+          c.getTo() != null ? df.format(c.getTo()) : "" };
       return text;
     }
-    
+
     public LogSearchCriteria getFromRenderParameter(String[] text) {
       SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
       Date d1 = null, d2 = null;
@@ -190,5 +195,5 @@ public class LogSearchController {
       return new LogSearchCriteria(text[0], text[1], d1, d2);
     }
   }
-  
+
 }

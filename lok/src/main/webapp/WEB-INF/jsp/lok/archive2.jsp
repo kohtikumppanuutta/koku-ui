@@ -8,7 +8,7 @@
 <portlet:defineObjects />
 
 <portlet:renderURL var="homeUrl">
-	<portlet:param name="op" value="choose" />
+	<portlet:param name="action" value="choose" />
 </portlet:renderURL>
 
 <div class="koku-lok">

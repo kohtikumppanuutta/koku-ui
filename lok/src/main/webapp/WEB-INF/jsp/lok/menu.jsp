@@ -7,19 +7,19 @@
 
 
 <portlet:renderURL var="archive">
-	<portlet:param name="op" value="archiveLog" />
+	<portlet:param name="action" value="archiveLog" />
 </portlet:renderURL>
 
 <portlet:renderURL var="searchUser">
-	<portlet:param name="op" value="searchUser" />
+	<portlet:param name="action" value="searchUser" />
 </portlet:renderURL>
 
 <portlet:renderURL var="searchArchive">
-	<portlet:param name="op" value="searchLog" />
+	<portlet:param name="action" value="searchLog" />
 </portlet:renderURL>
 
 <portlet:renderURL var="searchLogViews">
-	<portlet:param name="op" value="viewLog" />
+	<portlet:param name="action" value="viewLog" />
 </portlet:renderURL>
 
 <div class="koku-lok">
@@ -30,7 +30,7 @@
 	<div style="float: left;">
 
 		<div>
-			<h3>Järjestelmänvalvojan toiminnot</h3>
+			<h3><spring:message code="koku.lok.admin.actions" /></h3>
 
 
 			<form:form name="searchForm" method="post" action="${searchUser}">
@@ -46,7 +46,7 @@
 		</div>
 
 		<div>
-			<h3>Lokinkäsittelyn valvojan toiminnot</h3>
+			<h3><spring:message code="koku.lok.superadmin.actions" /></h3>
 			<form:form name="viewForm" method="post" action="${searchLogViews}">
 				<input type="submit" value="<spring:message code="koku.lok.view"/>" />
 			</form:form>

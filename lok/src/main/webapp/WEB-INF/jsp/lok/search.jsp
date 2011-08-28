@@ -11,16 +11,16 @@
 <portlet:defineObjects />
 
 <portlet:actionURL var="searchActionUrl">
-	<portlet:param name="op" value="searchLog" />
+	<portlet:param name="action" value="searchLog" />
 	<portlet:param name="visited" value="---" />
 </portlet:actionURL>
 
 <portlet:renderURL var="searchUser">
-	<portlet:param name="op" value="searchUser" />
+	<portlet:param name="action" value="searchUser" />
 </portlet:renderURL>
 
 <portlet:renderURL var="archiveURL">
-	<portlet:param name="op" value="archiveLog" />
+	<portlet:param name="action" value="archiveLog" />
 </portlet:renderURL>
 
 <%!Calendar starttime = Calendar.getInstance();%>

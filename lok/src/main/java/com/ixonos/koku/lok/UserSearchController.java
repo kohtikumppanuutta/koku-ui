@@ -39,35 +39,35 @@ public class UserSearchController {
   @Autowired
   private ResourceBundleMessageSource resourceBundle;
   
-  @RenderMapping(params = "op=home")
+  @RenderMapping(params = "action=home")
   public String render(Model model){
     log.debug("log search render phase");
     model.addAttribute("search", false);//This means that search was NOT done
     return "menu";
   }
   
-  @RenderMapping(params = "op=searchUser")
+  @RenderMapping(params = "action=searchUser")
   public String renderSearch(RenderRequest req, Model model){
     log.debug("log search render phase");
     model.addAttribute("search", false);//This means that search was NOT done
     return "usersearch";
   }
   
-  @ActionMapping(params = "op=searchUserWithParams")
+  @ActionMapping(params = "action=searchUserWithParams")
   public void searchUserWithParams(ActionResponse response, @RequestParam(value = "fn", required = false) String fname, @RequestParam(value = "sn", required = false) String sname, @RequestParam(value = "ssn", required = false) String ssn, Model model){
-    log.debug("log search user action phase with op=searchUserWithParams");
+    log.debug("log search user action phase with action=searchUserWithParams");
     
     //Form sending required to use ActionURL and now there parameters are send forward to render method
     response.setRenderParameter("fn", fname);
     response.setRenderParameter("sn", sname);
     response.setRenderParameter("ssn", ssn);
-    response.setRenderParameter("op", "searchUserParams");
+    response.setRenderParameter("action", "searchUserParams");
   }
   
-  @RenderMapping(params = "op=searchUserParams")
+  @RenderMapping(params = "action=searchUserParams")
   public String renderParams(@RequestParam(value = "fn", required = false) String fname, @RequestParam(value = "sn", required = false) String sname, @RequestParam(value = "ssn", required = false) String ssn, RenderRequest req, RenderResponse res, Model model) {
     
-    log.debug("log search user render phase with op=searchUserParams"); 
+    log.debug("log search user render phase with action=searchUserParams"); 
     model.addAttribute("searchedUsers", lokDemoService.findUsers(ssn, null, fname, sname));
     res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
     model.addAttribute("search", true);//This means that search was done

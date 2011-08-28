@@ -11,11 +11,11 @@
 <portlet:defineObjects />
 
 <portlet:actionURL var="viewActionUrl">
-	<portlet:param name="op" value="viewLog" />
+	<portlet:param name="action" value="viewLog" />
 </portlet:actionURL>
 
 <portlet:renderURL var="homeUrl">
-	<portlet:param name="op" value="choose" />
+	<portlet:param name="action" value="choose" />
 </portlet:renderURL>
 
 <%!Calendar starttime = Calendar.getInstance();%>
@@ -95,13 +95,13 @@
 							<%-- TODO! when using <th> the text won't align to left, that's why we use <td> and <b> here now.
 								This should be changed! --%>
 
-							<th width=20% scope="col"><b>Aikaleima</b>
+							<th width=20% scope="col"><b><spring:message code="ui.lok.timestamp" /></b>
 							</th>
-							<th width=20% scope="col"><b>Käsittelijä</b>
+							<th width=20% scope="col"><b><spring:message code="ui.lok.koku.user" /></b>
 							</th>
-							<th width=20% scope="col"><b>Tapahtumatyyppi</b>
+							<th width=20% scope="col"><b><spring:message code="ui.lok.action.type" /></b>
 							</th>
-							<th width=40% scope="col"><b>Käsitelty tieto</b>
+							<th width=40% scope="col"><b><spring:message code="ui.lok.processed.info" /></b>
 							</th>
 						</tr>
 

@@ -8,22 +8,23 @@
 <%@ page import="java.text.*"%>
 <%@ page import="com.ixonos.koku.lok.*"%>
 
+
 <portlet:defineObjects />
 
 <portlet:actionURL var="archiveActionUrl">
-	<portlet:param name="op" value="archiveLog" />
+	<portlet:param name="action" value="archiveLog" />
 </portlet:actionURL>
 
 <portlet:actionURL var="startArchiveActionUrl">
-	<portlet:param name="op" value="startArchiveLog" />
+	<portlet:param name="action" value="startArchiveLog" />
 </portlet:actionURL>
 
 <portlet:renderURL var="homeUrl">
-	<portlet:param name="op" value="choose" />
+	<portlet:param name="action" value="choose" />
 </portlet:renderURL>
 
 <portlet:renderURL var="searchUserUrl">
-	<portlet:param name="op" value="searchUser" />
+	<portlet:param name="action" value="searchUser" />
 </portlet:renderURL>
 
 <%
@@ -46,11 +47,6 @@
 	</div>
 
 	
-
-<%--
-		<h1 class="portlet-section-header">Lokitiedot</h1>
-		<div class="portlet-section-text"></div>
---%>
 		<h1 class="portlet-section-header">
 			<spring:message code="koku.lok.header.archive" />
 		</h1>
@@ -88,7 +84,7 @@
 		<c:if test="${not empty archiveDate}">
 
 			<p><spring:message code="koku.lok.archiveconfirmation"/> <fmt:formatDate
-									pattern="dd.MM.yyyy" value="${ archiveDate }" />.</p>
+									pattern="dd.MM.yyyy" value="${archiveDate}" />.</p>
 
 			<form:form name="changeArchiveDateForm"
 				commandName="changeArchiveDate" method="post"

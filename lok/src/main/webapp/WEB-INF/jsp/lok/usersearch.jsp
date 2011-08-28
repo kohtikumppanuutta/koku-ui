@@ -6,11 +6,11 @@
 <portlet:defineObjects />
 
 <portlet:renderURL var="home">
-    <portlet:param name="op" value="home" />
+    <portlet:param name="action" value="home" />
 </portlet:renderURL>
 
 <portlet:renderURL var="archiveURL">
-	<portlet:param name="op" value="archiveLog" />
+	<portlet:param name="action" value="archiveLog" />
 </portlet:renderURL>
 
 <div class="koku-lok">
@@ -38,7 +38,7 @@
 		<h3 class="portlet-section-subheader"><spring:message code="ui.lok.search.user" /></h3>
 
 		<portlet:actionURL var="searchUserParams">
-			<portlet:param name="op" value="searchUserWithParams" />
+			<portlet:param name="action" value="searchUserWithParams" />
 		</portlet:actionURL>
 
 		<form name="searchUserParams" method="post"
@@ -67,7 +67,7 @@
 				<c:forEach var="user" items="${searchedUsers}">
 
 					<portlet:renderURL var="showLogSearchFormURL">
-						<portlet:param name="op" value="searchLog" />
+						<portlet:param name="action" value="searchLog" />
 						<portlet:param name="ssn" value="${user.ssn}" />
 					</portlet:renderURL>
 
