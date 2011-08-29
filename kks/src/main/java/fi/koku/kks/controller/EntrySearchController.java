@@ -35,7 +35,7 @@ public class EntrySearchController {
 
   private SearchResult searchResult;
 
-  private static Logger log = LoggerFactory.getLogger(EntrySearchController.class);
+  private static final Logger log = LoggerFactory.getLogger(EntrySearchController.class);
 
   @ModelAttribute("result")
   public SearchResult get() {

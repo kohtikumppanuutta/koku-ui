@@ -35,7 +35,7 @@ public class ChildController {
   @Qualifier("demoKksService")
   private DemoService demoService;
 
-  private static Logger log = LoggerFactory.getLogger(ChildController.class);
+  private static final Logger log = LoggerFactory.getLogger(ChildController.class);
 
   @ActionMapping(params = "action=toChildInfo")
   public void toChildInfo(@ModelAttribute(value = "child") Person child, BindingResult bindingResult,

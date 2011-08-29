@@ -35,7 +35,7 @@ public class CreateCollectionController {
   @Qualifier("demoKksService")
   private DemoService demoService;
 
-  private static Logger log = LoggerFactory.getLogger(CreateCollectionController.class);
+  private static final Logger log = LoggerFactory.getLogger(CreateCollectionController.class);
 
   @ActionMapping(params = "action=createNewVersion")
   public void createVersion(@ModelAttribute(value = "child") Person child, @RequestParam String id,
@@ -67,12 +67,12 @@ public class CreateCollectionController {
     log.debug("create collection");
 
     Creatable a = Creatable.create(creation.getField());
-    String nimi = "".equals(creation.getName()) ? a.getName() : creation.getName();
-    KKSCollection collection = demoService.luocollection(child, nimi, a);
+    String name = "".equals(creation.getName()) ? a.getName() : creation.getName();
+    KKSCollection collection = demoService.luocollection(child, name, a);
 
     if (collection != null) {
-      CollectionState tila = collection.getState();
-      tila.setState(State.ACTIVE);
+      CollectionState state = collection.getState();
+      state.setState(State.ACTIVE);
     }
     response.setRenderParameter("action", "showChild");
     response.setRenderParameter("pic", child.getPic());
@@ -98,7 +98,6 @@ public class CreateCollectionController {
       @RequestParam(value = "collection") String collection, ActionResponse response, SessionStatus sessionStatus) {
     KKSCollection k = child.getKks().getCollection(collection);
 
-    // activate the collection for a given time period
     log.debug("activate collection");
 
     if (k != null) {
@@ -116,8 +115,7 @@ public class CreateCollectionController {
       @RequestParam(value = "collection") String collection, ActionResponse response, SessionStatus sessionStatus) {
     KKSCollection k = child.getKks().getCollection(collection);
 
-    // activate the collection for a given time period
-    log.debug("activate collection");
+    log.debug("lock collection");
 
     if (k != null) {
       CollectionState tila = k.getState();

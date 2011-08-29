@@ -37,7 +37,7 @@ public class MunicipalEmployeeController {
   @Qualifier("demoKksService")
   private DemoService demoService;
 
-  private static Logger log = LoggerFactory.getLogger(MunicipalEmployeeController.class);
+  private static final Logger log = LoggerFactory.getLogger(MunicipalEmployeeController.class);
 
   @RenderMapping(params = "action=showEmployee")
   public String show(RenderResponse response, @RequestParam(value = "childs", required = false) String[] childs,
@@ -57,7 +57,7 @@ public class MunicipalEmployeeController {
     log.info("search child");
 
     response.setRenderParameter("action", "showEmployee");
-    response.setRenderParameter("childs", toArray(demoService.haeHenkilo(child)));
+    response.setRenderParameter("childs", toPicArray(demoService.haeHenkilo(child)));
     response.setRenderParameter("search", "true");
     sessionStatus.setComplete();
   }
@@ -68,7 +68,7 @@ public class MunicipalEmployeeController {
     return new Person();
   }
 
-  private String[] toArray(List<Person> childs) {
+  private String[] toPicArray(List<Person> childs) {
     String[] tmp = null;
 
     if (childs.isEmpty()) {

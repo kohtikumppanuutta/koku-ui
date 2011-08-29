@@ -19,6 +19,8 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import org.apache.commons.lang.StringUtils;
+
 import fi.koku.kks.model.DemoService;
 import fi.koku.kks.model.Entry;
 import fi.koku.kks.model.EntryType;
@@ -39,7 +41,7 @@ public class CollectionController {
   @Qualifier("demoKksService")
   private DemoService demoService;
 
-  private static Logger log = LoggerFactory.getLogger(CollectionController.class);
+  private static final Logger log = LoggerFactory.getLogger(CollectionController.class);
 
   @RenderMapping(params = "action=showCollection")
   public String show(@ModelAttribute(value = "child") Person child,
@@ -63,7 +65,7 @@ public class CollectionController {
     child.getKks().removeCollection(entry);
     child.getKks().addCollection(entry);
 
-    if (type != null && !"".equals(type)) {
+    if (StringUtils.isNotBlank( type )) {
 
       response.setRenderParameter("action", "showMultivalue");
       response.setRenderParameter("pic", child.getPic());
