@@ -53,7 +53,7 @@
 </div>
 
 
-<h1 class="portlet-section-header">${child.name} ${collection.name}</h1>
+<h1 class="portlet-section-header"><c:out value="${child.name}"/> <c:out value="${collection.name}"/></h1>
 
 
 	<div class="kks-entry">
@@ -65,11 +65,11 @@
 				<span class="portlet-form-field-label">
 				
 				<c:if test="${ not empty entryvalue }">
-				    <spring:message code="ui.kks.modify.entry" /> ${type.name }
+				    <spring:message code="ui.kks.modify.entry" /> <c:out value="${type.name }"/>
 				</c:if>
 				
 				<c:if test="${ empty entryvalue }">
-                    <spring:message code="ui.kks.add" /> ${type.creationDesc }
+                    <spring:message code="ui.kks.add" /> <c:out value="${type.creationDesc }"/>
                 </c:if>
 				</span>
 				<c:if test="${ not empty entryvalue }">

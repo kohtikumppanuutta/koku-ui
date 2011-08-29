@@ -45,7 +45,7 @@
     <div class="kks-reset-floating"></div>
 <div >
 	<h1 class="portlet-section-header">
-		${child.name}
+		<c:out value="${child.name}"/>
 		<spring:message code="ui.kks.title" />
 	</h1>
 
@@ -77,7 +77,7 @@
 						</portlet:renderURL>">
 										<strong>${ collection.name }</strong> </a> </span></td>
 							<td>${ collection.modifier } <fmt:formatDate
-									pattern="dd/MM/yyyy" value="${ collection.creationTime }" />
+									pattern="dd/MM/yyyy" value="${collection.creationTime}" />
 							</td>
 
 							<c:if test="${ sessionScope.ammattilainen }">
@@ -220,10 +220,10 @@
 										<c:forEach var="creatable" items="${creatables}">
 											<c:if test="${creatable.needsVersioning}">
 												<form:option value="${creatable.asText}"
-													label="${ creatable.name }" />
+													label="${creatable.name}" />
 											</c:if>
 											<c:if test="${not creatable.needsVersioning}">
-                                            <form:option class="portlet-form-input-field" value="${creatable.asText}" label="${ creatable.name }" />
+                                            <form:option class="portlet-form-input-field" value="${creatable.asText}" label="${creatable.name}" />
                                             </c:if>
 
 										</c:forEach>

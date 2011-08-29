@@ -77,7 +77,7 @@
 
 <div class="kks-left">
 <h1 class="portlet-section-header">
-    ${child.name} ${collection.name} 
+    <c:out value="${child.name}"/> <c:out value="${collection.name}"/> 
     <c:if test="${not collection.state.active}">
         (<spring:message code="ui.kks.locked" />)
     </c:if>
@@ -123,25 +123,25 @@
                 <c:forEach var="group" items="${collection.type.sortedGroups}">
 
                     <c:if test="${not empty group.name}">
-                        <h2 class="portlet-section-subheader">${group.name } <spring:message code="ui.kks.fills" /></h2>
+                        <h2 class="portlet-section-subheader"><c:out value="${group.name}"/> <spring:message code="ui.kks.fills" /></h2>
                     </c:if>
                     <c:if test="${not empty group.description}">
                         <div class="portlet-section-text">
-                             <span class="kks-read-only-description">${group.description}</span>
+                             <span class="kks-read-only-description"><c:out value="${group.description}"/></span>
                         </div>
                     </c:if>
                     <c:forEach var="childGroup" items='${group.childGroups.values}'>
 
                         <c:if test="${not empty childGroup.name}">
-                            <h3 class="portlet-section-subheader">${childGroup.name }</h3>
+                            <h3 class="portlet-section-subheader"><c:out value="${childGroup.name}"/></h3>
                         </c:if>
                         <c:forEach var="types" items='${ childGroup.types.values  }'>
                             <c:forEach var="type" items='${ types }'>
                                 <div class="kks-entry">
-                                    <span class="portlet-form-field-label">${type.name } <c:if
+                                    <span class="portlet-form-field-label">${type.name} <c:if
                                             test="${type.multiValue && collection.state.active }">
                                             <a
-                                                href="javascript:void(0)" onclick="doSubmitNewMulti('${type.id }');">
+                                                href="javascript:void(0)" onclick="doSubmitNewMulti('${type.id}');">
                                                 (<spring:message code="ui.kks.add.multivalue" />) </a>
                                         </c:if>
                                     </span>
@@ -174,7 +174,7 @@
                                             <c:otherwise>
                                                 <div class="portlet-form-field">
                                                     <c:if test="${not type.multiValue}">
-                                                        <form:textarea class="portlet-form-input-field" title="${type.description }" 
+                                                        <form:textarea class="portlet-form-input-field" title="${type.description}" 
                                                             path="entries['${type.id}'].value" />
                                                     </c:if>
                                                     <c:if test="${type.multiValue}">
@@ -196,7 +196,7 @@
                                                                     <div class="kks-comment">
 	                                                                    <span class="kks-entry-value">${multivalue.value} <span class="kks-right">
 	                                                                    <a
-	                                                                            href="javascript:void(0)" onclick="doSubmitForm('${type.id}', '${multivalue.id }' );">
+	                                                                            href="javascript:void(0)" onclick="doSubmitForm('${type.id}', '${multivalue.id}' );">
 	                                                                                <spring:message code="ui.kks.modify" /> </a>
 	                                                                    </span> 
 	                                                                    </span>
@@ -229,11 +229,11 @@
                                                     <c:forEach var="multivalue"
                                                         items='${ collection.multiValueEntries[type.id] }'>
 
-                                                        <span class="kks-read-only-text"> ${multivalue.value} (${multivalue.recorder} <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${multivalue.creationTime}"/>)</span>
+                                                        <span class="kks-read-only-text"> <c:out value="${multivalue.value}"/> <c:out value="(${multivalue.recorder}"/> <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${multivalue.creationTime}"/>)</span>
                                                         
                                                     </c:forEach>
                                                 </c:if> <c:if test="${ not type.multiValue }">
-                                                    <span class="kks-read-only-text"> <c:out value="${collection.entries[type.id].value }"></c:out> </span>
+                                                    <span class="kks-read-only-text"> <c:out value="${collection.entries[type.id].value}"></c:out> </span>
                                                 </c:if> 
                                                 </c:otherwise>
                                         </c:choose>

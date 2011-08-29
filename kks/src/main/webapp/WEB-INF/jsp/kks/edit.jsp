@@ -15,7 +15,7 @@
             </form:form>
         </div>
         <div class="kks-read-only-text">
-            ${message}
+            <c:out value="${message}"/>
         </div>
 
 

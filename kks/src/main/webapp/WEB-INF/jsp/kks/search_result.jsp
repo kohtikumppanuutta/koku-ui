@@ -18,13 +18,13 @@
 		<div class="kks-reset-floating"></div>
 
 
-	<h1 class="portlet-section-header">${child.name} ${description}</h1>
+	<h1 class="portlet-section-header"><c:out value="${child.name}"/> <c:out value="${description}"/></h1>
 
 </br>
 
 	<div class="kks-content">
 
-		<c:if test="${not empty searchResult }">
+		<c:if test="${not empty searchResult}">
 
 			<c:if test="${empty searchResult.results}">
 				<spring:message code="ui.kks.no.entries" />
@@ -34,7 +34,7 @@
 
 				<c:if test="${not empty result.name}">
 					<h3 class="portlet-section-subheader">
-						${result.name }
+						<c:out value="${result.name}"/>
 
 						<c:if test="${ not result.collectionActive }">
 							<span class="lukittu"> <strong> (<spring:message
@@ -47,7 +47,7 @@
                         <portlet:renderURL>
                             <portlet:param name="action" value="showCollection" />
                             <portlet:param name="pic" value="${child.pic}" />
-                            <portlet:param name="collection" value="${result.collectionId }" />
+                            <portlet:param name="collection" value="${result.collectionId}" />
                         </portlet:renderURL>">
 									<spring:message code="ui.kks.modify" />  </a> </span>
 
@@ -57,8 +57,8 @@
 				<c:forEach var="entry" items='${result.entries}'>
 					<div class="kks-content">
 						<strong>${entry.type.name}</strong> <div class="kks-read-only-text">${
-							entry.value } (<fmt:formatDate value="${ entry.creationTime }" />
-							${ entry.recorder })</div>
+							entry.value } (<fmt:formatDate value="${entry.creationTime}" />
+							${entry.recorder})</div>
 					</div>
 				</c:forEach>
 				</br>

@@ -35,7 +35,7 @@
 		<div>
 			<c:forEach var="type" items="${collectionTypes}">
 
-				<h2 class="portlet-section-subheader">${ type.name }</h2>
+				<h2 class="portlet-section-subheader"><c:out value="${ type.name }"/></h2>
 
 				<table class="portlet-table-body" width="100%" border="0">
 					<tr>
@@ -53,13 +53,13 @@
 
 
 						<tr style="padding:5px">
-							<td style="padding:2px"><strong>${ entry.name }</strong></td>
-							<td style="padding:2px">${ entry.dataType }</td>
-							<td style="padding:2px">${ entry.developmentTypesAsText }</td>
-							<td style="padding:2px"><strong>${ entry.classificationsAsText }</strong></td>
+							<td style="padding:2px"><strong>${entry.name}</strong></td>
+							<td style="padding:2px">${entry.dataType}</td>
+							<td style="padding:2px">${entry.developmentTypesAsText}</td>
+							<td style="padding:2px"><strong>${entry.classificationsAsText}</strong></td>
 							
-							<td style="padding:2px">${ entry.register }</td>
-							<td style="padding:2px">${ entry.valuesAsText }</td>
+							<td style="padding:2px">${entry.register}</td>
+							<td style="padding:2px">${entry.valuesAsText}</td>
 						</tr>
 					</c:forEach>
 

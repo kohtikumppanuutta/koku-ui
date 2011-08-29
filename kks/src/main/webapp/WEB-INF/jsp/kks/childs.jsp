@@ -34,7 +34,7 @@
 							<portlet:param name="action" value="toChildInfo" />
 							<portlet:param name="pic" value="${child.pic}" />
 						</portlet:actionURL>">
-						 <strong>${ child.lastName }, ${child.firstName} </strong> </a>  ${child.pic}
+						 <c:out value="${child.lastName}"/>, <c:out value="${child.firstName}"/> </strong> </a>  <c:out value="${child.pic}"/>
 				</span></br>
 			</c:forEach>
 		</c:if>
