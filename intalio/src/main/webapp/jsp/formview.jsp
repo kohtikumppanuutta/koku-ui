@@ -13,7 +13,7 @@
 	function ajaxSampleData() {	
 		var command = jQuery('#ajaxCommand').val();
 		var data = jQuery('#ajaxData').val();		
-		ajaxData(command, data, doSomething);
+		sendDataToPortlet(command, data, doSomething);
 	}
 	
 	function doSomething(data) {
@@ -30,7 +30,7 @@
 	 * @param service ServiceName (e.g AppoimentService)
 	 * @param data XML-data
 	 */
-	function ajaxData(service, data, returnFunction) {	
+	function sendDataToPortlet(service, data, returnFunction) {	
 		var url="<%= ajax %>";		
 		var ajaxObject = {
 							"service":service,
@@ -46,10 +46,11 @@
 		var global_url = document.URL;
 
 		 if(global_url.indexOf("FormID=") > 0) {
+			var newUrl = "${formholder.url}";
 			var temp = global_url.split("FormID=");
-			var formId = temp[1];
-			
-			jQuery('#<portlet:namespace />xforms_iframe').attr('src', "${formholder.url}" + "&FormID=" + formId);
+			var param = temp[1];
+			newUrl += "&FormID=" + param;			
+			jQuery('#<portlet:namespace />xforms_iframe').attr('src', newUrl);
 		}else {
 			jQuery('#<portlet:namespace />xforms_iframe').attr('src', "${formholder.url}");
 		} 
