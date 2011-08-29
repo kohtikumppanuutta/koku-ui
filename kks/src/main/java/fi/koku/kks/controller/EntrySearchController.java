@@ -35,7 +35,7 @@ public class EntrySearchController {
 
   private SearchResult searchResult;
 
-  private static final Logger log = LoggerFactory.getLogger(EntrySearchController.class);
+  private static final Logger LOG = LoggerFactory.getLogger(EntrySearchController.class);
 
   @ModelAttribute("result")
   public SearchResult get() {
@@ -45,7 +45,7 @@ public class EntrySearchController {
   @RenderMapping(params = "action=showSearchResult")
   public String showResults(@ModelAttribute(value = "child") Person child,
       @RequestParam(value = "description") String description, RenderResponse response, Model model) {
-    log.info("show search result");
+    LOG.info("show search result");
 
     model.addAttribute("child", child);
     model.addAttribute("searchResult", this.searchResult);
@@ -58,7 +58,7 @@ public class EntrySearchController {
   public void search(@ModelAttribute(value = "child") Person child,
       @RequestParam(value = "classification") String classification,
       @RequestParam(value = "description") String description, ActionResponse response, SessionStatus sessionStatus) {
-    log.info("search entries");
+    LOG.info("search entries");
     String tmp[] = classification.replaceAll(" ", "").split(",");
     this.searchResult = demoService.searchEntries(child, tmp);
     response.setRenderParameter("action", "showSearchResult");

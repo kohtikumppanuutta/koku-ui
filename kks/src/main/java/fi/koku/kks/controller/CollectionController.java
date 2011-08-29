@@ -41,12 +41,12 @@ public class CollectionController {
   @Qualifier("demoKksService")
   private DemoService demoService;
 
-  private static final Logger log = LoggerFactory.getLogger(CollectionController.class);
+  private static final Logger LOG = LoggerFactory.getLogger(CollectionController.class);
 
   @RenderMapping(params = "action=showCollection")
   public String show(@ModelAttribute(value = "child") Person child,
       @RequestParam(value = "collection") String collection, RenderResponse response, Model model) {
-    log.info("show collection");
+    LOG.info("show collection");
     model.addAttribute("child", child);
     model.addAttribute("collection", child.getKks().getCollection(collection));
     return "collection";
@@ -61,7 +61,7 @@ public class CollectionController {
   public void save(@ModelAttribute(value = "child") Person child, @ModelAttribute(value = "entry") KKSCollection entry,
       BindingResult bindingResult, @RequestParam(required = false) String multiValueId,
       @RequestParam(required = false) String type, ActionResponse response, SessionStatus sessionStatus) {
-    log.info("save collection");
+    LOG.info("save collection");
     child.getKks().removeCollection(entry);
     child.getKks().addCollection(entry);
 
@@ -85,7 +85,7 @@ public class CollectionController {
   @ModelAttribute("entry")
   public KKSCollection getCommandObject(@RequestParam(value = "collection") String collection,
       @RequestParam(value = "pic") String pic) {
-    log.debug("get command object");
+    LOG.debug("get command object");
 
     Person child = demoService.searchChild(pic);
     return child.getKks().getCollection(collection);
@@ -96,7 +96,7 @@ public class CollectionController {
       @RequestParam(value = "entryType") String entryType, @RequestParam(value = "collection") String collection,
       @RequestParam(value = "entryId", required = false) String entry, @RequestParam(value = "value") String value,
       ActionResponse response, SessionStatus sessionStatus) {
-    log.info("save multivalue");
+    LOG.info("save multivalue");
 
     KKSCollection kok = child.getKks().getCollection(collection);
 
@@ -121,7 +121,7 @@ public class CollectionController {
   public void removeMultiValue(@ModelAttribute(value = "child") Person child,
       @RequestParam(value = "collection") String collection, @RequestParam(value = "entryId") String entry,
       ActionResponse response, SessionStatus sessionStatus) {
-    log.info("remove multivalue");
+    LOG.info("remove multivalue");
 
     KKSCollection kok = child.getKks().getCollection(collection);
 
@@ -138,7 +138,7 @@ public class CollectionController {
   @ActionMapping(params = "action=cancelMultivalue")
   public void cancelMultiValue(@ModelAttribute(value = "child") Person child,
       @RequestParam(value = "collection") String collection, ActionResponse response, SessionStatus sessionStatus) {
-    log.info("cancel multivalue");
+    LOG.info("cancel multivalue");
 
     response.setRenderParameter("action", "showCollection");
     response.setRenderParameter("pic", child.getPic());
@@ -151,7 +151,7 @@ public class CollectionController {
       @RequestParam(value = "collection") String collection,
       @RequestParam(value = "entryType", required = false) String entryType,
       @RequestParam(value = "entryId", required = false) String entry, RenderResponse response, Model model) {
-    log.info("show collection");
+    LOG.info("show collection");
 
     KKSCollection kok = child.getKks().getCollection(collection);
     EntryType t = kok.getType().getEntryType(entryType);

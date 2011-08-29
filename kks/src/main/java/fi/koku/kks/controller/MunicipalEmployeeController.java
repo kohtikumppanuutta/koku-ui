@@ -37,12 +37,12 @@ public class MunicipalEmployeeController {
   @Qualifier("demoKksService")
   private DemoService demoService;
 
-  private static final Logger log = LoggerFactory.getLogger(MunicipalEmployeeController.class);
+  private static final Logger LOG = LoggerFactory.getLogger(MunicipalEmployeeController.class);
 
   @RenderMapping(params = "action=showEmployee")
   public String show(RenderResponse response, @RequestParam(value = "childs", required = false) String[] childs,
       @RequestParam(value = "search", required = false) String search, Model model) {
-    log.info("show employee");
+    LOG.info("show employee");
     model.addAttribute("childs", toChilds(childs));
 
     if (search != null) {
@@ -54,7 +54,7 @@ public class MunicipalEmployeeController {
   @ActionMapping(params = "action=searchChild")
   public void fecthChild(@ModelAttribute(value = "child") Person child, BindingResult bindingResult,
       ActionResponse response, SessionStatus sessionStatus) {
-    log.info("search child");
+    LOG.info("search child");
 
     response.setRenderParameter("action", "showEmployee");
     response.setRenderParameter("childs", toPicArray(demoService.haeHenkilo(child)));
@@ -64,7 +64,7 @@ public class MunicipalEmployeeController {
 
   @ModelAttribute("child")
   public Person getCommandObject() {
-    log.debug("get entry command object");
+    LOG.debug("get entry command object");
     return new Person();
   }
 

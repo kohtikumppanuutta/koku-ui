@@ -30,18 +30,18 @@ public class GuardianController {
   @Qualifier("demoKksService")
   private DemoService demoService;
 
-  private static final Logger log = LoggerFactory.getLogger(GuardianController.class);
+  private static final Logger LOG = LoggerFactory.getLogger(GuardianController.class);
 
   @RenderMapping(params = "action=showChildrens")
   public String showChilds(RenderResponse response, Model model) {
-    log.info("showChildrens");
+    LOG.info("showChildrens");
     model.addAttribute("childs", getChilds());
     return "childs";
   }
 
   @ModelAttribute("childs")
   public List<Person> getChilds() {
-    log.info("getchilds");
+    LOG.info("getchilds");
     return demoService.searchChilds(null);
   }
 

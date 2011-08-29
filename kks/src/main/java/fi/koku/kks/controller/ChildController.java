@@ -35,12 +35,12 @@ public class ChildController {
   @Qualifier("demoKksService")
   private DemoService demoService;
 
-  private static final Logger log = LoggerFactory.getLogger(ChildController.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ChildController.class);
 
   @ActionMapping(params = "action=toChildInfo")
   public void toChildInfo(@ModelAttribute(value = "child") Person child, BindingResult bindingResult,
       ActionResponse response, SessionStatus sessionStatus) {
-    log.debug("toChildInfo");
+    LOG.debug("toChildInfo");
 
     response.setRenderParameter("action", "showChild");
     response.setRenderParameter("pic", child.getPic());
@@ -51,7 +51,7 @@ public class ChildController {
   @RenderMapping(params = "action=showChild")
   public String show(@ModelAttribute(value = "child") Person child,
       @ModelAttribute(value = "creation") Creation creation, RenderResponse response, Model model) {
-    log.info("nayta child");
+    LOG.info("nayta child");
     model.addAttribute("child", child);
     model.addAttribute("collections", child.getKks().getCollections());
     model.addAttribute("creatables", demoService.searchPersonCreatableCollections(child));
@@ -62,7 +62,7 @@ public class ChildController {
 
   @RenderMapping(params = "action=showPegasos")
   public String showPegasos(@ModelAttribute(value = "child") Person child, RenderResponse response, Model model) {
-    log.info("nayta child");
+    LOG.info("nayta child");
     model.addAttribute("child", child);
     return "pegasos";
   }
@@ -74,7 +74,7 @@ public class ChildController {
 
   @ModelAttribute("creation")
   public Creation getCommandObject() {
-    log.debug("get creation command object");
+    LOG.debug("get creation command object");
     return new Creation();
   }
 

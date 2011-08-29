@@ -35,14 +35,14 @@ public class CreateCollectionController {
   @Qualifier("demoKksService")
   private DemoService demoService;
 
-  private static final Logger log = LoggerFactory.getLogger(CreateCollectionController.class);
+  private static final Logger LOG = LoggerFactory.getLogger(CreateCollectionController.class);
 
   @ActionMapping(params = "action=createNewVersion")
   public void createVersion(@ModelAttribute(value = "child") Person child, @RequestParam String id,
       @RequestParam String name, @RequestParam(required = false) String clean, ActionResponse response,
       SessionStatus sessionStatus) {
 
-    log.debug("create new version");
+    LOG.debug("create new version");
 
     Creatable a = new Creatable(id, true, name);
     a.setCopyContent(!Boolean.valueOf(clean));
@@ -64,7 +64,7 @@ public class CreateCollectionController {
       @ModelAttribute(value = "creation") Creation creation, BindingResult bindingResult, ActionResponse response,
       SessionStatus sessionStatus) {
 
-    log.debug("create collection");
+    LOG.debug("create collection");
 
     Creatable a = Creatable.create(creation.getField());
     String name = "".equals(creation.getName()) ? a.getName() : creation.getName();
@@ -83,13 +83,13 @@ public class CreateCollectionController {
 
   @ModelAttribute("child")
   public Person getchild(@RequestParam String pic) {
-    log.info("getchild");
+    LOG.info("getchild");
     return demoService.searchChild(pic);
   }
 
   @ModelAttribute("creation")
   public Creation getCommandObject() {
-    log.debug("get creation command object");
+    LOG.debug("get creation command object");
     return new Creation();
   }
 
@@ -98,7 +98,7 @@ public class CreateCollectionController {
       @RequestParam(value = "collection") String collection, ActionResponse response, SessionStatus sessionStatus) {
     KKSCollection k = child.getKks().getCollection(collection);
 
-    log.debug("activate collection");
+    LOG.debug("activate collection");
 
     if (k != null) {
       CollectionState tila = k.getState();
@@ -115,7 +115,7 @@ public class CreateCollectionController {
       @RequestParam(value = "collection") String collection, ActionResponse response, SessionStatus sessionStatus) {
     KKSCollection k = child.getKks().getCollection(collection);
 
-    log.debug("lock collection");
+    LOG.debug("lock collection");
 
     if (k != null) {
       CollectionState tila = k.getState();
