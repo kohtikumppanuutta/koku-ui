@@ -8,12 +8,24 @@
 var loadingTimes = 0;
 /* the source url that iframe loads at first time */
 var firstUrl = "";
-
 /**
  * Returns to the main portlet page
  */
 function returnMainPage() {
-	window.location="<%= homeURL %>";
+	var url = "<%= homeURL %>";
+	url = formatUrl(url);
+	window.location = url;
+}
+
+/* Formats url mainly for gatein epp*/
+function formatUrl(url) {
+	var newUrl;
+	newUrl = url.replace(/&quot;/g,'"');
+	newUrl = newUrl.replace(/&amp;/g,"&");
+	newUrl = newUrl.replace(/&lt;/g,"<");
+	newUrl =  newUrl.replace(/&gt;/g,">");
+	
+	return newUrl;
 }
 
 /**
@@ -36,7 +48,7 @@ function checkForm() {
 </script>
 <div id="task-manager-wrap">
 	<div id="task-manager-tasklist">
-		<iframe src="<c:out value="${tasklink}" />" id="taskform" name="taskform" style="width:100%; height:100%" frameborder="0" scrolling="no" onload="checkForm()" ></iframe>
+		<iframe src="<c:out value="${tasklink}" />" id="taskform" name="taskform" style="width:100%; height:100%" frameborder="0" scrolling="auto" onload="checkForm()" ></iframe>
 	</div>
 	<div id="task-manager-operation" class="task-manager-operation-part">
 		<input type="button" value="<spring:message code="task.return"/>" onclick="returnMainPage()" />

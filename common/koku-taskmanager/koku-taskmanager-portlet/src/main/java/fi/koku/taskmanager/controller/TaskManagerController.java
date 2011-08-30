@@ -52,6 +52,8 @@ public class TaskManagerController {
 		String keyword = (String) request.getPortletSession().getAttribute("keyword", PortletSession.APPLICATION_SCOPE);
 		String orderType = (String) request.getPortletSession().getAttribute("orderType", PortletSession.APPLICATION_SCOPE);
 		
+		clearSession(request); // clear session since it's used only once
+		
 		modelmap.addAttribute("currentPage", currentPage);
 		modelmap.addAttribute("taskType", taskType);
 		modelmap.addAttribute("keyword", keyword);
@@ -60,6 +62,18 @@ public class TaskManagerController {
 		return "taskmanager";
 	}
 	
+	/**
+	 * Clears page parameters in session
+	 * @param request RenderRequest
+	 */
+	public void clearSession(RenderRequest request) {
+		PortletSession ps = request.getPortletSession();
+		ps.removeAttribute("currentPage", PortletSession.APPLICATION_SCOPE);
+		ps.removeAttribute("taskType", PortletSession.APPLICATION_SCOPE);
+		ps.removeAttribute("keyword", PortletSession.APPLICATION_SCOPE);
+		ps.removeAttribute("orderType", PortletSession.APPLICATION_SCOPE);
+	}
+
 	// -- @ModelAttribute here works as the referenceData method
 	@ModelAttribute(value = "tokenStatus")
 	public String model(RenderRequest request) {

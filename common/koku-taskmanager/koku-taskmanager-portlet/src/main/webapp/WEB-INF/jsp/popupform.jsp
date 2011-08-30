@@ -56,6 +56,7 @@ function removeRefreshTimer() {
  */
 function ajaxGetTaskStatus() {
 	var url="<%= ajaxURL %>";
+	url = formatUrl(url);
 
 	jQuery.post(url, {taskId:taskId}, function(data) {
 		var obj = eval('(' + data + ')');
@@ -75,19 +76,6 @@ function closeWindow() {
 	window.close();
 }
 
-/**
- * Checks the operation of forms finished or not. Usually the form operation is
- * finished if the source url forwards to another url such as empty.jsp
- */
-function checkForm() {
-	//var url = $('#taskform').attr("src");
-	
-	if(loadingTimes > 1) {
-		setTimeout('returnMainPage()', 500);
-	}
-	
-	loadingTimes += 1;
-}
 
 function getTaskId(url) {
 	var from = url.indexOf("id=");
@@ -103,6 +91,18 @@ function getTaskType(url) {
 	var taskType = url.substring(from+5, to-1);
 	
 	return taskType;
+}
+
+
+/* Formats url mainly for gatein epp*/
+function formatUrl(url) {
+	var newUrl;
+	newUrl = url.replace(/&quot;/g,'"');
+	newUrl = newUrl.replace(/&amp;/g,"&");
+	newUrl = newUrl.replace(/&lt;/g,"<");
+	newUrl =  newUrl.replace(/&gt;/g,">");
+	
+	return newUrl;
 }
 
 </script>

@@ -17,6 +17,28 @@
 	<portlet:param name="tasklink" value= "CONSTANT_TASK_FORM_LINK" />
 </portlet:resourceURL>
 
+<portlet:resourceURL var="formRenderURL" id="createFormRenderUrl">
+</portlet:resourceURL>
+
+<portlet:resourceURL var="popupRenderURL" id="createPopupRenderUrl">
+</portlet:resourceURL>
+
+<%
+	/* Parses the parent path url from the portlet ajaxURL */
+	
+	String defaultPath = "";
+
+	int pos = ajaxURL.indexOf("default");
+	if(pos > -1) { // for Jboss portal
+		defaultPath = ajaxURL.substring(0, pos+7);		
+	}else { // for Gatein portal
+		int pos1 = ajaxURL.indexOf("classic");
+		defaultPath = ajaxURL.substring(0, pos1+7);
+	}
+%>
+
+
+<script type="text/javascript" src="<%= request.getContextPath() %>/js/jquery-1.5.2.min.js"></script>
 <script type="text/javascript"> 
 /*
  * Handle action for task manager
@@ -26,9 +48,9 @@
 	var refreshTimer; // global refresh timer
 	var configObj = new config();
 	var pageObj = new paging();	
-	checkPageSession();
 	
 	jQuery(document).ready(function(){
+		checkPageSession();
 		/* Ajax activity support call. Show the ajax loading icon */
 	    jQuery('#task-manager-operation-loading')
 	    .hide()  // hide it initially
@@ -107,6 +129,7 @@
 		}
 		
 		var url="<%= ajaxURL %>";
+		url = formatUrl(url);
 
 		jQuery.post(url, {page:pageObj.currentPage, taskType:pageObj.taskType, 
 			keyword:pageObj.keyword, orderType:pageObj.orderType}, function(data) {
@@ -227,22 +250,82 @@
 		return taskHtml;
 	}
 	
+	<%  //for jboss portal
+	if(defaultPath.contains("default")) { %>
+	
+	function showForm(link) {
+		var formUrl = "<%= formURL %>";
+		var formUrl = formUrl.replace("CONSTANT_TASK_FORM_LINK", escape(link));
+		var formUrl = formUrl.replace("CONSTANT_TASK_CURRENT_PAGE", pageObj.currentPage);
+		var formUrl = formUrl.replace("CONSTANT_TASK_TASK_TYPE", pageObj.taskType);
+		var formUrl = formUrl.replace("CONSTANT_TASK_KEYWORD", pageObj.keyword);
+		var formUrl = formUrl.replace("CONSTANT_TASK_ORDER_TYPE", pageObj.orderType);
+		
+		window.location = formUrl;	
+	}
+	
+	/**
+	 * Show task form in pop up window
+	 */
+	function popupTaskForm(formLink) {
+		var w = 900;
+		var h = 650;
+		var left = (screen.width/2)-(w/2);
+		var top = (screen.height/2)-(h/2);
+		
+		var popupUrl = "<%= popupURL %>";
+		var popupUrl = popupUrl.replace("CONSTANT_TASK_FORM_LINK", escape(formLink));
+		var pWindow = window.open(popupUrl, 'popwindow','scrollbars=no, resizable=yes, width='+w+', height='+h+', top='+top+', left='+left);
+		var popupObj = new popupWindow(pWindow);
+		popupObj.run();
+	}
+	
+	<%}else{ // for gatein %>
+		// Creates a renderURL by ajax, to show the detailed message page 
+		function showForm(formLink) {
+			var url="<%= formRenderURL %>";
+			url = formatUrl(url);
+			
+			jQuery.post(url, {tasklink:formLink, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+				keyword:pageObj.keyword, orderType:pageObj.orderType}, function(data) {
+				var obj = eval('(' + data + ')');
+				var json = obj.response;
+				var renderUrl = json["renderUrl"];
+				window.location = renderUrl;
+			});
+				
+		}
+		
+		function popupTaskForm(formLink) {
+			var w = 900;
+			var h = 650;
+			var left = (screen.width/2)-(w/2);
+			var top = (screen.height/2)-(h/2);
+			var url = "<%= popupRenderURL %>";
+			url = formatUrl(url);
+			
+			jQuery.post(url, {tasklink:formLink, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+				keyword:pageObj.keyword, orderType:pageObj.orderType}, function(data) {
+				var obj = eval('(' + data + ')');
+				var json = obj.response;
+				var renderUrl = json["renderUrl"];
+				var pWindow = window.open(renderUrl, 'popwindow','scrollbars=no, resizable=yes, width='+w+', height='+h+', top='+top+', left='+left);
+				var popupObj = new popupWindow(pWindow);
+				popupObj.run();
+			});
+		}
+	
+	<%}%>
 	/**
 	 * Create task form Html link for different open form types
 	 */
 	function createFormLink(link, description) {
 		var linkHtml;
-		
+
 		/* 3 type values, 1: in portlet, 2: new window, 3: pop-up window */
 		if(configObj.openForm == '1') {
 			/* save the page parameters in session for returning back in order to keep the page unchanged*/
-			var formUrl = "<%= formURL %>";
-			var formUrl = formUrl.replace("CONSTANT_TASK_FORM_LINK", escape(link));
-			var formUrl = formUrl.replace("CONSTANT_TASK_CURRENT_PAGE", pageObj.currentPage);
-			var formUrl = formUrl.replace("CONSTANT_TASK_TASK_TYPE", pageObj.taskType);
-			var formUrl = formUrl.replace("CONSTANT_TASK_KEYWORD", pageObj.keyword);
-			var formUrl = formUrl.replace("CONSTANT_TASK_ORDER_TYPE", pageObj.orderType);
-			linkHtml = '<a href="'+ formUrl + '">';
+			linkHtml = '<a href="javascript:void(0)" onclick="showForm(\''+ link + '\')">';
 		}else if(configObj.openForm == '2') {
 			linkHtml = '<a href="' + link + '" target="_blank">';
 		}else if(configObj.openForm == '3') {
@@ -499,23 +582,6 @@
 		var pageHtml = createFormPage();
 		jQuery('#task-manager-operation-page').html(pageHtml);
 	}
-		
-	/**
-	 * Show task form in pop up window
-	 */
-	function popupTaskForm(formLink) {
-		var w = 900;
-		var h = 650;
-		var left = (screen.width/2)-(w/2);
-		var top = (screen.height/2)-(h/2);
-		
-		var popupUrl = "<%= popupURL %>";
-		var popupUrl = popupUrl.replace("CONSTANT_TASK_FORM_LINK", escape(formLink));
-		var pWindow = window.open(popupUrl, 'popwindow','scrollbars=no, resizable=yes, width='+w+', height='+h+', top='+top+', left='+left);
-		// var pWindow = window.open(formLink, 'popwindow','scrollbars=yes, resizable=yes, width='+w+', height='+h+', top='+top+', left='+left);
-		var popupObj = new popupWindow(pWindow);
-		popupObj.run();
-	}
 	
 	/**
 	 * Popup window object, which checks the status itself. If the popup window
@@ -639,6 +705,16 @@
 		ajaxGetTasks();
 	}
 	
+	/* Formats url mainly for gatein epp*/
+	function formatUrl(url) {
+		var newUrl;
+		newUrl = url.replace(/&quot;/g,'"');
+		newUrl = newUrl.replace(/&amp;/g,"&");
+		newUrl = newUrl.replace(/&lt;/g,"<");
+		newUrl =  newUrl.replace(/&gt;/g,">");
+		
+		return newUrl;
+	}
 </script>
 
 <div id="task-manager-wrap">

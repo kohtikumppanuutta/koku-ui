@@ -1,9 +1,15 @@
 package fi.koku.taskmanager.controller;
 
 import java.util.List;
+
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletSession;
+import javax.portlet.PortletURL;
+import javax.portlet.ResourceResponse;
+import javax.portlet.WindowState;
+import javax.portlet.WindowStateException;
+
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
@@ -138,6 +144,55 @@ public class AjaxController {
 			return TaskUtil.PROCESS;
 		}
 	}
+	
+	@ResourceMapping(value = "createFormRenderUrl")
+	public String createFormRenderUrl(
+			@RequestParam(value = "tasklink") String taskLink,
+			@RequestParam(value = "currentPage") String currentPage,
+			@RequestParam(value = "taskType") String taskType,
+			@RequestParam(value = "keyword") String keyword,
+			@RequestParam(value = "orderType") String orderType,
+			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
+		PortletURL renderUrlObj = response.createRenderURL();
+		renderUrlObj.setParameter( "myaction", "taskform");
+		renderUrlObj.setParameter( "tasklink", taskLink);
+		renderUrlObj.setParameter( "currentPage", currentPage);
+		renderUrlObj.setParameter( "taskType", taskType);
+		renderUrlObj.setParameter( "keyword", keyword);
+		renderUrlObj.setParameter( "orderType", orderType);	
+		try {
+			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
+		} catch (WindowStateException e) {
+			logger.error("Create request render url failed");
+		}
+		String renderUrlString = renderUrlObj.toString();
+		
+		JSONObject jsonModel = new JSONObject();
+		jsonModel.put("renderUrl", renderUrlString);
+		modelmap.addAttribute("response", jsonModel);
+		
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
 
+	@ResourceMapping(value = "createPopupRenderUrl")
+	public String createPopupRenderUrl(
+			@RequestParam(value = "tasklink") String taskLink,
+			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
+		PortletURL renderUrlObj = response.createRenderURL();
+		renderUrlObj.setParameter( "myaction", "taskform");
+		renderUrlObj.setParameter( "tasklink", taskLink);
+		try {
+			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
+		} catch (WindowStateException e) {
+			logger.error("Create request render url failed");
+		}
+		String renderUrlString = renderUrlObj.toString();
+		
+		JSONObject jsonModel = new JSONObject();
+		jsonModel.put("renderUrl", renderUrlString);
+		modelmap.addAttribute("response", jsonModel);
+		
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
 
 }
