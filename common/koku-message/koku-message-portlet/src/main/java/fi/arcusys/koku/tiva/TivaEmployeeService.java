@@ -6,8 +6,8 @@ import java.util.List;
 import fi.arcusys.koku.tiva.employeeservice.ConsentQuery;
 import fi.arcusys.koku.tiva.employeeservice.ConsentSummary;
 import fi.arcusys.koku.tiva.employeeservice.ConsentTO;
-import fi.arcusys.koku.tiva.employeeservice.ConsentTemplateSummary;
 import fi.arcusys.koku.tiva.employeeservice.KokuLooraSuostumusService_Service;
+import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
 
 /**
  * Retrieves Tiva consent data and related operations via web services
@@ -51,8 +51,8 @@ public class TivaEmployeeService {
 	 * @param query query for filtering consents
 	 * @return the total number of consents
 	 */
-	public int getTotalConsents(String user, ConsentQuery query) {
-		return kls.getKokuLooraSuostumusServicePort().getTotalConsents(user, query);
+	public int getTotalConsents(String user) {
+		return kls.getKokuLooraSuostumusServicePort().getTotalConsents(user);
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public class TivaEmployeeService {
 	 * @param limit limited number of results
 	 * @return a list of templates
 	 */
-	public List<ConsentTemplateSummary> searchConsentTemplates(String searchString, int limit) {
+	public List<SuostumuspohjaShort> searchConsentTemplates(String searchString, int limit) {
 		return kls.getKokuLooraSuostumusServicePort().searchConsentTemplates(searchString, limit);
 	}
 }

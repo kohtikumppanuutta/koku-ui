@@ -41,8 +41,8 @@ public class TivaCitizenService {
 	 * @param consentId consent id
 	 * @return detailed consent
 	 */
-	public ConsentTO getConsentById(long consentId) {
-		return kks.getKokuKunpoSuostumusServicePort().getConsentById(consentId);
+	public ConsentTO getConsentById(long consentId, String user) {
+		return kks.getKokuKunpoSuostumusServicePort().getConsentById(consentId, user);
 	}
 	
 	/**
@@ -79,7 +79,8 @@ public class TivaCitizenService {
 	 * @param consentId consent id
 	 */
 	public void revokeOwnConsent(long consentId) {
-		kks.getKokuKunpoSuostumusServicePort().revokeOwnConsent(consentId);
+		String arg1 = "";
+		kks.getKokuKunpoSuostumusServicePort().revokeOwnConsent(consentId, arg1);
 	}
 	
 }

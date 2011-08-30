@@ -69,8 +69,8 @@ public class AvCitizenService {
 	 * @param appointmentId appointment id
 	 * @return detailed appointment
 	 */
-	public AppointmentRespondedTO getAppointmentRespondedById(long appointmentId) {
-		return as.getKokuKunpoAppointmentServicePort().getAppointmentRespondedById(appointmentId);
+	public AppointmentRespondedTO getAppointmentRespondedById(long appointmentId, String targetUser) {
+		return as.getKokuKunpoAppointmentServicePort().getAppointmentRespondedById(appointmentId, targetUser);
 	}
 	
 }

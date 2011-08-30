@@ -59,7 +59,9 @@ public class ShowConsentController {
 		KokuConsent consent = null;
 		
 		if(taskType.equals("cst_own_citizen")) {
-			TivaCitizenServiceHandle handle = new TivaCitizenServiceHandle();
+			PortletSession portletSession = request.getPortletSession();
+			String username = (String) portletSession.getAttribute("USER_username");
+			TivaCitizenServiceHandle handle = new TivaCitizenServiceHandle(username);
 			consent = handle.getConsentById(consentId);
 		} else if(taskType.equals("cst_own_employee")) {
 			TivaEmployeeServiceHandle handle = new TivaEmployeeServiceHandle();

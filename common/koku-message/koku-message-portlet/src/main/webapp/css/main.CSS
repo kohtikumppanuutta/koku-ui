@@ -101,7 +101,11 @@
 .task-manager-table td.from {
 	width: 120px;
 }
-
+.from {
+	max-width: 150px;
+	overflow:hidden;
+	white-space:nowrap;
+}
 .task-manager-table td.date {
 	text-align:right;
 	width: 100px;

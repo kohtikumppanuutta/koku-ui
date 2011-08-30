@@ -69,11 +69,26 @@ function htmlToCode(s) {
  * Returns to the main portlet page
  */
 function returnMainPage() {
-	window.location="<%= homeURL %>";
+	var url = "<%= homeURL %>";
+	url = formatUrl(url);
+	window.location = url;
+}
+
+/* Formats url mainly for gatein epp*/
+function formatUrl(url) {
+	var newUrl;
+	newUrl = url.replace(/&quot;/g,'"');
+	newUrl = newUrl.replace(/&amp;/g,"&");
+	newUrl = newUrl.replace(/&lt;/g,"<");
+	newUrl =  newUrl.replace(/&gt;/g,">");
+	
+	return newUrl;
 }
 
 function exportFile() {	
-	window.location = "<%= exportURL %>";
+	var url = "<%= exportURL %>";
+	url = formatUrl(url);
+	window.location = url;
 }
 
 

@@ -13,7 +13,35 @@
 			<xs:element name='getTotalConsentsResponse' type='tns:getTotalConsentsResponse' />
 			<xs:element name='searchConsentTemplates' type='tns:searchConsentTemplates' />
 			<xs:element name='searchConsentTemplatesResponse' type='tns:searchConsentTemplatesResponse' />
+			<xs:complexType name='searchConsentTemplates'>
+				<xs:sequence>
+					<xs:element minOccurs='0' name='searchString' type='xs:string' />
+					<xs:element name='limit' type='xs:int' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='searchConsentTemplatesResponse'>
+				<xs:sequence>
+					<xs:element maxOccurs='unbounded' minOccurs='0' name='return'
+						type='tns:suostumuspohjaShort' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='suostumuspohjaShort'>
+				<xs:sequence>
+					<xs:element name='suostumuspohjaId' type='xs:long' />
+					<xs:element minOccurs='0' name='otsikko' type='xs:string' />
+				</xs:sequence>
+			</xs:complexType>
 			<xs:complexType name='getTotalConsents'>
+				<xs:sequence>
+					<xs:element minOccurs='0' name='user' type='xs:string' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='getTotalConsentsResponse'>
+				<xs:sequence>
+					<xs:element name='return' type='xs:int' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='getConsents'>
 				<xs:sequence>
 					<xs:element minOccurs='0' name='user' type='xs:string' />
 					<xs:element minOccurs='0' name='query' type='tns:consentQuery' />
@@ -32,17 +60,6 @@
 					<xs:element minOccurs='0' name='receipientUid' type='xs:string' />
 				</xs:sequence>
 			</xs:complexType>
-			<xs:complexType name='getTotalConsentsResponse'>
-				<xs:sequence>
-					<xs:element name='return' type='xs:int' />
-				</xs:sequence>
-			</xs:complexType>
-			<xs:complexType name='getConsents'>
-				<xs:sequence>
-					<xs:element minOccurs='0' name='user' type='xs:string' />
-					<xs:element minOccurs='0' name='query' type='tns:consentQuery' />
-				</xs:sequence>
-			</xs:complexType>
 			<xs:complexType name='getConsentsResponse'>
 				<xs:sequence>
 					<xs:element maxOccurs='unbounded' minOccurs='0' name='return'
@@ -53,8 +70,11 @@
 				<xs:complexContent>
 					<xs:extension base='tns:consentShortSummary'>
 						<xs:sequence>
-							<xs:element minOccurs='0' name='createType' type='tns:consentCreateType' />
+							<xs:element minOccurs='0' name='approvalStatus'
+								type='tns:consentApprovalStatus' />
 							<xs:element minOccurs='0' name='givenAt' type='xs:date' />
+							<xs:element maxOccurs='unbounded' minOccurs='0'
+								name='receipients' nillable='true' type='xs:string' />
 							<xs:element minOccurs='0' name='status' type='tns:consentStatus' />
 							<xs:element minOccurs='0' name='validTill' type='xs:date' />
 						</xs:sequence>
@@ -66,26 +86,9 @@
 					<xs:element minOccurs='0' name='anotherPermitterUid'
 						type='xs:string' />
 					<xs:element minOccurs='0' name='consentId' type='xs:long' />
+					<xs:element minOccurs='0' name='createType' type='tns:consentCreateType' />
 					<xs:element minOccurs='0' name='requestor' type='xs:string' />
 					<xs:element minOccurs='0' name='templateName' type='xs:string' />
-				</xs:sequence>
-			</xs:complexType>
-			<xs:complexType name='searchConsentTemplates'>
-				<xs:sequence>
-					<xs:element minOccurs='0' name='searchString' type='xs:string' />
-					<xs:element name='limit' type='xs:int' />
-				</xs:sequence>
-			</xs:complexType>
-			<xs:complexType name='searchConsentTemplatesResponse'>
-				<xs:sequence>
-					<xs:element maxOccurs='unbounded' minOccurs='0' name='return'
-						type='tns:consentTemplateSummary' />
-				</xs:sequence>
-			</xs:complexType>
-			<xs:complexType name='consentTemplateSummary'>
-				<xs:sequence>
-					<xs:element name='consentTemplateId' type='xs:long' />
-					<xs:element minOccurs='0' name='name' type='xs:string' />
 				</xs:sequence>
 			</xs:complexType>
 			<xs:complexType name='getConsentDetails'>
@@ -111,13 +114,15 @@
 			<xs:complexType name='actionRequestSummary'>
 				<xs:sequence>
 					<xs:element minOccurs='0' name='description' type='xs:string' />
+					<xs:element minOccurs='0' name='name' type='xs:string' />
 					<xs:element minOccurs='0' name='status' type='tns:actionRequestStatus' />
 				</xs:sequence>
 			</xs:complexType>
-			<xs:simpleType name='consentCreateType'>
+			<xs:simpleType name='consentApprovalStatus'>
 				<xs:restriction base='xs:string'>
-					<xs:enumeration value='Electronic' />
-					<xs:enumeration value='NonElectronic' />
+					<xs:enumeration value='Approved' />
+					<xs:enumeration value='Declined' />
+					<xs:enumeration value='Revoked' />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType name='consentStatus'>
@@ -127,6 +132,14 @@
 					<xs:enumeration value='Valid' />
 					<xs:enumeration value='Expired' />
 					<xs:enumeration value='Revoked' />
+					<xs:enumeration value='Declined' />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:simpleType name='consentCreateType'>
+				<xs:restriction base='xs:string'>
+					<xs:enumeration value='Electronic' />
+					<xs:enumeration value='EmailBased' />
+					<xs:enumeration value='PaperBased' />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType name='actionRequestStatus'>

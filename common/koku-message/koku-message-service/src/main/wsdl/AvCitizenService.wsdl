@@ -33,14 +33,14 @@
 			</xs:complexType>
 			<xs:complexType name='appointmentWithTarget'>
 				<xs:complexContent>
-					<xs:extension base='tns:appointmentBase'>
+					<xs:extension base='tns:appointmentSummary'>
 						<xs:sequence>
 							<xs:element minOccurs='0' name='targetPerson' type='xs:string' />
 						</xs:sequence>
 					</xs:extension>
 				</xs:complexContent>
 			</xs:complexType>
-			<xs:complexType name='appointmentBase'>
+			<xs:complexType name='appointmentSummary'>
 				<xs:sequence>
 					<xs:element name='appointmentId' type='xs:long' />
 					<xs:element minOccurs='0' name='sender' type='xs:string' />
@@ -84,6 +84,7 @@
 			<xs:complexType name='getAppointmentRespondedById'>
 				<xs:sequence>
 					<xs:element name='appointmentId' type='xs:long' />
+					<xs:element minOccurs='0' name='targetUser' type='xs:string' />
 				</xs:sequence>
 			</xs:complexType>
 			<xs:complexType name='getAppointmentRespondedByIdResponse'>
@@ -102,13 +103,6 @@
 							<xs:element minOccurs='0' name='status' type='xs:string' />
 							<xs:element minOccurs='0' name='targetPerson' type='xs:string' />
 						</xs:sequence>
-					</xs:extension>
-				</xs:complexContent>
-			</xs:complexType>
-			<xs:complexType name='appointmentSummary'>
-				<xs:complexContent>
-					<xs:extension base='tns:appointmentBase'>
-						<xs:sequence />
 					</xs:extension>
 				</xs:complexContent>
 			</xs:complexType>

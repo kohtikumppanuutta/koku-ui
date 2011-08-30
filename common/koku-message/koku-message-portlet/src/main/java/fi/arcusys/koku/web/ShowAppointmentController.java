@@ -59,7 +59,7 @@ public class ShowAppointmentController {
 	public KokuAppointment model(@RequestParam String appointmentId,
 			@RequestParam String currentPage,@RequestParam String taskType, 
 			@RequestParam String keyword, @RequestParam String orderType,
-			RenderRequest request) {
+			@RequestParam String targetPerson, RenderRequest request) {
 	
 		// store parameters in session for returning page from form page	
 		request.getPortletSession().setAttribute("currentPage", currentPage, PortletSession.APPLICATION_SCOPE);
@@ -71,7 +71,7 @@ public class ShowAppointmentController {
 		
 		if(taskType.equals("app_response_citizen")) {
 			AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
-			app = handle.getAppointmentById(appointmentId);
+			app = handle.getAppointmentById(appointmentId, targetPerson);
 		} else if(taskType.equals("app_response_employee")) {
 			AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
 			app = handle.getAppointmentById(appointmentId);

@@ -56,7 +56,6 @@
 		defaultPath = ajaxURL.substring(0, pos1+7);
 	}
 %>
-
 <script type="text/javascript"> 
 /*
  * Handle action for task manager
@@ -106,6 +105,7 @@
 		
 		pageObj.taskType = getTaskTypeFromNavi();	
 		var url="<%= ajaxURL %>";
+		url = formatUrl(url);
 
 		jQuery.post(url, {page:pageObj.currentPage, taskType:pageObj.taskType, 
 			keyword:pageObj.keyword, orderType:pageObj.orderType, field:pageObj.field}, function(data) {
@@ -124,6 +124,18 @@
 			}
 		});		
 	}
+	
+	/* Formats url mainly for gatein epp*/
+	function formatUrl(url) {
+		var newUrl;
+		newUrl = url.replace(/&quot;/g,'"');
+		newUrl = newUrl.replace(/&amp;/g,"&");
+		newUrl = newUrl.replace(/&lt;/g,"<");
+		newUrl =  newUrl.replace(/&gt;/g,">");
+		
+		return newUrl;
+	}
+	
 	/**
 	 * Represents the tasks in table list view and creates page operatonal part
 	 */
@@ -382,17 +394,17 @@
 	function formatSender() {
 		
 		if(pageObj.taskType == "msg_inbox" || pageObj.taskType == "msg_archive_inbox")
-			return  "<spring:message code="message.from" />";
+			return  '<span class="from">' + "<spring:message code="message.from" />" + '</span>';
 		else 
-			return "<spring:message code="message.receiver" />";		
+			return '<span class="from">' + "<spring:message code="message.receiver" />" + '</span>';	
 	}
 	/* Formats user field */
 	function formatUser(task) {
 		
 		if(pageObj.taskType == "msg_inbox" || pageObj.taskType == "msg_archive_inbox")
-			return task["sender"];
+			return '<span class="from">' + task["sender"] + '</span>';
 		else 
-			return task["recipients"];
+			return '<span class="from">' + task["recipients"] + '</span>';
 		
 	}
 	/* Formats subject field */
@@ -442,7 +454,7 @@
 		}else if(pageObj.taskType == "app_inbox_employee"){
 			url = "<%= defaultPath %>" + "/Message/NewAppointment" + "?FormID=" + appointmentId;			
 		}else if(pageObj.taskType == "app_inbox_citizen") {
-			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId + "&TargetPerson=" + targetPerson;				
+			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;				
 		}
 		
 		window.location = url;				
@@ -471,6 +483,7 @@
 	// Creates a renderURL by ajax, to show the detailed message page 
 	function showMessage(messageId) {
 		var url="<%= messageRenderURL %>";
+		url = formatUrl(url);
 		
 		jQuery.post(url, {messageId:messageId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
 			keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
@@ -485,6 +498,8 @@
 	//Creates a renderURL by ajax, to show the detailed request page
 	function showRequest(requestId) {
 		var url = "<%= requestRenderURL %>";
+		url = formatUrl(url);
+		
 		jQuery.post(url, {requestId:requestId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
 			keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
 			var obj = eval('(' + data + ')');
@@ -494,13 +509,15 @@
 		});
 	}	
 	//Creates a renderURL by ajax,to show the detailed appointment page
-	function showAppointment(appointmentId) {
+	function showAppointment(appointmentId, targetPerson) {
 		var url="";
 		
 		if(pageObj.taskType == "app_response_employee" || pageObj.taskType == "app_response_citizen") {
 			url = "<%= appointmentRenderURL %>";
+			url = formatUrl(url);
+			
 			jQuery.post(url, {appointmentId:appointmentId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
-				keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+				keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType, targetPerson:targetPerson}, function(data) {
 				var obj = eval('(' + data + ')');
 				var json = obj.response;
 				var renderUrl = json["renderUrl"];
@@ -510,7 +527,7 @@
 			url = "<%= defaultPath %>" + "/Message/NewAppointment" + "?FormID=" + appointmentId;
 			window.location = url;
 		}else if(pageObj.taskType == "app_inbox_citizen") {
-			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId;	
+			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;	
 			window.location = url;
 		}				
 	}
@@ -520,6 +537,8 @@
 		
 		if(pageObj.taskType == "cst_own_citizen" || pageObj.taskType == "cst_own_employee") {
 			url = "<%= consentRenderURL %>";
+			url = formatUrl(url);
+			
 			jQuery.post(url, {consentId:consentId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
 				keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
 				var obj = eval('(' + data + ')');
@@ -866,6 +885,7 @@
 		if(messageList.length == 0) return; // no message selected
 		
 		var url="<%= archiveURL %>";
+		url = formatUrl(url);
 
 		jQuery.post(url, {'messageList':messageList}, function(data) {
 			var obj = eval('(' + data + ')');
@@ -896,6 +916,7 @@
 		if(!conf)	return;
 		
 		var url="<%= deleteURL %>";
+		url = formatUrl(url);
 		
 		jQuery.post(url, {'messageList':messageList}, function(data) {
 			var obj = eval('(' + data + ')');
@@ -926,6 +947,7 @@
 		if(!conf)	return;
 		
 		var url="<%= revokeURL %>";
+		url = formatUrl(url);
 		
 		jQuery.post(url, {'messageList':messageList}, function(data) {
 			var obj = eval('(' + data + ')');

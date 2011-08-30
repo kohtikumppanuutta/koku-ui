@@ -34,7 +34,7 @@
 	}
 			
 %>
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
+<script type="text/javascript" src="<%= request.getContextPath() %>/js/jquery-1.5.2.min.js"></script>
 <script type="text/javascript">
 
 /*
@@ -60,8 +60,9 @@
 		var currentPage = "<%= currentPage %>";
 		
 		if(currentPage == 'Message') {
-			if(koku_navi_type != "") {
-				var obj = "#" + koku_navi_type;
+			var naviType = getNaviType();
+			if(naviType != "") {
+				var obj = "#" + naviType;
 				jQuery(obj).css("font-weight", "bold");
 					
 			}else jQuery("#msg_inbox").css("font-weight", "bold");
@@ -85,13 +86,28 @@
 	}
 	
 	/**
+	 * Gets message type from url link
+	 */
+	function getNaviType() {
+		var naviType = koku_navi_type;
+		
+		var global_url = document.URL;
+		var index = global_url.lastIndexOf("NAVI_TYPE=");
+		if(index > 0) {
+			naviType = global_url.substring(index+10);
+			koku_navi_type = naviType;
+		}		
+		return naviType;
+	}
+	/**
 	 * Execute ajax query in Post way, and parse the Json format response, and
 	 * then create tasks in table and task page filed.
 	 */
 	function ajaxUpdate() {
 
 		var url="<%= ajaxURL %>";
-
+		url = formatUrl(url);
+		
 		jQuery.ajax({
 			  type: 'POST',
 			  url: url,
@@ -110,6 +126,17 @@
 			  }
 			  
 			});		
+	}
+	
+	/* Formats url mainly for gatein epp*/
+	function formatUrl(url) {
+		var newUrl;
+		newUrl = url.replace(/&quot;/g,'"');
+		newUrl = newUrl.replace(/&amp;/g,"&");
+		newUrl = newUrl.replace(/&lt;/g,"<");
+		newUrl =  newUrl.replace(/&gt;/g,">");
+		
+		return newUrl;
 	}
 	
 	/**
@@ -135,13 +162,15 @@
 	}
 	<%}else{ // for gatein portal %>
 	function navigateToPage(naviType) {
-		var url = "<%= naviRenderURL %>";		
+		var url = "<%= naviRenderURL %>";	
+		url = formatUrl(url);
+		
 		jQuery.post(url, {'newNaviType':naviType}, function(data) {
 			var obj = eval('(' + data + ')');
 			var json = obj.response;
 			var renderUrl = json["renderUrl"];
 			var temp = renderUrl.split("?");
-			var naviUrl = "<%= defaultPath %>" + "/Message?" + temp[1];
+			var naviUrl = "<%= defaultPath %>" + "/Message?" + temp[1] + "&NAVI_TYPE=" + naviType;
 			window.location = naviUrl;
 		});		
 	}
@@ -234,6 +263,7 @@
 			<ul class="child">
 				<li id="cst_assigned_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_assigned_citizen')">Suostumus</a></li>
 				<li id="cst_own_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_citizen')">Oma suostumukset</a></li>
+				<li id="cst_new_valtakirja"><a href="<%= defaultPath %>/Message/ValtakirjaConsent">Valtakirja</a></li>
 			</ul></li>
 		</c:if>
 		<!-- For employee in Jboss portal-->
@@ -242,8 +272,15 @@
 			<ul class="child">
 				<li id="cst_new"><a href="<%= defaultPath %>/Message/NewConsent">Uudet</a></li>
 				<li id="cst_own_employee"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_employee')">Oma suostumus</a></li>
-			</ul></li>		
-		</c:if>		
+			</ul></li>				
+		<li><a href="javascript:void(0)">Tietopyyntö</a>
+			<ul class="child">
+				<li id="newinformation"><a href="<%= defaultPath %>/Message/NewInformation">Uusi</a></li>
+				<li id="informationbox"><a href="<%= defaultPath %>/Message/InformationBox">Saapuneet</a></li>
+			</ul>
+		</li>	
+		</c:if>	
+				
 		<li><a href="#">Asiointipalvelut</a>
 			<ul class="child">
 				<li><a href="#">Palveluhakemukset</a></li>

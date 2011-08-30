@@ -125,7 +125,6 @@ public class AvEmployeeServiceHandle {
 		while(it.hasNext()) {
 			slot = new Slot();
 			AppointmentSlot appSlot = it.next();
-			slot.setAppointmentId(appSlot.getAppointmentId());
 			slot.setSlotNumber(appSlot.getSlotNumber());
 			slot.setAppointmentDate(MessageUtil.formatDateByString(appSlot.getAppointmentDate(), dateString));
 			slot.setStartTime(MessageUtil.formatDateByString(appSlot.getStartTime(), timeString));

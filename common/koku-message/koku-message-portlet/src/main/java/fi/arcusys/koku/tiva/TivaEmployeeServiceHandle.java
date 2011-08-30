@@ -9,7 +9,7 @@ import fi.arcusys.koku.tiva.employeeservice.ConsentCriteria;
 import fi.arcusys.koku.tiva.employeeservice.ConsentQuery;
 import fi.arcusys.koku.tiva.employeeservice.ConsentSummary;
 import fi.arcusys.koku.tiva.employeeservice.ConsentTO;
-import fi.arcusys.koku.tiva.employeeservice.ConsentTemplateSummary;
+import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
@@ -75,7 +75,7 @@ public class TivaEmployeeServiceHandle {
 		ConsentCriteria criteria = createCriteria(keyword);	
 		query.setCriteria(criteria);
 		
-		return tes.getTotalConsents(user, query);
+		return tes.getTotalConsents(user);
 	}
 	
 	/**
@@ -106,7 +106,7 @@ public class TivaEmployeeServiceHandle {
 	 * @param limit limited number of results
 	 * @return a list of templates
 	 */
-	public List<ConsentTemplateSummary> searchConsentTemplates(String searchStr, int limit) {
+	public List<SuostumuspohjaShort> searchConsentTemplates(String searchStr, int limit) {
 		
 		return tes.searchConsentTemplates(searchStr, limit);
 	}

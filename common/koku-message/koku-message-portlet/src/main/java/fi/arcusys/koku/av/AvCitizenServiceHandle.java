@@ -66,15 +66,17 @@ public class AvCitizenServiceHandle {
 	 * @param appointmentId appointment id
 	 * @return detailed citizen appointment
 	 */
-	public CitizenAppointment getAppointmentById(String appointmentId) {
+	public CitizenAppointment getAppointmentById(String appointmentId, String targetUser) {
 		long  appId = (long) Long.parseLong(appointmentId);
 		CitizenAppointment ctzAppointment = new CitizenAppointment();
-		AppointmentRespondedTO appointment = acs.getAppointmentRespondedById(appId);
+		AppointmentRespondedTO appointment = acs.getAppointmentRespondedById(appId, targetUser);
 		ctzAppointment.setAppointmentId(appointment.getAppointmentId());
 		ctzAppointment.setSender(appointment.getSender());
 		ctzAppointment.setSubject(appointment.getSubject());
 		ctzAppointment.setDescription(appointment.getDescription());
-		ctzAppointment.setStatus(appointment.getStatus());
+		if(appointment.getStatus() != null) {
+			ctzAppointment.setStatus(appointment.getStatus());
+		}		
 		ctzAppointment.setSlot(formatSlot(appointment.getApprovedSlot()));
 		ctzAppointment.setReplier(appointment.getReplier());
 		ctzAppointment.setReplierComment(appointment.getReplierComment());

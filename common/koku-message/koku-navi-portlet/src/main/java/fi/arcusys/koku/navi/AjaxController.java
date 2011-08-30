@@ -149,7 +149,6 @@ public class AjaxController {
 		renderUrlObj.setParameter( "myaction", "showNavi");
 		renderUrlObj.setParameter( "naviType", newNaviType);	
 		String renderUrlString = renderUrlObj.toString();
-		
 		JSONObject jsonModel = new JSONObject();
 		jsonModel.put("renderUrl", renderUrlString);
 		modelmap.addAttribute("response", jsonModel);

@@ -18,11 +18,17 @@ import fi.arcusys.koku.util.MessageUtil;
 public class TivaCitizenServiceHandle {
 	
 	private TivaCitizenService tcs;
+	private String user;
 	
 	/**
 	 * Constructor and initialization
 	 */
 	public TivaCitizenServiceHandle() {
+		tcs = new TivaCitizenService();
+	}
+	
+	public TivaCitizenServiceHandle(String user) {
+		this.user = user;
 		tcs = new TivaCitizenService();
 	}
 	
@@ -60,13 +66,16 @@ public class TivaCitizenServiceHandle {
 	public KokuConsent getConsentById(String consentIdStr) {
 		long  consentId = (long) Long.parseLong(consentIdStr);
 		KokuConsent kokuConsent = new KokuConsent();		
-		ConsentTO consent = tcs.getConsentById(consentId);
+		ConsentTO consent = tcs.getConsentById(consentId, user);
 		kokuConsent.setConsentId(consent.getConsentId());
 		kokuConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
 		kokuConsent.setRequester(consent.getRequestor());
 		kokuConsent.setTemplateName(consent.getTemplateName());
 		kokuConsent.setCreateType(consent.getCreateType().value());
-		kokuConsent.setStatus(consent.getStatus().toString());
+		if(consent.getStatus() != null) {
+			kokuConsent.setStatus(consent.getStatus().toString());
+		}
+		
 		kokuConsent.setAssignedDate(MessageUtil.formatTaskDate(consent.getGivenAt()));
 		kokuConsent.setValidDate(MessageUtil.formatTaskDate(consent.getValidTill()));
 		kokuConsent.setActionRequests(convertActionRequests(consent.getActionRequests()));
@@ -95,7 +104,9 @@ public class TivaCitizenServiceHandle {
 			kokuConsent.setRequester(consent.getRequestor());
 			kokuConsent.setTemplateName(consent.getTemplateName());
 			kokuConsent.setCreateType(consent.getCreateType().value());
-			kokuConsent.setStatus(consent.getStatus().toString());
+			if(consent.getStatus() != null) {
+				kokuConsent.setStatus(consent.getStatus().toString());
+			}
 			kokuConsent.setAssignedDate(MessageUtil.formatTaskDate(consent.getGivenAt()));
 			kokuConsent.setValidDate(MessageUtil.formatTaskDate(consent.getValidTill()));
 			consentList.add(kokuConsent);

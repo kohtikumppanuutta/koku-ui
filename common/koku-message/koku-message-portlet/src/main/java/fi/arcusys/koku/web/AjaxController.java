@@ -337,6 +337,7 @@ public class AjaxController {
 			@RequestParam(value = "taskType") String taskType,
 			@RequestParam(value = "keyword") String keyword,
 			@RequestParam(value = "orderType") String orderType,
+			@RequestParam(value = "targetPerson") String targetPerson,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 
 		PortletURL renderUrlObj = response.createRenderURL();
@@ -346,6 +347,7 @@ public class AjaxController {
 		renderUrlObj.setParameter( "taskType", taskType);
 		renderUrlObj.setParameter( "keyword", keyword);
 		renderUrlObj.setParameter( "orderType", orderType);	
+		renderUrlObj.setParameter( "targetPerson", targetPerson);
 		try {
 			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
 		} catch (WindowStateException e) {
