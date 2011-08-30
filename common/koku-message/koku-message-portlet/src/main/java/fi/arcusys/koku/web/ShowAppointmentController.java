@@ -59,7 +59,7 @@ public class ShowAppointmentController {
 	public KokuAppointment model(@RequestParam String appointmentId,
 			@RequestParam String currentPage,@RequestParam String taskType, 
 			@RequestParam String keyword, @RequestParam String orderType,
-			@RequestParam String targetPerson, RenderRequest request) {
+			@RequestParam(value = "targetPerson", required = false) String targetPerson, RenderRequest request) {
 	
 		// store parameters in session for returning page from form page	
 		request.getPortletSession().setAttribute("currentPage", currentPage, PortletSession.APPLICATION_SCOPE);
