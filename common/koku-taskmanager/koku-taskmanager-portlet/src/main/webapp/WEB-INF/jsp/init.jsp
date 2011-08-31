@@ -12,6 +12,6 @@ PortletPreferences preferences = renderRequest.getPreferences();
 String taskFilter = preferences.getValue("taskFilter", "");
 String notifFilter = preferences.getValue("notifFilter", "");
 String refreshDuration = preferences.getValue("refreshDuration", "30");
-String openForm = preferences.getValue("openForm", "3");
+String openForm = preferences.getValue("openForm", "1");
 
 %>
