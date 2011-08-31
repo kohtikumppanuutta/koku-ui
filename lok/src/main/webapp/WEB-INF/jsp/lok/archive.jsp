@@ -9,7 +9,7 @@
 <portlet:actionURL var="archiveActionURL">
 	<portlet:param name="action" value="archiveLog" />
 </portlet:actionURL>
-
+ 
 <portlet:actionURL var="startArchiveActionURL">
 	<portlet:param name="action" value="startArchiveLog" />
 </portlet:actionURL>
@@ -22,16 +22,6 @@
 	<portlet:param name="action" value="searchUser" />
 </portlet:renderURL>
 
-<%
-  Calendar starttime = Calendar.getInstance();
-%>
-
-<!--  default starttime is 2 years ago -->
-<%
-  starttime.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR) - 2);
-%>
-
-<%!SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);%>
 
 <div class="koku-lok">
 <div class="portlet-section-body">
@@ -40,7 +30,6 @@
 		<a href="${homeURL}"><spring:message code="koku.common.back" />
 		</a>
 	</div>
-
 	
 		<h1 class="portlet-section-header">
 			<spring:message code="koku.lok.header.archive" />
@@ -48,51 +37,55 @@
 		
 		<div class="portlet-menu">
 			<ul>
-
 				<li class="portlet-menu-item"><a href="${searchUserURL}"><spring:message code="koku.lok.menu.item.search"/></a></li>
 				<li class="portlet-menu-item-selected"><spring:message code="koku.lok.menu.item.archive"/></li>
 			</ul>
 		</div>
 
 		<c:if test="${empty archiveDate}">
+		
 			<div class="log-archive">
 				<form:form name="logArchiveForm" commandName="logArchiveDate"
 					method="post" action="${archiveActionURL}">
 
-					<%-- TODO: Tähän tulee nyt aina aluksi default-päivämäärä eli 2 vuotta sitten. 
-	Pitäisikö tulla muutettava päivämäärä? --%>
+					<%-- TODO: Add error handling! Now the user can give any date and the
+					parsing error is shown on the web page. --%> 
+					<%-- TODO: Add a javascript date picker here? --%>
 					<span class="form-field-label"><spring:message
 							code="koku.common.archiveDate" /> </span>
-					<form:input path="date"
-						value="<%=df.format(starttime.getTime()) %>" />
+							<form:input path="date"	value="${defaultDate}" />
 					<span class="errors"><form:errors path="date" />
 					</span>
-
-					<input type="submit"
+						<input type="submit"
 						value="<spring:message code="koku.lok.button.archive"/>">
 
 					<div class="clear"></div>
-				</form:form>
+				</form:form>			
 			</div>
 		</c:if>
 
 		<c:if test="${not empty archiveDate}">
 
-			<p><spring:message code="koku.lok.archiveconfirmation"/> <fmt:formatDate
-									pattern="dd.MM.yyyy" value="${archiveDate}" />.</p>
+<%-- NOTE! The archivedate is not passed back to the first page! If the user wants to 
+change the date, the default date is shown.
+This is because the archiveDate parameter is used in the logic of the page
+(empty or not empty). --%>
 
+	
+		<p><spring:message code="koku.lok.archive.confirmation"/> <fmt:formatDate
+									pattern="dd.MM.yyyy" value="${archiveDateDate}" />.</p> 
 
-			<form:form name="changeArchiveDateForm"
-				commandName="changeArchiveDate" method="post"
-				action="${archiveActionURL}">
-				<input type="hidden" path="date" value="${archiveDate}">
+			<form:form name="changeArchiveDateForm"	commandName="logArchiveDate" 
+				method="post" action="${archiveActionURL}">
 				<input type="submit"
 					value="<spring:message code="koku.common.changeDate"/>">
 			</form:form>
 
-
 			<form:form method="post" action="${startArchiveActionURL}">
-				<input type="submit"
+			
+			<input type="hidden" name="date" value="${archiveDate}"/>
+			
+				<input type="submit"				
 					value="<spring:message code="koku.common.startArchive"/>">
 			</form:form>
 		</c:if>
