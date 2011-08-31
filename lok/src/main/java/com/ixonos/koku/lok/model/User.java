@@ -10,28 +10,28 @@ package com.ixonos.koku.lok.model;
 public class User {
 
   
-  private String ssn;
+  private String pic;
   private String uid;
   private String fname;
   private String sname;
  
   
-  public User(String ssn, String uid, String fname, String sname) {
+  public User(String pic, String uid, String fname, String sname) {
     super();
-    this.ssn = ssn;
+    this.pic = pic;
     this.uid = uid;
     this.fname = fname;
     this.sname = sname;
   }
 
 
-  public String getSsn() {
-    return ssn;
+  public String getPic() {
+    return pic;
   }
 
 
-  public void setSsn(String ssn) {
-    this.ssn = ssn;
+  public void setPic(String pic) {
+    this.pic = pic;
   }
 
 
@@ -67,7 +67,7 @@ public class User {
 
   @Override
   public String toString() {
-    return "User [ssn=" + ssn + ", uid=" + uid + ", fname=" + fname + ", sname=" + sname + "]";
+    return "User [pic=" + pic + ", uid=" + uid + ", fname=" + fname + ", sname=" + sname + "]";
   }
  
   

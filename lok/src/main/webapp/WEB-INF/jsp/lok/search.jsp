@@ -1,21 +1,16 @@
-<%@ taglib prefix="portlet" uri="http://java.sun.com/portlet"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ page contentType="text/html" isELIgnored="false"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ include file="imports.jsp" %>
 <%@ page import="java.util.Calendar"%>
 <%@ page import="java.text.*"%>
 <%@ page import="com.ixonos.koku.lok.*"%>
 
 <portlet:defineObjects />
 
-<portlet:actionURL var="searchActionUrl">
+<portlet:actionURL var="searchActionURL">
 	<portlet:param name="action" value="searchLog" />
 	<portlet:param name="visited" value="---" />
 </portlet:actionURL>
 
-<portlet:renderURL var="searchUser">
+<portlet:renderURL var="searchUserURL">
 	<portlet:param name="action" value="searchUser" />
 </portlet:renderURL>
 
@@ -37,7 +32,7 @@
 	<div class="portlet-section-body">
 
 		<div class="home">
-			<a href="${searchUser}"><spring:message code="koku.common.back" />
+			<a href="${searchUserURL}"><spring:message code="koku.common.back" />
 			</a>
 		</div>
 
@@ -67,9 +62,10 @@
 		</div>
 
 		<form:form name="logSearchForm" commandName="logSearchCriteria"
-			method="post" action="${searchActionUrl}">
+			method="post" action="${searchActionURL}">
 			<span class="form-field-label"><spring:message
 					code="koku.common.pic" /> </span>
+				
 			<form:input path="pic" maxlength="11" size="11" />
 			<span class="errors"><form:errors path="pic" /> </span>
 
@@ -102,36 +98,31 @@
 		<c:if test="${not empty entries}">
 			<h2 class="portlet-section-subheader">
 				<spring:message code="koku.common.searchResults" />
-				${searchParams.pic}, ${searchParam.concept}
+				<c:out value="${searchParams.pic}"/>, <c:out value="${searchParam.concept}"/>
 				<fmt:formatDate pattern="dd.MM.yyyy" value="${searchParams.from}" />
 				-
-				<fmt:formatDate pattern="dd.MM.yyyy" value="${ searchParams.to }" />
+				<fmt:formatDate pattern="dd.MM.yyyy" value="${searchParams.to}" />
 			</h2>
 			<table class="portlet-table-body" width="100%" border="0">
-				<%--<tr>
-<th width=20% scope="col">Aika</th>
-<th width=20% scope="col">Käyttäjä</th>
-<th width=20% scope="col">Tapahtumatyyppi</th>
-<th width=40% scope="col">Käsitelty tieto</th>
-</tr> --%>
+		
 				<tr>
 					<%-- TODO! when using <th> the text won't align to left, that's why we use <td> and <b> here now.
 This should be changed! --%>
 
-					<th width=20% scope="col"><b>Aika</b></th>
-					<th width=20% scope="col"><b>Käyttäjä</b></th>
-					<th width=20% scope="col"><b>Tapahtumatyyppi</b></th>
-					<th width=40% scope="col"><b>Käsitelty tieto</b></th>
-					<th width=20% scope="col"><b>Palvelu</b></th>
+					<th width=20% scope="col"><b><spring:message code="ui.lok.time" /></b></th>
+					<th width=20% scope="col"><b><spring:message code="ui.lok.end.user" /></b></th>
+					<th width=20% scope="col"><b><spring:message code="ui.lok.event.type" /></b></th>
+					<th width=40% scope="col"><b><spring:message code="ui.lok.event.description" /></b></th>
+					<th width=20% scope="col"><b><spring:message code="ui.lok.service" /></b></th>
 				</tr>
 
 				<c:forEach var="e" items="${entries}">
 					<tr>
-						<td width=20%>${e.timestamp}</td>
-						<td width=20%>${e.user}</td>
-						<td width=20%>${e.eventType}</td>
-						<td width=40%>${e.eventDescription}</td>
-						<td width=20%>${e.callingSystem}</td>
+						<td width=20%><c:out value="${e.timestamp}"/></td>
+						<td width=20%><c:out value="${e.user}"/></td>
+						<td width=20%><c:out value="${e.eventType}"/></td>
+						<td width=40%><c:out value="${e.eventDescription}"/></td>
+						<td width=20%><c:out value="${e.callingSystem}"/></td>
 					</tr>
 				</c:forEach>
 			</table>

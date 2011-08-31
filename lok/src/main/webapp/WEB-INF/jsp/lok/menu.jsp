@@ -1,24 +1,14 @@
-<%@ taglib prefix="portlet" uri="http://java.sun.com/portlet"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ page contentType="text/html" isELIgnored="false"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ include file="imports.jsp" %>
 
-
-<portlet:renderURL var="archive">
+<portlet:renderURL var="archiveURL">
 	<portlet:param name="action" value="archiveLog" />
 </portlet:renderURL>
 
-<portlet:renderURL var="searchUser">
+<portlet:renderURL var="searchUserURL">
 	<portlet:param name="action" value="searchUser" />
 </portlet:renderURL>
 
-<portlet:renderURL var="searchArchive">
-	<portlet:param name="action" value="searchLog" />
-</portlet:renderURL>
-
-<portlet:renderURL var="searchLogViews">
+<portlet:renderURL var="searchLogViewsURL">
 	<portlet:param name="action" value="viewLog" />
 </portlet:renderURL>
 
@@ -33,12 +23,12 @@
 			<h3><spring:message code="koku.lok.admin.actions" /></h3>
 
 
-			<form:form name="searchForm" method="post" action="${searchUser}">
+			<form:form name="searchForm" method="post" action="${searchUserURL}">
 				<input type="submit"
 					value="<spring:message code="koku.common.search"/>" />
 			</form:form>
 
-			<form:form name="logForm" method="post" action="${archive}">
+			<form:form name="logForm" method="post" action="${archiveURL}">
 				<input type="submit"
 					value="<spring:message code="koku.common.archive"/>" />
 			</form:form>
@@ -47,7 +37,7 @@
 
 		<div>
 			<h3><spring:message code="koku.lok.superadmin.actions" /></h3>
-			<form:form name="viewForm" method="post" action="${searchLogViews}">
+			<form:form name="viewForm" method="post" action="${searchLogViewsURL}">
 				<input type="submit" value="<spring:message code="koku.lok.view"/>" />
 			</form:form>
 		</div>

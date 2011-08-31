@@ -14,6 +14,7 @@ import javax.portlet.RenderResponse;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,14 +91,13 @@ public class LogSearchController {
 
   // portlet render phase
   @RenderMapping(params = "action=searchLog")
-  // OLI: public String render(@RequestParam(value = "visited", required =
-  // false) String visited,@RequestParam(value = "ssn", required = false) String
-  // ssn, RenderRequest req, RenderResponse res, Model model) {
   public String render(@RequestParam(value = "visited", required = false) String visited,
-      @RequestParam(value = "ssn", required = false) String ssn, RenderRequest req, RenderResponse res, Model model) {
-
+      @RequestParam(value = "pic", required = false) String pic, RenderRequest req, RenderResponse res, Model model) {
+//TODO: yllä pic on aina null.
+// Pitää muuttaa siten, että @RequestParam:lla otetaan koko searchCriteria
+    
     log.info("log search render phase");
-    log.info("req.ssn=" + ssn);
+    log.info("req.pic=" + pic);
 
     res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
 
@@ -115,9 +115,9 @@ public class LogSearchController {
     } else {
       log.info("criteria: null");
 
-      // Create new logsearchcriteria if there was ssn in request params
-      if (StringUtils.isNotBlank(ssn)) {
-        model.addAttribute("logSearchCriteria", new LogSearchCriteria(ssn, "", null, null));
+      // Create new logsearchcriteria if there was pic in request params
+      if (StringUtils.isNotBlank(pic)) {
+        model.addAttribute("logSearchCriteria", new LogSearchCriteria(pic, "", null, null));
       }
 
     }
@@ -177,22 +177,47 @@ public class LogSearchController {
   private static class CriteriaSerializer {
 
     public String[] getAsText(LogSearchCriteria c) {
+      String[] text = new String[]{};
+      
       SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
-      String[] text = new String[] { c.getPic(), c.getConcept(), c.getFrom() != null ? df.format(c.getFrom()) : "",
+      
+      if(c != null){
+        text = new String[] { c.getPic(), c.getConcept(), c.getFrom() != null ? df.format(c.getFrom()) : "",
           c.getTo() != null ? df.format(c.getTo()) : "" };
+      }
       return text;
     }
 
+    
+    //TODO: Is pic or some other parameter required for criteria?? Add error handling!
     public LogSearchCriteria getFromRenderParameter(String[] text) {
       SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
+      String pic = null, concept = null;
       Date d1 = null, d2 = null;
       try {
-        d1 = text[2].length() > 0 ? df.parse(text[2]) : null;
-        d2 = text[3].length() > 0 ? df.parse(text[3]) : null;
+        if(ArrayUtils.isNotEmpty(text)){
+          if(StringUtils.isNotBlank(text[0])){
+            pic = text[0]; // TODO: Add here some validation!!!
+          }
+          
+          if(StringUtils.isNotBlank(text[1])){
+            concept = text[1]; // TODO: What kind of input is accepted here?
+          }
+          
+          if(StringUtils.isNotBlank(text[2])){
+            d1 = df.parse(text[2]);
+          }
+          
+          if(StringUtils.isNotBlank(text[3])){
+            d2 = df.parse(text[3]);
+          }
+        }
+       
       } catch (ParseException e) {
         throw new IllegalArgumentException("error parsing date string", e);
       }
-      return new LogSearchCriteria(text[0], text[1], d1, d2);
+      
+      return new LogSearchCriteria(pic, concept, d1, d2);
     }
   }
 

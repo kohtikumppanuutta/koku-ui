@@ -29,10 +29,10 @@ public class LokDemoService {
     }
   }
 
-  public List<User> findUsers(String ssn, String uid, String fname, String sname){
-    log.info("ssn="+ssn+", fname="+fname+", sname="+sname);
+  public List<User> findUsers(String pic, String uid, String fname, String sname){
+    log.info("pic="+pic+", fname="+fname+", sname="+sname);
     //Return list of users if one of the search params is not null and not empty string. Else return empty arraylist.
-    if(StringUtils.isNotBlank(ssn) | StringUtils.isNotBlank(fname) | StringUtils.isNotBlank(sname)){  
+    if(StringUtils.isNotBlank(pic) | StringUtils.isNotBlank(fname) | StringUtils.isNotBlank(sname)){  
       log.info("Returning searchedUsers.size="+searchedUsers.size());
       return searchedUsers;
     }else {

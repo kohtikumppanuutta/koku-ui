@@ -1,13 +1,8 @@
-<%@ taglib prefix="portlet" uri="http://java.sun.com/portlet"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ page contentType="text/html" isELIgnored="false"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ include file="imports.jsp" %>
 
 <portlet:defineObjects />
 
-<portlet:renderURL var="homeUrl">
+<portlet:renderURL var="homeURL">
 	<portlet:param name="action" value="choose" />
 </portlet:renderURL>
 
@@ -19,7 +14,7 @@
 
 
 		<div class="home">
-			<form:form method="post" action="${homeUrl}">
+			<form:form method="post" action="${homeURL}">
 				<input type="submit"
 					value="<spring:message code="koku.common.lok.begin"/>">
 			</form:form>

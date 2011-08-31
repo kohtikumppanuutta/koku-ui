@@ -1,16 +1,11 @@
-<%@ taglib prefix="portlet" uri="http://java.sun.com/portlet"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ page contentType="text/html" isELIgnored="false"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ include file="imports.jsp" %>
 <%@ page import="java.util.Calendar"%>
 <%@ page import="java.text.*"%>
 <%@ page import="com.ixonos.koku.lok.*"%>
 
 <portlet:defineObjects />
 
-<portlet:actionURL var="viewActionUrl">
+<portlet:actionURL var="viewActionURL">
 	<portlet:param name="action" value="viewLog" />
 </portlet:actionURL>
 
@@ -32,7 +27,7 @@
 	<div class="portlet-section-body">
 
 		<div class="home">
-			<a href="${homeUrl}"><spring:message code="koku.common.back" />
+			<a href="${homeURL}"><spring:message code="koku.common.back" />
 			</a>
 		</div>
 
@@ -48,7 +43,7 @@
 
 			<p>
 				<form:form name="logSearchForm" commandName="logSearchCriteria"
-					method="post" action="${viewActionUrl}">
+					method="post" action="${viewActionURL}">
 
 
 					<!--  TODO: Javascript date picker will be added here! -->
@@ -79,7 +74,7 @@
 						<spring:message code="koku.lok.view.results.header" />
 						<fmt:formatDate pattern="dd.MM.yyyy" value="${searchParams.from}" />
 						-
-						<fmt:formatDate pattern="dd.MM.yyyy" value="${ searchParams.to }" />
+						<fmt:formatDate pattern="dd.MM.yyyy" value="${searchParams.to}" />
 						:
 					</h2>
 
@@ -99,18 +94,18 @@
 							</th>
 							<th width=20% scope="col"><b><spring:message code="ui.lok.koku.user" /></b>
 							</th>
-							<th width=20% scope="col"><b><spring:message code="ui.lok.action.type" /></b>
+							<th width=20% scope="col"><b><spring:message code="ui.lok.event.type" /></b>
 							</th>
-							<th width=40% scope="col"><b><spring:message code="ui.lok.processed.info" /></b>
+							<th width=40% scope="col"><b><spring:message code="ui.lok.event.description" /></b>
 							</th>
 						</tr>
 
 						<c:forEach var="e" items="${entries}">
 							<tr>
-								<td width=20%>${e.timestamp}</td>
-								<td width=20%>${e.user}</td>
-								<td width=20%>${e.eventType}</td>
-								<td width=40%>${e.eventDescription}</td>
+								<td width=20%><c:out value="${e.timestamp}"/></td>
+								<td width=20%><c:out value="${e.user}"/></td>
+								<td width=20%><c:out value="${e.eventType}"/></td>
+								<td width=40%><c:out value="${e.eventDescription}"/></td>
 							</tr>
 						</c:forEach>
 					</table>

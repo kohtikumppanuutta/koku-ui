@@ -10,6 +10,8 @@ import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,8 +122,15 @@ public class LogViewController {
       SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
       Date d1 = null, d2 = null;
       try {
-        d1 = text[0].length() > 0 ? df.parse(text[0]) : null;
-        d2 = text[1].length() > 0 ? df.parse(text[1]) : null;
+        if(ArrayUtils.isNotEmpty(text)){
+          if(StringUtils.isNotBlank(text[0])){
+            d1 = df.parse(text[0]);
+          }
+          
+          if(StringUtils.isNotBlank(text[1])){
+            d2 = df.parse(text[1]);
+          }
+        }
       } catch (ParseException e) {
         throw new IllegalArgumentException("error parsing date string", e);
       }

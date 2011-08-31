@@ -21,7 +21,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
  * Controller for user search (LOK).
  * This relates to LOK-3.
  * 
- * A simple controller that handles user search, listing and forwarding userid (ssn)
+ * A simple controller that handles user search, listing and forwarding userid (pic)
  * to next phase which is the actual log search
  * 
  * @author mikkope
@@ -54,21 +54,21 @@ public class UserSearchController {
   }
   
   @ActionMapping(params = "action=searchUserWithParams")
-  public void searchUserWithParams(ActionResponse response, @RequestParam(value = "fn", required = false) String fname, @RequestParam(value = "sn", required = false) String sname, @RequestParam(value = "ssn", required = false) String ssn, Model model){
+  public void searchUserWithParams(ActionResponse response, @RequestParam(value = "fn", required = false) String fname, @RequestParam(value = "sn", required = false) String sname, @RequestParam(value = "pic", required = false) String pic, Model model){
     log.debug("log search user action phase with action=searchUserWithParams");
     
     //Form sending required to use ActionURL and now there parameters are send forward to render method
     response.setRenderParameter("fn", fname);
     response.setRenderParameter("sn", sname);
-    response.setRenderParameter("ssn", ssn);
+    response.setRenderParameter("pic", pic);
     response.setRenderParameter("action", "searchUserParams");
   }
   
   @RenderMapping(params = "action=searchUserParams")
-  public String renderParams(@RequestParam(value = "fn", required = false) String fname, @RequestParam(value = "sn", required = false) String sname, @RequestParam(value = "ssn", required = false) String ssn, RenderRequest req, RenderResponse res, Model model) {
+  public String renderParams(@RequestParam(value = "fn", required = false) String fname, @RequestParam(value = "sn", required = false) String sname, @RequestParam(value = "pic", required = false) String pic, RenderRequest req, RenderResponse res, Model model) {
     
     log.debug("log search user render phase with action=searchUserParams"); 
-    model.addAttribute("searchedUsers", lokDemoService.findUsers(ssn, null, fname, sname));
+    model.addAttribute("searchedUsers", lokDemoService.findUsers(pic, null, fname, sname));
     res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
     model.addAttribute("search", true);//This means that search was done
     return "usersearch";
