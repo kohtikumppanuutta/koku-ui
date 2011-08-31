@@ -13,14 +13,15 @@
 	function ajaxSampleData() {	
 		var command = jQuery('#ajaxCommand').val();
 		var data = jQuery('#ajaxData').val();		
-		sendDataToPortlet(command, data, doSomething);
+		var result = sendDataToPortlet(command, data);
+		jQuery(".test").append("<div><pre>"+result+"</pre></div>");
 	}
 	
 	function doSomething(data) {
 		var obj = JSON.parse(data);
 		var json = obj.response;
 		var test1 = json["result"];
-		jQuery(".test").append("<div><pre>"+test1+"</pre></div>")
+		jQuery(".test").append("<div><pre>"+test1+"</pre></div>");
 	}
 	
 	
@@ -30,14 +31,20 @@
 	 * @param service ServiceName (e.g AppoimentService)
 	 * @param data XML-data
 	 */
-	function sendDataToPortlet(service, data, returnFunction) {	
+	function sendDataToPortlet(service, data) {	
 		var url="<%= ajax %>";		
 		var ajaxObject = {
 							"service":service,
 							"data":data
 						};
 		
-		jQuery.post(url, ajaxObject, returnFunction);
+		return jQuery.ajax( {
+			url: url,  
+			type: "POST", 
+			data: ajaxObject, 
+		    dataType: "html",
+			async: false 
+		}).responseText;
 	}
 
 	 

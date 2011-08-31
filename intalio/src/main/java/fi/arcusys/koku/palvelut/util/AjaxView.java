@@ -27,27 +27,21 @@ public class AjaxView extends AbstractView {
 	}
     
     @Override
-    public String getContentType () {
+    public final String getContentType () {
         String orgiContentType = super.getContentType ();
-        if (StringUtils.isEmpty (orgiContentType))
+        if (StringUtils.isEmpty (orgiContentType)) {
             orgiContentType = DEFAULT_AJAX_CONTENT_TYPE;
-
+        }
         return orgiContentType;
     }
 
     @Override
-    public void setContentType (String contentType) {
-        super.setContentType (contentType);
-    }
-
-    @Override
-    protected void renderMergedOutputModel (Map<String, Object> map, HttpServletRequest request,
+    protected final void renderMergedOutputModel (Map<String, Object> map, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         if (map == null || map.isEmpty ()) {
             JSONObject.fromObject ("{}").write (response.getWriter ());
             return;
         }
-
         JSON json = JSONSerializer.toJSON (map);
         json.write (response.getWriter ());
     }

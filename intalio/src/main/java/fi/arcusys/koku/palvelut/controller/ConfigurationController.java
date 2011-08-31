@@ -14,8 +14,6 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.WindowState;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 import org.intalio.tempo.workflow.task.Task;
 import org.springframework.stereotype.Controller;
@@ -29,20 +27,18 @@ import fi.arcusys.koku.palvelut.util.TaskUtil;
 import fi.arcusys.koku.palvelut.util.TokenUtil;
 import fi.arcusys.koku.palvelut.util.URLUtil;
 
-//@Resource(mappedName = "configurationController")
 @Controller("configurationController")
 @RequestMapping(value = "EDIT")
 public class ConfigurationController { 
-//extends AbstractController {
 	
 	public static final String EDIT_ACTION = "configuration";
-	private static final Logger log = Logger.getLogger(ConfigurationController.class.getName());
+	private static final Logger LOG = Logger.getLogger(ConfigurationController.class.getName());
 
 	
 	@RenderMapping
 	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {
-		log.debug("handleRenderRequestInternal");
+		LOG.debug("handleRenderRequestInternal");
 		Map<String, Object> map = new HashMap<String, Object>();
 //		map.put("taskList", getTaskHolders(request));
 		ModelAndView mav = new ModelAndView(EDIT_ACTION, "model", map);
@@ -50,7 +46,7 @@ public class ConfigurationController {
 			mav.addObject("formList", getTaskHolders(request));
 			mav.addObject("prefs", request.getPreferences());			
 		} catch (Exception e) {
-			log.error("Failure while trying to get TaskHolders. See following log for more information: ", e);
+			LOG.error("Failure while trying to get TaskHolders. See following log for more information: ", e);
 			ModelAndView failureMav = new ModelAndView("failureView", "model", null);
 			failureMav.addObject("prefs", request.getPreferences());
 			return failureMav;
@@ -62,10 +58,10 @@ public class ConfigurationController {
 	protected void handleActionRequestInternal(ActionRequest request,
 			ActionResponse response) throws Exception {
 		// TODO Auto-generated method stub
-		log.debug("handleActionRequestInternal");
+		LOG.debug("handleActionRequestInternal");
 		PortletPreferences prefs = request.getPreferences();
-		log.debug("showOnlyChecked: " + prefs.getValue("showOnlyChecked", null));
-		log.debug("showOnlyForm: " + prefs.getValue("showOnlyForm", null));
+		LOG.debug("showOnlyChecked: " + prefs.getValue("showOnlyChecked", null));
+		LOG.debug("showOnlyForm: " + prefs.getValue("showOnlyForm", null));
 		prefs.setValue("showOnlyChecked", request.getParameter("showOnlyChecked"));
 		prefs.setValue("showOnlyForm", request.getParameter("showOnlyForm"));
 		prefs.store();
@@ -78,9 +74,9 @@ public class ConfigurationController {
 	
 	private List<TaskHolder<Task>> getTaskHolders(PortletRequest request) {
 		String token = TokenUtil.getAuthenticationToken(request);
-		log.debug("Token: "+token);
+		LOG.debug("Token: "+token);
 		List<Task> taskList = TaskUtil.getPIPATaskList(token);
-		log.debug("taskList size: "+ taskList.size());
+		LOG.debug("taskList size: "+ taskList.size());
 		List<TaskHolder<Task>> tasks = new ArrayList<TaskHolder<Task>>();
 		for (Task task : taskList) {
 			String taskFormURL = URLUtil

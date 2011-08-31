@@ -27,7 +27,6 @@ public class ValidatorTest {
 											   "</soapenv:Body>" +
 											"</soapenv:Envelope>";
 	
-	
 	public static final String soapSetMsg = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:soa=\"http://soa.av.koku.arcusys.fi/\"> " +
 											   "<soapenv:Header/>" +
 											   "<soapenv:Body>" +
@@ -46,9 +45,8 @@ public class ValidatorTest {
 											   "</soapenv:Body>" +
 											"</soapenv:Envelope>";
 	
-	public final String ILLEGAL_OPERATIONS_REGEX = "<soa:get|<soa:find";
-	
-	
+	public static final String ILLEGAL_OPERATIONS_REGEX = "<soa:get|<soa:find";
+		
 	@Test
 	public void regexTest() {		
 		Pattern pa = Pattern.compile(ILLEGAL_OPERATIONS_REGEX);
@@ -66,7 +64,6 @@ public class ValidatorTest {
 		assertTrue(validate.isValid(soapSetMsg));
 		assertFalse(validate.isValid(soapFindMsg));
 		assertTrue(validate.isValid(soapBroken));	
-		
 	}
-
+	
 }

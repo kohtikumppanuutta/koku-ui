@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ page import="fi.arcusys.koku.palvelut.controller.ViewController"%>
 <%@ page import="fi.arcusys.koku.palvelut.controller.EditController"%>
-<%@ page import="fi.arcusys.koku.palvelut.model.VeeraForm"%>
+<%@ page import="fi.arcusys.koku.palvelut.model.client.VeeraForm"%>
 
 <%
 /** This page works as URL form edit & add page **/

@@ -13,9 +13,9 @@ import org.springframework.web.servlet.view.AbstractCachingViewResolver;
 public class AjaxViewResolver extends AbstractCachingViewResolver  {  
     
     public static final String AJAX_PREFIX = "ajax_";   
-    protected String ajaxPrefix = AJAX_PREFIX;    
-//    private View ajaxView = new AjaxView ();
-    // Spring instantiable
+    private String ajaxPrefix = AJAX_PREFIX;    
+
+    /* Spring instantiable */
     private View ajaxView;
   
     @Override  

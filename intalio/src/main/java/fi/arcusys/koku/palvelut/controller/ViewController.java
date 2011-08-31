@@ -14,6 +14,7 @@ import javax.portlet.PortletResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.xml.stream.XMLStreamException;
 
 import net.sf.json.JSONObject;
 
@@ -46,7 +47,7 @@ import fi.arcusys.koku.palvelut.util.XmlProxy;
 @Controller("viewController")
 @RequestMapping(value = "VIEW")
 public class ViewController extends FormHolderController {
-	private static Logger log = Logger.getLogger(ViewController.class);
+	private static Logger LOG = Logger.getLogger(ViewController.class);
 	public static final String FORM_VIEW_ACTION 						= "formview";
 	public static final String VIEW_ACTION 								= "view";
 	public static final String VIEW_CURRENT_FOLDER 						= "folderId";
@@ -56,6 +57,7 @@ public class ViewController extends FormHolderController {
 	public static final String ROOT_CATEGORY_LIST_MODEL_NAME 			= "rootCategories";
 	
 
+	public static final String APPOINTMENT_PROCESSING_SERVICE_NAME 		= "AppointmentProcessingService";
 	public static final String APPOINTMENT_SERVICE_CITIZEN_NAME 		= "AppointmentServiceCitizen";
 	public static final String APPOINTMENT_SERVICE_EMPLOYEE_NAME 		= "AppointmentServiceEmployee";
 	public static final String MESSAGE_SERVICE_NAME 					= "MessageService";
@@ -63,12 +65,13 @@ public class ViewController extends FormHolderController {
 	public static final String TIVA_CITIZEN_SERVICE_NAME				= "TivaServiceCitizen";
 	public static final String TIVA_EMPLOYEE_SERVICE_NAME				= "TivaServiceEmployee";
 	
-	private static final String APPOINTMENT_SERVICE_CITIZEN		= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuKunpoAppointmentServiceImpl";
-	private static final String APPOINTMENT_SERVICE_EMPLOYEE	= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuLooraAppointmentServiceImpl";
-	private static final String REQUEST_SERVICE		 			= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuRequestServiceImpl";
-	private static final String MESSAGE_SERVICE					= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuMessageServiceImpl";	
-	private static final String TIVA_CITIZEN_SERVICE			= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuLooraSuostumusServiceImpl";
-	private static final String TIVA_EMPLOYEE_SERVICE			= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuKunpoSuostumusServiceImpl";
+	private static final String APPOINTMENT_PROCESS_SERVICE				= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuAppointmentProcessingServiceImpl";
+	private static final String APPOINTMENT_SERVICE_CITIZEN				= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuKunpoAppointmentServiceImpl";
+	private static final String APPOINTMENT_SERVICE_EMPLOYEE			= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuLooraAppointmentServiceImpl";
+	private static final String REQUEST_SERVICE		 					= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuRequestServiceImpl";
+	private static final String MESSAGE_SERVICE							= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuMessageServiceImpl";	
+	private static final String TIVA_CITIZEN_SERVICE					= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuLooraSuostumusServiceImpl";
+	private static final String TIVA_EMPLOYEE_SERVICE					= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuKunpoSuostumusServiceImpl";
 
 
 	@Autowired
@@ -81,13 +84,13 @@ public class ViewController extends FormHolderController {
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		
 		if (service.isEmpty()) {
-			log.error("AjaxMessage Command is empty");
+			LOG.error("AjaxMessage Command is empty");
 			returnEmptyString(modelmap);
 			return AjaxViewResolver.AJAX_PREFIX;
 		}
 		
 		if (data.isEmpty()) {
-			log.error("AjaxMessage Data is empty");
+			LOG.error("AjaxMessage Data is empty");
 			returnEmptyString(modelmap);
 			return AjaxViewResolver.AJAX_PREFIX;
 		}
@@ -99,9 +102,11 @@ public class ViewController extends FormHolderController {
 			try {
 				result = proxy.send();				
 			} catch (IllegalOperationCall ioc) {
-				log.error("Illegal operation call. User '" + request.getUserPrincipal().getName() + "' tried to call restricted method that he/she doesn't have sufficient permission. ");
+				LOG.error("Illegal operation call. User '" + request.getUserPrincipal().getName() + "' tried to call restricted method that he/she doesn't have sufficient permission. ");
+			} catch (XMLStreamException xse) {
+				LOG.error("Unexpected XML-parsing error. User '" + request.getUserPrincipal().getName() + "'", xse);
 			} catch (Exception e) {
-				log.error("Coulnd't send given message. Parsing error propably. ", e);
+				LOG.error("Coulnd't send given message. Parsing error propably. ", e);
 			}
 		}
 		
@@ -118,6 +123,7 @@ public class ViewController extends FormHolderController {
 	private XmlProxy getProxy(String service, String data) {
 		
 		OperationsValidator validator = new OperationsValidatorImpl();
+		validator = null;
 		if (service.equals(APPOINTMENT_SERVICE_CITIZEN_NAME)) {
 			return new XmlProxy("", APPOINTMENT_SERVICE_CITIZEN, data, validator);	
 		} else if (service.equals(APPOINTMENT_SERVICE_EMPLOYEE_NAME)) {
@@ -152,7 +158,7 @@ public class ViewController extends FormHolderController {
 	public ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderRequest response) throws Exception {
 
-		log.debug("handleRenderRequestInternal");
+		LOG.debug("handleRenderRequestInternal");
 		PortletPreferences prefs = request.getPreferences();
 		if (prefs.getValue("showOnlyChecked", null) != null) {
 			ModelAndView mav = new ModelAndView(FORM_VIEW_ACTION, "model", null);
@@ -161,7 +167,7 @@ public class ViewController extends FormHolderController {
 			try {
 				t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue("showOnlyForm", null));				
 			} catch (Exception e) {
-				log.error("Failure while trying to get Task. See following log for more information: ", e);
+				LOG.error("Failure while trying to get Task. Some hints to fix problem: \1. Logged in proper user? (this portlet doesn't work correctly with admin/nonlogged users \n2. Task might be updated. Reselect form in 'edit'-mode. \n3. Check that connection to Intalio server is up. ", e);
 				return getFailureView(request);
 			}
 			FormHolder fh = getFormHolderFromTask(request, t.getDescription());
@@ -173,7 +179,7 @@ public class ViewController extends FormHolderController {
 		try {
 			rootFolderId = getRootFolderId(companyId);			
 		} catch (Exception e) {
-			log.error("Failure while trying to get RootFolderId. See following log for more information: ", e);
+			LOG.error("Failure while trying to get RootFolderId. See following log for more information: ", e);
 			return getFailureView(request);
 		}
 		String folderId = request.getParameter(ViewController.VIEW_CURRENT_FOLDER);
@@ -250,7 +256,7 @@ public class ViewController extends FormHolderController {
 			mav.addObject("prefs", request.getPreferences());
 			return mav;
 		} catch (Exception e) {
-			log.error("VeeraServicesFacade failure. See following log for more information: ", e);
+			LOG.error("VeeraServicesFacade failure. See following log for more information: ", e);
 			return getFailureView(request);
 		}
 	}

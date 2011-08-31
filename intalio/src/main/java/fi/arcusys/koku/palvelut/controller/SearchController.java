@@ -16,8 +16,6 @@ import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,7 +41,8 @@ public class SearchController {
 	//User given search text
 	public static final String SEARCH_TEXT_PARAM = "searchTextParam";
 
-	private static final Logger log = Logger.getLogger(SearchController.class);
+	private static final int MAX_RESULTS = 100;
+	private static final Logger LOG = Logger.getLogger(SearchController.class);
 	
 //	@Resource
 	@Autowired
@@ -62,21 +61,21 @@ public class SearchController {
 		long companyId = MigrationUtil.getCompanyId(request);
 		
 		String param = request.getParameter(SEARCH_TEXT_PARAM);
-		List<VeeraFormImpl> forms = servicesFacade.findFormsByDescription(param, 101);
+		List<VeeraFormImpl> forms = servicesFacade.findFormsByDescription(param, MAX_RESULTS+1);
 		
 		if(forms!=null && forms.size()>0){
 			//Results found
 			Collections.sort(forms, new VeeraFormComparator());
 			//Log form data if log level debug is enabled
-			if(log.isDebugEnabled()){
-				log.debug("VeeraForm.size="+forms.size());
+			if(LOG.isDebugEnabled()){
+				LOG.debug("VeeraForm.size="+forms.size());
 				for (VeeraFormImpl veeraForm : forms) {
-					log.debug(veeraForm.toString());	
-				}	
+					LOG.debug(veeraForm.toString());	
+				}
 			}
-			if(forms.size()>100){
+			if(forms.size()>MAX_RESULTS){
 				//Inform user that only 100 results are shown and suggest better search param
-				request.setAttribute(SEARCH_RESULT_MORE_THAN_LIMIT, "100");
+				request.setAttribute(SEARCH_RESULT_MORE_THAN_LIMIT, Integer.toString(MAX_RESULTS));
 			}
 		}else{
 			//No results

@@ -4,17 +4,12 @@ import java.util.ResourceBundle;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletSession;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.intalio.tempo.security.ws.TokenClient;
-import org.jasig.cas.client.proxy.Cas20ProxyRetriever;
-import org.jasig.cas.client.util.AbstractCasFilter;
-import org.jasig.cas.client.util.AssertionHolder;
 import org.jasig.cas.client.validation.Assertion;
-import org.jasig.cas.client.validation.TicketValidator;
 
 import fi.arcusys.koku.palvelut.bean.Configuration;
 
@@ -23,7 +18,7 @@ public class TokenUtil {
 
 	private static final String TOKEN_SESSION_PARAMETER = "intalioParticipantToken";
 
-	private static Log log = LogFactory.getLog(TokenUtil.class);
+	private static Log LOG = LogFactory.getLog(TokenUtil.class);
 	private static String defaultPassword = null;
 	private static String realm = null;
 
@@ -34,7 +29,7 @@ public class TokenUtil {
 			defaultPassword = rb.getString("password");
 			realm = rb.getString("realm");
 		} catch (Exception e) {
-			log.debug("Couldn't get default password", e);
+			LOG.debug("Couldn't get default password", e);
 		}
 	}
 
@@ -61,7 +56,7 @@ public class TokenUtil {
 				}
 				session.setAttribute(TOKEN_SESSION_PARAMETER, token);
 			} catch (Exception e) {
-				log.error(e);
+				LOG.error(e);
 			}
 		}
 		return token;
@@ -71,7 +66,7 @@ public class TokenUtil {
 	 * Fetches a participant token using the TokenClient for the specified user.
 	 */
 	public static String getAuthenticationToken(String userName, String password) {
-		log.debug("Getting participant token via TokenClient for user: "
+		LOG.debug("Getting participant token via TokenClient for user: "
 				+ userName);
 		String token = null;
 		TokenClient tokenClient = new TokenClient(Configuration.getInstance()
@@ -79,14 +74,14 @@ public class TokenUtil {
 		try {
 			token = tokenClient.authenticateUser(userName, password);
 		} catch (Exception e) {
-			log.error("Getting participant token failed for user: " + userName, e);
+			LOG.error("Getting participant token failed for user: " + userName, e);
 		}
 		return token;
 	}
 	
 	public static String getAuthenticationTokenFromTicket(String ticket, String serviceURL) {
-		if (log.isDebugEnabled()) {
-	 		log.debug("Getting participant token via TokenClient for ticket");
+		if (LOG.isDebugEnabled()) {
+	 		LOG.debug("Getting participant token via TokenClient for ticket");
 		}
 		String token = null;
 		TokenClient tokenClient = new TokenClient(Configuration.getInstance()
@@ -94,7 +89,7 @@ public class TokenUtil {
 		try {
 			token = tokenClient.getTokenFromTicket(ticket, serviceURL);
 		} catch (Exception e) {
-			log.error(e);
+			LOG.error(e);
 		}
 		return token;
 	}

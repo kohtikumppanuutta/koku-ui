@@ -3,7 +3,9 @@ package fi.arcusys.koku.palvelut.util;
 import java.io.StringReader;
 import java.util.Iterator;
 
+import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.axiom.om.OMAbstractFactory;
@@ -27,7 +29,7 @@ import fi.arcusys.koku.palvelut.exceptions.IllegalOperationCall;
  */
 public class XmlProxy {
 	
-	private static final Logger log = Logger.getLogger(XmlProxy.class);
+	private static final Logger LOG = Logger.getLogger(XmlProxy.class);
 
 	private final String message;
 	private final String action;
@@ -41,7 +43,7 @@ public class XmlProxy {
 	public XmlProxy(String action, String endpoint, String message, OperationsValidator validator) {
 		
 		if (message == null || action == null || endpoint == null) {
-			log.error("One of given constructor parameter was null");
+			LOG.error("One or more given constructor parameters was null");
 			throw new IllegalStateException();
 		}		
 		this.action = action;
@@ -50,21 +52,29 @@ public class XmlProxy {
 		this.validator = validator;
 	}
 	
-	public String send() throws IllegalOperationCall, Exception {
+	public String send() throws IllegalOperationCall, XMLStreamException {
 		if (validator != null && !validator.isValid(message)) {
 			throw new IllegalOperationCall();
 		}		
-		OMElement omelement = parseRequest(message);	
+		OMElement omelement = null;
+		omelement = parseRequest(message);
+		
 		Options options = new Options();
 		options.setTo(new EndpointReference(endpoint));
 		options.setAction(action);		
 		return send(omelement, options);
 	}
 	
-	protected OMElement parseRequest(String s) throws Exception  {
+	protected OMElement parseRequest(String s) throws XMLStreamException {
 		OMElement omelement = null;
 		StringReader stringreader = new StringReader(s);
-		XMLStreamReader xmlstreamreader = XMLInputFactory.newInstance().createXMLStreamReader(stringreader);
+		XMLStreamReader xmlstreamreader = null;
+		try {
+			xmlstreamreader = XMLInputFactory.newInstance().createXMLStreamReader(stringreader);
+		} catch (FactoryConfigurationError e) {
+			LOG.error("XMLInputFactory error ", e);
+			return null;
+		}
 		StAXOMBuilder staxombuilder = new StAXOMBuilder(xmlstreamreader);
 		OMElement omelement1 = staxombuilder.getDocumentElement();
 
@@ -121,7 +131,7 @@ public class XmlProxy {
 			omelement1.addChild(omelement4);
 		}
 
-		log.debug("Test output:" + omelement1.toString());
+		LOG.debug("Test output:" + omelement1.toString());
 		return omelement1.toString();
 	}
 	

@@ -1,6 +1,6 @@
 <%@ include file="/jsp/init.jsp"%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
-<%@page import="fi.arcusys.koku.palvelukanava.palvelut.model.VeeraCategory"%>
+<%@ page import="fi.arcusys.koku.palvelut.model.client.VeeraCategory"%>
 <%@ page import="fi.arcusys.koku.palvelut.controller.ViewController"%>
 <%@ page import="fi.arcusys.koku.palvelut.controller.EditController"%>
 <%@ page import="fi.arcusys.koku.palvelut.util.MigrationUtil"%>
@@ -53,7 +53,7 @@ pageContext.setAttribute("addNew", addNew);
 							VeeraCategory category = (VeeraCategory)request.getAttribute("editCategory"); 
 							String description = category.getDescription();
 							if (description == null) description = "";
-							escapedDescription = HtmlUtil.escape(description);
+							escapedDescription = MigrationUtil.escapeHtml(description);
 						}
 					%>
 					<input type="text" value="<%= escapedDescription %>" style="width: 350px;"
