@@ -263,7 +263,8 @@
 			<ul class="child">
 				<li id="cst_assigned_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_assigned_citizen')">Suostumus</a></li>
 				<li id="cst_own_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_citizen')">Oma suostumukset</a></li>
-				<li id="cst_new_valtakirja"><a href="<%= defaultPath %>/Message/ValtakirjaConsent">Valtakirja</a></li>
+				<li id="valtakirjaconsent"><a href="<%= defaultPath %>/Message/ValtakirjaConsent">Valtakirja</a></li>
+				<li id="selaavaltakirjoja"><a href="<%= defaultPath %>/Message/SelaaValtakirjoja">Selaa valtakirjoja</a></li>
 			</ul></li>
 		</c:if>
 		<!-- For employee in Jboss portal-->
