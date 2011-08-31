@@ -134,7 +134,9 @@ public class AjaxController {
 	@ResourceMapping(value = "revokeConsent")
 	public String revokeConsent(@RequestParam(value = "messageList[]") String[] messageList,
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
-		TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();		
+		PortletSession portletSession = request.getPortletSession();				
+		String username = (String) portletSession.getAttribute("USER_username");
+		TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle(username);		
 		
 		for(String consentId : messageList) {
 			tivaHandle.revokeOwnConsent(consentId);

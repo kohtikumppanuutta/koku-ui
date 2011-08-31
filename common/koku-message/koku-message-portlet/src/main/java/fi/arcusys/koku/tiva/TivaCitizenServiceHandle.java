@@ -76,8 +76,8 @@ public class TivaCitizenServiceHandle {
 			kokuConsent.setStatus(consent.getStatus().toString());
 		}
 		
-		kokuConsent.setAssignedDate(MessageUtil.formatTaskDate(consent.getGivenAt()));
-		kokuConsent.setValidDate(MessageUtil.formatTaskDate(consent.getValidTill()));
+		kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
+		kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
 		kokuConsent.setActionRequests(convertActionRequests(consent.getActionRequests()));
 		
 		return kokuConsent;
@@ -107,8 +107,8 @@ public class TivaCitizenServiceHandle {
 			if(consent.getStatus() != null) {
 				kokuConsent.setStatus(consent.getStatus().toString());
 			}
-			kokuConsent.setAssignedDate(MessageUtil.formatTaskDate(consent.getGivenAt()));
-			kokuConsent.setValidDate(MessageUtil.formatTaskDate(consent.getValidTill()));
+			kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
+			kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
 			consentList.add(kokuConsent);
 		}
 		
@@ -144,7 +144,7 @@ public class TivaCitizenServiceHandle {
 		long  consentId = (long) Long.parseLong(consentIdStr);
 		
 		try {
-			tcs.revokeOwnConsent(consentId);
+			tcs.revokeOwnConsent(consentId, user);
 			return MessageUtil.RESPONSE_OK;
 		} catch(RuntimeException e) {
 			return MessageUtil.RESPONSE_FAIL;

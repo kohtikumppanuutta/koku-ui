@@ -78,9 +78,8 @@ public class TivaCitizenService {
 	 * Revokes consent
 	 * @param consentId consent id
 	 */
-	public void revokeOwnConsent(long consentId) {
-		String arg1 = "";
-		kks.getKokuKunpoSuostumusServicePort().revokeOwnConsent(consentId, arg1);
+	public void revokeOwnConsent(long consentId, String user) {
+		kks.getKokuKunpoSuostumusServicePort().revokeOwnConsent(consentId, user);
 	}
 	
 }

@@ -56,8 +56,8 @@ public class TivaEmployeeServiceHandle {
 			kokuConsent.setTemplateName(consent.getTemplateName());
 			kokuConsent.setCreateType(consent.getCreateType().value());
 			kokuConsent.setStatus(consent.getStatus().toString());
-			kokuConsent.setAssignedDate(MessageUtil.formatTaskDate(consent.getGivenAt()));
-			kokuConsent.setValidDate(MessageUtil.formatTaskDate(consent.getValidTill()));
+			kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
+			kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
 			consentList.add(kokuConsent);
 		}
 		
@@ -93,8 +93,8 @@ public class TivaEmployeeServiceHandle {
 		kokuConsent.setTemplateName(consent.getTemplateName());
 		kokuConsent.setCreateType(consent.getCreateType().value());
 		kokuConsent.setStatus(consent.getStatus().toString());
-		kokuConsent.setAssignedDate(MessageUtil.formatTaskDate(consent.getGivenAt()));
-		kokuConsent.setValidDate(MessageUtil.formatTaskDate(consent.getValidTill()));
+		kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
+		kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
 		kokuConsent.setActionRequests(convertActionRequests(consent.getActionRequests()));
 		
 		return kokuConsent;
