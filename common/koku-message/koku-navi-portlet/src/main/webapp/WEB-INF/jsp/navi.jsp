@@ -244,7 +244,7 @@
 			</ul></li>
 		<li><a href="#">Päivähoitohakemukset</a>
 			<ul class="child">
-				<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Uudet</a></li>
+				<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Uudet</a></li>				
 			</ul></li>
 		</c:if>
 		<!-- For employee in Jboss portal-->
@@ -279,6 +279,8 @@
 			<ul class="child">
 				<li id="newinformation"><a href="<%= defaultPath %>/Message/NewInformation">Uusi tietopyyntö</a></li>
 				<li id="informationbox"><a href="<%= defaultPath %>/Message/InformationBox">Saapuneet</a></li>
+				<li id="ilmoitukset"><a href="<%= defaultPath %>/Message/Ilmoitukset">Ilmoitukset</a></li>
+				
 			</ul>
 		</li>	
 		</c:if>	
