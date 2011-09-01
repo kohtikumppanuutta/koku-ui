@@ -72,35 +72,14 @@ public class ShowConsentController {
 			PortletSession portletSession = request.getPortletSession();
 			String username = (String) portletSession.getAttribute("USER_username");
 			TivaCitizenServiceHandle handle = new TivaCitizenServiceHandle(username);
+			handle.setMessageSource(messageSource);
 			consent = handle.getConsentById(consentId);
 		} else if(taskType.equals("cst_own_employee")) {
 			TivaEmployeeServiceHandle handle = new TivaEmployeeServiceHandle();
+			handle.setMessageSource(messageSource);
 			consent = handle.getConsentDetails(consentId);
 		}
-		
-		// Localize status
-		consent.setStatus(localizeStatus(consent.getStatus()));		
 		return consent;
-	}	
-
-	
-	private String localizeStatus(final String status) {
-		LOG.warn("localize - Remove me");
-		if (messageSource == null) {
-			LOG.error("MessageSource is null");
-			return status;
-		}
-		
-		try {			
-			Locale locale = new Locale("fi", "FI");
-			if (status.equals("Created")) {
-				return messageSource.getMessage("consent.status.Created", null, locale);
-			}
-		} catch (NoSuchMessageException nsme) {
-			LOG.error("Spring localization doesn't have translation to given value", nsme);
-			return status;
-		}
-		return status;
 	}
 	
 }

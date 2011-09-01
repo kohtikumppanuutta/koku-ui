@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+
+import javax.annotation.Resource;
+
+import org.apache.log4j.Logger;
+import org.springframework.context.NoSuchMessageException;
+import org.springframework.context.support.ResourceBundleMessageSource;
 
 import fi.arcusys.koku.kv.messageservice.Criteria;
 import fi.arcusys.koku.kv.messageservice.Fields;
@@ -13,6 +20,7 @@ import fi.arcusys.koku.kv.messageservice.MessageStatus;
 import fi.arcusys.koku.kv.messageservice.MessageSummary;
 import fi.arcusys.koku.kv.messageservice.OrderBy;
 import fi.arcusys.koku.kv.messageservice.Type;
+import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
@@ -21,6 +29,11 @@ import fi.arcusys.koku.util.MessageUtil;
  * Jun 22, 2011
  */
 public class MessageHandle {
+	
+	private Logger LOG = Logger.getLogger(MessageHandle.class);
+
+	
+	private ResourceBundleMessageSource messageSource;
 	
 	MessageService ms;
 	
@@ -124,8 +137,7 @@ public class MessageHandle {
 			message.setSubject(msgSum.getSubject());
 			message.setCreationDate(MessageUtil.formatTaskDate(msgSum.getCreationDate()));
 			message.setMessageType(MessageUtil.getMessageType(msgSum.getMessageType()));
-			message.setMessageStatus(msgSum.getMessageStatus().toString().toLowerCase());
-			
+			message.setMessageStatus(localizeMsgStatus(msgSum.getMessageStatus()));
 			msgList.add(message);
 		}
 		
@@ -149,9 +161,31 @@ public class MessageHandle {
 		message.setSubject(msg.getSubject());
 		message.setContent(msg.getContent());
 		message.setCreationDate(MessageUtil.formatTaskDate(msg.getCreationDate()));
-		message.setMessageStatus(msg.getMessageStatus().toString().toLowerCase());	
+		message.setMessageStatus(localizeMsgStatus(msg.getMessageStatus()));	
 		
 		return message;
+	}
+	
+	private String localizeMsgStatus(MessageStatus status ) {
+		if (messageSource == null) {
+			LOG.warn("MessageSource is null. Localization doesn't work properly");
+			return status.toString().toLowerCase();
+		}
+		Locale locale = MessageUtil.getLocale();
+		
+		try {	
+			switch(status) {
+			case READ:
+				return messageSource.getMessage("MessageStatus.READ", null, locale);
+			case UNREAD:
+				return messageSource.getMessage("MessageStatus.UNREAD", null, locale);
+			default:
+				return messageSource.getMessage("unknown", null, locale);
+			}
+		} catch (NoSuchMessageException nsme) {
+			LOG.warn("Coulnd't find localized message. Localization doesn't work properly");
+			return status.toString().toLowerCase();
+		}
 	}
 	
 	/**
@@ -256,4 +290,12 @@ public class MessageHandle {
 		return criteria;
 	}
 
+	public final ResourceBundleMessageSource getMessageSource() {
+		return messageSource;
+	}
+
+	public final void setMessageSource(ResourceBundleMessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
+	
 }

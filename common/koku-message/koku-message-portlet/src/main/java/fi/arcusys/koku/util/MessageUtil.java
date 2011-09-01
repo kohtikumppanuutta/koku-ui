@@ -2,6 +2,7 @@ package fi.arcusys.koku.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -20,11 +21,24 @@ public class MessageUtil {
         throw new UnsupportedOperationException();
     }
 	
+	private static final Locale locale = new Locale("fi", "FI");
+	
 	public static final String DATE_FORMAT = "d.M.yyyy HH:mm:ss";
 	public static final String TIME_ZONE = "Europe/Helsinki";
 	public static final int PAGE_NUMBER = 10; // number of tasks in one page
 	public static final String RESPONSE_OK = "OK";
 	public static final String RESPONSE_FAIL = "FAIL";
+	
+	/**
+	 * Returns default locale
+	 * 
+	 * FIXME: For now this will return only Finnish locale.
+	 * 
+	 * @return Locale
+	 */
+	public static Locale getLocale() {
+		return locale;
+	}
 
 	/**
 	 * Gets the message folder type converting from message type

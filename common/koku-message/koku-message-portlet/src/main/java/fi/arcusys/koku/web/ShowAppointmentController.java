@@ -1,9 +1,15 @@
 package fi.arcusys.koku.web;
 
+import java.util.Locale;
+
+import javax.annotation.Resource;
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.apache.log4j.Logger;
+import org.springframework.context.NoSuchMessageException;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +28,11 @@ import fi.arcusys.koku.av.KokuAppointment;
 @Controller("singleAppointmentController")
 @RequestMapping(value = "VIEW")
 public class ShowAppointmentController {
+	
+	private Logger LOG = Logger.getLogger(ShowAppointmentController.class);
+	
+	@Resource
+	ResourceBundleMessageSource messageSource;
 	
 	/**
 	 * Shows the page that presents appointment in detail for either employee
@@ -75,11 +86,8 @@ public class ShowAppointmentController {
 		} else if(taskType.equals("app_response_employee")) {
 			AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
 			app = handle.getAppointmentById(appointmentId);
-
 		}
-		
 		return app;
-	}
+	}	
 	
-
 }

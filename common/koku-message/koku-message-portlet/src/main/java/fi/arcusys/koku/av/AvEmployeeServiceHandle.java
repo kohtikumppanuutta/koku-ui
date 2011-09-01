@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.context.support.ResourceBundleMessageSource;
+
 import fi.arcusys.koku.av.EmployeeAppointment.RejectedUser;
 import fi.arcusys.koku.av.employeeservice.Appointment;
 import fi.arcusys.koku.av.employeeservice.Appointment.AcceptedSlots;

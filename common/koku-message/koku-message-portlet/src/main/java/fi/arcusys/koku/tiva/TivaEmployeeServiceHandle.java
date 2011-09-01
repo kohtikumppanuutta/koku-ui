@@ -3,10 +3,18 @@ package fi.arcusys.koku.tiva;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
+import org.apache.log4j.Logger;
+import org.springframework.context.NoSuchMessageException;
+import org.springframework.context.support.ResourceBundleMessageSource;
+
+import fi.arcusys.koku.tiva.employeeservice.ConsentCreateType;
+import fi.arcusys.koku.tiva.employeeservice.ActionRequestStatus;
 import fi.arcusys.koku.tiva.employeeservice.ActionRequestSummary;
 import fi.arcusys.koku.tiva.employeeservice.ConsentCriteria;
 import fi.arcusys.koku.tiva.employeeservice.ConsentQuery;
+import fi.arcusys.koku.tiva.employeeservice.ConsentStatus;
 import fi.arcusys.koku.tiva.employeeservice.ConsentSummary;
 import fi.arcusys.koku.tiva.employeeservice.ConsentTO;
 import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
@@ -18,6 +26,11 @@ import fi.arcusys.koku.util.MessageUtil;
  * Aug 18, 2011
  */
 public class TivaEmployeeServiceHandle {
+	
+	private Logger LOG = Logger.getLogger(TivaEmployeeServiceHandle.class);
+	
+	private ResourceBundleMessageSource messageSource;
+
 
 	private TivaEmployeeService tes;
 	
@@ -54,8 +67,8 @@ public class TivaEmployeeServiceHandle {
 			kokuConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
 			kokuConsent.setRequester(consent.getRequestor());
 			kokuConsent.setTemplateName(consent.getTemplateName());
-			kokuConsent.setCreateType(consent.getCreateType().value());
-			kokuConsent.setStatus(consent.getStatus().toString());
+			kokuConsent.setCreateType(localizeConsentCreateType(consent.getCreateType()));
+			kokuConsent.setStatus(localizeConsentStatus(consent.getStatus()));
 			kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
 			kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
 			consentList.add(kokuConsent);
@@ -63,6 +76,8 @@ public class TivaEmployeeServiceHandle {
 		
 		return consentList;
 	}
+	
+
 	
 	/**
 	 * Gets total number of consents
@@ -92,7 +107,7 @@ public class TivaEmployeeServiceHandle {
 		kokuConsent.setRequester(consent.getRequestor());
 		kokuConsent.setTemplateName(consent.getTemplateName());
 		kokuConsent.setCreateType(consent.getCreateType().value());
-		kokuConsent.setStatus(consent.getStatus().toString());
+		kokuConsent.setStatus(localizeConsentStatus(consent.getStatus()));
 		kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
 		kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
 		kokuConsent.setActionRequests(convertActionRequests(consent.getActionRequests()));
@@ -147,10 +162,85 @@ public class TivaEmployeeServiceHandle {
 			ActionRequestSummary actionSummary = it.next();
 			actionReq = new ActionRequest();
 			actionReq.setDescription(actionSummary.getDescription());
-			actionReq.setStatus(actionSummary.getStatus().toString());
+			actionReq.setStatus(localizeActionRequestStatus(actionSummary.getStatus()));
 			actionList.add(actionReq);
-		}
-		
+		}		
 		return actionList;	
 	}
+	
+	private String localizeConsentStatus(ConsentStatus consentStatus) {
+		if (messageSource == null) {
+			LOG.warn("MessageSource is null. Localization doesn't work properly");
+			return consentStatus.toString().toLowerCase();
+		}
+		Locale locale = MessageUtil.getLocale();
+		
+		try {
+			switch(consentStatus) {
+			case DECLINED:
+				return messageSource.getMessage("ConsentStatus.DECLINED", null, locale);
+			case EXPIRED:
+				return messageSource.getMessage("ConsentStatus.EXPIRED", null, locale);
+			case OPEN:
+				return messageSource.getMessage("ConsentStatus.OPEN", null, locale);
+			case PARTIALLY_GIVEN:
+				return messageSource.getMessage("ConsentStatus.PARTIALLY_GIVEN", null, locale);
+			case REVOKED:
+				return messageSource.getMessage("ConsentStatus.REVOKED", null, locale);
+			case VALID:
+				return messageSource.getMessage("ConsentStatus.VALID", null, locale);
+			default:
+				return messageSource.getMessage("unknown", null, locale);
+			}
+		} catch (NoSuchMessageException nsme) {
+			LOG.warn("Coulnd't find localized message. Localization doesn't work properly");
+			return consentStatus.toString().toLowerCase();
+		}
+	}
+	
+	private String localizeActionRequestStatus(ActionRequestStatus actionRequestStatus) {
+		Locale locale = MessageUtil.getLocale();
+		
+		switch(actionRequestStatus) {
+		case DECLINED:
+			return messageSource.getMessage("ConsentReplyStatus.DECLINED", null, locale);
+		case GIVEN:
+			return messageSource.getMessage("ConsentReplyStatus.GIVEN", null, locale);
+		default:
+			return messageSource.getMessage("unknown", null, locale);
+		}
+	}
+	
+	private String localizeConsentCreateType(ConsentCreateType type) {
+		if (messageSource == null) {
+			LOG.warn("MessageSource is null. Localization doesn't work properly");
+			return type.toString().toLowerCase();
+		}
+		Locale locale = MessageUtil.getLocale();
+		
+		try {
+			switch(type) {
+			case ELECTRONIC:
+				return messageSource.getMessage("ConsentType.Electronic", null, locale);
+			case EMAIL_BASED:
+				return messageSource.getMessage("ConsentType.PaperBased", null, locale);
+			case PAPER_BASED:
+				return messageSource.getMessage("ConsentType.EmailBased", null, locale);
+			default:
+				return messageSource.getMessage("unknown", null, locale);
+			}
+		} catch (NoSuchMessageException nsme) {
+			LOG.warn("Coulnd't find localized message. Localization doesn't work properly");
+			return type.toString().toLowerCase();
+		}
+	}
+
+	public final ResourceBundleMessageSource getMessageSource() {
+		return messageSource;
+	}
+
+	public final void setMessageSource(ResourceBundleMessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
+	
 }

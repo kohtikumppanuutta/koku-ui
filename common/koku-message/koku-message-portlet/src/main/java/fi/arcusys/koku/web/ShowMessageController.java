@@ -1,9 +1,11 @@
 package fi.arcusys.koku.web;
 
+import javax.annotation.Resource;
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,9 @@ import fi.arcusys.koku.kv.MessageHandle;
 @Controller("singleMessageController")
 @RequestMapping(value = "VIEW")
 public class ShowMessageController {
+	
+	@Resource
+	private ResourceBundleMessageSource messageSource;
 	
 	/**
 	 * Shows message page
@@ -56,6 +61,7 @@ public class ShowMessageController {
 		request.getPortletSession().setAttribute("orderType", orderType, PortletSession.APPLICATION_SCOPE);
 		
 		MessageHandle msghandle = new MessageHandle();
+		msghandle.setMessageSource(messageSource);
 		Message message = msghandle.getMessageById(messageId);
 		
 		return message;

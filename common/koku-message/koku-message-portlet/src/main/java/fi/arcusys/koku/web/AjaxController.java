@@ -3,6 +3,7 @@ package fi.arcusys.koku.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletSession;
@@ -14,6 +15,7 @@ import javax.portlet.WindowStateException;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +43,9 @@ import fi.arcusys.koku.util.MessageUtil;
 @Controller("ajaxController")
 @RequestMapping(value = "VIEW")
 public class AjaxController {
+	
+	@Resource
+	ResourceBundleMessageSource messageSource;
 
 	private Logger logger = Logger.getLogger(AjaxController.class);
 	/**
@@ -201,18 +206,21 @@ public class AjaxController {
 				if(taskType.equals("cst_assigned_citizen")) {
 					List<KokuConsent> csts;
 					TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
+					tivaHandle.setMessageSource(messageSource);
 					csts = tivaHandle.getAssignedConsents(username, first, max);
 					totalTasksNum = tivaHandle.getTotalAssignedConsents(username);
 					jsonModel.put("tasks", csts);
 				}else if(taskType.equals("cst_own_citizen")) {
 					List<KokuConsent> csts;
 					TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
+					tivaHandle.setMessageSource(messageSource);
 					csts = tivaHandle.getOwnConsents(username, first, max);
 					totalTasksNum = tivaHandle.getTotalOwnConsents(username);
 					jsonModel.put("tasks", csts);
 				}else if(taskType.equals("cst_own_employee")) {
 					List<KokuConsent> csts;
 					TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
+					tivaHandle.setMessageSource(messageSource);
 					csts = tivaHandle.getConsents(username, keyword, first, max);
 					totalTasksNum = tivaHandle.getTotalConsents(username, keyword);
 					jsonModel.put("tasks", csts);
@@ -220,6 +228,7 @@ public class AjaxController {
 				
 			} else { // for message
 				MessageHandle msgHandle = new MessageHandle();
+				msgHandle.setMessageSource(messageSource);
 				List<Message> msgs;
 				msgs = msgHandle.getMessages(username, taskType, keyword, field, orderType, first, max);			
 				totalTasksNum = msgHandle.getTotalMessageNum(username, taskType, keyword, field);
