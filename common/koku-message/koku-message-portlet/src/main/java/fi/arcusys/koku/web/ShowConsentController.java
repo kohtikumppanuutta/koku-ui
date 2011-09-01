@@ -85,6 +85,7 @@ public class ShowConsentController {
 
 	
 	private String localizeStatus(final String status) {
+		LOG.warn("localize - Remove me");
 		if (messageSource == null) {
 			LOG.error("MessageSource is null");
 			return status;
