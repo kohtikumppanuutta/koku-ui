@@ -84,7 +84,19 @@ public class MessageUtil {
 			return "";
 		}
 	}
+	
+	/**
+	 * Formats the date in day
+	 * @param xmlGregorianCalendar
+	 * @return formatted date string
+	 */
+	public static String formatTaskDateByDay(XMLGregorianCalendar xmlGregorianCalendar) {		
+		String dateString = "d.M.yyyy";
+		
+		return formatDateByString(xmlGregorianCalendar, dateString);
+	}
 
+	
 	/**
 	 * Formats the date with given format with given format string
 	 * @param xmlGregorianCalendar
