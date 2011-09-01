@@ -206,7 +206,7 @@
 		</c:if>
 		
 		<li><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')" >Viestit</a>
-			<ul class="open child">
+			<ul class="child">
 				<li id="msg_new"><a href="<%= defaultPath %>/Message/NewMessage">Uusi viesti</a> </li>
 				<li id="msg_inbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')">Saapuneet <span id="inbox_num" class="message_num"></span></a></li>
 				<li id="msg_outbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_outbox')">Lähetetyt</a></li>
@@ -271,7 +271,8 @@
 		<c:if test="${fn:contains(naviURL, '/default/')}">
 		<li><a href="#">Suostumus</a>
 			<ul class="child">
-				<li id="cst_new"><a href="<%= defaultPath %>/Message/NewConsent">Uudet</a></li>
+				<li id="cst_new"><a href="<%= defaultPath %>/Message/NewConsent">Uusi suostumuspohja</a></li>
+				<li id="sendconsent"><a href="<%= defaultPath %>/Message/SendConsent">Lähetä suostumus</a></li>
 				<li id="cst_own_employee"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_employee')">Oma suostumus</a></li>
 			</ul></li>				
 		<li><a href="javascript:void(0)">Tietopyyntö</a>

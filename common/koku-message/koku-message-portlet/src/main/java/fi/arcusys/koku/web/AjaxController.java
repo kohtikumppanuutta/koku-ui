@@ -264,7 +264,7 @@ public class AjaxController {
 		renderUrlObj.setParameter( "keyword", keyword);
 		renderUrlObj.setParameter( "orderType", orderType);
 		try {
-			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
+			renderUrlObj.setWindowState(WindowState.NORMAL);
 		} catch (WindowStateException e) {
 			logger.error("Create message render url failed");
 		}
@@ -306,7 +306,7 @@ public class AjaxController {
 		renderUrlObj.setParameter( "keyword", keyword);
 		renderUrlObj.setParameter( "orderType", orderType);	
 		try {
-			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
+			renderUrlObj.setWindowState(WindowState.NORMAL);
 		} catch (WindowStateException e) {
 			logger.error("Create request render url failed");
 		}
@@ -351,7 +351,7 @@ public class AjaxController {
 		renderUrlObj.setParameter( "orderType", orderType);	
 		renderUrlObj.setParameter( "targetPerson", targetPerson);
 		try {
-			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
+			renderUrlObj.setWindowState(WindowState.NORMAL);
 		} catch (WindowStateException e) {
 			logger.error("Create appointment render url failed");
 		}
@@ -394,7 +394,7 @@ public class AjaxController {
 		renderUrlObj.setParameter( "keyword", keyword);
 		renderUrlObj.setParameter( "orderType", orderType);	
 		try {
-			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
+			renderUrlObj.setWindowState(WindowState.NORMAL);
 		} catch (WindowStateException e) {
 			logger.error("Create consent render url failed");
 		}

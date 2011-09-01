@@ -181,7 +181,7 @@
 				+ '<td class="choose"><spring:message code="message.choose" /></td>'
 				+ '<td class="from">' + formatSender() + '</td>'
 				+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
-				+ '<td class="date"><spring:message code="message.received" /></td>'
+				+ '<td><spring:message code="message.received" /></td>'
 				+ '</tr>';
 				 
 		for ( var i = 0; i < tasks.length; i++) {
@@ -201,7 +201,7 @@
 			taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["messageId"] + '" />' + '</td>'
 					 + '<td class="messageItem" onclick="showMessage(\''+ tasks[i]["messageId"] + '\')" >' + formatUser(tasks[i]) + '</td>'
 					 + '<td class="messageItem" onclick="showMessage(\''+ tasks[i]["messageId"] + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
-					 + '<td class="date messageItem" onclick="showMessage(\''+ tasks[i]["messageId"] + '\')" >' + tasks[i]["creationDate"] + '</td>'
+					 + '<td class="messageItem" onclick="showMessage(\''+ tasks[i]["messageId"] + '\')" >' + tasks[i]["creationDate"] + '</td>'
 					 + '</tr>';
 		}
 
