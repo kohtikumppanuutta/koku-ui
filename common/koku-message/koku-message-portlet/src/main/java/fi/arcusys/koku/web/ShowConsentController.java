@@ -1,9 +1,15 @@
 package fi.arcusys.koku.web;
 
+import java.util.Locale;
+
+import javax.annotation.Resource;
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.apache.log4j.Logger;
+import org.springframework.context.NoSuchMessageException;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +28,11 @@ import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
 @Controller("singleConsentController")
 @RequestMapping(value = "VIEW")
 public class ShowConsentController {
+	private Logger LOG = Logger.getLogger(ShowConsentController.class);
+
+	
+	@Resource
+	ResourceBundleMessageSource messageSource;
 	
 	/**
 	 * Shows consent page
@@ -30,7 +41,6 @@ public class ShowConsentController {
 	 */
 	@RenderMapping(params = "myaction=showConsent")
 	public String showPageView(RenderResponse response) {
-
 		return "showconsent";
 	}
 		
@@ -67,8 +77,29 @@ public class ShowConsentController {
 			TivaEmployeeServiceHandle handle = new TivaEmployeeServiceHandle();
 			consent = handle.getConsentDetails(consentId);
 		}
-				
+		
+		// Localize status
+		consent.setStatus(localizeStatus(consent.getStatus()));		
 		return consent;
 	}	
 
+	
+	private String localizeStatus(final String status) {
+		if (messageSource == null) {
+			LOG.error("MessageSource is null");
+			return status;
+		}
+		
+		try {			
+			Locale locale = new Locale("fi", "FI");
+			if (status.equals("Created")) {
+				return messageSource.getMessage("consent.status.Created", null, locale);
+			}
+		} catch (NoSuchMessageException nsme) {
+			LOG.error("Spring localization doesn't have translation to given value", nsme);
+			return status;
+		}
+		return status;
+	}
+	
 }
