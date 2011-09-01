@@ -106,7 +106,7 @@ public class TivaEmployeeServiceHandle {
 		kokuConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
 		kokuConsent.setRequester(consent.getRequestor());
 		kokuConsent.setTemplateName(consent.getTemplateName());
-		kokuConsent.setCreateType(consent.getCreateType().value());
+		kokuConsent.setCreateType(localizeConsentCreateType(consent.getCreateType()));
 		kokuConsent.setStatus(localizeConsentStatus(consent.getStatus()));
 		kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
 		kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
@@ -168,6 +168,7 @@ public class TivaEmployeeServiceHandle {
 		return actionList;	
 	}
 	
+	
 	private String localizeConsentStatus(ConsentStatus consentStatus) {
 		if (messageSource == null) {
 			LOG.warn("MessageSource is null. Localization doesn't work properly");
@@ -199,8 +200,12 @@ public class TivaEmployeeServiceHandle {
 	}
 	
 	private String localizeActionRequestStatus(ActionRequestStatus actionRequestStatus) {
+		if (messageSource == null) {
+			LOG.warn("MessageSource is null. Localization doesn't work properly");
+			return actionRequestStatus.toString().toLowerCase();
+		}
 		Locale locale = MessageUtil.getLocale();
-		
+		try {
 		switch(actionRequestStatus) {
 		case DECLINED:
 			return messageSource.getMessage("ConsentReplyStatus.DECLINED", null, locale);
@@ -208,6 +213,10 @@ public class TivaEmployeeServiceHandle {
 			return messageSource.getMessage("ConsentReplyStatus.GIVEN", null, locale);
 		default:
 			return messageSource.getMessage("unknown", null, locale);
+		}
+		} catch (NoSuchMessageException nsme) {
+			LOG.warn("Coulnd't find localized message. Localization doesn't work properly");
+			return actionRequestStatus.toString().toLowerCase();
 		}
 	}
 	

@@ -191,12 +191,14 @@ public class AjaxController {
 				if(taskType.equals("app_inbox_citizen") || taskType.equals("app_response_citizen")) {
 					List<KokuAppointment> apps;
 					AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
+					handle.setMessageSource(messageSource);
 					apps = handle.getAppointments(username, first, max, taskType);
 					totalTasksNum = handle.getTotalAppointmentsNum(username, taskType);
 					jsonModel.put("tasks", apps);
 				}else if(taskType.equals("app_inbox_employee") || taskType.equals("app_response_employee")) {
 					List<KokuAppointment> apps;
 					AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
+					handle.setMessageSource(messageSource);
 					apps = handle.getAppointments(username, first, max, taskType);
 					totalTasksNum = handle.getTotalAppointmentsNum(username, taskType);
 					jsonModel.put("tasks", apps);

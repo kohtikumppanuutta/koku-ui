@@ -3,7 +3,10 @@ package fi.arcusys.koku.av;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
+import org.apache.log4j.Logger;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
 import fi.arcusys.koku.av.EmployeeAppointment.RejectedUser;
@@ -13,6 +16,8 @@ import fi.arcusys.koku.av.employeeservice.Appointment.AcceptedSlots.Entry;
 import fi.arcusys.koku.av.employeeservice.AppointmentReceipientTO;
 import fi.arcusys.koku.av.employeeservice.AppointmentSlot;
 import fi.arcusys.koku.av.employeeservice.AppointmentSummary;
+import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
+import fi.arcusys.koku.tiva.employeeservice.ActionRequestStatus;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
@@ -21,6 +26,10 @@ import fi.arcusys.koku.util.MessageUtil;
  * Aug 22, 2011
  */
 public class AvEmployeeServiceHandle {
+	
+	private Logger LOG = Logger.getLogger(AvEmployeeServiceHandle.class);
+	
+	private ResourceBundleMessageSource messageSource;
 	private AvEmployeeService aes;
 	
 	/**
@@ -81,14 +90,13 @@ public class AvEmployeeServiceHandle {
 		empAppointment.setSender(appointment.getSender());
 		empAppointment.setSubject(appointment.getSubject());
 		empAppointment.setDescription(appointment.getDescription());
-		empAppointment.setStatus(appointment.getStatus());		
+		empAppointment.setStatus(localizeActionRequestStatus(appointment.getStatus()));		
 		empAppointment.setAcceptedSlots(appointment.getAcceptedSlots());
 		empAppointment.setRecipients(appointment.getRecipients());
 		empAppointment.setUsersRejected(appointment.getUsersRejected());
 		empAppointment.setRejectedUsers(formatRejectedUsers(appointment.getUsersRejected(), appointment.getRecipients()));
 		List<Slot> allSlots = formatSlots(appointment.getSlots(), appointment.getAcceptedSlots(), appointment.getRecipients());		
 		setSlots(empAppointment, allSlots);
-		
 		return empAppointment;		
 	}
 	
@@ -252,5 +260,34 @@ public class AvEmployeeServiceHandle {
 		
 		return rejectedUsers;
 	}
+	
+
+	private String localizeActionRequestStatus(String appointmentStatus) {
+		if (messageSource == null) {
+			LOG.warn("MessageSource is null. Localization doesn't work properly");
+			return appointmentStatus;
+		}
+		Locale locale = MessageUtil.getLocale();
+		try {
+			if (appointmentStatus.equals("Created")) {
+				return messageSource.getMessage("AppointmentStatus.Created", null, locale);
+			} else {
+				return appointmentStatus;
+			}
+		} catch (NoSuchMessageException nsme) {
+			LOG.warn("Coulnd't find localized message for '" +appointmentStatus +"'. Localization doesn't work properly");
+			return appointmentStatus;
+		}
+	}
+
+	public final ResourceBundleMessageSource getMessageSource() {
+		return messageSource;
+	}
+
+	public final void setMessageSource(ResourceBundleMessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
+	
+	
 	
 }

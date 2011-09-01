@@ -82,9 +82,11 @@ public class ShowAppointmentController {
 		
 		if(taskType.equals("app_response_citizen")) {
 			AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
+			handle.setMessageSource(messageSource);
 			app = handle.getAppointmentById(appointmentId, targetPerson);
 		} else if(taskType.equals("app_response_employee")) {
 			AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
+			handle.setMessageSource(messageSource);
 			app = handle.getAppointmentById(appointmentId);
 		}
 		return app;

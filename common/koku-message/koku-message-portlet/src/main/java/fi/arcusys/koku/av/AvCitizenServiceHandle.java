@@ -3,10 +3,17 @@ package fi.arcusys.koku.av;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+
+import org.apache.log4j.Logger;
+import org.springframework.context.NoSuchMessageException;
+import org.springframework.context.support.ResourceBundleMessageSource;
 
 import fi.arcusys.koku.av.citizenservice.AppointmentRespondedTO;
 import fi.arcusys.koku.av.citizenservice.AppointmentSlot;
 import fi.arcusys.koku.av.citizenservice.AppointmentWithTarget;
+import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
+import fi.arcusys.koku.tiva.employeeservice.ActionRequestStatus;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
@@ -15,6 +22,10 @@ import fi.arcusys.koku.util.MessageUtil;
  * Aug 22, 2011
  */
 public class AvCitizenServiceHandle {
+	
+	private Logger LOG = Logger.getLogger(AvCitizenServiceHandle.class);
+	
+	private ResourceBundleMessageSource messageSource;
 	
 	private AvCitizenService acs;
 	
@@ -75,7 +86,7 @@ public class AvCitizenServiceHandle {
 		ctzAppointment.setSubject(appointment.getSubject());
 		ctzAppointment.setDescription(appointment.getDescription());
 		if(appointment.getStatus() != null) {
-			ctzAppointment.setStatus(appointment.getStatus());
+			ctzAppointment.setStatus(localizeActionRequestStatus(appointment.getStatus()));
 		}		
 		ctzAppointment.setSlot(formatSlot(appointment.getApprovedSlot()));
 		ctzAppointment.setReplier(appointment.getReplier());
@@ -118,5 +129,32 @@ public class AvCitizenServiceHandle {
 		
 		return slot;
 	}
+	
 
+	private String localizeActionRequestStatus(String appointmentStatus) {
+		if (messageSource == null) {
+			LOG.warn("MessageSource is null. Localization doesn't work properly");
+			return appointmentStatus;
+		}
+		Locale locale = MessageUtil.getLocale();
+		try {
+			if (appointmentStatus.equals("Created")) {
+				return messageSource.getMessage("AppointmentStatus.Created", null, locale);
+			} else {
+				return appointmentStatus;
+			}
+		} catch (NoSuchMessageException nsme) {
+			LOG.warn("Coulnd't find localized message for '" +appointmentStatus +"'. Localization doesn't work properly");
+			return appointmentStatus;
+		}
+	}
+
+	public final ResourceBundleMessageSource getMessageSource() {
+		return messageSource;
+	}
+
+	public final void setMessageSource(ResourceBundleMessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
+	
 }
