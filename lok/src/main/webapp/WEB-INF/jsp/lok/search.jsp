@@ -18,15 +18,6 @@
 	<portlet:param name="action" value="archiveLog" />
 </portlet:renderURL>
 
-<%!Calendar starttime = Calendar.getInstance();%>
-<!--  default endtime is now -->
-<%!Calendar endtime = Calendar.getInstance();%>
-<!--  default starttime is 1 year ago -->
-<%
-  starttime.set(Calendar.YEAR, endtime.get(Calendar.YEAR) - 1);
-%>
-
-<%!SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);%>
 
 <div class="koku-lok">
 	<div class="portlet-section-body">
@@ -77,13 +68,15 @@
 			<!--  TODO: Javascript date picker will be added here! -->
 			<span class="form-field-label"><spring:message
 					code="koku.common.startTime" /> </span>
-			<form:input path="from" value="<%=df.format(starttime.getTime()) %>"
+		
+				<form:input path="from" value="${startDate}"
 				maxlength="10" size="10" />
 			<span class="errors"><form:errors path="from" /> </span>
 
 			<span class="form-field-label"><spring:message
 					code="koku.common.endTime" /> </span>
-			<form:input path="to" value="<%=df.format(endtime.getTime()) %>"
+	
+				<form:input path="to" value="${endDate}"
 				maxlength="10" size="10" />
 			<span class="errors"><form:errors path="to" /> </span>
 
@@ -93,12 +86,12 @@
 			<div class="clear"></div>
 		</form:form>
 
-
-		<%-- th { text-align: center; font-weight: bold } --%>
+	
 		<c:if test="${not empty entries}">
+			<c:if test="${not empty visited}">
 			<h2 class="portlet-section-subheader">
 				<spring:message code="koku.common.searchResults" />
-				<c:out value="${searchParams.pic}"/>, <c:out value="${searchParam.concept}"/>
+				<c:out value="${searchParams.pic}"/>, <c:out value="${searchParams.concept}"/>
 				<fmt:formatDate pattern="dd.MM.yyyy" value="${searchParams.from}" />
 				-
 				<fmt:formatDate pattern="dd.MM.yyyy" value="${searchParams.to}" />
@@ -106,7 +99,7 @@
 			<table class="portlet-table-body" width="100%" border="0">
 		
 				<tr>
-					<%-- TODO! when using <th> the text won't align to left, that's why we use <td> and <b> here now.
+<%-- TODO! when using <th> the text won't align to left, that's why we use <td> and <b> here now.
 This should be changed! --%>
 
 					<th width=20% scope="col"><b><spring:message code="ui.lok.time" /></b></th>
@@ -127,7 +120,7 @@ This should be changed! --%>
 				</c:forEach>
 			</table>
 		</c:if>
-
+	</c:if>
 
 
 		<c:if test="${empty entries}">

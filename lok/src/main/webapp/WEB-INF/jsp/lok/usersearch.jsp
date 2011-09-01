@@ -68,9 +68,6 @@
 					</portlet:renderURL>
 
 					<tr>
-					<%-- OLI: <td>${user.fname} ${user.sname}</td>
-						<td>${user.pic} </td> --%>
-						
 						<td><c:out value="${user.fname}"/> <c:out value="${user.sname}"/> </td>
 						<td><c:out value="${user.pic}"/> </td>
 						<td><a href="${showLogSearchFormURL}"><spring:message code="ui.lok.choose.user"/></a></td>
