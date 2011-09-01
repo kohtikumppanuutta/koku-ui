@@ -161,7 +161,7 @@
 		var type;
 		
 		if(typeof koku_navi_type == 'undefined' || koku_navi_type == ''){
-			type = "inbox"; // default is inbox
+			type = "msg_inbox"; // default is inbox
 		}else {
 			type = koku_navi_type;
 		}
@@ -796,7 +796,9 @@
 	 */
 	function createTasksPage() {
 		var pageHtml = '<ul>';
-		pageHtml += '<li><input type="button" value="<spring:message code="message.search"/>"  onclick="showSearchUI()" /></li>';
+		
+		if(pageObj.taskType.indexOf('msg') > -1 || pageObj.taskType.indexOf('cst') > -1)
+			pageHtml += '<li><input type="button" value="<spring:message code="message.search"/>"  onclick="showSearchUI()" /></li>';
 		
 		if(pageObj.taskType == 'msg_inbox' || pageObj.taskType == 'msg_outbox')
 			pageHtml += '<li><input type="button" value="<spring:message code="page.archive"/>"  onclick="archiveMessages()" /></li>';
@@ -967,6 +969,22 @@
 	 * Show/hide search user interface
 	 */
 	function showSearchUI() {
+		
+		if(pageObj.taskType.indexOf('msg') > -1) { // for message
+			var searchFields = ''
+				+ '<input type="checkbox" checked="checked" name="field" value="1" /><spring:message code="message.from" />'
+				+ '<input type="checkbox" checked="checked" name="field" value="2" /><spring:message code="message.to" />'
+				+ '<input type="checkbox" checked="checked" name="field" value="3" /><spring:message code="message.subject" />'
+				+ '<input type="checkbox" checked="checked" name="field" value="4" /><spring:message code="message.content" />';
+		}else if(pageObj.taskType.indexOf('cst') > -1) { // for consent
+			var searchFields = ''
+				+ '<input type="checkbox" checked="checked" name="field" value="1" /><spring:message code="consent.requester" />'
+				+ '<input type="checkbox" checked="checked" name="field" value="2" /><spring:message code="consent.templateName" />';
+		}else {
+			return;
+		}
+				
+		jQuery('#search-fields').html(searchFields);		
 		jQuery('#task-manager-search').toggle('fast');
 	}
 	
@@ -1015,10 +1033,10 @@
 				<input type="submit" value="<spring:message code="message.search"/>" />
 				<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
 				<span id="search-fields" >
-					<input type="checkbox" checked="checked" name="field" value="1" />From
-					<input type="checkbox" checked="checked" name="field" value="2" />To
-					<input type="checkbox" checked="checked" name="field" value="3" />Subject
-					<input type="checkbox" checked="checked" name="field" value="4" />Content
+					<input type="checkbox" checked="checked" name="field" value="1" /><spring:message code="message.from" />
+					<input type="checkbox" checked="checked" name="field" value="2" /><spring:message code="message.to" />
+					<input type="checkbox" checked="checked" name="field" value="3" /><spring:message code="message.subject" />
+					<input type="checkbox" checked="checked" name="field" value="4" /><spring:message code="message.content" />
 				</span>	
 			</form>
 		</div>
