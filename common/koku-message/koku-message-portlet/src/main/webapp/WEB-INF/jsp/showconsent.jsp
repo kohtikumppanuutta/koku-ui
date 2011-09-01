@@ -39,7 +39,7 @@ function formatUrl(url) {
 	<c:if test="${consent.anotherPermitterUid != '' && consent.anotherPermitterUid != null}">
 	<span class="text-bold"><spring:message code="consent.secondApprover"/>:</span> <c:out value="${consent.anotherPermitterUid}" /><br />
 	</c:if>
-    <h3><spring:message code="consent.actionRequest}"/></h3>
+    <h3><spring:message code="consent.actionRequest"/></h3>
     <table class="request-table">
     	<tr><td class="head"><spring:message code="consent.description"/></td><td class="head"><spring:message code="consent.status"/></td></tr>
     	<c:forEach var="request" items="${consent.actionRequests}" varStatus="loopStatus">
