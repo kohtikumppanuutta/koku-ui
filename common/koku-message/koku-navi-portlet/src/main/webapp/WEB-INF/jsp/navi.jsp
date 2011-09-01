@@ -229,7 +229,7 @@
 		<c:if test="${fn:contains(naviURL, '/default/')}">
 		<li><a href="#">Pyynnöt</a>
 			<ul class="child">
-				<li id="req_new"><a href="<%= defaultPath %>/Message/NewRequest">Uudet</a></li>
+				<li id="req_new"><a href="<%= defaultPath %>/Message/NewRequest">Uudet pyynnöt</a></li>
 				<li id="req_valid"><a href="javascript:void(0)" onclick="navigateToPage('req_valid')">Voimassaolevat</a></li>
 				<li><a href="#">Vanhentuneet</a></li>
 			</ul></li>
@@ -237,47 +237,47 @@
 		
 		<!-- For citizen in Gatein portal-->
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
-		<li><a href="#">Tapaaminen</a>
+		<li><a href="#">Tapaamiset</a>
 			<ul class="child">
 				<li id="app_inbox_citizen"><a href="javascript:void(0)" onclick="navigateToPage('app_inbox_citizen')">Saapuneet</a></li>
-				<li id="app_response_citizen"><a href="javascript:void(0)" onclick="navigateToPage('app_response_citizen')">Vastattu</a></li>
+				<li id="app_response_citizen"><a href="javascript:void(0)" onclick="navigateToPage('app_response_citizen')">Vastatut</a></li>
 			</ul></li>
-		<li><a href="#">Päivähoitohakemus</a>
+		<li><a href="#">Päivähoitohakemukset</a>
 			<ul class="child">
 				<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Uudet</a></li>
 			</ul></li>
 		</c:if>
 		<!-- For employee in Jboss portal-->
 		<c:if test="${fn:contains(naviURL, '/default/')}">
-		<li><a href="#">Tapaaminen</a>
+		<li><a href="#">Tapaamiset</a>
 			<ul class="child">
 				<li id="app_new"><a href="<%= defaultPath %>/Message/NewAppointment">Uudet</a></li>
 				<li id="app_inbox_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_inbox_employee')">Saapuneet</a></li>
-				<li id="app_response_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_response_employee')">Vastattu</a></li>
+				<li id="app_response_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_response_employee')">Vastatut</a></li>
 			</ul></li>
 		</c:if>			
 		
 		<!-- For citizen in Gatein portal-->
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
-		<li><a href="#">Suostumus</a>
+		<li><a href="#">Suostumukset</a>
 			<ul class="child">
-				<li id="cst_assigned_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_assigned_citizen')">Suostumus</a></li>
-				<li id="cst_own_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_citizen')">Oma suostumukset</a></li>
+				<li id="cst_assigned_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_assigned_citizen')">Suostumukset</a></li>
+				<li id="cst_own_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_citizen')">Omat suostumukset</a></li>
 				<li id="valtakirjaconsent"><a href="<%= defaultPath %>/Message/ValtakirjaConsent">Valtakirja</a></li>
 				<li id="selaavaltakirjoja"><a href="<%= defaultPath %>/Message/SelaaValtakirjoja">Selaa valtakirjoja</a></li>
 			</ul></li>
 		</c:if>
 		<!-- For employee in Jboss portal-->
 		<c:if test="${fn:contains(naviURL, '/default/')}">
-		<li><a href="#">Suostumus</a>
+		<li><a href="#">Suostumukset</a>
 			<ul class="child">
 				<li id="cst_new"><a href="<%= defaultPath %>/Message/NewConsent">Uusi suostumuspohja</a></li>
 				<li id="sendconsent"><a href="<%= defaultPath %>/Message/SendConsent">Lähetä suostumus</a></li>
 				<li id="cst_own_employee"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_employee')">Oma suostumus</a></li>
 			</ul></li>				
-		<li><a href="javascript:void(0)">Tietopyyntö</a>
+		<li><a href="javascript:void(0)">Tietopyynnöt</a>
 			<ul class="child">
-				<li id="newinformation"><a href="<%= defaultPath %>/Message/NewInformation">Uusi</a></li>
+				<li id="newinformation"><a href="<%= defaultPath %>/Message/NewInformation">Uusi tietopyyntö</a></li>
 				<li id="informationbox"><a href="<%= defaultPath %>/Message/InformationBox">Saapuneet</a></li>
 			</ul>
 		</li>	
