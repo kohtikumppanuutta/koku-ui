@@ -102,6 +102,7 @@
 	width: 120px;
 }
 .from {
+	display:inline-block;
 	max-width: 150px;
 	overflow:hidden;
 	white-space:nowrap;
