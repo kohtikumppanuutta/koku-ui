@@ -103,14 +103,12 @@
 }
 .from {
 	display:inline-block;
-	max-width: 120px;
-	max-width: 150px;
+	width: 150px;
 	overflow:hidden;
 	white-space:nowrap;
 }
 .task-manager-table td.date {
 	text-align:right;
-	width: 100px;
 }
 
 
