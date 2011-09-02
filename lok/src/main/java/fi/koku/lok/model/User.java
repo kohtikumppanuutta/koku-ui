@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.ixonos.koku.lok.model;
+package fi.koku.lok.model;
 
 /**
  * @author mikkope

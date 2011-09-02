@@ -1,4 +1,4 @@
-package com.ixonos.koku.lok;
+package fi.koku.lok;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.ixonos.koku.lok.model.User;
+import fi.koku.lok.model.User;
 
 @Service(value = "lokDemoService")
 public class LokDemoService {

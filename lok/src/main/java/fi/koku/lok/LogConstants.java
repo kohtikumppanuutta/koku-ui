@@ -1,4 +1,4 @@
-package com.ixonos.koku.lok;
+package fi.koku.lok;
 
 import java.util.Locale;
 

@@ -1,4 +1,4 @@
-package com.ixonos.koku.demo;
+package fi.koku.demo;
 
 import javax.portlet.MimeResponse;
 import javax.portlet.RenderRequest;

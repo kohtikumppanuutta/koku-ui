@@ -1,6 +1,6 @@
-package com.ixonos.koku.demo;
+package fi.koku.demo;
 
-import com.ixonos.koku.lok.KoKuWSFactory;
+import fi.koku.lok.KoKuWSFactory;
 
 import fi.koku.services.utility.log.v1.LogEntriesType;
 import fi.koku.services.utility.log.v1.LogEntryType;

@@ -1,4 +1,4 @@
-package com.ixonos.koku.lok;
+package fi.koku.lok;
 
 import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
@@ -42,7 +42,7 @@ public class UserSearchController {
   @RenderMapping(params = "action=home")
   public String render(Model model){
     log.debug("log search render phase");
-    model.addAttribute("search", false);//This means that search was NOT done
+    model.addAttribute("search", false); //This means that search was NOT done
     return "menu";
   }
   

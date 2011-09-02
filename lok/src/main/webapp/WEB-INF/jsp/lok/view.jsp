@@ -1,27 +1,15 @@
 <%@ include file="imports.jsp" %>
-<%@ page import="java.util.Calendar"%>
-<%@ page import="java.text.*"%>
-<%@ page import="com.ixonos.koku.lok.*"%>
 
 <portlet:defineObjects />
 
 <portlet:actionURL var="viewActionURL">
 	<portlet:param name="action" value="viewLog" />
+	<portlet:param name="visited" value="---" />
 </portlet:actionURL>
 
-<portlet:renderURL var="homeUrl">
-	<portlet:param name="action" value="choose" />
+<portlet:renderURL var="homeURL">
+    <portlet:param name="action" value="home" />
 </portlet:renderURL>
-
-<%!Calendar starttime = Calendar.getInstance();%>
-<!--  default endtime is now -->
-<%!Calendar endtime = Calendar.getInstance();%>
-<!--  default starttime is 1 year ago -->
-<%
-  starttime.set(Calendar.YEAR, endtime.get(Calendar.YEAR) - 1);
-%>
-
-<%!SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);%>
 
 <div class="koku-lok">
 	<div class="portlet-section-body">
@@ -51,13 +39,13 @@
 					<span class="form-field-label"><spring:message
 							code="koku.common.startTime" /> </span>
 					<form:input path="from"
-						value="<%=df.format(starttime.getTime()) %>" />
+						value="${startDate}" />
 					<span class="errors"><form:errors path="from" />
 					</span>
 
 					<span class="form-field-label"><spring:message
 							code="koku.common.endTime" /> </span>
-					<form:input path="to" value="<%=df.format(endtime.getTime()) %>" />
+					<form:input path="to" value="${endDate}" />
 					<span class="errors"><form:errors path="to" />
 					</span>
 
@@ -70,6 +58,7 @@
 
 				<%-- th { text-align: center; font-weight: bold } --%>
 				<c:if test="${not empty entries}">
+					<c:if test="${not empty visited}">
 					<h2 class="portlet-section-subheader">
 						<spring:message code="koku.lok.view.results.header" />
 						<fmt:formatDate pattern="dd.MM.yyyy" value="${searchParams.from}" />
@@ -109,6 +98,7 @@
 							</tr>
 						</c:forEach>
 					</table>
+				</c:if>
 				</c:if>
 		</div>
 

@@ -1,4 +1,4 @@
-package com.ixonos.koku.lok;
+package fi.koku.lok;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,8 +34,6 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 @Controller
 @RequestMapping(value = "VIEW")
 public class LogArchiveController {
-
-  // private static final String ARCHIVE_DATE_RENDER_PARAM = "log-archive";
 
   private static final Logger log = LoggerFactory.getLogger(LogArchiveController.class);
 

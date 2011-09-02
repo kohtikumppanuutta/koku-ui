@@ -1,8 +1,4 @@
 <%@ include file="imports.jsp" %>
-<%@ page import="java.util.Calendar"%>
-<%@ page import="java.text.*"%>
-<%@ page import="com.ixonos.koku.lok.*"%>
-
 
 <portlet:defineObjects />
 

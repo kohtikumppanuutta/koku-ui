@@ -1,8 +1,9 @@
-package com.ixonos.koku.lok;
+package fi.koku.lok;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
@@ -40,14 +42,14 @@ public class LogViewController {
   private static final Logger log = LoggerFactory.getLogger(LogViewController.class);
 
   private CriteriaSerializer criteriaSerializer = new CriteriaSerializer();
-
+  private SimpleDateFormat dateFormat = new SimpleDateFormat(LogConstants.DATE_FORMAT);
+  
   @Autowired
   private ResourceBundleMessageSource resourceBundle;
 
   // customize form data binding
   @InitBinder
-  public void initBinder(WebDataBinder binder) {
-    SimpleDateFormat dateFormat = new SimpleDateFormat(LogConstants.DATE_FORMAT);
+  public void initBinder(WebDataBinder binder) { 
     dateFormat.setLenient(false);
     CustomDateEditor dateEditor = new CustomDateEditor(dateFormat, true);
     binder.registerCustomEditor(Date.class, dateEditor);
@@ -61,19 +63,35 @@ public class LogViewController {
 
   // portlet render phase
   @RenderMapping(params = "action=viewLog")
-  public String render(RenderRequest req, RenderResponse res, Model model) {
+  public String render(RenderRequest req,  @RequestParam(value = "visited", required = false) String visited,
+      @ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, 
+      RenderResponse res, Model model) {
 
     res.setTitle(resourceBundle.getMessage("koku.lok.header.view", null, req.getLocale()));
 
-    LogSearchCriteria searchCriteria = null;
-    if (req.getParameterValues(CRITERIA_RENDER_PARAM) != null) {
-      searchCriteria = criteriaSerializer.getFromRenderParameter(req.getParameterValues(CRITERIA_RENDER_PARAM));
-      model.addAttribute("entries", doSearchEntries(searchCriteria));
-      model.addAttribute("searchParams", searchCriteria);
-    }
+    // default endtime is now
+    Calendar endtime = Calendar.getInstance();
+    // default starttime is 1 year ago
+    Calendar starttime = Calendar.getInstance();
+    starttime.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR) - 1);
 
-    if (searchCriteria != null) {
-      log.debug("criteria: " + searchCriteria.getFrom() + ", " + searchCriteria.getTo());
+    String startDateStr = dateFormat.format(starttime.getTime());
+    model.addAttribute("startDate", startDateStr);
+    String endDateStr = dateFormat.format(endtime.getTime());
+    model.addAttribute("endDate", endDateStr);
+
+    log.debug("modeliin lisätty startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
+    
+   
+    if (criteria != null) {
+      model.addAttribute("entries", doSearchEntries(criteria));
+      model.addAttribute("searchParams", criteria);
+      
+      if (visited != null) {
+        model.addAttribute("visited", "---");
+      }
+      
+      log.debug("criteria: " + criteria.getFrom() + ", " + criteria.getTo());
     } else {
       log.debug("criteria: null");
     }
@@ -83,11 +101,15 @@ public class LogViewController {
 
   // portlet action phase
   @ActionMapping(params = "action=viewLog")
-  public void doArchive(@ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, BindingResult result,
+  public void doSearchArchive(@ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, 
+      @ModelAttribute(value="visited") String visited, BindingResult result,
       ActionResponse response) {
 
-    response.setRenderParameter(CRITERIA_RENDER_PARAM, criteriaSerializer.getAsText(criteria));
-
+    if(visited != null){
+      response.setRenderParameter("visited", visited);
+    }
+    
+    response.setRenderParameter("logSearchCriteria", criteriaSerializer.getAsText(criteria));
     response.setRenderParameter("action", "viewLog");
   }
 

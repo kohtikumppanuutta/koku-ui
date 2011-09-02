@@ -1,4 +1,4 @@
-package com.ixonos.koku.lok;
+package fi.koku.lok;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -36,8 +36,6 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import fi.koku.services.utility.log.v1.LogService;
 import fi.koku.services.utility.log.v1.LogServicePortType;
 
-//import com.ixonos.koku.kks.utils.Vakiot;
-
 /**
  * Controller for log search (LOK). This implements LOK-3.
  * 
@@ -49,7 +47,6 @@ public class LogSearchController {
 
   private static final Logger log = LoggerFactory.getLogger(LogSearchController.class);
 
-  private static final String CRITERIA_RENDER_PARAM = "log-search-criteria";
   private CriteriaSerializer criteriaSerializer = new CriteriaSerializer();
   SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
 
@@ -100,7 +97,7 @@ public class LogSearchController {
       @ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, RenderResponse res, Model model) {
 
     log.info("action = searchLog");
- 
+
     res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
 
     // default endtime is now
@@ -133,24 +130,25 @@ public class LogSearchController {
       }
     }
 
-    //TODO: SOMEWHERE HERE SHOULD BE ADDED A PIECE CODE THAT WRITES LOG ABOUT LOG SEARCHES
-    
+    // TODO: SOMEWHERE HERE SHOULD BE ADDED A PIECE CODE THAT WRITES LOG ABOUT
+    // LOG SEARCHES
+
     return "search";
   }
 
   // portlet action phase
   @ActionMapping(params = "action=searchLog")
-  public void doSearch(@ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, @ModelAttribute(value="visited") String visited,
-      BindingResult result, ActionResponse response) {
+  public void doSearch(@ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria,
+      @ModelAttribute(value = "visited") String visited, BindingResult result, ActionResponse response) {
 
     log.debug("action = searchLog");
-    
+
     // TODO:
     // Hausta tallentuu tieto tapahtumalokin käsittelylokiin (tapahtumatietona
     // hakuehdot)
 
     // pass criteria to render phase
-    if(visited != null){
+    if (visited != null) {
       response.setRenderParameter("visited", visited);
     }
     response.setRenderParameter("logSearchCriteria", criteriaSerializer.getAsText(criteria));
