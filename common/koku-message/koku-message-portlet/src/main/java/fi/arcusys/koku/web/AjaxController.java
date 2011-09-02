@@ -155,6 +155,41 @@ public class AjaxController {
 	}
 	
 	/**
+	 * Cancels appointments
+	 * @param messageList
+	 * @param targetPersons
+	 * @param comment
+	 * @param modelmap
+	 * @param request
+	 * @param response
+	 * @return action response 'OK' or 'FAIL'
+	 */
+	@ResourceMapping(value = "cancelAppointment")
+	public String cancelAppointment(@RequestParam(value = "messageList[]") String[] messageList,
+			@RequestParam(value = "targetPersons[]") String[] targetPersons,
+			@RequestParam(value = "comment") String comment,
+			ModelMap modelmap, PortletRequest request, PortletResponse response) {
+		PortletSession portletSession = request.getPortletSession();				
+		String username = (String) portletSession.getAttribute("USER_username");
+		AvCitizenServiceHandle handle = new AvCitizenServiceHandle(username);		
+		
+		String appointmentId;
+		String targetPerson;
+		
+		for(int i=0, l= messageList.length; i < l; i++) {
+			appointmentId = messageList[i];
+			targetPerson = targetPersons[i];
+			handle.cancelAppointments(appointmentId, targetPerson, comment);
+		}
+		
+		JSONObject jsonModel = new JSONObject();
+		jsonModel.put("result", MessageUtil.RESPONSE_OK);
+		modelmap.addAttribute("response", jsonModel);
+		
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
+	
+	/**
 	 * Processes tasks query and get task list from web services
 	 * @param taskType type of requested task
 	 * @param page the page number

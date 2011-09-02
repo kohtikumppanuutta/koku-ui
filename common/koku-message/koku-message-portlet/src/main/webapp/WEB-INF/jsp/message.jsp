@@ -12,6 +12,9 @@
 <portlet:resourceURL var="revokeURL" id="revokeConsent">
 </portlet:resourceURL>
 
+<portlet:resourceURL var="cancelURL" id="cancelAppointment">
+</portlet:resourceURL>
+
 <portlet:renderURL var="messageURL" windowState="<%= WindowState.MAXIMIZED.toString() %>" >
 	<portlet:param name="myaction" value="showMessage" />
 </portlet:renderURL>
@@ -278,7 +281,7 @@
 				taskHtml += '<tr>';
 			}
 			
-			taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["appointmentId"] + '" />' + '</td>'
+			taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["appointmentId"] + '_' + tasks[i]["targetPerson"] '" />' + '</td>'
 					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\',\'' + tasks[i]["targetPerson"] + '\')" >' + tasks[i]["sender"] + '</td>'
 					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\',\'' + tasks[i]["targetPerson"] + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
 					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\',\'' + tasks[i]["targetPerson"] + '\')" >' + tasks[i]["description"] + '</td>'
@@ -552,6 +555,7 @@
 		}
 						
 	}
+
 	/************************For Gatein Portal end****************************/
    <%}%>
 		
@@ -797,16 +801,22 @@
 	function createTasksPage() {
 		var pageHtml = '<ul>';
 		
-		if(pageObj.taskType.indexOf('msg') > -1 || pageObj.taskType.indexOf('cst') > -1)
+		if(pageObj.taskType.indexOf('msg') > -1 || pageObj.taskType.indexOf('cst') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="message.search"/>"  onclick="showSearchUI()" /></li>';
-		
-		if(pageObj.taskType == 'msg_inbox' || pageObj.taskType == 'msg_outbox')
+		}
+			
+		if(pageObj.taskType == 'msg_inbox' || pageObj.taskType == 'msg_outbox') {
 			pageHtml += '<li><input type="button" value="<spring:message code="page.archive"/>"  onclick="archiveMessages()" /></li>';
-		
-		if(pageObj.taskType == 'cst_own_citizen' || pageObj.taskType == 'cst_own_employee')
+		}
+					
+		if(pageObj.taskType == 'cst_own_citizen' || pageObj.taskType == 'cst_own_employee') {
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="revokeConsents()" /></li>';
-		else
+		}else if(pageObj.taskType.indexOf('msg') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="page.removeSelected"/>"  onclick="deleteMessages()" /></li>';
+		}else if(pageObj.taskType == 'app_inbox_citizen') {
+			pageHtml += '<li><input type="button" value="<spring:message code="consent.cancel"/>"  onclick="cancelAppointments()" /></li>';
+		}
+			
 			
 		pageHtml     += '<li><a><img src="<%= request.getContextPath() %>/images/first.gif" onclick="movePage(\'first\')"/></a></li>'
 					 + '<li><a><img src="<%= request.getContextPath() %>/images/prev.gif" onclick="movePage(\'previous\')"/></a></li>'
@@ -921,6 +931,41 @@
 		url = formatUrl(url);
 		
 		jQuery.post(url, {'messageList':messageList}, function(data) {
+			var obj = eval('(' + data + ')');
+			var json = obj.response;
+			var result = json["result"];
+			
+			if(result == 'OK') {
+				ajaxGetTasks();
+			}else {
+				var message = "<spring:message code="error.unLogin" />";
+				showErrorMessage(message);
+			}
+		});
+	}
+	
+	/**
+	 * Cancels a list of appointments selected by user
+	 */
+	function cancelAppointments() {		
+		var messageList = [];
+		var targetPersons = [];
+		jQuery('input:checkbox[name="message"]:checked').each(function(){
+			var value = jQuery(this).val();
+			var temp = value.split('_');		
+		    messageList.push(temp[0]);
+		    targetPersons.push(temp[1]);
+		});
+		
+		if(messageList.length == 0) return; // no message selected
+		
+		var comment = prompt("Please add any comment","");
+		if(comment == null)	return;
+		
+		var url="<%= cancelURL %>";
+		url = formatUrl(url);
+		
+		jQuery.post(url, {'messageList':messageList, 'targetPersons', targetPersons, 'comment':comment}, function(data) {
 			var obj = eval('(' + data + ')');
 			var json = obj.response;
 			var result = json["result"];
