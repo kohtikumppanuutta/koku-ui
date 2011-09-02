@@ -66,8 +66,8 @@
 		var iFrameContentHeight = getIFrameBodyHeight();
 		if (iFramePreviousHeight != iFrameContentHeight) {
 			var newHeight = iFrameContentHeight + 20;
-			iFramePreviousHeight = newHeight;
-			resizeIFrame(newHeight);			
+			resizeIFrame(newHeight);
+			iFramePreviousHeight = getIFrameBodyHeight();
 		}		
 		setTimeout("resizeTimer()", 500 );
 	}

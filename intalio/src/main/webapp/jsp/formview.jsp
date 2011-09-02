@@ -25,8 +25,8 @@
 		var iFrameContentHeight = getIFrameBodyHeight();
 		if (iFramePreviousHeight != iFrameContentHeight) {
 			var newHeight = iFrameContentHeight + 20;
-			iFramePreviousHeight = newHeight;
-			resizeIFrame(newHeight);			
+			resizeIFrame(newHeight);
+			iFramePreviousHeight = getIFrameBodyHeight();
 		}		
 		setTimeout("resizeTimer()", 500 );
 	}
@@ -53,9 +53,6 @@
 			 //iFrameBody = iFrame.contentWindow.document.getElementsById('IntalioInternal_jsxmain');
 			  iFrameBody = iFrame.contentWindow.document.getElementsByTagName('body')[0];
 		}
-		<%-- var client = iFrameBody.clientHeight;
-		var scroll = iFrameBody.scrollHeight;
-		var offset = iFrameBody.offsetHeight; --%>
 		return iFrameBody.scrollHeight;
 	}
 
