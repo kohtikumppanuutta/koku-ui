@@ -18,7 +18,8 @@ public class EmployeeAppointment extends KokuAppointment{
 	private List<AppointmentReceipientTO> recipients;
 	private AcceptedSlots acceptedSlots;
 	private List<String> usersRejected;
-	private List<RejectedUser> rejectedUsers;
+	private List<UserWithTarget> rejectedUsers;
+	private List<UserWithTarget> unrespondedUsers;
 	
 	/* getters */	
 	public List<AppointmentReceipientTO> getRecipients() {
@@ -45,10 +46,13 @@ public class EmployeeAppointment extends KokuAppointment{
 		return usersRejected;
 	}
 	
-	public List<RejectedUser> getRejectedUsers() {
+	public List<UserWithTarget> getRejectedUsers() {
 		return rejectedUsers;
 	}
 	
+	public List<UserWithTarget> getunrespondedUsers() {
+		return unrespondedUsers;
+	}
 	/* setters */	
 	public void setRecipients(List<AppointmentReceipientTO> recipients) {
 		this.recipients = recipients;
@@ -74,11 +78,15 @@ public class EmployeeAppointment extends KokuAppointment{
 		this.usersRejected = usersRejected;
 	}
 	
-	public void setRejectedUsers(List<RejectedUser> rejectedUsers) {
+	public void setRejectedUsers(List<UserWithTarget> rejectedUsers) {
 		this.rejectedUsers = rejectedUsers;
 	}
 	
-	public static class RejectedUser {
+	public void setUnrespondedUsers(List<UserWithTarget> unrespondedUsers) {
+		this.unrespondedUsers = unrespondedUsers;
+	}
+	
+	public static class UserWithTarget {
 		private String targetPerson;
 		private String recipients;
 		

@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
-import fi.arcusys.koku.av.EmployeeAppointment.RejectedUser;
+import fi.arcusys.koku.av.EmployeeAppointment.UserWithTarget;
 import fi.arcusys.koku.av.employeeservice.Appointment;
 import fi.arcusys.koku.av.employeeservice.Appointment.AcceptedSlots;
 import fi.arcusys.koku.av.employeeservice.Appointment.AcceptedSlots.Entry;
@@ -93,6 +93,7 @@ public class AvEmployeeServiceHandle {
 		empAppointment.setRecipients(appointment.getRecipients());
 		empAppointment.setUsersRejected(appointment.getUsersRejected());
 		empAppointment.setRejectedUsers(formatRejectedUsers(appointment.getUsersRejected(), appointment.getRecipients()));
+		empAppointment.setUnrespondedUsers(calcUnrespondedUsers(appointment));
 		List<Slot> allSlots = formatSlots(appointment.getSlots(), appointment.getAcceptedSlots(), appointment.getRecipients());		
 		setSlots(empAppointment, allSlots);
 		return empAppointment;		
@@ -240,9 +241,9 @@ public class AvEmployeeServiceHandle {
 	 * @param recipients recipients list
 	 * @return a list of rejected users
 	 */
-	private List<RejectedUser> formatRejectedUsers(List<String> userRejected, List<AppointmentReceipientTO> recipients) {
-		List<RejectedUser> rejectedUsers = new ArrayList<RejectedUser>();
-		RejectedUser user;
+	private List<UserWithTarget> formatRejectedUsers(List<String> userRejected, List<AppointmentReceipientTO> recipients) {
+		List<UserWithTarget> rejectedUsers = new ArrayList<UserWithTarget>();
+		UserWithTarget user;
 		Iterator<String> it = userRejected.iterator();
 		String targetPerson;
 		String recipientsStr;
@@ -250,7 +251,7 @@ public class AvEmployeeServiceHandle {
 		while(it.hasNext()) {
 			targetPerson = it.next();
 			recipientsStr = mapRecipients(targetPerson, recipients);
-			user = new RejectedUser();
+			user = new UserWithTarget();
 			user.setTargetPerson(targetPerson);
 			user.setRecipients(recipientsStr);
 			rejectedUsers.add(user);
@@ -259,6 +260,59 @@ public class AvEmployeeServiceHandle {
 		return rejectedUsers;
 	}
 	
+	private List<UserWithTarget> calcUnrespondedUsers(Appointment appointment) {
+		List<UserWithTarget> unrespondedUsers = new ArrayList<UserWithTarget>();
+		List<String> userRejected = appointment.getUsersRejected();
+		List<AppointmentReceipientTO> recipients = appointment.getRecipients();
+		AcceptedSlots acceptedSlots = appointment.getAcceptedSlots();
+		
+		Iterator<AppointmentReceipientTO> itApp = recipients.iterator();
+		
+		while(itApp.hasNext()) {
+			AppointmentReceipientTO app = itApp.next();
+			String targetPerson = app.getTargetPerson();
+			
+			if(!hasTargetPerson(targetPerson, acceptedSlots, userRejected)) {
+				UserWithTarget user = new UserWithTarget();
+				user.setTargetPerson(targetPerson);
+				user.setRecipients(formatRecipients(app.getReceipients()));
+				unrespondedUsers.add(user);
+			}
+		}
+		
+		return unrespondedUsers;
+	}
+	
+	/**
+	 * Checks that the targetPeson exists or not
+	 * @param targetPerson
+	 * @param acceptedSlots
+	 * @param userRejected
+	 * @return true or false
+	 */
+	private boolean hasTargetPerson(String targetPerson, AcceptedSlots acceptedSlots, List<String> userRejected) {
+		Iterator<Entry> itEntry = acceptedSlots.getEntry().iterator();
+		
+		
+		while(itEntry.hasNext()) {
+			Entry entry = itEntry.next();
+			String target = entry.getValue();
+			
+			if(target.equals(targetPerson)) {
+				return true;
+			}
+		}
+		
+		Iterator<String> itRej = userRejected.iterator();
+		while(itRej.hasNext()) {
+			String user = itRej.next();
+			if(user.equals(targetPerson)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
 	private String localizeActionRequestStatus(String appointmentStatus) {
 		if (messageSource == null) {
