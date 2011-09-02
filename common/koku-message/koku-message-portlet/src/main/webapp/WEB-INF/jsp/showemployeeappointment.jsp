@@ -82,6 +82,10 @@ function formatUrl(url) {
 	</c:if>
 	
 	<h3><spring:message code="appointment.unrepliedUsers"/></h3>
+	<c:if test="${fn:length(appointment.unrespondedUsers) == 0}">
+		<spring:message code="appointment.none"/>
+	</c:if>
+	<c:if test="${fn:length(appointment.unrespondedUsers) > 0}">
 	<table class="request-table">
     	<tr>
     		<td class="head"><spring:message code="appointment.targetPerson"/></td>
@@ -95,8 +99,12 @@ function formatUrl(url) {
         </tr>
       	</c:forEach>
     </table>  
-    
+    </c:if>
 	<h3><spring:message code="appointment.rejectedUsers"/></h3>
+	<c:if test="${fn:length(appointment.rejectedUsers) == 0}">
+		<spring:message code="appointment.none"/>
+	</c:if>
+	<c:if test="${fn:length(appointment.rejectedUsers) > 0}">
 	<table class="request-table">
     	<tr>
     		<td class="head"><spring:message code="appointment.targetPerson"/></td>
@@ -110,7 +118,7 @@ function formatUrl(url) {
         </tr>
       	</c:forEach>
     </table>  
-
+	</c:if>
 	</div>
 	<div id="task-manager-operation" class="task-manager-operation-part">
 		<input type="button" value="<spring:message code="page.return"/>" onclick="returnMainPage()" />
