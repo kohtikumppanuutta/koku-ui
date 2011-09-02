@@ -26,11 +26,17 @@ public class AvCitizenServiceHandle {
 	private ResourceBundleMessageSource messageSource;
 	
 	private AvCitizenService acs;
+	private String loginUser;
 	
 	/**
 	 * Constructor and initialization
 	 */
 	public AvCitizenServiceHandle() {
+		acs = new AvCitizenService();
+	}
+	
+	public AvCitizenServiceHandle(String loginUser) {
+		this.loginUser = loginUser;
 		acs = new AvCitizenService();
 	}
 	
@@ -126,6 +132,24 @@ public class AvCitizenServiceHandle {
 		slot.setLocation(appSlot.getLocation());
 		
 		return slot;
+	}
+	
+	/**
+	 * Cancels appointments
+	 * @param appointmentIdStr
+	 * @param targetPerson
+	 * @param comment
+	 * @return operation response
+	 */
+	public String cancelAppointments(String appointmentIdStr, String targetPerson, String comment) {
+		long  appId = (long) Long.parseLong(appointmentIdStr);
+		
+		try {
+			acs.cancelAppointment(appId, targetPerson, loginUser, comment);
+			return MessageUtil.RESPONSE_OK;
+		} catch(RuntimeException e) {
+			return MessageUtil.RESPONSE_FAIL;
+		}		
 	}
 	
 
