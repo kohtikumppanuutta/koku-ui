@@ -16,6 +16,7 @@ import fi.arcusys.koku.av.employeeservice.Appointment.AcceptedSlots.Entry;
 import fi.arcusys.koku.av.employeeservice.AppointmentReceipientTO;
 import fi.arcusys.koku.av.employeeservice.AppointmentSlot;
 import fi.arcusys.koku.av.employeeservice.AppointmentSummary;
+import fi.arcusys.koku.av.employeeservice.AppointmentSummaryStatus;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
@@ -89,7 +90,7 @@ public class AvEmployeeServiceHandle {
 		empAppointment.setSender(appointment.getSender());
 		empAppointment.setSubject(appointment.getSubject());
 		empAppointment.setDescription(appointment.getDescription());
-		empAppointment.setStatus(localizeActionRequestStatus(appointment.getStatus().toString()));		
+		empAppointment.setStatus(localizeActionRequestStatus(appointment.getStatus()));		
 		empAppointment.setAcceptedSlots(appointment.getAcceptedSlots());
 		empAppointment.setRecipients(appointment.getRecipients());
 		empAppointment.setUsersRejected(appointment.getUsersRejected());
@@ -332,21 +333,26 @@ public class AvEmployeeServiceHandle {
 		}
 	}
 	
-	private String localizeActionRequestStatus(String appointmentStatus) {
+	private String localizeActionRequestStatus(AppointmentSummaryStatus appointmentStatus) {
 		if (messageSource == null) {
 			LOG.warn("MessageSource is null. Localization doesn't work properly");
-			return appointmentStatus;
+			return appointmentStatus.toString();
 		}
 		Locale locale = MessageUtil.getLocale();
 		try {
-			if (appointmentStatus.equals("Created")) {
+			switch (appointmentStatus) {
+			case APPROVED:
+				return messageSource.getMessage("AppointmentStatus.Approved", null, locale);
+			case CANCELLED:
+				return messageSource.getMessage("AppointmentStatus.Cancelled", null, locale);				
+			case CREATED:
 				return messageSource.getMessage("AppointmentStatus.Created", null, locale);
-			} else {
-				return appointmentStatus;
-			}
+			default:
+				return appointmentStatus.toString();
+			}					
 		} catch (NoSuchMessageException nsme) {
 			LOG.warn("Coulnd't find localized message for '" +appointmentStatus +"'. Localization doesn't work properly");
-			return appointmentStatus;
+			return appointmentStatus.toString();
 		}
 	}
 

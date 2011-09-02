@@ -12,6 +12,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import fi.arcusys.koku.av.citizenservice.AppointmentRespondedTO;
 import fi.arcusys.koku.av.citizenservice.AppointmentSlot;
 import fi.arcusys.koku.av.citizenservice.AppointmentWithTarget;
+import fi.arcusys.koku.av.citizenservice.AppointmentSummaryStatus;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
@@ -91,7 +92,7 @@ public class AvCitizenServiceHandle {
 		ctzAppointment.setSubject(appointment.getSubject());
 		ctzAppointment.setDescription(appointment.getDescription());
 		if(appointment.getStatus() != null) {
-			ctzAppointment.setStatus(localizeActionRequestStatus(appointment.getStatus().toString()));
+			ctzAppointment.setStatus(localizeActionRequestStatus(appointment.getStatus()));
 		}		
 		ctzAppointment.setSlot(formatSlot(appointment.getApprovedSlot()));
 		ctzAppointment.setReplier(appointment.getReplier());
@@ -154,27 +155,27 @@ public class AvCitizenServiceHandle {
 	}
 	
 
-	private String localizeActionRequestStatus(String appointmentStatus) {
+	
+	private String localizeActionRequestStatus(AppointmentSummaryStatus appointmentStatus) {
 		if (messageSource == null) {
 			LOG.warn("MessageSource is null. Localization doesn't work properly");
-			return appointmentStatus;
+			return appointmentStatus.toString();
 		}
 		Locale locale = MessageUtil.getLocale();
 		try {
-			if (appointmentStatus.equals("Created")) {
-				return messageSource.getMessage("AppointmentStatus.Created", null, locale);
-			} else if (appointmentStatus.equals("Approved")) {
+			switch (appointmentStatus) {
+			case APPROVED:
 				return messageSource.getMessage("AppointmentStatus.Approved", null, locale);
-			} else if (appointmentStatus.equals("Declined")) {
-				return messageSource.getMessage("AppointmentStatus.Declined", null, locale);
-			} else if (appointmentStatus.equals("Deleted")) {
-				return messageSource.getMessage("AppointmentStatus.Deleted", null, locale);
-			} else {				
-				return appointmentStatus;
-			}
+			case CANCELLED:
+				return messageSource.getMessage("AppointmentStatus.Cancelled", null, locale);				
+			case CREATED:
+				return messageSource.getMessage("AppointmentStatus.Created", null, locale);
+			default:
+				return appointmentStatus.toString();
+			}							
 		} catch (NoSuchMessageException nsme) {
 			LOG.warn("Coulnd't find localized message for '" +appointmentStatus +"'. Localization doesn't work properly");
-			return appointmentStatus;
+			return appointmentStatus.toString();
 		}
 	}
 
