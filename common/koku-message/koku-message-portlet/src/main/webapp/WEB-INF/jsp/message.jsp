@@ -281,7 +281,7 @@
 				taskHtml += '<tr>';
 			}
 			
-			taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["appointmentId"] + '_' + tasks[i]["targetPerson"] '" />' + '</td>'
+			taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["appointmentId"] + '_' + tasks[i]["targetPerson"] + '" />' + '</td>'
 					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\',\'' + tasks[i]["targetPerson"] + '\')" >' + tasks[i]["sender"] + '</td>'
 					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\',\'' + tasks[i]["targetPerson"] + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
 					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\',\'' + tasks[i]["targetPerson"] + '\')" >' + tasks[i]["description"] + '</td>'
@@ -965,7 +965,7 @@
 		var url="<%= cancelURL %>";
 		url = formatUrl(url);
 		
-		jQuery.post(url, {'messageList':messageList, 'targetPersons', targetPersons, 'comment':comment}, function(data) {
+		jQuery.post(url, {'messageList':messageList, 'targetPersons':targetPersons, 'comment':comment}, function(data) {
 			var obj = eval('(' + data + ')');
 			var json = obj.response;
 			var result = json["result"];
