@@ -76,10 +76,10 @@ public class LogArchiveController {
 
     log.debug("action=archiveLog");
 
-    if (logarchivedate != null && logarchivedate.getDate() != null) {
-      String archiveDateStr = dateFormat.format(logarchivedate.getDate());
+    if (logarchivedate != null && logarchivedate.getEndDate() != null) {
+      String archiveDateStr = dateFormat.format(logarchivedate.getEndDate());
       model.addAttribute("archiveDate", archiveDateStr);
-      model.addAttribute("archiveDateDate", logarchivedate.getDate());
+      model.addAttribute("archiveDateDate", logarchivedate.getEndDate());
 
       log.debug("modeliin lisätty archiveDateStr=" + archiveDateStr);
     }
@@ -105,7 +105,7 @@ public class LogArchiveController {
 
     log.debug("log archive render phase: archiving started");
     if (logarchivedate != null) {
-      log.debug("archive end date: " + logarchivedate.getDate());
+      log.debug("archive end date: " + logarchivedate.getEndDate());
     }
 
     res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
@@ -153,7 +153,7 @@ public class LogArchiveController {
       String date = null;
 
       if (logarchivedate != null) {
-        date = logarchivedate.getDate() != null ? df.format(logarchivedate.getDate()) : "";
+        date = logarchivedate.getEndDate() != null ? df.format(logarchivedate.getEndDate()) : "";
 
         log.debug("getAsText alkuperäinen archivedate: " + logarchivedate);
         log.debug("getAsText: formatoitu archivedate: " + date);

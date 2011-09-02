@@ -4,21 +4,21 @@ import java.util.Date;
 
 public class LogArchiveDate {
 
-  private Date date;
+  private Date endDate;
 
   public LogArchiveDate() {
   }
   
   public LogArchiveDate(Date archivedate){
-    this.date = archivedate;
+    this.endDate = archivedate;
   }
   
-  public Date getDate() {
-    return date;
+  public Date getEndDate() {
+    return endDate;
   }
 
-  public void setDate(Date date) {
-    this.date = date;
+  public void setEndDate(Date date) {
+    this.endDate = date;
   }
 }
 

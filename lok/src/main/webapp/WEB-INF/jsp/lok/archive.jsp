@@ -53,8 +53,8 @@
 					<%-- TODO: Add a javascript date picker here? --%>
 					<span class="form-field-label"><spring:message
 							code="koku.common.archiveDate" /> </span>
-							<form:input path="date"	value="${defaultDate}" />
-					<span class="errors"><form:errors path="date" />
+							<form:input path="endDate"value="${defaultDate}" />
+					<span class="errors"><form:errors path="endDate" />
 					</span>
 						<input type="submit"
 						value="<spring:message code="koku.lok.button.archive"/>">
@@ -83,7 +83,7 @@ This is because the archiveDate parameter is used in the logic of the page
 
 			<form:form method="post" action="${startArchiveActionURL}">
 			
-			<input type="hidden" name="date" value="${archiveDate}"/>
+			<input type="hidden" name="endDate" value="${archiveDate}"/>
 			
 				<input type="submit"				
 					value="<spring:message code="koku.common.startArchive"/>">
