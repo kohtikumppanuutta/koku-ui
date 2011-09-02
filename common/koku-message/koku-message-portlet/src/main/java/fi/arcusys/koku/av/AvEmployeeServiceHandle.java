@@ -16,8 +16,6 @@ import fi.arcusys.koku.av.employeeservice.Appointment.AcceptedSlots.Entry;
 import fi.arcusys.koku.av.employeeservice.AppointmentReceipientTO;
 import fi.arcusys.koku.av.employeeservice.AppointmentSlot;
 import fi.arcusys.koku.av.employeeservice.AppointmentSummary;
-import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
-import fi.arcusys.koku.tiva.employeeservice.ActionRequestStatus;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
