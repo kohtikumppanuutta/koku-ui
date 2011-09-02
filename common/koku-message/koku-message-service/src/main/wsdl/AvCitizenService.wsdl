@@ -1,3 +1,4 @@
+
 <definitions name='KokuKunpoAppointmentService'
 	targetNamespace='http://soa.av.koku.arcusys.fi/' xmlns='http://schemas.xmlsoap.org/wsdl/'
 	xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://soa.av.koku.arcusys.fi/'
@@ -5,6 +6,9 @@
 	<types>
 		<xs:schema targetNamespace='http://soa.av.koku.arcusys.fi/'
 			version='1.0' xmlns:tns='http://soa.av.koku.arcusys.fi/' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+			<xs:element name='cancelRespondedAppointment' type='tns:cancelRespondedAppointment' />
+			<xs:element name='cancelRespondedAppointmentResponse'
+				type='tns:cancelRespondedAppointmentResponse' />
 			<xs:element name='getAppointmentRespondedById' type='tns:getAppointmentRespondedById' />
 			<xs:element name='getAppointmentRespondedByIdResponse'
 				type='tns:getAppointmentRespondedByIdResponse' />
@@ -116,6 +120,17 @@
 					<xs:element minOccurs='0' name='comment' type='xs:string' />
 				</xs:sequence>
 			</xs:complexType>
+			<xs:complexType name='cancelRespondedAppointment'>
+				<xs:sequence>
+					<xs:element name='appointmentId' type='xs:long' />
+					<xs:element minOccurs='0' name='targetUser' type='xs:string' />
+					<xs:element minOccurs='0' name='user' type='xs:string' />
+					<xs:element minOccurs='0' name='comment' type='xs:string' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='cancelRespondedAppointmentResponse'>
+				<xs:sequence />
+			</xs:complexType>
 		</xs:schema>
 	</types>
 	<message name='KokuKunpoAppointmentService_getAppointmentRespondedById'>
@@ -151,7 +166,19 @@
 		name='KokuKunpoAppointmentService_getAppointmentRespondedByIdResponse'>
 		<part element='tns:getAppointmentRespondedByIdResponse' name='getAppointmentRespondedByIdResponse'></part>
 	</message>
+	<message
+		name='KokuKunpoAppointmentService_cancelRespondedAppointmentResponse'>
+		<part element='tns:cancelRespondedAppointmentResponse' name='cancelRespondedAppointmentResponse'></part>
+	</message>
+	<message name='KokuKunpoAppointmentService_cancelRespondedAppointment'>
+		<part element='tns:cancelRespondedAppointment' name='cancelRespondedAppointment'></part>
+	</message>
 	<portType name='KokuKunpoAppointmentService'>
+		<operation name='cancelRespondedAppointment' parameterOrder='cancelRespondedAppointment'>
+			<input message='tns:KokuKunpoAppointmentService_cancelRespondedAppointment'></input>
+			<output
+				message='tns:KokuKunpoAppointmentService_cancelRespondedAppointmentResponse'></output>
+		</operation>
 		<operation name='getAppointmentRespondedById'
 			parameterOrder='getAppointmentRespondedById'>
 			<input message='tns:KokuKunpoAppointmentService_getAppointmentRespondedById'></input>
@@ -185,6 +212,15 @@
 	<binding name='KokuKunpoAppointmentServiceBinding' type='tns:KokuKunpoAppointmentService'>
 		<soap:binding style='document'
 			transport='http://schemas.xmlsoap.org/soap/http' />
+		<operation name='cancelRespondedAppointment'>
+			<soap:operation soapAction='' />
+			<input>
+				<soap:body use='literal' />
+			</input>
+			<output>
+				<soap:body use='literal' />
+			</output>
+		</operation>
 		<operation name='getAppointmentRespondedById'>
 			<soap:operation soapAction='' />
 			<input>
