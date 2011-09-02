@@ -166,22 +166,33 @@ public class AjaxController {
 	 */
 	@ResourceMapping(value = "cancelAppointment")
 	public String cancelAppointment(@RequestParam(value = "messageList[]") String[] messageList,
-			@RequestParam(value = "targetPersons[]") String[] targetPersons,
+			@RequestParam(value = "targetPersons[]", required=false) String[] targetPersons,
 			@RequestParam(value = "comment") String comment,
+			@RequestParam(value = "taskType") String taskType,
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
-		PortletSession portletSession = request.getPortletSession();				
-		String username = (String) portletSession.getAttribute("USER_username");
-		AvCitizenServiceHandle handle = new AvCitizenServiceHandle(username);		
 		
-		String appointmentId;
-		String targetPerson;
-		
-		for(int i=0, l= messageList.length; i < l; i++) {
-			appointmentId = messageList[i];
-			targetPerson = targetPersons[i];
-			handle.cancelAppointments(appointmentId, targetPerson, comment);
+		if(taskType.endsWith("citizen")) {
+			PortletSession portletSession = request.getPortletSession();				
+			String username = (String) portletSession.getAttribute("USER_username");
+			AvCitizenServiceHandle handle = new AvCitizenServiceHandle(username);
+			String appointmentId;
+			String targetPerson;
+			
+			for(int i=0, l= messageList.length; i < l; i++) {
+				appointmentId = messageList[i];
+				targetPerson = targetPersons[i];
+				handle.cancelAppointments(appointmentId, targetPerson, comment);
+			}
+		}else if(taskType.endsWith("employee")) {
+			AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
+			String appointmentId;
+			
+			for(int i=0, l= messageList.length; i < l; i++) {
+				appointmentId = messageList[i];
+				handle.cancelAppointments(appointmentId, comment);
+			}
 		}
-		
+					
 		JSONObject jsonModel = new JSONObject();
 		jsonModel.put("result", MessageUtil.RESPONSE_OK);
 		modelmap.addAttribute("response", jsonModel);

@@ -67,6 +67,7 @@ public class AvEmployeeServiceHandle {
 			kokuAppointment.setSender(appSummary.getSender());
 			kokuAppointment.setSubject(appSummary.getSubject());
 			kokuAppointment.setDescription(appSummary.getDescription());
+			kokuAppointment.setStatus(appSummary.getStatus().toString());
 			
 			appList.add(kokuAppointment);		
 		}
@@ -88,7 +89,7 @@ public class AvEmployeeServiceHandle {
 		empAppointment.setSender(appointment.getSender());
 		empAppointment.setSubject(appointment.getSubject());
 		empAppointment.setDescription(appointment.getDescription());
-		empAppointment.setStatus(localizeActionRequestStatus(appointment.getStatus()));		
+		empAppointment.setStatus(localizeActionRequestStatus(appointment.getStatus().toString()));		
 		empAppointment.setAcceptedSlots(appointment.getAcceptedSlots());
 		empAppointment.setRecipients(appointment.getRecipients());
 		empAppointment.setUsersRejected(appointment.getUsersRejected());
@@ -314,6 +315,23 @@ public class AvEmployeeServiceHandle {
 		return false;
 	}
 
+	/**
+	 * Cancels appointment
+	 * @param appointmentIdStr
+	 * @param comment
+	 * @return
+	 */
+	public String cancelAppointments(String appointmentIdStr, String comment) {
+		long  appId = (long) Long.parseLong(appointmentIdStr);
+		
+		try {
+			aes.cancelAppointment(appId, comment);
+			return MessageUtil.RESPONSE_OK;
+		} catch(RuntimeException e) {
+			return MessageUtil.RESPONSE_FAIL;
+		}
+	}
+	
 	private String localizeActionRequestStatus(String appointmentStatus) {
 		if (messageSource == null) {
 			LOG.warn("MessageSource is null. Localization doesn't work properly");

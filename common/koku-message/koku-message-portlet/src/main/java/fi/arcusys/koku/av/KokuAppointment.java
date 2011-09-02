@@ -10,7 +10,8 @@ public class KokuAppointment {
 	private long appointmentId;
 	private String sender;
 	private String subject;
-	private String description;	
+	private String description;
+	private String status;
 	
 	/* getters */
 	public long getAppointmentId() {
@@ -29,6 +30,9 @@ public class KokuAppointment {
 		return description;
 	}
 	
+	public String getStatus() {
+		return status;
+	}
 	/* setters */
 	public void setAppointmentId(long appointmentId) {
 		this.appointmentId = appointmentId;
@@ -46,6 +50,9 @@ public class KokuAppointment {
 		this.description = description;
 	}
 	
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }
 
 

@@ -73,4 +73,13 @@ public class AvEmployeeService {
 		return as.getKokuLooraAppointmentServicePort().getAppointmentById(appointmentId);
 	}
 	
+	/**
+	 * Cancels appointment
+	 * @param appointmentId
+	 * @param comment
+	 */
+	public void cancelAppointment(long appointmentId, String comment) {
+		as.getKokuLooraAppointmentServicePort().cancelAppointment(appointmentId, comment);
+	}
+	
 }

@@ -73,6 +73,13 @@ public class AvCitizenService {
 		return as.getKokuKunpoAppointmentServicePort().getAppointmentRespondedById(appointmentId, targetUser);
 	}
 	
+	/**
+	 * Cancels appointment
+	 * @param appointmentId
+	 * @param targetUser
+	 * @param user
+	 * @param comment
+	 */
 	public void cancelAppointment(long appointmentId, String targetUser, String user, String comment) {
 		as.getKokuKunpoAppointmentServicePort().cancelRespondedAppointment(appointmentId, targetUser, user, comment);
 	}

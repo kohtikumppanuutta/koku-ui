@@ -70,6 +70,7 @@ public class AvCitizenServiceHandle {
 			kokuAppointment.setSubject(appSummary.getSubject());
 			kokuAppointment.setDescription(appSummary.getDescription());
 			kokuAppointment.setTargetPerson(appSummary.getTargetPerson());
+			kokuAppointment.setStatus(appSummary.getStatus().toString());
 			appList.add(kokuAppointment);		
 		}
 		
@@ -90,7 +91,7 @@ public class AvCitizenServiceHandle {
 		ctzAppointment.setSubject(appointment.getSubject());
 		ctzAppointment.setDescription(appointment.getDescription());
 		if(appointment.getStatus() != null) {
-			ctzAppointment.setStatus(localizeActionRequestStatus(appointment.getStatus()));
+			ctzAppointment.setStatus(localizeActionRequestStatus(appointment.getStatus().toString()));
 		}		
 		ctzAppointment.setSlot(formatSlot(appointment.getApprovedSlot()));
 		ctzAppointment.setReplier(appointment.getReplier());

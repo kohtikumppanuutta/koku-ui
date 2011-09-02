@@ -271,6 +271,7 @@
 				+ '<td class="from">' + '<spring:message code="message.from" />' + '</td>'
 				+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
 				+ '<td><spring:message code="message.description" /></td>'
+				+ '<td><spring:message code="message.status" /></td>'
 				+ '</tr>';
 				 
 		for ( var i = 0; i < tasks.length; i++) {
@@ -285,6 +286,7 @@
 					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\',\'' + tasks[i]["targetPerson"] + '\')" >' + tasks[i]["sender"] + '</td>'
 					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\',\'' + tasks[i]["targetPerson"] + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
 					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\',\'' + tasks[i]["targetPerson"] + '\')" >' + tasks[i]["description"] + '</td>'
+					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\',\'' + tasks[i]["targetPerson"] + '\')" >' + tasks[i]["status"] + '</td>'
 					 + '</tr>';
 
 		}
@@ -813,7 +815,7 @@
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="revokeConsents()" /></li>';
 		}else if(pageObj.taskType.indexOf('msg') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="page.removeSelected"/>"  onclick="deleteMessages()" /></li>';
-		}else if(pageObj.taskType == 'app_response_citizen') {
+		}else if(pageObj.taskType == 'app_response_citizen' || pageObj.taskType == 'app_response_employee') {
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.cancel"/>"  onclick="cancelAppointments()" /></li>';
 		}
 			
@@ -965,7 +967,7 @@
 		var url="<%= cancelURL %>";
 		url = formatUrl(url);
 		
-		jQuery.post(url, {'messageList':messageList, 'targetPersons':targetPersons, 'comment':comment}, function(data) {
+		jQuery.post(url, {'messageList':messageList, 'targetPersons':targetPersons, 'comment':comment, 'taskType':pageObj.taskType}, function(data) {
 			var obj = eval('(' + data + ')');
 			var json = obj.response;
 			var result = json["result"];
