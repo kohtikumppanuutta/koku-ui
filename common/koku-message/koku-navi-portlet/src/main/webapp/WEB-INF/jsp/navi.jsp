@@ -239,7 +239,7 @@
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
 		<li><a href="#">Tapaamiset</a>
 			<ul class="child">
-				<li id="app_inbox_citizen"><a href="javascript:void(0)" onclick="navigateToPage('app_inbox_citizen')">Saapuneet</a></li>
+				<li id="app_inbox_citizen"><a href="javascript:void(0)" onclick="navigateToPage('app_inbox_citizen')">Vastausta odottavat</a></li>
 				<li id="app_response_citizen"><a href="javascript:void(0)" onclick="navigateToPage('app_response_citizen')">Vastatut</a></li>
 			</ul></li>
 		<li><a href="#">Päivähoitohakemukset</a>
