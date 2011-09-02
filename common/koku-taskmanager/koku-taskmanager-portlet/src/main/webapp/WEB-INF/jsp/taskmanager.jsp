@@ -418,7 +418,7 @@
 		this.totalPages = 1;
 		this.totalItems;
 		/* 3 types: task, notification, process */
-		this.taskType = 'task';
+		this.taskType = '<%= defaultTaskType %>';
 		/* 0:task, 1:notification, 2: process */
 		this.taskTypeNum = 0;
 		/* keyword for searching and filter */
@@ -562,25 +562,6 @@
 		jQuery("input#keyword").val('');
 		var taskHtml = createInitTable();
 		jQuery('#task-manager-tasklist').html(taskHtml);
-	}
-	
-	/**
- 	 * Create frame Html
- 	 */
-	function createFrame(formLink) {
-		var frameHtml = '<iframe src="' + formLink + '" style="width:100%; height:100%" frameborder="0" id="taskform" scrolling="auto"></iframe>';
-		return frameHtml;
-	}
-	
-	/**
-	 * Show task form in a frame in portlet in the current window state of portlet
-	 */
-	function showTaskForm(formLink) {
-		removeRefreshTimer();
-		var frameHtml = createFrame(formLink);
-		jQuery('#task-manager-tasklist').html(frameHtml);
-		var pageHtml = createFormPage();
-		jQuery('#task-manager-operation-page').html(pageHtml);
 	}
 	
 	/**

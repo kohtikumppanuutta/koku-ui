@@ -24,6 +24,13 @@
 						<option value="3">Pop-up</option>
 				</select></td>
 			</tr>
+			<tr class="evenRow"><td><spring:message code="config.defaultTaskType" /></td>
+				<td><select name="defaultTaskType" id="defaultTaskType">
+						<option value="task" >Task</option>
+						<option value="notification" >Notification</option>
+						<option value="process">Process</option>
+				</select></td>
+			</tr>
 			<tr><td><input type="submit" value="<spring:message code="config.save"/>" /></td><td></td></tr>
 		</table>
 	</form>
@@ -32,4 +39,5 @@
 	// set the default selected option for selectors refreshDuration and openForm
 	jQuery('#refreshDuration').val("<%= refreshDuration %>");
 	jQuery('#openForm').val("<%= openForm %>");
+	jQuery('#openForm').val("<%= defaultTaskType %>");
 </script>

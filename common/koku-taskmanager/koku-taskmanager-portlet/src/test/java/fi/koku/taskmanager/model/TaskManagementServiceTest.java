@@ -45,6 +45,7 @@ public class TaskManagementServiceTest {
 		
     }
 	
+	@Ignore
 	@Test
 	public void getParticipantToken() {
 		String username = TEST_USERNAME;

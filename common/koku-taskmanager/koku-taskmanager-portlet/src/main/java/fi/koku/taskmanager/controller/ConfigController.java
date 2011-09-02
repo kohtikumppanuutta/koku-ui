@@ -40,10 +40,12 @@ public class ConfigController {
     		String notifFilter = request.getParameter("notifFilter");
     		String refreshDuration = request.getParameter("refreshDuration");
     		String openForm = request.getParameter("openForm");
+    		String defaultTaskType = request.getParameter("defaultTaskType");
     		pref.setValue("taskFilter", taskFilter);
     		pref.setValue("notifFilter", notifFilter);
     		pref.setValue("refreshDuration", refreshDuration);
     		pref.setValue("openForm", openForm);
+    		pref.setValue("defaultTaskType", defaultTaskType);
     		pref.store();
     		
     		response.setPortletMode(PortletMode.VIEW);
