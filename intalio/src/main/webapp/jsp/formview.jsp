@@ -9,6 +9,56 @@
 
 <script type="text/javascript">
 
+	var timerOn = 0;
+	var iFramePreviousHeight = 0;
+	var minHeight = 700;
+
+	function startResizer() {
+		if (!timerOn) {
+			timerOn = 1;
+			resizeTimer();
+		}
+	}
+	
+	/* Meansure IFrame size */
+	function resizeTimer() {
+		var iFrameContentHeight = getIFrameBodyHeight();
+		if (iFramePreviousHeight != iFrameContentHeight) {
+			var newHeight = iFrameContentHeight + 20;
+			iFramePreviousHeight = newHeight;
+			resizeIFrame(newHeight);			
+		}		
+		setTimeout("resizeTimer()", 500 );
+	}
+		
+	function resizeIFrame(height) {
+		if (height < minHeight) {
+			height = minHeight;
+		}
+		document.getElementById('<portlet:namespace />xforms_iframe').style.height = height + "px";
+	}
+	
+	function getIFrameBodyHeight(){
+		var iFrame =  document.getElementById('<portlet:namespace />xforms_iframe');
+		if (iFrame == null) {
+			return minHeight;
+		}
+		var iFrameBody;
+		if ( iFrame.contentDocument ) { 
+			 /* Firefox */
+			 //iFrameBody = iFrame.contentDocument.getElementsById('IntalioInternal_jsxmain');
+			  iFrameBody = iFrame.contentDocument.getElementsByTagName('body')[0];
+		} else if ( iFrame.contentWindow ) { 
+			 /*  InternetExplorer */
+			 //iFrameBody = iFrame.contentWindow.document.getElementsById('IntalioInternal_jsxmain');
+			  iFrameBody = iFrame.contentWindow.document.getElementsByTagName('body')[0];
+		}
+		<%-- var client = iFrameBody.clientHeight;
+		var scroll = iFrameBody.scrollHeight;
+		var offset = iFrameBody.offsetHeight; --%>
+		return iFrameBody.scrollHeight;
+	}
+
 	/* Simple function to send some example ajax data */
 	function ajaxSampleData() {	
 		var command = jQuery('#ajaxCommand').val();
@@ -22,8 +72,7 @@
 		var json = obj.response;
 		var test1 = json["result"];
 		jQuery(".test").append("<div><pre>"+test1+"</pre></div>");
-	}
-	
+	}	
 	
 	/**
 	 * Simple function to send some example ajax data 
@@ -61,6 +110,10 @@
 		}else {
 			jQuery('#<portlet:namespace />xforms_iframe').attr('src', "${formholder.url}");
 		} 
+		
+		 /* Make sure that IFrame height is correct. We do not want to 
+		  *	see any extra scrollbars. */
+		resizeIFrame(750);
 	 
 	 
 	 <%-- Temporary solution 
@@ -98,7 +151,9 @@
 </portlet:renderURL>
 
 
-<div class="test" style="display: none;">
+ <%-- Disabled for security reasons 
+ 
+ <div class="test" style="display: none;">
 	<div class="testTextAreas">
 		<textarea id="ajaxCommand" rows="3" cols="15" name="Command:"></textarea>
 		<textarea id="ajaxData" rows="3" cols="50" name="Data:"></textarea>
@@ -106,7 +161,9 @@
 	<button type="button" id="ajaxTest" name="Send data" onclick="ajaxSampleData()">Send data</button>
 </div>
 
-<div id="form_wrap" style="margin:5px; position:relative;">
+ --%>
+
+<div id="form_wrap" style="margin:5px; position:relative; min-width: 720px;">
 <div class="veera_form_window_header">
 	<c:if test="${helpContent != null}">
 		<span class="form_help_link">
@@ -136,4 +193,9 @@
 
 <!-- <iframe id="hiddenIframe" width="0" height="0" src="https://intalio:8443/xssEnabler.html" style="display: none;"></iframe> -->
 
-<iframe src="" id="<portlet:namespace />xforms_iframe" class="xforms_container_iframe" frameborder="0" scrolling="auto" style="height: 1000px; width:100%;"></iframe>
+<iframe onload="startResizer()" src="" id="<portlet:namespace />xforms_iframe" class="xforms_container_iframe" frameborder="0" scrolling="no" style="height: 1000px; width:100%;"></iframe>
+
+<script type="text/javascript">
+	startResizer();
+</script>
+
