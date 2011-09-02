@@ -12,8 +12,6 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import fi.arcusys.koku.av.citizenservice.AppointmentRespondedTO;
 import fi.arcusys.koku.av.citizenservice.AppointmentSlot;
 import fi.arcusys.koku.av.citizenservice.AppointmentWithTarget;
-import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
-import fi.arcusys.koku.tiva.employeeservice.ActionRequestStatus;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
@@ -140,7 +138,13 @@ public class AvCitizenServiceHandle {
 		try {
 			if (appointmentStatus.equals("Created")) {
 				return messageSource.getMessage("AppointmentStatus.Created", null, locale);
-			} else {
+			} else if (appointmentStatus.equals("Approved")) {
+				return messageSource.getMessage("AppointmentStatus.Approved", null, locale);
+			} else if (appointmentStatus.equals("Declined")) {
+				return messageSource.getMessage("AppointmentStatus.Declined", null, locale);
+			} else if (appointmentStatus.equals("Deleted")) {
+				return messageSource.getMessage("AppointmentStatus.Deleted", null, locale);
+			} else {				
 				return appointmentStatus;
 			}
 		} catch (NoSuchMessageException nsme) {
