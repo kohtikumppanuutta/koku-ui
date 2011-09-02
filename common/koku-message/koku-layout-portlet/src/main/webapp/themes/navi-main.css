@@ -120,22 +120,18 @@ ul#tabsHeader li#current a {
 }
 
 ul#tabsHeader li#current {
-   background-image: url('images/nav-active-right2.gif');
    background-color:#ffffff;
 }
 
 ul#tabsHeader li#current a {
-   background-image: url('images/nav-active-left.gif');
    color: #2c2c2c;
 }
 
 ul#tabsHeader li {
-   background-image: url('images/nav-inactive-right2.gif');
    background-color:#dddddd;
 }
 
 ul#tabsHeader li a {
-   background-image: url('images/nav-inactive-left.gif');
    color: #113266;
 }
 
