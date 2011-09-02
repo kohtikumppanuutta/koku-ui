@@ -236,7 +236,7 @@
 	<service name='KokuLooraSuostumusService'>
 		<port binding='tns:KokuLooraSuostumusServiceBinding' name='KokuLooraSuostumusServicePort'>
 			<soap:address
-				location='http://127.0.0.1:8180/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuLooraSuostumusServiceImpl' />
+				location='http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuLooraSuostumusServiceImpl' />
 		</port>
 	</service>
 </definitions>
