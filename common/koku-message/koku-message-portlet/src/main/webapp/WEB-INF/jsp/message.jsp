@@ -330,7 +330,7 @@
 				+ '<tr class="task-manager-table trheader">'
 				+ '<td class="choose"><spring:message code="message.choose" /></td>'
 				+ '<td>' + '<spring:message code="consent.requester" />' + '</td>'
-				+ '<td>' + '<spring:message code="consent.templateName" />' + '</td>'
+				+ '<td style="width:250px;">' + '<spring:message code="consent.templateName" />' + '</td>'
 				+ '<td>' + '<spring:message code="consent.status" />' + '</td>'
 				+ '<td>' + '<spring:message code="consent.createType" />' + '</td>'
 				+ '<td>' + '<spring:message code="consent.givenDate" />' + '</td>'
@@ -811,7 +811,7 @@
 			pageHtml += '<li><input type="button" value="<spring:message code="page.archive"/>"  onclick="archiveMessages()" /></li>';
 		}
 					
-		if(pageObj.taskType == 'cst_own_citizen' || pageObj.taskType == 'cst_own_employee') {
+		if(pageObj.taskType == 'cst_own_citizen') {
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="revokeConsents()" /></li>';
 		}else if(pageObj.taskType.indexOf('msg') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="page.removeSelected"/>"  onclick="deleteMessages()" /></li>';
