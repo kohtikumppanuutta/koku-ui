@@ -813,7 +813,7 @@
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="revokeConsents()" /></li>';
 		}else if(pageObj.taskType.indexOf('msg') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="page.removeSelected"/>"  onclick="deleteMessages()" /></li>';
-		}else if(pageObj.taskType == 'app_inbox_citizen') {
+		}else if(pageObj.taskType == 'app_response_citizen') {
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.cancel"/>"  onclick="cancelAppointments()" /></li>';
 		}
 			
