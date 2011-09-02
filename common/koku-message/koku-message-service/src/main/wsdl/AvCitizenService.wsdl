@@ -1,4 +1,3 @@
-
 <definitions name='KokuKunpoAppointmentService'
 	targetNamespace='http://soa.av.koku.arcusys.fi/' xmlns='http://schemas.xmlsoap.org/wsdl/'
 	xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://soa.av.koku.arcusys.fi/'
@@ -47,6 +46,8 @@
 			<xs:complexType name='appointmentSummary'>
 				<xs:sequence>
 					<xs:element name='appointmentId' type='xs:long' />
+					<xs:element minOccurs='0' name='status'
+						type='tns:appointmentSummaryStatus' />
 					<xs:element minOccurs='0' name='sender' type='xs:string' />
 					<xs:element minOccurs='0' name='subject' type='xs:string' />
 					<xs:element minOccurs='0' name='description' type='xs:string' />
@@ -104,7 +105,6 @@
 							<xs:element minOccurs='0' name='approvedSlot' type='tns:appointmentSlot' />
 							<xs:element minOccurs='0' name='replier' type='xs:string' />
 							<xs:element minOccurs='0' name='replierComment' type='xs:string' />
-							<xs:element minOccurs='0' name='status' type='xs:string' />
 							<xs:element minOccurs='0' name='targetPerson' type='xs:string' />
 						</xs:sequence>
 					</xs:extension>
@@ -131,6 +131,13 @@
 			<xs:complexType name='cancelRespondedAppointmentResponse'>
 				<xs:sequence />
 			</xs:complexType>
+			<xs:simpleType name='appointmentSummaryStatus'>
+				<xs:restriction base='xs:string'>
+					<xs:enumeration value='Created' />
+					<xs:enumeration value='Approved' />
+					<xs:enumeration value='Cancelled' />
+				</xs:restriction>
+			</xs:simpleType>
 		</xs:schema>
 	</types>
 	<message name='KokuKunpoAppointmentService_getAppointmentRespondedById'>
@@ -270,7 +277,7 @@
 	<service name='KokuKunpoAppointmentService'>
 		<port binding='tns:KokuKunpoAppointmentServiceBinding' name='KokuKunpoAppointmentServicePort'>
 			<soap:address
-				location='http://127.0.0.1:8180/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuKunpoAppointmentServiceImpl' />
+				location='http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuKunpoAppointmentServiceImpl' />
 		</port>
 	</service>
 </definitions>

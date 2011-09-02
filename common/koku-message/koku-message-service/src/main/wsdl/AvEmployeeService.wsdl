@@ -5,6 +5,8 @@
 	<types>
 		<xs:schema targetNamespace='http://soa.av.koku.arcusys.fi/'
 			version='1.0' xmlns:tns='http://soa.av.koku.arcusys.fi/' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+			<xs:element name='cancelAppointment' type='tns:cancelAppointment' />
+			<xs:element name='cancelAppointmentResponse' type='tns:cancelAppointmentResponse' />
 			<xs:element name='getAppointmentById' type='tns:getAppointmentById' />
 			<xs:element name='getAppointmentByIdResponse' type='tns:getAppointmentByIdResponse' />
 			<xs:element name='getCreatedAppointments' type='tns:getCreatedAppointments' />
@@ -17,14 +19,27 @@
 			<xs:element name='getTotalProcessedAppointments' type='tns:getTotalProcessedAppointments' />
 			<xs:element name='getTotalProcessedAppointmentsResponse'
 				type='tns:getTotalProcessedAppointmentsResponse' />
-			<xs:complexType name='getTotalCreatedAppointments'>
+			<xs:complexType name='getProcessedAppointments'>
 				<xs:sequence>
 					<xs:element minOccurs='0' name='user' type='xs:string' />
+					<xs:element name='startNum' type='xs:int' />
+					<xs:element name='maxNum' type='xs:int' />
 				</xs:sequence>
 			</xs:complexType>
-			<xs:complexType name='getTotalCreatedAppointmentsResponse'>
+			<xs:complexType name='getProcessedAppointmentsResponse'>
 				<xs:sequence>
-					<xs:element name='return' type='xs:int' />
+					<xs:element maxOccurs='unbounded' minOccurs='0' name='return'
+						type='tns:appointmentSummary' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='appointmentSummary'>
+				<xs:sequence>
+					<xs:element name='appointmentId' type='xs:long' />
+					<xs:element minOccurs='0' name='status'
+						type='tns:appointmentSummaryStatus' />
+					<xs:element minOccurs='0' name='sender' type='xs:string' />
+					<xs:element minOccurs='0' name='subject' type='xs:string' />
+					<xs:element minOccurs='0' name='description' type='xs:string' />
 				</xs:sequence>
 			</xs:complexType>
 			<xs:complexType name='getTotalProcessedAppointments'>
@@ -50,25 +65,14 @@
 						type='tns:appointmentSummary' />
 				</xs:sequence>
 			</xs:complexType>
-			<xs:complexType name='appointmentSummary'>
-				<xs:sequence>
-					<xs:element name='appointmentId' type='xs:long' />
-					<xs:element minOccurs='0' name='sender' type='xs:string' />
-					<xs:element minOccurs='0' name='subject' type='xs:string' />
-					<xs:element minOccurs='0' name='description' type='xs:string' />
-				</xs:sequence>
-			</xs:complexType>
-			<xs:complexType name='getProcessedAppointments'>
+			<xs:complexType name='getTotalCreatedAppointments'>
 				<xs:sequence>
 					<xs:element minOccurs='0' name='user' type='xs:string' />
-					<xs:element name='startNum' type='xs:int' />
-					<xs:element name='maxNum' type='xs:int' />
 				</xs:sequence>
 			</xs:complexType>
-			<xs:complexType name='getProcessedAppointmentsResponse'>
+			<xs:complexType name='getTotalCreatedAppointmentsResponse'>
 				<xs:sequence>
-					<xs:element maxOccurs='unbounded' minOccurs='0' name='return'
-						type='tns:appointmentSummary' />
+					<xs:element name='return' type='xs:int' />
 				</xs:sequence>
 			</xs:complexType>
 			<xs:complexType name='getAppointmentById'>
@@ -87,7 +91,6 @@
 						<xs:sequence>
 							<xs:element maxOccurs='unbounded' minOccurs='0' name='slots'
 								nillable='true' type='tns:appointmentSlot' />
-							<xs:element minOccurs='0' name='status' type='xs:string' />
 							<xs:element maxOccurs='unbounded' minOccurs='0'
 								name='recipients' nillable='true' type='tns:appointmentReceipientTO' />
 							<xs:element name='acceptedSlots'>
@@ -128,6 +131,22 @@
 					<xs:element minOccurs='0' name='targetPerson' type='xs:string' />
 				</xs:sequence>
 			</xs:complexType>
+			<xs:complexType name='cancelAppointment'>
+				<xs:sequence>
+					<xs:element name='appointmentId' type='xs:long' />
+					<xs:element minOccurs='0' name='comment' type='xs:string' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='cancelAppointmentResponse'>
+				<xs:sequence />
+			</xs:complexType>
+			<xs:simpleType name='appointmentSummaryStatus'>
+				<xs:restriction base='xs:string'>
+					<xs:enumeration value='Created' />
+					<xs:enumeration value='Approved' />
+					<xs:enumeration value='Cancelled' />
+				</xs:restriction>
+			</xs:simpleType>
 		</xs:schema>
 	</types>
 	<message name='KokuLooraAppointmentService_getAppointmentById'>
@@ -136,6 +155,9 @@
 	<message name='KokuLooraAppointmentService_getProcessedAppointments'>
 		<part element='tns:getProcessedAppointments' name='getProcessedAppointments'></part>
 	</message>
+	<message name='KokuLooraAppointmentService_cancelAppointment'>
+		<part element='tns:cancelAppointment' name='cancelAppointment'></part>
+	</message>
 	<message
 		name='KokuLooraAppointmentService_getTotalCreatedAppointmentsResponse'>
 		<part element='tns:getTotalCreatedAppointmentsResponse' name='getTotalCreatedAppointmentsResponse'></part>
@@ -143,6 +165,9 @@
 	<message
 		name='KokuLooraAppointmentService_getTotalProcessedAppointmentsResponse'>
 		<part element='tns:getTotalProcessedAppointmentsResponse' name='getTotalProcessedAppointmentsResponse'></part>
+	</message>
+	<message name='KokuLooraAppointmentService_cancelAppointmentResponse'>
+		<part element='tns:cancelAppointmentResponse' name='cancelAppointmentResponse'></part>
 	</message>
 	<message name='KokuLooraAppointmentService_getProcessedAppointmentsResponse'>
 		<part element='tns:getProcessedAppointmentsResponse' name='getProcessedAppointmentsResponse'></part>
@@ -163,6 +188,10 @@
 		<part element='tns:getTotalProcessedAppointments' name='getTotalProcessedAppointments'></part>
 	</message>
 	<portType name='KokuLooraAppointmentService'>
+		<operation name='cancelAppointment' parameterOrder='cancelAppointment'>
+			<input message='tns:KokuLooraAppointmentService_cancelAppointment'></input>
+			<output message='tns:KokuLooraAppointmentService_cancelAppointmentResponse'></output>
+		</operation>
 		<operation name='getAppointmentById' parameterOrder='getAppointmentById'>
 			<input message='tns:KokuLooraAppointmentService_getAppointmentById'></input>
 			<output message='tns:KokuLooraAppointmentService_getAppointmentByIdResponse'></output>
@@ -194,6 +223,15 @@
 	<binding name='KokuLooraAppointmentServiceBinding' type='tns:KokuLooraAppointmentService'>
 		<soap:binding style='document'
 			transport='http://schemas.xmlsoap.org/soap/http' />
+		<operation name='cancelAppointment'>
+			<soap:operation soapAction='' />
+			<input>
+				<soap:body use='literal' />
+			</input>
+			<output>
+				<soap:body use='literal' />
+			</output>
+		</operation>
 		<operation name='getAppointmentById'>
 			<soap:operation soapAction='' />
 			<input>
@@ -243,7 +281,7 @@
 	<service name='KokuLooraAppointmentService'>
 		<port binding='tns:KokuLooraAppointmentServiceBinding' name='KokuLooraAppointmentServicePort'>
 			<soap:address
-				location='http://127.0.0.1:8180/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuLooraAppointmentServiceImpl' />
+				location='http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuLooraAppointmentServiceImpl' />
 		</port>
 	</service>
 </definitions>
