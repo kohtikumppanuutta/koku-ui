@@ -959,7 +959,7 @@
 		
 		if(messageList.length == 0) return; // no message selected
 		
-		var comment = prompt("Please add any comment","");
+		var comment = prompt('<spring:message code="consent.cancelPrompt"/>',"");
 		if(comment == null)	return;
 		
 		var url="<%= cancelURL %>";
