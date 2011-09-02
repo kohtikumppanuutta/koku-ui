@@ -230,6 +230,7 @@
 		<li><a href="#">Pyynnöt</a>
 			<ul class="child">
 				<li id="req_new"><a href="<%= defaultPath %>/Message/NewRequest">Uudet pyynnöt</a></li>
+				<li id="luopohja"><a href="<%= defaultPath %>/Message/LuoPohja">Luo pohja</a></li>
 				<li id="req_valid"><a href="javascript:void(0)" onclick="navigateToPage('req_valid')">Voimassaolevat</a></li>
 				<li><a href="#">Vanhentuneet</a></li>
 			</ul></li>
