@@ -12,6 +12,7 @@
 	var timerOn = 0;
 	var iFramePreviousHeight = 0;
 	var minHeight = 700;
+	var iFrameId = '<portlet:namespace />xforms_iframe';
 
 	function startResizer() {
 		if (!timerOn) {
@@ -22,38 +23,66 @@
 	
 	/* Meansure IFrame size */
 	function resizeTimer() {
-		var iFrameContentHeight = getIFrameBodyHeight();
+		var iFrameContentHeight = getIFrameBodyHeight(iFrameId);
 		if (iFramePreviousHeight != iFrameContentHeight) {
 			var newHeight = iFrameContentHeight + 20;
-			resizeIFrame(newHeight);
-			iFramePreviousHeight = getIFrameBodyHeight();
+			resizeIFrame(iFrameId, newHeight);
+			iFramePreviousHeight = getIFrameBodyHeight(iFrameId);
 		}		
 		setTimeout("resizeTimer()", 500 );
 	}
 		
-	function resizeIFrame(height) {
+	function resizeIFrame(id, height) {
 		if (height < minHeight) {
 			height = minHeight;
 		}
-		document.getElementById('<portlet:namespace />xforms_iframe').style.height = height + "px";
+		document.getElementById(id).style.height = height+'px';
 	}
 	
-	function getIFrameBodyHeight(){
-		var iFrame =  document.getElementById('<portlet:namespace />xforms_iframe');
+	function getIFrameBodyHeight(id) {
+		var iFrame =  document.getElementById(id);
 		if (iFrame == null) {
 			return minHeight;
 		}
 		var iFrameBody;
-		if ( iFrame.contentDocument ) { 
-			 /* Firefox */
+		 var oBody;
+		 var oFrame;
+		 
+		if (!isIE()) { 
+			 /* Firefox, Safari, Chrome etc. */
 			 //iFrameBody = iFrame.contentDocument.getElementsById('IntalioInternal_jsxmain');
 			  iFrameBody = iFrame.contentDocument.getElementsByTagName('body')[0];
-		} else if ( iFrame.contentWindow ) { 
+		} else { 
 			 /*  InternetExplorer */
-			 //iFrameBody = iFrame.contentWindow.document.getElementsById('IntalioInternal_jsxmain');
-			  iFrameBody = iFrame.contentWindow.document.getElementsByTagName('body')[0];
+			<%-- //iFrameBody = iFrame.contentWindow.document.getElementsById('IntalioInternal_jsxmain');
+			  //iFrameBody = iFrame.contentWindow.document.getElementsByTagName('body')[0];
+			  //var iFrameDoc = window.frames[id].document;
+			  //iFrameBody = iFrameDoc.getElementsByTagName('body')[0];
+			 --%>			  
+			 oBody	= iFrame.document.body;
 		}
-		return iFrameBody.scrollHeight;
+		
+		/* IE doesn't seem to be working correctly */
+		if (isIE()) {
+			if (oBody == undefined) {
+				return iFramePreviousHeight;
+			}
+			return oBody.scrollHeight + (oBody.offsetHeight - oBody.clientHeight);
+
+			<%--//iFrameBody.scrollHeight;
+			// return iFrameBody.scrollHeight; --%>
+		} else {
+			return iFrameBody.scrollHeight;		
+		}
+		
+	}
+	
+	function isIE() {
+		if (navigator.appName == 'Microsoft Internet Explorer') {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/* Simple function to send some example ajax data */
@@ -110,7 +139,7 @@
 		
 		 /* Make sure that IFrame height is correct. We do not want to 
 		  *	see any extra scrollbars. */
-		resizeIFrame(750);
+		resizeIFrame(iFrameId, minHeight);
 	 
 	 
 	 <%-- Temporary solution 
@@ -190,7 +219,7 @@
 
 <!-- <iframe id="hiddenIframe" width="0" height="0" src="https://intalio:8443/xssEnabler.html" style="display: none;"></iframe> -->
 
-<iframe onload="startResizer()" src="" id="<portlet:namespace />xforms_iframe" class="xforms_container_iframe" frameborder="0" scrolling="no" style="height: 1000px; width:100%;"></iframe>
+<iframe src="" id="<portlet:namespace />xforms_iframe" class="xforms_container_iframe" frameborder="0" scrolling="no" style="height: 700px; width:100%;"></iframe>
 
 <script type="text/javascript">
 	startResizer();
