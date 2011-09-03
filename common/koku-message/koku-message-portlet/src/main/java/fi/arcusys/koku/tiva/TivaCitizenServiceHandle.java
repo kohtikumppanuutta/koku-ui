@@ -13,6 +13,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 
 import fi.arcusys.koku.tiva.citizenservice.ActionRequestStatus;
 import fi.arcusys.koku.tiva.citizenservice.ActionRequestSummary;
+import fi.arcusys.koku.tiva.citizenservice.ConsentApprovalStatus;
 import fi.arcusys.koku.tiva.citizenservice.ConsentCreateType;
 import fi.arcusys.koku.tiva.citizenservice.ConsentShortSummary;
 import fi.arcusys.koku.tiva.citizenservice.ConsentStatus;
@@ -90,7 +91,7 @@ public class TivaCitizenServiceHandle {
 		if(consent.getStatus() != null) {
 			kokuConsent.setStatus(localizeConsentStatus(consent.getStatus()));
 		}
-		
+		kokuConsent.setApprovalStatus(localizeApprovalConsentStatus(consent.getApprovalStatus()));		
 		kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
 		kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
 		kokuConsent.setActionRequests(convertActionRequests(consent.getActionRequests()));
@@ -124,6 +125,7 @@ public class TivaCitizenServiceHandle {
 			if(consent.getStatus() != null) {
 				kokuConsent.setStatus(localizeConsentStatus(consent.getStatus()));
 			}
+			kokuConsent.setApprovalStatus(localizeApprovalConsentStatus(consent.getApprovalStatus()));			
 			kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
 			kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
 			consentList.add(kokuConsent);
@@ -190,6 +192,32 @@ public class TivaCitizenServiceHandle {
 		
 		return actionList;	
 	}
+	
+	private String localizeApprovalConsentStatus(ConsentApprovalStatus approvalStatus) {
+		Locale locale = MessageUtil.getLocale();
+		
+		if (messageSource == null) {
+			LOG.warn("MessageSource is null. Localization doesn't work properly");
+			return approvalStatus.toString().toLowerCase();
+		}
+		
+		try {			
+			switch(approvalStatus) {
+			case DECLINED:
+				return messageSource.getMessage("ApprovalConsentStatus.DECLINED", null, locale);
+			case REVOKED:
+				return messageSource.getMessage("ApprovalConsentStatus.REVOKED", null, locale);
+			case APPROVED:
+				return messageSource.getMessage("ApprovalConsentStatus.APPROVED", null, locale);
+			default:
+				return messageSource.getMessage("unknown", null, locale);
+			}
+		} catch (NoSuchMessageException nsme) {
+			LOG.warn("Coulnd't find localized message. Localization doesn't work properly");
+			return approvalStatus.toString().toLowerCase();
+		}
+	}
+	
 	
 	private String localizeConsentStatus(ConsentStatus consentStatus) {
 		Locale locale = MessageUtil.getLocale();

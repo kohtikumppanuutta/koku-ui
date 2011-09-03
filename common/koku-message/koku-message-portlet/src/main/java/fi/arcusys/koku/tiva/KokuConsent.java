@@ -16,6 +16,7 @@ public class KokuConsent {
 	private String createType;
 	private String assignedDate;
 	private String status;
+	private String approvalStatus;
 	private String validDate;
 	private List<ActionRequest> actionRequests;
 	
@@ -83,6 +84,14 @@ public class KokuConsent {
 		this.validDate = validDate;
 	}
 	
+	public String getApprovalStatus() {
+		return approvalStatus;
+	}
+
+	public void setApprovalStatus(String approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
+
 	public List<ActionRequest> getActionRequests() {
 		return actionRequests;
 	} 
