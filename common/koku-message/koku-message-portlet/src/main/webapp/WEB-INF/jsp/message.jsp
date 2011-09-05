@@ -1026,7 +1026,7 @@
 		
 		if(messageList.length == 0) return; // no message selected
 		
-		var conf = confirm("<spring:message code="info.conformWarning"/>");
+		var conf = confirm("<spring:message code="info.conformRevokeWarning"/>");
 		if(!conf)	return;
 		
 		var url="<%= revokeURL %>";

@@ -149,8 +149,9 @@ public class MessageHandle {
 	 * @param messageId message id
 	 * @return detailed message
 	 */
-	public Message getMessageById(String messageId) {	
-		long  msgId = (long) Long.parseLong(messageId);
+	public Message getMessageById(String messageId) {
+		String parsedMsg = messageId.replaceAll(",", ".");
+		long  msgId = (long) Long.parseLong(parsedMsg);
 		setMessageStatus(msgId);
 		
 		fi.arcusys.koku.kv.messageservice.Message msg = ms.getMessageById(msgId);

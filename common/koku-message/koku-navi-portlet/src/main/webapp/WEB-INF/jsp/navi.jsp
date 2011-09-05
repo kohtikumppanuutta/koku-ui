@@ -245,7 +245,7 @@
 			</ul></li>
 		<li><a href="#">Päivähoitohakemukset</a>
 			<ul class="child">
-				<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Uudet</a></li>				
+				<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Uudet päivähoitohakemukset</a></li>				
 			</ul></li>
 		</c:if>
 		<!-- For employee in Jboss portal-->
@@ -279,7 +279,7 @@
 			<ul class="child">
 				<li id="cst_new"><a href="<%= defaultPath %>/Message/NewConsent">Uusi suostumuspohja</a></li>
 				<li id="sendconsent"><a href="<%= defaultPath %>/Message/SendConsent">Lähetä suostumus</a></li>
-				<li id="cst_own_employee"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_employee')">Oma suostumus</a></li>
+				<li id="cst_own_employee"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_employee')">Omat suostumukset</a></li>
 			</ul></li>				
 		<li><a href="javascript:void(0)">Tietopyynnöt</a>
 			<ul class="child">
