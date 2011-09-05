@@ -142,8 +142,6 @@ public class TivaEmployeeServiceHandle {
 
 		if(field.trim().length() > 0) {
 			criteria.setConsentTemplateId(Long.parseLong(field));
-		}else {
-			return null;
 		}
 		
 		return criteria;

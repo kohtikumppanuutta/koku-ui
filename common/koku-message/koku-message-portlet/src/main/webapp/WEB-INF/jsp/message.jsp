@@ -70,8 +70,9 @@
 	var refreshTimer; // global refresh timer
 	var configObj = new config();
 	var pageObj = new paging();	
-	
-	jQuery(document).ready(function(){		
+
+	jQuery(document).ready(function(){
+		suggestUrl = "<%= suggestURL %>";
 		checkPageSession();
 		/* Ajax activity support call. Show the ajax loading icon */
 	    jQuery('#task-manager-operation-loading')
@@ -109,7 +110,6 @@
 			return;
 		}
 		
-		pageObj.taskType = getTaskTypeFromNavi();	
 		var url="<%= ajaxURL %>";
 		url = formatUrl(url);
 
@@ -704,11 +704,15 @@
 		this.totalPages = 1;
 		this.totalItems;
 		/*  */
-		this.taskType = 'msg_inbox';
+		this.taskType = getTaskTypeFromNavi();
 		//this.taskType = parseParameter('naviType');
 		/* keywords for searching and filter fields */
 		this.keyword = '';
-		this.field = '1_2_3_4';
+		if(this.taskType.indexOf('msg') > -1) {
+			this.field = '1_2_3_4';
+		}else {
+			this.field = '';
+		}		
 		/* 6 types: by description_desc, by description_asc, by state_desc, 
 		by state_asc, by creationDate_desc, by creationDate_asc */
 		this.orderType = 'creationDate_desc';
@@ -822,7 +826,10 @@
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="revokeConsents()" /></li>';
 		}else if(pageObj.taskType.indexOf('msg') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="page.removeSelected"/>"  onclick="deleteMessages()" /></li>';
-		}else if(pageObj.taskType == 'app_response_citizen' || pageObj.taskType == 'app_response_employee') {
+		}else if(pageObj.taskType == 'app_response_employee') {
+			pageHtml += '<li><input type="button" value="<spring:message code="appointment.edit"/>"  onclick="editAppointments()" /></li>';
+			pageHtml += '<li><input type="button" value="<spring:message code="consent.cancel"/>"  onclick="cancelAppointments()" /></li>';
+		}else if(pageObj.taskType == 'app_inbox_employee') {
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.cancel"/>"  onclick="cancelAppointments()" /></li>';
 		}
 			
@@ -953,6 +960,26 @@
 		});
 	}
 	
+
+	function editAppointments() {
+		var messageList = [];
+		jQuery('input:checkbox[name="message"]:checked').each(function(){
+			var value = jQuery(this).val();
+			var temp = value.split('_');		
+		    messageList.push(temp[0]);
+		});
+		
+		if(messageList.length > 1) {
+			alert('<spring:message code="appointment.editError" />');
+		}else if(messageList.length == 0){
+			return;
+		}else if(messageList.length == 1){
+			var appointmentId = messageList[0];
+			url = "<%= defaultPath %>" + "/Message/NewAppointment" + "?FormID=" + appointmentId;
+			window.location = url;
+		}
+	}
+	
 	/**
 	 * Cancels a list of appointments selected by user
 	 */
@@ -1030,7 +1057,7 @@
 		}else if(pageObj.taskType.indexOf('cst') > -1) { // for consent
 			jQuery('#consent-search').show();
 			jQuery('#message-search').hide();
-			createSuggestDiv("consent-search", "templateName");
+			// createSuggestDiv("consent-search", "templateName");
 		}else {
 			return;
 		}
@@ -1059,7 +1086,7 @@
 	}
 	
 	function searchConsents() {
-		var keyword = jQuery("input#keyword").val();
+		var keyword = jQuery("input#recipient").val();
 		pageObj.field = '';
 		
 		if(currentNum != -1) {
@@ -1078,6 +1105,7 @@
  	 */
 	function resetSearch() {
 		jQuery("input#keyword").val('');
+		jQuery("input#recipient").val('');
 		jQuery('input:checkbox[name="field"]').attr('checked', true);
 		pageObj.keyword = '';
 		ajaxGetTasks();
@@ -1105,20 +1133,22 @@
 				</span>	
 			</form>
 		</div>
-		<div id="consent-search" class="basic-search" style="position:absolute; display:none;">
+		<div id="consent-search" class="basic-search" style="display:none;">
 			<form name="searchForm" onsubmit="searchConsents(); return false;">		
 				<span class="text-bold" ><spring:message code="consent.recipients" /></span>
-				<input type="text" name="keyword" id="keyword" style="width:160px;" />
+				<input type="text" name="recipient" id="recipient" style="width:160px;" />
 				<span class="text-bold" ><spring:message code="consent.templateName" /></span>
 				<input type="text" name="templateName" id="templateName" style="width:160px;" autocomplete="off" onkeydown="beKeyDown(event);" onkeyup="beKeyUp(event);"/>
 				<input type="submit" value="<spring:message code="message.search"/>" />
 				<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
 			</form>
 		</div>
+		
 	</div>
-	
 	<div id="task-manager-operation" class="task-manager-operation-part">
 		<div id="task-manager-operation-page"></div>
 		<div id="task-manager-operation-loading"><spring:message code="page.loading"/></div>
 	</div>
+	
+	<div id="search_suggest" style="position: absolute; left: 368px; top: 402px; width: 164px; background-color:#ffffff;  z-index:1000; display:none;"> </div>
 </div>

@@ -15,7 +15,8 @@ var isie = (document.all) ? true:false;
 var keyStr = "";
 var doKeyUp = false;
 var suggestDiv = 'search_suggest';
-var keywordDiv;
+var keywordDiv = 'templateName';
+var suggestUrl;
 
 function createSuggestDiv(searchElement, keywordElement) {
 	
@@ -80,13 +81,13 @@ function getCandidateKeywords(keyValue)
     keyStr = key;
     if(key.length>0)
     {
-    	var url="<%= suggestURL %>";
+    	var url = suggestUrl;
 		
 		jQuery.ajax({
 			  type: 'POST',
 			  url: url,
 			  global:false,
-			  data: {'keyword':keyword},
+			  data: {'keyword':key},
 			  success: function(data) {
 				var obj = eval('(' + data + ')');
 				var json = obj.response;
