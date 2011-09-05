@@ -68,8 +68,7 @@ public class AvEmployeeServiceHandle {
 			kokuAppointment.setSender(appSummary.getSender());
 			kokuAppointment.setSubject(appSummary.getSubject());
 			kokuAppointment.setDescription(appSummary.getDescription());
-			kokuAppointment.setStatus(appSummary.getStatus().toString());
-			
+			kokuAppointment.setStatus(localizeActionRequestStatus(appSummary.getStatus()));
 			appList.add(kokuAppointment);		
 		}
 		

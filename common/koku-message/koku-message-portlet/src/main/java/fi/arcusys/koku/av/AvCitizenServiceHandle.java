@@ -71,7 +71,7 @@ public class AvCitizenServiceHandle {
 			kokuAppointment.setSubject(appSummary.getSubject());
 			kokuAppointment.setDescription(appSummary.getDescription());
 			kokuAppointment.setTargetPerson(appSummary.getTargetPerson());
-			kokuAppointment.setStatus(appSummary.getStatus().toString());
+			kokuAppointment.setStatus(localizeActionRequestStatus(appSummary.getStatus()));
 			appList.add(kokuAppointment);		
 		}
 		
