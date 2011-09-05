@@ -13,24 +13,6 @@
 			<xs:element name='getTotalConsentsResponse' type='tns:getTotalConsentsResponse' />
 			<xs:element name='searchConsentTemplates' type='tns:searchConsentTemplates' />
 			<xs:element name='searchConsentTemplatesResponse' type='tns:searchConsentTemplatesResponse' />
-			<xs:complexType name='searchConsentTemplates'>
-				<xs:sequence>
-					<xs:element minOccurs='0' name='searchString' type='xs:string' />
-					<xs:element name='limit' type='xs:int' />
-				</xs:sequence>
-			</xs:complexType>
-			<xs:complexType name='searchConsentTemplatesResponse'>
-				<xs:sequence>
-					<xs:element maxOccurs='unbounded' minOccurs='0' name='return'
-						type='tns:suostumuspohjaShort' />
-				</xs:sequence>
-			</xs:complexType>
-			<xs:complexType name='suostumuspohjaShort'>
-				<xs:sequence>
-					<xs:element name='suostumuspohjaId' type='xs:long' />
-					<xs:element minOccurs='0' name='otsikko' type='xs:string' />
-				</xs:sequence>
-			</xs:complexType>
 			<xs:complexType name='getTotalConsents'>
 				<xs:sequence>
 					<xs:element minOccurs='0' name='user' type='xs:string' />
@@ -91,6 +73,24 @@
 					<xs:element minOccurs='0' name='templateName' type='xs:string' />
 				</xs:sequence>
 			</xs:complexType>
+			<xs:complexType name='searchConsentTemplates'>
+				<xs:sequence>
+					<xs:element minOccurs='0' name='searchString' type='xs:string' />
+					<xs:element name='limit' type='xs:int' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='searchConsentTemplatesResponse'>
+				<xs:sequence>
+					<xs:element maxOccurs='unbounded' minOccurs='0' name='return'
+						type='tns:suostumuspohjaShort' />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name='suostumuspohjaShort'>
+				<xs:sequence>
+					<xs:element minOccurs='0' name='suostumuspohjaId' type='xs:long' />
+					<xs:element minOccurs='0' name='otsikko' type='xs:string' />
+				</xs:sequence>
+			</xs:complexType>
 			<xs:complexType name='getConsentDetails'>
 				<xs:sequence>
 					<xs:element name='suostumusId' type='xs:long' />
@@ -122,7 +122,6 @@
 				<xs:restriction base='xs:string'>
 					<xs:enumeration value='Approved' />
 					<xs:enumeration value='Declined' />
-					<xs:enumeration value='Revoked' />
 				</xs:restriction>
 			</xs:simpleType>
 			<xs:simpleType name='consentStatus'>

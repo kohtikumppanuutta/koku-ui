@@ -3,6 +3,9 @@
 <portlet:resourceURL var="ajaxURL" id="getTask">
 </portlet:resourceURL>
 
+<portlet:resourceURL var="suggestURL" id="getSuggestion">
+</portlet:resourceURL>
+
 <portlet:resourceURL var="archiveURL" id="archiveMessage">
 </portlet:resourceURL>
 
@@ -1022,20 +1025,16 @@
 	function showSearchUI() {
 		
 		if(pageObj.taskType.indexOf('msg') > -1) { // for message
-			var searchFields = ''
-				+ '<input type="checkbox" checked="checked" name="field" value="1" /><spring:message code="message.from" />'
-				+ '<input type="checkbox" checked="checked" name="field" value="2" /><spring:message code="message.to" />'
-				+ '<input type="checkbox" checked="checked" name="field" value="3" /><spring:message code="message.subject" />'
-				+ '<input type="checkbox" checked="checked" name="field" value="4" /><spring:message code="message.content" />';
+			jQuery('#message-search').show();
+			jQuery('#consent-search').hide();
 		}else if(pageObj.taskType.indexOf('cst') > -1) { // for consent
-			var searchFields = ''
-				+ '<input type="checkbox" checked="checked" name="field" value="1" /><spring:message code="consent.requester" />'
-				+ '<input type="checkbox" checked="checked" name="field" value="2" /><spring:message code="consent.templateName" />';
+			jQuery('#consent-search').show();
+			jQuery('#message-search').hide();
+			createSuggestDiv("consent-search", "templateName");
 		}else {
 			return;
 		}
-				
-		jQuery('#search-fields').html(searchFields);		
+		
 		jQuery('#task-manager-search').toggle('fast');
 	}
 	
@@ -1059,6 +1058,21 @@
 		return false;
 	}
 	
+	function searchConsents() {
+		var keyword = jQuery("input#keyword").val();
+		pageObj.field = '';
+		
+		if(currentNum != -1) {
+			var templateId = consentTemplates[currentNum]['suostumuspohjaId'];
+			pageObj.field = templateId;	
+		}
+		
+		pageObj.keyword = keyword;			
+		ajaxGetTasks();
+		
+		return false;
+	}
+	
  	/**
  	 * Reset the search result and clear the keyword
  	 */
@@ -1077,9 +1091,9 @@
 		</table>
 	</div>
 	<div id="task-manager-search" class="task-manager-operation-part">
-		<div class="basic-search">
+		<div id="message-search" class="basic-search" style="display:none;">
 			<form name="searchForm" onsubmit="searchTasks(); return false;">		
-				<span class="message-keyword" ><spring:message code="message.searchKeyword" /></span>
+				<span class="text-bold" ><spring:message code="message.searchKeyword" /></span>
 				<input type="text" name="keyword" id="keyword" style="width:160px;" />
 				<input type="submit" value="<spring:message code="message.search"/>" />
 				<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
@@ -1089,6 +1103,16 @@
 					<input type="checkbox" checked="checked" name="field" value="3" /><spring:message code="message.subject" />
 					<input type="checkbox" checked="checked" name="field" value="4" /><spring:message code="message.content" />
 				</span>	
+			</form>
+		</div>
+		<div id="consent-search" class="basic-search" style="position:absolute; display:none;">
+			<form name="searchForm" onsubmit="searchConsents(); return false;">		
+				<span class="text-bold" ><spring:message code="consent.recipients" /></span>
+				<input type="text" name="keyword" id="keyword" style="width:160px;" />
+				<span class="text-bold" ><spring:message code="consent.templateName" /></span>
+				<input type="text" name="templateName" id="templateName" style="width:160px;" autocomplete="off" onkeydown="beKeyDown(event);" onkeyup="beKeyUp(event);"/>
+				<input type="submit" value="<spring:message code="message.search"/>" />
+				<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
 			</form>
 		</div>
 	</div>

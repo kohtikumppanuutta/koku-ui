@@ -2,6 +2,8 @@ package fi.arcusys.koku.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -129,6 +131,29 @@ public class MessageUtil {
 		} else {
 			return "";
 		}
+	}
+	
+	/**
+	 * Formats a list of string to string
+	 * @param recipients a list of string
+	 * @return recipients string
+	 */
+	public static String formatRecipients(List<String> recipients) {
+		Iterator<String> it = recipients.iterator();
+		String recipientStr = "";
+		String recipient;
+		
+		while(it.hasNext()) {
+			recipient = it.next();
+			
+			if(recipient.trim().length() > 0)
+				recipientStr += recipient + ", ";		
+		}
+		
+		if(recipientStr.lastIndexOf(",") > 0)
+			recipientStr = recipientStr.substring(0, recipientStr.length()-2);
+		
+		return recipientStr;
 	}
 }
 

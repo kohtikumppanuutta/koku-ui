@@ -32,6 +32,7 @@ import fi.arcusys.koku.kv.RequestHandle;
 import fi.arcusys.koku.tiva.KokuConsent;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
+import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
@@ -200,6 +201,20 @@ public class AjaxController {
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
+	@ResourceMapping(value = "getSuggestion")
+	public String getSuggestion(@RequestParam(value = "keyword") String keyword,
+			ModelMap modelmap, PortletRequest request, PortletResponse response) {
+		
+		TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();		
+		
+		List<SuostumuspohjaShort> consentTemplates = tivaHandle.searchConsentTemplates(keyword, 5);
+		
+		JSONObject jsonModel = new JSONObject();
+		jsonModel.put("result", consentTemplates);
+		modelmap.addAttribute("response", jsonModel);
+		
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
 	/**
 	 * Processes tasks query and get task list from web services
 	 * @param taskType type of requested task
@@ -269,8 +284,8 @@ public class AjaxController {
 					List<KokuConsent> csts;
 					TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
 					tivaHandle.setMessageSource(messageSource);
-					csts = tivaHandle.getConsents(username, keyword, first, max);
-					totalTasksNum = tivaHandle.getTotalConsents(username, keyword);
+					csts = tivaHandle.getConsents(username, keyword, field, first, max);
+					totalTasksNum = tivaHandle.getTotalConsents(username, keyword, field);
 					jsonModel.put("tasks", csts);
 				}	
 				
@@ -463,5 +478,6 @@ public class AjaxController {
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
+	
 	
 }

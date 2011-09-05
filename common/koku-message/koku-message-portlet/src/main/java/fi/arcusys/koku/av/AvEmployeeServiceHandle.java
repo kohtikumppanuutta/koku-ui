@@ -205,35 +205,12 @@ public class AvEmployeeServiceHandle {
 		while(it.hasNext()) {
 			receipientTo = it.next();
 			if(receipientTo.getTargetPerson().equals(targetPerson)) {
-				recipientsStr = formatRecipients(receipientTo.getReceipients());
+				recipientsStr = MessageUtil.formatRecipients(receipientTo.getReceipients());
 				break;
 			}
 		}
 		
 		return recipientsStr;
-	}
-	
-	/**
-	 * Formats a list of string to string
-	 * @param recipients a list of string
-	 * @return recipients string
-	 */
-	private String formatRecipients(List<String> recipients) {
-		Iterator<String> it = recipients.iterator();
-		String recipientStr = "";
-		String recipient;
-		
-		while(it.hasNext()) {
-			recipient = it.next();
-			
-			if(recipient.trim().length() > 0)
-				recipientStr += recipient + ", ";		
-		}
-		
-		if(recipientStr.lastIndexOf(",") > 0)
-			recipientStr = recipientStr.substring(0, recipientStr.length()-2);
-		
-		return recipientStr;
 	}
 	
 	/**
@@ -276,7 +253,7 @@ public class AvEmployeeServiceHandle {
 			if(!hasTargetPerson(targetPerson, acceptedSlots, userRejected)) {
 				UserWithTarget user = new UserWithTarget();
 				user.setTargetPerson(targetPerson);
-				user.setRecipients(formatRecipients(app.getReceipients()));
+				user.setRecipients(MessageUtil.formatRecipients(app.getReceipients()));
 				unrespondedUsers.add(user);
 			}
 		}

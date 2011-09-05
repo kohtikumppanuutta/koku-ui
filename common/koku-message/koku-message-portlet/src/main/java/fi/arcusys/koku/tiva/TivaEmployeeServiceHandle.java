@@ -50,11 +50,11 @@ public class TivaEmployeeServiceHandle {
 	 * @param maxNum maximum number of consents
 	 * @return
 	 */
-	public List<KokuConsent> getConsents(String user, String keyword, int startNum, int maxNum) {
+	public List<KokuConsent> getConsents(String user, String keyword, String field, int startNum, int maxNum) {
 		ConsentQuery query = new ConsentQuery();
 		query.setStartNum(startNum);
 		query.setMaxNum(maxNum);		
-		ConsentCriteria criteria = createCriteria(keyword);	
+		ConsentCriteria criteria = createCriteria(keyword, field);	
 		query.setCriteria(criteria);		
 		List<ConsentSummary> consentSummary = tes.getConsents(user,query);
 		List<KokuConsent> consentList = new ArrayList<KokuConsent>();
@@ -87,9 +87,9 @@ public class TivaEmployeeServiceHandle {
 	 * @param keyword keyword for filtering
 	 * @return the total number of consents
 	 */
-	public int getTotalConsents(String user, String keyword) {
+	public int getTotalConsents(String user, String keyword, String field) {
 		ConsentQuery query = new ConsentQuery();	
-		ConsentCriteria criteria = createCriteria(keyword);	
+		ConsentCriteria criteria = createCriteria(keyword, field);	
 		query.setCriteria(criteria);
 		
 		return tes.getTotalConsents(user);
@@ -114,7 +114,8 @@ public class TivaEmployeeServiceHandle {
 		kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
 		kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
 		kokuConsent.setActionRequests(convertActionRequests(consent.getActionRequests()));
-		
+		kokuConsent.setRecipients(MessageUtil.formatRecipients(consent.getReceipients()));
+			
 		return kokuConsent;
 	}
 	
@@ -134,15 +135,13 @@ public class TivaEmployeeServiceHandle {
 	 * @param keyword keyword string
 	 * @return ConsentCriteria object
 	 */
-	private ConsentCriteria createCriteria(String keyword) {
+	private ConsentCriteria createCriteria(String keyword, String field) {
 		ConsentCriteria criteria = new ConsentCriteria();
 		
-		if(keyword.trim().length() > 0) {
-			String[] keywords = keyword.split("_");
-			String consentTemplateId = keywords[0];
-			String receipientUid = keywords[1];
-			criteria.setConsentTemplateId(Long.parseLong(consentTemplateId));
-			criteria.setReceipientUid(receipientUid);
+		criteria.setReceipientUid(keyword);
+
+		if(field.trim().length() > 0) {
+			criteria.setConsentTemplateId(Long.parseLong(field));
 		}else {
 			return null;
 		}
@@ -259,8 +258,6 @@ public class TivaEmployeeServiceHandle {
 			switch(approvalStatus) {
 			case DECLINED:
 				return messageSource.getMessage("ApprovalConsentStatus.DECLINED", null, locale);
-			case REVOKED:
-				return messageSource.getMessage("ApprovalConsentStatus.REVOKED", null, locale);
 			case APPROVED:
 				return messageSource.getMessage("ApprovalConsentStatus.APPROVED", null, locale);
 			default:

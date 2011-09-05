@@ -274,3 +274,35 @@
 	overflow: hidden;
 	white-space: nowrap;
 }
+
+.item_normal 
+{ 
+  width:160px;
+  background-color:#ffffff;
+  overflow:hidden;
+  padding-left: 2px;
+} 
+.itemBg 
+{ 
+  cursor:default;
+  background-color:#ffffff;
+  width:160px;
+  padding-left: 2px;
+} 
+.item_high 
+{ 
+  background-color:#326BC5;
+  cursor:default;
+  width:160px;
+  color:white;
+  padding-left: 2px;
+  padding-right: 2px;
+} 
+.item_button 
+{ 
+  text-align:right;
+  background-color:#ffffff;
+  width:160px;
+  cursor:pointer;
+  padding-left: 2px;
+} 
