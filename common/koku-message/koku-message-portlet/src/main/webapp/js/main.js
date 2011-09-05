@@ -29,7 +29,7 @@ function createSuggestDiv(searchElement, keywordElement) {
 	var divSuggest = document.createElement('div');
 	divSuggest.id = suggestDiv;
 	divSuggest.style.width = document.getElementById(keywordDiv).offsetWidth+ 'px';
-	divSuggest.style.zIndex = '10';
+	divSuggest.style.zIndex = '1000';
 	divSuggest.style.position = 'absolute';
 	divSuggest.style.top = document.getElementById(keywordDiv).offsetHeight+ 'px';
 	divSuggest.style.left = document.getElementById(keywordDiv).offsetLeft + 'px';

@@ -814,7 +814,7 @@
 	function createTasksPage() {
 		var pageHtml = '<ul>';
 		
-		if(pageObj.taskType.indexOf('msg') > -1 || pageObj.taskType.indexOf('cst') > -1) {
+		if(pageObj.taskType.indexOf('msg') > -1 || pageObj.taskType.indexOf('cst_own_employee') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="message.search"/>"  onclick="showSearchUI()" /></li>';
 		}
 			
@@ -1057,7 +1057,7 @@
 		}else if(pageObj.taskType.indexOf('cst') > -1) { // for consent
 			jQuery('#consent-search').show();
 			jQuery('#message-search').hide();
-			// createSuggestDiv("consent-search", "templateName");
+			//createSuggestDiv("consent-search", "templateName");
 		}else {
 			return;
 		}
@@ -1150,5 +1150,5 @@
 		<div id="task-manager-operation-loading"><spring:message code="page.loading"/></div>
 	</div>
 	
-	<div id="search_suggest" style="position: absolute; left: 368px; top: 402px; width: 164px; background-color:#ffffff;  z-index:1000; display:none;"> </div>
+	<div id="search_suggest" style="position: absolute; left: 368px; top: 402px; width: 164px; background-color:#ffffff;  z-index:1000; display:none;"> </div> 
 </div>
