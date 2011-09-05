@@ -6,11 +6,12 @@
 <%-- Load jQuery --%>
 <%-- This just temporary fix, because jQuery should be made available from theme or by portal not in portlet. --%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.5.2.min.js"></script>
-
+<%-- jQuery iframe autoheight plugin --%>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.iframe-auto-height.plugin.1.5.0.min.js"></script>
 <script type="text/javascript">
 
 	var timerOn = 0;
-	var iFramePreviousHeight = 0;
+	var iFrameContentPreviousHeight = 0;
 	var minHeight = 700;
 	var iFrameId = '<portlet:namespace />xforms_iframe';
 
@@ -24,18 +25,21 @@
 	/* Meansure IFrame size */
 	function resizeTimer() {
 		var iFrameContentHeight = getIFrameBodyHeight(iFrameId);
-		if (iFramePreviousHeight != iFrameContentHeight) {
+		if (iFrameContentPreviousHeight != iFrameContentHeight) {
 			var newHeight = iFrameContentHeight + 20;
 			resizeIFrame(iFrameId, newHeight);
-			iFramePreviousHeight = getIFrameBodyHeight(iFrameId);
+			/* 	We have to ask height again, because Chorme/Safari will change content height on some 
+			 *	cases after resizing.
+			 */
+			iFrameContentPreviousHeight = getIFrameBodyHeight(iFrameId);
 		}		
 		setTimeout("resizeTimer()", 500 );
 	}
-		
+			
 	function resizeIFrame(id, height) {
 		if (height < minHeight) {
 			height = minHeight;
-		}
+		}		
 		document.getElementById(id).style.height = height+'px';
 	}
 	
@@ -44,35 +48,50 @@
 		if (iFrame == null) {
 			return minHeight;
 		}
-		var iFrameBody;
-		 var oBody;
-		 var oFrame;
+		
+		var body;
 		 
 		if (!isIE()) { 
 			 /* Firefox, Safari, Chrome etc. */
-			 //iFrameBody = iFrame.contentDocument.getElementsById('IntalioInternal_jsxmain');
-			  iFrameBody = iFrame.contentDocument.getElementsByTagName('body')[0];
+			  body = iFrame.contentDocument.getElementsByTagName('body')[0];
 		} else { 
 			 /*  InternetExplorer */
-			<%-- //iFrameBody = iFrame.contentWindow.document.getElementsById('IntalioInternal_jsxmain');
-			  //iFrameBody = iFrame.contentWindow.document.getElementsByTagName('body')[0];
-			  //var iFrameDoc = window.frames[id].document;
-			  //iFrameBody = iFrameDoc.getElementsByTagName('body')[0];
-			 --%>			  
-			 oBody	= iFrame.document.body;
+			 body = iFrame.contentWindow.document.getElementsByTagName('body')[0];
 		}
 		
 		/* IE doesn't seem to be working correctly */
 		if (isIE()) {
-			if (oBody == undefined) {
-				return iFramePreviousHeight;
+			if (body == undefined) {
+				return iFrameContentPreviousHeight;
 			}
-			return oBody.scrollHeight + (oBody.offsetHeight - oBody.clientHeight);
-
-			<%--//iFrameBody.scrollHeight;
-			// return iFrameBody.scrollHeight; --%>
+			
+			/* IE specific fix (for somereason IE can't set CSS styles by itself) */
+			var jsx3 = iFrame.contentDocument.getElementById('_jsx_0_3');
+			if (jsx3 != undefined || jsx3 != null ) {				
+				jsx3.style.display = 'block';
+				jsx3.style.height = '100%';
+				jsx3.style.overflow = 'visible';
+				jsx3.style.position = 'absolute';
+				jsx3.style.width = '100%';
+			} 
+			
+			var jsx2 = iFrame.contentDocument.getElementById('_jsx_0_2');
+			if (jsx2 != undefined || jsx2 != null ) {				
+				jsx2.style.height = '100%';
+			}
+			
+			var jsx1 = iFrame.contentDocument.getElementById('_jsx_0_1');
+			if (jsx1 != undefined || jsx1 != null ) {				
+				jsx1.style.display = 'block';
+				jsx1.style.height = '100%';
+				jsx1.style.overflow = 'visible';
+				jsx1.style.position = 'absolute';
+				jsx1.style.width = '100%';
+			}
+							
+			return body.scrollHeight + (body.offsetHeight - body.clientHeight);
 		} else {
-			return iFrameBody.scrollHeight;		
+			return body.scrollHeight;		
 		}
 		
 	}
@@ -219,9 +238,10 @@
 
 <!-- <iframe id="hiddenIframe" width="0" height="0" src="https://intalio:8443/xssEnabler.html" style="display: none;"></iframe> -->
 
-<iframe src="" id="<portlet:namespace />xforms_iframe" class="xforms_container_iframe" frameborder="0" scrolling="no" style="height: 700px; width:100%;"></iframe>
+<iframe src="" id="<portlet:namespace />xforms_iframe" class="xforms_container_iframe" frameborder="0" scrolling="no" horizontalscrolling="no" style="height: 700px; width:100%; overflow-x: hidden;"></iframe>
 
 <script type="text/javascript">
 	startResizer();
+	// jQuery('<portlet:namespace />xforms_iframe').iframeAutoHeight({minHeight: 700});
 </script>
 
