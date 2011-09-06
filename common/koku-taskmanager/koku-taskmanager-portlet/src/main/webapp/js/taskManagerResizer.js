@@ -67,22 +67,24 @@
 				return iFrameContentPreviousHeight;
 			}
 			
-			/* IE specific fix (for somereason IE can't set CSS styles by itself) */
-			var jsx3 = iFrame.contentDocument.getElementById('_jsx_0_3');
-			if (jsx3 != undefined || jsx3 != null ) {				
+			var jsx3 = iFrame.contentWindow.document.getElementById('_jsx_0_3');
+
+			if (jsx3 != undefined || jsx3 != null ) {
 				jsx3.style.display = 'block';
 				jsx3.style.height = '100%';
 				jsx3.style.overflow = 'visible';
+				jsx3.style.overflowX = 'visible';
+				jsx3.style.overflowY = 'visible';
 				jsx3.style.position = 'absolute';
 				jsx3.style.width = '100%';
 			} 
 			
-			var jsx2 = iFrame.contentDocument.getElementById('_jsx_0_2');
-			if (jsx2 != undefined || jsx2 != null ) {				
+			var jsx2 = iFrame.contentWindow.document.getElementById('_jsx_0_2');
+			if (jsx2 != undefined || jsx2 != null ) {
 				jsx2.style.height = '100%';
 			}
 			
-			var jsx1 = iFrame.contentDocument.getElementById('_jsx_0_1');
+			var jsx1 = iFrame.contentWindow.document.getElementById('_jsx_0_1');
 			if (jsx1 != undefined || jsx1 != null ) {				
 				jsx1.style.display = 'block';
 				jsx1.style.height = '100%';
