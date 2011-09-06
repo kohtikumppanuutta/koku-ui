@@ -3,18 +3,12 @@
 	<portlet:param name="myaction" value="home" />
 </portlet:renderURL>
 
+<script type="text/javascript" src="<%= request.getContextPath() %>/js/taskManagerResizer.js"></script>
 <script type="text/javascript"> 
 	/* the times that iframe loads different srcs */
 	var loadingTimes = 0;
 	/* the source url that iframe loads at first time */
-	var firstUrl = "";
-	
-	
-	/* Global variables for iframe hack */
-	var timerOn = 0;
-	var iFramePreviousHeight = 0;
-	var minHeight = 500;
-	
+	var firstUrl = "";	
 	
 	/**
 	 * Returns to the main portlet page
@@ -54,56 +48,13 @@
 		loadingTimes += 1;
 	}
 	
-	function startResizer() {
-		if (!timerOn) {
-			timerOn = 1;
-			resizeTimer();
-		}
-	}
-	
-	/* Meansure IFrame size */
-	function resizeTimer() {
-		var iFrameContentHeight = getIFrameBodyHeight();
-		if (iFramePreviousHeight != iFrameContentHeight) {
-			var newHeight = iFrameContentHeight + 20;
-			resizeIFrame(newHeight);
-			iFramePreviousHeight = getIFrameBodyHeight();
-		}		
-		setTimeout("resizeTimer()", 500 );
-	}
-		
-	function resizeIFrame(height) {
-		if (height < minHeight) {
-			height = minHeight;
-		}
-		document.getElementById('taskform').style.height = height + "px";
-	}
-	
-	function getIFrameBodyHeight(){
-		var iFrame =  document.getElementById('taskform');
-		if (iFrame == null) {
-			return minHeight;
-		}
-		var iFrameBody;
-		if ( iFrame.contentDocument ) { 
-			 /* Firefox */
-			 //iFrameBody = iFrame.contentDocument.getElementsById('IntalioInternal_jsxmain');
-			  iFrameBody = iFrame.contentDocument.getElementsByTagName('body')[0];
-		} else if ( iFrame.contentWindow ) { 
-			 /*  InternetExplorer */
-			 //iFrameBody = iFrame.contentWindow.document.getElementsById('IntalioInternal_jsxmain');
-			  iFrameBody = iFrame.contentWindow.document.getElementsByTagName('body')[0];
-		}
-		return iFrameBody.scrollHeight;
-	}
-
-	
-	
 </script>
 <div id="task-manager-wrap">
 	<div id="task-manager-tasklist">
-		<iframe src="<c:out value="${tasklink}" />" id="taskform" name="taskform" style="width:100%; height:100%" frameborder="0" scrolling="auto" onload="checkForm()" ></iframe>
-		<script type="text/javascript">startResizer();</script>
+		<iframe src="<c:out value="${tasklink}" />" id="taskform" name="taskform" style="width:100%; height:100%" frameborder="0" scrolling="no" onload="checkForm()" ></iframe>
+		<script type="text/javascript">
+			startResizer("taskform");
+		</script>
 	</div>
 	<div id="task-manager-operation" class="task-manager-operation-part">
 		<input type="button" value="<spring:message code="task.return"/>" onclick="returnMainPage()" />

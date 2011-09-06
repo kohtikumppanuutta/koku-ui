@@ -44,8 +44,9 @@
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 	border: 1px solid #cccccc;
-	height: 360px;
-	padding: 2px;
+	/* height: 360px; */
+	padding: 2px;	
+	overflow: hidden;
 }
 
 /* main table */
