@@ -44,7 +44,6 @@
 	</div>
 
 
-
 	<div style="clear: both"></div>
 
 </div><!-- end of koku-lok-div -->

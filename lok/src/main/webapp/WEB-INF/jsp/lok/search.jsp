@@ -57,6 +57,8 @@
 			<form:input path="pic" maxlength="11" size="11" />
 			<span class="errors"><form:errors path="pic" /> </span>
 
+<!--  TÄHÄN VETOVALIKKO, JOSSA MAHDOLLISET ARVOT -->
+
 			<span class="form-field-label"><spring:message
 					code="koku.common.concept" /> </span>
 			<form:input path="concept" maxlength="15" size="15" />
@@ -98,6 +100,7 @@
 				<tr>
 <%-- TODO! when using <th> the text won't align to left, that's why we use <td> and <b> here now.
 This should be changed! --%>
+<!-- TODO: Should the header titles be changed?  -->
 
 					<th width=20% scope="col"><b><spring:message code="ui.lok.time" /></b></th>
 					<th width=20% scope="col"><b><spring:message code="ui.lok.end.user" /></b></th>

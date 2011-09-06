@@ -86,13 +86,16 @@ public class LogArchiveController {
 
     // set default archive time that is shown to the user at first. Default is 2
     // years ago.
-    Calendar starttime = Calendar.getInstance();
-    starttime.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR) - 2);
-
-    String defaultDateStr = dateFormat.format(starttime.getTime());
-    model.addAttribute("defaultDate", defaultDateStr);
-    log.debug("modeliin lisätty defaultDateStr " + defaultDateStr);
-
+    try{
+      LogUtils lu = new LogUtils();
+      String defaultDateStr = lu.getDateString(2);
+      model.addAttribute("defaultDate", defaultDateStr);  
+      log.debug("modeliin lisätty defaultDateStr = " + defaultDateStr);
+    }catch(Exception e){
+      log.error(e.getMessage(), e);
+      //TODO: Lisää virheidenkäsittely
+    }
+    
     return "archive";
   }
 

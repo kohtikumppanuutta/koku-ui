@@ -37,7 +37,6 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 @Controller
 @RequestMapping(value = "VIEW")
 public class LogViewController {
-  private static final String CRITERIA_RENDER_PARAM = "log-search-criteria";
 
   private static final Logger log = LoggerFactory.getLogger(LogViewController.class);
 
@@ -69,19 +68,17 @@ public class LogViewController {
 
     res.setTitle(resourceBundle.getMessage("koku.lok.header.view", null, req.getLocale()));
 
-    // default endtime is now
-    Calendar endtime = Calendar.getInstance();
-    // default starttime is 1 year ago
-    Calendar starttime = Calendar.getInstance();
-    starttime.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR) - 1);
-
-    String startDateStr = dateFormat.format(starttime.getTime());
-    model.addAttribute("startDate", startDateStr);
-    String endDateStr = dateFormat.format(endtime.getTime());
-    model.addAttribute("endDate", endDateStr);
-
-    log.debug("modeliin lisätty startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
-    
+    try{
+      LogUtils lu = new LogUtils();
+      String startDateStr = lu.getDateString(1); // 1 year ago
+      String endDateStr = lu.getDateString(0); // now
+      model.addAttribute("startDate", startDateStr);
+      model.addAttribute("endDate", endDateStr);
+      log.debug("modeliin lisätty startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
+    }catch(Exception e){
+      log.error(e.getMessage(), e);
+      //TODO: Lisää virheidenkäsittely
+    }
    
     if (criteria != null) {
       model.addAttribute("entries", doSearchEntries(criteria));

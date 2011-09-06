@@ -5,14 +5,14 @@ package fi.koku.lok;
  * @author aspluma
  */
 public class LogEntry {
-  private String message;
-  private String logId;
-  private String timestamp;
-  private String user;
-  private String child;
-  private String eventType;
-  private String eventDescription;
-  private String callingSystem;
+  private String message; // message
+  private String logId; // dataItemId
+  private String timestamp; // timestamp
+  private String user;  // userPic
+  private String child; // customerPic
+  private String eventType;  // dataItemType
+  private String eventDescription;  // operation
+  private String callingSystem; // clientSystemId
   
 
   public String getLogId() {
@@ -27,6 +27,7 @@ public class LogEntry {
     return timestamp;
   }
 
+  // format for timestamp: yyyy-mm-dd
   public void setTimestamp(String timestamp) {
     this.timestamp = timestamp;
   }
