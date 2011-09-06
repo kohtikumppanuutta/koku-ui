@@ -191,6 +191,8 @@
 		height="59" />
 	</a>
 	<ul class="main">
+	
+		<!--  VIESTIT -->
 		<li><a href="javascript:void(0)" >Etusivu</a></li>
 		<!-- For citizen in Gatein portal-->
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
@@ -216,60 +218,78 @@
 						<li id="msg_archive_outbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_archive_outbox')">Lähetetyt</a></li>
 					</ul>
 				</li>
-			</ul></li>
+			</ul>
+		</li>
+			
+			
+		<!--  PYYNNÖT -->
 		<!-- For citizen in Gatein portal-->
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
 		<li><a href="#">Pyynnöt</a>
 			<ul class="child">
-				<li id="req_valid_request"><a href="<%= defaultPath %>/Message/ValidRequest">Voimassaolevat</a></li>
-				<li><a href="#">Vanhentuneet</a></li>
+				<li id="req_valid_request"><a href="<%= defaultPath %>/Message/ValidRequest">Saapuneet</a></li>
+				<li><a href="#">Vastatut</a></li>
+				<li><a href="#">Vanhat</a></li>
 			</ul></li>
 		</c:if>
 		<!-- For employee in Jboss portal -->
 		<c:if test="${fn:contains(naviURL, '/default/')}">
 		<li><a href="#">Pyynnöt</a>
 			<ul class="child">
-				<li id="req_new"><a href="<%= defaultPath %>/Message/NewRequest">Uudet pyynnöt</a></li>
-				<li id="luopohja"><a href="<%= defaultPath %>/Message/LuoPohja">Luo pohja</a></li>
-				<li id="req_valid"><a href="javascript:void(0)" onclick="navigateToPage('req_valid')">Voimassaolevat</a></li>
-				<li><a href="#">Vanhentuneet</a></li>
-			</ul></li>
+				<li id="req_new"><a href="<%= defaultPath %>/Message/NewRequest">Uusi pyyntö</a></li>
+				<li id="luopohja"><a href="<%= defaultPath %>/Message/LuoPohja">Luo uusi pohja</a></li>
+				<li>Lähetetyt
+					<ul class="child">
+						<li id="req_valid"><a href="javascript:void(0)" onclick="navigateToPage('req_valid')">Avoimet</a></li>
+						<li><a href="#">Valmiit</a></li>
+					</ul>
+				</li>
+			</ul>
+		</li>
 		</c:if>
 		
+		<!-- TAPAAMISET -->
 		<!-- For citizen in Gatein portal-->
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
 		<li><a href="#">Tapaamiset</a>
 			<ul class="child">
 				<li id="app_inbox_citizen"><a href="javascript:void(0)" onclick="navigateToPage('app_inbox_citizen')">Vastausta odottavat</a></li>
 				<li id="app_response_citizen"><a href="javascript:void(0)" onclick="navigateToPage('app_response_citizen')">Vastatut</a></li>
-			</ul></li>
-		<li><a href="#">Päivähoitohakemukset</a>
-			<ul class="child">
-				<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Uudet päivähoitohakemukset</a></li>				
-			</ul></li>
+				<li id="app_response_old_citizen"><a href="javascript:void(0)" onclick="navigateToPage('app_response_citizen')">Vanhat</a></li>
+				
+			</ul>
+		</li>
 		</c:if>
 		<!-- For employee in Jboss portal-->
 		<c:if test="${fn:contains(naviURL, '/default/')}">
 		<li><a href="#">Tapaamiset</a>
 			<ul class="child">
-				<li id="app_new"><a href="<%= defaultPath %>/Message/NewAppointment">Uudet</a></li>
-				<li id="app_inbox_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_inbox_employee')">Saapuneet</a></li>
-				<li id="app_response_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_response_employee')">Vastatut</a></li>
+				<li id="app_new"><a href="<%= defaultPath %>/Message/NewAppointment">Uusi tapaaminen</a></li>
+				<li id="app_inbox_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_inbox_employee')">Avoimet</a></li>
+				<li id="app_response_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_response_employee')">Valmiit</a></li>
 			</ul></li>
 		</c:if>			
 		
+		<!--  SUOSTUMUKSET -->
 		<!-- For citizen in Gatein portal-->
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
 			<li><a href="#">Suostumukset</a>
 				<ul class="child">
-					<li id="cst_assigned_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_assigned_citizen')">Suostumukset</a></li>
-					<li id="cst_own_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_citizen')">Omat suostumukset</a></li>
-				</ul></li>
+					<li id="cst_assigned_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_assigned_citizen')">Saapuneet pyynnöt</a></li>
+					<li id="cst_own_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_citizen')">Vastatut</a></li>
+					<li id="cst_own_citizen_old"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_citizen')">Vanhat</a></li>					
+				</ul>
+			</li>
 				
 			<li><a href="#">Valtakirjat</a>
 				<ul class="child">
-					<li id="valtakirjaconsent"><a href="<%= defaultPath %>/Message/ValtakirjaConsent">Valtakirja</a></li>
-					<li id="selaavaltakirjoja"><a href="<%= defaultPath %>/Message/SelaaValtakirjoja">Selaa valtakirjoja</a></li>
+					<li id="valtakirjaconsent"><a href="<%= defaultPath %>/Message/ValtakirjaConsent">Anna valtakirja  </a></li>
+					<li id="selaavaltakirjoja"><a href="#">Omat valtakirjat</a>
+						<ul class="child">
+							<li id="selaaOmiaValtakirjoja"><a href="<%= defaultPath %>/Message/SelaaValtakirjoja">Valtuuttajana</a></li>
+							<li id="selaaOmiaValtakirjoja"><a href="<%= defaultPath %>/Message/SelaaValtakirjoja">Valtuutettuna</a></li>
+						</ul>
+					</li>
 				</ul>
 			</li>
 		</c:if>
@@ -278,22 +298,39 @@
 		<li><a href="#">Suostumukset</a>
 			<ul class="child">
 				<li id="cst_new"><a href="<%= defaultPath %>/Message/NewConsent">Uusi suostumuspohja</a></li>
-				<li id="sendconsent"><a href="<%= defaultPath %>/Message/SendConsent">Lähetä suostumus</a></li>
-				<li id="cst_own_employee"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_employee')">Omat suostumukset</a></li>
-			</ul></li>				
+				<li id="sendconsent"><a href="<%= defaultPath %>/Message/SendConsent">Uusi suostumuspyyntö</a></li>
+				<li id="cst_own_employee"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_employee')">Lähetetyt suostumuspyynnöt</a></li>
+			</ul>
+		</li>
+		<li><a href="#">Valtakirjat</a>
+			<ul class="child">
+				<li id="valtakirjaconsent"><a href="<%= defaultPath %>/Message/ValtakirjaConsent">Asiakkaan valtakirjat </a></li>
+				<li id="selaavaltakirjoja"><a href="<%= defaultPath %>/Message/SelaaValtakirjoja">Asian valtakirjat</a></li>
+			</ul>
+		</li>
+			
+		<!--  TIETOPYYNNÖT -->
 		<li><a href="javascript:void(0)">Tietopyynnöt</a>
 			<ul class="child">
 				<li id="newinformation"><a href="<%= defaultPath %>/Message/NewInformation">Uusi tietopyyntö</a></li>
 				<li id="informationbox"><a href="<%= defaultPath %>/Message/InformationBox">Saapuneet</a></li>
-				<li id="ilmoitukset"><a href="<%= defaultPath %>/Message/Ilmoitukset">Ilmoitukset</a></li>
-				
+				<li id="ilmoitukset"><a href="<%= defaultPath %>/Message/Ilmoitukset">Lähetetyt</a>
+					<ul class="child">
+						<li id="cst_new"><a href="#">Avoimet</a></li>
+						<li id="sendconsent"><a href="#">Valmiit</a></li>
+					</ul>
+				</li>
 			</ul>
 		</li>	
 		</c:if>	
 				
 		<li><a href="#">Asiointipalvelut</a>
 			<ul class="child">
-				<li><a href="#">Palveluhakemukset</a></li>
+				<li><a href="#">Palveluhakemukset</a>
+						<ul class="child">
+							<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Päivähoitohakemukset</a></li>				
+						</ul>
+				</li>
 				<li><a href="#">Voimassaolevat palvelut</a></li>
 				<li><a href="#">Ajanvaraustiedot</a></li>
 			</ul></li>
