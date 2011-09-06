@@ -17,6 +17,7 @@ public String htmlToCode_old(String s)
 		s = s.replace("<", "&lt;");
 		s = s.replace(">", "&gt;");
 		s = s.replace("&", "&amp;");
+		s = s.replace("'", "&rsquo;");
 		
 		return s;
 	}
@@ -29,6 +30,8 @@ public String htmlToCode(String s)
 		s = s.replace("\n\n", "");
 		s = s.replace("\r\n", "");
 		s = s.replace("\n", "");
+		s = s.replace("&", "&amp;");
+		s = s.replace("'", "&rsquo;");
 		return s;
 	}
 } 

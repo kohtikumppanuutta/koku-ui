@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import javax.annotation.Resource;
-
 import org.apache.log4j.Logger;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -20,7 +18,6 @@ import fi.arcusys.koku.kv.messageservice.MessageStatus;
 import fi.arcusys.koku.kv.messageservice.MessageSummary;
 import fi.arcusys.koku.kv.messageservice.OrderBy;
 import fi.arcusys.koku.kv.messageservice.Type;
-import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
