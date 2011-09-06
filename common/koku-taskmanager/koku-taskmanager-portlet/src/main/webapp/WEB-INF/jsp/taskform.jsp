@@ -48,12 +48,19 @@
 		loadingTimes += 1;
 	}
 	
+	/* In EPP portlet won't expand fully because PORTLET-FRAGMENT has inline style width: 770px 
+		Unfortunately there is no easy way to change this size using CSS. */
+	function eppHack() {		
+		jQuery('#task-manager-wrap').parent().css('width', '100%');		
+	}
+	
 </script>
 <div id="task-manager-wrap">
 	<div id="task-manager-tasklist">
 		<iframe src="<c:out value="${tasklink}" />" id="taskform" name="taskform" style="width:100%; height:100%" frameborder="0" scrolling="no" onload="checkForm()" ></iframe>
 		<script type="text/javascript">
 			startResizer("taskform");
+			eppHack();
 		</script>
 	</div>
 	<div id="task-manager-operation" class="task-manager-operation-part">

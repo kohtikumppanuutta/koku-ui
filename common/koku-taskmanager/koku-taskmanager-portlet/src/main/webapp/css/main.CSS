@@ -2,6 +2,11 @@
  * css file for task manager portlet
  * @Author: JinhuaChen
  */
+ 
+ /* JBoss EPP fix */
+.UIComponent .UIComponentBlock .PORTLET-FRAGMENT {
+	/* width: 100% !important; */	
+}
 
 #task-manager-wrap {
 	margin: 5px;
