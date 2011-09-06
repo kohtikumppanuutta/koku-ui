@@ -123,6 +123,7 @@
 				pageObj.totalPages = json["totalPages"];
 				pageObj.totalItems = json["totalItems"];
 				var tasks = json["tasks"];
+				pageObj.tasks = tasks;
 				presentTasks(tasks);				
 			}else {
 				var message = "<spring:message code="error.unLogin" />";
@@ -285,11 +286,11 @@
 				taskHtml += '<tr>';
 			}
 			
-			taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["appointmentId"] + '_' + tasks[i]["targetPerson"] + '" />' + '</td>'
-					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\',\'' + tasks[i]["targetPerson"] + '\')" >' + tasks[i]["sender"] + '</td>'
-					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\',\'' + tasks[i]["targetPerson"] + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
-					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\',\'' + tasks[i]["targetPerson"] + '\')" >' + tasks[i]["description"] + '</td>'
-					 + '<td class="messageItem" onclick="showAppointment(\''+ tasks[i]["appointmentId"] + '\',\'' + tasks[i]["targetPerson"] + '\')" >' + tasks[i]["status"] + '</td>'
+			taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
+					 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + tasks[i]["sender"] + '</td>'
+					 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
+					 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + tasks[i]["description"] + '</td>'
+					 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + tasks[i]["status"] + '</td>'
 					 + '</tr>';
 
 		}
@@ -316,9 +317,9 @@
 			for ( var i = 0; i < tasks.length; i++) {
 			
 				if((i+1)%2 == 0) {
-					taskHtml += '<tr class="evenRow" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')">';	
+					taskHtml += '<tr class="evenRow" onclick="showConsent(\''+ i + '\')">';	
 				}else {
-					taskHtml += '<tr onclick="showConsent(\''+ tasks[i]["consentId"] + '\')">';
+					taskHtml += '<tr onclick="showConsent(\''+ i + '\')">';
 				}
 			
 				taskHtml += '<td class="messageItem">' + tasks[i]["requester"] + '</td>'
@@ -350,15 +351,15 @@
 					taskHtml += '<tr>';
 				}
 			
-				taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["consentId"] + '" />' + '</td>'
-						 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["requester"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["templateName"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["status"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["approvalStatus"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["createType"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["assignedDate"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["validDate"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["anotherPermitterUid"] + '</td>'
+				taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
+						 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["requester"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["templateName"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["status"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["approvalStatus"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["createType"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["assignedDate"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["validDate"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["anotherPermitterUid"] + '</td>'
 					 	 + '</tr>';
 			}
 
@@ -385,14 +386,14 @@
 					taskHtml += '<tr>';
 				}
 			
-				taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["consentId"] + '" />' + '</td>'
-						 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["requester"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["templateName"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["status"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["approvalStatus"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["createType"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["assignedDate"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ tasks[i]["consentId"] + '\')" >' + tasks[i]["validDate"] + '</td>'
+				taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
+						 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["requester"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["templateName"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["status"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["approvalStatus"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["createType"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["assignedDate"] + '</td>'
+					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["validDate"] + '</td>'
 					 	 + '</tr>';
 			}
 
@@ -453,7 +454,10 @@
 		window.location = url;
 	}
 	/* Shows detailed appointment page */
-	function showAppointment(appointmentId, targetPerson) {
+	function showAppointment(index) {
+		var task = pageObj.tasks[index];
+		var appointmentId = task["appointmentId"];
+		var targetPerson = task['targetPerson'];
 		var url="";
 		
 		if(pageObj.taskType == "app_response_employee" || pageObj.taskType == "app_response_citizen") {
@@ -472,7 +476,8 @@
 		window.location = url;				
 	}
 	/* Shows detailed consent page */
-	function showConsent(consentId) {
+	function showConsent(index) {
+		var consentId = pageObj.tasks[index]['consentId'];
 		var url="";
 		
 		if(pageObj.taskType == "cst_own_citizen" || pageObj.taskType == "cst_own_employee") {
@@ -521,7 +526,10 @@
 		});
 	}	
 	//Creates a renderURL by ajax,to show the detailed appointment page
-	function showAppointment(appointmentId, targetPerson) {
+	function showAppointment(index) {
+		var task = pageObj.tasks[index];
+		var appointmentId = task["appointmentId"];
+		var targetPerson = task['targetPerson'];
 		var url="";
 		
 		if(pageObj.taskType == "app_response_employee" || pageObj.taskType == "app_response_citizen") {
@@ -544,10 +552,17 @@
 		}				
 	}
 	//Creates a renderURL by ajax,to show the detailed consent page
-	function showConsent(consentId) {
+	function showConsent(index) {
 		var url="";
+		var task = pageObj.tasks[index];
 		
-		if(pageObj.taskType == "cst_own_citizen" || pageObj.taskType == "cst_own_employee") {
+		var consentId = task['consentId'];
+		
+		if(pageObj.taskType == "cst_own_citizen" && task['approvalStatus'] == 'Hyväksytty' && task['status'] != 'Mitätöity') { // edit mode
+			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;	
+			window.location = url;
+		}
+		else if(pageObj.taskType == "cst_own_citizen" || pageObj.taskType == "cst_own_employee") {
 			url = "<%= consentRenderURL %>";
 			url = formatUrl(url);
 			
@@ -703,7 +718,7 @@
 		this.currentPage = 1;
 		this.totalPages = 1;
 		this.totalItems;
-		/*  */
+		this.tasks;
 		this.taskType = getTaskTypeFromNavi();
 		//this.taskType = parseParameter('naviType');
 		/* keywords for searching and filter fields */
@@ -983,11 +998,18 @@
 	function cancelAppointments() {		
 		var messageList = [];
 		var targetPersons = [];
+		
 		jQuery('input:checkbox[name="message"]:checked').each(function(){
-			var value = jQuery(this).val();
-			var temp = value.split('_');		
-		    messageList.push(temp[0]);
-		    targetPersons.push(temp[1]);
+			var index =  jQuery(this).val();
+			var task = pageObj.tasks[index];
+			var appointmentId = task["appointmentId"];
+			var targetPerson = task['targetPerson'];
+			var status = task['status'];
+			
+			if(status != 'Peruutettu') { // check if cancelled or not
+				messageList.push(appointmentId);
+			    targetPersons.push(targetPerson);
+			}		    
 		});
 		
 		if(messageList.length == 0) return; // no message selected
@@ -1018,7 +1040,13 @@
 	function revokeConsents() {		
 		var messageList = [];		
 		jQuery('input:checkbox[name="message"]:checked').each(function(){
-		    messageList.push(jQuery(this).val());
+			var id = jQuery(this).val();
+			var consentId = pageObj.tasks[id]['consentId'];
+			var consentStatus = pageObj.tasks[id]['status'];
+			
+			if(consentStatus != 'Mitätöity') { // not revoked yet
+				messageList.push(consentId);
+			}    	
 		});
 		
 		if(messageList.length == 0) return; // no message selected
@@ -1150,6 +1178,4 @@
 		<div id="task-manager-operation-page"></div>
 		<div id="task-manager-operation-loading"><spring:message code="page.loading"/></div>
 	</div>
-<!-- 	
-	<div id="search_suggest" style="position: absolute; left: 368px; top: 402px; width: 164px; background-color:#ffffff;  z-index:1000; display:none;"> </div> --> 
 </div>
