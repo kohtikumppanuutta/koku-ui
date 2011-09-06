@@ -29,12 +29,11 @@ function createSuggestDiv(searchElement, keywordElement) {
 	var divKeyword = document.getElementById(keywordId);
 	var divSuggest = document.createElement('div');
 	divSuggest.id = suggestId;
-	divSuggest.style.width = divKeyword.offsetWidth+ 'px';
+	divSuggest.style.width = (divKeyword.offsetWidth -2)+ 'px';
 	divSuggest.style.zIndex = '1000';
 	divSuggest.style.position = 'absolute';
-	divSuggest.style.top = divKeyword.offsetHeight + 'px';
+	divSuggest.style.top = (divKeyword.offsetHeight + 2) + 'px';
 	divSuggest.style.left = divKeyword.offsetLeft + 'px';
-	divSuggest.style.left = '368px';
 	divSuggest.style.display = 'none';
 	
 	divSearch.appendChild(divSuggest);
@@ -172,7 +171,7 @@ function searchKey(e)
 {
   if (e == 38){  // up key
     if(currentNum == -1){
-      currentNum = suggestions.length -2;
+      currentNum = suggestions.length - 1;
       beMouseOver(currentNum);
       document.getElementById(keywordId).value=suggestions[currentNum];
     }else if(currentNum == 0){
@@ -191,7 +190,7 @@ function searchKey(e)
       beMouseOver(currentNum);
       document.getElementById(keywordId).value=suggestions[currentNum];
             		           		
-    }else if(currentNum == suggestions.length -2){
+    }else if(currentNum == suggestions.length -1){
       document.getElementById(keywordId).value=keyStr;
       document.getElementById("item" + currentNum).className="item_normal";
       currentNum = -1;

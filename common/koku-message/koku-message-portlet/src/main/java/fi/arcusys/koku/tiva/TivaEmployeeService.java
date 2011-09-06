@@ -8,6 +8,7 @@ import fi.arcusys.koku.tiva.employeeservice.ConsentSummary;
 import fi.arcusys.koku.tiva.employeeservice.ConsentTO;
 import fi.arcusys.koku.tiva.employeeservice.KokuLooraSuostumusService_Service;
 import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
+import fi.arcusys.koku.util.MessageUtil;
 
 /**
  * Retrieves Tiva consent data and related operations via web services
@@ -33,7 +34,12 @@ public class TivaEmployeeService {
 	 * @return a list of summary consents
 	 */
 	public List<ConsentSummary> getConsents(String user, ConsentQuery query) {
-		return kls.getKokuLooraSuostumusServicePort().getConsents(user, query);
+		try {
+			return kls.getKokuLooraSuostumusServicePort().getConsents(user, query);
+		} catch(RuntimeException e) {
+			return null;
+		}
+		
 	}
 	
 	/**

@@ -58,6 +58,11 @@ public class TivaEmployeeServiceHandle {
 		query.setCriteria(criteria);		
 		List<ConsentSummary> consentSummary = tes.getConsents(user,query);
 		List<KokuConsent> consentList = new ArrayList<KokuConsent>();
+		
+		if(consentSummary == null) {
+			return consentList;
+		}
+		
 		KokuConsent kokuConsent;	
 		Iterator<ConsentSummary> it = consentSummary.iterator();
 		

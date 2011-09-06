@@ -1047,18 +1047,18 @@
 	 * Show/hide search user interface
 	 */
 	function showSearchUI() {
-		jQuery('#task-manager-search').toggle('fast');
-		
+			
 		if(pageObj.taskType.indexOf('msg') > -1) { // for message
 			jQuery('#message-search').show();
 			jQuery('#consent-search').hide();
 		}else if(pageObj.taskType.indexOf('cst') > -1) { // for consent
 			jQuery('#consent-search').show();
 			jQuery('#message-search').hide();
-			createSuggestDiv("consent-search", "templateName");
 		}else {
 			return;
 		}	
+		
+		jQuery('#task-manager-search').toggle('fast');
 	}
 	
 	/**
@@ -1085,9 +1085,11 @@
 		var keyword = jQuery("input#recipient").val();
 		pageObj.field = '';
 		
-		if(currentNum != -1) {
+		if(currentNum == -1 && keyword !='') {
+			pageObj.field = -1;	
+		}else {
 			var templateId = consentTemplates[currentNum]['suostumuspohjaId'];
-			pageObj.field = templateId;	
+			pageObj.field = templateId;
 		}
 		
 		pageObj.keyword = keyword;			
@@ -1134,7 +1136,7 @@
 				<span class="text-bold" ><spring:message code="consent.recipients" /></span>
 				<input type="text" name="recipient" id="recipient" style="width:160px;" />
 				<span class="text-bold" ><spring:message code="consent.templateName" /></span>
-				<input type="text" name="templateName" id="templateName" style="width:160px;" autocomplete="off" onkeydown="beKeyDown(event);" onkeyup="beKeyUp(event);"/>
+				<input type="text" name="templateName" id="templateName" style="width:160px;" autocomplete="off" onkeydown="beKeyDown(event)" onkeyup="beKeyUp(event)" onclick="createSuggestDiv('consent-search', 'templateName')" />
 				<input type="submit" value="<spring:message code="message.search"/>" />
 				<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
 			</form>
