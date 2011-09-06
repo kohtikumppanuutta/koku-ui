@@ -48,7 +48,7 @@
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 	border: 1px solid #cccccc;
-	height: 360px;
+	min-height: 360px;
 	padding: 2px;
 }
 
@@ -79,7 +79,6 @@
 	word-wrap: break-word;
 	word-break: break-all;
 	overflow: hidden;
-	white-space: nowrap;
 }
 
 /* to solve the text overflow in table */
@@ -87,7 +86,6 @@
 	display:block;
 	width:100%;
 	overflow: hidden;
-	white-space: nowrap;
 }
 
 .task-manager-table td.left {
@@ -105,7 +103,6 @@
 	display:inline-block;
 	width: 150px;
 	overflow:hidden;
-	white-space:nowrap;
 }
 .task-manager-table td.date {
 	text-align:right;
@@ -157,7 +154,6 @@
 	word-wrap: break-word;
 	word-break: break-all;
 	overflow: hidden;
-	white-space: nowrap;
 }
 
 #task-manager-search {
@@ -187,7 +183,6 @@
 	word-wrap: break-word;
 	word-break: break-all;
 	overflow: hidden;
-	white-space: nowrap;
 }
 .search-td-1 { width: 100px;}
 .search-td-2 { width: auto;}
@@ -272,7 +267,6 @@
 	word-wrap: break-word;
 	word-break: break-all;
 	overflow: hidden;
-	white-space: nowrap;
 }
 
 .item_normal 

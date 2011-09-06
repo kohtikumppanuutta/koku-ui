@@ -14,28 +14,30 @@ var currentNum = -1;
 var isie = (document.all) ? true:false; 
 var keyStr = "";
 var doKeyUp = false;
-var suggestDiv = 'search_suggest';
-var keywordDiv = 'templateName';
+var suggestId = 'search_suggest';
+var keywordId = 'templateName';
 var suggestUrl;
 
 function createSuggestDiv(searchElement, keywordElement) {
 	
-	if(document.getElementById(suggestDiv) != null) {
+	if(document.getElementById(suggestId) != null) {
 		return;
 	}
 	
-	var searchDiv = document.getElementById(searchElement);
-	keywordDiv = keywordElement;
+	var divSearch = document.getElementById(searchElement);
+	keywordId = keywordElement;
+	var divKeyword = document.getElementById(keywordId);
 	var divSuggest = document.createElement('div');
-	divSuggest.id = suggestDiv;
-	divSuggest.style.width = document.getElementById(keywordDiv).offsetWidth+ 'px';
+	divSuggest.id = suggestId;
+	divSuggest.style.width = divKeyword.offsetWidth+ 'px';
 	divSuggest.style.zIndex = '1000';
 	divSuggest.style.position = 'absolute';
-	divSuggest.style.top = document.getElementById(keywordDiv).offsetHeight+ 'px';
-	divSuggest.style.left = document.getElementById(keywordDiv).offsetLeft + 'px';
+	divSuggest.style.top = divKeyword.offsetHeight + 'px';
+	divSuggest.style.left = divKeyword.offsetLeft + 'px';
+	divSuggest.style.left = '368px';
 	divSuggest.style.display = 'none';
 	
-	searchDiv.appendChild(divSuggest);
+	divSearch.appendChild(divSuggest);
 }
 
 function beKeyDown(e)
@@ -77,7 +79,7 @@ function getCandidateKeywords(keyValue)
     currentNum = -1;
     zz = -1;
     suggestions = new Array();
-    var key = document.getElementById(keywordDiv).value;
+    var key = document.getElementById(keywordId).value;
     keyStr = key;
     if(key.length>0)
     {
@@ -98,20 +100,20 @@ function getCandidateKeywords(keyValue)
 				}
 				
 				if(suggestions.length > 0) {
-					var DivRef= document.getElementById(suggestDiv);
+					var DivRef= document.getElementById(suggestId);
 			        DivRef.style.border = "solid #777 1px";
-			        document.getElementById(suggestDiv).innerHTML="";
+			        document.getElementById(suggestId).innerHTML="";
 			        for(var i=0;i <suggestions.length;i++)
 			        {
 			          if(suggestions[i]!="")
 			          {
-			            document.getElementById(suggestDiv).innerHTML+=" <div id='item" + i + "' class='itemBg' onmouseover='beMouseOver(" + i +")' onmouseout='beMouseOut(" + i + ")' onclick='beClick(" + i + ")'>" + suggestions[i] + " </div>";
+			            document.getElementById(suggestId).innerHTML+=" <div id='item" + i + "' class='itemBg' onmouseover='beMouseOver(" + i +")' onmouseout='beMouseOut(" + i + ")' onclick='beClick(" + i + ")'>" + suggestions[i] + " </div>";
 			          }
 			        }
-			        document.getElementById(suggestDiv).innerHTML+=" <div class='item_button' onclick='hiddenDiv();'> <font color='#0000ff'>close </font> </div>";
-			        document.getElementById(suggestDiv).style.display="inline";
+			        document.getElementById(suggestId).innerHTML+=" <div class='item_button' onclick='hiddenDiv();'> <font color='#0000ff'>close </font> </div>";
+			        document.getElementById(suggestId).style.display="inline";
 				}else {
-					document.getElementById(suggestDiv).style.display="none";
+					document.getElementById(suggestId).style.display="none";
 				}
 			  }
 			  
@@ -119,14 +121,14 @@ function getCandidateKeywords(keyValue)
                     
     } else
     {
-      document.getElementById(suggestDiv).style.display="none";
+      document.getElementById(suggestId).style.display="none";
     }
   }
 }  
 
 function hiddenDiv() 
 { 
-  document.getElementById(suggestDiv).style.display="none";
+  document.getElementById(suggestId).style.display="none";
 } 
               
 function beMouseOverEFF(i) 
@@ -148,7 +150,7 @@ function beMouseOutEFF(i)
 
 function beMouseOver(i) 
 { 
-  document.getElementById(keywordDiv).focus();
+  document.getElementById(keywordId).focus();
   beMouseOutEFF(zz);
   currentNum=zz=i;
   beMouseOverEFF(zz);
@@ -162,9 +164,9 @@ function beMouseOut(i)
 function beClick(i) 
 { 
   currentNum = i;
-  document.getElementById(keywordDiv).value=suggestions[i];
-  document.getElementById(suggestDiv).style.display="none";
-  document.getElementById(keywordDiv).focus();
+  document.getElementById(keywordId).value=suggestions[i];
+  document.getElementById(suggestId).style.display="none";
+  document.getElementById(keywordId).focus();
 } 
 function searchKey(e)  
 {
@@ -172,35 +174,35 @@ function searchKey(e)
     if(currentNum == -1){
       currentNum = suggestions.length -2;
       beMouseOver(currentNum);
-      document.getElementById(keywordDiv).value=suggestions[currentNum];
+      document.getElementById(keywordId).value=suggestions[currentNum];
     }else if(currentNum == 0){
-      document.getElementById(keywordDiv).value=keyStr;
+      document.getElementById(keywordId).value=keyStr;
       document.getElementById("item" + currentNum).className="item_normal";
       currentNum = -1;
     }else{
       currentNum --;
       beMouseOver(currentNum);
-      document.getElementById(keywordDiv).value=suggestions[currentNum];
+      document.getElementById(keywordId).value=suggestions[currentNum];
     }
             		
   }else if(e == 40){ //down key
     if(currentNum == -1){
       currentNum = 0;
       beMouseOver(currentNum);
-      document.getElementById(keywordDiv).value=suggestions[currentNum];
+      document.getElementById(keywordId).value=suggestions[currentNum];
             		           		
     }else if(currentNum == suggestions.length -2){
-      document.getElementById(keywordDiv).value=keyStr;
+      document.getElementById(keywordId).value=keyStr;
       document.getElementById("item" + currentNum).className="item_normal";
       currentNum = -1;
     }else{
       currentNum ++;
       beMouseOver(currentNum);
-      document.getElementById(keywordDiv).value=suggestions[currentNum];
+      document.getElementById(keywordId).value=suggestions[currentNum];
     }
             		 
   }else if(e == 13){ //enter key
-    document.getElementById(suggestDiv).style.display="none";
+    document.getElementById(suggestId).style.display="none";
     return false;          		 
   }
    

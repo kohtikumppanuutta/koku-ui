@@ -185,7 +185,7 @@
 		taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
 				+ '<td class="choose"><spring:message code="message.choose" /></td>'
-				+ '<td class="from">' + formatSender() + '</td>'
+				+ '<td>' + formatSender() + '</td>'
 				+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
 				+ '<td><spring:message code="message.received" /></td>'
 				+ '</tr>';
@@ -271,7 +271,7 @@
 		taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
 				+ '<td class="choose"><spring:message code="message.choose" /></td>'
-				+ '<td class="from">' + '<spring:message code="message.from" />' + '</td>'
+				+ '<td>' + '<spring:message code="message.from" />' + '</td>'
 				+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
 				+ '<td><spring:message code="message.description" /></td>'
 				+ '<td><spring:message code="message.status" /></td>'
@@ -406,17 +406,17 @@
 	function formatSender() {
 		
 		if(pageObj.taskType == "msg_inbox" || pageObj.taskType == "msg_archive_inbox")
-			return  '<span class="from">' + "<spring:message code="message.from" />" + '</span>';
+			return  "<spring:message code="message.from" />";
 		else 
-			return '<span class="from">' + "<spring:message code="message.receiver" />" + '</span>';	
+			return "<spring:message code="message.receiver" />";	
 	}
 	/* Formats user field */
 	function formatUser(task) {
 		
 		if(pageObj.taskType == "msg_inbox" || pageObj.taskType == "msg_archive_inbox")
-			return '<span class="from">' + task["sender"] + '</span>';
+			return task["sender"];
 		else 
-			return '<span class="from">' + task["recipients"] + '</span>';
+			return task["recipients"];
 		
 	}
 	/* Formats subject field */
@@ -618,7 +618,7 @@
 		taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
 				+ '<td class="choose"><spring:message code="message.choose" /></td>'
-				+ '<td class="from"><spring:message code="message.receiver" /></td>'
+				+ '<td><spring:message code="message.receiver" /></td>'
 				+ '<td><spring:message code="message.subject" /></td>'		
 				+ '<td class="date"><spring:message code="message.received" /></td>'	
 				+ '</tr></table>';
@@ -826,10 +826,7 @@
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="revokeConsents()" /></li>';
 		}else if(pageObj.taskType.indexOf('msg') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="page.removeSelected"/>"  onclick="deleteMessages()" /></li>';
-		}else if(pageObj.taskType == 'app_response_employee') {
-			pageHtml += '<li><input type="button" value="<spring:message code="appointment.edit"/>"  onclick="editAppointments()" /></li>';
-			pageHtml += '<li><input type="button" value="<spring:message code="consent.cancel"/>"  onclick="cancelAppointments()" /></li>';
-		}else if(pageObj.taskType == 'app_inbox_employee') {
+		}else if(pageObj.taskType == 'app_response_employee' || pageObj.taskType == 'app_response_citizen') {
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.cancel"/>"  onclick="cancelAppointments()" /></li>';
 		}
 			
@@ -1050,6 +1047,7 @@
 	 * Show/hide search user interface
 	 */
 	function showSearchUI() {
+		jQuery('#task-manager-search').toggle('fast');
 		
 		if(pageObj.taskType.indexOf('msg') > -1) { // for message
 			jQuery('#message-search').show();
@@ -1057,12 +1055,10 @@
 		}else if(pageObj.taskType.indexOf('cst') > -1) { // for consent
 			jQuery('#consent-search').show();
 			jQuery('#message-search').hide();
-			//createSuggestDiv("consent-search", "templateName");
+			createSuggestDiv("consent-search", "templateName");
 		}else {
 			return;
-		}
-		
-		jQuery('#task-manager-search').toggle('fast');
+		}	
 	}
 	
 	/**
@@ -1133,7 +1129,7 @@
 				</span>	
 			</form>
 		</div>
-		<div id="consent-search" class="basic-search" style="display:none;">
+		<div id="consent-search" class="basic-search" style="display:none; position:relative;">
 			<form name="searchForm" onsubmit="searchConsents(); return false;">		
 				<span class="text-bold" ><spring:message code="consent.recipients" /></span>
 				<input type="text" name="recipient" id="recipient" style="width:160px;" />
@@ -1149,6 +1145,6 @@
 		<div id="task-manager-operation-page"></div>
 		<div id="task-manager-operation-loading"><spring:message code="page.loading"/></div>
 	</div>
-	
-	<div id="search_suggest" style="position: absolute; left: 368px; top: 402px; width: 164px; background-color:#ffffff;  z-index:1000; display:none;"> </div> 
+<!-- 	
+	<div id="search_suggest" style="position: absolute; left: 368px; top: 402px; width: 164px; background-color:#ffffff;  z-index:1000; display:none;"> </div> --> 
 </div>
