@@ -972,26 +972,6 @@
 		});
 	}
 	
-
-	function editAppointments() {
-		var messageList = [];
-		jQuery('input:checkbox[name="message"]:checked').each(function(){
-			var value = jQuery(this).val();
-			var temp = value.split('_');		
-		    messageList.push(temp[0]);
-		});
-		
-		if(messageList.length > 1) {
-			alert('<spring:message code="appointment.editError" />');
-		}else if(messageList.length == 0){
-			return;
-		}else if(messageList.length == 1){
-			var appointmentId = messageList[0];
-			url = "<%= defaultPath %>" + "/Message/NewAppointment" + "?FormID=" + appointmentId;
-			window.location = url;
-		}
-	}
-	
 	/**
 	 * Cancels a list of appointments selected by user
 	 */
