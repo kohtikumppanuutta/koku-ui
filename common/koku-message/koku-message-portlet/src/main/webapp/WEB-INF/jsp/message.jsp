@@ -113,6 +113,8 @@
 		var url="<%= ajaxURL %>";
 		url = formatUrl(url);
 
+		pageObj.taskType = getTaskTypeFromNavi();
+		
 		jQuery.post(url, {page:pageObj.currentPage, taskType:pageObj.taskType, 
 			keyword:pageObj.keyword, orderType:pageObj.orderType, field:pageObj.field}, function(data) {
 			var obj = eval('(' + data + ')');
@@ -841,7 +843,7 @@
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="revokeConsents()" /></li>';
 		}else if(pageObj.taskType.indexOf('msg') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="page.removeSelected"/>"  onclick="deleteMessages()" /></li>';
-		}else if(pageObj.taskType == 'app_response_employee' || pageObj.taskType == 'app_response_citizen') {
+		}else if(pageObj.taskType == 'app_inbox_employee' || pageObj.taskType == 'app_response_employee' || pageObj.taskType == 'app_response_citizen') {
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.cancel"/>"  onclick="cancelAppointments()" /></li>';
 		}
 			
