@@ -1083,11 +1083,13 @@
 	
 	function searchConsents() {
 		var keyword = jQuery("input#recipient").val();
+		var templateName = jQuery("input#templateName").val();
+		
 		pageObj.field = '';
 		
-		if(currentNum == -1 && keyword !='') {
+		if(consentTemplates.length == 0 && templateName != '') {
 			pageObj.field = -1;	
-		}else {
+		}else if(consentTemplates.length > 0 && currentNum != -1) {
 			var templateId = consentTemplates[currentNum]['suostumuspohjaId'];
 			pageObj.field = templateId;
 		}
@@ -1104,6 +1106,7 @@
 	function resetSearch() {
 		jQuery("input#keyword").val('');
 		jQuery("input#recipient").val('');
+		jQuery("input#templateName").val('');
 		jQuery('input:checkbox[name="field"]').attr('checked', true);
 		pageObj.keyword = '';
 		ajaxGetTasks();
