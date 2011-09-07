@@ -49,10 +49,14 @@ window.onload = function() {
     doc.close(); 
     var iframeHeight;
     
-    if(iframe.contentDocument) {
-    	iframeHeight = iframe.contentDocument.documentElement.scrollHeight+10; //FF 3.0.11, Opera 9.63, and Chrome
+    // if(iframe.contentDocument) {
+    if(jQuery.browser.msie) {
+    	// FIXME: QUICK FIX
+    	iframeHeight = iframe.contentWindow.document.body.scrollHeight+50; //IE6, IE7
+    } else if (jQuery.browser.webkit) {
+    	iframeHeight = iframe.contentWindow.document.body.scrollHeight+10;  // Chrome
     } else {
-    	iframeHeight = iframe.contentWindow.document.body.scrollHeight+10; //IE6, IE7 and Chrome
+    	iframeHeight = iframe.contentDocument.documentElement.scrollHeight+10; //FF 3.0.11, Opera 9.63, and Chrome
     }
     
     iframe.style.height = iframeHeight + "px";
