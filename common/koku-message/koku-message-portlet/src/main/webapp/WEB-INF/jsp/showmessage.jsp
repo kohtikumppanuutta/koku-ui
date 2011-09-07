@@ -70,9 +70,10 @@ window.onload = function() {
     // if(iframe.contentDocument) {
     if(jQuery.browser.msie) {
     	// FIXME: QUICK FIX
-    	iframeHeight = iframe.contentWindow.document.body.scrollHeight+50; //IE6, IE7
+    	var body = iframe.contentWindow.document.body;
+    	iframeHeight = body.scrollHeight + body.clientHeight; //IE6, IE7
     } else if (jQuery.browser.webkit) {
-    	iframeHeight = iframe.contentWindow.document.body.scrollHeight+10; //  Chrome
+    	iframeHeight = iframe.contentWindow.document.body.scrollHeight+10;  // Chrome
     } else {
     	iframeHeight = iframe.contentDocument.documentElement.scrollHeight+10; //FF 3.0.11, Opera 9.63, and Chrome
     }

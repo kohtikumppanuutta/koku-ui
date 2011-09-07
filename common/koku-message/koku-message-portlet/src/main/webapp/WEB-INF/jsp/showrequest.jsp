@@ -52,7 +52,8 @@ window.onload = function() {
     // if(iframe.contentDocument) {
     if(jQuery.browser.msie) {
     	// FIXME: QUICK FIX
-    	iframeHeight = iframe.contentWindow.document.body.scrollHeight+50; //IE6, IE7
+    	var body = iframe.contentWindow.document.body;
+    	iframeHeight = body.scrollHeight + body.clientHeight; //IE6, IE7
     } else if (jQuery.browser.webkit) {
     	iframeHeight = iframe.contentWindow.document.body.scrollHeight+10;  // Chrome
     } else {
