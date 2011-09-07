@@ -55,6 +55,7 @@
 					<div class="clear"></div>
 				</form:form>
 
+<!--  TODO: Joka kerralla ei ehkä anneta kaikkia hakuparametrejä, se otettava huomioon -->
 
 				<%-- th { text-align: center; font-weight: bold } --%>
 				<c:if test="${not empty entries}">
@@ -67,7 +68,7 @@
 						:
 					</h2>
 
-					<%-- TODO: Nämä kentät tarvitaan:
+					<%-- TODO: Nämä kentät vastaukseen:
 						aikaleima
 						käsittelijän nimi
 						tapahtumatyyppi
@@ -79,22 +80,32 @@
 							<%-- TODO! when using <th> the text won't align to left, that's why we use <td> and <b> here now.
 								This should be changed! --%>
 
-							<th width=20% scope="col"><b><spring:message code="ui.lok.timestamp" /></b>
+							<th width=15% scope="col"><b><spring:message code="ui.lok.timestamp" /></b>
 							</th>
-							<th width=20% scope="col"><b><spring:message code="ui.lok.koku.user" /></b>
+							<th width=15% scope="col"><b><spring:message code="ui.lok.koku.user" /></b>
 							</th>
-							<th width=20% scope="col"><b><spring:message code="ui.lok.event.type" /></b>
+							<th width=15% scope="col"><b><spring:message code="ui.lok.operation" /></b>
 							</th>
-							<th width=40% scope="col"><b><spring:message code="ui.lok.event.description" /></b>
+							<th width=55% scope="col"><b><spring:message code="ui.lok.data.item.type" /></b>
+						
+							
 							</th>
 						</tr>
 
 						<c:forEach var="e" items="${entries}">
 							<tr>
-								<td width=20%><c:out value="${e.timestamp}"/></td>
-								<td width=20%><c:out value="${e.user}"/></td>
-								<td width=20%><c:out value="${e.eventType}"/></td>
-								<td width=40%><c:out value="${e.eventDescription}"/></td>
+								<td width=15%><c:out value="${e.timestamp}"/></td>
+								<td width=15%><c:out value="${e.user}"/></td>
+								<td width=15%><c:out value="${e.operation}"/></td>
+								<td width=55%><c:out value="${e.message}"/>
+								<%-- 
+								<c:out value="${e.dataItemType}"/>
+												<c:out value="${e.clientSystemId}"/>
+												<c:out value="${e.child}"/>
+												<c:out value="${e.logId}"/>
+												<%--<c:out value="${e.message}"/> --%>
+												</td>
+				
 							</tr>
 						</c:forEach>
 					</table>

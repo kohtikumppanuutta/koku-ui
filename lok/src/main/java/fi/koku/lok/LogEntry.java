@@ -6,14 +6,13 @@ package fi.koku.lok;
  */
 public class LogEntry {
   private String message; // message
-  private String logId; // dataItemId
+  private String logId; // dataItemId: id given by the logging system
   private String timestamp; // timestamp
-  private String user;  // userPic
-  private String child; // customerPic
-  private String eventType;  // dataItemType
-  private String eventDescription;  // operation
-  private String callingSystem; // clientSystemId
-  
+  private String user;  // userPic: pic of the user
+  private String child; // customerPic: pic of the child
+  private String dataItemType;  // dataItemType: kks.vasu, kks.4v, family info, ..
+  private String operation;  // operation: create, read, write, ..
+  private String clientSystemId; // clientSystemId: pyh, kks, kunpo, pegasos..
 
   public String getLogId() {
     return logId;
@@ -48,28 +47,28 @@ public class LogEntry {
     this.child = child;
   }
 
-  public String getEventType() {
-    return eventType;
+  public String getDataItemType() {
+    return dataItemType;
   }
 
-  public void setEventType(String eventType) {
-    this.eventType = eventType;
+  public void setDataItemType(String dataItemType) {
+    this.dataItemType = dataItemType;
   }
 
-  public String getEventDescription() {
-    return eventDescription;
+  public String getOperation() {
+    return operation;
   }
 
-  public void setEventDescription(String eventDescription) {
-    this.eventDescription = eventDescription;
+  public void setOperation(String operation) {
+    this.operation = operation;
   }
 
-  public String getCallingSystem() {
-    return callingSystem;
+  public String getClientSystemId() {
+    return clientSystemId;
   }
 
-  public void setCallingSystem(String callingSystem) {
-    this.callingSystem = callingSystem;
+  public void setClientSystemId(String clientSystemId) {
+    this.clientSystemId = clientSystemId;
   }
 
   public void setMessage(String message) {
@@ -84,8 +83,8 @@ public class LogEntry {
   }
   
   public String getMessage() {
-    message = logId +" "+ timestamp +" "+ user +" "+ child +" "+ eventType +" "+ 
-      eventDescription +" "+ callingSystem;
+    message = logId +" "+ timestamp +" "+ user +" "+ child +" "+ dataItemType +" "+ 
+      operation +" "+ clientSystemId;
     
     return message;
   }

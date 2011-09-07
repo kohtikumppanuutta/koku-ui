@@ -104,8 +104,8 @@ This should be changed! --%>
 
 					<th width=20% scope="col"><b><spring:message code="ui.lok.time" /></b></th>
 					<th width=20% scope="col"><b><spring:message code="ui.lok.end.user" /></b></th>
-					<th width=20% scope="col"><b><spring:message code="ui.lok.event.type" /></b></th>
-					<th width=40% scope="col"><b><spring:message code="ui.lok.event.description" /></b></th>
+						<th width=40% scope="col"><b><spring:message code="ui.lok.operation" /></b></th>
+					<th width=20% scope="col"><b><spring:message code="ui.lok.data.item.type" /></b></th>
 					<th width=20% scope="col"><b><spring:message code="ui.lok.service" /></b></th>
 				</tr>
 
@@ -113,9 +113,9 @@ This should be changed! --%>
 					<tr>
 						<td width=20%><c:out value="${e.timestamp}"/></td>
 						<td width=20%><c:out value="${e.user}"/></td>
-						<td width=20%><c:out value="${e.eventType}"/></td>
-						<td width=40%><c:out value="${e.eventDescription}"/></td>
-						<td width=20%><c:out value="${e.callingSystem}"/></td>
+						<td width=40%><c:out value="${e.operation}"/></td>
+						<td width=20%><c:out value="${e.dataItemType}"/></td>
+						<td width=20%><c:out value="${e.clientSystemId}"/></td>
 					</tr>
 				</c:forEach>
 			</table>
