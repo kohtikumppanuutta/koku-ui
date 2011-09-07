@@ -47,7 +47,12 @@ String content = htmlToCode(srcContent);
 <script type="text/javascript"> 
 
 window.onload = function() {
-	var content = '<%= content %>';
+	try{
+		var content = '<%= content %>';
+	}catch(error){
+		var content = error.description;
+	}
+	
 	var iframe = document.getElementById('msgFrame');
 	var doc = iframe.document;
 	

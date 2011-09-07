@@ -1147,7 +1147,7 @@
 		<div id="consent-search" class="basic-search" style="display:none; position:relative;">
 			<form name="searchForm" onsubmit="searchConsents(); return false;">		
 				<span class="text-bold" ><spring:message code="consent.recipients" /></span>
-				<input type="text" name="recipient" id="recipient" style="width:160px;" />
+				<input type="text" name="recipient" id="recipient" style="width:100px;" />
 				<span class="text-bold" ><spring:message code="consent.templateName" /></span>
 				<input type="text" name="templateName" id="templateName" style="width:160px;" autocomplete="off" onkeydown="beKeyDown(event)" onkeyup="beKeyUp(event)" onclick="createSuggestDiv('consent-search', 'templateName')" />
 				<input type="submit" value="<spring:message code="message.search"/>" />
