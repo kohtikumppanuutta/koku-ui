@@ -49,9 +49,13 @@
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 	border: 1px solid #cccccc;
-	/* height: 360px; */
+	min-height: 360px;
 	padding: 2px;	
 	overflow: hidden;
+}
+
+* html div#task-manager-tasklist { 
+   height: expression( this.scrollHeight < 361 ? "360px" : "auto" ); /* sets min-height for IE */
 }
 
 /* main table */
