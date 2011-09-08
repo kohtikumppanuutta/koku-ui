@@ -316,8 +316,8 @@
 				<li id="informationbox"><a href="<%= defaultPath %>/Message/InformationBox">Saapuneet</a></li>
 				<li id="ilmoitukset"><a href="<%= defaultPath %>/Message/Ilmoitukset">Lähetetyt</a>
 					<ul class="child">
-						<li id="cst_new"><a href="#">Avoimet</a></li>
-						<li id="sendconsent"><a href="#">Valmiit</a></li>
+						<li id="cst_new"><a href="<%= defaultPath %>/Message/Ilmoitukset">Avoimet</a></li>
+						<li id="sendconsent"><a href="<%= defaultPath %>/Message/Ilmoitukset">Valmiit</a></li>
 					</ul>
 				</li>
 			</ul>
