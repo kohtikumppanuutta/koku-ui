@@ -2,13 +2,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>fi.arcusys</groupId>
 	<artifactId>koku-message</artifactId>
-	<version>1.0</version>
 	<packaging>pom</packaging>
-
 	<name>koku-message</name>
-	<url>http://maven.apache.org</url>
+
+  <parent>
+    <artifactId>common-portlet</artifactId>
+    <groupId>kohti-kumppanuutta</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -41,8 +44,8 @@
 		</dependency>
 	</dependencies>
 	<modules>
-		<module>koku-message-portlet</module>
 		<module>koku-message-service</module>
+		<module>koku-message-portlet</module>
 		<module>koku-navi-portlet</module>
 		<module>koku-layout-portlet</module>
 	</modules>
