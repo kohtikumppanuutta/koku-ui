@@ -323,17 +323,20 @@
 			</ul>
 		</li>	
 		</c:if>	
-				
+		<!--  show only citizens -->
+		<c:if test="${fn:contains(naviURL, '/classic/')}">
 		<li><a href="#">Asiointipalvelut</a>
 			<ul class="child">
 				<li><a href="#">Palveluhakemukset</a>
-						<ul class="child">
-							<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Päivähoitohakemus</a></li>				
-						</ul>
+					<ul class="child">
+						<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Päivähoitohakemus</a></li>				
+					</ul>
 				</li>
 				<li><a href="#">Voimassaolevat palvelut</a></li>
 				<li><a href="#">Ajanvaraustiedot</a></li>
-			</ul></li>
+			</ul>
+		</li>
+		</c:if>	
 		<li><a href="#">Ohjeet</a></li>
 	</ul>
 </div>
