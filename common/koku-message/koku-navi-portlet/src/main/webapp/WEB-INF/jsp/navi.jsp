@@ -283,7 +283,7 @@
 				
 			<li><a href="#">Valtakirjat</a>
 				<ul class="child">
-					<li id="valtakirjaconsent"><a href="<%= defaultPath %>/Message/ValtakirjaConsent">Anna valtakirja  </a></li>
+					<li id="valtakirjaconsent"><a href="<%= defaultPath %>/Message/ValtakirjaConsent">Anna valtakirja</a></li>
 					<li id="selaavaltakirjoja"><a href="#">Omat valtakirjat</a>
 						<ul class="child">
 							<li id="selaaOmiaValtakirjoja"><a href="<%= defaultPath %>/Message/SelaaValtakirjoja">Valtuuttajana</a></li>
@@ -328,7 +328,7 @@
 			<ul class="child">
 				<li><a href="#">Palveluhakemukset</a>
 						<ul class="child">
-							<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Päivähoitohakemukset</a></li>				
+							<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Päivähoitohakemus</a></li>				
 						</ul>
 				</li>
 				<li><a href="#">Voimassaolevat palvelut</a></li>
