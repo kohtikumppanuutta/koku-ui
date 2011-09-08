@@ -83,7 +83,7 @@
 		<module>pyh</module>
 		<module>lok</module>
 		<module>intalio</module>
-		<!-- module>common</module -->
+		<module>common</module>
 	</modules>
 	<dependencies>
 
