@@ -39,5 +39,5 @@
 	// set the default selected option for selectors refreshDuration and openForm
 	jQuery('#refreshDuration').val("<%= refreshDuration %>");
 	jQuery('#openForm').val("<%= openForm %>");
-	jQuery('#openForm').val("<%= defaultTaskType %>");
+	jQuery('#defaultTaskType').val("<%= defaultTaskType %>");
 </script>

@@ -18,5 +18,21 @@
 		<portlet-info>
 			<title>Task Manager Portlet</title>
 		</portlet-info>
+
+		<portlet-preferences>
+			<preference>
+				<name>refreshDuration</name>
+				<value>60</value>
+			</preference>
+			<preference>
+				<name>defaultTaskType</name>
+				<value>task</value>
+			</preference>
+			<preference>
+				<name>openForm</name>
+				<value>1</value>
+			</preference>
+		</portlet-preferences>
+
 	</portlet>
 </portlet-app>
