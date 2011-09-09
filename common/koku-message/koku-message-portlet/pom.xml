@@ -3,15 +3,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
+	<artifactId>koku-message-portlet</artifactId>
+	<name>koku-message-portlet</name>
+	<packaging>war</packaging>
+	<description>Providing message services</description>
+	
 	<parent>
 		<artifactId>koku-message</artifactId>
 		<groupId>fi.arcusys</groupId>
 		<version>1.0</version>
 	</parent>
-	<artifactId>koku-message-portlet</artifactId>
-	<packaging>war</packaging>
-	<name>koku-message-portlet</name>
-	<description>Providing message services</description>
 
 	<build>
 		<finalName>koku-message-new-portlet</finalName>
