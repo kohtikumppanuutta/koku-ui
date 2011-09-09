@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>koku-message</artifactId>
 	<packaging>pom</packaging>
-	<name>koku-message</name>
+	<name>koku-message</name>	
 
-  <parent>
-    <artifactId>common-portlet</artifactId>
-    <groupId>kohti-kumppanuutta</groupId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
+	<parent>
+	    <artifactId>common</artifactId>
+	    <groupId>fi.arcusys</groupId>
+	    <version>0.0.1-SNAPSHOT</version>
+	 </parent>
 
 
 	<properties>
