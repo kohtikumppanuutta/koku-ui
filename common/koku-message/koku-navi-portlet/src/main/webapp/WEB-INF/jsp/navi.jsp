@@ -304,7 +304,8 @@
 		</li>
 		<li><a href="#">Valtakirjat</a>
 			<ul class="child">
-				<li id="valtakirjaconsent"><a href="<%= defaultPath %>/Message/ValtakirjaConsent">Asiakkaan valtakirjat </a></li>
+				<%-- <li id="valtakirjaconsent"><a href="<%= defaultPath %>/Message/ValtakirjaConsent">Asiakkaan valtakirjat </a></li>  --%>
+				<li id="cst_browse_customer_consents"><a href="javascript:void(0)" onclick="navigateToPage('cst_browse_customer_consents')">Asiakkaan valtakirjat </a></li> 
 				<li id="selaavaltakirjoja"><a href="<%= defaultPath %>/Message/SelaaValtakirjoja">Asian valtakirjat</a></li>
 			</ul>
 		</li>

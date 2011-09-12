@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import fi.arcusys.koku.AbstractHandle;
 import fi.arcusys.koku.av.AvCitizenServiceHandle;
 import fi.arcusys.koku.av.AvEmployeeServiceHandle;
 import fi.arcusys.koku.av.KokuAppointment;
@@ -45,8 +46,23 @@ import fi.arcusys.koku.util.MessageUtil;
 @RequestMapping(value = "VIEW")
 public class AjaxController {
 	
+	public static final String CONSENT_BROWSE_CUSTOMER_CONSENTS 		= "cst_browse_customer_consents";
+	public static final String CONSENT_BROWSE_OWN_CONSENTS_EMPLOYEE 	= "cst_own_employee";
+	public static final String CONSENT_BROWSE_OWN_CONSENTS_CITIZEN	 	= "cst_own_citizen";
+	public static final String CONSENT_ASSIGNED_CITIZEN					= "cst_assigned_citizen";
+	
+	public static final String APPOINTMENT_RESPONSE_CITIZEN 			= "app_response_citizen";
+	public static final String APPOINTMENT_RESPONSE_EMPLOYEE 			= "app_response_employee";
+	public static final String APPOINTMENT_INBOX_CITIZEN 				= "app_inbox_citizen";
+	public static final String APPOINTMENT_INBOX_EMPLOYEE 				= "app_inbox_employee";
+	
+	public static final String REQUEST_VALID_EMPLOYEE					= "req_valid";
+
+	
+	private static final String TASKS = "tasks";
+	
 	@Resource
-	ResourceBundleMessageSource messageSource;
+	private ResourceBundleMessageSource messageSource;
 
 	private Logger logger = Logger.getLogger(AjaxController.class);
 	/**
@@ -240,54 +256,58 @@ public class AjaxController {
 			int first = (page-1)*numPerPage + 1; // the start index of task
 			int max =  page*numPerPage; // max amount of tasks
 			
-			if(taskType.equals("req_valid")) { // for request
+			if(taskType.equals(REQUEST_VALID_EMPLOYEE)) { // for request (Pyynnöt) - employee Avoimet
 				List<KokuRequest> msgs;
 				RequestHandle reqHandle = new RequestHandle();
 				msgs = reqHandle.getRequests(username, "valid", "", first, max);
 				totalTasksNum = reqHandle.getTotalRequestsNum(username, "valid");
-				jsonModel.put("tasks", msgs);
-			} else if(taskType.startsWith("app")) { // for appointment
+				jsonModel.put(TASKS, msgs);
+			} else if(taskType.startsWith("app")) { // for appointment (Tapaamiset)
 				
-				
-				if(taskType.equals("app_inbox_citizen") || taskType.equals("app_response_citizen")) {
+				if(taskType.equals(APPOINTMENT_INBOX_CITIZEN) || taskType.equals(APPOINTMENT_RESPONSE_CITIZEN)) {	// Vastausta odottavat / vastatut 
 					List<KokuAppointment> apps;
 					AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
 					handle.setMessageSource(messageSource);
 					apps = handle.getAppointments(username, first, max, taskType);
 					totalTasksNum = handle.getTotalAppointmentsNum(username, taskType);
-					jsonModel.put("tasks", apps);
-				}else if(taskType.equals("app_inbox_employee") || taskType.equals("app_response_employee")) {
+					jsonModel.put(TASKS, apps);
+				}else if(taskType.equals(APPOINTMENT_INBOX_EMPLOYEE) || taskType.equals(APPOINTMENT_RESPONSE_EMPLOYEE)) { // Avoimet / Valmiit
 					List<KokuAppointment> apps;
 					AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
 					handle.setMessageSource(messageSource);
 					apps = handle.getAppointments(username, first, max, taskType);
 					totalTasksNum = handle.getTotalAppointmentsNum(username, taskType);
-					jsonModel.put("tasks", apps);
+					jsonModel.put(TASKS, apps);
 				}			
 				
-			} else if(taskType.startsWith("cst")) { // for consent
-				if(taskType.equals("cst_assigned_citizen")) {
-					List<KokuConsent> csts;
+			} else if(taskType.startsWith("cst")) { // for consent (Valtakirja / Suostumus)
+				List<KokuConsent> csts = null;
+				if (taskType.equals(CONSENT_ASSIGNED_CITIZEN)) { // Kansalaiselle saapuneet pyynnöt(/suostumukset) 
 					TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
 					tivaHandle.setMessageSource(messageSource);
 					csts = tivaHandle.getAssignedConsents(username, first, max);
 					totalTasksNum = tivaHandle.getTotalAssignedConsents(username);
-					jsonModel.put("tasks", csts);
-				}else if(taskType.equals("cst_own_citizen")) {
-					List<KokuConsent> csts;
+					jsonModel.put(TASKS, csts);
+				} else if(taskType.equals(CONSENT_BROWSE_OWN_CONSENTS_CITIZEN)) { // Kansalaiselle vastatut pyynnöt(/suostumukset) 
 					TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
 					tivaHandle.setMessageSource(messageSource);
 					csts = tivaHandle.getOwnConsents(username, first, max);
 					totalTasksNum = tivaHandle.getTotalOwnConsents(username);
-					jsonModel.put("tasks", csts);
-				}else if(taskType.equals("cst_own_employee")) {
-					List<KokuConsent> csts;
+					jsonModel.put(TASKS, csts);
+				} else if(taskType.equals(CONSENT_BROWSE_OWN_CONSENTS_EMPLOYEE)) { // Virkailijan lähetetyt suostumus pyynnöt
 					TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
 					tivaHandle.setMessageSource(messageSource);
 					csts = tivaHandle.getConsents(username, keyword, field, first, max);
 					totalTasksNum = tivaHandle.getTotalConsents(username, keyword, field);
-					jsonModel.put("tasks", csts);
-				}	
+					jsonModel.put(TASKS, csts);
+				} else if(taskType.equals(CONSENT_BROWSE_CUSTOMER_CONSENTS)) {	// Selaa käyttäjän x suostumuksia TIVA-13
+					TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
+					tivaHandle.setMessageSource(messageSource);
+					// FIXME: This should change when we get proper methods from WS
+					csts = tivaHandle.getConsents(username, keyword, field, first, max);
+					totalTasksNum = tivaHandle.getTotalConsents(username, keyword, field);
+					jsonModel.put(TASKS, csts);
+				}
 				
 			} else { // for message
 				MessageHandle msgHandle = new MessageHandle();
@@ -295,7 +315,7 @@ public class AjaxController {
 				List<Message> msgs;
 				msgs = msgHandle.getMessages(username, taskType, keyword, field, orderType, first, max);			
 				totalTasksNum = msgHandle.getTotalMessageNum(username, taskType, keyword, field);
-				jsonModel.put("tasks", msgs);
+				jsonModel.put(TASKS, msgs);
 			}
 			
 			totalPages = (totalTasksNum == 0) ? 1:(int) Math.ceil((double)totalTasksNum/numPerPage);	
@@ -439,6 +459,7 @@ public class AjaxController {
 	/**
 	 * Creates consent render url mainly for gatein portal, and keeps the page
 	 * parameters such as page id, task type, keyword
+	 * 
 	 * @param consentId consent id
 	 * @param currentPage current page
 	 * @param taskType request task type

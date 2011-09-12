@@ -51,7 +51,7 @@ public class TaskManagementService {
 			TokenService ts = new TokenService(TOKEN_WSDL_LOCATION);
 			participantToken = ts.getService().authenticateUser(username, password);
 		} catch (Exception e) {
-			logger.error("Get intalio token failed");
+			logger.error("Trying to get intalio token failed");
 		}
 				
 		return participantToken;

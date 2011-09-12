@@ -149,20 +149,22 @@
 	 * Represents the tasks in table list view and creates page operatonal part
 	 */
 	function presentTasks(tasks) {
+		var taskHtml = "";
 		if(pageObj.taskType == 'req_valid') // for request
-			var taskHtml = createRequestsTable(tasks);
+			taskHtml += createRequestsTable(tasks);
 		else if(pageObj.taskType.indexOf('app') == 0) // for appointment
-			var taskHtml = createAppoitmentsTable(tasks);
+			taskHtml += createAppoitmentsTable(tasks);
 		else if(pageObj.taskType.indexOf('cst') == 0) // for consent
-			var taskHtml = createConsentsTable(tasks);
+			taskHtml += createConsentsTable(tasks);
 		else // for message
-			var taskHtml = createMessagesTable(tasks);
-		
+			taskHtml += createMessagesTable(tasks);
+		 
 		jQuery('#task-manager-tasklist').html(taskHtml);
 		decorateTable();
 		var pageHtml = createTasksPage();
 		jQuery('#task-manager-operation-page').html(pageHtml);
 	}
+	
 	/**
 	 * Gets message type from the global variable 'koku_navi_type' in navi portlet
 	 */
@@ -282,19 +284,13 @@
 				 
 		for ( var i = 0; i < tasks.length; i++) {
 			
-			if((i+1)%2 == 0) {
-				taskHtml += '<tr class="evenRow">';	
-			}else {
-				taskHtml += '<tr>';
-			}
-			
+			taskHtml += generateRowTr(i);			
 			taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
 					 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + tasks[i]["sender"] + '</td>'
 					 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
 					 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + tasks[i]["description"] + '</td>'
 					 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + tasks[i]["status"] + '</td>'
 					 + '</tr>';
-
 		}
 
 		taskHtml += '</table>';
@@ -331,7 +327,7 @@
 
 			taskHtml += '</table>';
 			
-		}else if(pageObj.taskType == "cst_own_citizen") {
+		} else if(pageObj.taskType == "cst_own_citizen") {
 			taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
 				+ '<td class="choose"><spring:message code="message.choose" /></td>'
@@ -347,12 +343,7 @@
 				 
 			for ( var i = 0; i < tasks.length; i++) {
 			
-				if((i+1)%2 == 0) {
-					taskHtml += '<tr class="evenRow">';	
-				}else {
-					taskHtml += '<tr>';
-				}
-			
+				taskHtml += generateRowTr(i);			
 				taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
 						 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["requester"] + '</td>'
 					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["templateName"] + '</td>'
@@ -368,43 +359,149 @@
 			taskHtml += '</table>';
 			
 		}else if(pageObj.taskType == "cst_own_employee") {
-			taskHtml = '<table class="task-manager-table">'
-				+ '<tr class="task-manager-table trheader">'
-				+ '<td class="choose"><spring:message code="message.choose" /></td>'
-				+ '<td>' + '<spring:message code="consent.requester" />' + '</td>'
-				+ '<td>' + '<spring:message code="consent.templateName" />' + '</td>'
-				+ '<td>' + '<spring:message code="consent.status" />' + '</td>'
-				+ '<td>' + '<spring:message code="consent.approvalStatus" />' + '</td>'
-				+ '<td>' + '<spring:message code="consent.createType" />' + '</td>'
-				+ '<td>' + '<spring:message code="consent.givenDate" />' + '</td>'
-				+ '<td>' + '<spring:message code="consent.validDate" />' + '</td>'
-				+ '</tr>';
-				 
-			for ( var i = 0; i < tasks.length; i++) {
 			
-				if((i+1)%2 == 0) {
-					taskHtml += '<tr class="evenRow">';	
-				}else {
-					taskHtml += '<tr>';
-				}
+			taskHtml += createBrowseEmployeeOwnConsents(tasks);
 			
-				taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
-						 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["requester"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["templateName"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["status"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["approvalStatus"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["createType"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["assignedDate"] + '</td>'
-					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["validDate"] + '</td>'
-					 	 + '</tr>';
-			}
-
-			taskHtml += '</table>';
+// 			taskHtml = '<table class="task-manager-table">'
+// 				+ '<tr class="task-manager-table trheader">'
+// 				+ '<td class="choose"><spring:message code="message.choose" /></td>'
+// 				+ '<td>' + '<spring:message code="consent.requester" />' + '</td>'
+// 				+ '<td>' + '<spring:message code="consent.templateName" />' + '</td>'
+// 				+ '<td>' + '<spring:message code="consent.status" />' + '</td>'
+// 				+ '<td>' + '<spring:message code="consent.approvalStatus" />' + '</td>'
+// 				+ '<td>' + '<spring:message code="consent.createType" />' + '</td>'
+// 				+ '<td>' + '<spring:message code="consent.givenDate" />' + '</td>'
+// 				+ '<td>' + '<spring:message code="consent.validDate" />' + '</td>'
+// 				+ '</tr>';				 
+// 			for ( var i = 0; i < tasks.length; i++) {			
+// 				taskHtml += generateRowTr(i);			
+// 				taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
+// 						 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["requester"] + '</td>'
+// 					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["templateName"] + '</td>'
+// 					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["status"] + '</td>'
+// 					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["approvalStatus"] + '</td>'
+// 					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["createType"] + '</td>'
+// 					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["assignedDate"] + '</td>'
+// 					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["validDate"] + '</td>'
+// 					 	 + '</tr>';
+// 			}
+// 			taskHtml += '</table>';
 			
+		} else if (pageObj.taskType = "cst_browse_customer_consents") {
+			taskHtml += createBrowseUserConsentsTable(tasks);
 		}
 		
 		return taskHtml;
+	}
+	
+	function createBrowseEmployeeOwnConsents(tasks) {
+		var columnNames = ["<spring:message code="message.choose"/>",
+		                   "<spring:message code="consent.requester"/>",
+		                   "<spring:message code="consent.templateName"/>",
+		                   "<spring:message code="consent.status"/>",
+		                   "<spring:message code="consent.approvalStatus"/>",
+		                   "<spring:message code="consent.createType"/>",
+		                   "<spring:message code="consent.givenDate"/>",
+		                   "<spring:message code="consent.validDate"/>"
+		                  ];
+		
+		var columnIds = ["requester",
+		                 "templateName",
+		                 "status",
+		                 "approvalStatus",
+		                 "createType",
+		                 "assignedDate",
+		                 "validDate"];
+		return createTable("showConsent", columnNames, columnIds, tasks);
+	}
+	
+	
+	function createBrowseUserConsentsTable(tasks) {
+		var columnNames = ["<spring:message code="message.choose"/>",
+		                   "<spring:message code="consent.requester"/>",
+		                   "<spring:message code="consent.templateName"/>",
+		                   "<spring:message code="consent.status"/>",
+		                   "<spring:message code="consent.approvalStatus"/>",
+		                   "<spring:message code="consent.createType"/>",
+		                   "<spring:message code="consent.givenDate"/>",
+		                   "<spring:message code="consent.validDate"/>"
+		                  ];
+		
+		var columnIds = ["requester",
+		                 "templateName",
+		                 "status",
+		                 "approvalStatus",
+		                 "createType",
+		                 "assignedDate",
+		                 "validDate"];
+		return createTable("showConsent", columnNames, columnIds, tasks);
+	}
+	
+	
+	/**
+	 * General use table generator
+	 *  
+	 * @param {string} jsFunctionName
+	 * @param Array[String] columnNames (for spring)
+	 * @param Array[String] columnIds. ColumnIds.length < columnNames.length
+	 * @param {object} tasks
+	 */
+	function createTable(jsFunctionName, columnNames, columnIds, tasks) {
+		var taskHtml = "";		
+		taskHtml = '<table class="task-manager-table">'
+				+ '<tr class="task-manager-table trheader">';
+								
+		for (var i = 0; i < columnNames.length; i++)  {
+			taskHtml += '<td>' + columnNames[i] + '</td>';
+		}
+				
+		taskHtml += '</tr>';
+		taskHtml += generateTableContent(jsFunctionName, columnIds, tasks);
+		taskHtml += '</table>';
+		return taskHtml;		
 	}	
+	
+	/**
+	 * Generates table rows 
+	 *
+	 * @param {string] functionName
+	 * @oaram {Array[String]} columnNames.
+	 * @param {Object} tasks
+	 * @return {string} table 
+	 */
+	function generateTableContent(jsFunctionName, columnIds, tasks) {
+		var taskHtml = "";
+		for ( var i = 0; i < tasks.length; i++) {
+			taskHtml += generateRowTr(i);
+			taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
+			
+			/* Generate columns */
+			for (var j = 0; j < columnIds.length; j++)  {
+				taskHtml += '<td class="messageItem" onclick="'+ jsFunctionName + '(\''+ i + '\')" >' + tasks[i][columnIds[j]] + '</td>';
+			}
+			taskHtml +=	 '</tr>';
+		}
+		return taskHtml;
+	}
+	
+	/**
+	 * Generates tr-element with style "evenRow" if row is even 
+	 * and "oddRow" if row is odd.
+	 *
+	 * @param {number} row
+	 * @return {string} 
+	 */
+	function generateRowTr(row) {
+		var taskHtml = "";
+		if((row+1)%2 == 0) {
+			taskHtml += '<tr class="evenRow">';	
+		}else {
+			taskHtml += '<tr class="oddRow">';
+		}
+		return taskHtml;
+	}
+		
+	
 	/* Formats sender field */
 	function formatSender() {
 		
@@ -482,7 +579,7 @@
 		var consentId = pageObj.tasks[index]['consentId'];
 		var url="";
 		
-		if(pageObj.taskType == "cst_own_citizen" || pageObj.taskType == "cst_own_employee") {
+		if(pageObj.taskType == "cst_own_citizen" || pageObj.taskType == "cst_own_employee" || pageObj.taskType == "cst_browse_customer_consents") {
 			url = "<%= consentURL %>";
 			url += "&consentId=" + consentId
 					+ "&currentPage=" + pageObj.currentPage
@@ -631,16 +728,13 @@
 	}		
 	/* Create initial tasks table Html */
 	function createInitTable() {
-		var taskHtml = "";
-		taskHtml = '<table class="task-manager-table">'
+		return '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
 				+ '<td class="choose"><spring:message code="message.choose" /></td>'
 				+ '<td><spring:message code="message.receiver" /></td>'
 				+ '<td><spring:message code="message.subject" /></td>'		
 				+ '<td class="date"><spring:message code="message.received" /></td>'	
 				+ '</tr></table>';
-				
-		return taskHtml;
 	}
 
 	/**
@@ -831,31 +925,27 @@
 	function createTasksPage() {
 		var pageHtml = '<ul>';
 		
-		if(pageObj.taskType.indexOf('msg') > -1 || pageObj.taskType.indexOf('cst_own_employee') > -1) {
+		if (pageObj.taskType.indexOf('msg') > -1 || pageObj.taskType.indexOf('cst_own_employee') > -1 || pageObj.taskType.indexOf('cst_browse_customer_consents') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="message.search"/>"  onclick="showSearchUI()" /></li>';
-		}
-			
-		if(pageObj.taskType == 'msg_inbox' || pageObj.taskType == 'msg_outbox') {
+		}			
+		if (pageObj.taskType == 'msg_inbox' || pageObj.taskType == 'msg_outbox') {
 			pageHtml += '<li><input type="button" value="<spring:message code="page.archive"/>"  onclick="archiveMessages()" /></li>';
-		}
-					
-		if(pageObj.taskType == 'cst_own_citizen') {
+		}					
+		if (pageObj.taskType == 'cst_own_citizen') {
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="revokeConsents()" /></li>';
-		}else if(pageObj.taskType.indexOf('msg') > -1) {
+		} else if(pageObj.taskType.indexOf('msg') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="page.removeSelected"/>"  onclick="deleteMessages()" /></li>';
-		}else if(pageObj.taskType == 'app_inbox_employee' || pageObj.taskType == 'app_response_employee' || pageObj.taskType == 'app_response_citizen') {
+		} else if(pageObj.taskType == 'app_inbox_employee' || pageObj.taskType == 'app_response_employee' || pageObj.taskType == 'app_response_citizen') {
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.cancel"/>"  onclick="cancelAppointments()" /></li>';
-		}
+		}			
 			
-			
-		pageHtml     += '<li><a><img src="<%= request.getContextPath() %>/images/first.gif" onclick="movePage(\'first\')"/></a></li>'
-					 + '<li><a><img src="<%= request.getContextPath() %>/images/prev.gif" onclick="movePage(\'previous\')"/></a></li>'
-					 + '<li><spring:message code="page.page"/> ' + pageObj.currentPage + '/' + pageObj.totalPages + '</li>'
-					 + '<li><a><img src="<%= request.getContextPath() %>/images/next.gif" onclick="movePage(\'next\')"/></a></li>'
-					 + '<li><a><img src="<%= request.getContextPath() %>/images/last.gif" onclick="movePage(\'last\')"/></a></li>'
-					 + '<li><spring:message code="page.displaying"/> ' + createDisplayingTasksNum()  + '</li>'
-					 + '</ul>';
-								
+		pageHtml += '<li><a><img src="<%= request.getContextPath() %>/images/first.gif" onclick="movePage(\'first\')"/></a></li>'
+				 + '<li><a><img src="<%= request.getContextPath() %>/images/prev.gif" onclick="movePage(\'previous\')"/></a></li>'
+				 + '<li><spring:message code="page.page"/> ' + pageObj.currentPage + '/' + pageObj.totalPages + '</li>'
+				 + '<li><a><img src="<%= request.getContextPath() %>/images/next.gif" onclick="movePage(\'next\')"/></a></li>'
+				 + '<li><a><img src="<%= request.getContextPath() %>/images/last.gif" onclick="movePage(\'last\')"/></a></li>'
+				 + '<li><spring:message code="page.displaying"/> ' + createDisplayingTasksNum()  + '</li>'
+				 + '</ul>';
 		return pageHtml;
 	}
 	
@@ -1061,10 +1151,13 @@
 		if(pageObj.taskType.indexOf('msg') > -1) { // for message
 			jQuery('#message-search').show();
 			jQuery('#consent-search').hide();
-		}else if(pageObj.taskType.indexOf('cst') > -1) { // for consent
+		} else if (pageObj.taskType == 'cst_browse_customer_consents') {
+			jQuery('#consent-search-citizens').show();
+			jQuery('#message-search').hide();
+		} else if(pageObj.taskType.indexOf('cst') > -1) { // for consent
 			jQuery('#consent-search').show();
 			jQuery('#message-search').hide();
-		}else {
+		} else {
 			return;
 		}	
 		
@@ -1110,12 +1203,32 @@
 		return false;
 	}
 	
+	function searchCitizenConsents() {
+		var keyword = jQuery("input#customer").val();
+		var templateName = jQuery("input#templateName").val();
+		
+		pageObj.field = '';
+		
+		if(consentTemplates.length == 0 && templateName != '') {
+			pageObj.field = -1;	
+		}else if(consentTemplates.length > 0 && currentNum != -1) {
+			var templateId = consentTemplates[currentNum]['suostumuspohjaId'];
+			pageObj.field = templateId;
+		}
+		
+		pageObj.keyword = keyword;			
+		ajaxGetTasks();
+		
+		return false;
+	}
+	
  	/**
  	 * Reset the search result and clear the keyword
  	 */
 	function resetSearch() {
 		jQuery("input#keyword").val('');
 		jQuery("input#recipient").val('');
+		jQuery("input#customer").val('');
 		jQuery("input#templateName").val('');
 		jQuery('input:checkbox[name="field"]').attr('checked', true);
 		pageObj.keyword = '';
@@ -1148,6 +1261,17 @@
 			<form name="searchForm" onsubmit="searchConsents(); return false;">		
 				<span class="text-bold" ><spring:message code="consent.recipients" /></span>
 				<input type="text" name="recipient" id="recipient" style="width:100px;" />
+				<span class="text-bold" ><spring:message code="consent.templateName" /></span>
+				<input type="text" name="templateName" id="templateName" style="width:160px;" autocomplete="off" onkeydown="beKeyDown(event)" onkeyup="beKeyUp(event)" onclick="createSuggestDiv('consent-search', 'templateName')" />
+				<input type="submit" value="<spring:message code="message.search"/>" />
+				<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
+			</form>
+		</div>
+		<!-- TIVA-12 (and 13?) Selaa asiakkaan suostumuksia -->
+		<div id="consent-search-citizens" class="basic-search" style="display:none; position:relative;">
+			<form name="searchForm" onsubmit="searchCitizenConsents(); return false;">		
+				<span class="text-bold" ><spring:message code="consent.customer" /></span>
+				<input type="text" name="customer" id="customer" style="width:100px;" />
 				<span class="text-bold" ><spring:message code="consent.templateName" /></span>
 				<input type="text" name="templateName" id="templateName" style="width:160px;" autocomplete="off" onkeydown="beKeyDown(event)" onkeyup="beKeyUp(event)" onclick="createSuggestDiv('consent-search', 'templateName')" />
 				<input type="submit" value="<spring:message code="message.search"/>" />

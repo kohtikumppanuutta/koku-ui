@@ -7,8 +7,8 @@ import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.NoSuchMessageException;
-import org.springframework.context.support.ResourceBundleMessageSource;
 
+import fi.arcusys.koku.AbstractHandle;
 import fi.arcusys.koku.av.EmployeeAppointment.UserWithTarget;
 import fi.arcusys.koku.av.employeeservice.Appointment;
 import fi.arcusys.koku.av.employeeservice.Appointment.AcceptedSlots;
@@ -24,11 +24,10 @@ import fi.arcusys.koku.util.MessageUtil;
  * @author Jinhua Chen
  * Aug 22, 2011
  */
-public class AvEmployeeServiceHandle {
+public class AvEmployeeServiceHandle extends AbstractHandle {
 	
 	private Logger LOG = Logger.getLogger(AvEmployeeServiceHandle.class);
 	
-	private ResourceBundleMessageSource messageSource;
 	private AvEmployeeService aes;
 	
 	/**
@@ -310,19 +309,19 @@ public class AvEmployeeServiceHandle {
 	}
 	
 	private String localizeActionRequestStatus(AppointmentSummaryStatus appointmentStatus) {
-		if (messageSource == null) {
-			LOG.warn("MessageSource is null. Localization doesn't work properly");
+		if (getMessageSource() == null) {
+			LOG.warn("getMessageSource() is null. Localization doesn't work properly");
 			return appointmentStatus.toString();
 		}
 		Locale locale = MessageUtil.getLocale();
 		try {
 			switch (appointmentStatus) {
 			case APPROVED:
-				return messageSource.getMessage("AppointmentStatus.Approved", null, locale);
+				return getMessageSource().getMessage("AppointmentStatus.Approved", null, locale);
 			case CANCELLED:
-				return messageSource.getMessage("AppointmentStatus.Cancelled", null, locale);				
+				return getMessageSource().getMessage("AppointmentStatus.Cancelled", null, locale);				
 			case CREATED:
-				return messageSource.getMessage("AppointmentStatus.Created", null, locale);
+				return getMessageSource().getMessage("AppointmentStatus.Created", null, locale);
 			default:
 				return appointmentStatus.toString();
 			}					
@@ -331,15 +330,6 @@ public class AvEmployeeServiceHandle {
 			return appointmentStatus.toString();
 		}
 	}
-
-	public final ResourceBundleMessageSource getMessageSource() {
-		return messageSource;
-	}
-
-	public final void setMessageSource(ResourceBundleMessageSource messageSource) {
-		this.messageSource = messageSource;
-	}
-	
 	
 	
 }

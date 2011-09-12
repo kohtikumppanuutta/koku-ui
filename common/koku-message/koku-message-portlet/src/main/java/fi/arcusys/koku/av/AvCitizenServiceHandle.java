@@ -7,8 +7,8 @@ import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.NoSuchMessageException;
-import org.springframework.context.support.ResourceBundleMessageSource;
 
+import fi.arcusys.koku.AbstractHandle;
 import fi.arcusys.koku.av.citizenservice.AppointmentRespondedTO;
 import fi.arcusys.koku.av.citizenservice.AppointmentSlot;
 import fi.arcusys.koku.av.citizenservice.AppointmentWithTarget;
@@ -20,12 +20,10 @@ import fi.arcusys.koku.util.MessageUtil;
  * @author Jinhua Chen
  * Aug 22, 2011
  */
-public class AvCitizenServiceHandle {
+public class AvCitizenServiceHandle extends AbstractHandle {
 	
 	private Logger LOG = Logger.getLogger(AvCitizenServiceHandle.class);
-	
-	private ResourceBundleMessageSource messageSource;
-	
+		
 	private AvCitizenService acs;
 	private String loginUser;
 	
@@ -157,19 +155,19 @@ public class AvCitizenServiceHandle {
 
 	
 	private String localizeActionRequestStatus(AppointmentSummaryStatus appointmentStatus) {
-		if (messageSource == null) {
-			LOG.warn("MessageSource is null. Localization doesn't work properly");
+		if (getMessageSource() == null) {
+			LOG.warn("getMessageSource() is null. Localization doesn't work properly");
 			return appointmentStatus.toString();
 		}
 		Locale locale = MessageUtil.getLocale();
 		try {
 			switch (appointmentStatus) {
 			case APPROVED:
-				return messageSource.getMessage("AppointmentStatus.Approved", null, locale);
+				return getMessageSource().getMessage("AppointmentStatus.Approved", null, locale);
 			case CANCELLED:
-				return messageSource.getMessage("AppointmentStatus.Cancelled", null, locale);				
+				return getMessageSource().getMessage("AppointmentStatus.Cancelled", null, locale);				
 			case CREATED:
-				return messageSource.getMessage("AppointmentStatus.Created", null, locale);
+				return getMessageSource().getMessage("AppointmentStatus.Created", null, locale);
 			default:
 				return appointmentStatus.toString();
 			}							
@@ -177,14 +175,6 @@ public class AvCitizenServiceHandle {
 			LOG.warn("Coulnd't find localized message for '" +appointmentStatus +"'. Localization doesn't work properly");
 			return appointmentStatus.toString();
 		}
-	}
-
-	public final ResourceBundleMessageSource getMessageSource() {
-		return messageSource;
-	}
-
-	public final void setMessageSource(ResourceBundleMessageSource messageSource) {
-		this.messageSource = messageSource;
 	}
 	
 }

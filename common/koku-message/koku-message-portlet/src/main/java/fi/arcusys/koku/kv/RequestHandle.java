@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import fi.arcusys.koku.AbstractHandle;
 import fi.arcusys.koku.kv.requestservice.Request;
 import fi.arcusys.koku.kv.requestservice.RequestSummary;
 import fi.arcusys.koku.kv.requestservice.RequestType;
@@ -14,7 +15,7 @@ import fi.arcusys.koku.util.MessageUtil;
  * @author Jinhua Chen
  * Aug 22, 2011
  */
-public class RequestHandle {
+public class RequestHandle extends AbstractHandle {
 	
 	private RequestService rs;
 	

@@ -7,8 +7,8 @@ import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.NoSuchMessageException;
-import org.springframework.context.support.ResourceBundleMessageSource;
 
+import fi.arcusys.koku.AbstractHandle;
 import fi.arcusys.koku.tiva.employeeservice.ConsentApprovalStatus;
 import fi.arcusys.koku.tiva.employeeservice.ConsentCreateType;
 import fi.arcusys.koku.tiva.employeeservice.ActionRequestStatus;
@@ -26,12 +26,10 @@ import fi.arcusys.koku.util.MessageUtil;
  * @author Jinhua Chen
  * Aug 18, 2011
  */
-public class TivaEmployeeServiceHandle {
+public class TivaEmployeeServiceHandle extends AbstractHandle {
 	
 	private Logger LOG = Logger.getLogger(TivaEmployeeServiceHandle.class);
 	
-	private ResourceBundleMessageSource messageSource;
-
 
 	private TivaEmployeeService tes;
 	
@@ -175,8 +173,8 @@ public class TivaEmployeeServiceHandle {
 	
 	
 	private String localizeConsentStatus(ConsentStatus consentStatus) {
-		if (messageSource == null) {
-			LOG.warn("MessageSource is null. Localization doesn't work properly");
+		if (getMessageSource() == null) {
+			LOG.warn("getMessageSource() is null. Localization doesn't work properly");
 			return consentStatus.toString().toLowerCase();
 		}
 		Locale locale = MessageUtil.getLocale();
@@ -184,19 +182,19 @@ public class TivaEmployeeServiceHandle {
 		try {
 			switch(consentStatus) {
 			case DECLINED:
-				return messageSource.getMessage("ConsentStatus.DECLINED", null, locale);
+				return getMessageSource().getMessage("ConsentStatus.DECLINED", null, locale);
 			case EXPIRED:
-				return messageSource.getMessage("ConsentStatus.EXPIRED", null, locale);
+				return getMessageSource().getMessage("ConsentStatus.EXPIRED", null, locale);
 			case OPEN:
-				return messageSource.getMessage("ConsentStatus.OPEN", null, locale);
+				return getMessageSource().getMessage("ConsentStatus.OPEN", null, locale);
 			case PARTIALLY_GIVEN:
-				return messageSource.getMessage("ConsentStatus.PARTIALLY_GIVEN", null, locale);
+				return getMessageSource().getMessage("ConsentStatus.PARTIALLY_GIVEN", null, locale);
 			case REVOKED:
-				return messageSource.getMessage("ConsentStatus.REVOKED", null, locale);
+				return getMessageSource().getMessage("ConsentStatus.REVOKED", null, locale);
 			case VALID:
-				return messageSource.getMessage("ConsentStatus.VALID", null, locale);
+				return getMessageSource().getMessage("ConsentStatus.VALID", null, locale);
 			default:
-				return messageSource.getMessage("unknown", null, locale);
+				return getMessageSource().getMessage("unknown", null, locale);
 			}
 		} catch (NoSuchMessageException nsme) {
 			LOG.warn("Coulnd't find localized message. Localization doesn't work properly");
@@ -205,19 +203,19 @@ public class TivaEmployeeServiceHandle {
 	}
 	
 	private String localizeActionRequestStatus(ActionRequestStatus actionRequestStatus) {
-		if (messageSource == null) {
-			LOG.warn("MessageSource is null. Localization doesn't work properly");
+		if (getMessageSource() == null) {
+			LOG.warn("getMessageSource() is null. Localization doesn't work properly");
 			return actionRequestStatus.toString().toLowerCase();
 		}
 		Locale locale = MessageUtil.getLocale();
 		try {
 		switch(actionRequestStatus) {
 		case DECLINED:
-			return messageSource.getMessage("ConsentReplyStatus.DECLINED", null, locale);
+			return getMessageSource().getMessage("ConsentReplyStatus.DECLINED", null, locale);
 		case GIVEN:
-			return messageSource.getMessage("ConsentReplyStatus.GIVEN", null, locale);
+			return getMessageSource().getMessage("ConsentReplyStatus.GIVEN", null, locale);
 		default:
-			return messageSource.getMessage("unknown", null, locale);
+			return getMessageSource().getMessage("unknown", null, locale);
 		}
 		} catch (NoSuchMessageException nsme) {
 			LOG.warn("Coulnd't find localized message. Localization doesn't work properly");
@@ -226,8 +224,8 @@ public class TivaEmployeeServiceHandle {
 	}
 	
 	private String localizeConsentCreateType(ConsentCreateType type) {
-		if (messageSource == null) {
-			LOG.warn("MessageSource is null. Localization doesn't work properly");
+		if (getMessageSource() == null) {
+			LOG.warn("getMessageSource() is null. Localization doesn't work properly");
 			return type.toString().toLowerCase();
 		}
 		Locale locale = MessageUtil.getLocale();
@@ -235,13 +233,13 @@ public class TivaEmployeeServiceHandle {
 		try {
 			switch(type) {
 			case ELECTRONIC:
-				return messageSource.getMessage("ConsentType.Electronic", null, locale);
+				return getMessageSource().getMessage("ConsentType.Electronic", null, locale);
 			case EMAIL_BASED:
-				return messageSource.getMessage("ConsentType.PaperBased", null, locale);
+				return getMessageSource().getMessage("ConsentType.PaperBased", null, locale);
 			case PAPER_BASED:
-				return messageSource.getMessage("ConsentType.EmailBased", null, locale);
+				return getMessageSource().getMessage("ConsentType.EmailBased", null, locale);
 			default:
-				return messageSource.getMessage("unknown", null, locale);
+				return getMessageSource().getMessage("unknown", null, locale);
 			}
 		} catch (NoSuchMessageException nsme) {
 			LOG.warn("Coulnd't find localized message. Localization doesn't work properly");
@@ -252,32 +250,24 @@ public class TivaEmployeeServiceHandle {
 	private String localizeApprovalConsentStatus(ConsentApprovalStatus approvalStatus) {
 		Locale locale = MessageUtil.getLocale();
 		
-		if (messageSource == null) {
-			LOG.warn("MessageSource is null. Localization doesn't work properly");
+		if (getMessageSource() == null) {
+			LOG.warn("getMessageSource() is null. Localization doesn't work properly");
 			return approvalStatus.toString().toLowerCase();
 		}
 		
 		try {			
 			switch(approvalStatus) {
 			case DECLINED:
-				return messageSource.getMessage("ApprovalConsentStatus.DECLINED", null, locale);
+				return getMessageSource().getMessage("ApprovalConsentStatus.DECLINED", null, locale);
 			case APPROVED:
-				return messageSource.getMessage("ApprovalConsentStatus.APPROVED", null, locale);
+				return getMessageSource().getMessage("ApprovalConsentStatus.APPROVED", null, locale);
 			default:
-				return messageSource.getMessage("unknown", null, locale);
+				return getMessageSource().getMessage("unknown", null, locale);
 			}
 		} catch (NoSuchMessageException nsme) {
 			LOG.warn("Coulnd't find localized message. Localization doesn't work properly");
 			return approvalStatus.toString().toLowerCase();
 		}
-	}
-
-	public final ResourceBundleMessageSource getMessageSource() {
-		return messageSource;
-	}
-
-	public final void setMessageSource(ResourceBundleMessageSource messageSource) {
-		this.messageSource = messageSource;
 	}
 	
 }

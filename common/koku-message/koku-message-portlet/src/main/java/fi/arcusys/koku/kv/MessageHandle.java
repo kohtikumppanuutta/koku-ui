@@ -8,8 +8,8 @@ import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.NoSuchMessageException;
-import org.springframework.context.support.ResourceBundleMessageSource;
 
+import fi.arcusys.koku.AbstractHandle;
 import fi.arcusys.koku.kv.messageservice.Criteria;
 import fi.arcusys.koku.kv.messageservice.Fields;
 import fi.arcusys.koku.kv.messageservice.FolderType;
@@ -25,12 +25,9 @@ import fi.arcusys.koku.util.MessageUtil;
  * @author Jinhua Chen
  * Jun 22, 2011
  */
-public class MessageHandle {
+public class MessageHandle extends AbstractHandle {
 	
 	private Logger LOG = Logger.getLogger(MessageHandle.class);
-
-	
-	private ResourceBundleMessageSource messageSource;
 	
 	MessageService ms;
 	
@@ -165,8 +162,8 @@ public class MessageHandle {
 	}
 	
 	private String localizeMsgStatus(MessageStatus status ) {
-		if (messageSource == null) {
-			LOG.warn("MessageSource is null. Localization doesn't work properly");
+		if (getMessageSource() == null) {
+			LOG.warn("getMessageSource() is null. Localization doesn't work properly");
 			return status.toString().toLowerCase();
 		}
 		Locale locale = MessageUtil.getLocale();
@@ -174,11 +171,11 @@ public class MessageHandle {
 		try {	
 			switch(status) {
 			case READ:
-				return messageSource.getMessage("MessageStatus.READ", null, locale);
+				return getMessageSource().getMessage("MessageStatus.READ", null, locale);
 			case UNREAD:
-				return messageSource.getMessage("MessageStatus.UNREAD", null, locale);
+				return getMessageSource().getMessage("MessageStatus.UNREAD", null, locale);
 			default:
-				return messageSource.getMessage("unknown", null, locale);
+				return getMessageSource().getMessage("unknown", null, locale);
 			}
 		} catch (NoSuchMessageException nsme) {
 			LOG.warn("Coulnd't find localized message. Localization doesn't work properly");
@@ -286,14 +283,6 @@ public class MessageHandle {
 		}
 
 		return criteria;
-	}
-
-	public final ResourceBundleMessageSource getMessageSource() {
-		return messageSource;
-	}
-
-	public final void setMessageSource(ResourceBundleMessageSource messageSource) {
-		this.messageSource = messageSource;
 	}
 	
 }
