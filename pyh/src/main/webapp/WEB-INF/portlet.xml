@@ -23,6 +23,21 @@
 
    </portlet>
    
+   <filter>
+		<filter-name>userInfoFilter</filter-name>
+		<filter-class>fi.koku.portlet.filter.UserInfoPortletFilter</filter-class>
+		<lifecycle>RENDER_PHASE</lifecycle>
+		<init-param>
+			<name>authImplClassName</name>
+			<value>jabajaba.class</value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>userInfoFilter</filter-name>
+		<portlet-name>pyh</portlet-name>
+	</filter-mapping>
+   
+   
    <!--  <public-render-parameter>
      <identifier>viesti-id</identifier>
      <qname xmlns:kk="http://kohtikumppanuutta.fi/prp">kk:viesti</qname>

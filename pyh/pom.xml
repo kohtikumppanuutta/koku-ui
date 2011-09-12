@@ -23,6 +23,12 @@
       <version>0.0.4</version>
     </dependency>    
 
+	<dependency>
+    <groupId>kohti-kumppanuutta</groupId>
+    <artifactId>kahvaservice-api</artifactId>
+    <version>0.0.3</version>
+	</dependency>
+
   </dependencies>
 
 </project>
