@@ -23,9 +23,11 @@
 
    </portlet>
    
-   <filter>
+    
+    <!-- THIS IS EXTERNAL PORTLET FILTER FROM KOKU-UI/COMMON/userinfo-portlet-filter -project -->
+    <filter>
 		<filter-name>userInfoFilter</filter-name>
-		<filter-class>fi.koku.portlet.filter.UserInfoPortletFilter</filter-class>
+		<filter-class>fi.koku.portlet.filter.userinfo.UserInfoPortletFilter</filter-class>
 		<lifecycle>RENDER_PHASE</lifecycle>
 		<init-param>
 			<name>authImplClassName</name>
