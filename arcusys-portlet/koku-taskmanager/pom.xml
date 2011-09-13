@@ -8,7 +8,7 @@
   <name>koku-taskmanager</name>  
   
   <parent>
-    <artifactId>common</artifactId>
+    <artifactId>arcusys-portlets</artifactId>
     <groupId>fi.arcusys</groupId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
