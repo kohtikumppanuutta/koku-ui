@@ -1,13 +1,28 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>koku-ui</artifactId>
-    <groupId>kohti-kumppanuutta</groupId>
-    <version>0.0.1-SNAPSHOT</version>
-    <relativePath>..</relativePath>
-  </parent>
-  <artifactId>portlet-common</artifactId>
-  <name>portlet-common</name>
-  <description>code shared between koku portlet projects.
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>koku-ui</artifactId>
+		<groupId>kohti-kumppanuutta</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<artifactId>portlet-common</artifactId>
+	<name>portlet-common</name>
+	<packaging>jar</packaging>
+    <version>0.0.2-SNAPSHOT</version>
+	<description>code shared between koku portlet projects.
 the code can depend on servlet and portlet apis as well as koku service-api but not koku-portlets.</description>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>kohti-kumppanuutta</groupId>
+			<artifactId>kahvaservice-api</artifactId>
+			<version>0.0.3</version>
+		</dependency>
+
+	</dependencies>
+
+
 </project>
