@@ -19,7 +19,7 @@
 		<supported-locale>en_EN</supported-locale>
 		<supported-locale>fi_FI</supported-locale>
 		<supported-locale>sv_SE</supported-locale>
-		<resource-bundle>messages</resource-bundle>
+		<resource-bundle>messages</resource-bundle>		
 		<portlet-info>
 		  <title>Asiointipalvelut</title>
 		</portlet-info>
@@ -32,6 +32,24 @@
 				<name>portlet-enabled-for-private-pages</name>
 				<value>true</value>
 			</preference>
+			
+			<preference>
+				<name>showOnlyChecked</name>
+				<value>true</value>
+			</preference>
+			<preference>
+				<name>showOnlyForm</name>
+				<value>123123</value>
+			</preference>
+			<preference>
+				<name>showOnlyFormByDescription</name>
+				<value>Käyttäjäviestintä</value>
+			</preference>
+			<preference>
+				<name>useTaskId</name>
+				<value>false</value>
+			</preference>
+			
 		</portlet-preferences>
 		<security-role-ref>
 			<role-name>power-user</role-name>
