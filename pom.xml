@@ -84,6 +84,7 @@
 		<module>lok</module>
 		<module>intalio</module>
 		<!-- module>common</module -->
+		<module>portlet-common</module>
 	</modules>
 	<dependencies>
 
