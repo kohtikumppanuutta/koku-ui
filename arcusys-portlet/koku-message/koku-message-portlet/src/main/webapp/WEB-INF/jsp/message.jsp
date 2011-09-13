@@ -34,6 +34,11 @@
 	<portlet:param name="myaction" value="showConsent" />
 </portlet:renderURL>
 
+<!-- Not in use currently, but reserved for future use -->
+<portlet:renderURL var="intalioFormURL" windowState="<%= WindowState.NORMAL.toString() %>" >
+	<portlet:param name="myaction" value="showIntalioForm" />
+</portlet:renderURL>
+
 <!-- For gatein Portal -->
 <portlet:resourceURL var="messageRenderURL" id="createMessageRenderUrl">
 </portlet:resourceURL>
@@ -358,42 +363,15 @@
 
 			taskHtml += '</table>';
 			
-		}else if(pageObj.taskType == "cst_own_employee") {
-			
+		}else if(pageObj.taskType == "cst_own_employee") {			
 			taskHtml += createBrowseEmployeeOwnConsents(tasks);
-			
-// 			taskHtml = '<table class="task-manager-table">'
-// 				+ '<tr class="task-manager-table trheader">'
-// 				+ '<td class="choose"><spring:message code="message.choose" /></td>'
-// 				+ '<td>' + '<spring:message code="consent.requester" />' + '</td>'
-// 				+ '<td>' + '<spring:message code="consent.templateName" />' + '</td>'
-// 				+ '<td>' + '<spring:message code="consent.status" />' + '</td>'
-// 				+ '<td>' + '<spring:message code="consent.approvalStatus" />' + '</td>'
-// 				+ '<td>' + '<spring:message code="consent.createType" />' + '</td>'
-// 				+ '<td>' + '<spring:message code="consent.givenDate" />' + '</td>'
-// 				+ '<td>' + '<spring:message code="consent.validDate" />' + '</td>'
-// 				+ '</tr>';				 
-// 			for ( var i = 0; i < tasks.length; i++) {			
-// 				taskHtml += generateRowTr(i);			
-// 				taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
-// 						 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["requester"] + '</td>'
-// 					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["templateName"] + '</td>'
-// 					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["status"] + '</td>'
-// 					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["approvalStatus"] + '</td>'
-// 					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["createType"] + '</td>'
-// 					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["assignedDate"] + '</td>'
-// 					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["validDate"] + '</td>'
-// 					 	 + '</tr>';
-// 			}
-// 			taskHtml += '</table>';
-			
 		} else if (pageObj.taskType = "cst_browse_customer_consents") {
 			taskHtml += createBrowseUserConsentsTable(tasks);
 		}
 		
 		return taskHtml;
 	}
-	
+		
 	function createBrowseEmployeeOwnConsents(tasks) {
 		var columnNames = ["<spring:message code="message.choose"/>",
 		                   "<spring:message code="consent.requester"/>",
@@ -418,20 +396,17 @@
 	
 	function createBrowseUserConsentsTable(tasks) {
 		var columnNames = ["<spring:message code="message.choose"/>",
-		                   "<spring:message code="consent.requester"/>",
-		                   "<spring:message code="consent.templateName"/>",
 		                   "<spring:message code="consent.status"/>",
-		                   "<spring:message code="consent.approvalStatus"/>",
-		                   "<spring:message code="consent.createType"/>",
+		                   "<spring:message code="consent.templateName"/>",
+		                   "<spring:message code="consent.requester"/>",
 		                   "<spring:message code="consent.givenDate"/>",
 		                   "<spring:message code="consent.validDate"/>"
 		                  ];
 		
-		var columnIds = ["requester",
-		                 "templateName",
+		var columnIds = [
 		                 "status",
-		                 "approvalStatus",
-		                 "createType",
+		                 "templateName",
+		                 "requester",
 		                 "assignedDate",
 		                 "validDate"];
 		return createTable("showConsent", columnNames, columnIds, tasks);
@@ -527,159 +502,12 @@
 			return subject;
 	}
 
-	<%  //for jboss portal
-	if(defaultPath.contains("default")) { %>
-	
-	/* Shows detailed message page */
-	function showMessage(messageId) {
-		var url = "<%= messageURL %>";
-		url += "&messageId=" + messageId
-		+ "&currentPage=" + pageObj.currentPage
-		+ "&taskType=" + pageObj.taskType
-		+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
-		+ "&orderType=" + pageObj.orderType;
-		
-		window.location = url;
-	}
-	/* Shows detailed request page */
-	function showRequest(requestId) {
-		var url = "<%= requestURL %>";
-		url += "&requestId=" + requestId
-		+ "&currentPage=" + pageObj.currentPage
-		+ "&taskType=" + pageObj.taskType
-		+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
-		+ "&orderType=" + pageObj.orderType;
-		
-		window.location = url;
-	}
-	/* Shows detailed appointment page */
-	function showAppointment(index) {
-		var task = pageObj.tasks[index];
-		var appointmentId = task["appointmentId"];
-		var targetPerson = task['targetPerson'];
-		var url="";
-		
-		if(pageObj.taskType == "app_response_employee" || pageObj.taskType == "app_response_citizen") {
-			url = "<%= appointmentURL %>";
-			url += "&appointmentId=" + appointmentId
-					+ "&currentPage=" + pageObj.currentPage
-					+ "&taskType=" + pageObj.taskType
-					+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
-					+ "&orderType=" + pageObj.orderType;
-		}else if(pageObj.taskType == "app_inbox_employee"){
-			url = "<%= defaultPath %>" + "/Message/NewAppointment" + "?FormID=" + appointmentId;			
-		}else if(pageObj.taskType == "app_inbox_citizen") {
-			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;				
-		}
-		
-		window.location = url;				
-	}
-	/* Shows detailed consent page */
-	function showConsent(index) {
-		var consentId = pageObj.tasks[index]['consentId'];
-		var url="";
-		
-		if(pageObj.taskType == "cst_own_citizen" || pageObj.taskType == "cst_own_employee" || pageObj.taskType == "cst_browse_customer_consents") {
-			url = "<%= consentURL %>";
-			url += "&consentId=" + consentId
-					+ "&currentPage=" + pageObj.currentPage
-					+ "&taskType=" + pageObj.taskType
-					+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
-					+ "&orderType=" + pageObj.orderType;
-		}else if(pageObj.taskType == "cst_assigned_citizen"){
-			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;			
-		}
-				
-		window.location = url;
-	}
-	
-	<%}else{ // for gatein %>
-	
-	/************************For Gatein Portal start***************************/
-	// Creates a renderURL by ajax, to show the detailed message page 
-	function showMessage(messageId) {
-		var url="<%= messageRenderURL %>";
-		url = formatUrl(url);
-		
-		jQuery.post(url, {messageId:messageId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
-			keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
-			var obj = eval('(' + data + ')');
-			var json = obj.response;
-			var renderUrl = json["renderUrl"];
-			window.location = renderUrl;
-		});
-			
-	}
-	
-	//Creates a renderURL by ajax, to show the detailed request page
-	function showRequest(requestId) {
-		var url = "<%= requestRenderURL %>";
-		url = formatUrl(url);
-		
-		jQuery.post(url, {requestId:requestId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
-			keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
-			var obj = eval('(' + data + ')');
-			var json = obj.response;
-			var renderUrl = json["renderUrl"];
-			window.location = renderUrl;
-		});
-	}	
-	//Creates a renderURL by ajax,to show the detailed appointment page
-	function showAppointment(index) {
-		var task = pageObj.tasks[index];
-		var appointmentId = task["appointmentId"];
-		var targetPerson = task['targetPerson'];
-		var url="";
-		
-		if(pageObj.taskType == "app_response_employee" || pageObj.taskType == "app_response_citizen") {
-			url = "<%= appointmentRenderURL %>";
-			url = formatUrl(url);
-			
-			jQuery.post(url, {appointmentId:appointmentId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
-				keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType, targetPerson:targetPerson}, function(data) {
-				var obj = eval('(' + data + ')');
-				var json = obj.response;
-				var renderUrl = json["renderUrl"];
-				window.location = renderUrl;
-			});
-		}else if(pageObj.taskType == "app_inbox_employee"){
-			url = "<%= defaultPath %>" + "/Message/NewAppointment" + "?FormID=" + appointmentId;
-			window.location = url;
-		}else if(pageObj.taskType == "app_inbox_citizen") {
-			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;	
-			window.location = url;
-		}				
-	}
-	//Creates a renderURL by ajax,to show the detailed consent page
-	function showConsent(index) {
-		var url="";
-		var task = pageObj.tasks[index];
-		
-		var consentId = task['consentId'];
-		
-		if(pageObj.taskType == "cst_own_citizen" && task['approvalStatus'] == 'Hyväksytty' && task['status'] != 'Mitätöity') { // edit mode
-			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;	
-			window.location = url;
-		}
-		else if(pageObj.taskType == "cst_own_citizen" || pageObj.taskType == "cst_own_employee") {
-			url = "<%= consentRenderURL %>";
-			url = formatUrl(url);
-			
-			jQuery.post(url, {consentId:consentId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
-				keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
-				var obj = eval('(' + data + ')');
-				var json = obj.response;
-				var renderUrl = json["renderUrl"];
-				window.location = renderUrl;
-			});
-		}else if(pageObj.taskType == "cst_assigned_citizen"){
-			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;	
-			window.location = url;
-		}
-						
-	}
-
-	/************************For Gatein Portal end****************************/
+	<% if(defaultPath.contains("default")) { 	
+		// for jboss %>
+		<%@ include file="message_jboss.jspf" %> 
+	<% } else { 
+		// for gatein %>	
+		<%@ include file="message_gatein.jspf" %> 
    <%}%>
 		
 	/*

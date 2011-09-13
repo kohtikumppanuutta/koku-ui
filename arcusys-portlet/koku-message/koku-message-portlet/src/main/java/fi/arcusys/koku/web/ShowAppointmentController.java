@@ -19,6 +19,8 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import fi.arcusys.koku.av.AvCitizenServiceHandle;
 import fi.arcusys.koku.av.AvEmployeeServiceHandle;
 import fi.arcusys.koku.av.KokuAppointment;
+import static fi.arcusys.koku.util.Constants.*;
+
 
 /**
  * Shows appointment page and store the current query information on the jsp page
@@ -46,9 +48,9 @@ public class ShowAppointmentController {
 
 		String page = "showcitizenappointment";
 		
-		if(taskType.equals("app_response_citizen")) {
+		if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)) {
 			page = "showcitizenappointment";
-		} else if(taskType.equals("app_response_employee")) {
+		} else if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE)) {
 			page = "showemployeeappointment";
 		}
 		
@@ -73,18 +75,18 @@ public class ShowAppointmentController {
 			@RequestParam(value = "targetPerson", required = false) String targetPerson, RenderRequest request) {
 	
 		// store parameters in session for returning page from form page	
-		request.getPortletSession().setAttribute("currentPage", currentPage, PortletSession.APPLICATION_SCOPE);
-		request.getPortletSession().setAttribute("taskType", taskType, PortletSession.APPLICATION_SCOPE);
-		request.getPortletSession().setAttribute("keyword", keyword, PortletSession.APPLICATION_SCOPE);
-		request.getPortletSession().setAttribute("orderType", orderType, PortletSession.APPLICATION_SCOPE);
+		request.getPortletSession().setAttribute(ATTR_CURRENT_PAGE, currentPage, PortletSession.APPLICATION_SCOPE);
+		request.getPortletSession().setAttribute(ATTR_TASK_TYPE, taskType, PortletSession.APPLICATION_SCOPE);
+		request.getPortletSession().setAttribute(ATTR_KEYWORD, keyword, PortletSession.APPLICATION_SCOPE);
+		request.getPortletSession().setAttribute(ATTR_ORDER_TYPE, orderType, PortletSession.APPLICATION_SCOPE);
 		
 		KokuAppointment app = null;
 		
-		if(taskType.equals("app_response_citizen")) {
+		if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)) {
 			AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
 			handle.setMessageSource(messageSource);
 			app = handle.getAppointmentById(appointmentId, targetPerson);
-		} else if(taskType.equals("app_response_employee")) {
+		} else if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE)) {
 			AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
 			handle.setMessageSource(messageSource);
 			app = handle.getAppointmentById(appointmentId);

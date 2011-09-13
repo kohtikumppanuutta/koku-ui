@@ -10,6 +10,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
+import static fi.arcusys.koku.util.Constants.*;
 
 /**
  * Handles the main message page
@@ -49,19 +50,19 @@ public class MessageController {
 			ModelMap modelmap) {
 		// get parameters from session
 		String currentPage = (String) request.getPortletSession().getAttribute(
-				"currentPage", PortletSession.APPLICATION_SCOPE);
+				ATTR_CURRENT_PAGE, PortletSession.APPLICATION_SCOPE);
 		String taskType = (String) request.getPortletSession().getAttribute(
-				"taskType", PortletSession.APPLICATION_SCOPE);
+				ATTR_TASK_TYPE, PortletSession.APPLICATION_SCOPE);
 		String keyword = (String) request.getPortletSession().getAttribute(
-				"keyword", PortletSession.APPLICATION_SCOPE);
+				ATTR_KEYWORD, PortletSession.APPLICATION_SCOPE);
 		String orderType = (String) request.getPortletSession().getAttribute(
-				"orderType", PortletSession.APPLICATION_SCOPE);
+				ATTR_ORDER_TYPE, PortletSession.APPLICATION_SCOPE);
 		clearSession(request); // clear session since it's used only once
 		
-		modelmap.addAttribute("currentPage", currentPage);
-		modelmap.addAttribute("taskType", taskType);
-		modelmap.addAttribute("keyword", keyword);
-		modelmap.addAttribute("orderType", orderType);
+		modelmap.addAttribute(ATTR_CURRENT_PAGE, currentPage);
+		modelmap.addAttribute(ATTR_TASK_TYPE, taskType);
+		modelmap.addAttribute(ATTR_KEYWORD, keyword);
+		modelmap.addAttribute(ATTR_ORDER_TYPE, orderType);
 
 		return "message";
 	}
@@ -72,10 +73,10 @@ public class MessageController {
 	 */
 	public void clearSession(RenderRequest request) {
 		PortletSession ps = request.getPortletSession();
-		ps.removeAttribute("currentPage", PortletSession.APPLICATION_SCOPE);
-		ps.removeAttribute("taskType", PortletSession.APPLICATION_SCOPE);
-		ps.removeAttribute("keyword", PortletSession.APPLICATION_SCOPE);
-		ps.removeAttribute("orderType", PortletSession.APPLICATION_SCOPE);
+		ps.removeAttribute(ATTR_CURRENT_PAGE, PortletSession.APPLICATION_SCOPE);
+		ps.removeAttribute(ATTR_TASK_TYPE, PortletSession.APPLICATION_SCOPE);
+		ps.removeAttribute(ATTR_KEYWORD, PortletSession.APPLICATION_SCOPE);
+		ps.removeAttribute(ATTR_ORDER_TYPE, PortletSession.APPLICATION_SCOPE);
 	}
 	
 	// -- @ModelAttribute here works as the referenceData method
@@ -102,7 +103,7 @@ public class MessageController {
 
 			if (userid != null) { // user is logged in				
 				PortletSession portletSession = request.getPortletSession();
-				portletSession.setAttribute("USER_username", userid);
+				portletSession.setAttribute(ATTR_USERNAME, userid);
 			}
 
 		} catch (Exception e) {

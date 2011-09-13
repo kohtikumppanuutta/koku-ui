@@ -1,0 +1,85 @@
+	/************************For Gatein Portal start***************************/
+	// Creates a renderURL by ajax, to show the detailed message page 
+	function showMessage(messageId) {
+		var url="<%= messageRenderURL %>";
+		url = formatUrl(url);
+		
+		jQuery.post(url, {messageId:messageId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+			keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+			var obj = eval('(' + data + ')');
+			var json = obj.response;
+			var renderUrl = json["renderUrl"];
+			window.location = renderUrl;
+		});
+			
+	}
+	
+	//Creates a renderURL by ajax, to show the detailed request page
+	function showRequest(requestId) {
+		var url = "<%= requestRenderURL %>";
+		url = formatUrl(url);
+		
+		jQuery.post(url, {requestId:requestId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+			keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+			var obj = eval('(' + data + ')');
+			var json = obj.response;
+			var renderUrl = json["renderUrl"];
+			window.location = renderUrl;
+		});
+	}	
+	//Creates a renderURL by ajax,to show the detailed appointment page
+	function showAppointment(index) {
+		var task = pageObj.tasks[index];
+		var appointmentId = task["appointmentId"];
+		var targetPerson = task['targetPerson'];
+		var url="";
+		
+		if(pageObj.taskType == "app_response_employee" || pageObj.taskType == "app_response_citizen") {
+			url = "<%= appointmentRenderURL %>";
+			url = formatUrl(url);
+			
+			jQuery.post(url, {appointmentId:appointmentId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+				keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType, targetPerson:targetPerson}, function(data) {
+				var obj = eval('(' + data + ')');
+				var json = obj.response;
+				var renderUrl = json["renderUrl"];
+				window.location = renderUrl;
+			});
+		}else if(pageObj.taskType == "app_inbox_employee"){
+			url = "<%= defaultPath %>" + "/Message/NewAppointment" + "?FormID=" + appointmentId;
+			window.location = url;
+		}else if(pageObj.taskType == "app_inbox_citizen") {
+			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;	
+			window.location = url;
+		}				
+	}
+	//Creates a renderURL by ajax,to show the detailed consent page
+	function showConsent(index) {
+		var url="";
+		var task = pageObj.tasks[index];
+		
+		var consentId = task['consentId'];
+		
+		if(pageObj.taskType == "cst_own_citizen" && task['approvalStatus'] == 'Hyväksytty' && task['status'] != 'Mitätöity') { // edit mode
+			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;	
+			window.location = url;
+		}
+		else if(pageObj.taskType == "cst_own_citizen" || pageObj.taskType == "cst_own_employee") {
+			url = "<%= consentRenderURL %>";
+			url = formatUrl(url);
+			
+			jQuery.post(url, {consentId:consentId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+				keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+				var obj = eval('(' + data + ')');
+				var json = obj.response;
+				var renderUrl = json["renderUrl"];
+				window.location = renderUrl;
+			});
+		}else if(pageObj.taskType == "cst_assigned_citizen"){
+			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;	
+			window.location = url;
+		}
+						
+	}
+
+	/************************For Gatein Portal end****************************/

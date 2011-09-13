@@ -1,0 +1,72 @@
+
+
+	/* Shows detailed message page */
+	function showMessage(messageId) {
+		var url = "<%= messageURL %>";
+		url += "&messageId=" + messageId
+		+ "&currentPage=" + pageObj.currentPage
+		+ "&taskType=" + pageObj.taskType
+		+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
+		+ "&orderType=" + pageObj.orderType;
+		
+		window.location = url;
+	}
+	
+	/* Shows detailed request page */
+	function showRequest(requestId) {
+		var url = "<%= requestURL %>";
+		url += "&requestId=" + requestId
+		+ "&currentPage=" + pageObj.currentPage
+		+ "&taskType=" + pageObj.taskType
+		+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
+		+ "&orderType=" + pageObj.orderType;
+		
+		window.location = url;
+	}
+	
+	/* Shows detailed appointment page */
+	function showAppointment(index) {
+		var task = pageObj.tasks[index];
+		var appointmentId = task["appointmentId"];
+		var targetPerson = task['targetPerson'];
+		var url="";
+		
+		if(pageObj.taskType == "app_response_employee" || pageObj.taskType == "app_response_citizen") {
+			url = "<%= appointmentURL %>";
+			url += "&appointmentId=" + appointmentId
+					+ "&currentPage=" + pageObj.currentPage
+					+ "&taskType=" + pageObj.taskType
+					+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
+					+ "&orderType=" + pageObj.orderType;
+		}else if(pageObj.taskType == "app_inbox_employee"){
+			url = "<%= defaultPath %>" + "/Message/NewAppointment" + "?FormID=" + appointmentId;			
+		}else if(pageObj.taskType == "app_inbox_citizen") {
+			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;				
+		}		
+		window.location = url;				
+	}
+	
+	/* Shows detailed consent page */
+	function showConsent(index) {
+		var consentId = pageObj.tasks[index]['consentId'];
+		var url="";
+		
+		if (pageObj.taskType == "cst_own_citizen" || pageObj.taskType == "cst_own_employee") {
+			url = "<%= consentURL %>";
+			url += "&consentId=" + consentId
+					+ "&currentPage=" + pageObj.currentPage
+					+ "&taskType=" + pageObj.taskType
+					+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
+					+ "&orderType=" + pageObj.orderType;
+		} else if (pageObj.taskType == "cst_assigned_citizen") {
+			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;
+		} else if (pageObj.taskType == "cst_browse_customer_consents") {
+			url = "<%= intalioFormURL %>";
+			url += "&consentId=" + consentId
+					+ "&currentPage=" + pageObj.currentPage
+					+ "&taskType=" + pageObj.taskType
+					+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
+					+ "&orderType=" + pageObj.orderType;
+		}
+		window.location = url;
+	}

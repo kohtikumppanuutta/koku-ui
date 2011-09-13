@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
-import fi.arcusys.koku.AbstractHandle;
 import fi.arcusys.koku.av.AvCitizenServiceHandle;
 import fi.arcusys.koku.av.AvEmployeeServiceHandle;
 import fi.arcusys.koku.av.KokuAppointment;
@@ -35,6 +34,7 @@ import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
 import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
 import fi.arcusys.koku.util.MessageUtil;
+import static fi.arcusys.koku.util.Constants.*;
 
 /**
  * Hanldes ajax request from portlet and returns the response with json string
@@ -46,18 +46,6 @@ import fi.arcusys.koku.util.MessageUtil;
 @RequestMapping(value = "VIEW")
 public class AjaxController {
 	
-	public static final String CONSENT_BROWSE_CUSTOMER_CONSENTS 		= "cst_browse_customer_consents";
-	public static final String CONSENT_BROWSE_OWN_CONSENTS_EMPLOYEE 	= "cst_own_employee";
-	public static final String CONSENT_BROWSE_OWN_CONSENTS_CITIZEN	 	= "cst_own_citizen";
-	public static final String CONSENT_ASSIGNED_CITIZEN					= "cst_assigned_citizen";
-	
-	public static final String APPOINTMENT_RESPONSE_CITIZEN 			= "app_response_citizen";
-	public static final String APPOINTMENT_RESPONSE_EMPLOYEE 			= "app_response_employee";
-	public static final String APPOINTMENT_INBOX_CITIZEN 				= "app_inbox_citizen";
-	public static final String APPOINTMENT_INBOX_EMPLOYEE 				= "app_inbox_employee";
-	
-	public static final String REQUEST_VALID_EMPLOYEE					= "req_valid";
-
 	
 	private static final String TASKS = "tasks";
 	
@@ -86,7 +74,7 @@ public class AjaxController {
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		PortletSession portletSession = request.getPortletSession();				
-		String username = (String) portletSession.getAttribute("USER_username");
+		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		JSONObject jsonModel = getJsonModel(taskType, page, keyword, field, orderType, username);
 		modelmap.addAttribute("response", jsonModel);
 		
@@ -190,7 +178,7 @@ public class AjaxController {
 		
 		if(taskType.endsWith("citizen")) {
 			PortletSession portletSession = request.getPortletSession();				
-			String username = (String) portletSession.getAttribute("USER_username");
+			String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 			AvCitizenServiceHandle handle = new AvCitizenServiceHandle(username);
 			String appointmentId;
 			String targetPerson;
@@ -256,7 +244,7 @@ public class AjaxController {
 			int first = (page-1)*numPerPage + 1; // the start index of task
 			int max =  page*numPerPage; // max amount of tasks
 			
-			if(taskType.equals(REQUEST_VALID_EMPLOYEE)) { // for request (Pyynnöt) - employee Avoimet
+			if(taskType.equals(TASK_TYPE_REQUEST_VALID_EMPLOYEE)) { // for request (Pyynnöt) - employee Avoimet
 				List<KokuRequest> msgs;
 				RequestHandle reqHandle = new RequestHandle();
 				msgs = reqHandle.getRequests(username, "valid", "", first, max);
@@ -264,14 +252,14 @@ public class AjaxController {
 				jsonModel.put(TASKS, msgs);
 			} else if(taskType.startsWith("app")) { // for appointment (Tapaamiset)
 				
-				if(taskType.equals(APPOINTMENT_INBOX_CITIZEN) || taskType.equals(APPOINTMENT_RESPONSE_CITIZEN)) {	// Vastausta odottavat / vastatut 
+				if(taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_CITIZEN) || taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)) {	// Vastausta odottavat / vastatut 
 					List<KokuAppointment> apps;
 					AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
 					handle.setMessageSource(messageSource);
 					apps = handle.getAppointments(username, first, max, taskType);
 					totalTasksNum = handle.getTotalAppointmentsNum(username, taskType);
 					jsonModel.put(TASKS, apps);
-				}else if(taskType.equals(APPOINTMENT_INBOX_EMPLOYEE) || taskType.equals(APPOINTMENT_RESPONSE_EMPLOYEE)) { // Avoimet / Valmiit
+				}else if(taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE) || taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE)) { // Avoimet / Valmiit
 					List<KokuAppointment> apps;
 					AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
 					handle.setMessageSource(messageSource);
@@ -282,25 +270,25 @@ public class AjaxController {
 				
 			} else if(taskType.startsWith("cst")) { // for consent (Valtakirja / Suostumus)
 				List<KokuConsent> csts = null;
-				if (taskType.equals(CONSENT_ASSIGNED_CITIZEN)) { // Kansalaiselle saapuneet pyynnöt(/suostumukset) 
+				if (taskType.equals(TASK_TYPE_CONSENT_ASSIGNED_CITIZEN)) { // Kansalaiselle saapuneet pyynnöt(/suostumukset) 
 					TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
 					tivaHandle.setMessageSource(messageSource);
 					csts = tivaHandle.getAssignedConsents(username, first, max);
 					totalTasksNum = tivaHandle.getTotalAssignedConsents(username);
 					jsonModel.put(TASKS, csts);
-				} else if(taskType.equals(CONSENT_BROWSE_OWN_CONSENTS_CITIZEN)) { // Kansalaiselle vastatut pyynnöt(/suostumukset) 
+				} else if(taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS)) { // Kansalaiselle vastatut pyynnöt(/suostumukset) 
 					TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
 					tivaHandle.setMessageSource(messageSource);
 					csts = tivaHandle.getOwnConsents(username, first, max);
 					totalTasksNum = tivaHandle.getTotalOwnConsents(username);
 					jsonModel.put(TASKS, csts);
-				} else if(taskType.equals(CONSENT_BROWSE_OWN_CONSENTS_EMPLOYEE)) { // Virkailijan lähetetyt suostumus pyynnöt
+				} else if(taskType.equals(TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS)) { // Virkailijan lähetetyt suostumus pyynnöt
 					TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
 					tivaHandle.setMessageSource(messageSource);
 					csts = tivaHandle.getConsents(username, keyword, field, first, max);
 					totalTasksNum = tivaHandle.getTotalConsents(username, keyword, field);
 					jsonModel.put(TASKS, csts);
-				} else if(taskType.equals(CONSENT_BROWSE_CUSTOMER_CONSENTS)) {	// Selaa käyttäjän x suostumuksia TIVA-13
+				} else if(taskType.equals(TASK_TYPE_CONSENT_LIST_CITIZEN_CONSENTS)) {	// Selaa käyttäjän x suostumuksia TIVA-13
 					TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
 					tivaHandle.setMessageSource(messageSource);
 					// FIXME: This should change when we get proper methods from WS
@@ -349,12 +337,12 @@ public class AjaxController {
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 		PortletURL renderUrlObj = response.createRenderURL();
-		renderUrlObj.setParameter( "myaction", "showMessage");
-		renderUrlObj.setParameter( "messageId", messageId);
-		renderUrlObj.setParameter( "currentPage", currentPage);
-		renderUrlObj.setParameter( "taskType", taskType);
-		renderUrlObj.setParameter( "keyword", keyword);
-		renderUrlObj.setParameter( "orderType", orderType);
+		renderUrlObj.setParameter( ATTR_MY_ACTION, "showMessage");
+		renderUrlObj.setParameter( ATTR_MESSAGE_ID, messageId);
+		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
+		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
+		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
+		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);
 		try {
 			renderUrlObj.setWindowState(WindowState.NORMAL);
 		} catch (WindowStateException e) {
@@ -391,12 +379,12 @@ public class AjaxController {
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 		PortletURL renderUrlObj = response.createRenderURL();
-		renderUrlObj.setParameter( "myaction", "showRequest");
-		renderUrlObj.setParameter( "requestId", requestId);
-		renderUrlObj.setParameter( "currentPage", currentPage);
-		renderUrlObj.setParameter( "taskType", taskType);
-		renderUrlObj.setParameter( "keyword", keyword);
-		renderUrlObj.setParameter( "orderType", orderType);	
+		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_REQUEST);
+		renderUrlObj.setParameter( ATTR_REQUEST_ID, requestId);
+		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
+		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
+		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
+		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);	
 		try {
 			renderUrlObj.setWindowState(WindowState.NORMAL);
 		} catch (WindowStateException e) {
@@ -435,13 +423,13 @@ public class AjaxController {
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 
 		PortletURL renderUrlObj = response.createRenderURL();
-		renderUrlObj.setParameter( "myaction", "showAppointment");
-		renderUrlObj.setParameter( "appointmentId", appointmentId);
-		renderUrlObj.setParameter( "currentPage", currentPage);
-		renderUrlObj.setParameter( "taskType", taskType);
-		renderUrlObj.setParameter( "keyword", keyword);
-		renderUrlObj.setParameter( "orderType", orderType);	
-		renderUrlObj.setParameter( "targetPerson", targetPerson);
+		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_APPOINTMENT);
+		renderUrlObj.setParameter( ATTR_APPOIMENT_ID, appointmentId);
+		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
+		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
+		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
+		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);	
+		renderUrlObj.setParameter( ATTR_TARGET_PERSON, targetPerson);
 		try {
 			renderUrlObj.setWindowState(WindowState.NORMAL);
 		} catch (WindowStateException e) {
@@ -480,12 +468,12 @@ public class AjaxController {
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 
 		PortletURL renderUrlObj = response.createRenderURL();
-		renderUrlObj.setParameter( "myaction", "showConsent");
-		renderUrlObj.setParameter( "consentId", consentId);
-		renderUrlObj.setParameter( "currentPage", currentPage);
-		renderUrlObj.setParameter( "taskType", taskType);
-		renderUrlObj.setParameter( "keyword", keyword);
-		renderUrlObj.setParameter( "orderType", orderType);	
+		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_CONSENT);
+		renderUrlObj.setParameter( ATTR_CONSENT_ID, consentId);
+		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
+		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
+		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
+		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);	
 		try {
 			renderUrlObj.setWindowState(WindowState.NORMAL);
 		} catch (WindowStateException e) {
