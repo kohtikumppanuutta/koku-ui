@@ -23,15 +23,19 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.arcusys.koku.palvelut.model.client.TaskHolder;
+import fi.arcusys.koku.palvelut.util.Constants;
 import fi.arcusys.koku.palvelut.util.TaskUtil;
 import fi.arcusys.koku.palvelut.util.TokenUtil;
 import fi.arcusys.koku.palvelut.util.URLUtil;
+import static fi.arcusys.koku.palvelut.util.Constants.*;
 
 @Controller("configurationController")
 @RequestMapping(value = "EDIT")
 public class ConfigurationController { 
 	
 	public static final String EDIT_ACTION = "configuration";
+	public static final String JBOSS_PORTAL = "JBoss Portal 2.7";
+			
 	private static final Logger LOG = Logger.getLogger(ConfigurationController.class.getName());
 
 	
@@ -42,13 +46,21 @@ public class ConfigurationController {
 		Map<String, Object> map = new HashMap<String, Object>();
 //		map.put("taskList", getTaskHolders(request));
 		ModelAndView mav = new ModelAndView(EDIT_ACTION, "model", map);
+		String portalInfo = request.getPortalContext().getPortalInfo();
+		
+		if (portalInfo.startsWith(JBOSS_PORTAL)) {
+			mav.addObject(ATTR_PORTAL_ID, Constants.PORTAL_JBOSS);
+		} else {
+			mav.addObject(ATTR_PORTAL_ID, Constants.PORTAL_GATEIN);
+		}
+		
 		try {
-			mav.addObject("formList", getTaskHolders(request));
-			mav.addObject("prefs", request.getPreferences());			
+			mav.addObject(ATTR_FORM_LIST, getTaskHolders(request));
+			mav.addObject(ATTR_PREFERENCES, request.getPreferences());			
 		} catch (Exception e) {
 			LOG.error("Failure while trying to get TaskHolders. See following log for more information: ", e);
 			ModelAndView failureMav = new ModelAndView("failureView", "model", null);
-			failureMav.addObject("prefs", request.getPreferences());
+			failureMav.addObject(ATTR_PREFERENCES, request.getPreferences());
 			return failureMav;
 		}
 		return mav;
@@ -60,13 +72,14 @@ public class ConfigurationController {
 		// TODO Auto-generated method stub
 		LOG.debug("handleActionRequestInternal");
 		PortletPreferences prefs = request.getPreferences();
-		LOG.debug("showOnlyChecked: " + prefs.getValue("showOnlyChecked", null));
-		LOG.debug("showOnlyForm: " + prefs.getValue("showOnlyForm", null));
-		prefs.setValue("showOnlyChecked", request.getParameter("showOnlyChecked"));
-		prefs.setValue("showOnlyForm", request.getParameter("showOnlyForm"));
+		LOG.debug("showOnlyChecked: " + prefs.getValue(SHOW_ONLY_CHECKED, null));
+		LOG.debug("showOnlyForm: " + prefs.getValue(SHOW_ONLY_FORM_BY_ID, null));
+		prefs.setValue(SHOW_ONLY_CHECKED, request.getParameter(SHOW_ONLY_CHECKED));
+		prefs.setValue(SHOW_ONLY_FORM_BY_ID, request.getParameter(SHOW_ONLY_FORM_BY_ID));
+		prefs.setValue(SHOW_TASKS_BY_ID, Boolean.TRUE.toString());
 		prefs.store();
-		request.setAttribute("prefs", prefs);
-		
+		request.setAttribute(ATTR_PREFERENCES, prefs);
+		 
 		/* Return back to VIEW mode */
 		response.setPortletMode(PortletMode.VIEW);
         response.setWindowState(WindowState.NORMAL);

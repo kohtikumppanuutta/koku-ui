@@ -162,6 +162,9 @@ public class EditController {
 			ActionResponse response) throws Exception {
 		String editType = request.getParameter(EDIT_TYPE);
 		LOG.info("ActionRequest editType parameter = " + editType);
+		if (editType == null) {
+			LOG.error("EditType is null!");
+		}
 
 		long companyId = MigrationUtil.getCompanyByUser(request);
 		

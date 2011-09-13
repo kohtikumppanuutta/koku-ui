@@ -91,3 +91,40 @@ div.search_bar{
 .failureMessage.firstMessage {
     border-bottom: 1px dotted #BBBBBB;
 }
+
+/* ConfigurationView */
+
+.FormValuesHeader {
+	padding-bottom: 10px;
+	padding-top: 10px;
+}
+
+.FormValues {
+	width: 100%;
+	padding-left: 10px;
+}
+
+.FormValues tbody {
+	border-bottom: 1px solid #CCC;	
+}
+
+
+.FormValues .headerRow {
+	width: 500px;
+}
+
+.FormValues .row {
+	width: 250px;
+}
+
+.FormValues .headerRow .rowHeader {
+	width: 250px;
+	font-weight: bold;
+	text-align: left;
+	border-bottom: 1px solid #CCCCCC;
+}
+
+.FormValuesHelp {
+	padding-top: 10px;
+	width: 100%;
+}	

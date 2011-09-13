@@ -52,18 +52,52 @@ public class TaskUtil {
 	}
 
 	public static Task getTask(String token, String taskId) {
-		LOG.debug("Getting task with id=" + taskId + " via TaskManagerService for participant token: " + token);
+		LOG.debug("Getting task with id = " + taskId + " via TaskManagerService for participant token: " + token);
 		Task task = null;
 		ITaskManagementService tms = getTaskManager(Configuration.getInstance().getTaskManagerServiceEndpoint(), token);
 		try {
 			task = tms.getTask(taskId);
 		} catch (AuthException e) {
-			LOG.error("Authentication error", e);
+			LOG.error("Authentication error ", e);
 		} catch (UnavailableTaskException e) {
 			LOG.error("UnavailableTaskException ", e);
 		}
 		return task;
 	}
+	
+	/**
+	 * Returns task by given description. Very inefficient, because we can't 
+	 * save form IDs (Portlet restriction)
+	 * 
+	 * @param token
+	 * @param description
+	 * @return Task
+	 */
+	public static Task getTaskByDescription(String token, String description) {
+		LOG.debug("Getting PIPA task list via TaskManagerService for participant token: " + token);
+		Task selectedTask = null;
+		ITaskManagementService tms = getTaskManager(Configuration.getInstance().getTaskManagerServiceEndpoint(), token);
+		try {
+			List<Task> tasks = null;
+			tasks = Arrays.asList(tms.getAvailableTasks("PIPATask",""));
+			if (!tasks.isEmpty()) {
+				for (Task task : tasks) {
+					if (task.getDescription().equals(description)) {
+						selectedTask = task;
+						break;
+					}
+				}
+			}		
+		} catch (AuthException e) {
+			LOG.error("Authentication error", e);
+		}
+		
+		if (selectedTask == null) {
+			LOG.error("UnavailableTaskException. Coulnd't find Task by given description:  '"+ description + "'");
+		}		
+		return selectedTask;
+	}
+	
 	
     protected static ITaskManagementService getTaskManager(String endpoint, String token){
     	return new RemoteTMSFactory(endpoint, token).getService();

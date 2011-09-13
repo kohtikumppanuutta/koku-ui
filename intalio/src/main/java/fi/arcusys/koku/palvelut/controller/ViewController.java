@@ -43,6 +43,8 @@ import fi.arcusys.koku.palvelut.util.OperationsValidatorImpl;
 import fi.arcusys.koku.palvelut.util.TaskUtil;
 import fi.arcusys.koku.palvelut.util.TokenUtil;
 import fi.arcusys.koku.palvelut.util.XmlProxy;
+import static fi.arcusys.koku.palvelut.util.Constants.*;
+
 
 @Controller("viewController")
 @RequestMapping(value = "VIEW")
@@ -57,14 +59,6 @@ public class ViewController extends FormHolderController {
 	public static final String ROOT_CATEGORY_LIST_MODEL_NAME 			= "rootCategories";
 	
 
-	public static final String APPOINTMENT_PROCESSING_SERVICE_NAME 		= "AppointmentProcessingService";
-	public static final String APPOINTMENT_SERVICE_CITIZEN_NAME 		= "AppointmentServiceCitizen";
-	public static final String APPOINTMENT_SERVICE_EMPLOYEE_NAME 		= "AppointmentServiceEmployee";
-	public static final String MESSAGE_SERVICE_NAME 					= "MessageService";
-	public static final String REQUEST_SERVICE_NAME						= "RequestService";
-	public static final String TIVA_CITIZEN_SERVICE_NAME				= "TivaServiceCitizen";
-	public static final String TIVA_EMPLOYEE_SERVICE_NAME				= "TivaServiceEmployee";
-	
 	private static final String APPOINTMENT_PROCESS_SERVICE				= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuAppointmentProcessingServiceImpl";
 	private static final String APPOINTMENT_SERVICE_CITIZEN				= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuKunpoAppointmentServiceImpl";
 	private static final String APPOINTMENT_SERVICE_EMPLOYEE			= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuLooraAppointmentServiceImpl";
@@ -160,12 +154,24 @@ public class ViewController extends FormHolderController {
 
 		LOG.debug("handleRenderRequestInternal");
 		PortletPreferences prefs = request.getPreferences();
-		if (prefs.getValue("showOnlyChecked", null) != null) {
+		if (prefs.getValue(SHOW_ONLY_CHECKED, null) != null) {
 			ModelAndView mav = new ModelAndView(FORM_VIEW_ACTION, "model", null);
-			mav.addObject("prefs", request.getPreferences());
+			mav.addObject(ATTR_PREFERENCES, request.getPreferences());
 			Task t = null;
+			
+			Boolean showFormById = Boolean.valueOf(prefs.getValue(SHOW_TASKS_BY_ID, null));
+			LOG.debug("showFormById " + showFormById);
 			try {
-				t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue("showOnlyForm", null));				
+				if (showFormById) {
+					t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue(SHOW_ONLY_FORM_BY_ID, null));					
+				} else {
+					t = TaskUtil.getTaskByDescription(TokenUtil.getAuthenticationToken(request), prefs.getValue(SHOW_ONLY_FORM_BY_DESCRIPTION, null));
+					LOG.debug("t status: " + (t == null));
+					// Fallback. Try to get form by Id
+					if (t == null) {
+						t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue(SHOW_ONLY_FORM_BY_ID, null));
+					}
+				}
 			} catch (Exception e) {
 				LOG.error("Failure while trying to get Task. Some hints to fix problem: \1. Logged in proper user? (this portlet doesn't work correctly with admin/nonlogged users \n2. Task might be updated. Reselect form in 'edit'-mode. \n3. Check that connection to Intalio server is up. ", e);
 				return getFailureView(request);
@@ -253,7 +259,7 @@ public class ViewController extends FormHolderController {
 			Collections.reverse(path);
 			ModelAndView mav = new ModelAndView(VIEW_ACTION, "model", map);
 			mav.addObject("breadcrumb", path);
-			mav.addObject("prefs", request.getPreferences());
+			mav.addObject(ATTR_PREFERENCES, request.getPreferences());
 			return mav;
 		} catch (Exception e) {
 			LOG.error("VeeraServicesFacade failure. See following log for more information: ", e);
