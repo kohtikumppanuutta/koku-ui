@@ -212,6 +212,17 @@
 
 	</repositories>
 
+  <distributionManagement>
+
+    <repository>
+      <id>ElasticService.com</id>
+      <name>ElasticService.com-releases</name>
+      <url>https://m2.elasticservice.com/artifactory/koku</url>
+    </repository>
+  
+  </distributionManagement>
+
+
 	<pluginRepositories>
 
 		<pluginRepository>
