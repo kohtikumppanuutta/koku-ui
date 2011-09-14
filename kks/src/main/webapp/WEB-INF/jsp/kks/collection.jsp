@@ -115,12 +115,12 @@
 <div class="kks-reset-floating"></div>
     <div class="kks-content">
 
-        <c:if test="${not empty collection.type.entryGroups}">
+        <c:if test="${not empty collection.collectionClass }">
 
             <form:form class="form-wrapper" name="entryForm" commandName="entry" method="post"
                 action="${saveActionUrl}">
 
-                <c:forEach var="group" items="${collection.type.sortedGroups}">
+                <c:forEach var="group" items="${collection.collectionClass.kksGroups.kksGroup }">
 
                     <c:if test="${not empty group.name}">
                         <h2 class="portlet-section-subheader"><c:out value="${group.name}"/> <spring:message code="ui.kks.fills" /></h2>
@@ -130,42 +130,48 @@
                              <span class="kks-read-only-description"><c:out value="${group.description}"/></span>
                         </div>
                     </c:if>
-                    <c:forEach var="childGroup" items='${group.childGroups.values}'>
+                    
+                    <c:forEach var="childGroup" items='${group.subGroups.kksGroup}'>
 
                         <c:if test="${not empty childGroup.name}">
                             <h3 class="portlet-section-subheader"><c:out value="${childGroup.name}"/></h3>
                         </c:if>
-                        <c:forEach var="types" items='${ childGroup.types.values  }'>
-                            <c:forEach var="type" items='${ types }'>
+                        
+                        <c:if test="${not empty childGroup.description}">
+	                        <div class="portlet-section-text">
+	                             <span class="kks-read-only-description"><c:out value="${childGroup.description}"/></span>
+	                        </div>
+                    	</c:if>
+                            <c:forEach var="type" items='${ childGroup.kksEntryClasses.kksEntryClass  }'>
                                 <div class="kks-entry">
                                     <span class="portlet-form-field-label">${type.name} <c:if
                                             test="${type.multiValue && collection.state.active }">
                                             <a
-                                                href="javascript:void(0)" onclick="doSubmitNewMulti('${type.id}');">
+                                                href="javascript:void(0)" onclick="doSubmitNewMulti('${type.id}');">	
                                                 (<spring:message code="ui.kks.add.multivalue" />) </a>
                                         </c:if>
                                     </span>
-
+   
                                     <c:if test="${ collection.state.active }">
                                         <c:choose>
                                             <c:when
-                                                test="${ type.dataType.name eq multi_select.name }">
+                                                test="${ type.dataType eq multi_select.name }">
                                                 <div class="portlet-form-field"> <c:forEach
-                                                        items="${type.values }" var="value">
+                                                        items="${type.valueSpaces.valueSpace }" var="value">
                                                         <form:checkbox  class="portlet-form-input-field" title="${type.description }"
                                                             path="entries['${type.id}'].values"
                                                             value="${ value }" label="${value}" />
                                                     </c:forEach> </div>
                                             </c:when>
-                                            <c:when test="${ type.dataType.name eq select.name }">
+                                            <c:when test="${ type.dataType eq select.name }">
                                                 <div class="portlet-form-field"> <c:forEach
-                                                        items="${type.values}" var="value">
+                                                        items="${type.valueSpaces.valueSpace}" var="value">
                                                         <form:radiobutton class="portlet-form-input-field" title="${type.description }"
                                                             path="entries['${type.id}'].values"
                                                             value="${ value }" label="${value}" />
                                                     </c:forEach> </div>
                                             </c:when>
-                                            <c:when test="${ type.dataType.name eq text.name }">
+                                            <c:when test="${ type.dataType eq text.name }">
                                                 <div class="portlet-form-field" >
                                                     <form:input title="${type.description }" class="portlet-form-input-field"
                                                         path="entries['${type.id}'].value" />
@@ -196,7 +202,7 @@
                                                                     <div class="kks-comment">
 	                                                                    <span class="kks-entry-value">${multivalue.value} <span class="kks-right">
 	                                                                    <a
-	                                                                            href="javascript:void(0)" onclick="doSubmitForm('${type.id}', '${multivalue.id}' );">
+	                                                                            href="javascript:void(0)" onclick="doSubmitForm('${type.id}', '${multivalue.id}', '${multivalue.valueId}' );">
 	                                                                                <spring:message code="ui.kks.modify" /> </a>
 	                                                                    </span> 
 	                                                                    </span>
@@ -233,7 +239,7 @@
                                                         
                                                     </c:forEach>
                                                 </c:if> <c:if test="${ not type.multiValue }">
-                                                    <span class="kks-read-only-text"> <c:out value="${collection.entries[type.id].value}"></c:out> </span>
+                                                    <span class="kks-read-only-text"> ${type.description}<c:out value="${collection.entries[type.id].value}"></c:out> </span>
                                                 </c:if> 
                                                 </c:otherwise>
                                         </c:choose>
@@ -242,7 +248,6 @@
                                     </c:if>
                                 </div>
                             </c:forEach>
-                        </c:forEach>
                     </c:forEach>
                 </c:forEach>
 
@@ -286,6 +291,14 @@
                    '<input name="multiValueId" type="hidden" value="' + multiId + '"/>');
        }
        
+	   function addValueIdToForm(valueId) {
+	        $('#entry')
+	                .append(
+	                        '<input name="valueId" type="hidden" value="' + valueId + '"/>');
+
+	    }
+	   
+       
 	   function addTypeToForm(type) {
 	        $('#entry')
 	                .append(
@@ -299,7 +312,8 @@
 
 	    }
 
-	       function doSubmitForm( type, multiId ) {
+	       function doSubmitForm( type, multiId, valueId ) {
+	    	   	addValueIdToForm(valueId);
 	            addTypeToForm(type);
 	            addMultivalueIdToForm(multiId);
 	            $('#entry').submit();

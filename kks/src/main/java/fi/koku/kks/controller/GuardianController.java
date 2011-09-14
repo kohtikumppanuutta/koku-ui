@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import fi.koku.kks.model.DemoService;
+import fi.koku.kks.model.KksService;
 import fi.koku.kks.model.Person;
 
 /**
@@ -27,8 +27,8 @@ import fi.koku.kks.model.Person;
 public class GuardianController {
 
   @Autowired
-  @Qualifier("demoKksService")
-  private DemoService demoService;
+  @Qualifier("kksService")
+  private KksService kksService;
 
   private static final Logger LOG = LoggerFactory.getLogger(GuardianController.class);
 
@@ -42,7 +42,7 @@ public class GuardianController {
   @ModelAttribute("childs")
   public List<Person> getChilds() {
     LOG.info("getchilds");
-    return demoService.searchChilds(null);
+    return kksService.searchChilds(null);
   }
 
 }

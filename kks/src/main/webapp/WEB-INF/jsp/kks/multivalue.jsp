@@ -22,6 +22,7 @@
 	<portlet:param name="action" value="addMultivalue" />
 	<portlet:param name="pic" value="${child.pic}" />
 	<portlet:param name="collection" value="${collection.id}" />
+	<portlet:param name="valueId" value="${valueId}" />
 	
 	<c:if test="${ not empty entryvalue }">
 	   <portlet:param name="entryId" value="${entryvalue.id}" />
@@ -31,6 +32,7 @@
     <portlet:param name="action" value="removeMultivalue" />
     <portlet:param name="pic" value="${child.pic}" />
     <portlet:param name="collection" value="${collection.id}" />
+    <portlet:param name="valueId" value="${valueId}" />
     
     <c:if test="${ not empty entryvalue }">
        <portlet:param name="entryId" value="${entryvalue.id}" />
@@ -64,13 +66,8 @@
 			         
 				<span class="portlet-form-field-label">
 				
-				<c:if test="${ not empty entryvalue }">
-				    <spring:message code="ui.kks.modify.entry" /> <c:out value="${type.name }"/>
-				</c:if>
+				<c:out value="${type.name }"/>
 				
-				<c:if test="${ empty entryvalue }">
-                    <spring:message code="ui.kks.add" /> <c:out value="${type.creationDesc }"/>
-                </c:if>
 				</span>
 				<c:if test="${ not empty entryvalue }">
 				    <span class="kks-right"> <a href="${removeMultivalue}"><spring:message code="ui.kks.remove" /> </a> </span>

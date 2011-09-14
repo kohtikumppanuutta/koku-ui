@@ -20,7 +20,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import fi.koku.kks.model.DemoService;
+import fi.koku.kks.model.KksService;
 import fi.koku.kks.model.Person;
 
 /**
@@ -34,8 +34,8 @@ import fi.koku.kks.model.Person;
 public class MunicipalEmployeeController {
 
   @Autowired
-  @Qualifier("demoKksService")
-  private DemoService demoService;
+  @Qualifier("kksService")
+  private KksService kksService;
 
   private static final Logger LOG = LoggerFactory.getLogger(MunicipalEmployeeController.class);
 
@@ -57,7 +57,7 @@ public class MunicipalEmployeeController {
     LOG.info("search child");
 
     response.setRenderParameter("action", "showEmployee");
-    response.setRenderParameter("childs", toPicArray(demoService.haeHenkilo(child)));
+    response.setRenderParameter("childs", toPicArray(kksService.haeHenkilo(child)));
     response.setRenderParameter("search", "true");
     sessionStatus.setComplete();
   }
@@ -89,7 +89,7 @@ public class MunicipalEmployeeController {
     if (childIds != null) {
       for (String s : childIds) {
         if (!"".equals(s)) {
-          tmp.add(demoService.searchChild(s));
+          tmp.add(kksService.searchChild(s));
         }
       }
     }

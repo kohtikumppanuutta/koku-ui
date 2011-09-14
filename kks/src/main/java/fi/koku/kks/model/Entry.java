@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import fi.koku.services.entity.kks.v1.KksEntryClassType;
+import fi.koku.services.entity.kks.v1.KksTagType;
+import fi.koku.services.entity.kks.v1.KksTagsType;
+
 /**
  * Holds single entry
  * 
@@ -12,29 +16,43 @@ import java.util.List;
  */
 public class Entry {
 
-  private static int idGenerator = 0;
   private String id;
   private String value;
+  private String valueId;
   private Date creationTime;
   private String recorder;
-  private int version;
-  private String register;
-  private EntryType type;
-  private List<Classification> classifications;
+  private String version;
+  private KksEntryClassType type;
+  private List<KksTagType> tags;
   private List<String> values;
 
-  public Entry(String value, Date creation, int version, String register, String recorder, EntryType type) {
+  public Entry(String id, String valueId, String value, Date creation, String version, String recorder,
+      KksEntryClassType type) {
     super();
-    this.id = "" + idGenerator++;
+    this.id = id;
     this.value = value;
+    this.valueId = valueId;
     this.creationTime = creation;
     this.version = version;
-    this.register = register;
     this.type = type;
     this.values = new ArrayList<String>();
     this.recorder = recorder;
     this.values.add(value);
-    this.classifications = new ArrayList<Classification>();
+    this.tags = new ArrayList<KksTagType>();
+  }
+
+  public Entry(String value, String valueId, Date creation, String version, String recorder, KksEntryClassType type) {
+    super();
+    this.id = null;
+    this.value = value;
+    this.creationTime = creation;
+    this.valueId = valueId;
+    this.version = version;
+    this.type = type;
+    this.values = new ArrayList<String>();
+    this.recorder = recorder;
+    this.values.add(value);
+    this.tags = new ArrayList<KksTagType>();
   }
 
   public String getValue() {
@@ -55,40 +73,32 @@ public class Entry {
     this.creationTime = creation;
   }
 
-  public int getVersion() {
+  public String getVersion() {
     return version;
   }
 
-  public void setVersion(int version) {
+  public void setVersion(String version) {
     this.version = version;
   }
 
-  public String getRegister() {
-    return register;
-  }
-
-  public void setRegister(String register) {
-    this.register = register;
-  }
-
-  public EntryType getType() {
+  public KksEntryClassType getType() {
     return type;
   }
 
-  public void setType(EntryType type) {
+  public void setType(KksEntryClassType type) {
     this.type = type;
   }
 
-  public List<Classification> getClassifications() {
+  public List<KksTagType> getClassifications() {
 
-    List<Classification> tmp = new ArrayList<Classification>(classifications);
-
-    tmp.addAll(getType().getClassifications());
+    List<KksTagType> tmp = new ArrayList<KksTagType>(tags);
+    KksTagsType tags = getType().getKksTags();
+    tmp.addAll(tags.getKksTag());
     return tmp;
   }
 
-  public void setClassifications(List<Classification> classifications) {
-    this.classifications = classifications;
+  public void setClassifications(List<KksTagType> classifications) {
+    this.tags = classifications;
   }
 
   public List<String> getValues() {
@@ -97,6 +107,10 @@ public class Entry {
 
   public void setValues(List<String> values) {
     this.values = values;
+
+    if (values.size() > 0) {
+      this.value = values.get(0);
+    }
   }
 
   public String getRecorder() {
@@ -108,14 +122,7 @@ public class Entry {
   }
 
   public boolean hasClassification(String classification) {
-
-    for (Classification l : type.getClassifications()) {
-      if (l.getName().startsWith(classification)) {
-        return true;
-      }
-    }
-
-    for (Classification l : type.getDevelopmentTypes()) {
+    for (KksTagType l : type.getKksTags().getKksTag()) {
       if (l.getName().startsWith(classification)) {
         return true;
       }
@@ -130,6 +137,27 @@ public class Entry {
 
   public void setId(String id) {
     this.id = id;
+  }
+
+  public String getValueId() {
+    return valueId;
+  }
+
+  public void setValueId(String valueId) {
+    this.valueId = valueId;
+  }
+
+  public String getValuesAsText() {
+    StringBuffer sb = new StringBuffer();
+
+    for (int i = 0; i < values.size(); i++) {
+      sb.append(values.get(i));
+
+      if ((i + 1) < values.size()) {
+        sb.append(", ");
+      }
+    }
+    return sb.toString();
   }
 
 }

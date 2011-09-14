@@ -1,5 +1,8 @@
 package fi.koku.kks.controller;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.portlet.ActionResponse;
 import javax.portlet.RenderResponse;
 
@@ -16,9 +19,9 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import fi.koku.kks.model.DemoService;
+import fi.koku.kks.model.KKSCollection;
+import fi.koku.kks.model.KksService;
 import fi.koku.kks.model.Person;
-import fi.koku.kks.ui.common.utils.SearchResult;
 
 /**
  * Controller for entry searches
@@ -30,25 +33,22 @@ import fi.koku.kks.ui.common.utils.SearchResult;
 public class EntrySearchController {
 
   @Autowired
-  @Qualifier("demoKksService")
-  private DemoService demoService;
-
-  private SearchResult searchResult;
+  @Qualifier("kksService")
+  private KksService kksService;
 
   private static final Logger LOG = LoggerFactory.getLogger(EntrySearchController.class);
 
-  @ModelAttribute("result")
-  public SearchResult get() {
-    return this.searchResult;
-  }
-
   @RenderMapping(params = "action=showSearchResult")
   public String showResults(@ModelAttribute(value = "child") Person child,
-      @RequestParam(value = "description") String description, RenderResponse response, Model model) {
+      @RequestParam(value = "description") String description,
+      @RequestParam(value = "classification") String classification, RenderResponse response, Model model) {
     LOG.info("show search result");
+    String tmp[] = classification.replaceAll(" ", "").split(",");
+    List<String> names = Arrays.asList(tmp);
+    List<KKSCollection> collections = kksService.searchKksCollections(names, child.getPic());
 
     model.addAttribute("child", child);
-    model.addAttribute("searchResult", this.searchResult);
+    model.addAttribute("collections", collections);
     model.addAttribute("description", description);
 
     return "search_result";
@@ -59,17 +59,17 @@ public class EntrySearchController {
       @RequestParam(value = "classification") String classification,
       @RequestParam(value = "description") String description, ActionResponse response, SessionStatus sessionStatus) {
     LOG.info("search entries");
-    String tmp[] = classification.replaceAll(" ", "").split(",");
-    this.searchResult = demoService.searchEntries(child, tmp);
+
     response.setRenderParameter("action", "showSearchResult");
     response.setRenderParameter("pic", child.getPic());
     response.setRenderParameter("description", description);
+    response.setRenderParameter("classification", classification);
     sessionStatus.setComplete();
   }
 
   @ModelAttribute("child")
   public Person getchild(@RequestParam(value = "pic") String pic) {
-    return demoService.searchChild(pic);
+    return kksService.searchChild(pic);
   }
 
 }

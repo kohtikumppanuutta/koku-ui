@@ -18,7 +18,7 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.kks.model.Creation;
-import fi.koku.kks.model.DemoService;
+import fi.koku.kks.model.KksService;
 import fi.koku.kks.model.Person;
 
 /**
@@ -32,8 +32,8 @@ import fi.koku.kks.model.Person;
 public class ChildController {
 
   @Autowired
-  @Qualifier("demoKksService")
-  private DemoService demoService;
+  @Qualifier("kksService")
+  private KksService kksService;
 
   private static final Logger LOG = LoggerFactory.getLogger(ChildController.class);
 
@@ -51,10 +51,10 @@ public class ChildController {
   @RenderMapping(params = "action=showChild")
   public String show(@ModelAttribute(value = "child") Person child,
       @ModelAttribute(value = "creation") Creation creation, RenderResponse response, Model model) {
-    LOG.info("nayta child");
+    LOG.info("show child");
     model.addAttribute("child", child);
-    model.addAttribute("collections", child.getKks().getCollections());
-    model.addAttribute("creatables", demoService.searchPersonCreatableCollections(child));
+    model.addAttribute("collections", kksService.getKksCollections(child.getPic()));
+    model.addAttribute("creatables", kksService.searchPersonCreatableCollections(child));
 
     creation.setName("");
     return "child";
@@ -62,14 +62,14 @@ public class ChildController {
 
   @RenderMapping(params = "action=showPegasos")
   public String showPegasos(@ModelAttribute(value = "child") Person child, RenderResponse response, Model model) {
-    LOG.info("nayta child");
+    LOG.info("show child");
     model.addAttribute("child", child);
     return "pegasos";
   }
 
   @ModelAttribute("child")
   public Person getChild(@RequestParam String pic) {
-    return demoService.searchChild(pic);
+    return kksService.searchChild(pic);
   }
 
   @ModelAttribute("creation")

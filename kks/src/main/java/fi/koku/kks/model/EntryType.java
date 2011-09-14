@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fi.koku.kks.ui.common.DataType;
+import fi.koku.services.entity.kks.v1.KksTagType;
 
 /**
  * Kuvaa collectionn yhden tiedon sisällön, edellytykset ja mahdollisuudet
@@ -23,8 +24,7 @@ public class EntryType implements Comparable<EntryType> {
   private String group;
   private String register;
   private String subGroup;
-  private List<Classification> classifications;
-  private List<Classification> developmentTypes;
+  private List<KksTagType> classifications;
 
   public EntryType(String id, String name, String description, boolean multiValue, DataType dataType,
       List<String> values, String accountable, String group, String register, String subGroup) {
@@ -39,8 +39,7 @@ public class EntryType implements Comparable<EntryType> {
     this.group = group;
     this.register = register;
     this.subGroup = subGroup;
-    this.classifications = new ArrayList<Classification>();
-    this.developmentTypes = new ArrayList<Classification>();
+    this.classifications = new ArrayList<KksTagType>();
   }
 
   public String getId() {
@@ -107,20 +106,8 @@ public class EntryType implements Comparable<EntryType> {
     this.register = register;
   }
 
-  public List<Classification> getClassifications() {
+  public List<KksTagType> getClassifications() {
     return classifications;
-  }
-
-  public void setClassifications(List<Classification> classifications) {
-    this.classifications = classifications;
-  }
-
-  public List<Classification> getDevelopmentTypes() {
-    return developmentTypes;
-  }
-
-  public void setDevelopmentTypes(List<Classification> developmentTypes) {
-    this.developmentTypes = developmentTypes;
   }
 
   public String getSubGroup() {
@@ -139,25 +126,11 @@ public class EntryType implements Comparable<EntryType> {
     this.group = group;
   }
 
-  public String getDevelopmentTypesAsText() {
-    StringBuffer sb = new StringBuffer();
-    List<Classification> tmp = getDevelopmentTypes();
-    for (int i = 0; i < tmp.size(); i++) {
-      Classification l = tmp.get(i);
-      sb.append(l.getName());
-
-      if ((i + 1) < tmp.size()) {
-        sb.append(", ");
-      }
-    }
-    return sb.toString();
-  }
-
   public String getClassificationsAsText() {
     StringBuffer sb = new StringBuffer();
-    List<Classification> tmp = getClassifications();
+    List<KksTagType> tmp = getClassifications();
     for (int i = 0; i < tmp.size(); i++) {
-      Classification l = tmp.get(i);
+      KksTagType l = tmp.get(i);
       sb.append(l.getName());
 
       if ((i + 1) < tmp.size()) {

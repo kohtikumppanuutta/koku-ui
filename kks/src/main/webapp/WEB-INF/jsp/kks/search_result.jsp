@@ -24,46 +24,44 @@
 
 	<div class="kks-content">
 
-		<c:if test="${not empty searchResult}">
-
-			<c:if test="${empty searchResult.results}">
-				<spring:message code="ui.kks.no.entries" />
+			<c:if test="${empty collections }">
+				<spring:message code="ui.kks.no.entries" />				
 			</c:if>
 			
-			<c:forEach var="result" items="${searchResult.results}">
+				
+			<c:forEach var="result" items="${collections}">
 
 				<c:if test="${not empty result.name}">
 					<h3 class="portlet-section-subheader">
 						<c:out value="${result.name}"/>
 
-						<c:if test="${ not result.collectionActive }">
+						<c:if test="${ not result.state.active }">
 							<span class="lukittu"> <strong> (<spring:message
 										code="ui.kks.locked" />) </strong> </span>
 						</c:if>
 
-						<c:if test="${ result.collectionActive }">
+						<c:if test="${ result.state.active }">
 							<span class="kks-link kks-right" > <a
 								href="
                         <portlet:renderURL>
                             <portlet:param name="action" value="showCollection" />
                             <portlet:param name="pic" value="${child.pic}" />
-                            <portlet:param name="collection" value="${result.collectionId}" />
+                            <portlet:param name="collection" value="${result.id }" />
                         </portlet:renderURL>">
 									<spring:message code="ui.kks.modify" />  </a> </span>
 
 						</c:if>
 					</h3>
 				</c:if>
-				<c:forEach var="entry" items='${result.entries}'>
+				<c:forEach var="entry" items='${result.entryValues}'>
 					<div class="kks-content">
 						<strong>${entry.type.name}</strong> <div class="kks-read-only-text">${
-							entry.value } (<fmt:formatDate value="${entry.creationTime}" />
+							entry.valuesAsText } (<fmt:formatDate value="${entry.creationTime}" />
 							${entry.recorder})</div>
 					</div>
 				</c:forEach>
 				</br>
 			</c:forEach>
-		</c:if>
 	</div>
 </div>
 

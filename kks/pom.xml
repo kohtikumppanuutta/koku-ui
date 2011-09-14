@@ -10,4 +10,21 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>kks-portlet</name>
+  
+    <dependencies>
+  <dependency>  
+    <groupId>kohti-kumppanuutta</groupId>  
+    <artifactId>customerservice-api</artifactId>  
+    <version>0.0.5</version>  
+    <type>pom</type>  
+	</dependency> 
+	<dependency>
+      <groupId>kohti-kumppanuutta</groupId>
+      <artifactId>kksservice-api</artifactId>
+      <version>0.1.1</version>
+    </dependency>    
+ </dependencies>
+  
+
+  
 </project>
