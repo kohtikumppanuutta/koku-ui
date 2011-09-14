@@ -10,6 +10,8 @@ import fi.arcusys.koku.kv.messageservice.MessageQuery;
 import fi.arcusys.koku.kv.messageservice.MessageStatus;
 import fi.arcusys.koku.kv.messageservice.MessageSummary;
 import fi.arcusys.koku.util.MessageUtil;
+import static fi.arcusys.koku.util.Constants.*;
+
 
 /**
  * Retrieves messages data and related operations via web services
@@ -110,9 +112,9 @@ public class MessageService {
 				
 		try {
 			ms.getKokuMessageServicePort().deleteMessages(messageIds);
-			return MessageUtil.RESPONSE_OK;
+			return RESPONSE_OK;
 		} catch(RuntimeException e) {
-			return MessageUtil.RESPONSE_FAIL;
+			return RESPONSE_FAIL;
 		}
 	}
 	
@@ -126,9 +128,9 @@ public class MessageService {
 		
 		try {
 			ms.getKokuMessageServicePort().setMessagesStatus(messageIds, messageStatus);
-			return MessageUtil.RESPONSE_OK;
+			return RESPONSE_OK;
 		} catch(RuntimeException e) {
-			return MessageUtil.RESPONSE_FAIL;
+			return RESPONSE_FAIL;
 		}
 		
 	}
@@ -142,9 +144,9 @@ public class MessageService {
 		
 		try {
 			ms.getKokuMessageServicePort().archiveMessages(messageIds);
-			return MessageUtil.RESPONSE_OK;
+			return RESPONSE_OK;
 		} catch(RuntimeException e) {
-			return MessageUtil.RESPONSE_FAIL;
+			return RESPONSE_FAIL;
 		}
 		
 	}

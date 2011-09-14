@@ -60,11 +60,10 @@
 		
 		var consentId = task['consentId'];
 		
-		if(pageObj.taskType == "cst_own_citizen" && task['approvalStatus'] == 'Hyväksytty' && task['status'] != 'Mitätöity') { // edit mode
+		if (pageObj.taskType == "cst_own_citizen" && task['approvalStatus'] == 'Hyväksytty' && task['status'] != 'Mitätöity') { // edit mode
 			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;	
 			window.location = url;
-		}
-		else if(pageObj.taskType == "cst_own_citizen" || pageObj.taskType == "cst_own_employee") {
+		} else if(pageObj.taskType == "cst_own_citizen" || pageObj.taskType == "cst_own_employee") {
 			url = "<%= consentRenderURL %>";
 			url = formatUrl(url);
 			
@@ -75,11 +74,12 @@
 				var renderUrl = json["renderUrl"];
 				window.location = renderUrl;
 			});
-		}else if(pageObj.taskType == "cst_assigned_citizen"){
+		} else if(pageObj.taskType == "cst_assigned_citizen") {
 			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;	
-			window.location = url;
+		} else if (pageObj.taskType == "cst_browse_customer_consents") {
+			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;
 		}
-						
+		window.location = url;
 	}
 
 	/************************For Gatein Portal end****************************/

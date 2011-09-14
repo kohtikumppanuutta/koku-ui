@@ -14,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
+import static fi.arcusys.koku.util.Constants.*;
 
 /**
  * Configuration/edit mode of portlet
@@ -28,7 +29,7 @@ public class ConfigController {
 	@RenderMapping
 	public String showConfig(RenderRequest request, RenderResponse response, ModelMap modelmap) {	
 		
-		return "config";
+		return VIEW_CONFIG;
 	}
 	
 	@ActionMapping(params="myaction=config")
@@ -36,16 +37,18 @@ public class ConfigController {
 		 
         try { 
             PortletPreferences pref = request.getPreferences();       
-            String taskFilter = request.getParameter("taskFilter");
-    		String notifFilter = request.getParameter("notifFilter");
-    		String refreshDuration = request.getParameter("refreshDuration");
-    		String openForm = request.getParameter("openForm");
-    		String defaultTaskType = request.getParameter("defaultTaskType");
-    		pref.setValue("taskFilter", taskFilter);
-    		pref.setValue("notifFilter", notifFilter);
-    		pref.setValue("refreshDuration", refreshDuration);
-    		pref.setValue("openForm", openForm);
-    		pref.setValue("defaultTaskType", defaultTaskType);
+            String taskFilter = request.getParameter(PREF_TASK_FILTER);
+    		String notifFilter = request.getParameter(PREF_NOTIFICATION_FILTER);
+    		String refreshDuration = request.getParameter(PREF_REFRESH_DURATION);
+    		String openForm = request.getParameter(PREF_OPEN_FORM);
+    		String defaultTaskType = request.getParameter(PREF_DEFAULT_TASK_TYPE);
+    		String editable = request.getParameter(PREF_EDITABLE);
+    		pref.setValue(PREF_TASK_FILTER, taskFilter);
+    		pref.setValue(PREF_NOTIFICATION_FILTER, notifFilter);
+    		pref.setValue(PREF_REFRESH_DURATION, refreshDuration);
+    		pref.setValue(PREF_OPEN_FORM, openForm);
+    		pref.setValue(PREF_DEFAULT_TASK_TYPE, defaultTaskType);
+    		pref.setValue(PREF_EDITABLE, editable);
     		pref.store();
     		
     		response.setPortletMode(PortletMode.VIEW);

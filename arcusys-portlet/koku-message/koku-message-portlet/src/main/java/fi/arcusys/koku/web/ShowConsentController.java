@@ -40,7 +40,7 @@ public class ShowConsentController {
 	 */
 	@RenderMapping(params = "myaction=showConsent")
 	public String showPageView(RenderResponse response) {
-		return "showconsent";
+		return VIEW_SHOW_CONSENT;
 	}
 		
 	/**

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
-
+import static fi.arcusys.koku.util.Constants.*;
 
 /**
  * Shows task form page in a popup window
@@ -23,15 +23,15 @@ public class PopupController {
 	@RenderMapping(params = "myaction=popup")
 	public String showForm(RenderResponse response) {
 
-		return "popupform";
+		return VIEW_POPUP_FORM;
 	}
 	
 	@ResourceMapping(value = "getForm")
 	public String showPopupForm(@RequestParam(value = "tasklink") String tasklink,
 			ModelMap modelmap, PortletRequest req, PortletResponse res) {
-		modelmap.addAttribute("tasklink", tasklink);
+		modelmap.addAttribute(ATTR_TASK_LINK, tasklink);
 
-		return "popupform";
+		return VIEW_POPUP_FORM;
 	}
 	
 }

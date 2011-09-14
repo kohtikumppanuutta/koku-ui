@@ -61,12 +61,15 @@
 		} else if (pageObj.taskType == "cst_assigned_citizen") {
 			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;
 		} else if (pageObj.taskType == "cst_browse_customer_consents") {
+			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;			
+			<%--  			
 			url = "<%= intalioFormURL %>";
 			url += "&consentId=" + consentId
 					+ "&currentPage=" + pageObj.currentPage
 					+ "&taskType=" + pageObj.taskType
 					+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
 					+ "&orderType=" + pageObj.orderType;
+			--%>
 		}
 		window.location = url;
 	}

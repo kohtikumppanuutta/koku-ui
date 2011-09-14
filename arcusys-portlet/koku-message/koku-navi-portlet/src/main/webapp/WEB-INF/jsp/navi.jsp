@@ -284,10 +284,10 @@
 			<li><a href="#">Valtakirjat</a>
 				<ul class="child">
 					<li id="valtakirjaconsent"><a href="<%= defaultPath %>/Message/ValtakirjaConsent">Anna valtakirja</a></li>
-					<li id="selaavaltakirjoja"><a href="#">Omat valtakirjat</a>
+					<li><a href="#">Omat valtakirjat</a>
 						<ul class="child">
 							<li id="selaaOmiaValtakirjoja"><a href="<%= defaultPath %>/Message/SelaaValtakirjoja">Valtuuttajana</a></li>
-							<li id="selaaOmiaValtakirjoja"><a href="<%= defaultPath %>/Message/SelaaValtakirjoja">Valtuutettuna</a></li>
+							<li id="selaaOmiaValtakirjojaValtutettuna"><a href="<%= defaultPath %>/Message/SelaaValtakirjoja">Valtuutettuna</a></li>
 						</ul>
 					</li>
 				</ul>

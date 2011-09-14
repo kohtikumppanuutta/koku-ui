@@ -13,7 +13,7 @@ public class Task {
 	private String processId;
 	private String description;
 	private String creationDate;
-	private String link;	
+	private String link;
 
 	public Task(String id, String processId, String description,
 			String creationDate) {

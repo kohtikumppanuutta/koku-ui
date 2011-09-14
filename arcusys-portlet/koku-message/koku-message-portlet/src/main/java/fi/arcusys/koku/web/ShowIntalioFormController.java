@@ -1,13 +1,6 @@
 package fi.arcusys.koku.web;
 
-import static fi.arcusys.koku.util.Constants.ATTR_CURRENT_PAGE;
-import static fi.arcusys.koku.util.Constants.ATTR_KEYWORD;
-import static fi.arcusys.koku.util.Constants.ATTR_ORDER_TYPE;
-import static fi.arcusys.koku.util.Constants.ATTR_TASK_TYPE;
-import static fi.arcusys.koku.util.Constants.ATTR_USERNAME;
-import static fi.arcusys.koku.util.Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS;
-import static fi.arcusys.koku.util.Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS;
-import static fi.arcusys.koku.util.Constants.TASK_TYPE_CONSENT_LIST_CITIZEN_CONSENTS;
+import static fi.arcusys.koku.util.Constants.*;
 
 import javax.annotation.Resource;
 import javax.portlet.PortletSession;
@@ -22,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.arcusys.koku.tiva.KokuConsent;
-import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
-import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
 
 /**
  * Shows task form page and store the current query information on the jsp page
@@ -45,7 +36,7 @@ public class ShowIntalioFormController {
 	 */
 	@RenderMapping(params = "myaction=showIntalioForm")
 	public String showPageView(RenderResponse response) {
-		return "showIntalioForm";
+		return VIEW_SHOW_INTALIO_FORM;
 	}
 	
 	@ModelAttribute(value = "intalioForm")

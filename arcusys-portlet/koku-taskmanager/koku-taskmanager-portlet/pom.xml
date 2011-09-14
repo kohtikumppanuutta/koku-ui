@@ -112,6 +112,12 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		 <dependency>
+           <groupId>fi.arcusys</groupId>
+           <artifactId>koku-common-services</artifactId>
+           <version>1.0</version>
+           <type>jar</type>
+        </dependency>
 	</dependencies>
 	<properties>
 		<liferay.version>6.0.5</liferay.version>

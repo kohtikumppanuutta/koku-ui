@@ -18,6 +18,8 @@ import fi.arcusys.koku.av.employeeservice.AppointmentSlot;
 import fi.arcusys.koku.av.employeeservice.AppointmentSummary;
 import fi.arcusys.koku.av.employeeservice.AppointmentSummaryStatus;
 import fi.arcusys.koku.util.MessageUtil;
+import static fi.arcusys.koku.util.Constants.*;
+
 
 /**
  * Handles the appointments for employee
@@ -302,9 +304,9 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		
 		try {
 			aes.cancelAppointment(appId, comment);
-			return MessageUtil.RESPONSE_OK;
+			return RESPONSE_OK;
 		} catch(RuntimeException e) {
-			return MessageUtil.RESPONSE_FAIL;
+			return RESPONSE_FAIL;
 		}
 	}
 	

@@ -102,13 +102,12 @@
 			<version>2.4</version>
 			<classifier>jdk15</classifier>
 		</dependency>
-		<dependency>
-			<groupId>fi.arcusys</groupId>
-			<artifactId>koku-message-service</artifactId>
-			<version>1.0</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
+		 <dependency>
+           <groupId>fi.arcusys</groupId>
+           <artifactId>koku-common-services</artifactId>
+           <version>1.0</version>
+           <type>jar</type>
+        </dependency>
 	</dependencies>
 
 </project>

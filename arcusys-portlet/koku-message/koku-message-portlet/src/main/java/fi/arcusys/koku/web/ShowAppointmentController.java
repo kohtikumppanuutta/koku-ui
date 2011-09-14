@@ -46,14 +46,13 @@ public class ShowAppointmentController {
 	@RenderMapping(params = "myaction=showAppointment")
 	public String showPageView(@RequestParam String taskType, RenderResponse response) {
 
-		String page = "showcitizenappointment";
+		String page = VIEW_SHOW_CITIZEN_APPOINTMENT;
 		
 		if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)) {
-			page = "showcitizenappointment";
+			page = VIEW_SHOW_CITIZEN_APPOINTMENT;
 		} else if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE)) {
-			page = "showemployeeappointment";
-		}
-		
+			page = VIEW_SHOW_EMPLOYEE_APPOINTMENT;
+		}		
 		return page;
 	}
 		

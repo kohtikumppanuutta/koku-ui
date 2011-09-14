@@ -10,6 +10,7 @@ import java.util.TimeZone;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import fi.arcusys.koku.kv.messageservice.FolderType;
+import static fi.arcusys.koku.util.Constants.*;
 
 /**
  * Utilities used in the message portlet
@@ -24,13 +25,7 @@ public class MessageUtil {
     }
 	
 	private static final Locale locale = new Locale("fi", "FI");
-	
-	public static final String DATE_FORMAT = "d.M.yyyy HH:mm:ss";
-	public static final String TIME_ZONE = "Europe/Helsinki";
-	public static final int PAGE_NUMBER = 10; // number of tasks in one page
-	public static final String RESPONSE_OK = "OK";
-	public static final String RESPONSE_FAIL = "FAIL";
-	
+		
 	/**
 	 * Returns default locale
 	 * 
@@ -91,8 +86,8 @@ public class MessageUtil {
 		
 		if(xmlGregorianCalendar != null ) {
 			Calendar cal = xmlGregorianCalendar.toGregorianCalendar();
-			SimpleDateFormat dateformat = new SimpleDateFormat(MessageUtil.DATE_FORMAT);
-			dateformat.setTimeZone(TimeZone.getTimeZone(MessageUtil.TIME_ZONE));
+			SimpleDateFormat dateformat = new SimpleDateFormat(DATE_FORMAT);
+			dateformat.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
 			String dateStr = dateformat.format(cal.getTime());
 		
 			return dateStr;	

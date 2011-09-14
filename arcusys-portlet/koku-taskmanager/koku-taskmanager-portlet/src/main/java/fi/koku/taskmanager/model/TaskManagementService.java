@@ -46,14 +46,16 @@ public class TaskManagementService {
 	 */
 	public String getParticipantToken(String username, String password) {
 		String participantToken = null;
-		
+		String wsdlLocation = null;
 		try {     
 			TokenService ts = new TokenService(TOKEN_WSDL_LOCATION);
 			participantToken = ts.getService().authenticateUser(username, password);
 		} catch (Exception e) {
-			logger.error("Trying to get intalio token failed");
-		}
-				
+			logger.error("Trying to get intalio token failed.\n" +
+					"Hints for fixing problem:\n" +
+					"1. Check that that WSDL(s) location is correct \n" +
+					"2. Check that intalio server is online", e);	
+		}				
 		return participantToken;
 	}
 

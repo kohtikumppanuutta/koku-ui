@@ -36,7 +36,7 @@ public class ShowMessageController {
 	@RenderMapping(params = "myaction=showMessage")
 	public String showPageView(RenderResponse response) {
 
-		return "showmessage";
+		return VIEW_SHOW_MESSAGE;
 	}
 		
 	/**

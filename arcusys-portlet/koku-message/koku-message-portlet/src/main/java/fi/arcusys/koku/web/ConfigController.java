@@ -14,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
+import static fi.arcusys.koku.util.Constants.*;
 
 /**
  * Handles the action in configuration mode,
@@ -29,7 +30,7 @@ public class ConfigController {
 	@RenderMapping
 	public String showConfig(RenderRequest request, RenderResponse response, ModelMap modelmap) {	
 		System.out.println("show edit mode");
-		return "config";
+		return VIEW_CONFIG;
 	}
 	
 	@ActionMapping(params="myaction=config")

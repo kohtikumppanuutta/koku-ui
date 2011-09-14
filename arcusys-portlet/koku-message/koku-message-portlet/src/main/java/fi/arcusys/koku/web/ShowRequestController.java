@@ -32,7 +32,7 @@ public class ShowRequestController {
 	@RenderMapping(params = "myaction=showRequest")
 	public String showPageView(RenderResponse response) {
 
-		return "showrequest";
+		return VIEW_SHOW_REQUEST;
 	}
 		
 	/**

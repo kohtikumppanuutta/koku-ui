@@ -35,7 +35,7 @@ public class MessageController {
 			ModelMap modelmap) {		
 		logger.info("show default page message");
 		
-		return "message";
+		return VIEW_MESSAGE;
 	}
 
 	/**

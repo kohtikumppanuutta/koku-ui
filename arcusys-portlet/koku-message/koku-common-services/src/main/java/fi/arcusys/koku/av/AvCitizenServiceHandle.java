@@ -14,6 +14,8 @@ import fi.arcusys.koku.av.citizenservice.AppointmentSlot;
 import fi.arcusys.koku.av.citizenservice.AppointmentWithTarget;
 import fi.arcusys.koku.av.citizenservice.AppointmentSummaryStatus;
 import fi.arcusys.koku.util.MessageUtil;
+import static fi.arcusys.koku.util.Constants.*;
+
 
 /**
  * Handles appointments related operations
@@ -146,9 +148,9 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 		
 		try {
 			acs.cancelAppointment(appId, targetPerson, loginUser, comment);
-			return MessageUtil.RESPONSE_OK;
+			return RESPONSE_OK;
 		} catch(RuntimeException e) {
-			return MessageUtil.RESPONSE_FAIL;
+			return RESPONSE_FAIL;
 		}		
 	}
 	

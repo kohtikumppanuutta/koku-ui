@@ -2,6 +2,7 @@ package fi.koku.taskmanager.controller;
 
 import java.util.List;
 
+import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletSession;
@@ -23,6 +24,7 @@ import fi.koku.taskmanager.model.Task;
 import fi.koku.taskmanager.model.TaskHandle;
 import fi.koku.taskmanager.util.TaskUtil;
 
+import static fi.arcusys.koku.util.Constants.*;
 /**
  * Handles ajax request from web and returns the data with json string
  * @author Jinhua Chen
@@ -31,6 +33,8 @@ import fi.koku.taskmanager.util.TaskUtil;
 @Controller("ajaxController")
 @RequestMapping(value = "VIEW")
 public class AjaxController {
+	
+	private static final String RESPONSE 		= "response";
 
 	Logger logger = Logger.getLogger(AjaxController.class);
 	/**
@@ -52,11 +56,15 @@ public class AjaxController {
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		
 		PortletSession portletSession = request.getPortletSession();				
-		String token = (String) portletSession.getAttribute("USER_token");
-		String username = (String) portletSession.getAttribute("USER_username");
-		int taskType = getTaskType(taskTypeStr);	
+		String token = (String) portletSession.getAttribute(ATTR_TOKEN);
+		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+		int taskType = getTaskType(taskTypeStr);
 		JSONObject jsonModel = getJsonModel(taskType, page, keyword, orderType, token, username);
-		modelmap.addAttribute("response", jsonModel);
+				
+		PortletPreferences pref = request.getPreferences();
+		Boolean editableForm = Boolean.valueOf(pref.getValue(PREF_EDITABLE, Boolean.FALSE.toString()));
+		jsonModel.put(JSON_EDITABLE, editableForm.toString());
+		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
@@ -74,20 +82,19 @@ public class AjaxController {
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		
 		PortletSession portletSession = request.getPortletSession();				
-		String token = (String) portletSession.getAttribute("USER_token");
-		String username = (String) portletSession.getAttribute("USER_username");
+		String token = (String) portletSession.getAttribute(ATTR_TOKEN);
+		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		JSONObject jsonModel = new JSONObject();
 		
-		if(token == null) {
-			jsonModel.put("tokenStatus", "INVALID");
+		if (token == null) {
+			jsonModel.put(JSON_TOKEN_STATUS, TOKEN_STATUS_INVALID);
 			logger.info("Intalio token is invalid!");
-		}else {
+		} else {
 			TaskHandle taskhandle = new TaskHandle(token, username);
 			String taskState = taskhandle.getTaskStatus(taskId);
-			jsonModel.put("taskState", taskState);
-		}
-		
-		modelmap.addAttribute("response", jsonModel);		
+			jsonModel.put(JSON_TASK_STATE, taskState);
+		}		
+		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -104,10 +111,10 @@ public class AjaxController {
 	public JSONObject getJsonModel(int taskType, int page, String keyword, String orderType, String token, String username) {
 		JSONObject jsonModel = new JSONObject();
 		
-		if(token == null) {
-			jsonModel.put("tokenStatus", "INVALID");
+		if (token == null) {
+			jsonModel.put(JSON_TOKEN_STATUS, TOKEN_STATUS_INVALID);
 			logger.info("Intalio token is invalid!");
-		}else {
+		} else {
 			TaskHandle taskhandle = new TaskHandle(token, username);
 			int numPerPage = TaskUtil.PAGE_NUMBER;
 			int totalTasksNum;
@@ -118,12 +125,11 @@ public class AjaxController {
 			tasks = taskhandle.getTasksByParams(taskType, keyword, orderType, first, max);
 			totalTasksNum = taskhandle.getTotalTasksNumber(taskType, keyword);
 			totalPages = (totalTasksNum == 0) ? 1:(int) Math.ceil((double)totalTasksNum/numPerPage);	
-			jsonModel.put("totalItems", totalTasksNum);
-			jsonModel.put("totalPages", totalPages);		
-			jsonModel.put("tasks", tasks);
-			jsonModel.put("tokenStatus", "VALID");
+			jsonModel.put(JSON_TOTAL_ITEMS, totalTasksNum);
+			jsonModel.put(JSON_TOTAL_PAGES, totalPages);		
+			jsonModel.put(JSON_TASKS, tasks);
+			jsonModel.put(JSON_TOKEN_STATUS, TOKEN_STATUS_VALID);
 		}		
-		
 		return jsonModel;	
 	}
 	
@@ -134,13 +140,13 @@ public class AjaxController {
 	 */
 	private int getTaskType(String taskTypeStr) {
 		
-		if(taskTypeStr.equals("task")) {
+		if (taskTypeStr.equals("task")) {
 			return TaskUtil.TASK;
-		}else if(taskTypeStr.equals("notification")) {
+		} else if(taskTypeStr.equals("notification")) {
 			return TaskUtil.NOTIFICATION;
-		}else if(taskTypeStr.equals("process")) {
+		} else if(taskTypeStr.equals("process")) {
 			return TaskUtil.PROCESS;
-		}else {
+		} else {
 			return TaskUtil.PROCESS;
 		}
 	}
@@ -154,12 +160,12 @@ public class AjaxController {
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 		PortletURL renderUrlObj = response.createRenderURL();
-		renderUrlObj.setParameter( "myaction", "taskform");
-		renderUrlObj.setParameter( "tasklink", taskLink);
-		renderUrlObj.setParameter( "currentPage", currentPage);
-		renderUrlObj.setParameter( "taskType", taskType);
-		renderUrlObj.setParameter( "keyword", keyword);
-		renderUrlObj.setParameter( "orderType", orderType);	
+		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_TASKFORM);
+		renderUrlObj.setParameter( ATTR_TASK_LINK, taskLink);
+		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
+		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
+		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
+		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);	
 		try {
 			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
 		} catch (WindowStateException e) {
@@ -168,8 +174,8 @@ public class AjaxController {
 		String renderUrlString = renderUrlObj.toString();
 		
 		JSONObject jsonModel = new JSONObject();
-		jsonModel.put("renderUrl", renderUrlString);
-		modelmap.addAttribute("response", jsonModel);
+		jsonModel.put(JSON_RENDER_URL, renderUrlString);
+		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
@@ -179,8 +185,8 @@ public class AjaxController {
 			@RequestParam(value = "tasklink") String taskLink,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 		PortletURL renderUrlObj = response.createRenderURL();
-		renderUrlObj.setParameter( "myaction", "taskform");
-		renderUrlObj.setParameter( "tasklink", taskLink);
+		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_TASKFORM);
+		renderUrlObj.setParameter( ATTR_TASK_LINK, taskLink);
 		try {
 			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
 		} catch (WindowStateException e) {
@@ -189,8 +195,8 @@ public class AjaxController {
 		String renderUrlString = renderUrlObj.toString();
 		
 		JSONObject jsonModel = new JSONObject();
-		jsonModel.put("renderUrl", renderUrlString);
-		modelmap.addAttribute("response", jsonModel);
+		jsonModel.put(JSON_RENDER_URL, renderUrlString);
+		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}

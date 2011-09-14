@@ -18,6 +18,7 @@ import fi.arcusys.koku.tiva.citizenservice.ConsentStatus;
 import fi.arcusys.koku.tiva.citizenservice.ConsentSummary;
 import fi.arcusys.koku.tiva.citizenservice.ConsentTO;
 import fi.arcusys.koku.util.MessageUtil;
+import static fi.arcusys.koku.util.Constants.*;
 
 /**
  * Handles tiva consents related operations for citizen
@@ -161,9 +162,9 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 		
 		try {
 			tcs.revokeOwnConsent(consentId, user);
-			return MessageUtil.RESPONSE_OK;
+			return RESPONSE_OK;
 		} catch(RuntimeException e) {
-			return MessageUtil.RESPONSE_FAIL;
+			return RESPONSE_FAIL;
 		}
 	}
 	

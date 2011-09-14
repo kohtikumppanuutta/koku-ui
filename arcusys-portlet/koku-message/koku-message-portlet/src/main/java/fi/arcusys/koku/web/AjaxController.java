@@ -33,7 +33,6 @@ import fi.arcusys.koku.tiva.KokuConsent;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
 import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
-import fi.arcusys.koku.util.MessageUtil;
 import static fi.arcusys.koku.util.Constants.*;
 
 /**
@@ -53,6 +52,7 @@ public class AjaxController {
 	private ResourceBundleMessageSource messageSource;
 
 	private Logger logger = Logger.getLogger(AjaxController.class);
+	
 	/**
 	 * Handles portlet ajax request of tasks such as messages, requests,
 	 * appointments, consents and so on, distinguished by task type
@@ -76,7 +76,7 @@ public class AjaxController {
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		JSONObject jsonModel = getJsonModel(taskType, page, keyword, field, orderType, username);
-		modelmap.addAttribute("response", jsonModel);
+		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
@@ -101,8 +101,8 @@ public class AjaxController {
 		
 		String result = msghandle.archiveMessages(messageIds); // OK or FAIL
 		JSONObject jsonModel = new JSONObject();
-		jsonModel.put("result", result);
-		modelmap.addAttribute("response", jsonModel);
+		jsonModel.put(JSON_RESULT, result);
+		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
@@ -127,8 +127,8 @@ public class AjaxController {
 		
 		String result = msghandle.deleteMessages(messageIds); // OK or FAIL
 		JSONObject jsonModel = new JSONObject();
-		jsonModel.put("result", result);
-		modelmap.addAttribute("response", jsonModel);
+		jsonModel.put(JSON_RESULT, result);
+		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
@@ -145,7 +145,7 @@ public class AjaxController {
 	public String revokeConsent(@RequestParam(value = "messageList[]") String[] messageList,
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		PortletSession portletSession = request.getPortletSession();				
-		String username = (String) portletSession.getAttribute("USER_username");
+		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle(username);		
 		
 		for(String consentId : messageList) {
@@ -153,8 +153,8 @@ public class AjaxController {
 		}
 		
 		JSONObject jsonModel = new JSONObject();
-		jsonModel.put("result", MessageUtil.RESPONSE_OK);
-		modelmap.addAttribute("response", jsonModel);
+		jsonModel.put(JSON_RESULT, RESPONSE_OK);
+		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
@@ -199,8 +199,8 @@ public class AjaxController {
 		}
 					
 		JSONObject jsonModel = new JSONObject();
-		jsonModel.put("result", MessageUtil.RESPONSE_OK);
-		modelmap.addAttribute("response", jsonModel);
+		jsonModel.put(JSON_RESULT, RESPONSE_OK);
+		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
@@ -214,8 +214,8 @@ public class AjaxController {
 		List<SuostumuspohjaShort> consentTemplates = tivaHandle.searchConsentTemplates(keyword, 5);
 		
 		JSONObject jsonModel = new JSONObject();
-		jsonModel.put("result", consentTemplates);
-		modelmap.addAttribute("response", jsonModel);
+		jsonModel.put(JSON_RESULT, consentTemplates);
+		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
@@ -237,7 +237,7 @@ public class AjaxController {
 			logger.info("No logged in user");
 		}else {
 			
-			int numPerPage = MessageUtil.PAGE_NUMBER;
+			int numPerPage = PAGE_NUMBER;
 			int totalTasksNum = 0;
 			int totalPages;
 			
@@ -307,9 +307,9 @@ public class AjaxController {
 			}
 			
 			totalPages = (totalTasksNum == 0) ? 1:(int) Math.ceil((double)totalTasksNum/numPerPage);	
-			jsonModel.put("totalItems", totalTasksNum);
-			jsonModel.put("totalPages", totalPages);
-			jsonModel.put("loginStatus", "VALID");
+			jsonModel.put(JSON_TOTAL_ITEMS, totalTasksNum);
+			jsonModel.put(JSON_TOTAL_PAGES, totalPages);
+			jsonModel.put(JSON_LOGIN_STATUS, "VALID");
 		}		
 		
 		return jsonModel;	
@@ -351,8 +351,8 @@ public class AjaxController {
 		String renderUrlString = renderUrlObj.toString();
 		
 		JSONObject jsonModel = new JSONObject();
-		jsonModel.put("renderUrl", renderUrlString);
-		modelmap.addAttribute("response", jsonModel);
+		jsonModel.put(JSON_RENDER_URL, renderUrlString);
+		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
@@ -393,8 +393,8 @@ public class AjaxController {
 		String renderUrlString = renderUrlObj.toString();
 		
 		JSONObject jsonModel = new JSONObject();
-		jsonModel.put("renderUrl", renderUrlString);
-		modelmap.addAttribute("response", jsonModel);
+		jsonModel.put(JSON_RENDER_URL, renderUrlString);
+		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
@@ -438,8 +438,8 @@ public class AjaxController {
 		String renderUrlString = renderUrlObj.toString();
 		
 		JSONObject jsonModel = new JSONObject();
-		jsonModel.put("renderUrl", renderUrlString);
-		modelmap.addAttribute("response", jsonModel);
+		jsonModel.put(JSON_RENDER_URL, renderUrlString);
+		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
@@ -482,8 +482,8 @@ public class AjaxController {
 		String renderUrlString = renderUrlObj.toString();
 		
 		JSONObject jsonModel = new JSONObject();
-		jsonModel.put("renderUrl", renderUrlString);
-		modelmap.addAttribute("response", jsonModel);
+		jsonModel.put(JSON_RENDER_URL, renderUrlString);
+		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}

@@ -141,7 +141,8 @@
 				pageObj.totalPages = json["totalPages"];
 				pageObj.totalItems = json["totalItems"];
 				var tasks = json["tasks"];
-				var taskHtml = createTasksTable(tasks);
+				var editable = json["editable"];
+				var taskHtml = createTasksTable(tasks, editable);
 				jQuery('#task-manager-tasklist').html(taskHtml);
 				decorateTable();
 				var pageHtml = createTasksPage();
@@ -159,13 +160,17 @@
 	/**
 	 * Create tasks table in Html
 	 */
-	function createTasksTable(tasks) {
+	function createTasksTable(tasks, editable) {
 		var taskHtml = "";
 		var formLink = "";
 		
 		taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
 				+ '<td><a href="javascript:void(0)" onclick="orderTask(\'description\')"><spring:message code="task.description" /></a></td>';
+				
+		<c:if test="<%= Boolean.valueOf(editable) %>">
+			taskHtml += '<td><spring:message code="task.edit" /></td>';
+		</c:if>
 		/* process does not have state field */
 		if(pageObj.taskType != 'process') {
 			taskHtml += '<td><a href="javascript:void(0)" onclick="orderTask(\'state\')"><spring:message code="task.state" /></a></td>';
@@ -184,6 +189,9 @@
 			}
 			
 			taskHtml +=  '<td>' + formLink + '</td>';
+			if (editable) {
+				taskHtml += '<td><div><spring:message code="task.edit" /></div></td>';	
+			}
 			/* process does not have state field */
 			if(pageObj.taskType != 'process') {
 				taskHtml += '<td>' + getTaskState(tasks[i]["state"]) + '</td>';
@@ -242,8 +250,12 @@
 		var taskHtml = "";
 		taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
-				+ '<td><spring:message code="task.description" /></td>'
-				+ '<td><spring:message code="task.state" /></td>'
+				+ '<td><spring:message code="task.description" /></td>';
+				
+		<c:if test="<%= Boolean.valueOf(editable) %>">
+			taskHtml += '<td><spring:message code="task.edit" /></td>';
+		</c:if>
+		taskHtml += '<td><spring:message code="task.state" /></td>'
 				+ '<td><spring:message code="task.creationDate" /></td>'								
 				+ '</tr></table>';
 				
@@ -703,6 +715,9 @@
 		<table class="task-manager-table">
 			<tr class="task-manager-table trheader">
 				<td><spring:message code="task.description" /></td>
+				<c:if test="<%= Boolean.valueOf(editable) %>">
+					<td><spring:message code="task.edit" /></td>
+				</c:if>
 				<td><spring:message code="task.state" /></td>
 				<td><spring:message code="task.creationDate" /></td>								
 			</tr> 

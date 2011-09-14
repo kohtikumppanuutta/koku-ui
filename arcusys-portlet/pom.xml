@@ -16,5 +16,47 @@
 	<module>koku-message</module>
 	<module>koku-taskmanager</module>
   </modules>
+
+	<build>
+	<plugins>
+		<plugin>
+				<groupId>org.zeroturnaround</groupId>
+				<artifactId>javarebel-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>generate-rebel-xml</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<classpath>
+						<resources>
+							<resource>
+								<directory>${basedir}/koku-message/koku-layout-portlet/target/classes</directory>
+							</resource>
+							<resource>
+								<directory>${basedir}/koku-message/koku-message-portlet/target/classes</directory>
+							</resource>
+							<resource>
+								<directory>${basedir}/koku-message/koku-message-service/target/classes</directory>
+							</resource>
+							<resource>
+								<directory>${basedir}/koku-message/koku-navi-portlet/target/classes</directory>
+							</resource>
+							<resource>	
+								<directory>${basedir}/koku-taskmanager/koku-intalio-services/target/classes</directory>
+							</resource>
+							<resource>	
+								<directory>${basedir}/koku-taskmanager/koku-taskmanager-portlet/target/classes</directory>
+							</resource>
+						</resources>
+					</classpath>
+				</configuration>
+			</plugin>
+	</plugins>
+	</build>
 	
 </project>
