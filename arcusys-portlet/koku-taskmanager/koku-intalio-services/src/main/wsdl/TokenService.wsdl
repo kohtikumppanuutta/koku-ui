@@ -193,8 +193,8 @@
     </wsdl:binding>
     <wsdl:service name="TokenService">
         <wsdl:port name="Service" binding="tns:TokenServiceSOAP">
-            <!--  soap:address location="http://127.0.0.1:8080/axis2/services/TokenService.Service/"/ -->
-            <soap:address location="http://intalio.intra.arcusys.fi:8080/axis2/services/TokenService.Service/"/>
+            <soap:address location="http://127.0.0.1:8080/axis2/services/TokenService.Service/"/>
+            <!-- soap:address location="http://intalio.intra.arcusys.fi:8080/axis2/services/TokenService.Service/"/-->
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>
