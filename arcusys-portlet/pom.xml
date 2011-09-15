@@ -41,6 +41,9 @@
 								<directory>${basedir}/koku-message/koku-message-portlet/target/classes</directory>
 							</resource>
 							<resource>
+								<directory>${basedir}/koku-message/koku-common-services/target/classes</directory>
+							</resource>
+							<resource>
 								<directory>${basedir}/koku-message/koku-message-service/target/classes</directory>
 							</resource>
 							<resource>
