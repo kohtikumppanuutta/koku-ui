@@ -77,7 +77,7 @@ public class ShowConsentController {
 			TivaEmployeeServiceHandle handle = new TivaEmployeeServiceHandle();
 			handle.setMessageSource(messageSource);
 			consent = handle.getConsentDetails(consentId);
-		} else if (taskType.equals(TASK_TYPE_CONSENT_LIST_CITIZEN_CONSENTS)) {
+		} else if (taskType.equals(TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS)) {
 			// TODO: Need some logic here? 
 			// REMOVE ME?
 		}

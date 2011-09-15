@@ -53,6 +53,7 @@
 			window.location = url;
 		}				
 	}
+	
 	//Creates a renderURL by ajax,to show the detailed consent page
 	function showConsent(index) {
 		var url="";
@@ -81,5 +82,7 @@
 		}
 		window.location = url;
 	}
+	
+	
 
 	/************************For Gatein Portal end****************************/

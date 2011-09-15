@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ page import="javax.portlet.PortletPreferences" %>
 <%@ page import="javax.portlet.WindowState" %>
+<%@ page import="fi.arcusys.koku.util.Constants" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %> 
 
 <portlet:defineObjects />
@@ -10,7 +11,7 @@
 <%
 PortletPreferences preferences = renderRequest.getPreferences();
 
-String refreshDuration = preferences.getValue("refreshDuration", "30");
-String messageType = preferences.getValue("messageType", "2");
+String refreshDuration = preferences.getValue(Constants.PREF_REFRESH_DURATION, "30");
+String messageType = preferences.getValue(Constants.PREF_MESSAGE_TYPE, "2");
 
 %>

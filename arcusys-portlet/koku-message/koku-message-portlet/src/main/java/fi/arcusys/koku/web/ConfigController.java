@@ -29,7 +29,7 @@ public class ConfigController {
 	
 	@RenderMapping
 	public String showConfig(RenderRequest request, RenderResponse response, ModelMap modelmap) {	
-		System.out.println("show edit mode");
+		logger.debug("show edit mode");
 		return VIEW_CONFIG;
 	}
 	
@@ -38,12 +38,12 @@ public class ConfigController {
 		 
         try { 
             PortletPreferences pref = request.getPreferences();       
-    		String refreshDuration = request.getParameter("refreshDuration");
-    		String messageType = request.getParameter("messageType");
+    		String refreshDuration = request.getParameter(PREF_REFRESH_DURATION);
+    		String messageType = request.getParameter(PREF_MESSAGE_TYPE);
     		System.out.println("refresh: " + refreshDuration
     				+ "messageType: " + messageType);
-    		pref.setValue("refreshDuration", refreshDuration);
-    		pref.setValue("messageType", messageType);
+    		pref.setValue(PREF_REFRESH_DURATION, refreshDuration);
+    		pref.setValue(PREF_MESSAGE_TYPE, messageType);
     		pref.store();
     		
     		response.setPortletMode(PortletMode.VIEW);

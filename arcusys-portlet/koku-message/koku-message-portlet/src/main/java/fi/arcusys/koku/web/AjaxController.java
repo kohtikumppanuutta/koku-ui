@@ -232,6 +232,8 @@ public class AjaxController {
 	public JSONObject getJsonModel(String taskType, int page, String keyword, String field, String orderType, String username) {
 		JSONObject jsonModel = new JSONObject();
 		
+		logger.debug("Ajax call");
+		
 		if(username == null) {
 			jsonModel.put("loginStatus", "INVALID");
 			logger.info("No logged in user");
@@ -288,7 +290,21 @@ public class AjaxController {
 					csts = tivaHandle.getConsents(username, keyword, field, first, max);
 					totalTasksNum = tivaHandle.getTotalConsents(username, keyword, field);
 					jsonModel.put(TASKS, csts);
-				} else if(taskType.equals(TASK_TYPE_CONSENT_LIST_CITIZEN_CONSENTS)) {	// Selaa käyttäjän x suostumuksia TIVA-13
+				} else if(taskType.equals(TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS)) {	// Selaa asiakkaan/asian valtakirjoja TIVA-13
+					TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
+					tivaHandle.setMessageSource(messageSource);
+					// FIXME: This should change when we get proper methods from WS
+					csts = tivaHandle.getConsents(username, keyword, field, first, max);
+					totalTasksNum = tivaHandle.getTotalConsents(username, keyword, field);
+					jsonModel.put(TASKS, csts);
+				} else if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_FROM_USER)) {	// Kuntalainen: Valtuuttajana TIVA-11
+					TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
+					tivaHandle.setMessageSource(messageSource);
+					// FIXME: This should change when we get proper methods from WS
+					csts = tivaHandle.getConsents(username, keyword, field, first, max);
+					totalTasksNum = tivaHandle.getTotalConsents(username, keyword, field);
+					jsonModel.put(TASKS, csts);
+				} else if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_TO_USER)) {	// Kuntalainen: Valtuutettuna TIVA-11
 					TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
 					tivaHandle.setMessageSource(messageSource);
 					// FIXME: This should change when we get proper methods from WS
@@ -311,7 +327,6 @@ public class AjaxController {
 			jsonModel.put(JSON_TOTAL_PAGES, totalPages);
 			jsonModel.put(JSON_LOGIN_STATUS, "VALID");
 		}		
-		
 		return jsonModel;	
 	}
 

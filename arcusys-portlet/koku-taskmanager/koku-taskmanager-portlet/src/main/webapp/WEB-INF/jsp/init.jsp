@@ -15,6 +15,8 @@ String notifFilter = preferences.getValue(Constants.PREF_NOTIFICATION_FILTER, ""
 String refreshDuration = preferences.getValue(Constants.PREF_REFRESH_DURATION, "30");
 String openForm = preferences.getValue(Constants.PREF_OPEN_FORM, "1");
 String defaultTaskType = preferences.getValue(Constants.PREF_DEFAULT_TASK_TYPE, "task");
-String editable = preferences.getValue(Constants.PREF_EDITABLE, "false");
+// No need to show edit column in TaskManager portlet
+// String editable = preferences.getValue(Constants.PREF_EDITABLE, "false");
+String editable = "false";
 
 %>

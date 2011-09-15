@@ -41,11 +41,13 @@ public class Constants {
 	public static final String MY_ACTION_TASKFORM	 					= "taskform";
 
 	
-	/* ATTR_MY_TASK_TYPE parameter possible values */
-	public static final String TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS		= "cst_own_employee";
-	public static final String TASK_TYPE_CONSENT_CITIZEN_CONSENTS		= "cst_own_citizen";	
-	public static final String TASK_TYPE_CONSENT_LIST_CITIZEN_CONSENTS	= "cst_browse_customer_consents";
-	public static final String TASK_TYPE_CONSENT_ASSIGNED_CITIZEN		= "cst_assigned_citizen";	
+	/* ATTR_MY_TASK_TYPE parameter possible values. (Message-portlet) */
+	public static final String TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS		= "cst_own_employee";					// Virkailijan lähetetyt suostumus pyynnöt 
+	public static final String TASK_TYPE_CONSENT_CITIZEN_CONSENTS		= "cst_own_citizen";					// Kansalaiselle vastatut pyynnöt(/suostumukset) 
+	public static final String TASK_TYPE_CONSENT_ASSIGNED_CITIZEN		= "cst_assigned_citizen";	 			// Kansalaiselle saapuneet pyynnöt(/suostumukset) 
+	public static final String TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS	= "cst_browse_customer_consents";		// Virkam.: Selaa asiakkaan valtakirjoja
+	public static final String TASK_TYPE_WARRANT_BROWSE_FROM_USER 		= "cst_browse_own_warrants_from_user";	// Kuntalainen: Valtuuttajana
+	public static final String TASK_TYPE_WARRANT_BROWSE_TO_USER 		= "cst_browse_own_warrants_to_user";	// Kuntalainen: Valtuutettuna
 	public static final String TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN 	= "app_response_citizen";
 	public static final String TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE 	= "app_response_employee";
 	public static final String TASK_TYPE_APPOINTMENT_INBOX_CITIZEN 		= "app_inbox_citizen";
@@ -84,14 +86,19 @@ public class Constants {
 	public static final String JSON_RESULT								= "result";
 	public static final String JSON_LOGIN_STATUS						= "loginStatus";
 
-	/* PortletPreferences keys */
+	/* PortletPreferences keys: */
+	public static final String PREF_REFRESH_DURATION 					= "refreshDuration";
+	
+	/* PortletPreferences keys: TaskManager */
 	public static final String PREF_TASK_FILTER 						= "taskFilter";
 	public static final String PREF_NOTIFICATION_FILTER 				= "notifFilter";
-	public static final String PREF_REFRESH_DURATION 					= "refreshDuration";
 	public static final String PREF_OPEN_FORM 							= "openForm";
 	public static final String PREF_DEFAULT_TASK_TYPE 					= "defaultTaskType";
 	public static final String PREF_EDITABLE 							= "editable";
 	
+	/* PortletPreferences keys: MessagePortlet */
+	public static final String PREF_MESSAGE_TYPE 						= "messageType";
+
 	/* ?  */
 	public static final String TOKEN_STATUS_VALID						= "VALID";
 	public static final String TOKEN_STATUS_INVALID						= "INVALID";

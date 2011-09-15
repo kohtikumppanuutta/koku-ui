@@ -56,7 +56,7 @@ public class ShowIntalioFormController {
 		
 		KokuConsent consent = null;
 
-		if (taskType.equals(TASK_TYPE_CONSENT_LIST_CITIZEN_CONSENTS)) {
+		if (taskType.equals(TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS)) {
 			// TODO: Need some logic here?
 		}
 		return consent;

@@ -310,7 +310,7 @@
 		var taskHtml = "";
 		var formLink = "";
 		
-		if(pageObj.taskType == "cst_assigned_citizen") {
+		if(pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN %>") {
 			taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
 				+ '<td>' + '<spring:message code="consent.requester" />' + '</td>'
@@ -332,7 +332,7 @@
 
 			taskHtml += '</table>';
 			
-		} else if(pageObj.taskType == "cst_own_citizen") {
+		} else if(pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS %>") {
 			taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
 				+ '<td class="choose"><spring:message code="message.choose" /></td>'
@@ -363,16 +363,87 @@
 
 			taskHtml += '</table>';
 			
-		}else if(pageObj.taskType == "cst_own_employee") {			
+		} else if(pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>") {			
 			taskHtml += createBrowseEmployeeOwnConsents(tasks);
-		} else if (pageObj.taskType = "cst_browse_customer_consents") {
+		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>") {
 			taskHtml += createBrowseUserConsentsTable(tasks);
+		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_TO_USER %>") {
+			taskHtml += createBrowseWarrantsToMe(tasks);
+		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_FROM_USER %>") {
+			taskHtml += createBrowseWarrantsFromMe(tasks);
+		}		
+		return taskHtml;
+	}
+	
+	
+	function createBrowseWarrantsToMe(tasks) {
+		if (tasks == undefined || tasks == null || tasks.length == 0) {
+			return showErrorMsgNoConsents();
+		}
+		var columnNames = ["<spring:message code="message.choose"/>",
+		                   "<spring:message code="consent.requester"/>",
+		                   "<spring:message code="consent.templateName"/>",
+		                   "<spring:message code="consent.status"/>",
+		                   "<spring:message code="consent.approvalStatus"/>",
+		                   "<spring:message code="consent.createType"/>",
+		                   "<spring:message code="consent.givenDate"/>",
+		                   "<spring:message code="consent.validDate"/>"
+		                  ];
+		
+		var columnIds = ["requester",
+		                 "templateName",
+		                 "status",
+		                 "approvalStatus",
+		                 "createType",
+		                 "assignedDate",
+		                 "validDate"];
+		return createTable("noFunction", columnNames, columnIds, tasks);
+	}
+	
+	function createBrowseWarrantsFromMe(tasks) {
+		if (tasks == undefined || tasks == null || tasks.length == 0) {
+			return showErrorMsgNoConsents();
 		}
 		
-		return taskHtml;
+		var columnNames = ["<spring:message code="message.choose"/>",
+		                   "<spring:message code="consent.requester"/>",
+		                   "<spring:message code="consent.templateName"/>",
+		                   "<spring:message code="consent.status"/>",
+		                   "<spring:message code="consent.approvalStatus"/>",
+		                   "<spring:message code="consent.createType"/>",
+		                   "<spring:message code="consent.givenDate"/>",
+		                   "<spring:message code="consent.validDate"/>",
+		                   "<spring:message code="consent.edit"/>"
+		                  ];
+		
+		var columnIds = ["requester",
+		                 "templateName",
+		                 "status",
+		                 "approvalStatus",
+		                 "createType",
+		                 "assignedDate",
+		                 "validDate",
+		                 "editLink"];
+		createEditConsentColumn(tasks);
+		return createTable("noFunction", columnNames, columnIds, tasks);
+	}
+	
+	function createEditConsentColumn(tasks) {
+		for (var i = 0; i < tasks.length; i++)  {
+			var url = "<%= defaultPath %>/Message/ValtakirjaConsent?FormID="+ tasks[i].consentId;
+			tasks[i]["editLink"] = "<a href="+ url+ "><spring:message code="consent.edit"/></a>";
+		}
+	}
+	
+	function showErrorMsgNoConsents() {
+		return "<div class='errorMsg noConsents'><spring:message code="consent.errorMsg.noWarrants"/></div>";
 	}
 		
 	function createBrowseEmployeeOwnConsents(tasks) {
+		if (tasks == undefined || tasks == null || tasks.length == 0) {
+			return showErrorMsgNoConsents();
+		}
+		
 		var columnNames = ["<spring:message code="message.choose"/>",
 		                   "<spring:message code="consent.requester"/>",
 		                   "<spring:message code="consent.templateName"/>",
@@ -758,14 +829,17 @@
 		}			
 		if (pageObj.taskType == 'msg_inbox' || pageObj.taskType == 'msg_outbox') {
 			pageHtml += '<li><input type="button" value="<spring:message code="page.archive"/>"  onclick="archiveMessages()" /></li>';
-		}					
-		if (pageObj.taskType == 'cst_own_citizen') {
+		}
+		if (pageObj.taskType == '<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS %>' 
+				|| pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_BROWSE_FROM_USER %>') {
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="revokeConsents()" /></li>';
 		} else if(pageObj.taskType.indexOf('msg') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="page.removeSelected"/>"  onclick="deleteMessages()" /></li>';
-		} else if(pageObj.taskType == 'app_inbox_employee' || pageObj.taskType == 'app_response_employee' || pageObj.taskType == 'app_response_citizen') {
+		} else if( pageObj.taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE %>' 
+				|| pageObj.taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE %>' 
+				|| pageObj.taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN %>') {
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.cancel"/>"  onclick="cancelAppointments()" /></li>';
-		}			
+		}
 			
 		pageHtml += '<li><a><img src="<%= request.getContextPath() %>/images/first.gif" onclick="movePage(\'first\')"/></a></li>'
 				 + '<li><a><img src="<%= request.getContextPath() %>/images/prev.gif" onclick="movePage(\'previous\')"/></a></li>'
