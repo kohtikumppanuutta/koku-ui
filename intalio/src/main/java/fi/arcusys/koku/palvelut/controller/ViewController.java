@@ -19,6 +19,7 @@ import javax.xml.stream.XMLStreamException;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.apache.openjpa.lib.log.Log;
 import org.intalio.tempo.workflow.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,6 +38,7 @@ import fi.arcusys.koku.palvelut.model.client.VeeraFormImpl;
 import fi.arcusys.koku.palvelut.services.VeeraServicesFacade;
 import fi.arcusys.koku.palvelut.util.AjaxViewResolver;
 import fi.arcusys.koku.palvelut.util.CategoryUtil;
+import fi.arcusys.koku.palvelut.util.Constants;
 import fi.arcusys.koku.palvelut.util.MigrationUtil;
 import fi.arcusys.koku.palvelut.util.OperationsValidator;
 import fi.arcusys.koku.palvelut.util.OperationsValidatorImpl;
@@ -154,6 +156,10 @@ public class ViewController extends FormHolderController {
 
 		LOG.debug("handleRenderRequestInternal");
 		PortletPreferences prefs = request.getPreferences();
+		String portalInfo = (String)request.getPortalContext().getPortalInfo();
+		Boolean isGateInPortal = portalInfo.toLowerCase().contains(Constants.PORTAL_GATEIN);
+		
+		
 		if (prefs.getValue(SHOW_ONLY_CHECKED, null) != null) {
 			ModelAndView mav = new ModelAndView(FORM_VIEW_ACTION, "model", null);
 			mav.addObject(ATTR_PREFERENCES, request.getPreferences());
@@ -162,8 +168,9 @@ public class ViewController extends FormHolderController {
 			Boolean showFormById = Boolean.valueOf(prefs.getValue(SHOW_TASKS_BY_ID, null));
 			LOG.debug("showFormById " + showFormById);
 			try {
-				if (showFormById) {
-					t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue(SHOW_ONLY_FORM_BY_ID, null));					
+				if (isGateInPortal || showFormById) {
+					LOG.debug("Loading taskID: " + prefs.getValue(SHOW_ONLY_FORM_BY_ID, null) + "isGateIn: "+ isGateInPortal);
+					t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue(SHOW_ONLY_FORM_BY_ID, null));
 				} else {
 					t = TaskUtil.getTaskByDescription(TokenUtil.getAuthenticationToken(request), prefs.getValue(SHOW_ONLY_FORM_BY_DESCRIPTION, null));
 					LOG.debug("t status: " + (t == null));
@@ -173,7 +180,7 @@ public class ViewController extends FormHolderController {
 					}
 				}
 			} catch (Exception e) {
-				LOG.error("Failure while trying to get Task. Some hints to fix problem: \1. Logged in proper user? (this portlet doesn't work correctly with admin/nonlogged users \n2. Task might be updated. Reselect form in 'edit'-mode. \n3. Check that connection to Intalio server is up. ", e);
+				LOG.error("Failure while trying to get Task.\nSome hints to fix problem: \n1. Logged in proper user? (this portlet doesn't work correctly with admin/nonlogged users \n2. Task might be updated. Reselect form in 'edit'-mode. \n3. Check that connection to Intalio server is up. ", e);
 				return getFailureView(request);
 			}
 			FormHolder fh = getFormHolderFromTask(request, t.getDescription());

@@ -29,7 +29,7 @@ public class Constants {
 	
 	/* Portal types */
 	public static final String PORTAL_JBOSS								= "jBoss";
-	public static final String PORTAL_GATEIN							= "gateIn";
+	public static final String PORTAL_GATEIN							= "gatein";
 	public static final String PORTAL_LIFERAY							= "liferay";
 	
 	private Constants() {

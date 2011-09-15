@@ -66,18 +66,19 @@ public class ConfigurationController {
 		return mav;
 	}
 	
-	@ActionMapping
+	@ActionMapping(params="action=config")
 	protected void handleActionRequestInternal(ActionRequest request,
 			ActionResponse response) throws Exception {
 		// TODO Auto-generated method stub
-		LOG.debug("handleActionRequestInternal");
+		LOG.debug("handleActionRequestInternal - Save settings");
 		PortletPreferences prefs = request.getPreferences();
-		LOG.debug("showOnlyChecked: " + prefs.getValue(SHOW_ONLY_CHECKED, null));
-		LOG.debug("showOnlyForm: " + prefs.getValue(SHOW_ONLY_FORM_BY_ID, null));
 		prefs.setValue(SHOW_ONLY_CHECKED, request.getParameter(SHOW_ONLY_CHECKED));
 		prefs.setValue(SHOW_ONLY_FORM_BY_ID, request.getParameter(SHOW_ONLY_FORM_BY_ID));
 		prefs.setValue(SHOW_TASKS_BY_ID, Boolean.TRUE.toString());
 		prefs.store();
+		LOG.debug("showOnlyChecked: " + prefs.getValue(SHOW_ONLY_CHECKED, null));
+		LOG.debug("showOnlyForm: " + prefs.getValue(SHOW_ONLY_FORM_BY_ID, null));
+		LOG.debug("showTasksById: "+ prefs.getValue(SHOW_TASKS_BY_ID, Boolean.TRUE.toString()));
 		request.setAttribute(ATTR_PREFERENCES, prefs);
 		 
 		/* Return back to VIEW mode */
