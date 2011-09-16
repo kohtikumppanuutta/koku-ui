@@ -22,7 +22,12 @@
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>kksservice-api</artifactId>
       <version>0.1.1</version>
-    </dependency>    
+    </dependency>
+    <dependency>
+      <groupId>kohti-kumppanuutta</groupId>
+      <artifactId>portlet-common</artifactId>
+      <version>0.0.3</version>
+    </dependency>        
  </dependencies>
   
 
