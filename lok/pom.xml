@@ -19,6 +19,12 @@
       <version>0.0.2</version>
     </dependency>    
 
+    <dependency>
+      <groupId>kohti-kumppanuutta</groupId>
+      <artifactId>portlet-common</artifactId>
+      <version>0.0.3</version>
+    </dependency>
+
   </dependencies>
 
 </project>
