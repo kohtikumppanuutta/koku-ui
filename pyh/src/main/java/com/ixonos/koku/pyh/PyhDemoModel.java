@@ -18,7 +18,7 @@ import com.ixonos.koku.pyh.model.Person;
 public class PyhDemoModel {
 
   private static Logger log = LoggerFactory.getLogger(PyhDemoModel.class);
-
+/*
   private List<Person> persons;
   private List<Family> families;
   private List<Guardianship> guardianships;
@@ -146,5 +146,5 @@ public class PyhDemoModel {
     }
     return null;
   }
-
+*/
 }

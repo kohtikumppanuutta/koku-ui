@@ -21,7 +21,7 @@ public class Guardianship {
 
   public void setDependants(List<Dependant> d) {
     for (Dependant dep : d) {
-      dependants.put(dep.getSsn(), dep);
+      dependants.put(dep.getPic(), dep);
     }
   }
 
@@ -34,7 +34,7 @@ public class Guardianship {
   }
 
   public void addDependant(Dependant dep) {
-    dependants.put(dep.getSsn(), dep);
+    dependants.put(dep.getPic(), dep);
   }
 
   public List<Guardian> getGuardians() {
@@ -43,12 +43,12 @@ public class Guardianship {
 
   public void setGuardians(List<Guardian> g) {
     for (Guardian dep : g) {
-      guardians.put(dep.getSsn(), dep);
+      guardians.put(dep.getPic(), dep);
     }
   }
 
   public void addGuardian(Guardian g) {
-    this.guardians.put(g.getSsn(), g);
+    this.guardians.put(g.getPic(), g);
   }
 
   public boolean guardianshipExists(String guardianSSN, String dependantSSN) {

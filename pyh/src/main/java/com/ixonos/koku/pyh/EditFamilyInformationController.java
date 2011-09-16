@@ -54,7 +54,7 @@ public class EditFamilyInformationController {
     model.addAttribute("dependants", pyhDemoService.getDependants());
     model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers());
     model.addAttribute("parentsFull", pyhDemoService.isParentsSet());
-    model.addAttribute("messages", messageService.getSentMessages(pyhDemoService.getUser().getSsn()));
+    model.addAttribute("messages", messageService.getSentMessages(pyhDemoService.getUser().getPic()));
     return "editfamilyinformation";
   }
 
@@ -66,42 +66,18 @@ public class EditFamilyInformationController {
     model.addAttribute("dependants", pyhDemoService.getDependants());
     model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers());
     model.addAttribute("parentsFull", pyhDemoService.isParentsSet());
-    model.addAttribute("messages", messageService.getSentMessages(pyhDemoService.getUser().getSsn()));
+    model.addAttribute("messages", messageService.getSentMessages(pyhDemoService.getUser().getPic()));
     return "editfamilyinformation";
   }
-
-  @ModelAttribute(value = "newDependant")
-  public Person getCommandObject() {
-    return new Person();
-  }
-
+  
   @ModelAttribute(value = "searchedUsers")
   private List<Person> getSearchedUsers() {
     return pyhDemoService.getSearchedUsers();
   }
-
+  
   @ActionMapping(params = "action=addDependantAsFamilyMember")
-  public void addDependantAsFamilyMember(@RequestParam String dependantSSN, ActionResponse response) {
-    pyhDemoService.addDependantAsFamilyMember(dependantSSN);
-
-    response.setRenderParameter("action", "editFamilyInformation");
-  }
-
-  @ActionMapping(params = "action=addNewDependant")
-  public void addNewDependant(@ModelAttribute Person dependant, ActionResponse response) {
-    String ssn = dependant.getSsn();
-    String firstName = dependant.getFirstname();
-    String middleName = dependant.getMiddlename();
-    String surname = dependant.getSurname();
-    String birthDay = dependant.getBirthday();
-    String birthMonth = dependant.getBirthmonth();
-    String birthYear = dependant.getBirthyear();
-    dependant.setBirthdate(dependant.getBirthday(), dependant.getBirthmonth(), dependant.getBirthyear());
-
-    if (ssn.equals("") == false && firstName.equals("") == false && middleName.equals("") == false
-        && surname.equals("") == false) {
-      pyhDemoService.addNewDependant(dependant);
-    }
+  public void addDependantAsFamilyMember(@RequestParam String dependantPic, ActionResponse response) {
+    pyhDemoService.addDependantAsFamilyMember(dependantPic);
 
     response.setRenderParameter("action", "editFamilyInformation");
   }
@@ -117,7 +93,7 @@ public class EditFamilyInformationController {
   public void removeDependant(@RequestParam String familyMemberSSN, ActionResponse response) {
 
     for (Dependant d : pyhDemoService.getDependants()) {
-      if (d.getSsn().equals(familyMemberSSN)) {
+      if (d.getPic().equals(familyMemberSSN)) {
         d.setMemberOfUserFamily(false);
       }
     }
@@ -125,23 +101,17 @@ public class EditFamilyInformationController {
 
     response.setRenderParameter("action", "editFamilyInformation");
   }
-
-  @ActionMapping(params = "action=changeEmail")
-  public void changeEmail(@RequestParam String email, ActionResponse response) {
-    pyhDemoService.getUser().setEmail(email);
-
-    response.setRenderParameter("action", "editFamilyInformation");
-  }
-
+  
   @ActionMapping(params = "action=searchUsers")
   public void searchUsers(ActionRequest request, ActionResponse response) {
     String fn = request.getParameter("searchFirstname");
     String sn = request.getParameter("searchSurname");
-    String ssn = request.getParameter("searchSSN");
+    String pic = request.getParameter("searchSSN");
 
     // call service to query users,
     // users are returned as a model attribute object searchedUsers
-    pyhDemoService.searchUsers(fn, sn, ssn);
+    // TODO: what is the correct search criteria?
+    pyhDemoService.searchUsers(fn, sn, pic, "" /*customer id*/);
 
     response.setRenderParameter("action", "editFamilyInformationWithSearchResults");
   }

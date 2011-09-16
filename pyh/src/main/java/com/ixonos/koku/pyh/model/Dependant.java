@@ -1,21 +1,22 @@
 package com.ixonos.koku.pyh.model;
 
+import fi.koku.services.entity.customer.v1.CustomerType;
+
 public class Dependant extends Person {
-
+  
   private boolean memberOfUserFamily;
-
-  public Dependant(Person person) {
-    super(person.getFirstname(), person.getMiddlename(), person.getSurname(), person.getSsn(), person.getBirthdate(),
-        "");
+  
+  public Dependant(CustomerType customer) {
+    super(customer);
     memberOfUserFamily = false;
   }
-
+  
   public boolean getMemberOfUserFamily() {
     return memberOfUserFamily;
   }
-
+  
   public void setMemberOfUserFamily(boolean isMember) {
     this.memberOfUserFamily = isMember;
   }
-
+  
 }

@@ -37,23 +37,22 @@ public class FamilyInformationController {
   @RenderMapping(params = "action=guardianFamilyInformation")
   public String render(Model model) {
 
-    String ssn = pyhDemoService.getUser().getSsn();
+    String pic = pyhDemoService.getUserPic();
     model.addAttribute("user", pyhDemoService.getUser());
     model.addAttribute("dependants", pyhDemoService.getDependants());
     model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers());
-    model.addAttribute("messages", messageService.getMessagesFor(ssn));
-    model.addAttribute("sentMessages", messageService.getSentMessages(ssn));
+    model.addAttribute("messages", messageService.getMessagesFor(pic));
+    model.addAttribute("sentMessages", messageService.getSentMessages(pic));
     return "familyinformation";
   }
-
+  
   @RenderMapping(params = "action=userSelection")
-  public String render(@RequestParam String ssn, Model model) {
-    pyhDemoService.setUser(ssn);
+  public String render(@RequestParam String pic, Model model) {
     model.addAttribute("user", pyhDemoService.getUser());
     model.addAttribute("dependants", pyhDemoService.getDependants());
     model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers());
-    model.addAttribute("messages", messageService.getMessagesFor(ssn));
-    model.addAttribute("sentMessages", messageService.getSentMessages(ssn));
+    model.addAttribute("messages", messageService.getMessagesFor(pic));
+    model.addAttribute("sentMessages", messageService.getSentMessages(pic));
     return "familyinformation";
   }
 

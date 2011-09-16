@@ -12,124 +12,229 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.ixonos.koku.pyh.mock.User;
 import com.ixonos.koku.pyh.model.Dependant;
 import com.ixonos.koku.pyh.model.DependantExecutable;
 import com.ixonos.koku.pyh.model.Family;
 import com.ixonos.koku.pyh.model.FamilyExecutable;
 import com.ixonos.koku.pyh.model.FamilyMember;
-import com.ixonos.koku.pyh.model.Guardian;
-import com.ixonos.koku.pyh.model.Guardianship;
 import com.ixonos.koku.pyh.model.Message;
 import com.ixonos.koku.pyh.model.MessageService;
 import com.ixonos.koku.pyh.model.ParentExecutable;
 import com.ixonos.koku.pyh.model.Person;
-import com.ixonos.koku.pyh.util.Role;
+import com.ixonos.koku.pyh.util.CommunityRole;
+
+import fi.koku.services.entity.community.v1.CommunitiesType;
+import fi.koku.services.entity.community.v1.CommunityQueryCriteriaType;
+import fi.koku.services.entity.community.v1.CommunityServiceFactory;
+import fi.koku.services.entity.community.v1.CommunityServicePortType;
+import fi.koku.services.entity.community.v1.CommunityType;
+import fi.koku.services.entity.community.v1.MemberType;
+import fi.koku.services.entity.community.v1.MembersType;
+import fi.koku.services.entity.community.v1.ServiceFault;
+import fi.koku.services.entity.customer.v1.CustomerQueryCriteriaType;
+import fi.koku.services.entity.customer.v1.CustomerServiceFactory;
+import fi.koku.services.entity.customer.v1.CustomerServicePortType;
+import fi.koku.services.entity.customer.v1.CustomerType;
+import fi.koku.services.entity.customer.v1.CustomersType;
 
 @Service(value = "pyhDemoService")
 public class PyhDemoService {
-
+  
   private static Logger log = LoggerFactory.getLogger(PyhDemoService.class);
-
-  private PyhDemoModel model;
-  private User user;
+  
   private List<Person> searchedUsers;
-
+  private String userPic;
+  
   @Autowired
   @Qualifier(value = "pyhMessageService")
   private MessageService messageService;
-
+  
+  private CustomerServicePortType customerService;
+  private CommunityServicePortType communityService;
+  
   public PyhDemoService() {
-    if (model == null) {
-      this.model = PyhDemoFactory.createModel();
+    
+    // TODO: get user's PIC from the portal
+    userPic = "010101-1010";
+    
+    // TODO: initialization with username and password
+    
+    String customerServiceEndpoint = "http://localhost:8088/mockcustomerService-soap11-binding?wsdl";
+    CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory("u", "p", customerServiceEndpoint);
+    customerService = customerServiceFactory.getCustomerService();
+    
+    String communityServiceEndpoint = "http://localhost:8088/mockcommunityService-soap11-binding?wsdl";
+    CommunityServiceFactory communityServiceFactory = new CommunityServiceFactory("u", "p", communityServiceEndpoint);
+    communityService = communityServiceFactory.getCommunityService();
+  }
+  
+  /**
+   * Returns a person by PIC.
+   */
+  public Person getPerson(String pic) {
+    CustomerType customer = null;
+    try {
+      // TODO: AuditInfoType
+      customer = customerService.opGetCustomer(pic, new fi.koku.services.entity.customer.v1.AuditInfoType());
+    } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
+      log.error("PyhDemoService.getUser: opGetCustomer raised a ServiceFault", fault);
     }
-    if (user == null) {
-      this.user = new User("010101-1010", "guardian");
-      // this.user = new User("030405-3456", "guardian");
-    }
+    return new Person(customer);
   }
-
-  public void setUser(String ssn) {
-    this.user = new User(ssn, "guardian");
-  }
-
-  public void reset() {
-    this.model = PyhDemoFactory.createModel();
-  }
-
+  
+  /**
+   * Returns the current user.
+   */
   public Person getUser() {
-    return model.getPerson(user.getSsn());
+    return getPerson(userPic);
   }
-
+  
+  /**
+   * Returns the user's PIC.
+   */
+  public String getUserPic() {
+    return userPic;
+  }
+  
+  /**
+   * Returns user's dependants.
+   */
   public List<Dependant> getDependants() {
     List<Dependant> dependants = new ArrayList<Dependant>();
-
-    List<Guardianship> guardianships = model.getGuardianships();
-    Iterator<Guardianship> gsi = guardianships.iterator();
-    while (gsi.hasNext()) {
-      Guardianship gs = gsi.next();
-
-      List<Guardian> guardians = gs.getGuardians();
-      Iterator<Guardian> gi = guardians.iterator();
-      while (gi.hasNext()) {
-        Guardian g = gi.next();
-        if (g.getSsn().equals(user.getSsn())) {
-
-          // if user SSN matches guardian's SSN then we have correct
-          // guardianship
-          // and we can return guardianship's dependants (that is user's
-          // dependants)
-          dependants = gs.getDependants();
+    CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
+    // TODO: get community type from constants
+    communityQueryCriteria.setCommunityType("guardian_community");
+    communityQueryCriteria.setMemberPic(userPic);
+    CommunitiesType communitiesType = null;
+    
+    try {
+      communitiesType = communityService.opQueryCommunities(communityQueryCriteria, new fi.koku.services.entity.community.v1.AuditInfoType());
+    } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
+      log.error("PyhDemoService.getDependants: opQueryCommunities raised a ServiceFault", fault);
+    }
+    
+    if (communitiesType != null) {
+      List<CommunityType> communities = communitiesType.getCommunity();
+      Iterator<CommunityType> ci = communities.iterator();
+      while (ci.hasNext()) {
+        CommunityType community = ci.next();
+        MembersType membersType = community.getMembers();
+        List<MemberType> members = membersType.getMember();
+        Iterator<MemberType> mi = members.iterator();
+        while (mi.hasNext()) {
+          MemberType member = mi.next();
+          // TODO: get role from constants
+          if (member.getRole().equals("dependant")) {
+            try {
+              CustomerType customer = customerService.opGetCustomer(member.getPic(), new fi.koku.services.entity.customer.v1.AuditInfoType());
+              dependants.add(new Dependant(customer));
+            }
+            catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
+              log.error("PyhDemoService.getDependants: opGetCustomer raised an ServiceFault", fault);
+            }
+          }
         }
       }
     }
     return dependants;
   }
-
-  public List<FamilyMember> getNonDependants() {
-    Family usersFamily = getUsersFamily();
-    return usersFamily.getChilds();
-  }
-
+  
+  /**
+   * Returns all other members of the user's family except dependants.
+   */
   public List<FamilyMember> getOtherFamilyMembers() {
     List<FamilyMember> otherFamilyMembers = new ArrayList<FamilyMember>();
-    Family usersFamily = getUsersFamily();
-    List<FamilyMember> fmList = usersFamily.getAllMembers();
-
-    Iterator<FamilyMember> fmi = fmList.iterator();
-    while (fmi.hasNext()) {
-      FamilyMember fm = fmi.next();
-      if (!fm.getSsn().equals(user.getSsn()) && !isUsersDependant(fm.getSsn())) {
-        otherFamilyMembers.add(fm);
+    CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
+    // TODO: get community type from constants
+    communityQueryCriteria.setCommunityType("family_community");
+    communityQueryCriteria.setMemberPic(userPic);
+    CommunitiesType communitiesType = null;
+    
+    try {
+      communitiesType = communityService.opQueryCommunities(communityQueryCriteria, new fi.koku.services.entity.community.v1.AuditInfoType());
+    } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
+      log.error("PyhDemoService.getOtherFamilyMembers: opQueryCommunities raised a ServiceFault", fault);
+    }
+    
+    if (communitiesType != null) {
+      List<CommunityType> communities = communitiesType.getCommunity();
+      Iterator<CommunityType> ci = communities.iterator();
+      while (ci.hasNext()) {
+        CommunityType community = ci.next();
+        MembersType membersType = community.getMembers();
+        List<MemberType> members = membersType.getMember();
+        Iterator<MemberType> mi = members.iterator();
+        while (mi.hasNext()) {
+          MemberType member = mi.next();
+          // TODO: get role from constants
+          if (!member.getRole().equals("dependant")) { // TODO: dependant is not role of family_community; is this correct?
+            CustomerType customer = null;
+            
+            try {
+              customer = customerService.opGetCustomer(member.getPic(), new fi.koku.services.entity.customer.v1.AuditInfoType());
+            } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
+              log.error("PyhDemoService.getOtherFamilyMembers: opGetCustomer raised a ServiceFault", fault);
+            }
+            
+            if (customer != null) {
+              otherFamilyMembers.add(new FamilyMember(customer, CommunityRole.createFromRoleID(member.getRole())));
+            }
+          }
+        }
       }
     }
     return otherFamilyMembers;
   }
-
+  
+  /**
+   * Checks if the user's family has max. number of parents.
+   */
   public boolean isParentsSet() {
-    return getUsersFamily().isParentsSet();
+    Family family = getFamily(userPic);
+    if (family != null) {
+      return family.isParentsSet();
+    }
+    return false;
   }
-
-  public void searchUsers(String firstname, String surname, String ssn) {
+  
+  /**
+   * Query persons by name, PIC and customer ID and stores them in the searchedUsers list.
+   */
+  public void searchUsers(String firstname, String surname, String customerPic, String customerID) {
     clearSearchedUsers();
-
-    Family family = getUsersFamily();
-    if (firstname.equals("") == false || surname.equals("") == false || ssn.equals("") == false) {
-      Iterator<Person> pi = model.getPersons().iterator();
-      while (pi.hasNext()) {
-        Person person = pi.next();
-        if ((person.getFirstname().equalsIgnoreCase(firstname) || person.getSurname().equalsIgnoreCase(surname) || person
-            .getSsn().equalsIgnoreCase(ssn)) && !family.isFamilyMember(person.getSsn())) {
-          searchedUsers.add(person);
-        }
+    
+    // TODO: what is the final query criteria?
+    CustomerQueryCriteriaType customerCriteria = new CustomerQueryCriteriaType();
+    customerCriteria.setId(customerID);
+    customerCriteria.setPic(customerPic);
+    CustomersType customersType = null;
+    
+    try {
+      customersType = customerService.opQueryCustomers(customerCriteria, new fi.koku.services.entity.customer.v1.AuditInfoType());
+    } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
+      log.error("PyhDemoService.searchUsers: opQueryCustomers raised a ServiceFault", fault);
+    }
+    
+    if (customersType != null) {
+      List<CustomerType> customers = customersType.getCustomer();
+      Iterator<CustomerType> ci = customers.iterator();
+      while (ci.hasNext()) {
+        CustomerType customer = ci.next();
+        searchedUsers.add(new Person(customer));
       }
     }
   }
-
+  
+  /**
+   * Returns the results of a query for persons.
+   */
   public List<Person> getSearchedUsers() {
     return searchedUsers;
   }
-
+  
+  /**
+   * Clears the search results.
+   */
   public void clearSearchedUsers() {
     if (searchedUsers == null) {
       searchedUsers = new ArrayList<Person>();
@@ -137,232 +242,298 @@ public class PyhDemoService {
       searchedUsers.clear();
     }
   }
-
+  
+  /**
+   * Adds a dependant into the user's family.
+   */
   public void addDependantAsFamilyMember(String dependantSSN) {
-    Person user = getUser();
-
     // REMOVE COMMENTS, IF CONFIRMATION MESSAGES ARE NEED ALSO FOR DEPENDANT >
     // FAMILY INSERTION
     // List<String> tmp = generateRecipients(dependantSSN, user, Role.CHILD);
 
     // if (tmp.size() == 0) {
-    insertDependantToFamily(user.getSsn(), dependantSSN, Role.CHILD);
+    
+    insertDependantToFamily(userPic, dependantSSN, CommunityRole.CHILD);
+    
     // } else {
     // sendDependantFamilyAdditionMessage(tmp, user,
     // model.getPerson(dependantSSN), Role.CHILD);
     // }
   }
-
-  private List<String> generateRecipients(String targetSSN, Person user, Role role) {
-    List<String> tmp = new ArrayList<String>();
-
-    if (Role.CHILD.equals(role)) {
-      List<Guardian> guardians = model.getDependantGuardians(targetSSN);
-
-      for (Guardian g : guardians) {
-        tmp.add(g.getSsn());
+  
+  /**
+   * Selects persons (PICs) to whom send the confirmation message for a operation, for example adding a dependant 
+   * into a family.
+   */
+  private List<String> generateRecipients(String targetSSN, Person user, CommunityRole role) {
+    List<String> recipientPics = new ArrayList<String>();
+    
+    if (CommunityRole.CHILD.equals(role)) {
+      CommunityQueryCriteriaType communityCriteria = new CommunityQueryCriteriaType();
+      communityCriteria.setCommunityType("guardian_community");
+      communityCriteria.setMemberPic(targetSSN);
+      CommunitiesType communitiesType = null;
+      
+      try {
+        communitiesType = communityService.opQueryCommunities(communityCriteria, new fi.koku.services.entity.community.v1.AuditInfoType());
+      }
+      catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
+        log.error("PyhDemoService.generateRecipients: opQueryCommunities raised a ServiceFault", fault);
+      }
+      
+      if (communitiesType != null) {
+        List<CommunityType> communities = communitiesType.getCommunity();
+        Iterator<CommunityType> ci = communities.iterator();
+        while (ci.hasNext()) {
+          CommunityType community = ci.next();
+          MembersType membersType = community.getMembers();
+          List<MemberType> members = membersType.getMember();
+          Iterator<MemberType> mi = members.iterator();
+          while (mi.hasNext()) {
+            MemberType member = mi.next();
+            if (member.getRole().equals("guardian")) {
+              recipientPics.add(member.getPic());
+            }
+          }
+        }
       }
     } else {
-
-      FamilyMember f = getUsersFamily().getOtherParent(user.getSsn());
-
-      if (f != null) {
-        tmp.add(f.getSsn());
+      
+      MemberType familyMember = getFamily(userPic).getOtherParent(user.getPic());
+      
+      if (familyMember != null) {
+        recipientPics.add(familyMember.getPic());
       }
-      Family fam = getFamily(targetSSN);
-
-      if (fam != null) {
-        for (FamilyMember fm : fam.getParents()) {
-          if (!fm.getSsn().equals(user.getSsn()) && !tmp.contains(fm.getSsn())) {
-            tmp.add(fm.getSsn());
+      Family family = getFamily(targetSSN);
+      
+      if (family != null) {
+        for (MemberType member : family.getParents()) {
+          if (!member.getPic().equals(user.getPic()) && !recipientPics.contains(member.getPic())) {
+            recipientPics.add(member.getPic());
           }
         }
       }
     }
-    return tmp;
+    return recipientPics;
   }
-
-  public void insertDependantToFamily(String userSSN, String dependantSSN, Role role) {
-    Dependant dependant = model.getDependant(dependantSSN);
-    dependant.setMemberOfUserFamily(true);
-    dependant.setRequestBending(false);
-    Family family = getFamily(userSSN);
-    family.addFamilyMember(new FamilyMember(dependant, role));
-  }
-
-  public void addNewDependant(Person dependant) {
-
-    if (model.getPerson(dependant.getSsn()) == null) {
-      model.addPerson(dependant);
-    }
-
-    // get user's guardianship or create if does not exist
-    Guardianship guardianship = model.getGuardianship(user.getSsn());
-    if (guardianship == null) {
-
-      guardianship = new Guardianship();
-      Person person = model.getPerson(user.getSsn());
-      // TODO: get guardian's role
-      guardianship.addGuardian(new Guardian(person, "rooli"));
-      model.addGuardianship(guardianship);
-    }
-    guardianship.addDependant(new Dependant(dependant));
-  }
-
-  public void removeGuardianShip(String dependantSSN) {
-    // get user's guardianship or create if does not exist
-    Guardianship guardianship = model.getGuardianship(user.getSsn());
-    if (guardianship != null) {
-      guardianship.removeGuardian(user.getSsn());
-
-      if (guardianship.isEmpty()) {
-        model.getGuardianships().remove(guardianship);
+  
+  /**
+   * Inserts a dependant into a family.
+   */
+  public void insertDependantToFamily(String userPic, String dependantSSN, CommunityRole role) {
+      Family family = getFamily(userPic);
+      family.addFamilyMember(dependantSSN, role.getRoleID());
+      
+      try {
+        communityService.opUpdateCommunity(family.getCommunity(), new fi.koku.services.entity.community.v1.AuditInfoType());
+      } catch (ServiceFault fault) {
+        log.error("PyhDemoService.insertDependantToFamily: opUpdateCommunity raised a ServiceFault", fault);
       }
-    }
   }
-
-  public void removeFamilyChild(String familyMemberSSN) {
-    Family family = getUsersFamily();
-    FamilyMember familyMember = family.getChild(familyMemberSSN);
-    family.removeFamilyMember(familyMember);
-  }
-
+  
+  /**
+   * Removes a family member from a family community.
+   */
   public void removeFamilyMember(String familyMemberSSN) {
-
-    log.debug("remove fm");
-    Family family = getUsersFamily();
-    FamilyMember familyMember = family.getFamilyMember(familyMemberSSN);
-    family.removeFamilyMember(familyMember);
-
-    if (Role.PARENT.equals(familyMember.getRole()) || Role.FATHER.equals(familyMember.getRole())
-        || Role.MOTHER.equals(familyMember.getRole())) {
-
-      // Remove childs when parent is removed (both needs to set up childs
-      // again)
-      List<FamilyMember> childs = family.getChilds();
-      for (FamilyMember f : childs) {
-        family.removeFamilyMember(f);
-      }
-
-      Family tmp = getFamily(familyMember.getSsn());
-      if (tmp == null) {
-        Family f = new Family();
-        f.addFamilyMember(familyMember);
-        model.addFamily(f);
+    CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
+    // TODO: get community type from constants
+    communityQueryCriteria.setCommunityType("family_community");
+    communityQueryCriteria.setMemberPic(familyMemberSSN);
+    
+    // TODO: could this method be implemented somehow with opGetCommunity?
+    
+    CommunitiesType communitiesType = null;
+    
+    try {
+      communitiesType = communityService.opQueryCommunities(communityQueryCriteria, new fi.koku.services.entity.community.v1.AuditInfoType());
+    } catch (ServiceFault fault) {
+      log.error("PyhDemoService.removeFamilyMember: opGetCommunity raised a ServiceFault", fault);
+    }
+    
+    if (communitiesType != null) {
+      List<CommunityType> communityType = communitiesType.getCommunity();
+      Iterator<CommunityType> ci = communityType.iterator();
+      CommunityType community = null;
+      while (ci.hasNext()) {
+        community = ci.next();
+        MembersType membersType = community.getMembers();
+        List<MemberType> members = membersType.getMember();
+        Iterator<MemberType> mi = members.iterator();
+        while (mi.hasNext()) {
+          MemberType member = mi.next();
+          if (member.getPic().equals(familyMemberSSN)) {
+            members.remove(member);
+            try {
+              communityService.opUpdateCommunity(community, new fi.koku.services.entity.community.v1.AuditInfoType());
+            } catch (ServiceFault fault) {
+              log.error("PyhDemoService.removeFamilyMember: opUpdateCommunity raised a ServiceFault", fault);
+            }
+          }
+        }
       }
     }
   }
-
+  
+  /**
+   * Creates a recipient list for confirmation request message for adding persons as family members.
+   * Then the message sending method is called or if there are no recipients then persons are added immediately.
+   */
   public void addPersonsAsFamilyMembers(HashMap<String, String> personMap) {
-
+    
+    // personMap parameter contains (personPIC, role) pairs
+    
     Set<String> keys = personMap.keySet();
     Iterator<String> si = keys.iterator();
-    Person user = getUser();
+    Person user = getPerson(userPic);
     while (si.hasNext()) {
       String ssn = si.next();
       String role = personMap.get(ssn);
-
-      Person person = model.getPerson(ssn);
-      Role r = Role.create(role);
-
-      List<String> tmp = generateRecipients(ssn, user, r);
-
-      if (Role.PARENT.equals(r) || Role.FATHER.equals(r) || Role.MOTHER.equals(r)) {
-        sendParentAdditionMessage(ssn, user, ssn, person, r);
-      } else if (tmp.size() == 0) {
-        insertInto(user.getSsn(), ssn, r);
+      
+      Person person = getPerson(ssn);
+      CommunityRole communityRole = CommunityRole.create(role);
+      
+      List<String> recipients = generateRecipients(ssn, user, communityRole);
+      
+      if (CommunityRole.PARENT.equals(communityRole) || CommunityRole.FATHER.equals(communityRole) || 
+          CommunityRole.MOTHER.equals(communityRole)) {
+        sendParentAdditionMessage(ssn, user, ssn, person, communityRole);
+      } else if (recipients.size() == 0) {
+        insertInto(userPic, ssn, communityRole);
       } else {
-        sendFamilyAdditionMessage(tmp, user, ssn, person, r);
+        sendFamilyAdditionMessage(recipients, user, ssn, person, communityRole);
       }
-
     }
   }
-
-  private void sendParentAdditionMessage(String recipient, Person user, String ssn, Person person, Role r) {
+  
+  /**
+   * TODO: service implementation
+   */
+  private void sendParentAdditionMessage(String recipient, Person user, String ssn, Person person, CommunityRole r) {
     List<String> tmp = new ArrayList<String>();
     tmp.add(recipient);
-    Message message = Message.createMessage(tmp, user.getSsn(), ssn, person.getCapFullName()
+    Message message = Message.createMessage(tmp, user.getPic(), ssn, person.getCapFullName()
         + " Uusi perheyhteystieto.", "Käyttäjä " + user.getFullName()
         + " on lisännyt sinut perheyhteisön toiseksi vanhemmaksi. "
-        + "Hyväksymällä pyynnön perheyhteisönne yhdistetään automaattisesti.", new ParentExecutable(user.getSsn(), ssn,
+        + "Hyväksymällä pyynnön perheyhteisönne yhdistetään automaattisesti.", new ParentExecutable(user.getPic(), ssn,
         r, this));
     messageService.addMessage(message);
   }
-
-  private void sendFamilyAdditionMessage(List<String> recipients, Person user, String ssn, Person person, Role r) {
-    Message message = Message.createMessage(recipients, user.getSsn(), ssn, person.getCapFullName()
+  
+  /**
+   * TODO: service implementation
+   */
+  private void sendFamilyAdditionMessage(List<String> recipients, Person user, String ssn, Person person, CommunityRole r) {
+    Message message = Message.createMessage(recipients, user.getPic(), ssn, person.getCapFullName()
         + " Uusi perheyhteystieto.", "Käyttäjä " + user.getFullName() + " on lisännyt henkilön " + person.getFullName()
         + " perheyhteisön muuksi jäseneksi. "
         + "Kaikkien opsapuolten on hyväksyttävä uuden jäsenen liittäminen perheyhteisöön.",
-        new FamilyExecutable(user.getSsn(), ssn, r, this));
+        new FamilyExecutable(user.getPic(), ssn, r, this));
     messageService.addMessage(message);
   }
-
-  private void sendDependantFamilyAdditionMessage(List<String> recipients, Person user, Person person, Role r) {
-    Message message = Message.createMessage(recipients, user.getSsn(), person.getSsn(), person.getCapFullName()
+  
+  /**
+   * TODO: service implementation
+   */
+  private void sendDependantFamilyAdditionMessage(List<String> recipients, Person user, Person person, CommunityRole r) {
+    Message message = Message.createMessage(recipients, user.getPic(), person.getPic(), person.getCapFullName()
         + " Uusi perheyhteystieto.", "Käyttäjä " + user.getFullName() + " on lisännyt henkilön " + person.getFullName()
         + " perheyhteisön muuksi jäseneksi. "
         + "Kaikkien opsapuolten on hyväksyttävä uuden jäsenen liittäminen perheyhteisöön.", new DependantExecutable(
-        user.getSsn(), person.getSsn(), r, this));
-    person.setRequestBending(true);
+        user.getPic(), person.getPic(), r, this));
+    person.setRequestPending(true);
     messageService.addMessage(message);
   }
-
-  public void insertInto(String toFamilySSN, String personSSN, Role role) {
-    Family family = getFamily(toFamilySSN);
-    Person person = model.getPerson(personSSN);
-    switch (role) {
-    case DEPENDANT:
-      addNewDependant(person);
-      break;
-    default:
-      family.addFamilyMember(new FamilyMember(person, role));
-      break;
+  
+  /**
+   * Inserts a new member into a family community.
+   */
+  public void insertInto(String toFamilyPic, String personPic, CommunityRole role) {
+    Family family = getFamily(toFamilyPic);
+    family.addFamilyMember(personPic, role.getRoleID());
+    
+    try {
+      communityService.opUpdateCommunity(family.getCommunity(), new fi.koku.services.entity.community.v1.AuditInfoType());
+    } catch (ServiceFault fault) {
+      log.error("PyhDemoService.insertInto: opUpdateCommunity raised a ServiceFault", fault);
     }
   }
-
-  public void insertParentInto(String toFamilySSN, String personSSN, Role role) {
-    Family family = getFamily(toFamilySSN);
-    Family combine = getFamily(personSSN);
-    Person person = model.getPerson(personSSN);
-
+  
+  /**
+   * Inserts a parent (from other family) into a family and then combines the two families.
+   */
+  public void insertParentInto(String toFamilyPic, String personPic, CommunityRole role) {
+    Family family = getFamily(toFamilyPic);
+    Family combine = getFamily(personPic);
+    
     family.combineFamily(combine);
-    family.addFamilyMember(new FamilyMember(person, role));
-    model.removeFamily(combine);
+    family.addFamilyMember(personPic, role.getRoleID());
+    
+    try {
+      communityService.opUpdateCommunity(family.getCommunity(), new fi.koku.services.entity.community.v1.AuditInfoType());
+    } catch (ServiceFault fault) {
+      log.error("PyhDemoService.insertParentInto: opUpdateCommunity raised a ServiceFault", fault);
+    }
+    
+    removeFamily(combine);
   }
-
-  private Family getFamily(String ssn) {
-    Iterator<Family> fi = model.getFamilies().iterator();
-    while (fi.hasNext()) {
-      Family f = fi.next();
-      if (f.isFamilyMember(ssn)) {
-        return f;
+  
+  /**
+   * Removes a family community.
+   */
+  private void removeFamily(Family family) {
+    try {
+      communityService.opDeleteCommunity(family.getCommunityId(), new fi.koku.services.entity.community.v1.AuditInfoType());
+    } catch (ServiceFault fault) {
+      log.error("PyhDemoService.removeFamily: opDeleteCommunity raised a ServiceFault", fault);
+    }
+  }
+  
+  /**
+   * Returns a family by person's PIC.
+   *
+   * TODO: miten ratkaistaan se, että tämä metodi voi palauttaa useamman kuin yhden perheen?
+   */
+  private Family getFamily(String pic) {
+    List<Family> families = new ArrayList<Family>();
+    CommunityQueryCriteriaType communityCriteria = new CommunityQueryCriteriaType();
+    // TODO: get community type from constants
+    communityCriteria.setCommunityType("family_community");
+    communityCriteria.setMemberPic(pic);
+    CommunitiesType communitiesType = null;
+    
+    try {
+      communitiesType = communityService.opQueryCommunities(communityCriteria, new fi.koku.services.entity.community.v1.AuditInfoType());
+    } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
+      log.error("PyhDemoService.getFamily: opQueryCommunities raised a ServiceFault", fault);
+    }
+    
+    if (communitiesType != null) {
+      List<CommunityType> communities = communitiesType.getCommunity();
+      Iterator<CommunityType> ci = communities.iterator();
+      while (ci.hasNext()) { 
+        CommunityType community = ci.next();
+        families.add(new Family(community));
       }
+      // TODO: families voi sisältää useamman kuin yhden perheen henkilön kuuluessa useaan perheeseen ->
+      // mikä perhe tässä tilanteessa palautetaan?
+      return families.get(0);
     }
     return null;
   }
-
-  private Family getUsersFamily() {
-    Iterator<Family> fi = model.getFamilies().iterator();
-    while (fi.hasNext()) {
-      Family f = fi.next();
-      if (f.isFamilyMember(user.getSsn())) {
-        return f;
-      }
-    }
-    return null;
-  }
-
-  private boolean isUsersDependant(String dependantSSN) {
-    List<Guardianship> guardianships = model.getGuardianships();
-    Iterator<Guardianship> gi = guardianships.iterator();
-    while (gi.hasNext()) {
-      Guardianship g = gi.next();
-      if (g.guardianshipExists(user.getSsn(), dependantSSN)) {
+  
+  /**
+   * Checks if a dependant is user's dependant.
+   */
+  private boolean isUsersDependant(String dependantPic) {
+    List<Dependant> dependants = getDependants();
+    Iterator<Dependant> di = dependants.iterator();
+    while (di.hasNext()) {
+      Dependant dependant = di.next();
+      if (dependantPic.equals(dependant.getPic())) {
         return true;
       }
     }
     return false;
   }
-
+  
 }

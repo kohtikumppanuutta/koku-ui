@@ -1,11 +1,11 @@
 <%@ include file="imports.jsp" %>
 
-<c:set var="CHILD" value="<%=com.ixonos.koku.pyh.util.Role.CHILD%>" />
-<c:set var="PARENT" value="<%=com.ixonos.koku.pyh.util.Role.PARENT%>" />
-<c:set var="MEMBER"	value="<%=com.ixonos.koku.pyh.util.Role.FAMILY_MEMBER%>" />
-<c:set var="DEPENDANT" value="<%=com.ixonos.koku.pyh.util.Role.DEPENDANT%>" />
-<c:set var="FATHER" value="<%=com.ixonos.koku.pyh.util.Role.FATHER%>" />
-<c:set var="MOTHER" value="<%=com.ixonos.koku.pyh.util.Role.MOTHER%>" />
+<c:set var="CHILD" value="<%=com.ixonos.koku.pyh.util.CommunityRole.CHILD%>" />
+<c:set var="PARENT" value="<%=com.ixonos.koku.pyh.util.CommunityRole.PARENT%>" />
+<c:set var="MEMBER"	value="<%=com.ixonos.koku.pyh.util.CommunityRole.FAMILY_MEMBER%>" />
+<c:set var="DEPENDANT" value="<%=com.ixonos.koku.pyh.util.CommunityRole.DEPENDANT%>" />
+<c:set var="FATHER" value="<%=com.ixonos.koku.pyh.util.CommunityRole.FATHER%>" />
+<c:set var="MOTHER" value="<%=com.ixonos.koku.pyh.util.CommunityRole.MOTHER%>" />
 
 <portlet:defineObjects />
 
@@ -13,9 +13,6 @@
 	<portlet:param name="action" value="addUsersToFamily" />
 </portlet:actionURL>
 
-<portlet:actionURL var="changeEmail">
-	<portlet:param name="action" value="changeEmail" />
-</portlet:actionURL>
 <portlet:renderURL var="backURL">
 	<portlet:param name="action" value="guardianFamilyInformation" />
 </portlet:renderURL>
@@ -73,7 +70,7 @@
                 <td> 
                 <span class="actions">
                         <span class="pyh-link"> <c:choose>
-		                        <c:when test="${child.requestBending}">
+		                        <c:when test="${child.requestPending}">
 		                          //nothing at the moment
 		                          Odottaa hyv‰ksynt‰‰
 		                        </c:when>

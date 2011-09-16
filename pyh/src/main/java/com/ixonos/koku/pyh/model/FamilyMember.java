@@ -1,28 +1,34 @@
 package com.ixonos.koku.pyh.model;
 
-import com.ixonos.koku.pyh.util.Role;
+import com.ixonos.koku.pyh.util.CommunityRole;
+
+import fi.koku.services.entity.community.v1.MemberType;
+import fi.koku.services.entity.customer.v1.CustomerType;
 
 public class FamilyMember extends Person {
 
-  private Role role;
-
-  public FamilyMember(Person person, Role role) {
-    super(person.getFirstname(), person.getMiddlename(), person.getSurname(), person.getSsn(), person.getBirthdate(),
-        "");
+  private CommunityRole role;
+  
+  public FamilyMember(CustomerType customer, CommunityRole role) {
+    super(customer);
     this.role = role;
   }
-
-  public Role getRole() {
+  
+  /**
+   * Returns member's role ID which is one of the following:
+   * guardian, dependant, parent, father, mother
+   */
+  public String getRoleId() {
+    return role.getRoleID();
+  }
+  
+  public CommunityRole getRole() {
     return role;
   }
-
-  public void setRole(Role role) {
-    this.role = role;
-  }
-
+  
   @Override
   public String toString() {
     return super.toString() + " FamilyMember [role=" + role + "]";
   }
-
+  
 }

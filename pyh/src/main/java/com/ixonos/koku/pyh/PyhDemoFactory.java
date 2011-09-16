@@ -11,12 +11,13 @@ import com.ixonos.koku.pyh.model.FamilyMember;
 import com.ixonos.koku.pyh.model.Guardian;
 import com.ixonos.koku.pyh.model.Guardianship;
 import com.ixonos.koku.pyh.model.Person;
-import com.ixonos.koku.pyh.util.Role;
+import com.ixonos.koku.pyh.util.CommunityRole;
 
 public class PyhDemoFactory {
 
   private static Logger log = LoggerFactory.getLogger(PyhDemoFactory.class);
 
+  /*
   public static PyhDemoModel createModel() {
 
     PyhDemoModel model = new PyhDemoModel();
@@ -52,13 +53,13 @@ public class PyhDemoFactory {
     // create families
 
     Family f1 = new Family();
-    f1.addFamilyMember(new FamilyMember(p6, Role.PARENT));
+    f1.addFamilyMember(new FamilyMember(p6, CommunityRole.PARENT));
 
     Family f3 = new Family();
-    f3.addFamilyMember(new FamilyMember(p7, Role.PARENT));
+    f3.addFamilyMember(new FamilyMember(p7, CommunityRole.PARENT));
 
     Family f2 = new Family();
-    f2.addFamilyMember(new FamilyMember(p2, Role.PARENT));
+    f2.addFamilyMember(new FamilyMember(p2, CommunityRole.PARENT));
 
     model.addFamily(f1);
     model.addFamily(f2);
@@ -82,5 +83,6 @@ public class PyhDemoFactory {
 
     return model;
   }
-
+  */
+  
 }

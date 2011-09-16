@@ -1,26 +1,26 @@
 package com.ixonos.koku.pyh.model;
 
 import com.ixonos.koku.pyh.PyhDemoService;
-import com.ixonos.koku.pyh.util.Role;
+import com.ixonos.koku.pyh.util.CommunityRole;
 
 public class ParentExecutable implements Executable {
 
-  private String userSSN;
-  private String targetSSN;
+  private String userPic;
+  private String targetPic;
   private PyhDemoService service;
-  private Role role;
+  private CommunityRole role;
 
-  public ParentExecutable(String parentSSN, String targetSSN, Role role, PyhDemoService service) {
+  public ParentExecutable(String parentPic, String targetPic, CommunityRole role, PyhDemoService service) {
     super();
-    this.userSSN = parentSSN;
-    this.targetSSN = targetSSN;
+    this.userPic = parentPic;
+    this.targetPic = targetPic;
     this.service = service;
     this.role = role;
   }
-
+  
   @Override
   public void execute() {
-    service.insertParentInto(userSSN, targetSSN, role);
+    service.insertParentInto(userPic, targetPic, role);
   }
 
 }

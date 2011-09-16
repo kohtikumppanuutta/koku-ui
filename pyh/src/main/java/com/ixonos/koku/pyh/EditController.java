@@ -39,7 +39,7 @@ public class EditController {
   @RenderMapping(params = "action=reset")
   public String naytaLuokittelu(RenderRequest req, @RequestParam(value = "note", required = false) String note,
       Model model) {
-    demoService.reset();
+    //demoService.reset();
     messageService.reset();
     if (note != null) {
       model.addAttribute("note", "Malli resetoitu");

@@ -1,9 +1,9 @@
-<%@page import="com.ixonos.koku.pyh.util.Role"%>
+<%@page import="com.ixonos.koku.pyh.util.CommunityRole"%>
 <%@ include file="imports.jsp" %>
 
 <portlet:defineObjects />
 
-<c:set var="dp" value="<%=com.ixonos.koku.pyh.util.Role.DEPENDANT%>" />
+<c:set var="dp" value="<%=com.ixonos.koku.pyh.util.CommunityRole.DEPENDANT%>" />
 
 <portlet:renderURL var="editFamilyInformation">
                             <portlet:param name="action" value="editFamilyInformation" />

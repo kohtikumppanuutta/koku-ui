@@ -2,138 +2,138 @@ package com.ixonos.koku.pyh.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ixonos.koku.pyh.util.Role;
+import com.ixonos.koku.pyh.util.CommunityRole;
+
+import fi.koku.services.entity.community.v1.CommunityType;
+import fi.koku.services.entity.community.v1.MemberType;
+import fi.koku.services.entity.community.v1.MembersType;
 
 public class Family {
 
   private static Logger log = LoggerFactory.getLogger(Family.class);
-
-  private Map<String, FamilyMember> otherFamilyMembers;
-  private Map<String, FamilyMember> childs;
-  private Map<String, FamilyMember> parents;
-
+  
+//  private Map<String, FamilyMember> otherFamilyMembers;
+//  private Map<String, FamilyMember> childs;
+//  private Map<String, FamilyMember> parents;
+  
+  private CommunityType community;
+  
   public Family() {
     // family is separated by roles (for ease of queries)
-    otherFamilyMembers = new LinkedHashMap<String, FamilyMember>();
-    childs = new LinkedHashMap<String, FamilyMember>();
-    parents = new LinkedHashMap<String, FamilyMember>();
+//    otherFamilyMembers = new LinkedHashMap<String, FamilyMember>();
+//    childs = new LinkedHashMap<String, FamilyMember>();
+//    parents = new LinkedHashMap<String, FamilyMember>();
   }
-
+  
+  /**
+   * Constructor for creating a Family from CommunityType and list of FamilyMembers
+   */
+  public Family(CommunityType community) {
+    this.community = community;
+  }
+  
+  public String getCommunityId() {
+    return community.getId();
+  }
+  
+  public String getCommunityType() {
+    return community.getType();
+  }
+  
+  public String getCommunityName() {
+    return community.getName();
+  }
+  
+  public MembersType getCommunityMembers() {
+    return community.getMembers();
+  }
+  
+  public CommunityType getCommunity() {
+    return community;
+  }
+  
   public void combineFamily(Family family) {
-    for (FamilyMember tmp : family.getAllMembers()) {
-      addFamilyMember(tmp);
+    for (MemberType member : family.getAllMembers()) {
+      addFamilyMember(member.getPic(), member.getRole());
     }
   }
-
-  public FamilyMember getOtherParent(String notWantedParentSSN) {
-    for (FamilyMember f : getParents()) {
-      if (!f.getSsn().equals(notWantedParentSSN)) {
-        return f;
+  
+  public MemberType getOtherParent(String notWantedParentPic) {
+    for (MemberType m : getParents()) {
+      if (!m.getPic().equals(notWantedParentPic)) {
+        return m;
       }
     }
     return null;
   }
+  
+  public void addFamilyMember(String memberPic, String role) {
+    MembersType membersType = community.getMembers();
+    List<MemberType> members = membersType.getMember();
+    
+    MemberType newMember = new MemberType();
+    newMember.setPic(memberPic);
+    newMember.setRole(role);
+    members.add(newMember);
+  }
+  
+//  public FamilyMember getChild(String familyMemberSSN) {
+//    return childs.get(familyMemberSSN);
+//  }
 
-  public void addFamilyMember(FamilyMember familyMember) {
+//  public FamilyMember getFamilyMember(String familyMemberSSN) {
+//
+//    if (childs.containsKey(familyMemberSSN)) {
+//      return childs.get(familyMemberSSN);
+//    }
+//
+//    if (parents.containsKey(familyMemberSSN)) {
+//      return parents.get(familyMemberSSN);
+//    }
+//    return otherFamilyMembers.get(familyMemberSSN);
+//  }
 
-    if (Role.CHILD.equals(familyMember.getRole())) {
-      childs.put(familyMember.getSsn(), familyMember);
-    } else if (Role.PARENT.equals(familyMember.getRole()) || Role.FATHER.equals(familyMember.getRole())
-        || Role.MOTHER.equals(familyMember.getRole())) {
-      parents.put(familyMember.getSsn(), familyMember);
-    } else {
-      otherFamilyMembers.put(familyMember.getSsn(), familyMember);
+//  public List<FamilyMember> getOtherFamilyMembers() {
+//    return new ArrayList<FamilyMember>(otherFamilyMembers.values());
+//  }
+
+//  public boolean isFamilyMember(String personSSN) {
+//    return parents.containsKey(personSSN) || childs.containsKey(personSSN) || otherFamilyMembers.containsKey(personSSN);
+//  }
+
+//  public List<FamilyMember> getChilds() {
+//    return new ArrayList<FamilyMember>(childs.values());
+//  }
+
+  public List<MemberType> getParents() {
+    List<MemberType> parents = new ArrayList<MemberType>();
+    MembersType membersType = community.getMembers();
+    List<MemberType> members = membersType.getMember();
+    Iterator<MemberType> mi = members.iterator();
+    while (mi.hasNext()) {
+      MemberType member = mi.next();
+      CommunityRole memberRole = CommunityRole.createFromRoleID(member.getRole());
+      if (CommunityRole.PARENT.equals(memberRole) || CommunityRole.MOTHER.equals(memberRole) || 
+          CommunityRole.FATHER.equals(memberRole)) {
+        parents.add(member);
+      }
     }
-
+    return parents;
   }
-
-  public void removeFamilyMember(FamilyMember familyMember) {
-    if (familyMember == null)
-      return;
-
-    if (Role.CHILD.equals(familyMember.getRole())) {
-      childs.remove(familyMember.getSsn());
-    } else if (Role.PARENT.equals(familyMember.getRole()) || Role.FATHER.equals(familyMember.getRole())
-        || Role.MOTHER.equals(familyMember.getRole())) {
-      parents.remove(familyMember.getSsn());
-    } else {
-      otherFamilyMembers.remove(familyMember.getSsn());
-    }
+  
+  public List<MemberType> getAllMembers() {
+    MembersType membersType = community.getMembers();
+    List<MemberType> members = membersType.getMember();
+    return members;
   }
-
-  public FamilyMember getChild(String familyMemberSSN) {
-    return childs.get(familyMemberSSN);
-  }
-
-  public FamilyMember getFamilyMember(String familyMemberSSN) {
-
-    if (childs.containsKey(familyMemberSSN)) {
-      return childs.get(familyMemberSSN);
-    }
-
-    if (parents.containsKey(familyMemberSSN)) {
-      return parents.get(familyMemberSSN);
-    }
-    return otherFamilyMembers.get(familyMemberSSN);
-  }
-
-  public List<FamilyMember> getOtherFamilyMembers() {
-    return new ArrayList<FamilyMember>(otherFamilyMembers.values());
-  }
-
-  public boolean isFamilyMember(String personSSN) {
-    return parents.containsKey(personSSN) || childs.containsKey(personSSN) || otherFamilyMembers.containsKey(personSSN);
-  }
-
-  public List<FamilyMember> getChilds() {
-    return new ArrayList<FamilyMember>(childs.values());
-  }
-
-  public List<FamilyMember> getParents() {
-    return new ArrayList<FamilyMember>(parents.values());
-  }
-
-  public List<FamilyMember> getAllMembers() {
-    List<FamilyMember> tmp = new ArrayList<FamilyMember>();
-    tmp.addAll(getParents());
-    tmp.addAll(getChilds());
-    tmp.addAll(getOtherFamilyMembers());
-    return tmp;
-  }
-
+  
   public boolean isParentsSet() {
-    // Family can have max 2 parents
-    return parents.size() >= 2;
+    return getParents().size() >= 2;
   }
-
-  public String toString() {
-    String family = "";
-
-    Iterator<FamilyMember> it = childs.values().iterator();
-    while (it.hasNext()) {
-      FamilyMember fm = it.next();
-      family += fm.getFirstname() + " " + fm.getSurname() + "; ";
-    }
-
-    Iterator<FamilyMember> ite = childs.values().iterator();
-    while (ite.hasNext()) {
-      FamilyMember fm = ite.next();
-      family += fm.getFirstname() + " " + fm.getSurname() + "; ";
-    }
-
-    Iterator<FamilyMember> i = otherFamilyMembers.values().iterator();
-    while (i.hasNext()) {
-      FamilyMember fm = i.next();
-      family += fm.getFirstname() + " " + fm.getSurname() + "; ";
-    }
-    return family;
-  }
-
+  
 }

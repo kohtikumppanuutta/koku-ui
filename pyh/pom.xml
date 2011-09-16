@@ -3,7 +3,7 @@
   <parent>
     <artifactId>koku-ui</artifactId>
     <groupId>kohti-kumppanuutta</groupId>
-    <version>0.0.1</version>
+    <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>pyh-portlet</artifactId>
   <packaging>war</packaging>
@@ -11,20 +11,23 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <dependencies>
-<!--  <dependency>
-		<groupId>org.exoplatform.portal</groupId>
-		<artifactId>exo.portal.webui.portal</artifactId>
-		<version>3.1.0-GA</version>
-		<scope>provided</scope>
-	</dependency> -->  
-
+  
+    <!--  
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+  	<artifactId>exo.portal.webui.portal</artifactId>
+  	<version>3.1.0-GA</version>
+  	<scope>provided</scope>
+    </dependency>
+    -->  
+  
     <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>customerservice-api</artifactId>
-      <version>0.0.4</version>
-    </dependency>    
-
-	<dependency>
+      <version>0.0.7</version>
+    </dependency>     
+  
+    <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>portlet-common</artifactId>
       <version>0.0.3</version>
