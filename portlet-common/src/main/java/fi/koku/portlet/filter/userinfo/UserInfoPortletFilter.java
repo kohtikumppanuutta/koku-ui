@@ -19,11 +19,7 @@ import javax.portlet.filter.RenderFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fi.arcusys.tampere.hrsoa.entity.User;
-import fi.arcusys.tampere.hrsoa.ws.ldap.LdapService;
-import fi.koku.services.common.kahva.LdapServiceFactory;
-
-import fi.koku.portlet.filter.userinfo.UserInfo;
+import fi.koku.portlet.filter.userinfo.service.UserInfoService;
 
 /**
  * @author mikkope
@@ -33,12 +29,27 @@ import fi.koku.portlet.filter.userinfo.UserInfo;
 public class UserInfoPortletFilter implements RenderFilter {
 
   private static final Logger log = LoggerFactory.getLogger(UserInfoPortletFilter.class);
+  private UserInfoService userInfoService = null;
+  
   
   public void init(FilterConfig filterConfig) {
     
     //This just an example how to get information from portlet.xml
     String implClassName = filterConfig.getInitParameter("authImplClassName");
     log.debug("Initializing portlet: authImplClassName=" + implClassName);
+
+    //Load configured class
+    try {
+      userInfoService = (UserInfoService)ClassLoader.getSystemClassLoader().loadClass(implClassName).newInstance();
+    } catch (InstantiationException e) {
+      log.error("Failed to Instantiate classname="+implClassName,e);
+    } catch (IllegalAccessException e) {
+      log.error("Failed to Instantiate. Illegal Access on classname="+implClassName,e);
+    } catch (ClassNotFoundException e) {
+      log.error("Class not found. Classname="+implClassName,e);
+    }
+    
+    
 
   }
 
@@ -70,36 +81,12 @@ public class UserInfoPortletFilter implements RenderFilter {
           
           // #TODO# Here we have to remember that Loora and Kunpo has different
           // mechanisms after VETUMAIntegration. Now impl "Loora-case"
-
-          // 1) Call Kahvaservice to get User.ssn
-          String endpoint = null;
-          try {
-            //Webservice call #TODO# Make endpoint configurable
-            endpoint = "http://localhost:8280/kahvaservice-mock-0.0.1-SNAPSHOT/KahvaServiceEndpointBean";
-            LdapServiceFactory f = new LdapServiceFactory(endpoint);
-            LdapService ws = f.getOrganizationService();
-            User userFromWS = ws.getUserById(portalUserId);
-            
-            //Create UserInfo and store it into portlet session
-            UserInfo userInfo = new UserInfo();
-            userInfo.setUid(portalUserId);
-            userInfo.setPic(userFromWS.getSsn());
-            userInfo.setFname(userFromWS.getFirstName());
-            userInfo.setSname(userFromWS.getLastName());
-            userInfo.setEmail(userFromWS.getEmail());
-            
+          UserInfo userInfo = userInfoService.getUserInfoById(portalUserId);
+          if(userInfo!=null){
             psession.setAttribute(UserInfo.KEY_USER_INFO, userInfo);
             log.debug("Following UserInfo-object is added to portlet sesssion : "+userInfo);
-            
-            // *3) Call CustomerService to get Koku-User if needed
-            
-          } catch (Exception e) {
-             log.error("Failed to get User data from external source: WS.endpoint="+endpoint);
-             //log.debug("Detailed info:",e);
-             
-             //#TODO# NOTE: Portlet filter is now only adding user info to portletsession if the data is
-             //available. Otherwise nothing is done.
-             
+          }else{
+            log.debug("userInfo=null and therefore not added to portletsession");
           }
           
         }
