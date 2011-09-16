@@ -31,7 +31,7 @@
 		<lifecycle>RENDER_PHASE</lifecycle>
 		<init-param>
 			<name>authImplClassName</name>
-			<value>jabajaba.class</value>
+			<value>fi.koku.portlet.filter.userinfo.service.impl.UserInfoServiceLocalDummyImpl</value>
 		</init-param>
 	</filter>
 	<filter-mapping>
