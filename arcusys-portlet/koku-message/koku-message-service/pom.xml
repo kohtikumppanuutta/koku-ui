@@ -128,6 +128,30 @@
 										<extraarg>-autoNameResolution</extraarg>
 									</extraargs>
 								</wsdlOption>
+								<wsdlOption>
+									<wsdl>${basedir}/src/main/wsdl/UsersAndGroupsService.wsdl</wsdl>
+									<wsdlLocation>classpath:UsersAndGroupsService.wsdl</wsdlLocation>
+									<extraargs>
+										<extraarg>-client</extraarg>
+										<extraarg>-server</extraarg>
+										<extraarg>-impl</extraarg>
+										<extraarg>-p</extraarg>
+										<extraarg>fi.arcusys.koku.user.usersandgroupsservice</extraarg>
+										<extraarg>-autoNameResolution</extraarg>
+									</extraargs>
+								</wsdlOption>
+								<wsdlOption>
+									<wsdl>${basedir}/src/main/wsdl/KokuKunpoValtakirjaService.wsdl</wsdl>
+									<wsdlLocation>classpath:KokuKunpoValtakirjaService.wsdl</wsdlLocation>
+									<extraargs>
+										<extraarg>-client</extraarg>
+										<extraarg>-server</extraarg>
+										<extraarg>-impl</extraarg>
+										<extraarg>-p</extraarg>
+										<extraarg>fi.arcusys.koku.tiva.kunpovaltakirjaservice</extraarg>
+										<extraarg>-autoNameResolution</extraarg>
+									</extraargs>
+								</wsdlOption>
 							</wsdlOptions>
 						</configuration>
 						<goals>
