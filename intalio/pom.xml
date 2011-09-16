@@ -10,7 +10,7 @@
 	<parent>
 	        <groupId>kohti-kumppanuutta</groupId>
         	<artifactId>koku-ui</artifactId>
-	        <version>0.0.1-SNAPSHOT</version>
+	        <version>0.0.1</version>
 		<!--groupId>fi.arcusys.koku.kv</groupId>
 		<artifactId>kv</artifactId>
 		<version>0.1-SNAPSHOT</version-->
