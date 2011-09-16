@@ -71,7 +71,7 @@ public class TaskHandleTest{
 		List<Task> tasklist = tester.getTasksFromServ(taskType, subQuery, first, max);
 		assertTrue("GetTasksFromServ failed", tasklist.size() > 0);
 	}
-
+	@Ignore
 	@Test
 	public void createTask() {
 		List<TaskMetadata> tasklist = new ArrayList<TaskMetadata>();
@@ -106,7 +106,7 @@ public class TaskHandleTest{
 		actual = myTask.getCreationDate();
 		assertEquals("createTask first creation date failed", expected, actual);		
 	}
-	
+	@Ignore
 	@Test
 	public void formatTaskDate() {
 		GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance();
@@ -122,7 +122,7 @@ public class TaskHandleTest{
 		String actual = tester.formatTaskDate(xmlGregorianCalendar);
 		assertEquals("formatTaskDate failed", expected, actual);
 	}
-	
+	@Ignore
 	@Test
 	public void createTaskLink() {
 		TaskMetadata task = new TaskMetadata();
@@ -157,7 +157,7 @@ public class TaskHandleTest{
 		int actual = tester.getTotalTasksNumber(taskType, keyword);
 		assertEquals("getTotalTasksNumber failed", expected, actual);
 	}
-
+	@Ignore
 	@Test
 	public void createTotalNumSubQuery() {
 		int taskType = 1;
@@ -184,7 +184,7 @@ public class TaskHandleTest{
 		actual = tester.createTotalNumSubQuery(taskType, keyword);
 		assertEquals("createTotalNumSubQuery for other invalid processes failed", expected, actual);
 	}
-
+	@Ignore
 	@Test
 	public void createTaskSubQuery() {
 		int taskType = 1;
@@ -212,7 +212,7 @@ public class TaskHandleTest{
 		actual = tester.createTaskSubQuery(taskType, keyword, orderType);
 		assertEquals("createTaskSubQuery for other invalid processes failed", expected, actual);
 	}
-
+	@Ignore
 	@Test
 	public void getOrderTypeStr() {
 		String orderType = "description_desc";
