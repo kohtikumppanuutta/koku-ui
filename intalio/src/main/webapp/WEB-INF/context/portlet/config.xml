@@ -9,8 +9,11 @@
 	
     <bean id="configuration" class="fi.arcusys.koku.palvelut.bean.Configuration" factory-method="getInstance">
     	<!-- Production env configuration   -->
-    	<property name="tokenServiceEndpoint" value="http://intalio.intra.arcusys.fi:8080/axis2/services/TokenService" />
-    	<property name="taskManagerServiceEndpoint" value="http://intalio.intra.arcusys.fi:8080/axis2/services/TaskManagementServices" />
+<!--     	<property name="tokenServiceEndpoint" value="http://intalio.intra.arcusys.fi:8080/axis2/services/TokenService" /> -->
+<!--     	<property name="taskManagerServiceEndpoint" value="http://intalio.intra.arcusys.fi:8080/axis2/services/TaskManagementServices" /> -->
+    	<property name="tokenServiceEndpoint" value="http://localhost:8080/axis2/services/TokenService" />
+    	<property name="taskManagerServiceEndpoint" value="http://localhost:8080/axis2/services/TaskManagementServices" />
+
   
     	<!-- Test env configuration
     	<property name="tokenServiceEndpoint" value="http://localhost3:8080/axis2/services/TokenService" />
@@ -20,7 +23,7 @@
 	<!-- Proxy configuration -->
   <bean id="xformsProxyConfiguration" class="fi.arcusys.koku.palvelut.proxy.ProxyConfig" factory-method="getInstance">
     	<property name="proxyFilterPath" value="/palvelut-portlet/xforms" />
-    	<property name="targetPath" value="http://intalio.intra.arcusys.fi:8080/xFormsManager" />
+    	<property name="targetPath" value="http://localhost:8080/xFormsManager" />
     	<property name="replaceMap">
 			<map>
 			  <entry>
@@ -43,7 +46,8 @@
 	
 	<bean id="ajaxformsProxyConfiguration" class="fi.arcusys.koku.palvelut.proxy.ProxyConfig" factory-method="getInstance">
     	<property name="proxyFilterPath" value="/palvelut-portlet/ajaxforms" />
-    	<property name="targetPath" value="http://intalio.intra.arcusys.fi:8080/gi" />
+<!--     	<property name="targetPath" value="http://intalio.intra.arcusys.fi:8080/gi" />    	 -->
+    	<property name="targetPath" value="http://localhost:8080/gi" />
 			<property name="storeCookies" value="true" />
     	<property name="replaceMap">
 			<map>
