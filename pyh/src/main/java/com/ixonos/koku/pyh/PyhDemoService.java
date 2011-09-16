@@ -59,11 +59,11 @@ public class PyhDemoService {
     
     // TODO: initialization with username and password
     
-    String customerServiceEndpoint = "http://localhost:8088/mockcustomerService-soap11-binding?wsdl";
+    String customerServiceEndpoint = "http://localhost:8180/customer-service-0.0.1-SNAPSHOT/CustomerServiceEndpointBean?wsdl";
     CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory("u", "p", customerServiceEndpoint);
     customerService = customerServiceFactory.getCustomerService();
     
-    String communityServiceEndpoint = "http://localhost:8088/mockcommunityService-soap11-binding?wsdl";
+    String communityServiceEndpoint = "http://localhost:8180/customer-service-0.0.1-SNAPSHOT/CommunityServiceEndpointBean?wsdl";
     CommunityServiceFactory communityServiceFactory = new CommunityServiceFactory("u", "p", communityServiceEndpoint);
     communityService = communityServiceFactory.getCommunityService();
   }
