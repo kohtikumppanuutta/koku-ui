@@ -17,6 +17,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import fi.arcusys.koku.tiva.KokuConsent;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
+import fi.arcusys.koku.users.UserIdResolver;
 import static fi.arcusys.koku.util.Constants.*;
 
 /**
@@ -26,7 +27,7 @@ import static fi.arcusys.koku.util.Constants.*;
  */
 @Controller("singleConsentController")
 @RequestMapping(value = "VIEW")
-public class ShowConsentController {
+public class ShowConsentController extends AbstractController {
 	private Logger LOG = Logger.getLogger(ShowConsentController.class);
 
 	
@@ -67,10 +68,13 @@ public class ShowConsentController {
 		
 		KokuConsent consent = null;
 		
+		PortletSession portletSession = request.getPortletSession();
+		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+		UserIdResolver resolver = new UserIdResolver();
+		String userId = resolver.getUserId(username, getPortalRole(request));
+		
 		if(taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS)) {
-			PortletSession portletSession = request.getPortletSession();
-			String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-			TivaCitizenServiceHandle handle = new TivaCitizenServiceHandle(username);
+			TivaCitizenServiceHandle handle = new TivaCitizenServiceHandle(userId);
 			handle.setMessageSource(messageSource);
 			consent = handle.getConsentById(consentId);
 		} else if(taskType.equals(TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS)) {

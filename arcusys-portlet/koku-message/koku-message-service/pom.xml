@@ -148,7 +148,19 @@
 										<extraarg>-server</extraarg>
 										<extraarg>-impl</extraarg>
 										<extraarg>-p</extraarg>
-										<extraarg>fi.arcusys.koku.tiva.kunpovaltakirjaservice</extraarg>
+										<extraarg>fi.arcusys.koku.tiva.warrant.citizenwarrantservice</extraarg>
+										<extraarg>-autoNameResolution</extraarg>
+									</extraargs>
+								</wsdlOption>
+								<wsdlOption>
+									<wsdl>${basedir}/src/main/wsdl/KokuLooraValtakirjaService.wsdl</wsdl>
+									<wsdlLocation>classpath:KokuLooraValtakirjaService.wsdl</wsdlLocation>
+									<extraargs>
+										<extraarg>-client</extraarg>
+										<extraarg>-server</extraarg>
+										<extraarg>-impl</extraarg>
+										<extraarg>-p</extraarg>
+										<extraarg>fi.arcusys.koku.tiva.warrant.employeewarrantservice</extraarg>
 										<extraarg>-autoNameResolution</extraarg>
 									</extraargs>
 								</wsdlOption>

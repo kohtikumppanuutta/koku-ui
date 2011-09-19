@@ -1,0 +1,200 @@
+<definitions name='KokuLooraValtakirjaService' targetNamespace='http://soa.tiva.koku.arcusys.fi/' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://soa.tiva.koku.arcusys.fi/' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://soa.tiva.koku.arcusys.fi/' version='1.0' xmlns:tns='http://soa.tiva.koku.arcusys.fi/' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='getAuthorizationDetails' type='tns:getAuthorizationDetails'/>
+   <xs:element name='getAuthorizationDetailsResponse' type='tns:getAuthorizationDetailsResponse'/>
+   <xs:element name='getAuthorizations' type='tns:getAuthorizations'/>
+   <xs:element name='getAuthorizationsResponse' type='tns:getAuthorizationsResponse'/>
+   <xs:element name='getTotalAuthorizations' type='tns:getTotalAuthorizations'/>
+   <xs:element name='getTotalAuthorizationsResponse' type='tns:getTotalAuthorizationsResponse'/>
+   <xs:element name='searchAuthorizationTemplates' type='tns:searchAuthorizationTemplates'/>
+   <xs:element name='searchAuthorizationTemplatesResponse' type='tns:searchAuthorizationTemplatesResponse'/>
+   <xs:complexType name='searchAuthorizationTemplates'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='searchString' type='xs:string'/>
+     <xs:element name='limit' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='searchAuthorizationTemplatesResponse'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:valtakirjapohja'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='valtakirjapohja'>
+    <xs:sequence>
+     <xs:element name='templateId' type='xs:long'/>
+     <xs:element minOccurs='0' name='templateName' type='xs:string'/>
+     <xs:element minOccurs='0' name='description' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getAuthorizations'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='query' type='tns:authorizationQuery'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='authorizationQuery'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='criteria' type='tns:authorizationCriteria'/>
+     <xs:element name='maxNum' type='xs:int'/>
+     <xs:element name='startNum' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='authorizationCriteria'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='authorizationTemplateId' type='xs:long'/>
+     <xs:element minOccurs='0' name='receipientUid' type='xs:string'/>
+     <xs:element minOccurs='0' name='senderUid' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getAuthorizationsResponse'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:authorizationShortSummary'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='authorizationShortSummary'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='authorizationId' type='xs:long'/>
+     <xs:element minOccurs='0' name='receiverUid' type='xs:string'/>
+     <xs:element minOccurs='0' name='senderUid' type='xs:string'/>
+     <xs:element minOccurs='0' name='status' type='tns:authorizationStatus'/>
+     <xs:element minOccurs='0' name='targetPersonUid' type='xs:string'/>
+     <xs:element minOccurs='0' name='template' type='tns:valtakirjapohja'/>
+     <xs:element minOccurs='0' name='validTill' type='xs:anySimpleType'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getTotalAuthorizations'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='criteria' type='tns:authorizationCriteria'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getTotalAuthorizationsResponse'>
+    <xs:sequence>
+     <xs:element name='return' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getAuthorizationDetails'>
+    <xs:sequence>
+     <xs:element name='valtakirjaId' type='xs:long'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getAuthorizationDetailsResponse'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='return' type='tns:authorizationSummary'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='authorizationSummary'>
+    <xs:complexContent>
+     <xs:extension base='tns:authorizationShortSummary'>
+      <xs:sequence>
+       <xs:element minOccurs='0' name='createdAt' type='xs:anySimpleType'/>
+       <xs:element minOccurs='0' name='givenAt' type='xs:anySimpleType'/>
+       <xs:element minOccurs='0' name='replyTill' type='xs:anySimpleType'/>
+       <xs:element minOccurs='0' name='type' type='tns:authorizationCreateType'/>
+      </xs:sequence>
+     </xs:extension>
+    </xs:complexContent>
+   </xs:complexType>
+   <xs:simpleType name='authorizationStatus'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='Open'/>
+     <xs:enumeration value='Valid'/>
+     <xs:enumeration value='Expired'/>
+     <xs:enumeration value='Revoked'/>
+     <xs:enumeration value='Declined'/>
+    </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name='authorizationCreateType'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='Electronic'/>
+     <xs:enumeration value='Non_Electronic'/>
+    </xs:restriction>
+   </xs:simpleType>
+  </xs:schema>
+ </types>
+ <message name='KokuLooraValtakirjaService_searchAuthorizationTemplatesResponse'>
+  <part element='tns:searchAuthorizationTemplatesResponse' name='searchAuthorizationTemplatesResponse'></part>
+ </message>
+ <message name='KokuLooraValtakirjaService_getTotalAuthorizations'>
+  <part element='tns:getTotalAuthorizations' name='getTotalAuthorizations'></part>
+ </message>
+ <message name='KokuLooraValtakirjaService_getAuthorizations'>
+  <part element='tns:getAuthorizations' name='getAuthorizations'></part>
+ </message>
+ <message name='KokuLooraValtakirjaService_getAuthorizationDetailsResponse'>
+  <part element='tns:getAuthorizationDetailsResponse' name='getAuthorizationDetailsResponse'></part>
+ </message>
+ <message name='KokuLooraValtakirjaService_getTotalAuthorizationsResponse'>
+  <part element='tns:getTotalAuthorizationsResponse' name='getTotalAuthorizationsResponse'></part>
+ </message>
+ <message name='KokuLooraValtakirjaService_getAuthorizationsResponse'>
+  <part element='tns:getAuthorizationsResponse' name='getAuthorizationsResponse'></part>
+ </message>
+ <message name='KokuLooraValtakirjaService_getAuthorizationDetails'>
+  <part element='tns:getAuthorizationDetails' name='getAuthorizationDetails'></part>
+ </message>
+ <message name='KokuLooraValtakirjaService_searchAuthorizationTemplates'>
+  <part element='tns:searchAuthorizationTemplates' name='searchAuthorizationTemplates'></part>
+ </message>
+ <portType name='KokuLooraValtakirjaService'>
+  <operation name='getAuthorizationDetails' parameterOrder='getAuthorizationDetails'>
+   <input message='tns:KokuLooraValtakirjaService_getAuthorizationDetails'></input>
+   <output message='tns:KokuLooraValtakirjaService_getAuthorizationDetailsResponse'></output>
+  </operation>
+  <operation name='getAuthorizations' parameterOrder='getAuthorizations'>
+   <input message='tns:KokuLooraValtakirjaService_getAuthorizations'></input>
+   <output message='tns:KokuLooraValtakirjaService_getAuthorizationsResponse'></output>
+  </operation>
+  <operation name='getTotalAuthorizations' parameterOrder='getTotalAuthorizations'>
+   <input message='tns:KokuLooraValtakirjaService_getTotalAuthorizations'></input>
+   <output message='tns:KokuLooraValtakirjaService_getTotalAuthorizationsResponse'></output>
+  </operation>
+  <operation name='searchAuthorizationTemplates' parameterOrder='searchAuthorizationTemplates'>
+   <input message='tns:KokuLooraValtakirjaService_searchAuthorizationTemplates'></input>
+   <output message='tns:KokuLooraValtakirjaService_searchAuthorizationTemplatesResponse'></output>
+  </operation>
+ </portType>
+ <binding name='KokuLooraValtakirjaServiceBinding' type='tns:KokuLooraValtakirjaService'>
+  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='getAuthorizationDetails'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getAuthorizations'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getTotalAuthorizations'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='searchAuthorizationTemplates'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='KokuLooraValtakirjaService'>
+  <port binding='tns:KokuLooraValtakirjaServiceBinding' name='KokuLooraValtakirjaServicePort'>
+   <soap:address location='http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuLooraValtakirjaServiceImpl'/>
+  </port>
+ </service>
+</definitions>

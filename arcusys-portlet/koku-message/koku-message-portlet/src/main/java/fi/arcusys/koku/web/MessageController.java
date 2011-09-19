@@ -105,7 +105,6 @@ public class MessageController {
 				PortletSession portletSession = request.getPortletSession();
 				portletSession.setAttribute(ATTR_USERNAME, userid);
 			}
-
 		} catch (Exception e) {
 			logger.error("Exception when getting user id");
 		}

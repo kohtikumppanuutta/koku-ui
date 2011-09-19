@@ -33,6 +33,8 @@ import fi.arcusys.koku.tiva.KokuConsent;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
 import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
+import fi.arcusys.koku.users.UserIdResolver;
+import fi.arcusys.koku.util.PortalRole;
 import static fi.arcusys.koku.util.Constants.*;
 
 /**
@@ -43,15 +45,14 @@ import static fi.arcusys.koku.util.Constants.*;
 
 @Controller("ajaxController")
 @RequestMapping(value = "VIEW")
-public class AjaxController {
-	
+public class AjaxController extends AbstractController {
 	
 	private static final String TASKS = "tasks";
 	
 	@Resource
 	private ResourceBundleMessageSource messageSource;
 
-	private Logger logger = Logger.getLogger(AjaxController.class);
+	private static Logger LOG = Logger.getLogger(AjaxController.class);
 	
 	/**
 	 * Handles portlet ajax request of tasks such as messages, requests,
@@ -75,7 +76,9 @@ public class AjaxController {
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		JSONObject jsonModel = getJsonModel(taskType, page, keyword, field, orderType, username);
+		UserIdResolver resolver = new UserIdResolver();
+		String userId = resolver.getUserId(username, getPortalRole(request));
+		JSONObject jsonModel = getJsonModel(taskType, page, keyword, field, orderType, userId);
 		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
@@ -146,7 +149,11 @@ public class AjaxController {
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle(username);		
+		UserIdResolver resolver = new UserIdResolver();
+		String userId = resolver.getUserId(username, getPortalRole(request));
+
+		PortalRole role = getPortalRole(request);
+		TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle(userId);		
 		
 		for(String consentId : messageList) {
 			tivaHandle.revokeOwnConsent(consentId);
@@ -158,6 +165,7 @@ public class AjaxController {
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
+	
 	
 	/**
 	 * Cancels appointments
@@ -176,10 +184,15 @@ public class AjaxController {
 			@RequestParam(value = "taskType") String taskType,
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		
+		
+		PortletSession portletSession = request.getPortletSession();				
+		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+		UserIdResolver resolver = new UserIdResolver();
+		String userId = resolver.getUserId(username, getPortalRole(request));
+
+		
 		if(taskType.endsWith("citizen")) {
-			PortletSession portletSession = request.getPortletSession();				
-			String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-			AvCitizenServiceHandle handle = new AvCitizenServiceHandle(username);
+			AvCitizenServiceHandle handle = new AvCitizenServiceHandle(userId);
 			String appointmentId;
 			String targetPerson;
 			
@@ -226,31 +239,30 @@ public class AjaxController {
 	 * @param keyword keyword for filtering
 	 * @param field field for filtering
 	 * @param orderType order of tasks
-	 * @param username the user to which the tasks belong 
+	 * @param userId the user to which the tasks belong 
 	 * @return task information in Json format
 	 */
-	public JSONObject getJsonModel(String taskType, int page, String keyword, String field, String orderType, String username) {
+	public JSONObject getJsonModel(String taskType, int page, String keyword, String field, String orderType, String userId) {
 		JSONObject jsonModel = new JSONObject();
 		
-		logger.debug("Ajax call");
+		LOG.debug("Ajax call");
 		
-		if(username == null) {
+		if(userId == null) {
 			jsonModel.put("loginStatus", "INVALID");
-			logger.info("No logged in user");
-		}else {
+			LOG.info("No logged in user");
+		} else {
 			
 			int numPerPage = PAGE_NUMBER;
 			int totalTasksNum = 0;
-			int totalPages;
-			
+			int totalPages;			
 			int first = (page-1)*numPerPage + 1; // the start index of task
 			int max =  page*numPerPage; // max amount of tasks
 			
 			if(taskType.equals(TASK_TYPE_REQUEST_VALID_EMPLOYEE)) { // for request (Pyynnöt) - employee Avoimet
 				List<KokuRequest> msgs;
 				RequestHandle reqHandle = new RequestHandle();
-				msgs = reqHandle.getRequests(username, "valid", "", first, max);
-				totalTasksNum = reqHandle.getTotalRequestsNum(username, "valid");
+				msgs = reqHandle.getRequests(userId, "valid", "", first, max);
+				totalTasksNum = reqHandle.getTotalRequestsNum(userId, "valid");
 				jsonModel.put(TASKS, msgs);
 			} else if(taskType.startsWith("app")) { // for appointment (Tapaamiset)
 				
@@ -258,15 +270,15 @@ public class AjaxController {
 					List<KokuAppointment> apps;
 					AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
 					handle.setMessageSource(messageSource);
-					apps = handle.getAppointments(username, first, max, taskType);
-					totalTasksNum = handle.getTotalAppointmentsNum(username, taskType);
+					apps = handle.getAppointments(userId, first, max, taskType);
+					totalTasksNum = handle.getTotalAppointmentsNum(userId, taskType);
 					jsonModel.put(TASKS, apps);
 				}else if(taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE) || taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE)) { // Avoimet / Valmiit
 					List<KokuAppointment> apps;
 					AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
 					handle.setMessageSource(messageSource);
-					apps = handle.getAppointments(username, first, max, taskType);
-					totalTasksNum = handle.getTotalAppointmentsNum(username, taskType);
+					apps = handle.getAppointments(userId, first, max, taskType);
+					totalTasksNum = handle.getTotalAppointmentsNum(userId, taskType);
 					jsonModel.put(TASKS, apps);
 				}			
 				
@@ -275,41 +287,41 @@ public class AjaxController {
 				if (taskType.equals(TASK_TYPE_CONSENT_ASSIGNED_CITIZEN)) { // Kansalaiselle saapuneet pyynnöt(/suostumukset) 
 					TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
 					tivaHandle.setMessageSource(messageSource);
-					csts = tivaHandle.getAssignedConsents(username, first, max);
-					totalTasksNum = tivaHandle.getTotalAssignedConsents(username);
+					csts = tivaHandle.getAssignedConsents(userId, first, max);
+					totalTasksNum = tivaHandle.getTotalAssignedConsents(userId);
 					jsonModel.put(TASKS, csts);
 				} else if(taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS)) { // Kansalaiselle vastatut pyynnöt(/suostumukset) 
 					TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
 					tivaHandle.setMessageSource(messageSource);
-					csts = tivaHandle.getOwnConsents(username, first, max);
-					totalTasksNum = tivaHandle.getTotalOwnConsents(username);
+					csts = tivaHandle.getOwnConsents(userId, first, max);
+					totalTasksNum = tivaHandle.getTotalOwnConsents(userId);
 					jsonModel.put(TASKS, csts);
 				} else if(taskType.equals(TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS)) { // Virkailijan lähetetyt suostumus pyynnöt
 					TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
 					tivaHandle.setMessageSource(messageSource);
-					csts = tivaHandle.getConsents(username, keyword, field, first, max);
-					totalTasksNum = tivaHandle.getTotalConsents(username, keyword, field);
+					csts = tivaHandle.getConsents(userId, keyword, field, first, max);
+					totalTasksNum = tivaHandle.getTotalConsents(userId, keyword, field);
 					jsonModel.put(TASKS, csts);
 				} else if(taskType.equals(TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS)) {	// Selaa asiakkaan/asian valtakirjoja TIVA-13
 					TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
 					tivaHandle.setMessageSource(messageSource);
 					// FIXME: This should change when we get proper methods from WS
-					csts = tivaHandle.getConsents(username, keyword, field, first, max);
-					totalTasksNum = tivaHandle.getTotalConsents(username, keyword, field);
+					csts = tivaHandle.getConsents(userId, keyword, field, first, max);
+					totalTasksNum = tivaHandle.getTotalConsents(userId, keyword, field);
 					jsonModel.put(TASKS, csts);
 				} else if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_FROM_USER)) {	// Kuntalainen: Valtuuttajana TIVA-11
 					TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
 					tivaHandle.setMessageSource(messageSource);
 					// FIXME: This should change when we get proper methods from WS
-					csts = tivaHandle.getConsents(username, keyword, field, first, max);
-					totalTasksNum = tivaHandle.getTotalConsents(username, keyword, field);
+					csts = tivaHandle.getConsents(userId, keyword, field, first, max);
+					totalTasksNum = tivaHandle.getTotalConsents(userId, keyword, field);
 					jsonModel.put(TASKS, csts);
 				} else if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_TO_USER)) {	// Kuntalainen: Valtuutettuna TIVA-11
 					TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
 					tivaHandle.setMessageSource(messageSource);
 					// FIXME: This should change when we get proper methods from WS
-					csts = tivaHandle.getConsents(username, keyword, field, first, max);
-					totalTasksNum = tivaHandle.getTotalConsents(username, keyword, field);
+					csts = tivaHandle.getConsents(userId, keyword, field, first, max);
+					totalTasksNum = tivaHandle.getTotalConsents(userId, keyword, field);
 					jsonModel.put(TASKS, csts);
 				}
 				
@@ -317,8 +329,8 @@ public class AjaxController {
 				MessageHandle msgHandle = new MessageHandle();
 				msgHandle.setMessageSource(messageSource);
 				List<Message> msgs;
-				msgs = msgHandle.getMessages(username, taskType, keyword, field, orderType, first, max);			
-				totalTasksNum = msgHandle.getTotalMessageNum(username, taskType, keyword, field);
+				msgs = msgHandle.getMessages(userId, taskType, keyword, field, orderType, first, max);			
+				totalTasksNum = msgHandle.getTotalMessageNum(userId, taskType, keyword, field);
 				jsonModel.put(TASKS, msgs);
 			}
 			
@@ -361,7 +373,7 @@ public class AjaxController {
 		try {
 			renderUrlObj.setWindowState(WindowState.NORMAL);
 		} catch (WindowStateException e) {
-			logger.error("Create message render url failed");
+			LOG.error("Create message render url failed");
 		}
 		String renderUrlString = renderUrlObj.toString();
 		
@@ -403,7 +415,7 @@ public class AjaxController {
 		try {
 			renderUrlObj.setWindowState(WindowState.NORMAL);
 		} catch (WindowStateException e) {
-			logger.error("Create request render url failed");
+			LOG.error("Create request render url failed");
 		}
 		String renderUrlString = renderUrlObj.toString();
 		
@@ -448,7 +460,7 @@ public class AjaxController {
 		try {
 			renderUrlObj.setWindowState(WindowState.NORMAL);
 		} catch (WindowStateException e) {
-			logger.error("Create appointment render url failed");
+			LOG.error("Create appointment render url failed");
 		}
 		String renderUrlString = renderUrlObj.toString();
 		
@@ -492,7 +504,7 @@ public class AjaxController {
 		try {
 			renderUrlObj.setWindowState(WindowState.NORMAL);
 		} catch (WindowStateException e) {
-			logger.error("Create consent render url failed");
+			LOG.error("Create consent render url failed");
 		}
 		String renderUrlString = renderUrlObj.toString();
 		
