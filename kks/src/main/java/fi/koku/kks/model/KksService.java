@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import fi.koku.kks.ui.common.KksConverter;
@@ -41,6 +43,8 @@ import fi.koku.services.entity.kks.v1.ServiceFault;
  */
 @Service(value = "kksService")
 public class KksService {
+
+  private static final Logger LOG = LoggerFactory.getLogger(KksService.class);
 
   String endPoint = "http://localhost:8180/";
   private KKSDemoModel malli;
@@ -99,7 +103,7 @@ public class KksService {
       }
 
     } catch (ServiceFault e) {
-      e.printStackTrace();
+      LOG.error("Failed to get KKS collections", e);
     }
     return tmp;
   }
@@ -110,7 +114,7 @@ public class KksService {
       KksCollectionType kks = kksService.opGetKksCollection(collectionId, audit);
       return converter.fromWsType(kks, true);
     } catch (ServiceFault e) {
-      e.printStackTrace();
+      LOG.error("Failed to get KKS collection " + collectionId, e);
     }
     return null;
   }
@@ -118,11 +122,13 @@ public class KksService {
   public boolean updateKksCollection(KKSCollection collection, String customer) {
     try {
       KksServicePortType kksService = kf.getKksService();
-      return kksService.opUpdateKksCollection(converter.toWsType(collection, customer), audit);
+      kksService.opUpdateKksCollection(converter.toWsType(collection, customer), audit);
     } catch (ServiceFault e) {
       e.printStackTrace();
+      LOG.error("Failed to update KKS collection " + collection.getId(), e);
+      return false;
     }
-    return false;
+    return true;
   }
 
   public boolean updateKksCollectionStatus(String collectionId, String status) {
@@ -131,14 +137,14 @@ public class KksService {
       KksCollectionStateCriteriaType state = new KksCollectionStateCriteriaType();
       state.setCollectionId(collectionId);
       state.setState(status);
-      return kksService.opUpdateKksCollectionStatus(state, audit);
+      kksService.opUpdateKksCollectionStatus(state, audit);
     } catch (ServiceFault e) {
-      e.printStackTrace();
+      LOG.error("Failed to update KKS collection status " + collectionId + " : " + status, e);
     }
-    return false;
+    return true;
   }
 
-  public KKSCollection createKksCollection(String name, String type, String customer) {
+  public String createKksCollection(String name, String type, String customer) {
     try {
       KksServicePortType kksService = kf.getKksService();
       KksCollectionCreationCriteriaType kksCollectionCreationCriteria = new KksCollectionCreationCriteriaType();
@@ -146,14 +152,14 @@ public class KksService {
       kksCollectionCreationCriteria.setPic(customer);
       kksCollectionCreationCriteria.setCollectionTypeId(type);
       kksCollectionCreationCriteria.setKksScope("new");
-      return converter.fromWsType(kksService.opAddKksCollection(kksCollectionCreationCriteria, audit), false);
+      return kksService.opAddKksCollection(kksCollectionCreationCriteria, audit).getId();
     } catch (ServiceFault e) {
-      e.printStackTrace();
+      LOG.error("Failed to create KKS collection " + name, e);
     }
     return null;
   }
 
-  public KKSCollection createKksCollectionVersion(String name, String type, String customer, boolean empty) {
+  public String createKksCollectionVersion(String name, String type, String customer, boolean empty) {
     try {
       KksServicePortType kksService = kf.getKksService();
       KksCollectionCreationCriteriaType kksCollectionCreationCriteria = new KksCollectionCreationCriteriaType();
@@ -167,9 +173,9 @@ public class KksService {
         kksCollectionCreationCriteria.setKksScope("version");
       }
 
-      return converter.fromWsType(kksService.opAddKksCollection(kksCollectionCreationCriteria, audit), false);
+      return kksService.opAddKksCollection(kksCollectionCreationCriteria, audit).getId();
     } catch (ServiceFault e) {
-      e.printStackTrace();
+      LOG.error("Failed to create KKS collection version " + name + " type: " + type, e);
     }
     return null;
   }
@@ -191,12 +197,12 @@ public class KksService {
       }
 
     } catch (ServiceFault e) {
-      e.printStackTrace();
+      LOG.error("Failed to search KKS collections", e);
     }
     return tmp;
   }
 
-  public boolean addKksEntry(String customer, String entryId, String valueId, String value) {
+  public String addKksEntry(String customer, String entryId, String valueId, String value) {
     try {
       KksServicePortType kksService = kf.getKksService();
 
@@ -208,11 +214,11 @@ public class KksService {
       evt.setValue(value);
       criteria.setValue(evt);
 
-      return kksService.opAddEntry(criteria, audit);
+      return kksService.opAddEntry(criteria, audit).getId();
     } catch (ServiceFault e) {
-      e.printStackTrace();
+      LOG.error("Failed to add KKS entry " + entryId, e);
     }
-    return false;
+    return null;
   }
 
   public boolean removeKksEntry(String customer, String entryId, String valueId, String value) {
@@ -227,11 +233,12 @@ public class KksService {
       evt.setValue(value);
       criteria.setValue(evt);
 
-      return kksService.opDeleteEntry(criteria, audit);
+      kksService.opDeleteEntry(criteria, audit);
     } catch (ServiceFault e) {
-      e.printStackTrace();
+      LOG.error("Failed to remove KKS entry " + entryId, e);
+      return false;
     }
-    return false;
+    return true;
   }
 
   private void collectMetadata() {
@@ -258,7 +265,7 @@ public class KksService {
       }
 
     } catch (ServiceFault e) {
-      e.printStackTrace();
+      LOG.error("Failed to collect KKS metadata ", e);
     }
   }
 

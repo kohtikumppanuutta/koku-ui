@@ -43,11 +43,11 @@ public class CreateCollectionController {
 
     LOG.debug("create new version");
 
-    KKSCollection collection = kksService.createKksCollectionVersion(name, id, child.getPic(), Boolean.valueOf(clean));
+    String collection = kksService.createKksCollectionVersion(name, id, child.getPic(), Boolean.valueOf(clean));
 
     response.setRenderParameter("action", "showCollection");
     response.setRenderParameter("pic", child.getPic());
-    response.setRenderParameter("collection", collection.getId());
+    response.setRenderParameter("collection", collection);
 
     sessionStatus.setComplete();
   }
@@ -61,7 +61,7 @@ public class CreateCollectionController {
 
     Creatable a = Creatable.create(creation.getField());
     String name = "".equals(creation.getName()) ? a.getName() : creation.getName();
-    KKSCollection collection = kksService.createKksCollection(name, a.getId(), child.getPic());
+    String collection = kksService.createKksCollection(name, a.getId(), child.getPic());
 
     response.setRenderParameter("action", "showChild");
     response.setRenderParameter("pic", child.getPic());
