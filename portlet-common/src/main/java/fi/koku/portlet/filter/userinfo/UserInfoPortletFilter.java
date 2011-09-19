@@ -40,7 +40,7 @@ public class UserInfoPortletFilter implements RenderFilter {
 
     //Load configured class
     try {
-      userInfoService = (UserInfoService)ClassLoader.getSystemClassLoader().loadClass(implClassName).newInstance();
+      userInfoService = (UserInfoService)Class.forName(implClassName).newInstance();
     } catch (InstantiationException e) {
       log.error("Failed to Instantiate classname="+implClassName,e);
     } catch (IllegalAccessException e) {
@@ -54,7 +54,7 @@ public class UserInfoPortletFilter implements RenderFilter {
   }
 
   public void doFilter(RenderRequest request, RenderResponse response, FilterChain filterChain) {
-    log.debug("Entered PYH userinfo filter");
+    log.debug("Entered UserInfo filter");
 
     //Allow filter chaining
     doFilterChaining(request, response, filterChain);
