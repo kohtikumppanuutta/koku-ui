@@ -44,8 +44,11 @@ public class AjaxController extends AbstractController {
 	@ResourceMapping(value = "update")
 	public String showAjax(ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		String username = request.getRemoteUser();
-		UserIdResolver resolver = new UserIdResolver();
-		String userId = resolver.getUserId(username, getPortalRole(request));
+		String userId = null;
+		if (username != null) {
+			UserIdResolver resolver = new UserIdResolver();
+			userId = resolver.getUserId(username, getPortalRole(request));			
+		}
 		JSONObject jsonModel = getJsonModel(userId);
 		modelmap.addAttribute("response", jsonModel);
 		
