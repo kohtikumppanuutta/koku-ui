@@ -141,8 +141,8 @@
 									</extraargs>
 								</wsdlOption>
 								<wsdlOption>
-									<wsdl>${basedir}/src/main/wsdl/KokuKunpoValtakirjaService.wsdl</wsdl>
-									<wsdlLocation>classpath:KokuKunpoValtakirjaService.wsdl</wsdlLocation>
+									<wsdl>${basedir}/src/main/wsdl/KokuKunpoValtakirjaServiceImpl.wsdl</wsdl>
+									<wsdlLocation>classpath:KokuKunpoValtakirjaServiceImpl.wsdl</wsdlLocation>
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-server</extraarg>
@@ -153,8 +153,8 @@
 									</extraargs>
 								</wsdlOption>
 								<wsdlOption>
-									<wsdl>${basedir}/src/main/wsdl/KokuLooraValtakirjaService.wsdl</wsdl>
-									<wsdlLocation>classpath:KokuLooraValtakirjaService.wsdl</wsdlLocation>
+									<wsdl>${basedir}/src/main/wsdl/KokuLooraValtakirjaServiceImpl.wsdl</wsdl>
+									<wsdlLocation>classpath:KokuLooraValtakirjaServiceImpl.wsdl</wsdlLocation>
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-server</extraarg>
