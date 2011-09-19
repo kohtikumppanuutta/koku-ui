@@ -381,7 +381,6 @@
 			return showErrorMsgNoConsents();
 		}
 		var columnNames = ["<spring:message code="message.choose"/>",
-		                   "<spring:message code="consent.requester"/>",
 		                   "<spring:message code="consent.templateName"/>",
 		                   "<spring:message code="consent.status"/>",
 		                   "<spring:message code="consent.approvalStatus"/>",
@@ -390,14 +389,14 @@
 		                   "<spring:message code="consent.validDate"/>"
 		                  ];
 		
-		var columnIds = ["requester",
+		var columnIds = [
 		                 "templateName",
 		                 "status",
 		                 "approvalStatus",
 		                 "createType",
 		                 "assignedDate",
 		                 "validDate"];
-		return createTable("noFunction", columnNames, columnIds, tasks);
+		return createTable("noFunction", "createBrowseWarrantsToMe" , columnNames, columnIds, tasks);
 	}
 	
 	function createBrowseWarrantsFromMe(tasks) {
@@ -406,26 +405,27 @@
 		}
 		
 		var columnNames = ["<spring:message code="message.choose"/>",
-		                   "<spring:message code="consent.requester"/>",
 		                   "<spring:message code="consent.templateName"/>",
 		                   "<spring:message code="consent.status"/>",
 		                   "<spring:message code="consent.approvalStatus"/>",
 		                   "<spring:message code="consent.createType"/>",
 		                   "<spring:message code="consent.givenDate"/>",
+		                   "<spring:message code="consent.accepted"/>",
 		                   "<spring:message code="consent.validDate"/>",
 		                   "<spring:message code="consent.edit"/>"
 		                  ];
 		
-		var columnIds = ["requester",
+		var columnIds = [
 		                 "templateName",
 		                 "status",
 		                 "approvalStatus",
 		                 "createType",
 		                 "assignedDate",
+		                 "acceptedDate",
 		                 "validDate",
 		                 "editLink"];
 		createEditConsentColumn(tasks);
-		return createTable("noFunction", columnNames, columnIds, tasks);
+		return createTable("noFunction", "createBrowseWarrantsFromMe", columnNames, columnIds, tasks);
 	}
 	
 	function createEditConsentColumn(tasks) {
@@ -434,10 +434,7 @@
 			tasks[i]["editLink"] = "<a href="+ url+ "><spring:message code="consent.edit"/></a>";
 		}
 	}
-	
-	function showErrorMsgNoConsents() {
-		return "<div class='errorMsg noConsents'><spring:message code="consent.errorMsg.noWarrants"/></div>";
-	}
+
 		
 	function createBrowseEmployeeOwnConsents(tasks) {
 		if (tasks == undefined || tasks == null || tasks.length == 0) {
@@ -461,7 +458,7 @@
 		                 "createType",
 		                 "assignedDate",
 		                 "validDate"];
-		return createTable("showConsent", columnNames, columnIds, tasks);
+		return createTable("showConsent", "createBrowseEmployeeOwnConsents", columnNames, columnIds, tasks);
 	}
 	
 	
@@ -480,21 +477,25 @@
 		                 "requester",
 		                 "assignedDate",
 		                 "validDate"];
-		return createTable("showConsent", columnNames, columnIds, tasks);
+		return createTable("showConsent", "browseUserConsentsTable", columnNames, columnIds, tasks);
 	}
 	
+	function showErrorMsgNoConsents() {
+		return "<div class='errorMsg noConsents'><spring:message code="consent.errorMsg.noWarrants"/></div>";
+	}
 	
 	/**
 	 * General use table generator
 	 *  
 	 * @param {string} jsFunctionName
+	 * @param {string} styleName for table
 	 * @param Array[String] columnNames (for spring)
 	 * @param Array[String] columnIds. ColumnIds.length < columnNames.length
 	 * @param {object} tasks
 	 */
-	function createTable(jsFunctionName, columnNames, columnIds, tasks) {
+	function createTable(jsFunctionName, tableStyleName, columnNames, columnIds, tasks) {
 		var taskHtml = "";		
-		taskHtml = '<table class="task-manager-table">'
+		taskHtml = "<table class='task-manager-table "+ tableStyleName + "'>"
 				+ '<tr class="task-manager-table trheader">';
 								
 		for (var i = 0; i < columnNames.length; i++)  {
