@@ -12,7 +12,7 @@ import fi.arcusys.koku.user.usersandgroupsservice.UsersAndGroupsService_Service;
  */
 public class KokuUserService {
 	
-	public final URL USER_SERVICE_WSDL_LOCATION = getClass().getClassLoader().getResource("UserAndGroupsService.wsdl");
+	public final URL USER_SERVICE_WSDL_LOCATION = getClass().getClassLoader().getResource("UsersAndGroupsServiceImpl.wsdl");
 	private UsersAndGroupsService_Service service;
 	
 	/**

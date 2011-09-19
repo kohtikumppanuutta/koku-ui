@@ -18,6 +18,9 @@ public class UserIdResolver {
 	 */
 	public String getUserId(String username, PortalRole role) {
 		String userId = null;
+		if (username == null) {
+			return null;
+		}
 	
 		switch (role) {
 		case CITIZEN:

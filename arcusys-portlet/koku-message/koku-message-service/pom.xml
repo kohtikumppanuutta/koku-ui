@@ -129,8 +129,8 @@
 									</extraargs>
 								</wsdlOption>
 								<wsdlOption>
-									<wsdl>${basedir}/src/main/wsdl/UsersAndGroupsService.wsdl</wsdl>
-									<wsdlLocation>classpath:UsersAndGroupsService.wsdl</wsdlLocation>
+									<wsdl>${basedir}/src/main/wsdl/UsersAndGroupsServiceImpl.wsdl</wsdl>
+									<wsdlLocation>classpath:UsersAndGroupsServiceImpl.wsdl</wsdlLocation>
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-server</extraarg>
