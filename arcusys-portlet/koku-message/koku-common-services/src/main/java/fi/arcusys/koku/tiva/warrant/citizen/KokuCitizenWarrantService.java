@@ -1,19 +1,19 @@
-package fi.arcusys.koku.tiva.warrant;
+package fi.arcusys.koku.tiva.warrant.citizen;
 
 import java.net.URL;
 import java.util.List;
 
-import fi.arcusys.koku.tiva.kunpovaltakirjaservice.AuthorizationShortSummary;
-import fi.arcusys.koku.tiva.kunpovaltakirjaservice.AuthorizationSummary;
-import fi.arcusys.koku.tiva.kunpovaltakirjaservice.KokuKunpoValtakirjaService_Service;
+import fi.arcusys.koku.tiva.warrant.citizenwarrantservice.AuthorizationShortSummary;
+import fi.arcusys.koku.tiva.warrant.citizenwarrantservice.AuthorizationSummary;
+import fi.arcusys.koku.tiva.warrant.citizenwarrantservice.KokuKunpoValtakirjaService_Service;
 
-public class KokuWarrantService {
+public class KokuCitizenWarrantService {
 	
 	public final URL WARRANT_SERVICE_WSDL_LOCATION = getClass().getClassLoader().getResource("KokuKunpoValtakirjaService.wsdl");
 	private KokuKunpoValtakirjaService_Service service;
 	
 	
-	public KokuWarrantService() {
+	public KokuCitizenWarrantService() {
 		service = new KokuKunpoValtakirjaService_Service(WARRANT_SERVICE_WSDL_LOCATION);
 	}
 	

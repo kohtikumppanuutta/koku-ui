@@ -4,6 +4,12 @@ import java.net.URL;
 
 import fi.arcusys.koku.user.usersandgroupsservice.UsersAndGroupsService_Service;
 
+/**
+ * Retrieves userId by given portal username
+ * 
+ * @author Toni Turunen
+ *
+ */
 public class KokuUserService {
 	
 	public final URL USER_SERVICE_WSDL_LOCATION = getClass().getClassLoader().getResource("UserAndGroupsService.wsdl");

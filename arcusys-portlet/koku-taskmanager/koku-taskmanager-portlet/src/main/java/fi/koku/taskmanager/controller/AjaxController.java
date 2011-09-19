@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import fi.arcusys.koku.users.UserIdResolver;
 import fi.koku.taskmanager.model.Task;
 import fi.koku.taskmanager.model.TaskHandle;
 import fi.koku.taskmanager.util.TaskUtil;
@@ -32,11 +33,11 @@ import static fi.arcusys.koku.util.Constants.*;
  */
 @Controller("ajaxController")
 @RequestMapping(value = "VIEW")
-public class AjaxController {
+public class AjaxController extends AbstractController {
 	
+	private static Logger logger = Logger.getLogger(AjaxController.class);
 	private static final String RESPONSE 		= "response";
 
-	Logger logger = Logger.getLogger(AjaxController.class);
 	/**
 	 * Shows ajax for retrieving intalio tasks
 	 * @param page page id
@@ -58,6 +59,7 @@ public class AjaxController {
 		PortletSession portletSession = request.getPortletSession();				
 		String token = (String) portletSession.getAttribute(ATTR_TOKEN);
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+
 		int taskType = getTaskType(taskTypeStr);
 		JSONObject jsonModel = getJsonModel(taskType, page, keyword, orderType, token, username);
 				

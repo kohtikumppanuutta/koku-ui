@@ -8,7 +8,9 @@ import fi.arcusys.koku.AbstractHandle;
 import fi.arcusys.koku.kv.requestservice.Request;
 import fi.arcusys.koku.kv.requestservice.RequestSummary;
 import fi.arcusys.koku.kv.requestservice.RequestType;
+import fi.arcusys.koku.users.KokuUserService;
 import fi.arcusys.koku.util.MessageUtil;
+import fi.arcusys.koku.util.PortalRole;
 
 /**
  * Handles request related operations
@@ -35,7 +37,7 @@ public class RequestHandle extends AbstractHandle {
 	 * @param maxNum maximum number of requests
 	 * @return a list of requests
 	 */
-	public List<KokuRequest> getRequests(String user, String requestTypeStr, String subQuery, int startNum, int maxNum) {	
+	public List<KokuRequest> getRequests(String userId, String requestTypeStr, String subQuery, int startNum, int maxNum) {
 		RequestType requestType;
 		
 		if(requestTypeStr.equals("valid")) {
@@ -44,7 +46,7 @@ public class RequestHandle extends AbstractHandle {
 			requestType = RequestType.OUTDATED;
 		}
 		List<KokuRequest> reqList = new ArrayList<KokuRequest>();
-		List<RequestSummary> reqs = rs.getRequests(user, requestType, subQuery, startNum, maxNum);
+		List<RequestSummary> reqs = rs.getRequests(userId, requestType, subQuery, startNum, maxNum);
 		Iterator<RequestSummary> it = reqs.iterator();
 		KokuRequest req;
 		
@@ -93,7 +95,7 @@ public class RequestHandle extends AbstractHandle {
 	 * @param requestTypeStr request type string
 	 * @return the total number of requests
 	 */
-	public int getTotalRequestsNum(String user, String requestTypeStr) {
+	public int getTotalRequestsNum(String userId, String requestTypeStr) {
 		RequestType requestType;
 		
 		if(requestTypeStr.equals("valid")) {
@@ -102,7 +104,7 @@ public class RequestHandle extends AbstractHandle {
 			requestType = RequestType.OUTDATED;
 		}
 		
-		return rs.getTotalRequestNum(user, requestType);
+		return rs.getTotalRequestNum(userId, requestType);
 	}
 
 }

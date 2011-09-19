@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import fi.arcusys.koku.users.UserIdResolver;
+
 /**
  * Hanldes ajax request and return the response with json string
  * @author Jinhua Chen
@@ -28,9 +30,10 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 @Controller("ajaxController")
 @RequestMapping(value = "VIEW")
-public class AjaxController {
+public class AjaxController extends AbstractController {
 
-	private Logger logger = Logger.getLogger(AjaxController.class);
+	private static Logger LOGGER = Logger.getLogger(AjaxController.class);
+	
 	/**
 	 * Gets the amount of new unread messages for user
 	 * @param modelmap ModelMap
@@ -40,8 +43,10 @@ public class AjaxController {
 	 */
 	@ResourceMapping(value = "update")
 	public String showAjax(ModelMap modelmap, PortletRequest request, PortletResponse response) {
-		String username = request.getRemoteUser();	
-		JSONObject jsonModel = getJsonModel(username);
+		String username = request.getRemoteUser();
+		UserIdResolver resolver = new UserIdResolver();
+		String userId = resolver.getUserId(username, getPortalRole(request));
+		JSONObject jsonModel = getJsonModel(userId);
 		modelmap.addAttribute("response", jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
@@ -49,22 +54,22 @@ public class AjaxController {
 		
 	/**
 	 * Gets the amount of new messages of Inbox and Archive_Inbox and puts values to model
-	 * @param username user that message belong to
+	 * @param userId user that message belong to
 	 * @return Json object contains result
 	 */
-	public JSONObject getJsonModel(String username) {
+	public JSONObject getJsonModel(String userId) {
 		JSONObject jsonModel = new JSONObject();
 		String newInboxMessageNum = "0";
 		String  newArchiveMessageNum = "0";
 		
-		if(username == null) {
+		if (userId == null) {
 			jsonModel.put("loginStatus", "INVALID");
-		}else {
+		} else {
 			jsonModel.put("loginStatus", "VALID");
-			newInboxMessageNum = getNewMessageNum(username, "Inbox");
+			newInboxMessageNum = getNewMessageNum(userId, "Inbox");
 			jsonModel.put("inbox", newInboxMessageNum);
 			
-			newArchiveMessageNum = getNewMessageNum(username, "Archive_Inbox");
+			newArchiveMessageNum = getNewMessageNum(userId, "Archive_Inbox");
 			jsonModel.put("archive_inbox", newArchiveMessageNum);
 						
 		}		
@@ -126,7 +131,7 @@ public class AjaxController {
 			num = xmlStr.substring(pos1+8, pos2);			
 			
 		} catch (Exception e) {
-			logger.info("Getting the number of new messages service failed");
+			LOGGER.info("Getting the number of new messages service failed");
 			//e.printStackTrace();
 		}
 		

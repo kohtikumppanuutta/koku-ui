@@ -1,5 +1,8 @@
 package fi.arcusys.koku.tiva;
 
+import static fi.arcusys.koku.util.Constants.RESPONSE_FAIL;
+import static fi.arcusys.koku.util.Constants.RESPONSE_OK;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,7 +21,7 @@ import fi.arcusys.koku.tiva.citizenservice.ConsentStatus;
 import fi.arcusys.koku.tiva.citizenservice.ConsentSummary;
 import fi.arcusys.koku.tiva.citizenservice.ConsentTO;
 import fi.arcusys.koku.util.MessageUtil;
-import static fi.arcusys.koku.util.Constants.*;
+import fi.arcusys.koku.util.PortalRole;
 
 /**
  * Handles tiva consents related operations for citizen
@@ -30,7 +33,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	private Logger LOG = Logger.getLogger(TivaCitizenServiceHandle.class);
 	
 	private TivaCitizenService tcs;
-	private String user;
+	private String userId;
 	
 	/**
 	 * Constructor and initialization
@@ -39,8 +42,10 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 		tcs = new TivaCitizenService();
 	}
 	
-	public TivaCitizenServiceHandle(String user) {
-		this.user = user;
+	public TivaCitizenServiceHandle(String userId) {
+		if (userId == null) {
+			throw new IllegalArgumentException("userId is null!");
+		}
 		tcs = new TivaCitizenService();
 	}
 	
@@ -51,8 +56,8 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	 * @param maxNum maximum number of consents
 	 * @return a list of assigned consents
 	 */
-	public List<KokuConsent> getAssignedConsents(String user, int startNum, int maxNum) {
-		List<ConsentShortSummary> consentSummary = tcs.getAssignedConsents(user, startNum, maxNum);
+	public List<KokuConsent> getAssignedConsents(String userId, int startNum, int maxNum) {
+		List<ConsentShortSummary> consentSummary = tcs.getAssignedConsents(userId, startNum, maxNum);
 		List<KokuConsent> consentList = new ArrayList<KokuConsent>();
 		KokuConsent kokuConsent;		
 		Iterator<ConsentShortSummary> it = consentSummary.iterator();
@@ -78,7 +83,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	public KokuConsent getConsentById(String consentIdStr) {
 		long  consentId = (long) Long.parseLong(consentIdStr);
 		KokuConsent kokuConsent = new KokuConsent();		
-		ConsentTO consent = tcs.getConsentById(consentId, user);
+		ConsentTO consent = tcs.getConsentById(consentId, this.userId);
 		kokuConsent.setConsentId(consent.getConsentId());
 		kokuConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
 		kokuConsent.setRequester(consent.getRequestor());
@@ -104,8 +109,8 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	 * @param maxNum maximum number of consents
 	 * @return a list of consents
 	 */
-	public List<KokuConsent> getOwnConsents(String user, int startNum, int maxNum) {
-		List<ConsentSummary> consentSummary = tcs.getOwnConsents(user, startNum, maxNum);
+	public List<KokuConsent> getOwnConsents(String userId, int startNum, int maxNum) {
+		List<ConsentSummary> consentSummary = tcs.getOwnConsents(userId, startNum, maxNum);
 		List<KokuConsent> consentList = new ArrayList<KokuConsent>();
 		KokuConsent kokuConsent;	
 		Iterator<ConsentSummary> it = consentSummary.iterator();
@@ -130,16 +135,14 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 		return consentList;
 	}
 	
-
 	
 	/**
 	 * Gets the total number of assigned consents
 	 * @param user user name
 	 * @return the total number of assigned consents
 	 */
-	public int getTotalAssignedConsents(String user) {
-		
-		return tcs.getTotalAssignedConsents(user);
+	public int getTotalAssignedConsents(String userId) {
+		return tcs.getTotalAssignedConsents(userId);
 	}
 	
 	/**
@@ -147,9 +150,8 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	 * @param user user name
 	 * @return the total number of own consents
 	 */
-	public int getTotalOwnConsents(String user) {
-		
-		return tcs.getTotalOwnConsents(user);
+	public int getTotalOwnConsents(String userId) {
+		return tcs.getTotalOwnConsents(userId);
 	}
 	
 	/**
@@ -161,7 +163,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 		long  consentId = (long) Long.parseLong(consentIdStr);
 		
 		try {
-			tcs.revokeOwnConsent(consentId, user);
+			tcs.revokeOwnConsent(consentId, this.userId);
 			return RESPONSE_OK;
 		} catch(RuntimeException e) {
 			return RESPONSE_FAIL;
@@ -291,6 +293,5 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 			return type.toString().toLowerCase();
 		}
 	}
-	
 	
 }

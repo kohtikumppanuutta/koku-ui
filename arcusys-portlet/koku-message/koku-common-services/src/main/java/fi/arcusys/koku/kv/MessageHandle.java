@@ -19,6 +19,7 @@ import fi.arcusys.koku.kv.messageservice.MessageSummary;
 import fi.arcusys.koku.kv.messageservice.OrderBy;
 import fi.arcusys.koku.kv.messageservice.Type;
 import fi.arcusys.koku.util.MessageUtil;
+import fi.arcusys.koku.util.PortalRole;
 
 /**
  * Handles request of messages and retrieves messages
@@ -46,7 +47,7 @@ public class MessageHandle extends AbstractHandle {
 	 * @param max maximum amount of messages
 	 * @return a list of messages
 	 */
-	public List<Message> getMessages(String user, String messageType, String keyword, String field, String orderType, int start, int max) {
+	public List<Message> getMessages(String userId, String messageType, String keyword, String field, String orderType, int start, int max) {
 		FolderType folderType = MessageUtil.getFolderType(messageType);
 		MessageQuery messageQuery = new MessageQuery();
 		messageQuery.setStartNum(start);
@@ -63,7 +64,7 @@ public class MessageHandle extends AbstractHandle {
 		messageQuery.getOrderBy().add(orderby);
 		
 		List<MessageSummary> msgs;		
-		msgs = ms.getMessages(user, folderType, messageQuery);
+		msgs = ms.getMessages(userId, folderType, messageQuery);
 		List<Message> msgList = new ArrayList<Message>();
 		Message message;		
 		Iterator<MessageSummary> it = msgs.iterator();
@@ -93,12 +94,13 @@ public class MessageHandle extends AbstractHandle {
 	 * @param field field string for filtering
 	 * @return number of messages
 	 */
-	public int getTotalMessageNum(String user, String messageType, String keyword, String field) {
+	public int getTotalMessageNum(String userId, String messageType, String keyword, String field) {
+
 		FolderType folderType = MessageUtil.getFolderType(messageType);
 		/* sets the criteria for searching including keyword for each field, default is searching all fields */
 		Criteria criteria = createCriteria(keyword, field);		
 		
-		return ms.getTotalMessageNum(user, folderType, criteria);		
+		return ms.getTotalMessageNum(userId, folderType, criteria);		
 	}
 	
 	/**
@@ -112,12 +114,13 @@ public class MessageHandle extends AbstractHandle {
 	 * @param max maximum amount of messages
 	 * @return a list of messages
 	 */
-	public List<Message> getMessagesOld(String user, String messageType, String keyword, String orderType, int start, int max) {
+	public List<Message> getMessagesOld(String userId, String messageType, String keyword, String orderType, int start, int max) {
+
 		FolderType folderType = MessageUtil.getFolderType(messageType);
 		String subQuery = "";
 		
 		List<MessageSummary> msgs;		
-		msgs = ms.getMessagesOld(user, folderType, subQuery, start, max);
+		msgs = ms.getMessagesOld(userId, folderType, subQuery, start, max);
 		List<Message> msgList = new ArrayList<Message>();
 		Message message;		
 		Iterator<MessageSummary> it = msgs.iterator();

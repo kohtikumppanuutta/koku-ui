@@ -1,5 +1,12 @@
 package fi.arcusys.koku.av;
 
+import static fi.arcusys.koku.util.Constants.DATE;
+import static fi.arcusys.koku.util.Constants.RESPONSE_FAIL;
+import static fi.arcusys.koku.util.Constants.RESPONSE_OK;
+import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE;
+import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE;
+import static fi.arcusys.koku.util.Constants.TIME;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,7 +25,6 @@ import fi.arcusys.koku.av.employeeservice.AppointmentSlot;
 import fi.arcusys.koku.av.employeeservice.AppointmentSummary;
 import fi.arcusys.koku.av.employeeservice.AppointmentSummaryStatus;
 import fi.arcusys.koku.util.MessageUtil;
-import static fi.arcusys.koku.util.Constants.*;
 
 
 /**
@@ -47,15 +53,15 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	 * @param taskType task type requested
 	 * @return a list of summary appointments
 	 */
-	public List<KokuAppointment> getAppointments(String user, int startNum, int maxNum, String taskType) {
+	public List<KokuAppointment> getAppointments(String userId, int startNum, int maxNum, String taskType) {
 
 		List<AppointmentSummary> appSummaryList;
 		List<KokuAppointment> appList = new ArrayList<KokuAppointment>();
 		
-		if(taskType.equals("app_inbox_employee"))
-			appSummaryList = aes.getCreatedAppointments(user, startNum, maxNum);
-		else if(taskType.equals("app_response_employee"))
-			appSummaryList = aes.getProcessedAppointments(user, startNum, maxNum);
+		if(taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE))
+			appSummaryList = aes.getCreatedAppointments(userId, startNum, maxNum);
+		else if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE))
+			appSummaryList = aes.getProcessedAppointments(userId, startNum, maxNum);
 		else
 			return appList;
 			
@@ -107,12 +113,11 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	 * @param taskType task type requested
 	 * @return the number of appointments
 	 */
-	public int getTotalAppointmentsNum(String user, String taskType) {
-		
-		if(taskType.equals("app_inbox_employee"))// for employee
-			return aes.getTotalCreatedAppointmentNum(user);
-		else if(taskType.equals("app_response_employee"))
-			return aes.getTotalProcessedAppointments(user);
+	public int getTotalAppointmentsNum(String userId, String taskType) {
+		if(taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE))// for employee
+			return aes.getTotalCreatedAppointmentNum(userId);
+		else if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE))
+			return aes.getTotalProcessedAppointments(userId);
 		else
 			return 0;
 	}
@@ -129,17 +134,15 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		
 		List<Slot> slots = new ArrayList<Slot>();
 		Slot slot;
-		String dateString = "d.M.yyyy";
-		String timeString = "HH:mm:ss";
 		Iterator<AppointmentSlot> it = appSlots.iterator();
 		
 		while(it.hasNext()) {
 			slot = new Slot();
 			AppointmentSlot appSlot = it.next();
 			slot.setSlotNumber(appSlot.getSlotNumber());
-			slot.setAppointmentDate(MessageUtil.formatDateByString(appSlot.getAppointmentDate(), dateString));
-			slot.setStartTime(MessageUtil.formatDateByString(appSlot.getStartTime(), timeString));
-			slot.setEndTime(MessageUtil.formatDateByString(appSlot.getEndTime(), timeString));
+			slot.setAppointmentDate(MessageUtil.formatDateByString(appSlot.getAppointmentDate(), DATE));
+			slot.setStartTime(MessageUtil.formatDateByString(appSlot.getStartTime(), TIME));
+			slot.setEndTime(MessageUtil.formatDateByString(appSlot.getEndTime(), TIME));
 			slot.setLocation(appSlot.getLocation());
 			slot.setComment(appSlot.getComment());
 			

@@ -19,7 +19,9 @@ import fi.arcusys.koku.tiva.employeeservice.ConsentStatus;
 import fi.arcusys.koku.tiva.employeeservice.ConsentSummary;
 import fi.arcusys.koku.tiva.employeeservice.ConsentTO;
 import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
+import fi.arcusys.koku.users.KokuUserService;
 import fi.arcusys.koku.util.MessageUtil;
+import fi.arcusys.koku.util.PortalRole;
 
 /**
  * Handles tiva consents related operations for employee
@@ -30,7 +32,6 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 	
 	private Logger LOG = Logger.getLogger(TivaEmployeeServiceHandle.class);
 	
-
 	private TivaEmployeeService tes;
 	
 	/**
@@ -42,19 +43,22 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 	
 	/**
 	 * Gets consents and generates koku consent data model for use
-	 * @param user user name
+	 * @param username user name
 	 * @param keyword keyword for filtering
 	 * @param startNum start index of consent
 	 * @param maxNum maximum number of consents
 	 * @return
 	 */
-	public List<KokuConsent> getConsents(String user, String keyword, String field, int startNum, int maxNum) {
+	public List<KokuConsent> getConsents(String userId, String keyword, String field, int startNum, int maxNum) {
+		if (userId == null) {
+			throw new IllegalArgumentException("userId can't be null");
+		}
 		ConsentQuery query = new ConsentQuery();
 		query.setStartNum(startNum);
 		query.setMaxNum(maxNum);		
 		ConsentCriteria criteria = createCriteria(keyword, field);	
 		query.setCriteria(criteria);		
-		List<ConsentSummary> consentSummary = tes.getConsents(user,query);
+		List<ConsentSummary> consentSummary = tes.getConsents(userId, query);
 		List<KokuConsent> consentList = new ArrayList<KokuConsent>();
 		
 		if(consentSummary == null) {
@@ -269,5 +273,6 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 			return approvalStatus.toString().toLowerCase();
 		}
 	}
+
 	
 }

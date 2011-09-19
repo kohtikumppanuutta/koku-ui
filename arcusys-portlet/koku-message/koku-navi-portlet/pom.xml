@@ -104,6 +104,12 @@
 			<version>2.4</version>
 			<classifier>jdk15</classifier>
 		</dependency>
+		 <dependency>
+           <groupId>fi.arcusys</groupId>
+           <artifactId>koku-common-services</artifactId>
+           <version>1.0</version>
+           <type>jar</type>
+        </dependency>
 
 	</dependencies>
 </project>
