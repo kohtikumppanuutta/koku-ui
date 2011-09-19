@@ -30,99 +30,40 @@ public class Person {
   }
   
   public String getFirstname() {
-    //return firstname;
     return customer.getEtuNimi();
   }
-
-//  public void setFirstname(String firstname) {
-//    this.firstname = firstname;
-//  }
-
-//  public String getMiddlename() {
-//    return middlename;
-//  }
-
-//  public void setMiddlename(String middlename) {
-//    this.middlename = middlename;
-//  }
-
+  
+  public String getFirstnames() {
+    return customer.getEtunimetNimi();
+  }
+  
   public String getSurname() {
-    //return surname;
     return customer.getSukuNimi();
   }
 
-//  public void setSurname(String surname) {
-//    this.surname = surname;
-//  }
-
   public String getPic() {
-    //return ssn;
     return customer.getHenkiloTunnus();
   }
 
-//  public void setSsn(String ssn) {
-//    this.ssn = ssn;
-//  }
-  
   public String getBirthdate() {
-    //return birthdate;
     return customer.getSyntymaPvm().toString();
   }
   
-  public Calendar getBirthdayAsCalendar() {
-    //return birthdayCal;
+  public Calendar getBirthdaycalendar() {
     return customer.getSyntymaPvm();
   }
   
-//  public void setBirthdate(String birthdate) {
-//    this.birthdate = birthdate;
-//  }
-
-//  public void setBirthdate(String day, String month, String year) {
-//    this.birthdate = day + "-" + month + "-" + year;
-//  }
-
-//  public void setBirthdayCalendar(Calendar cal) {
-//    this.birthdayCal = cal;
-//  }
-  
-//  public String getBirthday() {
-//    return birthday;
-//  }
-
-//  public void setBirthday(String birthday) {
-//    this.birthday = birthday;
-//  }
-
-//  public String getBirthmonth() {
-//    return birthmonth;
-//  }
-
-//  public void setBirthmonth(String birthmonth) {
-//    this.birthmonth = birthmonth;
-//  }
-
-//  public String getBirthyear() {
-//    return birthyear;
-//  }
-
-//  public void setBirthyear(String birthyear) {
-//    this.birthyear = birthyear;
-//  }
-
-//  public String getEmail() {
-//    return email;
-//  }
-  
-  public String getEContactInfo() {
-    ElectronicContactInfosType contactInfoType = customer.getElectronicContactInfos();
-    List<ElectronicContactInfoType> contactInfos = contactInfoType.getEContactInfo();
-    Iterator<ElectronicContactInfoType> cii = contactInfos.iterator();
+  public String getEcontactinfo() {
     String electronicContactInfo = "";
-    while (cii.hasNext()) {
-      ElectronicContactInfoType contactInfo = cii.next();
-      String info = contactInfo.getContactInfoType() + ": " + contactInfo.getContactInfo();
-      electronicContactInfo += info + "\n";
+    ElectronicContactInfosType contactInfoType = customer.getElectronicContactInfos();
+    if (contactInfoType != null) {
+      List<ElectronicContactInfoType> contactInfos = contactInfoType.getEContactInfo();
+      Iterator<ElectronicContactInfoType> cii = contactInfos.iterator();
+      while (cii.hasNext()) {
+        ElectronicContactInfoType contactInfo = cii.next();
+        String info = contactInfo.getContactInfoType() + ": " + contactInfo.getContactInfo();
+        electronicContactInfo += info + "\n";
+      }
     }
     return electronicContactInfo;
   }
@@ -135,14 +76,6 @@ public class Person {
     return (getFirstname() + " " + getSurname() + " " + getPic()).toUpperCase();
   }
 
-//  public void setEmail(String email) {
-//    this.email = email;
-//  }
-  
-//  public void setEContactInfo(String eContactInfo) {
-//    this.eContactInfo = eContactInfo;
-//  }
-  
   public boolean isRequestPending() {
     return this.requestPending;
   }

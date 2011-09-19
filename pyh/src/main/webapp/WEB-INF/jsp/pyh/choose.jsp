@@ -4,17 +4,17 @@
 
 <portlet:renderURL var="pekka">
 	<portlet:param name="action" value="userSelection"/>
-	<portlet:param name="ssn" value="010101-1010"/>
+	<portlet:param name="pic" value="010101-1010"/>
 </portlet:renderURL>
 
 <portlet:renderURL var="irina">
     <portlet:param name="action" value="userSelection"/>
-    <portlet:param name="ssn" value="020202-2020"/>
+    <portlet:param name="pic" value="020202-2020"/>
 </portlet:renderURL>
 
 <portlet:renderURL var="tytti">
     <portlet:param name="action" value="userSelection"/>
-    <portlet:param name="ssn" value="020304-2345"/>
+    <portlet:param name="pic" value="020304-2345"/>
 </portlet:renderURL>
 
 <div class="koku-pyh">

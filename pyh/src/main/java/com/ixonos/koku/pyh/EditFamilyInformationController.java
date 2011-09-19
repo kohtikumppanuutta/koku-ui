@@ -83,21 +83,21 @@ public class EditFamilyInformationController {
   }
 
   @ActionMapping(params = "action=removeFamilyMember")
-  public void removeFamilyMember(@RequestParam String familyMemberSSN, ActionResponse response) {
-    pyhDemoService.removeFamilyMember(familyMemberSSN);
+  public void removeFamilyMember(@RequestParam String familyMemberPic, ActionResponse response) {
+    pyhDemoService.removeFamilyMember(familyMemberPic);
 
     response.setRenderParameter("action", "editFamilyInformation");
   }
 
   @ActionMapping(params = "action=removeDependant")
-  public void removeDependant(@RequestParam String familyMemberSSN, ActionResponse response) {
+  public void removeDependant(@RequestParam String familyMemberPic, ActionResponse response) {
 
     for (Dependant d : pyhDemoService.getDependants()) {
-      if (d.getPic().equals(familyMemberSSN)) {
+      if (d.getPic().equals(familyMemberPic)) {
         d.setMemberOfUserFamily(false);
       }
     }
-    pyhDemoService.removeFamilyMember(familyMemberSSN);
+    pyhDemoService.removeFamilyMember(familyMemberPic);
 
     response.setRenderParameter("action", "editFamilyInformation");
   }
@@ -106,7 +106,7 @@ public class EditFamilyInformationController {
   public void searchUsers(ActionRequest request, ActionResponse response) {
     String fn = request.getParameter("searchFirstname");
     String sn = request.getParameter("searchSurname");
-    String pic = request.getParameter("searchSSN");
+    String pic = request.getParameter("searchPic");
 
     // call service to query users,
     // users are returned as a model attribute object searchedUsers
@@ -120,13 +120,13 @@ public class EditFamilyInformationController {
   public void addUsersToFamily(ActionRequest request, ActionResponse response) {
     HashMap<String, String> parameterMap = new HashMap<String, String>();
     HashMap<String, String> personMap = new HashMap<String, String>();
-    String personSSN = "";
+    String personPic = "";
     String personRole = "";
 
     for (Enumeration<String> e = request.getParameterNames(); e.hasMoreElements();) {
       String param = e.nextElement();
       String paramValue = request.getParameter(param);
-      if (param.startsWith("userSSN") || param.startsWith("userRole")) {
+      if (param.startsWith("userPic") || param.startsWith("userRole")) {
         parameterMap.put(param, paramValue);
       }
     }
@@ -135,15 +135,15 @@ public class EditFamilyInformationController {
     Iterator<String> si = keys.iterator();
     while (si.hasNext()) {
       String key = si.next();
-      if (key.startsWith("userSSN")) {
+      if (key.startsWith("userPic")) {
         String[] tokens = key.split("_");
-        // index is the number after '_' in parameter name, e.g. userSSN_1
+        // index is the number after '_' in parameter name, e.g. userPic_1
         // (index is 1)
         String index = tokens[1];
 
-        personSSN = parameterMap.get(key);
+        personPic = parameterMap.get(key);
         personRole = parameterMap.get("userRole_" + index);
-        personMap.put(personSSN, personRole);
+        personMap.put(personPic, personRole);
       }
     }
 

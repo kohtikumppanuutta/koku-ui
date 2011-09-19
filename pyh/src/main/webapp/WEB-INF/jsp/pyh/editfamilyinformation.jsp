@@ -43,7 +43,7 @@
 		<div class="name">
 			${user.firstname} ${user.surname} <br />
 		</div>
-        <div class="email"><spring:message code="ui.pyh.email" />  ${user.email}</div>
+        <div class="email"><spring:message code="ui.pyh.email" />  ${user.econtactinfo}</div>
 		<br />
 	</c:if>
 	
@@ -60,7 +60,7 @@
             <c:forEach var="child" items="${dependants}">
             <tr>
                 <td> ${child.fullName} </td>
-                <td> ${child.ssn} </td>
+                <td> ${child.pic} </td>
                 <td> <spring:message code="${DEPENDANT.bundleId}"/>
                 
                 <c:if test="${child.memberOfUserFamily}">
@@ -78,7 +78,7 @@
                                    <span class="pyh-link"> 
                                          <portlet:actionURL var="removeFamilyMember">
                                         <portlet:param name="action" value="removeDependant" />
-                                        <portlet:param name="familyMemberSSN" value="${child.ssn}" />
+                                        <portlet:param name="familyMemberPic" value="${child.pic}" />
                                     </portlet:actionURL>
                             <a href="${removeFamilyMember}"><spring:message code="ui.pyh.remove.family" /></a> </span> 
                                 </c:when>
@@ -86,7 +86,7 @@
                                     <portlet:actionURL var="addDependantAsFamilyMember">
                                         <portlet:param name="action"
                                             value="addDependantAsFamilyMember" />
-                                        <portlet:param name="dependantSSN" value="${child.ssn}" />
+                                        <portlet:param name="dependantPic" value="${child.pic}" />
                                     </portlet:actionURL>
                                     <a href="${addDependantAsFamilyMember}"><spring:message code="ui.pyh.add.into.family" /></a>
                                 </c:otherwise>
@@ -98,12 +98,12 @@
             <c:forEach var="familyMember" items="${otherFamilyMembers}">
                 <tr>
                 <td>${familyMember.fullName} </td>
-                <td>${familyMember.ssn} </td>
+                <td>${familyMember.pic} </td>
                 <td><spring:message code="${familyMember.role.bundleId}"/></td>
                 <td><span class="pyh-linkki">
                     <portlet:actionURL var="removeFamilyMember">
                     <portlet:param name="action" value="removeFamilyMember" />
-                    <portlet:param name="familyMemberSSN" value="${familyMember.ssn}" />
+                    <portlet:param name="familyMemberPic" value="${familyMember.pic}" />
                 </portlet:actionURL>
                         <a
                         href="${removeFamilyMember}"><spring:message code="ui.pyh.remove.family" /></a>
@@ -148,9 +148,9 @@
 			<span class="portlet-form-field-label"><spring:message code="ui.pyh.form.last.name" /></span>
 			<span class="portlet-form-input-field"> <input
 				name="searchSurname" /> </span>
-			<span class="portlet-form-field-label"><spring:message code="ui.pyh.table.ssn" />: </span>
+			<span class="portlet-form-field-label"><spring:message code="ui.pyh.table.pic" />: </span>
 			<span class="portlet-form-input-field"> <input
-				name="searchSSN" /> </span>
+				name="searchPic" /> </span>
 			<input class="portlet-form-button" type="submit" value="<spring:message code="ui.pyh.seek"/>" />
 		</form:form>
 	</div>
@@ -162,7 +162,7 @@
 
 				<tr class="portlet-table-body th">
 					<th width="38%"><spring:message code="ui.pyh.table.name" /></th>
-					<th width="26%"><spring:message code="ui.pyh.table.ssn" /></th>
+					<th width="26%"><spring:message code="ui.pyh.table.pic" /></th>
 					<th width="10%"><spring:message code="ui.pyh.table.add" /></th>
 					<th width="26%"><spring:message code="ui.pyh.table.role" /></th>
 				</tr>
@@ -172,8 +172,8 @@
 
 					<tr>
 						<td>${user.firstname} ${user.surname}</td>
-						<td>${user.ssn} <input id="user_ssn_${userVar}"
-							name="userSSN_${userVar}" type="hidden" value="${user.ssn}" />
+						<td>${user.pic} <input id="user_pic_${userVar}"
+							name="userPic_${userVar}" type="hidden" value="${user.pic}" />
 						</td>
 
 
@@ -229,7 +229,7 @@
 
 	function addUserToForm(user) {
 
-		$('#addUsersToFamilyForm').append($('#user_ssn_' + user));
+		$('#addUsersToFamilyForm').append($('#user_pic_' + user));
 		var userRole = $('#user_role_' + user + ' option:selected').val();
 		$('#addUsersToFamilyForm')
 				.append(

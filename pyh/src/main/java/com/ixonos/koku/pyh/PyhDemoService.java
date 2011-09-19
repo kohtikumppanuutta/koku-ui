@@ -31,6 +31,7 @@ import fi.koku.services.entity.community.v1.CommunityType;
 import fi.koku.services.entity.community.v1.MemberType;
 import fi.koku.services.entity.community.v1.MembersType;
 import fi.koku.services.entity.community.v1.ServiceFault;
+import fi.koku.services.entity.customer.v1.AuditInfoType;
 import fi.koku.services.entity.customer.v1.CustomerQueryCriteriaType;
 import fi.koku.services.entity.customer.v1.CustomerServiceFactory;
 import fi.koku.services.entity.customer.v1.CustomerServicePortType;
@@ -44,6 +45,7 @@ public class PyhDemoService {
   
   private List<Person> searchedUsers;
   private String userPic;
+  private String userID;
   
   @Autowired
   @Qualifier(value = "pyhMessageService")
@@ -54,17 +56,18 @@ public class PyhDemoService {
   
   public PyhDemoService() {
     
+    // TODO: get user ID from UserInfo
+    userID = "";
+    
     // TODO: get user's PIC from the portal
     userPic = "010101-1010";
     
-    // TODO: initialization with username and password
-    
-    String customerServiceEndpoint = "http://localhost:8180/customer-service-0.0.1-SNAPSHOT/CustomerServiceEndpointBean?wsdl";
-    CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory("u", "p", customerServiceEndpoint);
+    String customerServiceEndpoint = PyhConstants.CUSTOMER_SERVICE_ENDPOINT;
+    CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory(PyhConstants.CUSTOMER_SERVICE_USER_ID, PyhConstants.CUSTOMER_SERVICE_PASSWORD, customerServiceEndpoint);
     customerService = customerServiceFactory.getCustomerService();
     
-    String communityServiceEndpoint = "http://localhost:8180/customer-service-0.0.1-SNAPSHOT/CommunityServiceEndpointBean?wsdl";
-    CommunityServiceFactory communityServiceFactory = new CommunityServiceFactory("u", "p", communityServiceEndpoint);
+    String communityServiceEndpoint = PyhConstants.COMMUNITY_SERVICE_ENDPOINT;
+    CommunityServiceFactory communityServiceFactory = new CommunityServiceFactory(PyhConstants.COMMUNITY_SERVICE_USER_ID, PyhConstants.COMMUNITY_SERVICE_PASSWORD, communityServiceEndpoint);
     communityService = communityServiceFactory.getCommunityService();
   }
   
@@ -73,9 +76,13 @@ public class PyhDemoService {
    */
   public Person getPerson(String pic) {
     CustomerType customer = null;
+    
+    fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
+    customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
+    customerAuditInfoType.setUserId(userID);
+    
     try {
-      // TODO: AuditInfoType
-      customer = customerService.opGetCustomer(pic, new fi.koku.services.entity.customer.v1.AuditInfoType());
+      customer = customerService.opGetCustomer(pic, customerAuditInfoType);
     } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
       log.error("PyhDemoService.getUser: opGetCustomer raised a ServiceFault", fault);
     }
@@ -102,13 +109,20 @@ public class PyhDemoService {
   public List<Dependant> getDependants() {
     List<Dependant> dependants = new ArrayList<Dependant>();
     CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
-    // TODO: get community type from constants
-    communityQueryCriteria.setCommunityType("guardian_community");
+    communityQueryCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_GUARDIAN_COMMUNITY);
     communityQueryCriteria.setMemberPic(userPic);
     CommunitiesType communitiesType = null;
     
+    fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
+    communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
+    communityAuditInfoType.setUserId(userID);
+    
+    fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
+    customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
+    customerAuditInfoType.setUserId(userID);
+    
     try {
-      communitiesType = communityService.opQueryCommunities(communityQueryCriteria, new fi.koku.services.entity.community.v1.AuditInfoType());
+      communitiesType = communityService.opQueryCommunities(communityQueryCriteria, communityAuditInfoType);
     } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
       log.error("PyhDemoService.getDependants: opQueryCommunities raised a ServiceFault", fault);
     }
@@ -123,10 +137,9 @@ public class PyhDemoService {
         Iterator<MemberType> mi = members.iterator();
         while (mi.hasNext()) {
           MemberType member = mi.next();
-          // TODO: get role from constants
-          if (member.getRole().equals("dependant")) {
+          if (member.getRole().equals(PyhConstants.ROLE_DEPENDANT)) {
             try {
-              CustomerType customer = customerService.opGetCustomer(member.getPic(), new fi.koku.services.entity.customer.v1.AuditInfoType());
+              CustomerType customer = customerService.opGetCustomer(member.getPic(), customerAuditInfoType);
               dependants.add(new Dependant(customer));
             }
             catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
@@ -142,16 +155,26 @@ public class PyhDemoService {
   /**
    * Returns all other members of the user's family except dependants.
    */
+  
+  // TODO: first get user's dependants, then family members skipping the dependants
+  
   public List<FamilyMember> getOtherFamilyMembers() {
     List<FamilyMember> otherFamilyMembers = new ArrayList<FamilyMember>();
     CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
-    // TODO: get community type from constants
-    communityQueryCriteria.setCommunityType("family_community");
+    communityQueryCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_FAMILY);
     communityQueryCriteria.setMemberPic(userPic);
     CommunitiesType communitiesType = null;
     
+    fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
+    communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
+    communityAuditInfoType.setUserId(userID);
+    
+    fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
+    customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
+    customerAuditInfoType.setUserId(userID);
+    
     try {
-      communitiesType = communityService.opQueryCommunities(communityQueryCriteria, new fi.koku.services.entity.community.v1.AuditInfoType());
+      communitiesType = communityService.opQueryCommunities(communityQueryCriteria, communityAuditInfoType);
     } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
       log.error("PyhDemoService.getOtherFamilyMembers: opQueryCommunities raised a ServiceFault", fault);
     }
@@ -166,12 +189,12 @@ public class PyhDemoService {
         Iterator<MemberType> mi = members.iterator();
         while (mi.hasNext()) {
           MemberType member = mi.next();
-          // TODO: get role from constants
-          if (!member.getRole().equals("dependant")) { // TODO: dependant is not role of family_community; is this correct?
+          if (!member.getRole().equals(PyhConstants.ROLE_DEPENDANT)) {
             CustomerType customer = null;
             
             try {
-              customer = customerService.opGetCustomer(member.getPic(), new fi.koku.services.entity.customer.v1.AuditInfoType());
+              // FIXME: getCustomeria ei pidä kutsua loopissa toistamiseen
+              customer = customerService.opGetCustomer(member.getPic(), customerAuditInfoType);
             } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
               log.error("PyhDemoService.getOtherFamilyMembers: opGetCustomer raised a ServiceFault", fault);
             }
@@ -190,7 +213,15 @@ public class PyhDemoService {
    * Checks if the user's family has max. number of parents.
    */
   public boolean isParentsSet() {
-    Family family = getFamily(userPic);
+    Family family = null;
+    
+    try {
+      family = getFamily(userPic);
+    } catch (TooManyFamiliesException tme) {
+      log.error("PyhDemoService.isParentsSet: caught TooManyFamiliesException", tme);
+      return false;
+    }
+    
     if (family != null) {
       return family.isParentsSet();
     }
@@ -203,14 +234,17 @@ public class PyhDemoService {
   public void searchUsers(String firstname, String surname, String customerPic, String customerID) {
     clearSearchedUsers();
     
-    // TODO: what is the final query criteria?
     CustomerQueryCriteriaType customerCriteria = new CustomerQueryCriteriaType();
-    customerCriteria.setId(customerID);
     customerCriteria.setPic(customerPic);
+    customerCriteria.setSelection("full"); // FIXME: tätä käytetään vain silloin kun tarvitaan käyttäjän kaikki tiedot
     CustomersType customersType = null;
     
+    fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
+    customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
+    customerAuditInfoType.setUserId(userID);
+    
     try {
-      customersType = customerService.opQueryCustomers(customerCriteria, new fi.koku.services.entity.customer.v1.AuditInfoType());
+      customersType = customerService.opQueryCustomers(customerCriteria, customerAuditInfoType);
     } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
       log.error("PyhDemoService.searchUsers: opQueryCustomers raised a ServiceFault", fault);
     }
@@ -246,18 +280,18 @@ public class PyhDemoService {
   /**
    * Adds a dependant into the user's family.
    */
-  public void addDependantAsFamilyMember(String dependantSSN) {
+  public void addDependantAsFamilyMember(String dependantPic) {
     // REMOVE COMMENTS, IF CONFIRMATION MESSAGES ARE NEED ALSO FOR DEPENDANT >
     // FAMILY INSERTION
-    // List<String> tmp = generateRecipients(dependantSSN, user, Role.CHILD);
+    // List<String> tmp = generateRecipients(dependantPic, user, Role.CHILD);
 
     // if (tmp.size() == 0) {
     
-    insertDependantToFamily(userPic, dependantSSN, CommunityRole.CHILD);
+    insertDependantToFamily(userPic, dependantPic, CommunityRole.CHILD);
     
     // } else {
     // sendDependantFamilyAdditionMessage(tmp, user,
-    // model.getPerson(dependantSSN), Role.CHILD);
+    // model.getPerson(dependantPic), Role.CHILD);
     // }
   }
   
@@ -265,17 +299,21 @@ public class PyhDemoService {
    * Selects persons (PICs) to whom send the confirmation message for a operation, for example adding a dependant 
    * into a family.
    */
-  private List<String> generateRecipients(String targetSSN, Person user, CommunityRole role) {
+  private List<String> generateRecipients(String targetPic, Person user, CommunityRole role) {
     List<String> recipientPics = new ArrayList<String>();
     
     if (CommunityRole.CHILD.equals(role)) {
       CommunityQueryCriteriaType communityCriteria = new CommunityQueryCriteriaType();
-      communityCriteria.setCommunityType("guardian_community");
-      communityCriteria.setMemberPic(targetSSN);
+      communityCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_GUARDIAN_COMMUNITY);
+      communityCriteria.setMemberPic(targetPic);
       CommunitiesType communitiesType = null;
+
+      fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
+      communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
+      communityAuditInfoType.setUserId(userID);
       
       try {
-        communitiesType = communityService.opQueryCommunities(communityCriteria, new fi.koku.services.entity.community.v1.AuditInfoType());
+        communitiesType = communityService.opQueryCommunities(communityCriteria, communityAuditInfoType);
       }
       catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
         log.error("PyhDemoService.generateRecipients: opQueryCommunities raised a ServiceFault", fault);
@@ -291,7 +329,7 @@ public class PyhDemoService {
           Iterator<MemberType> mi = members.iterator();
           while (mi.hasNext()) {
             MemberType member = mi.next();
-            if (member.getRole().equals("guardian")) {
+            if (member.getRole().equals(PyhConstants.ROLE_GUARDIAN)) {
               recipientPics.add(member.getPic());
             }
           }
@@ -299,12 +337,26 @@ public class PyhDemoService {
       }
     } else {
       
-      MemberType familyMember = getFamily(userPic).getOtherParent(user.getPic());
+      MemberType familyMember = null;
+      
+      try {
+        familyMember = getFamily(userPic).getOtherParent(user.getPic());
+      } catch (TooManyFamiliesException tme) {
+        log.error("PyhDemoService.generateRecipients: caught TooManyFamiliesException", tme);
+        return null;
+      }
       
       if (familyMember != null) {
         recipientPics.add(familyMember.getPic());
       }
-      Family family = getFamily(targetSSN);
+      Family family = null;
+      
+      try {
+        family = getFamily(targetPic);
+      } catch (TooManyFamiliesException tme) {
+        log.error("PyhDemoService.generateRecipients: caught TooManyFamiliesException", tme);
+        return null;
+      }
       
       if (family != null) {
         for (MemberType member : family.getParents()) {
@@ -320,12 +372,24 @@ public class PyhDemoService {
   /**
    * Inserts a dependant into a family.
    */
-  public void insertDependantToFamily(String userPic, String dependantSSN, CommunityRole role) {
-      Family family = getFamily(userPic);
-      family.addFamilyMember(dependantSSN, role.getRoleID());
+  public void insertDependantToFamily(String userPic, String dependantPic, CommunityRole role) {
+      Family family = null;
       
       try {
-        communityService.opUpdateCommunity(family.getCommunity(), new fi.koku.services.entity.community.v1.AuditInfoType());
+        family = getFamily(userPic);
+      } catch (TooManyFamiliesException tme) {
+        log.error("PyhDemoService.insertDependantToFamily: caught TooManyFamiliesException", tme);
+        return;
+      }
+      
+      family.addFamilyMember(dependantPic, role.getRoleID());
+      
+      fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
+      communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
+      communityAuditInfoType.setUserId(userID);
+      
+      try {
+        communityService.opUpdateCommunity(family.getCommunity(), communityAuditInfoType);
       } catch (ServiceFault fault) {
         log.error("PyhDemoService.insertDependantToFamily: opUpdateCommunity raised a ServiceFault", fault);
       }
@@ -334,18 +398,18 @@ public class PyhDemoService {
   /**
    * Removes a family member from a family community.
    */
-  public void removeFamilyMember(String familyMemberSSN) {
+  public void removeFamilyMember(String familyMemberPic) {
     CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
-    // TODO: get community type from constants
-    communityQueryCriteria.setCommunityType("family_community");
-    communityQueryCriteria.setMemberPic(familyMemberSSN);
+    communityQueryCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_FAMILY);
+    communityQueryCriteria.setMemberPic(familyMemberPic);
     
-    // TODO: could this method be implemented somehow with opGetCommunity?
-    
+    fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
+    communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
+    communityAuditInfoType.setUserId(userID);
     CommunitiesType communitiesType = null;
     
     try {
-      communitiesType = communityService.opQueryCommunities(communityQueryCriteria, new fi.koku.services.entity.community.v1.AuditInfoType());
+      communitiesType = communityService.opQueryCommunities(communityQueryCriteria, communityAuditInfoType);
     } catch (ServiceFault fault) {
       log.error("PyhDemoService.removeFamilyMember: opGetCommunity raised a ServiceFault", fault);
     }
@@ -361,13 +425,14 @@ public class PyhDemoService {
         Iterator<MemberType> mi = members.iterator();
         while (mi.hasNext()) {
           MemberType member = mi.next();
-          if (member.getPic().equals(familyMemberSSN)) {
+          if (member.getPic().equals(familyMemberPic)) {
             members.remove(member);
             try {
-              communityService.opUpdateCommunity(community, new fi.koku.services.entity.community.v1.AuditInfoType());
+              communityService.opUpdateCommunity(community, communityAuditInfoType);
             } catch (ServiceFault fault) {
               log.error("PyhDemoService.removeFamilyMember: opUpdateCommunity raised a ServiceFault", fault);
             }
+            return;
           }
         }
       }
@@ -386,53 +451,53 @@ public class PyhDemoService {
     Iterator<String> si = keys.iterator();
     Person user = getPerson(userPic);
     while (si.hasNext()) {
-      String ssn = si.next();
-      String role = personMap.get(ssn);
+      String pic = si.next();
+      String role = personMap.get(pic);
       
-      Person person = getPerson(ssn);
+      Person person = getPerson(pic);
       CommunityRole communityRole = CommunityRole.create(role);
       
-      List<String> recipients = generateRecipients(ssn, user, communityRole);
+      List<String> recipients = generateRecipients(pic, user, communityRole);
       
       if (CommunityRole.PARENT.equals(communityRole) || CommunityRole.FATHER.equals(communityRole) || 
           CommunityRole.MOTHER.equals(communityRole)) {
-        sendParentAdditionMessage(ssn, user, ssn, person, communityRole);
+        sendParentAdditionMessage(pic, user, pic, person, communityRole);
       } else if (recipients.size() == 0) {
-        insertInto(userPic, ssn, communityRole);
+        insertInto(userPic, pic, communityRole);
       } else {
-        sendFamilyAdditionMessage(recipients, user, ssn, person, communityRole);
+        sendFamilyAdditionMessage(recipients, user, pic, person, communityRole);
       }
     }
   }
   
   /**
-   * TODO: service implementation
+   * TODO: service implementation (Käyttäjäviestintä)
    */
-  private void sendParentAdditionMessage(String recipient, Person user, String ssn, Person person, CommunityRole r) {
+  private void sendParentAdditionMessage(String recipient, Person user, String pic, Person person, CommunityRole r) {
     List<String> tmp = new ArrayList<String>();
     tmp.add(recipient);
-    Message message = Message.createMessage(tmp, user.getPic(), ssn, person.getCapFullName()
+    Message message = Message.createMessage(tmp, user.getPic(), pic, person.getCapFullName()
         + " Uusi perheyhteystieto.", "Käyttäjä " + user.getFullName()
         + " on lisännyt sinut perheyhteisön toiseksi vanhemmaksi. "
-        + "Hyväksymällä pyynnön perheyhteisönne yhdistetään automaattisesti.", new ParentExecutable(user.getPic(), ssn,
+        + "Hyväksymällä pyynnön perheyhteisönne yhdistetään automaattisesti.", new ParentExecutable(user.getPic(), pic,
         r, this));
     messageService.addMessage(message);
   }
   
   /**
-   * TODO: service implementation
+   * TODO: service implementation (Käyttäjäviestintä)
    */
-  private void sendFamilyAdditionMessage(List<String> recipients, Person user, String ssn, Person person, CommunityRole r) {
-    Message message = Message.createMessage(recipients, user.getPic(), ssn, person.getCapFullName()
+  private void sendFamilyAdditionMessage(List<String> recipients, Person user, String pic, Person person, CommunityRole r) {
+    Message message = Message.createMessage(recipients, user.getPic(), pic, person.getCapFullName()
         + " Uusi perheyhteystieto.", "Käyttäjä " + user.getFullName() + " on lisännyt henkilön " + person.getFullName()
         + " perheyhteisön muuksi jäseneksi. "
         + "Kaikkien opsapuolten on hyväksyttävä uuden jäsenen liittäminen perheyhteisöön.",
-        new FamilyExecutable(user.getPic(), ssn, r, this));
+        new FamilyExecutable(user.getPic(), pic, r, this));
     messageService.addMessage(message);
   }
   
   /**
-   * TODO: service implementation
+   * TODO: service implementation (Käyttäjäviestintä)
    */
   private void sendDependantFamilyAdditionMessage(List<String> recipients, Person user, Person person, CommunityRole r) {
     Message message = Message.createMessage(recipients, user.getPic(), person.getPic(), person.getCapFullName()
@@ -448,11 +513,23 @@ public class PyhDemoService {
    * Inserts a new member into a family community.
    */
   public void insertInto(String toFamilyPic, String personPic, CommunityRole role) {
-    Family family = getFamily(toFamilyPic);
-    family.addFamilyMember(personPic, role.getRoleID());
+    Family family = null;
     
     try {
-      communityService.opUpdateCommunity(family.getCommunity(), new fi.koku.services.entity.community.v1.AuditInfoType());
+      family = getFamily(toFamilyPic);
+    } catch (TooManyFamiliesException tme) {
+      log.error("PyhDemoService.insertInto: caught TooManyFamiliesException", tme);
+      return;
+    }
+    
+    family.addFamilyMember(personPic, role.getRoleID());
+    
+    fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
+    communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
+    communityAuditInfoType.setUserId(userID);
+    
+    try {
+      communityService.opUpdateCommunity(family.getCommunity(), communityAuditInfoType);
     } catch (ServiceFault fault) {
       log.error("PyhDemoService.insertInto: opUpdateCommunity raised a ServiceFault", fault);
     }
@@ -462,14 +539,26 @@ public class PyhDemoService {
    * Inserts a parent (from other family) into a family and then combines the two families.
    */
   public void insertParentInto(String toFamilyPic, String personPic, CommunityRole role) {
-    Family family = getFamily(toFamilyPic);
-    Family combine = getFamily(personPic);
+    Family family = null;
+    Family combine = null;
+    
+    try {
+      family = getFamily(toFamilyPic);
+      combine = getFamily(personPic);
+    } catch (TooManyFamiliesException tme) {
+      log.error("PyhDemoService.insertParentInto: caught TooManyFamiliesException", tme);
+      return;
+    }
     
     family.combineFamily(combine);
     family.addFamilyMember(personPic, role.getRoleID());
     
+    fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
+    communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
+    communityAuditInfoType.setUserId(userID);
+    
     try {
-      communityService.opUpdateCommunity(family.getCommunity(), new fi.koku.services.entity.community.v1.AuditInfoType());
+      communityService.opUpdateCommunity(family.getCommunity(), communityAuditInfoType);
     } catch (ServiceFault fault) {
       log.error("PyhDemoService.insertParentInto: opUpdateCommunity raised a ServiceFault", fault);
     }
@@ -481,8 +570,12 @@ public class PyhDemoService {
    * Removes a family community.
    */
   private void removeFamily(Family family) {
+    fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
+    communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
+    communityAuditInfoType.setUserId(userID);
+    
     try {
-      communityService.opDeleteCommunity(family.getCommunityId(), new fi.koku.services.entity.community.v1.AuditInfoType());
+      communityService.opDeleteCommunity(family.getCommunityId(), communityAuditInfoType);
     } catch (ServiceFault fault) {
       log.error("PyhDemoService.removeFamily: opDeleteCommunity raised a ServiceFault", fault);
     }
@@ -493,16 +586,19 @@ public class PyhDemoService {
    *
    * TODO: miten ratkaistaan se, että tämä metodi voi palauttaa useamman kuin yhden perheen?
    */
-  private Family getFamily(String pic) {
+  private Family getFamily(String pic) throws TooManyFamiliesException {
     List<Family> families = new ArrayList<Family>();
     CommunityQueryCriteriaType communityCriteria = new CommunityQueryCriteriaType();
-    // TODO: get community type from constants
-    communityCriteria.setCommunityType("family_community");
+    communityCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_FAMILY);
     communityCriteria.setMemberPic(pic);
     CommunitiesType communitiesType = null;
     
+    fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
+    communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
+    communityAuditInfoType.setUserId(userID);
+    
     try {
-      communitiesType = communityService.opQueryCommunities(communityCriteria, new fi.koku.services.entity.community.v1.AuditInfoType());
+      communitiesType = communityService.opQueryCommunities(communityCriteria, communityAuditInfoType);
     } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
       log.error("PyhDemoService.getFamily: opQueryCommunities raised a ServiceFault", fault);
     }
@@ -514,9 +610,14 @@ public class PyhDemoService {
         CommunityType community = ci.next();
         families.add(new Family(community));
       }
-      // TODO: families voi sisältää useamman kuin yhden perheen henkilön kuuluessa useaan perheeseen ->
-      // mikä perhe tässä tilanteessa palautetaan?
-      return families.get(0);
+      
+      if (families.size() > 1) {
+        TooManyFamiliesException tme = new TooManyFamiliesException("opQueryCommunities with parameter 'pic=" + pic + "' returned more than one family!");
+      }
+      
+      if (families.size() > 0) {
+        return families.get(0);
+      }
     }
     return null;
   }

@@ -34,7 +34,7 @@
 
 	<c:if test="${not empty user}">
 		<div class="name">${user.firstname} ${user.surname} </div>
-		<div class="email"><spring:message code="ui.pyh.email" />  ${user.email}</div>
+		<div class="email"><spring:message code="ui.pyh.email" />  ${user.econtactinfo}</div>
 	</c:if>
 
 </br>
@@ -51,7 +51,7 @@
             <c:forEach var="child" items="${dependants}">
             <tr>
                 <td> ${child.fullName} </td>
-                <td> ${child.ssn} </td>
+                <td> ${child.pic} </td>
                 <td> <spring:message code="${dp.bundleId}"/> 
                     <c:if test="${child.memberOfUserFamily}">
                      (<spring:message code="ui.pyh.added.into.family" />)
@@ -66,7 +66,7 @@
             <c:forEach var="familyMember" items="${otherFamilyMembers}">
              <tr>
                 <td>${familyMember.fullName} </td>
-                <td>${familyMember.ssn} </td>
+                <td>${familyMember.pic} </td>
                 <td><spring:message code="${familyMember.role.bundleId}"/></td>
             </tr>
             </c:forEach>
@@ -112,7 +112,7 @@
                     <span class="pyh-right"> 
                     <portlet:actionURL var="accept">
                             <portlet:param name="action" value="acceptMessage" />
-                            <portlet:param name="readerId" value="${user.ssn}" />
+                            <portlet:param name="readerId" value="${user.pic}" />
                             <portlet:param name="messageId" value="${message.id}" />
                     </portlet:actionURL>
                     <form:form name="accept" method="post" action="${accept}">
