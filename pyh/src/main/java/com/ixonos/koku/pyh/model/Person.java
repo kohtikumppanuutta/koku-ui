@@ -61,7 +61,7 @@ public class Person {
       Iterator<ElectronicContactInfoType> cii = contactInfos.iterator();
       while (cii.hasNext()) {
         ElectronicContactInfoType contactInfo = cii.next();
-        String info = contactInfo.getContactInfoType() + ": " + contactInfo.getContactInfo();
+        String info = contactInfo.getContactInfo();
         electronicContactInfo += info + "\n";
       }
     }

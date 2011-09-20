@@ -33,8 +33,8 @@
 	</h1>
 
 	<c:if test="${not empty user}">
-		<div class="name">${user.firstname} ${user.surname} </div>
-		<div class="email"><spring:message code="ui.pyh.email" />  ${user.econtactinfo}</div>
+		<div class="name">${user.firstnames} ${user.surname} </div>
+		<div class="email"><spring:message code="ui.pyh.econtactinfo" /> ${user.econtactinfo}</div>
 	</c:if>
 
 </br>

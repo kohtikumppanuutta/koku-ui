@@ -2,6 +2,7 @@ package com.ixonos.koku.pyh;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -31,7 +32,6 @@ import fi.koku.services.entity.community.v1.CommunityType;
 import fi.koku.services.entity.community.v1.MemberType;
 import fi.koku.services.entity.community.v1.MembersType;
 import fi.koku.services.entity.community.v1.ServiceFault;
-import fi.koku.services.entity.customer.v1.AuditInfoType;
 import fi.koku.services.entity.customer.v1.CustomerQueryCriteriaType;
 import fi.koku.services.entity.customer.v1.CustomerServiceFactory;
 import fi.koku.services.entity.customer.v1.CustomerServicePortType;
@@ -86,6 +86,13 @@ public class PyhDemoService {
     } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
       log.error("PyhDemoService.getUser: opGetCustomer raised a ServiceFault", fault);
     }
+    
+    // testing
+    log.info("getPerson()");
+    log.info("etunimet: " + customer.getEtunimetNimi());
+    log.info("sukunimi: " + customer.getSukuNimi());
+    log.info("hetu: " + customer.getHenkiloTunnus());
+    
     return new Person(customer);
   }
   
@@ -130,6 +137,12 @@ public class PyhDemoService {
     if (communitiesType != null) {
       List<CommunityType> communities = communitiesType.getCommunity();
       Iterator<CommunityType> ci = communities.iterator();
+      
+      // TODO: remove this log message
+      if (!ci.hasNext()) {
+        log.info("getDependants: communities.iterator() has no communities!");
+      }
+      
       while (ci.hasNext()) {
         CommunityType community = ci.next();
         MembersType membersType = community.getMembers();
@@ -139,6 +152,7 @@ public class PyhDemoService {
           MemberType member = mi.next();
           if (member.getRole().equals(PyhConstants.ROLE_DEPENDANT)) {
             try {
+              // FIXME: call to opGetCustomer must be placed outside the loop
               CustomerType customer = customerService.opGetCustomer(member.getPic(), customerAuditInfoType);
               dependants.add(new Dependant(customer));
             }
@@ -155,10 +169,14 @@ public class PyhDemoService {
   /**
    * Returns all other members of the user's family except dependants.
    */
-  
-  // TODO: first get user's dependants, then family members skipping the dependants
-  
   public List<FamilyMember> getOtherFamilyMembers() {
+    List<Dependant> dependants = getDependants();
+    Set<String> dependantPics = new HashSet<String>();
+    Iterator<Dependant> di = dependants.iterator();
+    while (di.hasNext()) {
+      dependantPics.add(di.next().getPic());
+    }
+    
     List<FamilyMember> otherFamilyMembers = new ArrayList<FamilyMember>();
     CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
     communityQueryCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_FAMILY);
@@ -182,6 +200,12 @@ public class PyhDemoService {
     if (communitiesType != null) {
       List<CommunityType> communities = communitiesType.getCommunity();
       Iterator<CommunityType> ci = communities.iterator();
+      
+      // TODO: remove this log message
+      if (!ci.hasNext()) {
+        log.info("getOtherFamilyMembers: communities.iterator() has no communities!");
+      }
+      
       while (ci.hasNext()) {
         CommunityType community = ci.next();
         MembersType membersType = community.getMembers();
@@ -189,7 +213,7 @@ public class PyhDemoService {
         Iterator<MemberType> mi = members.iterator();
         while (mi.hasNext()) {
           MemberType member = mi.next();
-          if (!member.getRole().equals(PyhConstants.ROLE_DEPENDANT)) {
+          if (!dependantPics.contains(member.getPic())) {
             CustomerType customer = null;
             
             try {
