@@ -54,7 +54,7 @@ public class LogDemoFactory {
 
     entry.setLogId("" + id);
 
-    entry.setTimestamp(simpleDateFormat.format(new Date()));
+    entry.setTimestamp(new Date());
     entry.setUser(user);
     entry.setChild(child);
     entry.setDataItemType(dataItemType);

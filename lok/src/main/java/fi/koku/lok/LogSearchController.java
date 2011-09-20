@@ -5,6 +5,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -35,10 +36,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;
 import fi.koku.services.utility.log.v1.LogEntryType;
 import fi.koku.services.utility.log.v1.LogQueryCriteriaType;
 import fi.koku.services.utility.log.v1.LogServicePortType;
+import fi.koku.services.utility.log.v1.ServiceFault;
 
 /**
  * Controller for log search (LOK). This implements LOK-3 (Etsi lokitieto).
@@ -163,14 +166,16 @@ public class LogSearchController {
       LogQueryCriteriaType criteriatype = new LogQueryCriteriaType();
 
       // the user does not have to give the dates so these might be null
-      XMLGregorianCalendar xmlstart = lu.getXMLGregorianDate(searchCriteria.getFrom());
-      XMLGregorianCalendar xmlend = lu.getXMLGregorianDate(searchCriteria.getTo());
+      Calendar t1 = Calendar.getInstance();
+      t1.setTime(searchCriteria.getFrom());
+      Calendar t2 = Calendar.getInstance();
+      t2.setTime(searchCriteria.getTo());
 
       // set the criteria
       criteriatype.setCustomerPic(searchCriteria.getPic());
       // assume that null arguments are ok
-      criteriatype.setStartTime(xmlstart);
-      criteriatype.setEndDdate(xmlend);
+      criteriatype.setStartTime(t1);
+      criteriatype.setEndDate(t2);
 
       // data item type: kks.vasu, kks.4v, family/community info, consent, ...
       criteriatype.setDataItemType(searchCriteria.getConcept());
@@ -180,11 +185,14 @@ public class LogSearchController {
       // TODO: ADD HERE LOGGING OF LOG
 
       log.debug("criteriatype cust pic: " + criteriatype.getCustomerPic() + "\n" + "start: "
-          + criteriatype.getStartTime() + "\n" + "end: " + criteriatype.getEndDdate() + "\n" + "dataItem: "
+          + criteriatype.getStartTime() + "\n" + "end: " + criteriatype.getEndDate() + "\n" + "dataItem: "
           + criteriatype.getDataItemType() + "\n" + "logtype: " + criteriatype.getLogType());
 
       // call to log database
-      LogEntriesType entriestype = port.opQueryLog(criteriatype);
+      AuditInfoType audit = new AuditInfoType();
+      audit.setComponent("lok"); //FIXME
+      audit.setUserId("luser");  // FIXME
+      LogEntriesType entriestype = port.opQueryLog(criteriatype, audit);
 
       // the log entries list from the database
       List<LogEntryType> entryTypeList = entriestype.getLogEntry();
@@ -210,18 +218,19 @@ public class LogSearchController {
         logEntry.setLogId(logEntryType.getDataItemId()); 
         // other info about the log entry
         logEntry.setMessage(logEntryType.getMessage()); 
-        logEntry.setTimestamp(lu.getDate(logEntryType.getTimestamp()));
+        logEntry.setTimestamp(logEntryType.getTimestamp().getTime());
         logEntry.setUser(logEntryType.getUserPic());
 
         entryList.add(logEntry);
 
       }
 
+      // TODO: Parempi virheenkäsittely
     } catch (MalformedURLException e) {
       log.error(e.getMessage(), e);
-    } catch (DatatypeConfigurationException ex) {
-      log.error(ex.getMessage(), ex);
-    } // TODO: Parempi virheenkäsittely
+    } catch (ServiceFault e) {
+      log.error("service fault", e);
+    }
 
     return entryList;
   }

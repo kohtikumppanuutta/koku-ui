@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -32,10 +33,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;
 import fi.koku.services.utility.log.v1.LogEntryType;
 import fi.koku.services.utility.log.v1.LogQueryCriteriaType;
 import fi.koku.services.utility.log.v1.LogServicePortType;
+import fi.koku.services.utility.log.v1.ServiceFault;
 
 /**
  * Controller for viewing log views, for admin. This implements LOK-4 (Tarkista
@@ -140,23 +143,28 @@ public class LogViewController {
       LogQueryCriteriaType criteriatype = new LogQueryCriteriaType();
 
       // the user does not have to give the dates so these might be null
-      XMLGregorianCalendar xmlstart = lu.getXMLGregorianDate(criteria.getFrom());
-      XMLGregorianCalendar xmlend = lu.getXMLGregorianDate(criteria.getTo());
+      Calendar t1 = Calendar.getInstance();
+      t1.setTime(criteria.getFrom());
+      Calendar t2 = Calendar.getInstance();
+      t2.setTime(criteria.getTo());
 
       // assume that also null arguments are ok!! TODO: ota huomioon
       // kantakyselyissä
-      criteriatype.setStartTime(xmlstart);
-      criteriatype.setEndDdate(xmlend);
+      criteriatype.setStartTime(t1);
+      criteriatype.setEndDate(t2);
       criteriatype.setCustomerPic(criteria.getPic());
       criteriatype.setDataItemType(criteria.getConcept());
       criteriatype.setLogType(LogConstants.LOG_ADMIN);
 
       // TODO: ADD HERE LOGGING OF LOG
 
-      log.debug("criteriatype start: " + criteriatype.getStartTime() + ", end: " + criteriatype.getEndDdate());
+      log.debug("criteriatype start: " + criteriatype.getStartTime() + ", end: " + criteriatype.getEndDate());
 
       // call to log database
-      LogEntriesType entriestype = port.opQueryLog(criteriatype);
+      AuditInfoType audit = new AuditInfoType();
+      audit.setComponent("lok"); //FIXME
+      audit.setUserId("luser");  // FIXME
+      LogEntriesType entriestype = port.opQueryLog(criteriatype, audit);
 
       // get the log entries list from the database
       List<LogEntryType> entryTypeList = entriestype.getLogEntry();
@@ -169,7 +177,7 @@ public class LogViewController {
 
         // put values that were read from the database in logEntry for showing
         // them to the user
-        logEntry.setTimestamp(lu.getDate(logEntryType.getTimestamp()));
+        logEntry.setTimestamp(logEntryType.getTimestamp().getTime());
         logEntry.setUser(logEntryType.getUserPic());
         logEntry.setOperation(logEntryType.getOperation()); // read, write, ..
 
@@ -188,11 +196,12 @@ public class LogViewController {
         entryList.add(logEntry);
       }
 
+   // TODO: Parempi virheenkäsittely
     } catch (MalformedURLException e) {
       log.error(e.getMessage(), e);
-    } catch (DatatypeConfigurationException ex) {
-      log.error(ex.getMessage(), ex);
-    } // TODO: Parempi virheenkäsittely
+    } catch (ServiceFault e) {
+      log.error("service fault", e);
+    }
 
     return entryList;
   }

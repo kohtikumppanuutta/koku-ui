@@ -1,5 +1,7 @@
 package fi.koku.lok;
 
+import java.util.Date;
+
 /**
  * 
  * @author aspluma
@@ -7,7 +9,7 @@ package fi.koku.lok;
 public class LogEntry {
   private String message; // message
   private String logId; // dataItemId: id given by the logging system
-  private String timestamp; // timestamp
+  private Date timestamp; // timestamp
   private String user;  // userPic: pic of the user
   private String child; // customerPic: pic of the child
   private String dataItemType;  // dataItemType: kks.vasu, kks.4v, family info, ..
@@ -22,12 +24,12 @@ public class LogEntry {
     this.logId = logId;
   }
 
-  public String getTimestamp() {
+  public Date getTimestamp() {
     return timestamp;
   }
 
   // format for timestamp: yyyy-mm-dd
-  public void setTimestamp(String timestamp) {
+  public void setTimestamp(Date timestamp) {
     this.timestamp = timestamp;
   }
 
