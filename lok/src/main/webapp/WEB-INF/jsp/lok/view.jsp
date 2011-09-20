@@ -117,7 +117,7 @@
 			<c:if test="${not empty visited}">
 				<%-- do not show this on the first visit to this page --%>
 				<p>
-					<spring:message code="koku.common.noResults" />
+					<spring:message code="koku.lok.admin.noResults" />
 				</p>
 			</c:if>
 		</c:if>
