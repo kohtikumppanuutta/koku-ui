@@ -34,5 +34,12 @@ public class KokuCitizenWarrantService {
 		return service.getKokuKunpoValtakirjaServicePort().getTotalSentAuthorizations(userId);
 	}
 	
+	public int getTotalReceivedAuthorizations(String userId) {
+		return service.getKokuKunpoValtakirjaServicePort().getTotalReceivedAuthorizations(userId);
+	}
+	
+	public void revokeOwnAuthorization(long authorizationId, String user, String comment) {
+		service.getKokuKunpoValtakirjaServicePort().revokeOwnAuthorization(authorizationId, user, comment);
+	}
 }
 

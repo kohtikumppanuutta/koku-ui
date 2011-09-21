@@ -1,6 +1,6 @@
 package fi.arcusys.koku.tiva.warrant.model;
 
-public enum AuthorizationStatus {
+public enum KokuAuthorizationStatus {
 
     OPEN("Open"),
     VALID("Valid"),
@@ -11,7 +11,7 @@ public enum AuthorizationStatus {
     
     private final String value;
 
-    AuthorizationStatus(String v) {
+    KokuAuthorizationStatus(String v) {
         value = v;
     }
 
@@ -19,8 +19,8 @@ public enum AuthorizationStatus {
         return value;
     }
 
-    public static AuthorizationStatus fromValue(String v) {
-        for (AuthorizationStatus c: AuthorizationStatus.values()) {
+    public static KokuAuthorizationStatus fromValue(String v) {
+        for (KokuAuthorizationStatus c: KokuAuthorizationStatus.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

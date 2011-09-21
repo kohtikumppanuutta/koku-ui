@@ -33,7 +33,7 @@
      <xs:element minOccurs='0' name='status' type='tns:authorizationStatus'/>
      <xs:element minOccurs='0' name='targetPersonUid' type='xs:string'/>
      <xs:element minOccurs='0' name='template' type='tns:valtakirjapohja'/>
-     <xs:element minOccurs='0' name='validTill' type='xs:anySimpleType'/>
+     <xs:element minOccurs='0' name='validTill' type='xs:date'/>
     </xs:sequence>
    </xs:complexType>
    <xs:complexType name='valtakirjapohja'>
@@ -90,9 +90,9 @@
     <xs:complexContent>
      <xs:extension base='tns:authorizationShortSummary'>
       <xs:sequence>
-       <xs:element minOccurs='0' name='createdAt' type='xs:anySimpleType'/>
-       <xs:element minOccurs='0' name='givenAt' type='xs:anySimpleType'/>
-       <xs:element minOccurs='0' name='replyTill' type='xs:anySimpleType'/>
+       <xs:element minOccurs='0' name='createdAt' type='xs:date'/>
+       <xs:element minOccurs='0' name='givenAt' type='xs:date'/>
+       <xs:element minOccurs='0' name='replyTill' type='xs:date'/>
        <xs:element minOccurs='0' name='type' type='tns:authorizationCreateType'/>
       </xs:sequence>
      </xs:extension>

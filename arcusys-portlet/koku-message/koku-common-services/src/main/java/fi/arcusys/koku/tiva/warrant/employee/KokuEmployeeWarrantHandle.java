@@ -7,7 +7,7 @@ import fi.arcusys.koku.AbstractHandle;
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationCriteria;
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationQuery;
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationShortSummary;
-import fi.arcusys.koku.tiva.warrant.model.AuthorizationSummary;
+import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationSummary;
 import fi.arcusys.koku.tiva.warrant.model.Valtakirjapohja;
 
 public class KokuEmployeeWarrantHandle extends AbstractHandle {
@@ -18,7 +18,7 @@ public class KokuEmployeeWarrantHandle extends AbstractHandle {
 		service = new KokuEmployeeWarrantService();		
 	}
 	
-	public List<AuthorizationSummary> getAuthorizations(long authorizationTemplateId, String receipientUid, String senderUid, int startNum, int maxNum) {
+	public List<KokuAuthorizationSummary> getAuthorizations(long authorizationTemplateId, String receipientUid, String senderUid, int startNum, int maxNum) {
 		AuthorizationQuery query = new AuthorizationQuery();
 		AuthorizationCriteria criteria = new AuthorizationCriteria();
 		criteria.setAuthorizationTemplateId(authorizationTemplateId);
@@ -28,9 +28,9 @@ public class KokuEmployeeWarrantHandle extends AbstractHandle {
 		query.setStartNum(startNum);
 		query.setMaxNum(maxNum);
 		List<AuthorizationShortSummary> authShortSummaries = service.getAuthorizations(query);
-		List<AuthorizationSummary> summaries = new ArrayList<AuthorizationSummary>();
+		List<KokuAuthorizationSummary> summaries = new ArrayList<KokuAuthorizationSummary>();
 		for (AuthorizationShortSummary shortSummary : authShortSummaries) {
-			summaries.add(new AuthorizationSummary(shortSummary));
+			summaries.add(new KokuAuthorizationSummary(shortSummary));
 		}
 		return summaries;
 	}
@@ -43,8 +43,8 @@ public class KokuEmployeeWarrantHandle extends AbstractHandle {
 		return service.getTotalAuthorizations(criteria);
 	}
 
-	public AuthorizationSummary getAuthorizationDetails(int valtakirjaId) {
-		return new AuthorizationSummary(service.getAuthorizationDetails(valtakirjaId));
+	public KokuAuthorizationSummary getAuthorizationDetails(int valtakirjaId) {
+		return new KokuAuthorizationSummary(service.getAuthorizationDetails(valtakirjaId));
 	}
 
 	public List<Valtakirjapohja> searchAuthorizationTemplates(String searchString, int limit) {

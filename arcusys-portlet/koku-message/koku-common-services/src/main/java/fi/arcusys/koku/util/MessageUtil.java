@@ -127,7 +127,7 @@ public class MessageUtil {
 			return "";
 		}
 	}
-	
+		
 	/**
 	 * Formats a list of string to string
 	 * @param recipients a list of string

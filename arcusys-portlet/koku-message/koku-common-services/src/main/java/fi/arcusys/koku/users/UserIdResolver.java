@@ -37,7 +37,6 @@ public class UserIdResolver {
 		if (userId == null) {
 			throw new IllegalArgumentException("Couldn't find userId by given username: " + username + " PortalRole: " + role);
 		}
-		
 		return userId;
 	}
 	

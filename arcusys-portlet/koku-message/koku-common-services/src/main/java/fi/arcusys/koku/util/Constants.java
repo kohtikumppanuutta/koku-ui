@@ -33,6 +33,7 @@ public class Constants {
 	public static final String ATTR_REQUEST_ID							= "requestId";
 	public static final String ATTR_APPOIMENT_ID						= "appointmentId";
 	public static final String ATTR_CONSENT_ID							= "consentId";
+	public static final String ATTR_AUTHORIZATION_ID					= "authorizationId";
 	public static final String ATTR_MY_ACTION							= "myaction";
 	public static final String ATTR_TARGET_PERSON						= "targetPerson";
 	public static final String ATTR_PORTAL_INFO							= "portalInfo";
@@ -41,6 +42,7 @@ public class Constants {
 	public static final String MY_ACTION_SHOW_REQUEST 					= "showRequest";
 	public static final String MY_ACTION_SHOW_APPOINTMENT				= "showAppointment";
 	public static final String MY_ACTION_SHOW_CONSENT 					= "showConsent";
+	public static final String MY_ACTION_SHOW_WARRANT					= "showWarrant";
 	public static final String MY_ACTION_TASKFORM	 					= "taskform";
 
 	
@@ -49,8 +51,8 @@ public class Constants {
 	public static final String TASK_TYPE_CONSENT_CITIZEN_CONSENTS		= "cst_own_citizen";					// Kansalaiselle vastatut pyynnöt(/suostumukset) 
 	public static final String TASK_TYPE_CONSENT_ASSIGNED_CITIZEN		= "cst_assigned_citizen";	 			// Kansalaiselle saapuneet pyynnöt(/suostumukset) 
 	public static final String TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS	= "cst_browse_customer_consents";		// Virkam.: Selaa asiakkaan valtakirjoja
-	public static final String TASK_TYPE_WARRANT_BROWSE_FROM_USER 		= "cst_browse_own_warrants_from_user";	// Kuntalainen: Valtuuttajana
-	public static final String TASK_TYPE_WARRANT_BROWSE_TO_USER 		= "cst_browse_own_warrants_to_user";	// Kuntalainen: Valtuutettuna
+	public static final String TASK_TYPE_WARRANT_BROWSE_RECEIEVED 		= "cst_browse_own_warrants_from_user";	// Kuntalainen: Valtuuttajana
+	public static final String TASK_TYPE_WARRANT_BROWSE_SENT 			= "cst_browse_own_warrants_to_user";	// Kuntalainen: Valtuutettuna
 	public static final String TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN 	= "app_response_citizen";
 	public static final String TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE 	= "app_response_employee";
 	public static final String TASK_TYPE_APPOINTMENT_INBOX_CITIZEN 		= "app_inbox_citizen";
@@ -74,6 +76,7 @@ public class Constants {
 	public static final String VIEW_SHOW_MESSAGE						= "showmessage";	
 	public static final String VIEW_SHOW_INTALIO_FORM					= "showIntalioForm";
 	public static final String VIEW_SHOW_CONSENT						= "showconsent";
+	public static final String VIEW_SHOW_WARRANT						= "showwarrant";
 	public static final String VIEW_SHOW_EMPLOYEE_APPOINTMENT			= "showemployeeappointment";
 	public static final String VIEW_SHOW_CITIZEN_APPOINTMENT			= "showcitizenappointment";
 	public static final String VIEW_MESSAGE								= "message";

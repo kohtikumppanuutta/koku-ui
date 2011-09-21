@@ -33,6 +33,8 @@ import fi.arcusys.koku.tiva.KokuConsent;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
 import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
+import fi.arcusys.koku.tiva.warrant.citizens.KokuCitizenWarrantHandle;
+import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationSummary;
 import fi.arcusys.koku.users.UserIdResolver;
 import fi.arcusys.koku.util.PortalRole;
 import static fi.arcusys.koku.util.Constants.*;
@@ -166,6 +168,44 @@ public class AjaxController extends AbstractController {
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
+	/**
+	 * Revokes the warrants
+	 * @param messageList a list of message/consent ids to be deleted
+	 * @param modelmap ModelMap
+	 * @param request PortletRequest
+	 * @param response PortletResponse
+	 * @return action response 'OK' or 'FAIL'
+	 */
+	@ResourceMapping(value = "revokeWarrant")
+	public String revokeWarrant(
+			@RequestParam(value = "messageList[]") String[] messageList,
+			@RequestParam(value = "comment") String comment,
+			ModelMap modelmap, 
+			PortletRequest request,
+			PortletResponse response) {
+		PortletSession portletSession = request.getPortletSession();				
+		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+		UserIdResolver resolver = new UserIdResolver();
+		String userId = resolver.getUserId(username, getPortalRole(request));
+
+		KokuCitizenWarrantHandle warrantHandle = new KokuCitizenWarrantHandle();		
+		
+		for(String authorizationId : messageList) {
+			try {
+				long authId = Long.parseLong(authorizationId);
+				warrantHandle.revokeOwnAuthorization(authId, userId, comment);				
+			} catch (NumberFormatException nfe) {
+				LOG.error("Couldn't revoke authorization! Invalid authorizationId. Username: "+ username + " UserId: "+ userId + " AuthorizationId: "+ authorizationId + "Comment: " + comment);
+			}
+		}
+		
+		JSONObject jsonModel = new JSONObject();
+		jsonModel.put(JSON_RESULT, RESPONSE_OK);
+		modelmap.addAttribute(RESPONSE, jsonModel);
+		
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
+	
 	
 	/**
 	 * Cancels appointments
@@ -284,6 +324,7 @@ public class AjaxController extends AbstractController {
 				
 			} else if(taskType.startsWith("cst")) { // for consent (Valtakirja / Suostumus)
 				List<KokuConsent> csts = null;
+				List<KokuAuthorizationSummary> summaries = null;
 				if (taskType.equals(TASK_TYPE_CONSENT_ASSIGNED_CITIZEN)) { // Kansalaiselle saapuneet pyynnöt(/suostumukset) 
 					TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
 					tivaHandle.setMessageSource(messageSource);
@@ -309,20 +350,18 @@ public class AjaxController extends AbstractController {
 					csts = tivaHandle.getConsents(userId, keyword, field, first, max);
 					totalTasksNum = tivaHandle.getTotalConsents(userId, keyword, field);
 					jsonModel.put(TASKS, csts);
-				} else if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_FROM_USER)) {	// Kuntalainen: Valtuuttajana TIVA-11
-					TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
-					tivaHandle.setMessageSource(messageSource);
-					// FIXME: This should change when we get proper methods from WS
-					csts = tivaHandle.getConsents(userId, keyword, field, first, max);
-					totalTasksNum = tivaHandle.getTotalConsents(userId, keyword, field);
-					jsonModel.put(TASKS, csts);
-				} else if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_TO_USER)) {	// Kuntalainen: Valtuutettuna TIVA-11
-					TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
-					tivaHandle.setMessageSource(messageSource);
-					// FIXME: This should change when we get proper methods from WS
-					csts = tivaHandle.getConsents(userId, keyword, field, first, max);
-					totalTasksNum = tivaHandle.getTotalConsents(userId, keyword, field);
-					jsonModel.put(TASKS, csts);
+				} else if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_RECEIEVED)) {	// Kuntalainen: Valtuuttajana TIVA-11
+					KokuCitizenWarrantHandle warrantHandle = new KokuCitizenWarrantHandle();
+					warrantHandle.setMessageSource(messageSource);
+					summaries = warrantHandle.getSentWarrants(userId, first, max);
+					totalTasksNum = warrantHandle.getTotalReceivedAuthorizations(userId);
+					jsonModel.put(TASKS, summaries);
+				} else if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_SENT)) {	// Kuntalainen: Valtuutettuna TIVA-11
+					KokuCitizenWarrantHandle warrantHandle = new KokuCitizenWarrantHandle();
+					warrantHandle.setMessageSource(messageSource);
+					summaries = warrantHandle.getReceivedAuthorizations(userId, first, max);
+					totalTasksNum = warrantHandle.getTotalSentAuthorizations(userId);
+					jsonModel.put(TASKS, summaries);
 				}
 				
 			} else { // for message
@@ -515,5 +554,49 @@ public class AjaxController extends AbstractController {
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
+	/**
+	 * Creates warrant render url mainly for gatein portal, and keeps the page
+	 * parameters such as page id, task type, keyword
+	 * 
+	 * @param authorizationId authorization id
+	 * @param currentPage current page
+	 * @param taskType request task type
+	 * @param keyword keyword
+	 * @param orderType order type
+	 * @param modelmap ModelMap
+	 * @param request PortletRequest
+	 * @param response ResourceResponse
+	 * @return Consent render url in Json format
+	 */
+	@ResourceMapping(value = "createWarrantRenderUrl")
+	public String createWarrantRenderUrl(
+			@RequestParam(value = "authorizationId") String authorizationId,
+			@RequestParam(value = "currentPage") String currentPage,
+			@RequestParam(value = "taskType") String taskType,
+			@RequestParam(value = "keyword") String keyword,
+			@RequestParam(value = "orderType") String orderType,
+			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
+
+		PortletURL renderUrlObj = response.createRenderURL();
+		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_WARRANT);
+		renderUrlObj.setParameter( ATTR_AUTHORIZATION_ID, authorizationId);
+		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
+		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
+		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
+		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);	
+		
+		try {
+			renderUrlObj.setWindowState(WindowState.NORMAL);
+		} catch (WindowStateException e) {
+			LOG.error("Create consent render url failed");
+		}
+		String renderUrlString = renderUrlObj.toString();
+		
+		JSONObject jsonModel = new JSONObject();
+		jsonModel.put(JSON_RENDER_URL, renderUrlString);
+		modelmap.addAttribute(RESPONSE, jsonModel);
+		
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
 	
 }

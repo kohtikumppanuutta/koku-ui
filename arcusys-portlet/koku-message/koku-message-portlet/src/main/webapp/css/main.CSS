@@ -131,7 +131,8 @@
 }
 
 .messageItem {
-	cursor: pointer;
+	/* cursor: pointer; */ 
+	cursor: normal;
 }
 /* main table row color */
 .task-manager-table tr.new {font-weight:bold;}
@@ -311,5 +312,14 @@
 .errorMsg.noConsents {
 	padding: 10px;
 	color: #F00;
+}
+
+abbr.valueWithDesc {
+	border-bottom: 0;
+	cursor: pointer;
+}
+
+abbr.valueWithDesc:hover {
+	color: #0089C1;
 }
 

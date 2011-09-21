@@ -15,6 +15,10 @@
 <portlet:resourceURL var="revokeURL" id="revokeConsent">
 </portlet:resourceURL>
 
+<portlet:resourceURL var="revokeWarrantURL" id="revokeWarrants">
+</portlet:resourceURL>
+
+
 <portlet:resourceURL var="cancelURL" id="cancelAppointment">
 </portlet:resourceURL>
 
@@ -34,6 +38,10 @@
 	<portlet:param name="myaction" value="showConsent" />
 </portlet:renderURL>
 
+<portlet:renderURL var="citizenWarrantURL" windowState="<%= WindowState.NORMAL.toString() %>" >
+	<portlet:param name="myaction" value="showCitizenWarrant" />
+</portlet:renderURL>
+
 <!-- Not in use currently, but reserved for future use -->
 <portlet:renderURL var="intalioFormURL" windowState="<%= WindowState.NORMAL.toString() %>" >
 	<portlet:param name="myaction" value="showIntalioForm" />
@@ -51,6 +59,10 @@
 
 <portlet:resourceURL var="consentRenderURL" id="createConsentRenderUrl">
 </portlet:resourceURL>
+
+<portlet:resourceURL var="warrantRenderURL" id="createWarrantRenderUrl">
+</portlet:resourceURL>
+
 
 <!-- For gatein Portal ends-->
 
@@ -367,9 +379,9 @@
 			taskHtml += createBrowseEmployeeOwnConsents(tasks);
 		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>") {
 			taskHtml += createBrowseUserConsentsTable(tasks);
-		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_TO_USER %>") {
+		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED %>") {
 			taskHtml += createBrowseWarrantsToMe(tasks);
-		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_FROM_USER %>") {
+		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT %>") {
 			taskHtml += createBrowseWarrantsFromMe(tasks);
 		}		
 		return taskHtml;
@@ -380,23 +392,30 @@
 		if (tasks == undefined || tasks == null || tasks.length == 0) {
 			return showErrorMsgNoConsents();
 		}
+		
 		var columnNames = ["<spring:message code="message.choose"/>",
-		                   "<spring:message code="consent.templateName"/>",
-		                   "<spring:message code="consent.status"/>",
-		                   "<spring:message code="consent.approvalStatus"/>",
-		                   "<spring:message code="consent.createType"/>",
-		                   "<spring:message code="consent.givenDate"/>",
-		                   "<spring:message code="consent.validDate"/>"
+		                   "<spring:message code="warrant.templateName"/>",
+		                   "<spring:message code="warrant.status"/>",
+// 		                   "<spring:message code="consent.approvalStatus"/>",
+// 		                   "<spring:message code="consent.createType"/>",
+// 		                   "<spring:message code="consent.givenDate"/>",
+// 		                   "<spring:message code="consent.validDate"/>"
+		                   "<spring:message code="warrant.validTill.short"/>"
 		                  ];
 		
 		var columnIds = [
-		                 "templateName",
-		                 "status",
-		                 "approvalStatus",
-		                 "createType",
-		                 "assignedDate",
-		                 "validDate"];
-		return createTable("noFunction", "createBrowseWarrantsToMe" , columnNames, columnIds, tasks);
+		                 "templateNameWithDescription",
+		                 "localizedStatus",
+// 		                 "approvalStatus",
+// 		                 "createType",
+// 		                 "assignedDate",
+// 		                 "validDate"
+						 "validTill"
+		                 ];
+		
+		flattenTasksContent(tasks);
+
+		return createTable("showWarrant", "createBrowseWarrantsToMe" , columnNames, columnIds, tasks);
 	}
 	
 	function createBrowseWarrantsFromMe(tasks) {
@@ -405,33 +424,47 @@
 		}
 		
 		var columnNames = ["<spring:message code="message.choose"/>",
-		                   "<spring:message code="consent.templateName"/>",
-		                   "<spring:message code="consent.status"/>",
-		                   "<spring:message code="consent.approvalStatus"/>",
-		                   "<spring:message code="consent.createType"/>",
-		                   "<spring:message code="consent.givenDate"/>",
-		                   "<spring:message code="consent.accepted"/>",
-		                   "<spring:message code="consent.validDate"/>",
-		                   "<spring:message code="consent.edit"/>"
+		                   "<spring:message code="warrant.templateName"/>",
+		                   "<spring:message code="warrant.status"/>",
+// 		                   "<spring:message code="consent.approvalStatus"/>",
+// 		                   "<spring:message code="consent.createType"/>",
+// 		                   "<spring:message code="consent.givenDate"/>",
+// 		                   "<spring:message code="consent.accepted"/>",
+// 		                   "<spring:message code="consent.validDate"/>",
+		                   "<spring:message code="warrant.validTill.short"/>",
+		                   "<spring:message code="warrant.edit"/>"
 		                  ];
 		
 		var columnIds = [
-		                 "templateName",
-		                 "status",
-		                 "approvalStatus",
-		                 "createType",
-		                 "assignedDate",
-		                 "acceptedDate",
-		                 "validDate",
-		                 "editLink"];
+		                 "templateNameWithDescription",
+		                 "localizedStatus",
+// 		                 "approvalStatus",
+// 		                 "createType",
+// 		                 "assignedDate",
+// 		                 "acceptedDate",
+// 		                 "validDate",
+						 "validTill",
+		                 "editLink"
+		                 ];
+		flattenTasksContent(tasks);
 		createEditConsentColumn(tasks);
-		return createTable("noFunction", "createBrowseWarrantsFromMe", columnNames, columnIds, tasks);
+
+		return createTable("showWarrant", "createBrowseWarrantsFromMe", columnNames, columnIds, tasks);
 	}
 	
 	function createEditConsentColumn(tasks) {
 		for (var i = 0; i < tasks.length; i++)  {
-			var url = "<%= defaultPath %>/Message/ValtakirjaConsent?FormID="+ tasks[i].consentId;
+			var url = "<%= defaultPath %>/Message/ValtakirjaEditConsent?FormID="+ tasks[i].authorizationId;
 			tasks[i]["editLink"] = "<a href="+ url+ "><spring:message code="consent.edit"/></a>";
+		}
+	}
+	
+	function flattenTasksContent(tasks) {
+		for (var i = 0; i < tasks.length; i++)  {			
+			tasks[i]["templateDescription"] = tasks[i].template.description;
+			tasks[i]["templateId"] = tasks[i].template.templateId;
+			tasks[i]["templateName"] = tasks[i].template.templateName;
+			tasks[i]["templateNameWithDescription"] = "<abbr class='valueWithDesc' title='"+ tasks[i].template.description +"' >" + tasks[i].template.templateName +"</abbr>";
 		}
 	}
 
@@ -831,9 +864,10 @@
 		if (pageObj.taskType == 'msg_inbox' || pageObj.taskType == 'msg_outbox') {
 			pageHtml += '<li><input type="button" value="<spring:message code="page.archive"/>"  onclick="archiveMessages()" /></li>';
 		}
-		if (pageObj.taskType == '<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS %>' 
-				|| pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_BROWSE_FROM_USER %>') {
+		if (pageObj.taskType == '<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS %>') {
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="revokeConsents()" /></li>';
+		} else if ( pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT %>') {
+			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="revokeWarrants()" /></li>';
 		} else if(pageObj.taskType.indexOf('msg') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="page.removeSelected"/>"  onclick="deleteMessages()" /></li>';
 		} else if( pageObj.taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE %>' 
@@ -1045,6 +1079,54 @@
 			}
 		});
 	}
+	
+	/**
+	 * Revokes a list of warrants selected by user
+	 */
+	function revokeWarrants() {		
+		var messageList = [];		
+		jQuery('input:checkbox[name="message"]:checked').each(function(){
+			var id = jQuery(this).val();
+			var authorizationId = pageObj.tasks[id]['authorizationId'];
+			var warrantStatus = pageObj.tasks[id]['status'];
+			
+			if(warrantStatus != '<spring:message code="ConsentStatus.REVOKED"/>') { // not revoked yet
+				messageList.push(authorizationId);
+			}    	
+		});
+		
+		if(messageList.length == 0) {
+			return; // no message selected
+		}
+		
+		var conf = confirm("<spring:message code="info.conformRevokeWarrantWarning"/>");
+		
+		if(!conf) {
+			return;
+		}
+		
+		var comment = prompt('<spring:message code="warrant.cancelPrompt"/>',"");
+		if (comment == null) {
+			return;
+		}
+		
+		var url="<%= revokeWarrantURL %>";
+		url = formatUrl(url);
+		
+		jQuery.post(url, {'messageList':messageList, 'comment':comment}, function(data) {
+			var obj = eval('(' + data + ')');
+			var json = obj.response;
+			var result = json["result"];
+			
+			if (result == 'OK') {
+				ajaxGetTasks();
+			} else {
+				var message = "<spring:message code="error.unLogin" />";
+				showErrorMessage(message);
+			}
+		});
+	}
+	
 
 	/**
 	 * Show/hide search user interface

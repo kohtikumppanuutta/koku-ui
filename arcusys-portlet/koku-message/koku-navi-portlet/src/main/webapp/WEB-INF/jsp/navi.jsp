@@ -286,8 +286,8 @@
 					<li id="valtakirjaconsent"><a href="<%= defaultPath %>/Message/ValtakirjaConsent">Anna valtakirja</a></li>
 					<li><a href="#">Omat valtakirjat</a>
 						<ul class="child">
-							<li id="cst_browse_own_warrants_from_user"><a href="javascript:void(0)" onclick="navigateToPage('cst_browse_own_warrants_from_user')">Valtuuttajana</a></li>
-							<li id="cst_browse_own_warrants_to_user"><a href="javascript:void(0)" onclick="navigateToPage('cst_browse_own_warrants_to_user')">Valtuutettuna</a></li>
+							<li id="<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT%>')">Valtuuttajana</a></li>
+							<li id="<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED%>')">Valtuutettuna</a></li>
 						</ul>
 					</li>
 				</ul>
