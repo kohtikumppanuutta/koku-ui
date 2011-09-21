@@ -34,11 +34,11 @@ public class KksConverter {
     this.kksService = kksService;
   }
 
-  public KKSCollection fromWsType(KksCollectionType collection, boolean generateEmptyEntries) {
+  public KKSCollection fromWsType(KksCollectionType collection, boolean generateEmptyEntries, String user) {
 
     KKSCollection tmp = new KKSCollection(collection.getId(), collection.getName(), collection.getDescription(),
         fromWsType(collection.getStatus()), collection.getCreated().getTime(), collection.getVersion().intValue(),
-        kksService.getCollectionClassType(collection.getCollectionClassId()));
+        kksService.getCollectionClassType(collection.getCollectionClassId(), user));
 
     tmp.setModifier(collection.getCreator());
     tmp.setPrevVersion(collection.getPrevVersion());
@@ -48,7 +48,7 @@ public class KksConverter {
 
     for (KksEntryType entryType : collection.getKksEntries().getEntries()) {
 
-      KksEntryClassType metaEntry = kksService.getEntryClassType(entryType.getEntryClassId());
+      KksEntryClassType metaEntry = kksService.getEntryClassType(entryType.getEntryClassId(), user);
 
       if (metaEntry != null) {
         if (metaEntry.isMultiValue()) {

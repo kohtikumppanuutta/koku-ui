@@ -35,7 +35,7 @@ public class EditController {
     kksService.clearMetadata();
 
     if (message != null) {
-      model.addAttribute("message", "Malli resetoitu");
+      model.addAttribute("message", "");
     }
     return "edit";
   }

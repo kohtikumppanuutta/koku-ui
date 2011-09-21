@@ -21,9 +21,6 @@ public class KokuWSFactory {
   private final URL KKS_WSDL_LOCATION = getClass().getClassLoader().getResource("/wsdl/kksService.wsdl");
   private static final String KKS_SERVICE_VERSION = "0.0.1-SNAPSHOT";
 
-  private final URL CUSTOMER_WSDL_LOCATION = getClass().getClassLoader().getResource("/wsdl/kksService.wsdl");
-  private static final String CUSTOMER_SERVICE_VERSION = "0.0.1-SNAPSHOT";
-
   public KokuWSFactory(String uid, String pwd, String endpointBaseUrl) {
     this.uid = uid;
     this.pwd = pwd;

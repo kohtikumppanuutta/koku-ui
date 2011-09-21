@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletSession;
 import javax.portlet.RenderResponse;
 
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import fi.koku.kks.model.KKSCollection;
 import fi.koku.kks.model.KksService;
 import fi.koku.kks.model.Person;
+import fi.koku.kks.ui.common.utils.Utils;
 
 /**
  * Controller for entry searches
@@ -39,13 +41,14 @@ public class EntrySearchController {
   private static final Logger LOG = LoggerFactory.getLogger(EntrySearchController.class);
 
   @RenderMapping(params = "action=showSearchResult")
-  public String showResults(@ModelAttribute(value = "child") Person child,
+  public String showResults(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "description") String description,
       @RequestParam(value = "classification") String classification, RenderResponse response, Model model) {
     LOG.info("show search result");
     String tmp[] = classification.replaceAll(" ", "").split(",");
     List<String> names = Arrays.asList(tmp);
-    List<KKSCollection> collections = kksService.searchKksCollections(names, child.getPic());
+    List<KKSCollection> collections = kksService.searchKksCollections(names, child.getPic(),
+        Utils.getPicFromSession(session));
 
     model.addAttribute("child", child);
     model.addAttribute("collections", collections);
@@ -68,8 +71,8 @@ public class EntrySearchController {
   }
 
   @ModelAttribute("child")
-  public Person getchild(@RequestParam(value = "pic") String pic) {
-    return kksService.searchChild(pic);
+  public Person getchild(PortletSession session, @RequestParam(value = "pic") String pic) {
+    return kksService.searchChild(pic, Utils.getPicFromSession(session));
   }
 
 }

@@ -2,6 +2,7 @@ package fi.koku.kks.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -12,10 +13,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import fi.koku.kks.ui.common.KksConverter;
-import fi.koku.kks.ui.common.KokuWSFactory;
-import fi.koku.kks.ui.common.User;
+import fi.koku.kks.ui.common.utils.Constants;
 import fi.koku.kks.ui.common.utils.SearchResult;
-import fi.koku.services.entity.kks.v1.AuditInfoType;
+import fi.koku.services.entity.community.v1.CommunitiesType;
+import fi.koku.services.entity.community.v1.CommunityQueryCriteriaType;
+import fi.koku.services.entity.community.v1.CommunityServiceFactory;
+import fi.koku.services.entity.community.v1.CommunityServicePortType;
+import fi.koku.services.entity.community.v1.CommunityType;
+import fi.koku.services.entity.community.v1.MemberType;
+import fi.koku.services.entity.community.v1.MembersType;
+import fi.koku.services.entity.customer.v1.CustomerServiceFactory;
+import fi.koku.services.entity.customer.v1.CustomerServicePortType;
+import fi.koku.services.entity.customer.v1.CustomerType;
 import fi.koku.services.entity.kks.v1.KksCollectionClassType;
 import fi.koku.services.entity.kks.v1.KksCollectionCreationCriteriaType;
 import fi.koku.services.entity.kks.v1.KksCollectionStateCriteriaType;
@@ -27,11 +36,9 @@ import fi.koku.services.entity.kks.v1.KksEntryCriteriaType;
 import fi.koku.services.entity.kks.v1.KksEntryValueType;
 import fi.koku.services.entity.kks.v1.KksGroupType;
 import fi.koku.services.entity.kks.v1.KksQueryCriteriaType;
+import fi.koku.services.entity.kks.v1.KksServiceFactory;
 import fi.koku.services.entity.kks.v1.KksServicePortType;
-import fi.koku.services.entity.kks.v1.KksTagIdsType;
 import fi.koku.services.entity.kks.v1.KksTagNamesType;
-import fi.koku.services.entity.kks.v1.KksTagType;
-import fi.koku.services.entity.kks.v1.KksTagsType;
 import fi.koku.services.entity.kks.v1.KksType;
 import fi.koku.services.entity.kks.v1.ServiceFault;
 
@@ -46,35 +53,66 @@ public class KksService {
 
   private static final Logger LOG = LoggerFactory.getLogger(KksService.class);
 
-  String endPoint = "http://localhost:8180/";
   private KKSDemoModel malli;
-  private KokuWSFactory kf;
-  private AuditInfoType audit;
   private Map<String, KksEntryClassType> entryClasses;
   private Map<String, KksCollectionClassType> collectionClasses;
   private KksConverter converter;
 
   public KksService() {
-    kf = new KokuWSFactory("marko", "marko", endPoint);
-    audit = new AuditInfoType();
-    audit.setComponent("kks");
-    audit.setUserId("tuomape");
-    converter = new KksConverter(this);
-
     entryClasses = new HashMap<String, KksEntryClassType>();
     collectionClasses = new HashMap<String, KksCollectionClassType>();
+    converter = new KksConverter(this);
   }
 
-  public KksEntryClassType getEntryClassType(String id) {
+  public fi.koku.services.entity.customer.v1.AuditInfoType getCustomerAuditInfo(String user) {
+    fi.koku.services.entity.customer.v1.AuditInfoType a = new fi.koku.services.entity.customer.v1.AuditInfoType();
+    a.setComponent(Constants.COMPONENT_KKS);
+    a.setUserId(user);
+    return a;
+  }
+
+  public fi.koku.services.entity.community.v1.AuditInfoType getCommynityAuditInfo(String user) {
+    fi.koku.services.entity.community.v1.AuditInfoType a = new fi.koku.services.entity.community.v1.AuditInfoType();
+    a.setComponent(Constants.COMPONENT_KKS);
+    a.setUserId(user);
+    return a;
+  }
+
+  public fi.koku.services.entity.kks.v1.AuditInfoType getKksAuditInfo(String user) {
+    fi.koku.services.entity.kks.v1.AuditInfoType a = new fi.koku.services.entity.kks.v1.AuditInfoType();
+    a.setComponent(Constants.COMPONENT_KKS);
+    a.setUserId(user);
+    return a;
+  }
+
+  private KksServicePortType getKksService() {
+    KksServiceFactory kksServiceFactory = new KksServiceFactory(Constants.KKS_SERVICE_USER_ID,
+        Constants.KKS_SERVICE_PASSWORD, Constants.ENDPOINT);
+    return kksServiceFactory.getKksService();
+  }
+
+  private CommunityServicePortType getCommunityService() {
+    CommunityServiceFactory csf = new CommunityServiceFactory(Constants.COMMUNITY_SERVICE_USER_ID,
+        Constants.COMMUNITY_SERVICE_PASSWORD, Constants.ENDPOINT);
+    return csf.getCommunityService();
+  }
+
+  private CustomerServicePortType getCustomerService() {
+    CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory(Constants.CUSTOMER_SERVICE_USER_ID,
+        Constants.CUSTOMER_SERVICE_PASSWORD, Constants.ENDPOINT);
+    return customerServiceFactory.getCustomerService();
+  }
+
+  public KksEntryClassType getEntryClassType(String id, String user) {
     if (entryClasses.isEmpty()) {
-      collectMetadata();
+      collectMetadata(user);
     }
     return entryClasses.get(id);
   }
 
-  public KksCollectionClassType getCollectionClassType(String id) {
+  public KksCollectionClassType getCollectionClassType(String id, String user) {
     if (collectionClasses.isEmpty()) {
-      collectMetadata();
+      collectMetadata(user);
     }
     return collectionClasses.get(id);
   }
@@ -84,21 +122,22 @@ public class KksService {
     collectionClasses.clear();
   }
 
-  public List<KKSCollection> getKksCollections(String pic) {
+  public List<KKSCollection> getKksCollections(String pic, String user) {
     List<KKSCollection> tmp = new ArrayList<KKSCollection>();
     try {
-      KksServicePortType kksService = kf.getKksService();
+
       KksCollectionsCriteriaType criteria = new KksCollectionsCriteriaType();
       criteria.setPic(pic);
       criteria.setKksScope("minimum");
-      KksType kks = kksService.opGetKks(criteria, audit);
+      KksServicePortType kksService = getKksService();
+      KksType kks = kksService.opGetKks(criteria, getKksAuditInfo(user));
 
       List<KksCollectionType> collections = kks.getKksCollections().getKksCollection();
 
       if (collections != null) {
 
         for (KksCollectionType kct : collections) {
-          tmp.add(converter.fromWsType(kct, false));
+          tmp.add(converter.fromWsType(kct, false, user));
         }
       }
 
@@ -108,21 +147,21 @@ public class KksService {
     return tmp;
   }
 
-  public KKSCollection getKksCollection(String collectionId) {
+  public KKSCollection getKksCollection(String collectionId, String user) {
     try {
-      KksServicePortType kksService = kf.getKksService();
-      KksCollectionType kks = kksService.opGetKksCollection(collectionId, audit);
-      return converter.fromWsType(kks, true);
+      KksServicePortType kksService = getKksService();
+      KksCollectionType kks = kksService.opGetKksCollection(collectionId, getKksAuditInfo(user));
+      return converter.fromWsType(kks, true, user);
     } catch (ServiceFault e) {
       LOG.error("Failed to get KKS collection " + collectionId, e);
     }
     return null;
   }
 
-  public boolean updateKksCollection(KKSCollection collection, String customer) {
+  public boolean updateKksCollection(KKSCollection collection, String customer, String user) {
     try {
-      KksServicePortType kksService = kf.getKksService();
-      kksService.opUpdateKksCollection(converter.toWsType(collection, customer), audit);
+      KksServicePortType kksService = getKksService();
+      kksService.opUpdateKksCollection(converter.toWsType(collection, customer), getKksAuditInfo(user));
     } catch (ServiceFault e) {
       e.printStackTrace();
       LOG.error("Failed to update KKS collection " + collection.getId(), e);
@@ -131,69 +170,67 @@ public class KksService {
     return true;
   }
 
-  public boolean updateKksCollectionStatus(String collectionId, String status) {
+  public boolean updateKksCollectionStatus(String collectionId, String status, String user) {
     try {
-      KksServicePortType kksService = kf.getKksService();
+      KksServicePortType kksService = getKksService();
       KksCollectionStateCriteriaType state = new KksCollectionStateCriteriaType();
       state.setCollectionId(collectionId);
       state.setState(status);
-      kksService.opUpdateKksCollectionStatus(state, audit);
+      kksService.opUpdateKksCollectionStatus(state, getKksAuditInfo(user));
     } catch (ServiceFault e) {
       LOG.error("Failed to update KKS collection status " + collectionId + " : " + status, e);
     }
     return true;
   }
 
-  public String createKksCollection(String name, String type, String customer) {
+  public String createKksCollection(String name, String type, String customer, String user) {
     try {
-      KksServicePortType kksService = kf.getKksService();
       KksCollectionCreationCriteriaType kksCollectionCreationCriteria = new KksCollectionCreationCriteriaType();
       kksCollectionCreationCriteria.setCollectionName(name);
       kksCollectionCreationCriteria.setPic(customer);
       kksCollectionCreationCriteria.setCollectionTypeId(type);
       kksCollectionCreationCriteria.setKksScope("new");
-      return kksService.opAddKksCollection(kksCollectionCreationCriteria, audit).getId();
+      KksServicePortType kksService = getKksService();
+      return kksService.opAddKksCollection(kksCollectionCreationCriteria, getKksAuditInfo(user)).getId();
     } catch (ServiceFault e) {
       LOG.error("Failed to create KKS collection " + name, e);
     }
     return null;
   }
 
-  public String createKksCollectionVersion(String name, String type, String customer, boolean empty) {
+  public String createKksCollectionVersion(String name, String type, String customer, boolean empty, String user) {
     try {
-      KksServicePortType kksService = kf.getKksService();
       KksCollectionCreationCriteriaType kksCollectionCreationCriteria = new KksCollectionCreationCriteriaType();
       kksCollectionCreationCriteria.setCollectionName(name);
       kksCollectionCreationCriteria.setPic(customer);
       kksCollectionCreationCriteria.setCollectionTypeId(type);
 
       if (empty) {
-        kksCollectionCreationCriteria.setKksScope("new_version");
+        kksCollectionCreationCriteria.setKksScope("empty_version");
       } else {
         kksCollectionCreationCriteria.setKksScope("version");
       }
-
-      return kksService.opAddKksCollection(kksCollectionCreationCriteria, audit).getId();
+      KksServicePortType kksService = getKksService();
+      return kksService.opAddKksCollection(kksCollectionCreationCriteria, getKksAuditInfo(user)).getId();
     } catch (ServiceFault e) {
       LOG.error("Failed to create KKS collection version " + name + " type: " + type, e);
     }
     return null;
   }
 
-  public List<KKSCollection> searchKksCollections(List<String> tagNames, String customer) {
+  public List<KKSCollection> searchKksCollections(List<String> tagNames, String customer, String user) {
     List<KKSCollection> tmp = new ArrayList<KKSCollection>();
 
     try {
-      KksServicePortType kksService = kf.getKksService();
       KksQueryCriteriaType kksQueryCriteria = new KksQueryCriteriaType();
       KksTagNamesType names = new KksTagNamesType();
       names.getKksTagName().addAll(tagNames);
       kksQueryCriteria.setKksTagNames(names);
-
-      KksCollectionsType collections = kksService.opQueryKks(kksQueryCriteria, audit);
+      KksServicePortType kksService = getKksService();
+      KksCollectionsType collections = kksService.opQueryKks(kksQueryCriteria, getKksAuditInfo(user));
 
       for (KksCollectionType type : collections.getKksCollection()) {
-        tmp.add(converter.fromWsType(type, false));
+        tmp.add(converter.fromWsType(type, false, user));
       }
 
     } catch (ServiceFault e) {
@@ -202,10 +239,8 @@ public class KksService {
     return tmp;
   }
 
-  public String addKksEntry(String customer, String entryId, String valueId, String value) {
+  public String addKksEntry(String customer, String entryId, String valueId, String value, String user) {
     try {
-      KksServicePortType kksService = kf.getKksService();
-
       KksEntryCriteriaType criteria = new KksEntryCriteriaType();
       criteria.setEntryId(entryId);
       criteria.setPic(customer);
@@ -213,18 +248,16 @@ public class KksService {
       evt.setId(valueId);
       evt.setValue(value);
       criteria.setValue(evt);
-
-      return kksService.opAddEntry(criteria, audit).getId();
+      KksServicePortType kksService = getKksService();
+      return kksService.opAddEntry(criteria, getKksAuditInfo(user)).getId();
     } catch (ServiceFault e) {
       LOG.error("Failed to add KKS entry " + entryId, e);
     }
     return null;
   }
 
-  public boolean removeKksEntry(String customer, String entryId, String valueId, String value) {
+  public boolean removeKksEntry(String customer, String entryId, String valueId, String value, String user) {
     try {
-      KksServicePortType kksService = kf.getKksService();
-
       KksEntryCriteriaType criteria = new KksEntryCriteriaType();
       criteria.setEntryId(entryId);
       criteria.setPic(customer);
@@ -232,8 +265,8 @@ public class KksService {
       evt.setId(valueId);
       evt.setValue(value);
       criteria.setValue(evt);
-
-      kksService.opDeleteEntry(criteria, audit);
+      KksServicePortType kksService = getKksService();
+      kksService.opDeleteEntry(criteria, getKksAuditInfo(user));
     } catch (ServiceFault e) {
       LOG.error("Failed to remove KKS entry " + entryId, e);
       return false;
@@ -241,10 +274,11 @@ public class KksService {
     return true;
   }
 
-  private void collectMetadata() {
+  private void collectMetadata(String user) {
     try {
-      KksServicePortType kksService = kf.getKksService();
-      List<KksCollectionClassType> classes = kksService.opGetKksCollectionClasses("all", audit).getKksCollectionClass();
+      KksServicePortType kksService = getKksService();
+      List<KksCollectionClassType> classes = kksService.opGetKksCollectionClasses("all", getKksAuditInfo(user))
+          .getKksCollectionClass();
 
       if (classes != null) {
         for (KksCollectionClassType kcc : classes) {
@@ -269,26 +303,6 @@ public class KksService {
     }
   }
 
-  public void test() {
-
-    KksServicePortType kksService = kf.getKksService();
-
-    KksTagIdsType tmp = new KksTagIdsType();
-    tmp.getKksTagId().add("1");
-    KksTagsType tags;
-    try {
-      tags = kksService.opGetKksTags(tmp, audit);
-
-      for (KksTagType kt : tags.getKksTag()) {
-        System.out.println("tags" + kt.getName());
-      }
-    } catch (ServiceFault e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-
-  }
-
   public boolean onkoLuotu() {
     if (malli != null) {
       return true;
@@ -300,25 +314,67 @@ public class KksService {
     malli = DemoFactory.luo();
   }
 
-  public List<Person> searchChilds(User user) {
-    return malli.getPersons();
+  public List<Person> searchChilds(String user) {
+    return getChilds(user);
   }
 
-  public List<Person> haeHenkilo(Person target) {
-    List<Person> list = new ArrayList<Person>();
-    Person tmp = searchChild(target.getPic().trim());
+  public List<Person> getChilds(String pic) {
+    List<Person> childs = new ArrayList<Person>();
+    CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
+    communityQueryCriteria.setCommunityType(Constants.COMMUNITY_TYPE_GUARDIAN_COMMUNITY);
+    communityQueryCriteria.setMemberPic(pic);
+    CommunitiesType communitiesType = null;
 
-    if (tmp != null) {
-      list.add(tmp);
+    try {
+      communitiesType = getCommunityService().opQueryCommunities(communityQueryCriteria, getCommynityAuditInfo(pic));
+    } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
+      LOG.error("Failed to get communities", fault);
+    }
+
+    if (communitiesType != null) {
+      List<CommunityType> communities = communitiesType.getCommunity();
+      for (CommunityType community : communities) {
+        MembersType membersType = community.getMembers();
+        List<MemberType> members = membersType.getMember();
+        Iterator<MemberType> mi = members.iterator();
+        while (mi.hasNext()) {
+          MemberType member = mi.next();
+          if (member.getRole().equals(Constants.ROLE_DEPENDANT)) {
+            try {
+              CustomerType customer = getCustomerService().opGetCustomer(member.getPic(), getCustomerAuditInfo(pic));
+              childs.add(Person.fromCustomerType(customer));
+            } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
+              LOG.error("Failed to get community person details", fault);
+            }
+          }
+        }
+      }
+    }
+    return childs;
+  }
+
+  public List<Person> searchPerson(Person target, String user) {
+    List<Person> list = new ArrayList<Person>();
+    try {
+      CustomerType t = getCustomerService().opGetCustomer(target.getPic().trim(), getCustomerAuditInfo(user));
+      if (t != null) {
+        Person p = Person.fromCustomerType(t);
+        list.add(p);
+      }
+    } catch (fi.koku.services.entity.customer.v1.ServiceFault e) {
+      LOG.error("Failed to fetch customer details", e);
     }
     return list;
   }
 
-  public Person searchChild(String socialSecurityNumber) {
-    for (Person tmp : malli.getPersons()) {
-      if (tmp.getPic().equals(socialSecurityNumber.trim())) {
-        return tmp;
+  public Person searchChild(String socialSecurityNumber, String user) {
+    try {
+      CustomerType t = getCustomerService().opGetCustomer(socialSecurityNumber.trim(), getCustomerAuditInfo(user));
+      if (t != null) {
+        return Person.fromCustomerType(t);
       }
+    } catch (fi.koku.services.entity.customer.v1.ServiceFault e) {
+      LOG.error("Failed to fetch customer details", e);
     }
     return null;
   }
@@ -342,9 +398,9 @@ public class KksService {
    * @param h
    * @return
    */
-  public List<Creatable> searchPersonCreatableCollections(Person h) {
+  public List<Creatable> searchPersonCreatableCollections(Person h, String user) {
     if (collectionClasses.isEmpty()) {
-      collectMetadata();
+      collectMetadata(user);
     }
 
     List<Creatable> creatables = new ArrayList<Creatable>();

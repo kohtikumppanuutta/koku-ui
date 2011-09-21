@@ -1,6 +1,7 @@
 package fi.koku.kks.controller;
 
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletSession;
 import javax.portlet.RenderResponse;
 
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import fi.koku.kks.model.Creation;
 import fi.koku.kks.model.KksService;
 import fi.koku.kks.model.Person;
+import fi.koku.kks.ui.common.utils.Utils;
 
 /**
  * Controller for child info
@@ -49,12 +51,13 @@ public class ChildController {
   }
 
   @RenderMapping(params = "action=showChild")
-  public String show(@ModelAttribute(value = "child") Person child,
+  public String show(PortletSession session, @ModelAttribute(value = "child") Person child,
       @ModelAttribute(value = "creation") Creation creation, RenderResponse response, Model model) {
     LOG.info("show child");
     model.addAttribute("child", child);
-    model.addAttribute("collections", kksService.getKksCollections(child.getPic()));
-    model.addAttribute("creatables", kksService.searchPersonCreatableCollections(child));
+    model.addAttribute("collections", kksService.getKksCollections(child.getPic(), Utils.getPicFromSession(session)));
+    model.addAttribute("creatables",
+        kksService.searchPersonCreatableCollections(child, Utils.getPicFromSession(session)));
 
     creation.setName("");
     return "child";
@@ -68,8 +71,8 @@ public class ChildController {
   }
 
   @ModelAttribute("child")
-  public Person getChild(@RequestParam String pic) {
-    return kksService.searchChild(pic);
+  public Person getChild(PortletSession session, @RequestParam String pic) {
+    return kksService.searchChild(pic, Utils.getPicFromSession(session));
   }
 
   @ModelAttribute("creation")

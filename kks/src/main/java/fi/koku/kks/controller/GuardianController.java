@@ -2,6 +2,7 @@ package fi.koku.kks.controller;
 
 import java.util.List;
 
+import javax.portlet.PortletSession;
 import javax.portlet.RenderResponse;
 
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.kks.model.KksService;
 import fi.koku.kks.model.Person;
+import fi.koku.kks.ui.common.utils.Utils;
 
 /**
  * Controller for guardian role
@@ -33,16 +35,16 @@ public class GuardianController {
   private static final Logger LOG = LoggerFactory.getLogger(GuardianController.class);
 
   @RenderMapping(params = "action=showChildrens")
-  public String showChilds(RenderResponse response, Model model) {
+  public String showChilds(PortletSession session, RenderResponse response, Model model) {
     LOG.info("showChildrens");
-    model.addAttribute("childs", getChilds());
+    model.addAttribute("childs", getChilds(session));
     return "childs";
   }
 
   @ModelAttribute("childs")
-  public List<Person> getChilds() {
+  public List<Person> getChilds(PortletSession session) {
     LOG.info("getchilds");
-    return kksService.searchChilds(null);
+    return kksService.searchChilds(Utils.getPicFromSession(session));
   }
 
 }

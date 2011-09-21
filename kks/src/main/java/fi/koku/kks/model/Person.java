@@ -1,5 +1,7 @@
 package fi.koku.kks.model;
 
+import fi.koku.services.entity.customer.v1.CustomerType;
+
 /**
  * Contains person info and collections
  * 
@@ -12,6 +14,7 @@ public class Person {
   private String secondName;
   private String lastName;
   private String pic;
+  private String customerId;
   private KKS kks;
 
   public Person() {
@@ -27,6 +30,14 @@ public class Person {
     this.lastName = last;
     this.pic = pic;
     this.kks = new KKS();
+  }
+
+  public String getCustomerId() {
+    return customerId;
+  }
+
+  public void setCustomerId(String customerId) {
+    this.customerId = customerId;
   }
 
   public String getFirstName() {
@@ -77,4 +88,13 @@ public class Person {
     return firstName + " " + lastName;
   }
 
+  public static Person fromCustomerType(CustomerType c) {
+    Person p = new Person();
+    p.setFirstName(c.getEtuNimi());
+    p.setSecondName(c.getEtunimetNimi());
+    p.setLastName(c.getSukuNimi());
+    p.setPic(c.getHenkiloTunnus());
+    p.setCustomerId(c.getId());
+    return p;
+  }
 }

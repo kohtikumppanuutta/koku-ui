@@ -1,6 +1,7 @@
 package fi.koku.kks.controller;
 
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletSession;
 import javax.portlet.RenderResponse;
 
 import org.apache.commons.lang.StringUtils;
@@ -22,6 +23,7 @@ import fi.koku.kks.model.Entry;
 import fi.koku.kks.model.KKSCollection;
 import fi.koku.kks.model.KksService;
 import fi.koku.kks.model.Person;
+import fi.koku.kks.ui.common.utils.Utils;
 import fi.koku.services.entity.kks.v1.KksEntryClassType;
 
 /**
@@ -41,24 +43,25 @@ public class CollectionController {
   private static final Logger LOG = LoggerFactory.getLogger(CollectionController.class);
 
   @RenderMapping(params = "action=showCollection")
-  public String show(@ModelAttribute(value = "child") Person child,
+  public String show(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "collection") String collection, RenderResponse response, Model model) {
     LOG.info("show collection");
     model.addAttribute("child", child);
-    model.addAttribute("collection", kksService.getKksCollection(collection));
+    model.addAttribute("collection", kksService.getKksCollection(collection, Utils.getPicFromSession(session)));
     return "collection";
   }
 
   @ModelAttribute("child")
-  public Person getchild(@RequestParam(value = "pic") String pic) {
-    return kksService.searchChild(pic);
+  public Person getchild(PortletSession session, @RequestParam(value = "pic") String pic) {
+    return kksService.searchChild(pic, Utils.getPicFromSession(session));
   }
 
   @ActionMapping(params = "action=saveCollection")
-  public void save(@ModelAttribute(value = "child") Person child, @ModelAttribute(value = "entry") KKSCollection entry,
-      BindingResult bindingResult, @RequestParam(required = false) String multiValueId,
-      @RequestParam(required = false) String type, @RequestParam(value = "valueId", required = false) String valueId,
-      ActionResponse response, SessionStatus sessionStatus) {
+  public void save(PortletSession session, @ModelAttribute(value = "child") Person child,
+      @ModelAttribute(value = "entry") KKSCollection entry, BindingResult bindingResult,
+      @RequestParam(required = false) String multiValueId, @RequestParam(required = false) String type,
+      @RequestParam(value = "valueId", required = false) String valueId, ActionResponse response,
+      SessionStatus sessionStatus) {
     LOG.info("save collection");
 
     System.out.println(" SAVE ");
@@ -66,7 +69,7 @@ public class CollectionController {
       System.out.println("Entry: " + e.getId() + " " + e.getType().getName() + " Value " + e.getValue());
     }
 
-    kksService.updateKksCollection(entry, child.getPic());
+    kksService.updateKksCollection(entry, child.getPic(), Utils.getPicFromSession(session));
 
     if (StringUtils.isNotBlank(type)) {
 
@@ -87,27 +90,23 @@ public class CollectionController {
   }
 
   @ModelAttribute("entry")
-  public KKSCollection getCommandObject(@RequestParam(value = "collection") String collection,
+  public KKSCollection getCommandObject(PortletSession session, @RequestParam(value = "collection") String collection,
       @RequestParam(value = "pic") String pic) {
     LOG.debug("get command object");
 
-    KKSCollection k = kksService.getKksCollection(collection);
+    KKSCollection k = kksService.getKksCollection(collection, Utils.getPicFromSession(session));
 
-    System.out.println(" COMMAND ");
-    for (Entry e : k.getEntries().values()) {
-      System.out.println("Entry: " + e.getId() + " " + e.getType().getName() + " Value " + e.getValue());
-    }
     return k;
   }
 
   @ActionMapping(params = "action=addMultivalue")
-  public void saveMultivalue(@ModelAttribute(value = "child") Person child,
+  public void saveMultivalue(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "entryType") String entryType, @RequestParam(value = "collection") String collection,
       @RequestParam(value = "entryId", required = false) String entry, @RequestParam(value = "value") String value,
       @RequestParam(value = "valueId") String valueId, ActionResponse response, SessionStatus sessionStatus) {
     LOG.info("save multivalue");
 
-    kksService.addKksEntry(child.getPic(), entry, valueId, value);
+    kksService.addKksEntry(child.getPic(), entry, valueId, value, Utils.getPicFromSession(session));
     response.setRenderParameter("action", "showCollection");
     response.setRenderParameter("pic", child.getPic());
     response.setRenderParameter("collection", collection);
@@ -115,11 +114,11 @@ public class CollectionController {
   }
 
   @ActionMapping(params = "action=removeMultivalue")
-  public void removeMultiValue(@ModelAttribute(value = "child") Person child,
+  public void removeMultiValue(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "collection") String collection, @RequestParam(value = "entryId") String entry,
       @RequestParam(value = "valueId") String valueId, ActionResponse response, SessionStatus sessionStatus) {
     LOG.info("remove multivalue");
-    kksService.removeKksEntry(child.getPic(), entry, valueId, "");
+    kksService.removeKksEntry(child.getPic(), entry, valueId, "", Utils.getPicFromSession(session));
     response.setRenderParameter("action", "showCollection");
     response.setRenderParameter("pic", child.getPic());
     response.setRenderParameter("collection", collection);
@@ -138,16 +137,16 @@ public class CollectionController {
   }
 
   @RenderMapping(params = "action=showMultivalue")
-  public String showMultivalue(@ModelAttribute(value = "child") Person child,
+  public String showMultivalue(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "collection") String collection,
       @RequestParam(value = "entryType", required = false) String entryType,
       @RequestParam(value = "entryId", required = false) String entry,
       @RequestParam(value = "valueId", required = false) String valueId, RenderResponse response, Model model) {
     LOG.info("show collection");
 
-    KKSCollection kok = kksService.getKksCollection(collection);
+    KKSCollection kok = kksService.getKksCollection(collection, Utils.getPicFromSession(session));
 
-    KksEntryClassType t = kksService.getEntryClassType(entryType);
+    KksEntryClassType t = kksService.getEntryClassType(entryType, Utils.getPicFromSession(session));
 
     model.addAttribute("child", child);
     model.addAttribute("collection", kok);

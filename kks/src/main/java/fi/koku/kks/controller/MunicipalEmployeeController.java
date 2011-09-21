@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletSession;
 import javax.portlet.RenderResponse;
 
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.kks.model.KksService;
 import fi.koku.kks.model.Person;
+import fi.koku.kks.ui.common.utils.Utils;
 
 /**
  * Controller for role municipal employee
@@ -40,10 +42,11 @@ public class MunicipalEmployeeController {
   private static final Logger LOG = LoggerFactory.getLogger(MunicipalEmployeeController.class);
 
   @RenderMapping(params = "action=showEmployee")
-  public String show(RenderResponse response, @RequestParam(value = "childs", required = false) String[] childs,
+  public String show(PortletSession session, RenderResponse response,
+      @RequestParam(value = "childs", required = false) String[] childs,
       @RequestParam(value = "search", required = false) String search, Model model) {
     LOG.info("show employee");
-    model.addAttribute("childs", toChilds(childs));
+    model.addAttribute("childs", toChilds(childs, Utils.getPicFromSession(session)));
 
     if (search != null) {
       model.addAttribute("search", search);
@@ -52,12 +55,11 @@ public class MunicipalEmployeeController {
   }
 
   @ActionMapping(params = "action=searchChild")
-  public void fecthChild(@ModelAttribute(value = "child") Person child, BindingResult bindingResult,
-      ActionResponse response, SessionStatus sessionStatus) {
+  public void fecthChild(PortletSession session, @ModelAttribute(value = "child") Person child,
+      BindingResult bindingResult, ActionResponse response, SessionStatus sessionStatus) {
     LOG.info("search child");
-
     response.setRenderParameter("action", "showEmployee");
-    response.setRenderParameter("childs", toPicArray(kksService.haeHenkilo(child)));
+    response.setRenderParameter("childs", toPicArray(kksService.searchPerson(child, Utils.getPicFromSession(session))));
     response.setRenderParameter("search", "true");
     sessionStatus.setComplete();
   }
@@ -83,13 +85,13 @@ public class MunicipalEmployeeController {
     return tmp;
   }
 
-  private List<Person> toChilds(String[] childIds) {
+  private List<Person> toChilds(String[] childIds, String user) {
     List<Person> tmp = new ArrayList<Person>();
 
     if (childIds != null) {
       for (String s : childIds) {
         if (!"".equals(s)) {
-          tmp.add(kksService.searchChild(s));
+          tmp.add(kksService.searchChild(s, user));
         }
       }
     }

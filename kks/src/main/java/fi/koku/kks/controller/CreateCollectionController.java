@@ -1,6 +1,7 @@
 package fi.koku.kks.controller;
 
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +17,10 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 
 import fi.koku.kks.model.Creatable;
 import fi.koku.kks.model.Creation;
-import fi.koku.kks.model.KKSCollection;
 import fi.koku.kks.model.KksService;
 import fi.koku.kks.model.Person;
 import fi.koku.kks.ui.common.State;
+import fi.koku.kks.ui.common.utils.Utils;
 
 /**
  * Controller for creating agreements and plans
@@ -37,13 +38,14 @@ public class CreateCollectionController {
   private static final Logger LOG = LoggerFactory.getLogger(CreateCollectionController.class);
 
   @ActionMapping(params = "action=createNewVersion")
-  public void createVersion(@ModelAttribute(value = "child") Person child, @RequestParam String id,
-      @RequestParam String name, @RequestParam(required = false) String clean, ActionResponse response,
-      SessionStatus sessionStatus) {
+  public void createVersion(PortletSession session, @ModelAttribute(value = "child") Person child,
+      @RequestParam String id, @RequestParam String name, @RequestParam(required = false) String clean,
+      ActionResponse response, SessionStatus sessionStatus) {
 
     LOG.debug("create new version");
 
-    String collection = kksService.createKksCollectionVersion(name, id, child.getPic(), Boolean.valueOf(clean));
+    String collection = kksService.createKksCollectionVersion(name, id, child.getPic(), Boolean.valueOf(clean),
+        Utils.getPicFromSession(session));
 
     response.setRenderParameter("action", "showCollection");
     response.setRenderParameter("pic", child.getPic());
@@ -53,7 +55,7 @@ public class CreateCollectionController {
   }
 
   @ActionMapping(params = "action=createCollection")
-  public void create(@ModelAttribute(value = "child") Person child,
+  public void create(PortletSession session, @ModelAttribute(value = "child") Person child,
       @ModelAttribute(value = "creation") Creation creation, BindingResult bindingResult, ActionResponse response,
       SessionStatus sessionStatus) {
 
@@ -61,7 +63,8 @@ public class CreateCollectionController {
 
     Creatable a = Creatable.create(creation.getField());
     String name = "".equals(creation.getName()) ? a.getName() : creation.getName();
-    String collection = kksService.createKksCollection(name, a.getId(), child.getPic());
+    String collection = kksService.createKksCollection(name, a.getId(), child.getPic(),
+        Utils.getPicFromSession(session));
 
     response.setRenderParameter("action", "showChild");
     response.setRenderParameter("pic", child.getPic());
@@ -71,9 +74,9 @@ public class CreateCollectionController {
   }
 
   @ModelAttribute("child")
-  public Person getchild(@RequestParam String pic) {
+  public Person getchild(PortletSession session, @RequestParam String pic) {
     LOG.info("getchild");
-    return kksService.searchChild(pic);
+    return kksService.searchChild(pic, Utils.getPicFromSession(session));
   }
 
   @ModelAttribute("creation")
@@ -83,21 +86,20 @@ public class CreateCollectionController {
   }
 
   @ActionMapping(params = "action=activate")
-  public void activate(@ModelAttribute(value = "child") Person child,
+  public void activate(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "collection") String collection, ActionResponse response, SessionStatus sessionStatus) {
 
-    kksService.updateKksCollectionStatus(collection, State.ACTIVE.toString());
+    kksService.updateKksCollectionStatus(collection, State.ACTIVE.toString(), Utils.getPicFromSession(session));
     response.setRenderParameter("action", "showChild");
     response.setRenderParameter("pic", child.getPic());
     sessionStatus.setComplete();
   }
 
   @ActionMapping(params = "action=lock")
-  public void lock(@ModelAttribute(value = "child") Person child,
+  public void lock(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "collection") String collection, ActionResponse response, SessionStatus sessionStatus) {
-    KKSCollection k = kksService.getKksCollection(collection);
 
-    kksService.updateKksCollectionStatus(collection, State.LOCKED.toString());
+    kksService.updateKksCollectionStatus(collection, State.LOCKED.toString(), Utils.getPicFromSession(session));
 
     response.setRenderParameter("action", "showChild");
     response.setRenderParameter("pic", child.getPic());
