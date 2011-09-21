@@ -299,6 +299,7 @@
 			<ul class="child">
 				<li id="cst_new"><a href="<%= defaultPath %>/Message/NewConsent">Uusi suostumuspohja</a></li>
 				<li id="sendconsent"><a href="<%= defaultPath %>/Message/SendConsent">Uusi suostumuspyyntö</a></li>
+				<li id="fillconsent"><a href="<%= defaultPath %>/Message/FillConsent">Kirjaa asiakkaan suostumus</a></li>				
 				<li id="cst_own_employee"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_employee')">Lähetetyt suostumuspyynnöt</a></li>
 			</ul>
 		</li>
