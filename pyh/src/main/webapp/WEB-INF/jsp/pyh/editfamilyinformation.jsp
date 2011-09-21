@@ -43,7 +43,7 @@
 		<div class="name">
 			${user.firstname} ${user.surname} <br />
 		</div>
-        <div class="email"><spring:message code="ui.pyh.email" />  ${user.econtactinfo}</div>
+        <div class="email"><spring:message code="ui.pyh.econtactinfo" />  ${user.econtactinfo}</div>
 		<br />
 	</c:if>
 	
