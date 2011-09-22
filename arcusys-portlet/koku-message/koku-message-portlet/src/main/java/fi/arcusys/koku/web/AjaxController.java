@@ -34,6 +34,7 @@ import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
 import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
 import fi.arcusys.koku.tiva.warrant.citizens.KokuCitizenWarrantHandle;
+import fi.arcusys.koku.tiva.warrant.employee.KokuEmployeeWarrantHandle;
 import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationSummary;
 import fi.arcusys.koku.users.UserIdResolver;
 import fi.arcusys.koku.util.PortalRole;
@@ -343,13 +344,18 @@ public class AjaxController extends AbstractController {
 					csts = tivaHandle.getConsents(userId, keyword, field, first, max);
 					totalTasksNum = tivaHandle.getTotalConsents(userId, keyword, field);
 					jsonModel.put(TASKS, csts);
-				} else if(taskType.equals(TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS)) {	// Selaa asiakkaan/asian valtakirjoja TIVA-13
-					TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
-					tivaHandle.setMessageSource(messageSource);
-					// FIXME: This should change when we get proper methods from WS
-					csts = tivaHandle.getConsents(userId, keyword, field, first, max);
-					totalTasksNum = tivaHandle.getTotalConsents(userId, keyword, field);
-					jsonModel.put(TASKS, csts);
+				} else if(taskType.equals(TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS)) {	// Virkailija: Selaa asiakkaan valtakirjoja TIVA-13
+//					KokuEmployeeWarrantHandle warrantHandle = new KokuEmployeeWarrantHandle();
+//					warrantHandle.setMessageSource(messageSource);
+//					summaries = warrantHandle.getConsents(userId, keyword, field, first, max);
+//					totalTasksNum = warrantHandle.getTotalConsents(userId, keyword, field);
+					jsonModel.put(TASKS, summaries);
+				} else if(taskType.equals(TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS)) {	// Virkailija: Selaa asian valtakirjoja TIVA-14
+//					KokuEmployeeWarrantHandle warrantHandle = new KokuEmployeeWarrantHandle();
+//					warrantHandle.setMessageSource(messageSource);
+//					summaries = warrantHandle.getConsents(userId, keyword, field, first, max);
+//					totalTasksNum = warrantHandle.getTotalConsents(userId, keyword, field);
+					jsonModel.put(TASKS, summaries);
 				} else if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_RECEIEVED)) {	// Kuntalainen: Valtuuttajana TIVA-11
 					KokuCitizenWarrantHandle warrantHandle = new KokuCitizenWarrantHandle();
 					warrantHandle.setMessageSource(messageSource);

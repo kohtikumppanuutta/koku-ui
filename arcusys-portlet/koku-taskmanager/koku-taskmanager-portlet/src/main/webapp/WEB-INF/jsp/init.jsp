@@ -1,4 +1,4 @@
-<%@ page import="fi.koku.taskmanager.util.Constants"%>
+<%-- <%@ page import="fi.koku.taskmanager.util.Constants"%> --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ page import="javax.portlet.PortletPreferences" %>
@@ -10,11 +10,19 @@
 <%
 PortletPreferences preferences = renderRequest.getPreferences();
 
-String taskFilter = preferences.getValue(Constants.PREF_TASK_FILTER, "");
-String notifFilter = preferences.getValue(Constants.PREF_NOTIFICATION_FILTER, "");
-String refreshDuration = preferences.getValue(Constants.PREF_REFRESH_DURATION, "30");
-String openForm = preferences.getValue(Constants.PREF_OPEN_FORM, "1");
-String defaultTaskType = preferences.getValue(Constants.PREF_DEFAULT_TASK_TYPE, "task");
+// String taskFilter = preferences.getValue(Constants.PREF_TASK_FILTER, "");
+// String notifFilter = preferences.getValue(Constants.PREF_NOTIFICATION_FILTER, "");
+// String refreshDuration = preferences.getValue(Constants.PREF_REFRESH_DURATION, "30");
+// String openForm = preferences.getValue(Constants.PREF_OPEN_FORM, "1");
+// String defaultTaskType = preferences.getValue(Constants.PREF_DEFAULT_TASK_TYPE, "task");
+
+String taskFilter = preferences.getValue("taskFilter", "");
+String notifFilter = preferences.getValue("notifFilter", "");
+String refreshDuration = preferences.getValue("refreshDuration", "30");
+String openForm = preferences.getValue("openForm", "1");
+String defaultTaskType = preferences.getValue("defaultTaskType", "task");
+
+
 // No need to show edit column in TaskManager portlet
 // String editable = preferences.getValue(Constants.PREF_EDITABLE, "false");
 String editable = "false";

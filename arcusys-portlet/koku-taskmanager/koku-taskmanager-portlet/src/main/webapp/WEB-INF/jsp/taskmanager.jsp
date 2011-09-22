@@ -189,7 +189,7 @@
 			}
 			
 			taskHtml +=  '<td>' + formLink + '</td>';
-			if (editable) {
+			if (editable == true) {
 				taskHtml += '<td><div><spring:message code="task.edit" /></div></td>';	
 			}
 			/* process does not have state field */
@@ -340,7 +340,7 @@
 			linkHtml = '<a href="javascript:void(0)" onclick="showForm(\''+ link + '\')">';
 		}else if(configObj.openForm == '2') {
 			linkHtml = '<a href="' + link + '" target="_blank">';
-		}else if(configObj.openForm == '3') {
+		}else if(configObj.openForm == '3' || configObj.openForm == 'task') {
 			linkHtml = '<a href="javascript:void(0)" onclick="popupTaskForm(\'' + link + '\')">';
 		}
 		

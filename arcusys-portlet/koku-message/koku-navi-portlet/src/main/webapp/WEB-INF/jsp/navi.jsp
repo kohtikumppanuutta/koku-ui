@@ -284,10 +284,11 @@
 			<li><a href="#">Valtakirjat</a>
 				<ul class="child">
 					<li id="valtakirjaconsent"><a href="<%= defaultPath %>/Message/ValtakirjaConsent">Anna valtakirja</a></li>
+					<li id="<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED%>')">Vastaanotetut</a></li>
 					<li><a href="#">Omat valtakirjat</a>
 						<ul class="child">
 							<li id="<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT%>')">Valtuuttajana</a></li>
-							<li id="<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED%>')">Valtuutettuna</a></li>
+							<li id="selaaOmiaValtakirjoja"><a href="<%= defaultPath %>/Message/SelaaValtakirjoja">Valtuutettuna</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -306,8 +307,8 @@
 		<li><a href="#">Valtakirjat</a>
 			<ul class="child">
 				<%-- <li id="valtakirjaconsent"><a href="<%= defaultPath %>/Message/ValtakirjaConsent">Asiakkaan valtakirjat </a></li>  --%>
-				<li id="cst_browse_customer_consents"><a href="javascript:void(0)" onclick="navigateToPage('cst_browse_customer_consents')">Asiakkaan valtakirjat </a></li> 
-				<li id="selaavaltakirjoja"><a href="<%= defaultPath %>/Message/SelaaValtakirjoja">Asian valtakirjat</a></li>
+				<li id="<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>')">Asiakkaan valtakirjat </a></li> 
+				<li id="<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS%>')">Asian valtakirjat</a></li>
 			</ul>
 		</li>
 			
