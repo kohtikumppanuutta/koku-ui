@@ -35,6 +35,7 @@ public class KKSCollection {
   private boolean versioned;
   private boolean buildFromExisting;
   private KksCollectionClassType collectionClass;
+  private String creator;
 
   public KKSCollection(String id, KKSCollection previous, boolean clear, Date creationTime, CollectionState state,
       int version) {
@@ -154,6 +155,9 @@ public class KKSCollection {
   }
 
   public final void addEntry(Entry entry) {
+    if (entry == null) {
+      return;
+    }
     entries.put("" + entry.getType().getId(), entry);
   }
 
@@ -285,4 +289,13 @@ public class KKSCollection {
       }
     }
   }
+
+  public String getCreator() {
+    return creator;
+  }
+
+  public void setCreator(String creator) {
+    this.creator = creator;
+  }
+
 }

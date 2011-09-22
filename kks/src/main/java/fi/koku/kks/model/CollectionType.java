@@ -20,6 +20,7 @@ public class CollectionType {
   private int id;
   private String name;
   private String description;
+  private String concentType;
   private List<EntryType> entryTypes;
   private LinkedMapWrapper<String, Group> entryGroups;
   private GroupComparator groupComparator;
@@ -108,4 +109,13 @@ public class CollectionType {
     }
     return null;
   }
+
+  public String getConcentType() {
+    return concentType;
+  }
+
+  public void setConcentType(String concentType) {
+    this.concentType = concentType;
+  }
+
 }

@@ -19,7 +19,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import fi.koku.kks.model.Entry;
 import fi.koku.kks.model.KKSCollection;
 import fi.koku.kks.model.KksService;
 import fi.koku.kks.model.Person;
@@ -64,11 +63,6 @@ public class CollectionController {
       SessionStatus sessionStatus) {
     LOG.info("save collection");
 
-    System.out.println(" SAVE ");
-    for (Entry e : entry.getEntries().values()) {
-      System.out.println("Entry: " + e.getId() + " " + e.getType().getName() + " Value " + e.getValue());
-    }
-
     kksService.updateKksCollection(entry, child.getPic(), Utils.getPicFromSession(session));
 
     if (StringUtils.isNotBlank(type)) {
@@ -106,7 +100,8 @@ public class CollectionController {
       @RequestParam(value = "valueId") String valueId, ActionResponse response, SessionStatus sessionStatus) {
     LOG.info("save multivalue");
 
-    kksService.addKksEntry(child.getPic(), entry, valueId, value, Utils.getPicFromSession(session));
+    kksService.addKksEntry(collection, child.getPic(), entry, entryType, valueId, value,
+        Utils.getPicFromSession(session));
     response.setRenderParameter("action", "showCollection");
     response.setRenderParameter("pic", child.getPic());
     response.setRenderParameter("collection", collection);

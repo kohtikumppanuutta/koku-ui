@@ -45,7 +45,7 @@ public class KksConverter {
     tmp.setNextVersion(collection.getNextVersion());
     tmp.setBuildFromExisting(collection.getNextVersion() != null);
     tmp.setVersioned(collection.getNextVersion() != null);
-
+    tmp.setCreator(collection.getCreator());
     for (KksEntryType entryType : collection.getKksEntries().getEntries()) {
 
       KksEntryClassType metaEntry = kksService.getEntryClassType(entryType.getEntryClassId(), user);
@@ -82,6 +82,7 @@ public class KksConverter {
     tmp.setDescription(collection.getDescription());
     tmp.setCollectionClassId(collection.getCollectionClass().getId());
     tmp.setCustomerId(customer);
+    tmp.setCreator(collection.getCreator());
     tmp.setPrevVersion(collection.getPrevVersion());
     tmp.setNextVersion(collection.getNextVersion());
     tmp.setStatus(collection.getState().getState().toString());

@@ -1,6 +1,9 @@
 package fi.koku.kks.model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -239,7 +242,8 @@ public class KksService {
     return tmp;
   }
 
-  public String addKksEntry(String customer, String entryId, String valueId, String value, String user) {
+  public String addKksEntry(String collectionId, String customer, String entryId, String entryClassId, String valueId,
+      String value, String user) {
     try {
       KksEntryCriteriaType criteria = new KksEntryCriteriaType();
       criteria.setEntryId(entryId);
@@ -248,6 +252,12 @@ public class KksService {
       evt.setId(valueId);
       evt.setValue(value);
       criteria.setValue(evt);
+      criteria.setCollectionId(collectionId);
+      criteria.setCreator(user);
+      criteria.setEntryClassId(entryClassId);
+      Calendar c = new GregorianCalendar();
+      c.setTime(new Date());
+      criteria.setModified(c);
       KksServicePortType kksService = getKksService();
       return kksService.opAddEntry(criteria, getKksAuditInfo(user)).getId();
     } catch (ServiceFault e) {
