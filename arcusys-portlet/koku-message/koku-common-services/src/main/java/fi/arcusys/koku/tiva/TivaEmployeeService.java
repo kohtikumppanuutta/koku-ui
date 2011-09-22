@@ -3,6 +3,7 @@ package fi.arcusys.koku.tiva;
 import java.net.URL;
 import java.util.List;
 
+import fi.arcusys.koku.tiva.employeeservice.ConsentCriteria;
 import fi.arcusys.koku.tiva.employeeservice.ConsentQuery;
 import fi.arcusys.koku.tiva.employeeservice.ConsentSummary;
 import fi.arcusys.koku.tiva.employeeservice.ConsentTO;
@@ -55,8 +56,8 @@ public class TivaEmployeeService {
 	 * @param query query for filtering consents
 	 * @return the total number of consents
 	 */
-	public int getTotalConsents(String user) {
-		return kls.getKokuLooraSuostumusServicePort().getTotalConsents(user);
+	public int getTotalConsents(String user, ConsentCriteria criteria) {
+		return kls.getKokuLooraSuostumusServicePort().getTotalConsents(user, criteria);
 	}
 	
 	/**

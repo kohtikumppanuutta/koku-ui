@@ -76,11 +76,13 @@
 				window.location = renderUrl;
 			});
 		} else if(pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>") {
-			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;	
+			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;
+			window.location = url;
+				
 		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>") {
 			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;
+			window.location = url;			
 		}
-		window.location = url;
 	}
 	
 	function showWarrant(index) {

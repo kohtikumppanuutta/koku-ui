@@ -46,7 +46,7 @@ public class KokuCitizenWarrantHandle extends AbstractHandle {
 	}
 	
 	public List<KokuAuthorizationSummary> getReceivedAuthorizations(String userId, int startNum, int maxNum) {
-		 List<AuthorizationShortSummary> summaries = service.getSentAuthorizations(userId, startNum, maxNum);
+		 List<AuthorizationShortSummary> summaries = service.getReceivedAuthorizations(userId, startNum, maxNum);
 		 List<KokuAuthorizationSummary> summariesModels = new ArrayList<KokuAuthorizationSummary>();
 		 for (AuthorizationShortSummary summary : summaries) {
 			 KokuAuthorizationSummary shortSummary = new KokuAuthorizationSummary(summary);

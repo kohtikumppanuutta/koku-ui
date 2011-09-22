@@ -46,6 +46,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 		if (userId == null) {
 			throw new IllegalArgumentException("userId is null!");
 		}
+		this.userId = userId;
 		tcs = new TivaCitizenService();
 	}
 	
@@ -203,8 +204,6 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 			switch(approvalStatus) {
 			case DECLINED:
 				return getMessageSource().getMessage("ApprovalConsentStatus.DECLINED", null, locale);
-			case REVOKED:
-				return getMessageSource().getMessage("ApprovalConsentStatus.REVOKED", null, locale);
 			case APPROVED:
 				return getMessageSource().getMessage("ApprovalConsentStatus.APPROVED", null, locale);
 			default:

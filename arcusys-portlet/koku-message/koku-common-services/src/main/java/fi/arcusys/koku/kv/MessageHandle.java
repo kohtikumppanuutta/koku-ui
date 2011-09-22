@@ -19,7 +19,6 @@ import fi.arcusys.koku.kv.messageservice.MessageSummary;
 import fi.arcusys.koku.kv.messageservice.OrderBy;
 import fi.arcusys.koku.kv.messageservice.Type;
 import fi.arcusys.koku.util.MessageUtil;
-import fi.arcusys.koku.util.PortalRole;
 
 /**
  * Handles request of messages and retrieves messages

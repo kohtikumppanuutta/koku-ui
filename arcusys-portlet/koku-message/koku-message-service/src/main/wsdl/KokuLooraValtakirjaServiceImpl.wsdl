@@ -9,24 +9,6 @@
    <xs:element name='getTotalAuthorizationsResponse' type='tns:getTotalAuthorizationsResponse'/>
    <xs:element name='searchAuthorizationTemplates' type='tns:searchAuthorizationTemplates'/>
    <xs:element name='searchAuthorizationTemplatesResponse' type='tns:searchAuthorizationTemplatesResponse'/>
-   <xs:complexType name='searchAuthorizationTemplates'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='searchString' type='xs:string'/>
-     <xs:element name='limit' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='searchAuthorizationTemplatesResponse'>
-    <xs:sequence>
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:valtakirjapohja'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='valtakirjapohja'>
-    <xs:sequence>
-     <xs:element name='templateId' type='xs:long'/>
-     <xs:element minOccurs='0' name='templateName' type='xs:string'/>
-     <xs:element minOccurs='0' name='description' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
    <xs:complexType name='getAuthorizations'>
     <xs:sequence>
      <xs:element minOccurs='0' name='query' type='tns:authorizationQuery'/>
@@ -62,6 +44,13 @@
      <xs:element minOccurs='0' name='validTill' type='xs:date'/>
     </xs:sequence>
    </xs:complexType>
+   <xs:complexType name='valtakirjapohja'>
+    <xs:sequence>
+     <xs:element name='templateId' type='xs:long'/>
+     <xs:element minOccurs='0' name='templateName' type='xs:string'/>
+     <xs:element minOccurs='0' name='description' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
    <xs:complexType name='getTotalAuthorizations'>
     <xs:sequence>
      <xs:element minOccurs='0' name='criteria' type='tns:authorizationCriteria'/>
@@ -70,6 +59,17 @@
    <xs:complexType name='getTotalAuthorizationsResponse'>
     <xs:sequence>
      <xs:element name='return' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='searchAuthorizationTemplates'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='searchString' type='xs:string'/>
+     <xs:element name='limit' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='searchAuthorizationTemplatesResponse'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:valtakirjapohja'/>
     </xs:sequence>
    </xs:complexType>
    <xs:complexType name='getAuthorizationDetails'>
@@ -194,7 +194,7 @@
  </binding>
  <service name='KokuLooraValtakirjaService'>
   <port binding='tns:KokuLooraValtakirjaServiceBinding' name='KokuLooraValtakirjaServicePort'>
-   <soap:address location='http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuLooraValtakirjaServiceImpl'/>
+   <soap:address location='http://127.0.0.1:8180/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuLooraValtakirjaServiceImpl'/>
   </port>
  </service>
 </definitions>

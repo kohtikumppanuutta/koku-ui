@@ -353,13 +353,13 @@ public class AjaxController extends AbstractController {
 				} else if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_RECEIEVED)) {	// Kuntalainen: Valtuuttajana TIVA-11
 					KokuCitizenWarrantHandle warrantHandle = new KokuCitizenWarrantHandle();
 					warrantHandle.setMessageSource(messageSource);
-					summaries = warrantHandle.getSentWarrants(userId, first, max);
+					summaries = warrantHandle.getReceivedAuthorizations(userId, first, max);
 					totalTasksNum = warrantHandle.getTotalReceivedAuthorizations(userId);
 					jsonModel.put(TASKS, summaries);
 				} else if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_SENT)) {	// Kuntalainen: Valtuutettuna TIVA-11
 					KokuCitizenWarrantHandle warrantHandle = new KokuCitizenWarrantHandle();
 					warrantHandle.setMessageSource(messageSource);
-					summaries = warrantHandle.getReceivedAuthorizations(userId, first, max);
+					summaries = warrantHandle.getSentWarrants(userId, first, max);
 					totalTasksNum = warrantHandle.getTotalSentAuthorizations(userId);
 					jsonModel.put(TASKS, summaries);
 				}

@@ -39,7 +39,7 @@
 </portlet:renderURL>
 
 <portlet:renderURL var="citizenWarrantURL" windowState="<%= WindowState.NORMAL.toString() %>" >
-	<portlet:param name="myaction" value="showCitizenWarrant" />
+	<portlet:param name="myaction" value="showWarrant" />
 </portlet:renderURL>
 
 <!-- Not in use currently, but reserved for future use -->
@@ -454,8 +454,12 @@
 	
 	function createEditConsentColumn(tasks) {
 		for (var i = 0; i < tasks.length; i++)  {
-			var url = "<%= defaultPath %>/Message/ValtakirjaEditConsent?FormID="+ tasks[i].authorizationId;
-			tasks[i]["editLink"] = "<a href="+ url+ "><spring:message code="consent.edit"/></a>";
+			if (tasks[i].status != 'REVOKED') {
+				var url = "<%= defaultPath %>/Message/ValtakirjaEditConsent?FormID="+ tasks[i].authorizationId;
+				tasks[i]["editLink"] = "<a href="+ url+ "><spring:message code="consent.edit"/></a>";
+			} else {
+				tasks[i]["editLink"] = "";
+			}
 		}
 	}
 	

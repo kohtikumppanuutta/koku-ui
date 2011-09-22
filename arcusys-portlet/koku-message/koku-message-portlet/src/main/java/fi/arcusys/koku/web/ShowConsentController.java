@@ -55,9 +55,12 @@ public class ShowConsentController extends AbstractController {
 	 * @return consent data model
 	 */
 	@ModelAttribute(value = "consent")
-	public KokuConsent model(@RequestParam String consentId,
-			@RequestParam String currentPage,@RequestParam String taskType, 
-			@RequestParam String keyword, @RequestParam String orderType,
+	public KokuConsent model(
+			@RequestParam(value="consentId", required=false) String consentId,
+			@RequestParam String currentPage,
+			@RequestParam String taskType, 
+			@RequestParam String keyword, 
+			@RequestParam String orderType,
 			RenderRequest request) {
 
 		// store parameters in session for returning page from form page	

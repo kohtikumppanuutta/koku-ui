@@ -51,6 +51,7 @@ public class Constants {
 	public static final String TASK_TYPE_CONSENT_CITIZEN_CONSENTS		= "cst_own_citizen";					// Kansalaiselle vastatut pyynnöt(/suostumukset) 
 	public static final String TASK_TYPE_CONSENT_ASSIGNED_CITIZEN		= "cst_assigned_citizen";	 			// Kansalaiselle saapuneet pyynnöt(/suostumukset) 
 	public static final String TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS	= "cst_browse_customer_consents";		// Virkam.: Selaa asiakkaan valtakirjoja
+	public static final String TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS	= "cst_browse_subject_consents";		// Virkam.: Selaa asiakkaan valtakirjoja
 	public static final String TASK_TYPE_WARRANT_BROWSE_RECEIEVED 		= "cst_browse_own_warrants_from_user";	// Kuntalainen: Valtuuttajana
 	public static final String TASK_TYPE_WARRANT_BROWSE_SENT 			= "cst_browse_own_warrants_to_user";	// Kuntalainen: Valtuutettuna
 	public static final String TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN 	= "app_response_citizen";

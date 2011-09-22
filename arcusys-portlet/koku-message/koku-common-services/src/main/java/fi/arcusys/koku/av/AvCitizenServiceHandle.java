@@ -99,8 +99,10 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 		ctzAppointment.setDescription(appointment.getDescription());
 		if (appointment.getStatus() != null) {
 			ctzAppointment.setStatus(localizeActionRequestStatus(appointment.getStatus()));
-		}		
-		ctzAppointment.setSlot(formatSlot(appointment.getApprovedSlot()));
+		}
+		if (appointment.getApprovedSlot() != null) {
+			ctzAppointment.setSlot(formatSlot(appointment.getApprovedSlot()));			
+		}
 		ctzAppointment.setReplier(appointment.getReplier());
 		ctzAppointment.setReplierComment(appointment.getReplierComment());
 		ctzAppointment.setTargetPerson(appointment.getTargetPerson());

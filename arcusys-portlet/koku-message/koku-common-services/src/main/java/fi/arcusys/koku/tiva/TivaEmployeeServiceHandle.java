@@ -99,7 +99,7 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 		ConsentCriteria criteria = createCriteria(keyword, field);	
 		query.setCriteria(criteria);
 		
-		return tes.getTotalConsents(user);
+		return tes.getTotalConsents(user, criteria);
 	}
 	
 	/**
