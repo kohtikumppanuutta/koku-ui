@@ -54,6 +54,8 @@ public class PyhDemoService {
   private CustomerServicePortType customerService;
   private CommunityServicePortType communityService;
   
+  private boolean debug = true;
+  
   public PyhDemoService() {
     
     // TODO: get user ID from UserInfo
@@ -62,11 +64,9 @@ public class PyhDemoService {
     // TODO: get user's PIC from the portal
     userPic = "010101-1010";
     
-    //String customerServiceEndpoint = PyhConstants.CUSTOMER_SERVICE_ENDPOINT;
     CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory(PyhConstants.CUSTOMER_SERVICE_USER_ID, PyhConstants.CUSTOMER_SERVICE_PASSWORD, PyhConstants.CUSTOMER_SERVICE_ENDPOINT);
     customerService = customerServiceFactory.getCustomerService();
     
-    //String communityServiceEndpoint = PyhConstants.COMMUNITY_SERVICE_ENDPOINT;
     CommunityServiceFactory communityServiceFactory = new CommunityServiceFactory(PyhConstants.COMMUNITY_SERVICE_USER_ID, PyhConstants.COMMUNITY_SERVICE_PASSWORD, PyhConstants.COMMUNITY_SERVICE_ENDPOINT);
     communityService = communityServiceFactory.getCommunityService();
   }
@@ -87,12 +87,10 @@ public class PyhDemoService {
       log.error("PyhDemoService.getUser: opGetCustomer raised a ServiceFault", fault);
     }
     
-    // TODO: remove after testing
-    log.info("getPerson()");
-    log.info("etunimet: " + customer.getEtunimetNimi());
-    log.info("sukunimi: " + customer.getSukuNimi());
-    log.info("hetu: " + customer.getHenkiloTunnus());
-    log.info("--");
+    if (debug) {
+      log.info("getPerson(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
+      log.info("--");
+    }
     
     return new Person(customer);
   }
@@ -101,6 +99,10 @@ public class PyhDemoService {
    * Returns the current user.
    */
   public Person getUser() {
+    if (debug) {
+      log.info("getUser(): calling getPerson() with pic " + userPic);
+    }
+    
     return getPerson(userPic);
   }
   
@@ -108,6 +110,10 @@ public class PyhDemoService {
    * Returns the user's PIC.
    */
   public String getUserPic() {
+    if (debug) {
+      log.info("getUserPic(): returning user pic " + userPic);
+    }
+    
     return userPic;
   }
   
@@ -160,13 +166,47 @@ public class PyhDemoService {
       }
     }
     
-    // TODO: remove after testing
-    Iterator<Dependant> it = dependants.iterator();
-    log.info("getDependants(), returning dependants:");
-    while (it.hasNext()) {
-      log.info("dep pic: " + it.next().getPic());
+    // check if dependant is member of user's family
+    
+    Family userFamily;
+    try {
+      userFamily = getFamily(userPic);
+    } catch (FamilyNotFoundException fnfe) {
+      userFamily = null;
+      log.error("getDependants(): caught FamilyNotFoundException: cannot set Dependant.memberOfUserFamily because userFamily is null!");
+      log.error(fnfe.getMessage());
+    } catch (TooManyFamiliesException tmfe) {
+      userFamily = null;
+      log.error("getDependants(): caught TooManyFamiliesException: cannot set Dependant.memberOfUserFamily because userFamily is null!");
+      log.error(tmfe.getMessage());
     }
-    log.info("--");
+    
+    if (userFamily != null) {
+      Iterator<Dependant> di = dependants.iterator();
+      while (di.hasNext()) {
+        Dependant d = di.next();
+        
+        List<MemberType> members = userFamily.getAllMembers();
+        Iterator<MemberType> mi = members.iterator();
+        // iterate through family members
+        while (mi.hasNext()) {
+          MemberType member = mi.next();
+          // if dependant belongs to user's family then set Dependant.memberOfUserFamily
+          if (d.getPic().equals(member.getPic())) {
+            d.setMemberOfUserFamily(true);
+          }
+        }
+      }
+    }
+    
+    if (debug) {
+      Iterator<Dependant> it = dependants.iterator();
+      log.info("getDependants(), returning dependants:");
+      while (it.hasNext()) {
+        log.info("dep pic: " + it.next().getPic());
+      }
+      log.info("--");
+    }
     
     return dependants;
   }
@@ -231,13 +271,14 @@ public class PyhDemoService {
       }
     }
     
-    // TODO: remove after testing
-    Iterator<FamilyMember> it = otherFamilyMembers.iterator();
-    log.info("getOtherFamilyMembers(), returning members:");
-    while (it.hasNext()) {
-      log.info("member pic: " + it.next().getPic());
+    if (debug) {
+      Iterator<FamilyMember> it = otherFamilyMembers.iterator();
+      log.info("getOtherFamilyMembers(), returning members:");
+      while (it.hasNext()) {
+        log.info("member pic: " + it.next().getPic());
+      }
+      log.info("--");
     }
-    log.info("--");
     
     return otherFamilyMembers;
   }
@@ -259,8 +300,17 @@ public class PyhDemoService {
     }
     
     if (family != null) {
+      if (debug) {
+        log.info("isParentsSet(): returning " + family.isParentsSet());
+      }
+      
       return family.isParentsSet();
     }
+    
+    if (debug) {
+      log.info("isParentsSet(): returning false");
+    }
+    
     return false;
   }
   
@@ -293,6 +343,16 @@ public class PyhDemoService {
         searchedUsers.add(new Person(customer));
       }
     }
+    
+    if (debug) {
+      log.info("searchUsers(): searchedUsers contains:");
+      Iterator<Person> pi = searchedUsers.iterator();
+      while (pi.hasNext()) {
+        Person p = pi.next();
+        log.info("person pic: " + p.getPic());
+      }
+    }
+    
   }
   
   /**
@@ -316,6 +376,7 @@ public class PyhDemoService {
   /**
    * Adds a dependant into the user's family.
    */
+  /*
   public void addDependantAsFamilyMember(String dependantPic) {
     // REMOVE COMMENTS, IF CONFIRMATION MESSAGES ARE NEED ALSO FOR DEPENDANT >
     // FAMILY INSERTION
@@ -330,6 +391,7 @@ public class PyhDemoService {
     // model.getPerson(dependantPic), Role.CHILD);
     // }
   }
+  */
   
   /**
    * Selects persons (PICs) to whom send the confirmation message for a operation, for example adding a dependant 
@@ -408,6 +470,15 @@ public class PyhDemoService {
         }
       }
     }
+    
+    if (debug) {
+      log.info("generateRecipients(): returning pics:");
+      Iterator<String> rpi = recipientPics.iterator();
+      while (rpi.hasNext()) {
+        log.info("recipient pic: " + rpi.next());
+      }
+    }
+    
     return recipientPics;
   }
   
@@ -441,6 +512,17 @@ public class PyhDemoService {
         } catch (ServiceFault fault) {
           log.error("PyhDemoService.insertDependantToFamily: opUpdateCommunity raised a ServiceFault", fault);
         }
+        
+        if (debug) {
+          log.info("insertDependantToFamily(): family members after insert:");
+          List<MemberType> members = family.getAllMembers();
+          Iterator<MemberType> mi = members.iterator();
+          while (mi.hasNext()) {
+            MemberType m = mi.next();
+            log.info("member pic: " + m.getPic());
+          }
+        }
+        
       }
   }
   
@@ -481,6 +563,16 @@ public class PyhDemoService {
             } catch (ServiceFault fault) {
               log.error("PyhDemoService.removeFamilyMember: opUpdateCommunity raised a ServiceFault", fault);
             }
+            
+            if (debug) {
+              log.info("removeFamilyMember(): members after removing:");
+              Iterator<MemberType> mit = members.iterator();
+              while (mit.hasNext()) {
+                MemberType m = mit.next();
+                log.info("member pic: " + m.getPic());
+              }
+            }
+            
             return;
           }
         }
@@ -495,6 +587,16 @@ public class PyhDemoService {
   public void addPersonsAsFamilyMembers(HashMap<String, String> personMap) {
     
     // personMap parameter contains (personPIC, role) pairs
+    
+    if (debug) {
+      log.info("addPersonsAsFamilyMembers(): adding persons:");
+      Set<String> set = personMap.keySet();
+      Iterator<String> it = set.iterator();
+      while (it.hasNext()) {
+        String personPic = it.next();
+        log.info("person pic: " + personPic);
+      }
+    }
     
     Set<String> keys = personMap.keySet();
     Iterator<String> si = keys.iterator();
@@ -523,6 +625,10 @@ public class PyhDemoService {
    * TODO: service implementation (Käyttäjäviestintä)
    */
   private void sendParentAdditionMessage(String recipient, Person user, String pic, Person person, CommunityRole r) {
+    if (debug) {
+      log.info("calling sendParentAdditionMessage()");
+    }
+    
     List<String> tmp = new ArrayList<String>();
     tmp.add(recipient);
     Message message = Message.createMessage(tmp, user.getPic(), pic, person.getCapFullName()
@@ -537,6 +643,10 @@ public class PyhDemoService {
    * TODO: service implementation (Käyttäjäviestintä)
    */
   private void sendFamilyAdditionMessage(List<String> recipients, Person user, String pic, Person person, CommunityRole r) {
+    if (debug) {
+      log.info("calling sendFamilyAdditionMessage()");
+    }
+    
     Message message = Message.createMessage(recipients, user.getPic(), pic, person.getCapFullName()
         + " Uusi perheyhteystieto.", "Käyttäjä " + user.getFullName() + " on lisännyt henkilön " + person.getFullName()
         + " perheyhteisön muuksi jäseneksi. "
@@ -549,6 +659,10 @@ public class PyhDemoService {
    * TODO: service implementation (Käyttäjäviestintä)
    */
   private void sendDependantFamilyAdditionMessage(List<String> recipients, Person user, Person person, CommunityRole r) {
+    if (debug) {
+      log.info("calling sendDependantFamilyAdditionMessage()");
+    }
+    
     Message message = Message.createMessage(recipients, user.getPic(), person.getPic(), person.getCapFullName()
         + " Uusi perheyhteystieto.", "Käyttäjä " + user.getFullName() + " on lisännyt henkilön " + person.getFullName()
         + " perheyhteisön muuksi jäseneksi. "
@@ -588,6 +702,17 @@ public class PyhDemoService {
       } catch (ServiceFault fault) {
         log.error("PyhDemoService.insertInto: opUpdateCommunity raised a ServiceFault", fault);
       }
+      
+      if (debug) {
+        log.info("insertInto(): members after insert:");
+        List<MemberType> members = family.getAllMembers();
+        Iterator<MemberType> mti = members.iterator();
+        while (mti.hasNext()) {
+          MemberType m = mti.next();
+          log.info("member pic: " + m.getPic());
+        }
+      }
+      
     }
   }
   
@@ -636,6 +761,17 @@ public class PyhDemoService {
       } catch (ServiceFault fault) {
         log.error("PyhDemoService.insertParentInto: opUpdateCommunity raised a ServiceFault", fault);
       }
+      
+      if (debug) {
+        log.info("insertParentInto(): family members after combining families:");
+        List<MemberType> members = family.getAllMembers();
+        Iterator<MemberType> mit = members.iterator();
+        while (mit.hasNext()) {
+          MemberType m = mit.next();
+          log.info("member pic: " + m.getPic());
+        }
+      }
+      
     }
     
     if (combine != null) {
@@ -656,6 +792,11 @@ public class PyhDemoService {
     } catch (ServiceFault fault) {
       log.error("PyhDemoService.removeFamily: opDeleteCommunity raised a ServiceFault", fault);
     }
+    
+    if (debug) {
+      log.info("removeFamily(): removing family with communityID " + family.getCommunityId());
+    }
+    
   }
   
   /**
@@ -699,15 +840,27 @@ public class PyhDemoService {
       if (families.size() > 1) {
         throw new TooManyFamiliesException("opQueryCommunities with parameter 'pic=" + pic + "' returned more than one family!");
       } else if (families.size() > 0) {
-        return families.get(0);
+        Family family = families.get(0);
+        
+        if (debug) {
+          log.info("getFamily(): returning family with community ID " + family.getCommunityId());
+        }
+        
+        return family;
       }
     }
+    
+    if (debug) {
+      log.info("getFamily(): returning null!");
+    }
+    
     return null;
   }
   
   /**
    * Checks if a dependant is user's dependant.
    */
+  /*
   private boolean isUsersDependant(String dependantPic) {
     List<Dependant> dependants = getDependants();
     Iterator<Dependant> di = dependants.iterator();
@@ -719,5 +872,6 @@ public class PyhDemoService {
     }
     return false;
   }
+  */
   
 }

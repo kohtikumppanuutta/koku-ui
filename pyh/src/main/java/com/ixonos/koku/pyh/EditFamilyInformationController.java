@@ -25,6 +25,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import com.ixonos.koku.pyh.model.Dependant;
 import com.ixonos.koku.pyh.model.MessageService;
 import com.ixonos.koku.pyh.model.Person;
+import com.ixonos.koku.pyh.util.CommunityRole;
 
 /**
  * Controller for editing user's family information.
@@ -77,7 +78,7 @@ public class EditFamilyInformationController {
   
   @ActionMapping(params = "action=addDependantAsFamilyMember")
   public void addDependantAsFamilyMember(@RequestParam String dependantPic, ActionResponse response) {
-    pyhDemoService.addDependantAsFamilyMember(dependantPic);
+    pyhDemoService.insertDependantToFamily(pyhDemoService.getUserPic(), dependantPic, CommunityRole.CHILD);
 
     response.setRenderParameter("action", "editFamilyInformation");
   }
