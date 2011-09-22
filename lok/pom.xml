@@ -16,13 +16,19 @@
     <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>lokservice-api</artifactId>
-      <version>0.0.6</version>
+      <version>0.0.7</version>
     </dependency>    
 
     <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>portlet-common</artifactId>
       <version>0.0.3</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>kohti-kumppanuutta</groupId>
+      <artifactId>customerservice-api</artifactId>
+      <version>0.0.7</version>
     </dependency>
 
   </dependencies>

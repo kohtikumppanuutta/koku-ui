@@ -7,7 +7,7 @@ import java.util.Locale;
  * 
  * @author aspluma
  */
-public final class LogConstants {
+public class LogConstants {
   public static final String DATE_FORMAT = "yyyy-MM-dd";
   public static final Locale LOCALE_FI = new Locale("fi");
   public static final boolean REAL_LOG = true; // use real/mock log or use demo
@@ -19,14 +19,27 @@ public final class LogConstants {
 
   public static final String LOG_USERNAME = "marko";
   public static final String LOG_PASSWORD = "marko";
+  
+  public static final String CUSTOMER_SERVICE_ENDPOINT = "http://localhost:8180/customer-service-0.0.1-SNAPSHOT/CustomerServiceEndpointBean?wsdl";
+  public static final String CUSTOMER_SERVICE_USER_ID = "marko";
+  public static final String CUSTOMER_SERVICE_PASSWORD = "marko";
 
+  public static final String COMPONENT_LOK = "LOK";
+
+  public static final String LOK_USER_ID = "susanna";
   // String ep =
   // "http://localhost:8080/log-service-0.0.1-SNAPSHOT/LogServiceBean?wsdl";
   // TODO: Muuta tämä, kun siirrytään pois mockista!
-  public static final String LOG_SERVICE = "http://localhost:8088/mocklogService-soap11-binding?WSDL";
+ // public static final String LOG_SERVICE = "http://localhost:8088/mocklogService-soap11-binding?WSDL";
+  public static final String LOG_SERVICE = "http://localhost:8180/lok-service-0.0.1-SNAPSHOT.jar";
 
+  // These are user errors, no error code needed
+  public static final String ARCHIVE_INPUT_ERROR = "Arkistointipäivämäärä väärän muotoinen";
+  
   private LogConstants() {
     // Contains only static constants. No need for new instances
   }
 
 }
+
+

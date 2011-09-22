@@ -5,7 +5,7 @@
     <portlet>
         <portlet-name>lok</portlet-name>
         <header-content>
-            <link type="text/css" rel="stylesheet" href="/css/lok2.css" />
+            <link type="text/css" rel="stylesheet" href="/css/lok.css" />
         </header-content>
     </portlet>
 </portlet-app>

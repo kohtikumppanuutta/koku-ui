@@ -82,19 +82,22 @@ public class LogViewController {
     res.setTitle(resourceBundle.getMessage("koku.lok.header.view", null, req.getLocale()));
 
     try {
-
       String startDateStr = lu.getDateString(1); // 1 year ago
       String endDateStr = lu.getDateString(0); // now
       model.addAttribute("startDate", startDateStr);
       model.addAttribute("endDate", endDateStr);
-      log.debug("modeliin lisätty startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
+      log.debug("startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       // TODO: Lisää virheidenkäsittely
     }
 
+    // note: empty results error handling is on the jsp page
     if (criteria != null) {
+
       if (LogConstants.REAL_ADMIN_LOG) {
+        // TODO: poista tämä (Virheviestin testausta varten)
+        // model.addAttribute("entries", new ArrayList<LogEntry>());
         model.addAttribute("entries", getAdminLogEntries(criteria));
       } else {
         model.addAttribute("entries", getDemoAdminLogEntries(criteria));
@@ -143,23 +146,33 @@ public class LogViewController {
       LogQueryCriteriaType criteriatype = new LogQueryCriteriaType();
 
       // the user does not have to give the dates so these might be null
-      Calendar t1 = Calendar.getInstance();
-      t1.setTime(criteria.getFrom());
-      Calendar t2 = Calendar.getInstance();
-      t2.setTime(criteria.getTo());
-
+      Calendar start = Calendar.getInstance();
+      if(criteria.getFrom() == null){
+        start = null;
+      } else{
+        start.setTime(criteria.getFrom());
+      }
+      Calendar end = Calendar.getInstance();
+      if(criteria.getTo() == null){
+        end = null;
+      } else{
+        end.setTime(criteria.getTo());
+      }
+      
       // assume that also null arguments are ok!! TODO: ota huomioon
       // kantakyselyissä
-      criteriatype.setStartTime(t1);
-      criteriatype.setEndDate(t2);
+      criteriatype.setStartTime(start);
+      criteriatype.setEndTime(end);
       criteriatype.setCustomerPic(criteria.getPic());
       criteriatype.setDataItemType(criteria.getConcept());
       criteriatype.setLogType(LogConstants.LOG_ADMIN);
 
-      // TODO: ADD HERE LOGGING OF LOG
+      // TODO: ADD HERE WRITING TO LOG
+      // "tapahtumatieto = hakuehdot"
 
-      log.debug("criteriatype start: " + criteriatype.getStartTime() + ", end: " + criteriatype.getEndDate());
+      log.debug("criteriatype start: " + criteriatype.getStartTime() + ", end: " + criteriatype.getEndTime());
 
+      //TODO: muutos!
       // call to log database
       AuditInfoType audit = new AuditInfoType();
       audit.setComponent("lok"); //FIXME
@@ -183,15 +196,17 @@ public class LogViewController {
 
         // "käsitelty tieto": all these together!
         // kks, pyh, kunpo, ..
-        logEntry.setClientSystemId(logEntryType.getClientSystemId()); 
+        logEntry.setClientSystemId(logEntryType.getClientSystemId());
         // pic of the child
-        logEntry.setChild(logEntryType.getCustomerPic()); 
+        logEntry.setChild(logEntryType.getCustomerPic());
         // kks.vasu, kks.4v, ..
-        logEntry.setDataItemType(logEntryType.getDataItemType()); 
+        logEntry.setDataItemType(logEntryType.getDataItemType());
         // id given by the system that wrote the log
-        logEntry.setLogId(logEntryType.getDataItemId()); 
-        // other info about the log entry 
-        logEntry.setMessage(logEntryType.getMessage()); 
+        logEntry.setLogId(logEntryType.getDataItemId());
+        
+        // other info about the log entry
+        //TODO: this already has all the other fields inside it, should this be used???
+        logEntry.setMessage(logEntryType.getMessage());
 
         entryList.add(logEntry);
       }
@@ -199,8 +214,11 @@ public class LogViewController {
    // TODO: Parempi virheenkäsittely
     } catch (MalformedURLException e) {
       log.error(e.getMessage(), e);
-    } catch (ServiceFault e) {
-      log.error("service fault", e);
+    
+    } // TODO: Parempi virheenkäsittely
+ catch (ServiceFault e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
 
     return entryList;

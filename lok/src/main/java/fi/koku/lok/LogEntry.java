@@ -7,6 +7,8 @@ import java.util.Date;
  * @author aspluma
  */
 public class LogEntry {
+  
+  
   private String message; // message
   private String logId; // dataItemId: id given by the logging system
   private Date timestamp; // timestamp

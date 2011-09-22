@@ -40,16 +40,12 @@
 
 		<form name="searchUserParams" method="post"
 			action="${searchUserParams}">
-			<span class="portlet-form-field-label"><spring:message code="ui.lok.first.name" /></span>
-			<span class="portlet-form-input-field"> <input type="text" name="fn" id="fn" /> </span>
-			<span class="portlet-form-field-label"><spring:message code="ui.lok.last.name" /></span>
-			<span class="portlet-form-input-field"> <input type="text" name="sn" /> </span>
 			<span class="portlet-form-field-label"><spring:message code="koku.common.pic" />: </span>
 			<span class="portlet-form-input-field"> <input type="text" name="pic" /> </span>
 			<input class="portlet-form-button" type="submit" value="<spring:message code="ui.lok.seek"/>" />
 		</form>
 	</div>
-
+<p>
 	<c:choose>
 		<c:when test="${not empty searchedUsers}">
 			<table class="portlet-table-body" width="100%" border="0">
@@ -60,20 +56,14 @@
 					<th></th>
 				</tr>
 
-				<c:forEach var="user" items="${searchedUsers}">
-
-					<portlet:renderURL var="showLogSearchFormURL">
+		<portlet:renderURL var="showLogSearchFormURL">
 						<portlet:param name="action" value="searchLog" />
-						<portlet:param name="pic" value="${user.pic}" />
+						<portlet:param name="pic" value="${foundPic}" />
 					</portlet:renderURL>
-
 					<tr>
-						<td><c:out value="${user.fname}"/> <c:out value="${user.sname}"/> </td>
-						<td><c:out value="${user.pic}"/> </td>
+					<td><c:out value="${foundName}"/> </td><td><c:out value="${foundPic}"/> </td>
 						<td><a href="${showLogSearchFormURL}"><spring:message code="ui.lok.choose.user"/></a></td>
 					</tr>
-
-				</c:forEach>
 			</table>
 
 			<p>&nbsp;</p>

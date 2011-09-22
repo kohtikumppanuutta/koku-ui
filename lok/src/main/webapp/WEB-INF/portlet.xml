@@ -18,6 +18,7 @@
   </portlet>
 
 <!-- THIS IS EXTERNAL PORTLET FILTER FROM KOKU-UI/COMMON/userinfo-portlet-filter -project -->
+   <!-- 
     <filter>
 		<filter-name>userInfoFilter</filter-name>
 		<filter-class>fi.koku.portlet.filter.userinfo.UserInfoPortletFilter</filter-class>
@@ -31,7 +32,7 @@
 		<filter-name>userInfoFilter</filter-name>
 		<portlet-name>lok</portlet-name>
 	</filter-mapping>
-
+ -->
   <container-runtime-option>
     <name>javax.portlet.renderHeaders</name>
     <value>true</value>
