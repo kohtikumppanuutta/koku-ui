@@ -236,6 +236,26 @@ public class KKSCollection {
     return null;
   }
 
+  public Entry getEntryWithValue(String id) {
+
+    for (List<Entry> tmp : multiValueEntries.values()) {
+      for (Entry k : tmp) {
+
+        if (k.getValueId().equals(id)) {
+          return k;
+        }
+      }
+    }
+
+    for (Entry k : entries.values()) {
+      if (k.getValueId().equals(id)) {
+        return k;
+      }
+    }
+
+    return null;
+  }
+
   public boolean isVersioned() {
     return versioned;
   }

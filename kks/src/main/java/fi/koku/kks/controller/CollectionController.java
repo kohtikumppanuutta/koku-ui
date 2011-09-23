@@ -149,7 +149,7 @@ public class CollectionController {
     model.addAttribute("valueId", valueId);
 
     if (StringUtils.isNotEmpty(entry)) {
-      model.addAttribute("entryvalue", kok.getEntry(entry));
+      model.addAttribute("entryvalue", kok.getEntryWithValue(valueId));
     }
 
     return "multivalue";

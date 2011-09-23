@@ -201,6 +201,7 @@
                                                                     
                                                                     <div class="kks-comment">
 	                                                                    <span class="kks-entry-value">${multivalue.value} <span class="kks-right">
+	                                                                    '${type.id}', '${multivalue.id}', '${multivalue.valueId}'
 	                                                                    <a
 	                                                                            href="javascript:void(0)" onclick="doSubmitForm('${type.id}', '${multivalue.id}', '${multivalue.valueId}' );">
 	                                                                                <spring:message code="ui.kks.modify" /> </a>
