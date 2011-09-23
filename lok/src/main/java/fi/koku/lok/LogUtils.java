@@ -26,7 +26,7 @@ public class LogUtils {
   private static final Logger log = LoggerFactory.getLogger(LogUtils.class);
   
   /**
-   * Method for parsing the date input 
+   * Method for parsing a Date to a Calendar 
    * @param cal
    * @return
    * @throws KoKuFaultException
@@ -142,4 +142,5 @@ public class LogUtils {
     
     return dateStr;    
   }
+  
 }

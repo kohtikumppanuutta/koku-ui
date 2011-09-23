@@ -33,12 +33,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.koku.services.entity.customer.v1.CustomerServiceFactory;
 import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;
 import fi.koku.services.utility.log.v1.LogEntryType;
 import fi.koku.services.utility.log.v1.LogQueryCriteriaType;
 import fi.koku.services.utility.log.v1.LogServicePortType;
 import fi.koku.services.utility.log.v1.ServiceFault;
+import fi.koku.services.utility.log.v1.LogServiceFactory;
 
 /**
  * Controller for log search (LOK). This implements LOK-3 (Etsi lokitieto).
@@ -52,10 +54,20 @@ public class LogSearchController {
 
   private static final Logger log = LoggerFactory.getLogger(LogSearchController.class);
 
+  // Use log service
+  private LogServicePortType logService;
+  
   private CriteriaSerializer criteriaSerializer = new CriteriaSerializer();
   SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
   LogUtils lu = new LogUtils();
 
+  public LogSearchController(){
+    LogServiceFactory logServiceFactory = new LogServiceFactory(
+        LogConstants.CUSTOMER_SERVICE_USER_ID, LogConstants.CUSTOMER_SERVICE_PASSWORD,
+        LogConstants.CUSTOMER_SERVICE_ENDPOINT);
+    logService = logServiceFactory.getLogService();    
+  }
+  
 //  @Autowired
 //  private ResourceBundleMessageSource resourceBundle;
 
@@ -96,24 +108,27 @@ public class LogSearchController {
       model.addAttribute("endDate", endDateStr);
       log.debug("startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
   
-
+      
+      
     if (criteria != null) {
-      if (LogConstants.REAL_LOG) {
-       //TODO: poista tämä. Virheviestin testausta varten.
-        //model.addAttribute("entries", new ArrayList<LogEntry>());
+      if (visited != null) { 
 
-        model.addAttribute("entries", getLogEntries(criteria));
-      } else {
-        model.addAttribute("entries", getDemoLogEntries(criteria));
-      }
-      model.addAttribute("searchParams", criteria);
-      if (visited != null) {
+        if (LogConstants.REAL_LOG) {
+          //TODO: poista tämä. Virheviestin testausta varten.
+          //model.addAttribute("entries", new ArrayList<LogEntry>());
+
+          model.addAttribute("entries", getLogEntries(criteria));
+        } else { //TODO: poista tämä!
+          model.addAttribute("entries", getDemoLogEntries(criteria));
+        }
+        model.addAttribute("searchParams", criteria);
+
         model.addAttribute("visited", "---");
       }
       log.info("criteria: " + criteria.getPic() + ", " + criteria.getConcept() + ", " + criteria.getFrom() + ", "
           + criteria.getTo());
 
-      // TODO: ADD HERE THE ACTUAL CALL TO LOG SERVICE
+    
 
       if (StringUtils.isNotBlank(criteria.getPic())) {
         model.addAttribute("logSearchCriteria", criteria);
@@ -127,6 +142,7 @@ public class LogSearchController {
     return "search";
   }
 
+  // This is run after the customer has been searched and the user clicks 'Valitse'
   // portlet action phase
   @ActionMapping(params = "action=searchLog")
   public void doSearch(@ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria,
@@ -146,6 +162,8 @@ public class LogSearchController {
     response.setRenderParameter("action", "searchLog");
   }
 
+ 
+ 
   /**
    * Method for reading log entries
    * 
@@ -155,11 +173,8 @@ public class LogSearchController {
   private List<LogEntry> getLogEntries(LogSearchCriteria searchCriteria) {
     List<LogEntry> entryList = new ArrayList<LogEntry>();
 
-    // TODO: onko tarkoituksella startTime ja endDate?
-
     try {
-      // connect to the log service
-      LogServicePortType port = lu.getLogService();
+   
 
       LogQueryCriteriaType criteriatype = new LogQueryCriteriaType();
 
@@ -172,15 +187,27 @@ public class LogSearchController {
       Calendar start = lu.parseGivenDate(searchCriteria.getFrom());
       
       Calendar end = lu.parseGivenDate(searchCriteria.getTo());
+
 /*
  *  if (logarchivedate != null && logarchivedate.getEndDate() != null) {
       String archiveDateStr = dateFormat.format(logarchivedate.getEndDate());      
  */
-     
+      
+      log.debug("parsitut päivämäärät: "+start+"\n"+end+"\n");
       // assume that null arguments are ok
-      criteriatype.setStartTime(start);
+/*
+ * TESTI 23.9. 
+ *       criteriatype.setStartTime(start);
+ 
       criteriatype.setEndTime(end);
-
+*/
+      //TODO: testataan kovakoodatuilla päivillä!!! 23.9.
+      Calendar startCal = Calendar.getInstance();
+      startCal.set(2010, 9, 1, 18, 15, 33);
+      Calendar endCal = Calendar.getInstance();
+      endCal.set(2011,9, 24);
+      criteriatype.setStartTime(startCal);
+      criteriatype.setEndTime(endCal);
       // data item type: kks.vasu, kks.4v, family/community info, consent, ...
       criteriatype.setDataItemType(searchCriteria.getConcept());
       // log type: loki, lokin seurantaloki
@@ -189,15 +216,16 @@ public class LogSearchController {
       // TODO: ADD HERE WRITING TO LOG
       // lokiin: tapahtumatieto = hakuehdot
       
-      log.debug("criteriatype cust pic: " + criteriatype.getCustomerPic() + "\n" + "start: "
-          + criteriatype.getStartTime() + "\n" + "end: " + criteriatype.getEndTime() + "\n" + "dataItem: "
+      log.debug("criteriatype cust pic: " + criteriatype.getCustomerPic() + "\n" +
+          "start: "+ criteriatype.getStartTime() + "\n" + 
+          "end: " + criteriatype.getEndTime() + "\n" + "dataItem: "
           + criteriatype.getDataItemType() + "\n" + "logtype: " + criteriatype.getLogType());
 
       // call to log database
       AuditInfoType audit = new AuditInfoType();
       audit.setComponent("lok"); //FIXME
       audit.setUserId("luser");  // FIXME
-      LogEntriesType entriestype = port.opQueryLog(criteriatype, audit);
+      LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
 
       // TODO: kirjoita käsittelylokiin
       // writeLog(LogEntry entry)
@@ -205,7 +233,7 @@ public class LogSearchController {
       // the log entries list from the database
       List<LogEntryType> entryTypeList = entriestype.getLogEntry();
 
-      log.debug("entrytypelist size: " + entryTypeList.size());
+      log.debug("entrytype list size: " + entryTypeList.size());
 
       for (Iterator<?> i = entryTypeList.iterator(); i.hasNext();) {
         LogEntry logEntry = new LogEntry();
@@ -234,8 +262,7 @@ public class LogSearchController {
       }
 
       // TODO: Parempi virheenkäsittely
-    } catch (MalformedURLException e) {
-      log.error(e.getMessage(), e);
+   
     
     } // TODO: Parempi virheenkäsittely
  catch (ServiceFault e) {

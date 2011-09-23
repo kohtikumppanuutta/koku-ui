@@ -37,6 +37,7 @@ import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;
 import fi.koku.services.utility.log.v1.LogEntryType;
 import fi.koku.services.utility.log.v1.LogQueryCriteriaType;
+import fi.koku.services.utility.log.v1.LogServiceFactory;
 import fi.koku.services.utility.log.v1.LogServicePortType;
 import fi.koku.services.utility.log.v1.ServiceFault;
 
@@ -52,14 +53,24 @@ public class LogViewController {
 
   private static final Logger log = LoggerFactory.getLogger(LogViewController.class);
 
+  // Use log service
+  private LogServicePortType logService;
+  
   private CriteriaSerializer criteriaSerializer = new CriteriaSerializer();
   private SimpleDateFormat dateFormat = new SimpleDateFormat(LogConstants.DATE_FORMAT);
 
   LogUtils lu = new LogUtils();
 
-  @Autowired
-  private ResourceBundleMessageSource resourceBundle;
+//  @Autowired
+//  private ResourceBundleMessageSource resourceBundle;
 
+  public LogViewController(){
+    LogServiceFactory logServiceFactory = new LogServiceFactory(
+        LogConstants.CUSTOMER_SERVICE_USER_ID, LogConstants.CUSTOMER_SERVICE_PASSWORD,
+        LogConstants.CUSTOMER_SERVICE_ENDPOINT);
+    logService = logServiceFactory.getLogService();    
+    log.debug("Got logService!");
+  }
   // customize form data binding
   @InitBinder
   public void initBinder(WebDataBinder binder) {
@@ -79,19 +90,23 @@ public class LogViewController {
   public String render(RenderRequest req, @RequestParam(value = "visited", required = false) String visited,
       @ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, RenderResponse res, Model model) {
 
-    res.setTitle(resourceBundle.getMessage("koku.lok.header.view", null, req.getLocale()));
-
+//    res.setTitle(resourceBundle.getMessage("koku.lok.header.view", null, req.getLocale()));
+/** TESTI 23.9.
     try {
       String startDateStr = lu.getDateString(1); // 1 year ago
       String endDateStr = lu.getDateString(0); // now
       model.addAttribute("startDate", startDateStr);
       model.addAttribute("endDate", endDateStr);
+      // set dates to criteria
+      criteria.setFrom(dateFormat.parse(startDateStr));
+      criteria.setTo(dateFormat.parse(endDateStr));
       log.debug("startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       // TODO: Lisää virheidenkäsittely
     }
 
+   
     // note: empty results error handling is on the jsp page
     if (criteria != null) {
 
@@ -109,6 +124,40 @@ public class LogViewController {
         model.addAttribute("visited", "---");
       }
 
+      log.info("criteria: " + criteria.getPic() + ", " + criteria.getConcept() + ", " + criteria.getFrom() + ", "
+          + criteria.getTo());
+      
+    
+//      log.debug("criteria: " + criteria.getFrom() + ", " + criteria.getTo());
+    } else {
+      log.debug("criteria: null");
+    }
+
+    return "view";
+    */
+    // testi 23.9. vanha koodi takas:
+    // default endtime is now
+    Calendar endtime = Calendar.getInstance();
+    // default starttime is 1 year ago
+    Calendar starttime = Calendar.getInstance();
+    starttime.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR) - 1);
+
+    String startDateStr = dateFormat.format(starttime.getTime());
+    model.addAttribute("startDate", startDateStr);
+    String endDateStr = dateFormat.format(endtime.getTime());
+    model.addAttribute("endDate", endDateStr);
+
+    log.debug("modeliin lisätty startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
+    
+   
+    if (criteria != null) {
+      model.addAttribute("entries", getAdminLogEntries(criteria));
+      model.addAttribute("searchParams", criteria);
+      
+      if (visited != null) {
+        model.addAttribute("visited", "---");
+      }
+      
       log.debug("criteria: " + criteria.getFrom() + ", " + criteria.getTo());
     } else {
       log.debug("criteria: null");
@@ -140,9 +189,7 @@ public class LogViewController {
     List<LogEntry> entryList = new ArrayList<LogEntry>();
 
     try {
-      // connect to the log service
-      LogServicePortType port = lu.getLogService();
-
+     
       LogQueryCriteriaType criteriatype = new LogQueryCriteriaType();
 
       // the user does not have to give the dates so these might be null
@@ -170,14 +217,14 @@ public class LogViewController {
       // TODO: ADD HERE WRITING TO LOG
       // "tapahtumatieto = hakuehdot"
 
-      log.debug("criteriatype start: " + criteriatype.getStartTime() + ", end: " + criteriatype.getEndTime());
+      log.debug("criteriatype start: " + criteriatype.getStartTime() + "\n end: " + criteriatype.getEndTime());
 
       //TODO: muutos!
       // call to log database
       AuditInfoType audit = new AuditInfoType();
       audit.setComponent("lok"); //FIXME
       audit.setUserId("luser");  // FIXME
-      LogEntriesType entriestype = port.opQueryLog(criteriatype, audit);
+      LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
 
       // get the log entries list from the database
       List<LogEntryType> entryTypeList = entriestype.getLogEntry();
@@ -212,8 +259,7 @@ public class LogViewController {
       }
 
    // TODO: Parempi virheenkäsittely
-    } catch (MalformedURLException e) {
-      log.error(e.getMessage(), e);
+  
     
     } // TODO: Parempi virheenkäsittely
  catch (ServiceFault e) {
