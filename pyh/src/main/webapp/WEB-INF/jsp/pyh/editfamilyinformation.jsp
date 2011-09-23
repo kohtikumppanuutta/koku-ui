@@ -176,7 +176,6 @@
 							name="userPic_${userVar}" type="hidden" value="${user.pic}" />
 						</td>
 
-
 						<td><input name="addUserCheckbox_${userVar}"
 							value="${userVar}" type="checkbox" /></td>
 

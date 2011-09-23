@@ -42,10 +42,8 @@ import fi.koku.services.entity.customer.v1.CustomersType;
 public class PyhDemoService {
   
   private static Logger log = LoggerFactory.getLogger(PyhDemoService.class);
-  
   private List<Person> searchedUsers;
-  private String userPic;
-  private String userID;
+  private String userID = "";
   
   @Autowired
   @Qualifier(value = "pyhMessageService")
@@ -58,11 +56,9 @@ public class PyhDemoService {
   
   public PyhDemoService() {
     
-    // TODO: get user ID from UserInfo
-    userID = "";
+    // TODO: get user ID from UserInfo; userID == PIC
     
     // TODO: get user's PIC from the portal
-    userPic = "010101-1010";
     
     CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory(PyhConstants.CUSTOMER_SERVICE_USER_ID, PyhConstants.CUSTOMER_SERVICE_PASSWORD, PyhConstants.CUSTOMER_SERVICE_ENDPOINT);
     customerService = customerServiceFactory.getCustomerService();
@@ -79,6 +75,7 @@ public class PyhDemoService {
     
     fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
     customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
+    // TODO: userID = pic
     customerAuditInfoType.setUserId(userID);
     
     try {
@@ -98,7 +95,7 @@ public class PyhDemoService {
   /**
    * Returns the current user.
    */
-  public Person getUser() {
+  public Person getUser(String userPic) {
     if (debug) {
       log.info("getUser(): calling getPerson() with pic " + userPic);
     }
@@ -107,20 +104,9 @@ public class PyhDemoService {
   }
   
   /**
-   * Returns the user's PIC.
-   */
-  public String getUserPic() {
-    if (debug) {
-      log.info("getUserPic(): returning user pic " + userPic);
-    }
-    
-    return userPic;
-  }
-  
-  /**
    * Returns user's dependants.
    */
-  public List<Dependant> getDependants() {
+  public List<Dependant> getDependants(String userPic) {
     List<Dependant> dependants = new ArrayList<Dependant>();
     CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
     communityQueryCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_GUARDIAN_COMMUNITY);
@@ -166,7 +152,7 @@ public class PyhDemoService {
       }
     }
     
-    // check if dependant is member of user's family
+    // next check if dependant is member of user's family
     
     Family userFamily;
     try {
@@ -188,7 +174,6 @@ public class PyhDemoService {
         
         List<MemberType> members = userFamily.getAllMembers();
         Iterator<MemberType> mi = members.iterator();
-        // iterate through family members
         while (mi.hasNext()) {
           MemberType member = mi.next();
           // if dependant belongs to user's family then set Dependant.memberOfUserFamily
@@ -214,8 +199,8 @@ public class PyhDemoService {
   /**
    * Returns all other members of the user's family except dependants.
    */
-  public List<FamilyMember> getOtherFamilyMembers() {
-    List<Dependant> dependants = getDependants();
+  public List<FamilyMember> getOtherFamilyMembers(String userPic) {
+    List<Dependant> dependants = getDependants(userPic);
     Set<String> dependantPics = new HashSet<String>();
     Iterator<Dependant> di = dependants.iterator();
     while (di.hasNext()) {
@@ -286,7 +271,7 @@ public class PyhDemoService {
   /**
    * Checks if the user's family has max. number of parents.
    */
-  public boolean isParentsSet() {
+  public boolean isParentsSet(String userPic) {
     Family family = null;
     
     try {
@@ -317,7 +302,7 @@ public class PyhDemoService {
   /**
    * Query persons by name, PIC and customer ID and stores them in the searchedUsers list.
    */
-  public void searchUsers(String firstname, String surname, String customerPic, String customerID) {
+  public void searchUsers(String firstname, String surname, String customerPic, String customerID, String currentUserPic) {
     clearSearchedUsers();
     
     CustomerQueryCriteriaType customerCriteria = new CustomerQueryCriteriaType();
@@ -335,12 +320,17 @@ public class PyhDemoService {
       log.error("PyhDemoService.searchUsers: opQueryCustomers raised a ServiceFault", fault);
     }
     
+    Set<String> depPics = getDependantPics(currentUserPic);
+    
     if (customersType != null) {
       List<CustomerType> customers = customersType.getCustomer();
       Iterator<CustomerType> ci = customers.iterator();
       while (ci.hasNext()) {
         CustomerType customer = ci.next();
-        searchedUsers.add(new Person(customer));
+        // filter out user's dependants from search results
+        if (!depPics.contains(customer.getHenkiloTunnus())) {
+          searchedUsers.add(new Person(customer));
+        }
       }
     }
     
@@ -397,7 +387,7 @@ public class PyhDemoService {
    * Selects persons (PICs) to whom send the confirmation message for a operation, for example adding a dependant 
    * into a family.
    */
-  private List<String> generateRecipients(String targetPic, Person user, CommunityRole role) {
+  private List<String> generateRecipients(String targetPic, Person user, CommunityRole role, String currentUserPic) {
     List<String> recipientPics = new ArrayList<String>();
     
     if (CommunityRole.CHILD.equals(role)) {
@@ -438,7 +428,7 @@ public class PyhDemoService {
       MemberType familyMember = null;
       
       try {
-        familyMember = getFamily(userPic).getOtherParent(user.getPic());
+        familyMember = getFamily(currentUserPic).getOtherParent(user.getPic());
       } catch (TooManyFamiliesException tme) {
         log.error("PyhDemoService.generateRecipients(): getFamily(userPic) threw a TooManyFamiliesException!");
         log.error(tme.getMessage());
@@ -584,7 +574,7 @@ public class PyhDemoService {
    * Creates a recipient list for confirmation request message for adding persons as family members.
    * Then the message sending method is called or if there are no recipients then persons are added immediately.
    */
-  public void addPersonsAsFamilyMembers(HashMap<String, String> personMap) {
+  public void addPersonsAsFamilyMembers(HashMap<String, String> personMap, String userPic) {
     
     // personMap parameter contains (personPIC, role) pairs
     
@@ -608,7 +598,7 @@ public class PyhDemoService {
       Person person = getPerson(pic);
       CommunityRole communityRole = CommunityRole.create(role);
       
-      List<String> recipients = generateRecipients(pic, user, communityRole);
+      List<String> recipients = generateRecipients(pic, user, communityRole, userPic/*current user's pic*/);
       
       if (CommunityRole.PARENT.equals(communityRole) || CommunityRole.FATHER.equals(communityRole) || 
           CommunityRole.MOTHER.equals(communityRole)) {
@@ -858,6 +848,19 @@ public class PyhDemoService {
   }
   
   /**
+   * Returns user's dependants' PICs.
+   */
+  private Set<String> getDependantPics(String userPic) {
+    Set<String> dependantPics = new HashSet<String>();
+    List<Dependant> dependants = getDependants(userPic);
+    Iterator<Dependant> di = dependants.iterator();
+    while (di.hasNext()) {
+      dependantPics.add(di.next().getPic());
+    }
+    return dependantPics;
+  }
+  
+  /**
    * Checks if a dependant is user's dependant.
    */
   /*
@@ -873,5 +876,4 @@ public class PyhDemoService {
     return false;
   }
   */
-  
 }

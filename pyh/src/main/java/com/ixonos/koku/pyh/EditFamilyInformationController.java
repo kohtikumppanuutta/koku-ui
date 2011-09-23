@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 
 import org.slf4j.Logger;
@@ -26,6 +27,8 @@ import com.ixonos.koku.pyh.model.Dependant;
 import com.ixonos.koku.pyh.model.MessageService;
 import com.ixonos.koku.pyh.model.Person;
 import com.ixonos.koku.pyh.util.CommunityRole;
+
+import fi.koku.portlet.filter.userinfo.UserInfo;
 
 /**
  * Controller for editing user's family information.
@@ -49,25 +52,45 @@ public class EditFamilyInformationController {
   private MessageService messageService;
 
   @RenderMapping(params = "action=editFamilyInformation")
-  public String render(Model model) {
+  public String render(Model model, PortletSession session) {
+    String userPic = "";
+    
+    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
+    if (userInfo != null) {
+      userPic = userInfo.getPic();
+    } else {
+      // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
+    }
+    
     pyhDemoService.clearSearchedUsers();
-    model.addAttribute("user", pyhDemoService.getUser());
-    model.addAttribute("dependants", pyhDemoService.getDependants());
-    model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers());
-    model.addAttribute("parentsFull", pyhDemoService.isParentsSet());
-    model.addAttribute("messages", messageService.getSentMessages(pyhDemoService.getUser().getPic()));
+    model.addAttribute("user", pyhDemoService.getUser(userPic));
+    model.addAttribute("dependants", pyhDemoService.getDependants(userPic));
+    model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers(userPic));
+    model.addAttribute("parentsFull", pyhDemoService.isParentsSet(userPic));
+    model.addAttribute("messages", messageService.getSentMessages(userPic));
+
     return "editfamilyinformation";
   }
 
   // this render method does not clear the search results
   @RenderMapping(params = "action=editFamilyInformationWithSearchResults")
-  public String renderWithSearchResults(RenderRequest request, Model model) {
+  public String renderWithSearchResults(RenderRequest request, Model model, PortletSession session) {
+    String userPic = "";
+    
+    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
+    if (userInfo != null) {
+      userPic = userInfo.getPic();
+    } else {
+      // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
+    }
+    
     request.setAttribute("search", true);
-    model.addAttribute("user", pyhDemoService.getUser());
-    model.addAttribute("dependants", pyhDemoService.getDependants());
-    model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers());
-    model.addAttribute("parentsFull", pyhDemoService.isParentsSet());
-    model.addAttribute("messages", messageService.getSentMessages(pyhDemoService.getUser().getPic()));
+    model.addAttribute("user", pyhDemoService.getUser(userPic));
+    model.addAttribute("dependants", pyhDemoService.getDependants(userPic));
+    model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers(userPic));
+    model.addAttribute("parentsFull", pyhDemoService.isParentsSet(userPic));
+    model.addAttribute("messages", messageService.getSentMessages(userPic));
+
     return "editfamilyinformation";
   }
   
@@ -77,34 +100,61 @@ public class EditFamilyInformationController {
   }
   
   @ActionMapping(params = "action=addDependantAsFamilyMember")
-  public void addDependantAsFamilyMember(@RequestParam String dependantPic, ActionResponse response) {
-    pyhDemoService.insertDependantToFamily(pyhDemoService.getUserPic(), dependantPic, CommunityRole.CHILD);
+  public void addDependantAsFamilyMember(@RequestParam String dependantPic, ActionResponse response, PortletSession session) {
+    String userPic = "";
+    
+    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
+    if (userInfo != null) {
+      userPic = userInfo.getPic();
+    } else {
+      // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
+    }
+    
+    pyhDemoService.insertDependantToFamily(userPic, dependantPic, CommunityRole.CHILD);
 
     response.setRenderParameter("action", "editFamilyInformation");
   }
 
   @ActionMapping(params = "action=removeFamilyMember")
   public void removeFamilyMember(@RequestParam String familyMemberPic, ActionResponse response) {
+    
     pyhDemoService.removeFamilyMember(familyMemberPic);
 
     response.setRenderParameter("action", "editFamilyInformation");
   }
 
   @ActionMapping(params = "action=removeDependant")
-  public void removeDependant(@RequestParam String familyMemberPic, ActionResponse response) {
-
-    for (Dependant d : pyhDemoService.getDependants()) {
+  public void removeDependant(@RequestParam String familyMemberPic, ActionResponse response, PortletSession session) {
+    String userPic = "";
+    
+    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
+    if (userInfo != null) {
+      userPic = userInfo.getPic();
+    } else {
+      // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
+    }
+    
+    for (Dependant d : pyhDemoService.getDependants(userPic)) {
       if (d.getPic().equals(familyMemberPic)) {
         d.setMemberOfUserFamily(false);
       }
     }
     pyhDemoService.removeFamilyMember(familyMemberPic);
-
+    
     response.setRenderParameter("action", "editFamilyInformation");
   }
   
   @ActionMapping(params = "action=searchUsers")
-  public void searchUsers(ActionRequest request, ActionResponse response) {
+  public void searchUsers(ActionRequest request, ActionResponse response, PortletSession session) {
+    String userPic = "";
+    
+    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
+    if (userInfo != null) {
+      userPic = userInfo.getPic();
+    } else {
+      // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
+    }
+    
     String fn = request.getParameter("searchFirstname");
     String sn = request.getParameter("searchSurname");
     String pic = request.getParameter("searchPic");
@@ -112,13 +162,22 @@ public class EditFamilyInformationController {
     // call service to query users,
     // users are returned as a model attribute object searchedUsers
     // TODO: what is the correct search criteria?
-    pyhDemoService.searchUsers(fn, sn, pic, "" /*customer id*/);
+    pyhDemoService.searchUsers(fn, sn, pic, userPic /*customer id == user pic*/, userPic);
 
     response.setRenderParameter("action", "editFamilyInformationWithSearchResults");
   }
 
   @ActionMapping(params = "action=addUsersToFamily")
-  public void addUsersToFamily(ActionRequest request, ActionResponse response) {
+  public void addUsersToFamily(ActionRequest request, ActionResponse response, PortletSession session) {
+    String userPic = "";
+    
+    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
+    if (userInfo != null) {
+      userPic = userInfo.getPic();
+    } else {
+      // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
+    }
+    
     HashMap<String, String> parameterMap = new HashMap<String, String>();
     HashMap<String, String> personMap = new HashMap<String, String>();
     String personPic = "";
@@ -149,7 +208,7 @@ public class EditFamilyInformationController {
     }
 
     // call service to add users to family
-    pyhDemoService.addPersonsAsFamilyMembers(personMap);
+    pyhDemoService.addPersonsAsFamilyMembers(personMap, userPic);
 
     response.setRenderParameter("action", "editFamilyInformation");
   }

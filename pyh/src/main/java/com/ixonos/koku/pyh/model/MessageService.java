@@ -43,7 +43,7 @@ public class MessageService implements MessageListener {
     messages.clear();
   }
 
-  public List<Message> getMessagesFor(String ssn) {
+  public List<Message> getMessagesFor(String pic) {
 
     List<Message> tmp = new ArrayList<Message>();
     List<Message> results = new ArrayList<Message>();
@@ -52,7 +52,7 @@ public class MessageService implements MessageListener {
     }
 
     for (Message m : tmp) {
-      if (m.getRecipients().contains(ssn) && !m.isReadBy(ssn)) {
+      if (m.getRecipients().contains(pic) && !m.isReadBy(pic)) {
         results.add(m);
       }
     }
@@ -60,7 +60,7 @@ public class MessageService implements MessageListener {
     return results;
   }
 
-  public List<Message> getSentMessages(String ssn) {
+  public List<Message> getSentMessages(String pic) {
 
     List<Message> tmp = new ArrayList<Message>();
     List<Message> results = new ArrayList<Message>();
@@ -69,7 +69,7 @@ public class MessageService implements MessageListener {
     }
 
     for (Message m : tmp) {
-      if (m.getFrom().equals(ssn)) {
+      if (m.getFrom().equals(pic)) {
         results.add(m);
       }
     }
