@@ -85,9 +85,8 @@
 </h1>
 </div>
 <div class="kks-right">
-
          <c:if      
-            test="${ collection.buildFromExisting }">            
+            test="${ not empty collection.prevVersion }">            
             <a
                 href="
                         <portlet:renderURL>
@@ -97,8 +96,8 @@
                         </portlet:renderURL>">
                 <strong><spring:message code="ui.kks.prev.version" />
             </strong> </a>
-        </c:if> <c:if test="${collection.versioned}">
-            <c:if test="${ collection.buildFromExisting }">
+        </c:if> <c:if test="${not empty collection.nextVersion }">
+            <c:if test="${ not empty collection.prevVersion }">
             </br>
             </c:if>
             <a
@@ -201,7 +200,6 @@
                                                                     
                                                                     <div class="kks-comment">
 	                                                                    <span class="kks-entry-value">${multivalue.value} <span class="kks-right">
-	                                                                    '${type.id}', '${multivalue.id}', '${multivalue.valueId}'
 	                                                                    <a
 	                                                                            href="javascript:void(0)" onclick="doSubmitForm('${type.id}', '${multivalue.id}', '${multivalue.valueId}' );">
 	                                                                                <spring:message code="ui.kks.modify" /> </a>
@@ -240,7 +238,7 @@
                                                         
                                                     </c:forEach>
                                                 </c:if> <c:if test="${ not type.multiValue }">
-                                                    <span class="kks-read-only-text"> ${type.description}<c:out value="${collection.entries[type.id].value}"></c:out> </span>
+                                                    <span class="kks-read-only-text"><c:out value="${collection.entries[type.id].value}"></c:out> </span>
                                                 </c:if> 
                                                 </c:otherwise>
                                         </c:choose>

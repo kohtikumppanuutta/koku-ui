@@ -186,6 +186,7 @@ public class KksConverter {
     for (KksTagType tag : entry.getType().getKksTags().getKksTag()) {
       ids.getKksTagId().add(tag.getId());
     }
+
     tmp.setKksTagIds(ids);
     Calendar c = new GregorianCalendar();
     c.setTime(entry.getCreationTime());

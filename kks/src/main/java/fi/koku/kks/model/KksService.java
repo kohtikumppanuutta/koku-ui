@@ -226,6 +226,7 @@ public class KksService {
 
     try {
       KksQueryCriteriaType kksQueryCriteria = new KksQueryCriteriaType();
+      kksQueryCriteria.setPic(customer);
       KksTagNamesType names = new KksTagNamesType();
       names.getKksTagName().addAll(tagNames);
       kksQueryCriteria.setKksTagNames(names);
