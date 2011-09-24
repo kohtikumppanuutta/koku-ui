@@ -57,8 +57,8 @@ public class LogArchiveController {
   
   public LogArchiveController(){
     LogServiceFactory logServiceFactory = new LogServiceFactory(
-        LogConstants.CUSTOMER_SERVICE_USER_ID, LogConstants.CUSTOMER_SERVICE_PASSWORD,
-        LogConstants.CUSTOMER_SERVICE_ENDPOINT);
+        LogConstants.LOG_SERVICE_USER_ID, LogConstants.LOG_SERVICE_PASSWORD,
+        LogConstants.LOG_SERVICE_ENDPOINT);
     logService = logServiceFactory.getLogService();    
   }
   

@@ -66,8 +66,8 @@ public class LogViewController {
 
   public LogViewController(){
     LogServiceFactory logServiceFactory = new LogServiceFactory(
-        LogConstants.CUSTOMER_SERVICE_USER_ID, LogConstants.CUSTOMER_SERVICE_PASSWORD,
-        LogConstants.CUSTOMER_SERVICE_ENDPOINT);
+        LogConstants.LOG_SERVICE_USER_ID, LogConstants.LOG_SERVICE_PASSWORD,
+        LogConstants.LOG_SERVICE_ENDPOINT);
     logService = logServiceFactory.getLogService();    
     log.debug("Got logService!");
   }
@@ -149,12 +149,12 @@ public class LogViewController {
 
     log.debug("modeliin lisätty startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
     
-   
+    if (visited != null) {
     if (criteria != null) {
       model.addAttribute("entries", getAdminLogEntries(criteria));
       model.addAttribute("searchParams", criteria);
       
-      if (visited != null) {
+    
         model.addAttribute("visited", "---");
       }
       

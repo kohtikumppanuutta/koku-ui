@@ -77,7 +77,7 @@ public class LogUtils {
   /**
    * The "real" LOK service.
    */
-  public LogServicePortType getLogService() throws MalformedURLException {
+/*  public LogServicePortType getLogService() throws MalformedURLException {
     String uid = LogConstants.LOG_USERNAME;
     String pwd = LogConstants.LOG_PASSWORD;
 
@@ -92,7 +92,7 @@ public class LogUtils {
     ((BindingProvider) port).getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, pwd);
     
     return port;
-  }
+  }*/
   
   /**
    * Method for transforming Date to XMLGregorianCalendar format

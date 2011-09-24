@@ -1,6 +1,5 @@
 package fi.koku.lok;
 
-import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,16 +11,12 @@ import java.util.List;
 import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,14 +28,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import fi.koku.services.entity.customer.v1.CustomerServiceFactory;
 import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;
 import fi.koku.services.utility.log.v1.LogEntryType;
 import fi.koku.services.utility.log.v1.LogQueryCriteriaType;
+import fi.koku.services.utility.log.v1.LogServiceFactory;
 import fi.koku.services.utility.log.v1.LogServicePortType;
 import fi.koku.services.utility.log.v1.ServiceFault;
-import fi.koku.services.utility.log.v1.LogServiceFactory;
 
 /**
  * Controller for log search (LOK). This implements LOK-3 (Etsi lokitieto).
@@ -63,8 +57,8 @@ public class LogSearchController {
 
   public LogSearchController(){
     LogServiceFactory logServiceFactory = new LogServiceFactory(
-        LogConstants.CUSTOMER_SERVICE_USER_ID, LogConstants.CUSTOMER_SERVICE_PASSWORD,
-        LogConstants.CUSTOMER_SERVICE_ENDPOINT);
+        LogConstants.LOG_SERVICE_USER_ID, LogConstants.LOG_SERVICE_PASSWORD,
+        LogConstants.LOG_SERVICE_ENDPOINT);
     logService = logServiceFactory.getLogService();    
   }
   
@@ -195,19 +189,19 @@ public class LogSearchController {
       
       log.debug("parsitut päivämäärät: "+start+"\n"+end+"\n");
       // assume that null arguments are ok
-/*
- * TESTI 23.9. 
- *       criteriatype.setStartTime(start);
+
  
+      criteriatype.setStartTime(start); 
       criteriatype.setEndTime(end);
-*/
+
       //TODO: testataan kovakoodatuilla päivillä!!! 23.9.
-      Calendar startCal = Calendar.getInstance();
+  /*    Calendar startCal = Calendar.getInstance();
       startCal.set(2010, 9, 1, 18, 15, 33);
       Calendar endCal = Calendar.getInstance();
       endCal.set(2011,9, 24);
       criteriatype.setStartTime(startCal);
       criteriatype.setEndTime(endCal);
+    */
       // data item type: kks.vasu, kks.4v, family/community info, consent, ...
       criteriatype.setDataItemType(searchCriteria.getConcept());
       // log type: loki, lokin seurantaloki
@@ -234,11 +228,19 @@ public class LogSearchController {
       List<LogEntryType> entryTypeList = entriestype.getLogEntry();
 
       log.debug("entrytype list size: " + entryTypeList.size());
+    
 
       for (Iterator<?> i = entryTypeList.iterator(); i.hasNext();) {
         LogEntry logEntry = new LogEntry();
         LogEntryType logEntryType = (LogEntryType) i.next();
-
+        
+        log.debug(logEntryType.getClientSystemId()+"\n");
+        log.debug(logEntryType.getCustomerPic()+"\n");
+        log.debug(logEntryType.getDataItemId()+"\n");
+        log.debug(logEntryType.getDataItemType()+"\n");
+        log.debug(logEntryType.getOperation()+"\n");
+        log.debug(logEntryType.getUserPic()+"\n");
+        log.debug(logEntryType.getTimestamp()+"\n");
         // put values that were read from the database in logEntry for showing
         // them to the user
      

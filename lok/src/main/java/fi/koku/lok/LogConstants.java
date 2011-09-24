@@ -25,14 +25,19 @@ public class LogConstants {
   public static final String CUSTOMER_SERVICE_PASSWORD = "marko";
 
   public static final String COMPONENT_LOK = "LOK";
-
   public static final String LOK_USER_ID = "susanna";
+
   // String ep =
   // "http://localhost:8080/log-service-0.0.1-SNAPSHOT/LogServiceBean?wsdl";
   // TODO: Muuta tämä, kun siirrytään pois mockista!
  // public static final String LOG_SERVICE = "http://localhost:8088/mocklogService-soap11-binding?WSDL";
-  public static final String LOG_SERVICE = "http://localhost:8180/lok-service-0.0.1-SNAPSHOT.jar";
-
+//24.9. vaihda portiksi 8580, jos tutkitaan tcpmonilla
+//  public static final String LOG_SERVICE_ENDPOINT = "http://localhost:8180/lok-service-0.0.1-SNAPSHOT.jar";
+  public static final String LOG_SERVICE_ENDPOINT = "http://localhost:8180/lok-service-0.0.1-SNAPSHOT/LogServiceEndpointBean?wsdl";
+  
+  public static final String LOG_SERVICE_USER_ID = "marko";
+  public static final String LOG_SERVICE_PASSWORD = "marko";
+  
   // These are user errors, no error code needed
   public static final String ARCHIVE_INPUT_ERROR = "Arkistointipäivämäärä väärän muotoinen";
   
