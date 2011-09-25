@@ -35,12 +35,12 @@ public class LogUtils {
     Calendar cal = Calendar.getInstance();
     
     if(date!=null){ // if it's null, return a null value
-      if(date instanceof Date){
         cal.setTime(date);
+        log.debug("date: "+date);
       } else{
         throw new KoKuFaultException("wrong format of date");
       }
-    }
+  
     return cal;
   }
   /*

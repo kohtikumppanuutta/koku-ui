@@ -101,8 +101,7 @@ public class LogSearchController {
       model.addAttribute("startDate", startDateStr);
       model.addAttribute("endDate", endDateStr);
       log.debug("startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
-  
-      
+
       
     if (criteria != null) {
       if (visited != null) { 
@@ -129,9 +128,7 @@ public class LogSearchController {
       }
     }
 
-    // TODO: SOMEWHERE HERE SHOULD BE ADDED A PIECE OF CODE THAT WRITES LOG
-    // ABOUT
-    // LOG SEARCHES
+  
 
     return "search";
   }
@@ -168,8 +165,6 @@ public class LogSearchController {
     List<LogEntry> entryList = new ArrayList<LogEntry>();
 
     try {
-   
-
       LogQueryCriteriaType criteriatype = new LogQueryCriteriaType();
 
       // set the criteria
@@ -178,30 +173,16 @@ public class LogSearchController {
       
       // the user does not have to give the dates so these might be null!
      //TODO!!! TÄHÄN PITÄÄ SAADA JOKIN TOIMIVA VIRHEENKÄSITTELY!
-      Calendar start = lu.parseGivenDate(searchCriteria.getFrom());
-      
+      Calendar start = lu.parseGivenDate(searchCriteria.getFrom());     
       Calendar end = lu.parseGivenDate(searchCriteria.getTo());
-
-/*
- *  if (logarchivedate != null && logarchivedate.getEndDate() != null) {
-      String archiveDateStr = dateFormat.format(logarchivedate.getEndDate());      
- */
+//TODO: end-aikaan pitäisi lisätä 1 vuorokausi!
       
       log.debug("parsitut päivämäärät: "+start+"\n"+end+"\n");
       // assume that null arguments are ok
-
  
       criteriatype.setStartTime(start); 
       criteriatype.setEndTime(end);
 
-      //TODO: testataan kovakoodatuilla päivillä!!! 23.9.
-  /*    Calendar startCal = Calendar.getInstance();
-      startCal.set(2010, 9, 1, 18, 15, 33);
-      Calendar endCal = Calendar.getInstance();
-      endCal.set(2011,9, 24);
-      criteriatype.setStartTime(startCal);
-      criteriatype.setEndTime(endCal);
-    */
       // data item type: kks.vasu, kks.4v, family/community info, consent, ...
       criteriatype.setDataItemType(searchCriteria.getConcept());
       // log type: loki, lokin seurantaloki
@@ -218,11 +199,24 @@ public class LogSearchController {
       // call to log database
       AuditInfoType audit = new AuditInfoType();
       audit.setComponent("lok"); //FIXME
-      audit.setUserId("luser");  // FIXME
+      audit.setUserId("170777-777X");  // FIXME
+     
+     
+      
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
 
-      // TODO: kirjoita käsittelylokiin
-      // writeLog(LogEntry entry)
+      // write to admin log about this query
+      LogEntryType logEntryAdminType = new LogEntryType();
+      logEntryAdminType.setTimestamp(Calendar.getInstance()); // set timestamp == now
+      log.debug("adminentryyn: date "+Calendar.getInstance().getTime().toString());
+      logEntryAdminType.setUserPic(audit.getUserId());
+      logEntryAdminType.setCustomerPic(searchCriteria.getPic());
+      logEntryAdminType.setOperation("view log");
+      logEntryAdminType.setMessage("no message"); //FIXME
+      // this tells the DAOBean to write to admin log!
+      logEntryAdminType.setClientSystemId("log");
+      logService.opLog(logEntryAdminType, audit);
+    log.debug("serviceen meni: "+logEntryAdminType.getTimestamp().getTime().toString());
       
       // the log entries list from the database
       List<LogEntryType> entryTypeList = entriestype.getLogEntry();
@@ -234,12 +228,13 @@ public class LogSearchController {
         LogEntry logEntry = new LogEntry();
         LogEntryType logEntryType = (LogEntryType) i.next();
         
-        log.debug(logEntryType.getClientSystemId()+"\n");
+ /*       log.debug(logEntryType.getClientSystemId()+"\n");
         log.debug(logEntryType.getCustomerPic()+"\n");
         log.debug(logEntryType.getDataItemId()+"\n");
         log.debug(logEntryType.getDataItemType()+"\n");
         log.debug(logEntryType.getOperation()+"\n");
         log.debug(logEntryType.getUserPic()+"\n");
+   */
         log.debug(logEntryType.getTimestamp()+"\n");
         // put values that were read from the database in logEntry for showing
         // them to the user
