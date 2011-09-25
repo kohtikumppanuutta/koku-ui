@@ -105,7 +105,6 @@
 												<c:out value="${e.logId}"/>
 												<%--<c:out value="${e.message}"/> --%>
 												</td>
-				
 							</tr>
 						</c:forEach>
 					</table>

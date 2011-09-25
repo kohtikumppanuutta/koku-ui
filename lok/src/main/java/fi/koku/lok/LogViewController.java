@@ -61,9 +61,6 @@ public class LogViewController {
 
   LogUtils lu = new LogUtils();
 
-//  @Autowired
-//  private ResourceBundleMessageSource resourceBundle;
-
   public LogViewController(){
     LogServiceFactory logServiceFactory = new LogServiceFactory(
         LogConstants.LOG_SERVICE_USER_ID, LogConstants.LOG_SERVICE_PASSWORD,
@@ -211,6 +208,7 @@ public class LogViewController {
       criteriatype.setStartTime(start);
       criteriatype.setEndTime(end);
       criteriatype.setCustomerPic(criteria.getPic());
+      log.debug("pic: "+criteria.getPic());
       criteriatype.setDataItemType(criteria.getConcept());
       criteriatype.setLogType(LogConstants.LOG_ADMIN);
 

@@ -32,7 +32,7 @@ public class LogConstants {
   // TODO: Muuta tämä, kun siirrytään pois mockista!
  // public static final String LOG_SERVICE = "http://localhost:8088/mocklogService-soap11-binding?WSDL";
 //24.9. vaihda portiksi 8580, jos tutkitaan tcpmonilla
-//  public static final String LOG_SERVICE_ENDPOINT = "http://localhost:8180/lok-service-0.0.1-SNAPSHOT.jar";
+//  public static final String LOG_SERVICE_ENDPOINT = "http://localhost:8580/lok-service-0.0.1-SNAPSHOT.jar";
   public static final String LOG_SERVICE_ENDPOINT = "http://localhost:8180/lok-service-0.0.1-SNAPSHOT/LogServiceEndpointBean?wsdl";
   
   public static final String LOG_SERVICE_USER_ID = "marko";
