@@ -131,15 +131,29 @@ public class KksConverter {
     String valId = val == null ? "" : val.getId();
     String value = val == null ? "" : val.getValue();
 
-    return new Entry(entry.getId(), valId, value, entry.getModified().getTime(), entry.getVersion().toString(),
+    Entry e = new Entry(entry.getId(), valId, entry.getModified().getTime(), entry.getVersion().toString(),
         entry.getCreator(), metaEntry);
+
+    if (metaEntry.getDataType().equals(DataType.MULTI_SELECT.toString())) {
+      String tmp[] = value.split(",");
+      List<String> values = new ArrayList<String>();
+
+      for (String s : tmp) {
+        values.add(s);
+      }
+      e.setValues(values);
+
+    } else {
+      e.setValue(value);
+    }
+
+    return e;
   }
 
   public Entry fromWsType(KksEntryType entry, List<KksEntryValueType> values, KksEntryClassType metaEntry) {
 
     Entry e = null;
     if (values.size() > 1) {
-
       e = new Entry(entry.getId(), null, "", entry.getModified().getTime(), entry.getVersion().toString(),
           entry.getCreator(), metaEntry);
       List<String> tmp = new ArrayList<String>();
@@ -172,11 +186,33 @@ public class KksConverter {
     List<Entry> vals = Arrays.asList(values);
     EntryValuesType evt = new EntryValuesType();
     for (Entry v : vals) {
-      for (String value : v.getValues()) {
-        KksEntryValueType kevt = new KksEntryValueType();
-        kevt.setId(v.getValueId());
-        kevt.setValue(value);
-        evt.getEntryValue().add(kevt);
+
+      if (v.getType().getDataType().equals(DataType.MULTI_SELECT.toString())) {
+
+        if (v.getValues() != null) {
+          KksEntryValueType kevt = new KksEntryValueType();
+          kevt.setId(v.getValueId());
+          StringBuilder b = new StringBuilder();
+
+          b.append("");
+
+          for (int i = 0; i < v.getValues().size(); i++) {
+            b.append(v.getValues().get(i));
+            if ((i + 1) < v.getValues().size()) {
+              b.append(",");
+            }
+          }
+          kevt.setValue(b.toString());
+          evt.getEntryValue().add(kevt);
+        }
+
+      } else {
+        for (String value : v.getValues()) {
+          KksEntryValueType kevt = new KksEntryValueType();
+          kevt.setId(v.getValueId());
+          kevt.setValue(value);
+          evt.getEntryValue().add(kevt);
+        }
       }
     }
     tmp.setEntryValues(evt);
