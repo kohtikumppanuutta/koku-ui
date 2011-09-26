@@ -36,6 +36,8 @@ import fi.koku.services.utility.log.v1.LogServiceFactory;
 import fi.koku.services.utility.log.v1.LogServicePortType;
 import fi.koku.services.utility.log.v1.ServiceFault;
 
+import fi.koku.lok.*;
+
 /**
  * Controller for viewing log views, for admin. This implements LOK-4 (Tarkista
  * lokin käsittelyloki).
