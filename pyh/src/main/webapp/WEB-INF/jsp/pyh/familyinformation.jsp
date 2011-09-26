@@ -6,24 +6,21 @@
 <c:set var="dp" value="<%=com.ixonos.koku.pyh.util.CommunityRole.DEPENDANT%>" />
 
 <portlet:renderURL var="editFamilyInformation">
-                            <portlet:param name="action" value="editFamilyInformation" />
+	<portlet:param name="action" value="editFamilyInformation" />
 </portlet:renderURL>
 
+<%--
 <portlet:renderURL var="home">
     <portlet:param name="action" value="" />
 </portlet:renderURL>
-
+--%>
 
 <div class="koku-pyh">
 <div class="portlet-section-body">
 
 <div class="pyh-temp">
-  <span> <a
-            href="${home}"> Vaihda k‰ytt‰j‰‰</a> </span>
-   <span class="pyh-right"> <a
-            href="${editFamilyInformation}">
-                <spring:message code="ui.pyh.modify.info" /></a> </span>
-          
+  <%-- <span> <a href="${home}"> Vaihda k‰ytt‰j‰‰</a> </span> --%> 
+  <span class="pyh-right"> <a href="${editFamilyInformation}"> <spring:message code="ui.pyh.modify.info" /> </a> </span>
 </div>
 
 <div class="pyh-reset-floating"></div>

@@ -41,35 +41,18 @@ public class FamilyInformationController {
   @Qualifier(value = "pyhDemoService")
   private PyhDemoService pyhDemoService;
 
-  @RenderMapping(params = "action=guardianFamilyInformation")
+  @RenderMapping
   public String render(PortletSession session, Model model) {
-    String userPic = "";
+    String userPic = ""; // hard-coded pic for testing
     
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
     if (userInfo != null) {
       userPic = userInfo.getPic();
+      log.info("Got PIC from session. userPic = " + userPic);
+      
     } else {
       // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
-    }
-    
-    model.addAttribute("user", pyhDemoService.getUser(userPic));
-    model.addAttribute("dependants", pyhDemoService.getDependants(userPic));
-    model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers(userPic));
-    model.addAttribute("messages", messageService.getMessagesFor(userPic));
-    model.addAttribute("sentMessages", messageService.getSentMessages(userPic));
-    return "familyinformation";
-  }
-  
-  // TODO: remove when not needed anymore
-  @RenderMapping(params = "action=userSelection")
-  public String render(@RequestParam String pic, Model model, PortletSession session) {
-    String userPic = "";
-    
-    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
-    if (userInfo != null) {
-      userPic = userInfo.getPic();
-    } else {
-      // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
+      log.error("ERROR: UserInfo returns no PIC!");
     }
     
     model.addAttribute("user", pyhDemoService.getUser(userPic));

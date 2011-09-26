@@ -20,16 +20,28 @@ public class MessageService implements MessageListener {
     messages = new HashMap<String, Message>();
   }
 
+  /**
+   * TODO: lisää viesti pyh-servicen kautta tietokantaan
+   * 
+   */
   public synchronized void addMessage(Message m) {
     messages.put(m.getId(), m);
     m.addListener(this);
   }
-
+  
+  /**
+   * TODO: poista viesti pyh-servicen kautta tietokannasta
+   * 
+   */
   public synchronized void removeMessage(Message m) {
     messages.remove(m.getId());
     m.removeListener(this);
   }
-
+  
+  /**
+   * TODO: hae viesti pyh-servicen kautta tietokannasta
+   * 
+   */
   public synchronized Message getMessage(String id) {
     return messages.get(id);
   }
@@ -42,7 +54,13 @@ public class MessageService implements MessageListener {
   public void reset() {
     messages.clear();
   }
-
+  
+  /**
+   * TODO: haetaan tietokannasta pyh-servicen kautta käyttäjälle saapuneet viestit
+   * 
+   * -saapunut viesti näkyy käyttäjälle niin kauan kunnes hän on hyväksynyt/hylännyt viestin
+   * 
+   */
   public List<Message> getMessagesFor(String pic) {
 
     List<Message> tmp = new ArrayList<Message>();
@@ -59,7 +77,13 @@ public class MessageService implements MessageListener {
 
     return results;
   }
-
+  
+  /**
+   * TODO: haetaan tietokannasta pyh-servicen kautta käyttäjän lähettämät viestit
+   * 
+   * -lähetetty viesti näkyy käyttäjälle niin kauan kunnes vastaanottaja on hyväksynyt/hylännyt viestin
+   * 
+   */
   public List<Message> getSentMessages(String pic) {
 
     List<Message> tmp = new ArrayList<Message>();

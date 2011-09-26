@@ -53,13 +53,14 @@ public class EditFamilyInformationController {
 
   @RenderMapping(params = "action=editFamilyInformation")
   public String render(Model model, PortletSession session) {
-    String userPic = "";
+    String userPic = ""; // hard-coded pic for testing
     
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
     if (userInfo != null) {
       userPic = userInfo.getPic();
     } else {
       // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
+      log.error("ERROR: UserInfo returns no PIC!");
     }
     
     pyhDemoService.clearSearchedUsers();
@@ -75,13 +76,14 @@ public class EditFamilyInformationController {
   // this render method does not clear the search results
   @RenderMapping(params = "action=editFamilyInformationWithSearchResults")
   public String renderWithSearchResults(RenderRequest request, Model model, PortletSession session) {
-    String userPic = "";
+    String userPic = ""; // hard-coded pic for testing
     
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
     if (userInfo != null) {
       userPic = userInfo.getPic();
     } else {
       // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
+      log.error("ERROR: UserInfo returns no PIC!");
     }
     
     request.setAttribute("search", true);
@@ -101,13 +103,14 @@ public class EditFamilyInformationController {
   
   @ActionMapping(params = "action=addDependantAsFamilyMember")
   public void addDependantAsFamilyMember(@RequestParam String dependantPic, ActionResponse response, PortletSession session) {
-    String userPic = "";
+    String userPic = ""; // hard-coded pic for testing
     
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
     if (userInfo != null) {
       userPic = userInfo.getPic();
     } else {
       // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
+      log.error("ERROR: UserInfo returns no PIC!");
     }
     
     pyhDemoService.insertDependantToFamily(userPic, dependantPic, CommunityRole.CHILD);
@@ -116,22 +119,32 @@ public class EditFamilyInformationController {
   }
 
   @ActionMapping(params = "action=removeFamilyMember")
-  public void removeFamilyMember(@RequestParam String familyMemberPic, ActionResponse response) {
-    
-    pyhDemoService.removeFamilyMember(familyMemberPic);
-
-    response.setRenderParameter("action", "editFamilyInformation");
-  }
-
-  @ActionMapping(params = "action=removeDependant")
-  public void removeDependant(@RequestParam String familyMemberPic, ActionResponse response, PortletSession session) {
-    String userPic = "";
+  public void removeFamilyMember(@RequestParam String familyMemberPic, ActionResponse response, PortletSession session) {
+    String userPic = ""; // hard-coded pic for testing
     
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
     if (userInfo != null) {
       userPic = userInfo.getPic();
     } else {
       // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
+      log.error("ERROR: UserInfo returns no PIC!");
+    }
+    
+    pyhDemoService.removeFamilyMember(familyMemberPic, userPic);
+
+    response.setRenderParameter("action", "editFamilyInformation");
+  }
+
+  @ActionMapping(params = "action=removeDependant")
+  public void removeDependant(@RequestParam String familyMemberPic, ActionResponse response, PortletSession session) {
+    String userPic = ""; // hard-coded pic for testing
+    
+    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
+    if (userInfo != null) {
+      userPic = userInfo.getPic();
+    } else {
+      // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
+      log.error("ERROR: UserInfo returns no PIC!");
     }
     
     for (Dependant d : pyhDemoService.getDependants(userPic)) {
@@ -139,20 +152,21 @@ public class EditFamilyInformationController {
         d.setMemberOfUserFamily(false);
       }
     }
-    pyhDemoService.removeFamilyMember(familyMemberPic);
+    pyhDemoService.removeFamilyMember(familyMemberPic, userPic);
     
     response.setRenderParameter("action", "editFamilyInformation");
   }
   
   @ActionMapping(params = "action=searchUsers")
   public void searchUsers(ActionRequest request, ActionResponse response, PortletSession session) {
-    String userPic = "";
+    String userPic = ""; // hard-coded pic for testing
     
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
     if (userInfo != null) {
       userPic = userInfo.getPic();
     } else {
       // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
+      log.error("ERROR: UserInfo returns no PIC!");
     }
     
     String fn = request.getParameter("searchFirstname");
@@ -169,14 +183,18 @@ public class EditFamilyInformationController {
 
   @ActionMapping(params = "action=addUsersToFamily")
   public void addUsersToFamily(ActionRequest request, ActionResponse response, PortletSession session) {
-    String userPic = "";
+    String userPic = ""; // hard-coded pic for testing
     
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
     if (userInfo != null) {
       userPic = userInfo.getPic();
     } else {
       // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
+      log.error("ERROR: UserInfo returns no PIC!");
     }
+    
+    // TODO: get community id (family community where to add users)
+    String communityId = "test_community_id";
     
     HashMap<String, String> parameterMap = new HashMap<String, String>();
     HashMap<String, String> personMap = new HashMap<String, String>();
@@ -208,7 +226,7 @@ public class EditFamilyInformationController {
     }
 
     // call service to add users to family
-    pyhDemoService.addPersonsAsFamilyMembers(personMap, userPic);
+    pyhDemoService.addPersonsAsFamilyMembers(personMap, userPic, communityId);
 
     response.setRenderParameter("action", "editFamilyInformation");
   }

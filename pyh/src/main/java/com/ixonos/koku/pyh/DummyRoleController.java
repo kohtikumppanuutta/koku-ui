@@ -14,6 +14,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
  * 
  */
 
+/*
 @Controller(value = "dummyRoleController")
 @RequestMapping(value = "VIEW")
 public class DummyRoleController {
@@ -21,8 +22,9 @@ public class DummyRoleController {
   private static Logger log = LoggerFactory.getLogger(DummyRoleController.class);
 
   @RenderMapping
-  public String render(/* RenderRequest request, RenderResponse response */) {
+  public String render() {
     return "choose";
   }
 
 }
+*/
