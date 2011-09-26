@@ -131,7 +131,7 @@ public class KksConverter {
     String valId = val == null ? "" : val.getId();
     String value = val == null ? "" : val.getValue();
 
-    Entry e = new Entry(entry.getId(), valId, entry.getModified().getTime(), entry.getVersion().toString(),
+    Entry e = new Entry(entry.getId(), valId, value, entry.getModified().getTime(), entry.getVersion().toString(),
         entry.getCreator(), metaEntry);
 
     if (metaEntry.getDataType().equals(DataType.MULTI_SELECT.toString())) {
@@ -143,8 +143,6 @@ public class KksConverter {
       }
       e.setValues(values);
 
-    } else {
-      e.setValue(value);
     }
 
     return e;

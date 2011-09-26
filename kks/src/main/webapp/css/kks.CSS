@@ -24,8 +24,14 @@
 .koku-kks .portlet-section-text {
 }
 .koku-kks .portlet-form-field-label{
+	
     margin: 8px 0 2px;
-    width: 300px
+    width: 300px;
+    font-weight: bold;
+    line-height: 18px;
+    text-align: left;
+    vertical-align: top;
+    white-space:normal;
 }
 .koku-kks textarea.portlet-form-input-field {
     padding: 5px; 

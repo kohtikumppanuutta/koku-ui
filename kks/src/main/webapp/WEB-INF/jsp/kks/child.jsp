@@ -229,7 +229,7 @@
 										</c:forEach>
 									</form:select> </span>
 								<div class="portlet-form-field-label"><spring:message code="ui.kks.contract.name" /></div>
-								<span class="portlet-form-field"><form:input  id="kks.name" path="name" size="40" />
+								<span class="portlet-form-field"><form:input  id="kks.name" path="name" size="70" />
 								</span>
 							
 

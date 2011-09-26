@@ -122,7 +122,7 @@
                 <c:forEach var="group" items="${collection.collectionClass.kksGroups.kksGroup }">
 
                     <c:if test="${not empty group.name}">
-                        <h2 class="portlet-section-subheader"><c:out value="${group.name}"/> <spring:message code="ui.kks.fills" /></h2>
+                        <h2 class="portlet-section-subheader"><c:out value="${group.name}"/></h2>
                     </c:if>
                     <c:if test="${not empty group.description}">
                         <div class="portlet-section-text">
