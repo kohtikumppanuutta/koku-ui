@@ -13,6 +13,9 @@ import fi.koku.portlet.filter.userinfo.UserInfo;
  */
 public class UserInfoUtils {
 
+  //Singleton
+  private UserInfoUtils() {}
+  
   /**
    * Get user's PIC from session
    * 
