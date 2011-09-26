@@ -1,6 +1,5 @@
 package fi.koku.lok;
 
-import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,16 +11,12 @@ import java.util.List;
 import javax.portlet.ActionResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -182,8 +177,8 @@ public class LogViewController {
    * @param criteria
    * @return
    */
-  private List<LogEntry> getAdminLogEntries(LogSearchCriteria criteria) {
-    List<LogEntry> entryList = new ArrayList<LogEntry>();
+  private List<AdminLogEntry> getAdminLogEntries(LogSearchCriteria criteria) {
+    List<AdminLogEntry> entryList = new ArrayList<AdminLogEntry>();
 
     try {
      
@@ -207,21 +202,38 @@ public class LogViewController {
       // kantakyselyissä
       criteriatype.setStartTime(start);
       criteriatype.setEndTime(end);
-      criteriatype.setCustomerPic(criteria.getPic());
-      log.debug("pic: "+criteria.getPic());
-      criteriatype.setDataItemType(criteria.getConcept());
+// ei haeta kuin ajoilla! 
+      //     criteriatype.setCustomerPic(criteria.getPic());
+ //     log.debug("viewcontroller criteria pic: "+criteria.getPic());
+ //     criteriatype.setDataItemType(criteria.getConcept());
       criteriatype.setLogType(LogConstants.LOG_ADMIN);
 
       // TODO: ADD HERE WRITING TO LOG
       // "tapahtumatieto = hakuehdot"
 
-      log.debug("criteriatype start: " + criteriatype.getStartTime() + "\n end: " + criteriatype.getEndTime());
-
+      // Set the user information
       //TODO: muutos!
+      //TODO: TÄMÄ ALKUUN?
       // call to log database
       AuditInfoType audit = new AuditInfoType();
       audit.setComponent("lok"); //FIXME
-      audit.setUserId("luser");  // FIXME
+      audit.setUserId("090979-9999");  // FIXME
+      
+      // write this query to normal log
+      LogEntryType logEntryTypeWrite = new LogEntryType();
+      logEntryTypeWrite.setUserPic(audit.getUserId());
+      // LOK-4: "Tapahtumatietona hakuehdot"
+      logEntryTypeWrite.setMessage("start: "+dateFormat.format(criteriatype.getStartTime().getTime())+", end: "+dateFormat.format(criteriatype.getEndTime().getTime()));
+      logEntryTypeWrite.setTimestamp(Calendar.getInstance());
+      logEntryTypeWrite.setOperation("search");
+      logEntryTypeWrite.setClientSystemId("adminlog");
+      logEntryTypeWrite.setDataItemType("log");
+      logEntryTypeWrite.setDataItemId("dataitemid");
+      // call to lok service
+      logService.opLog(logEntryTypeWrite, audit);
+ 
+      log.debug("criteriatype start: " + criteriatype.getStartTime() + "\n end: " + criteriatype.getEndTime());
+    
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
 
       // get the log entries list from the database
@@ -230,7 +242,7 @@ public class LogViewController {
       log.debug("entryTypeList size: " + entryTypeList.size());
 
       for (Iterator<?> i = entryTypeList.iterator(); i.hasNext();) {
-        LogEntry logEntry = new LogEntry();
+        AdminLogEntry logEntry = new AdminLogEntry();
         LogEntryType logEntryType = (LogEntryType) i.next();
 
         // put values that were read from the database in logEntry for showing
@@ -241,13 +253,13 @@ public class LogViewController {
 
         // "käsitelty tieto": all these together!
         // kks, pyh, kunpo, ..
-        logEntry.setClientSystemId(logEntryType.getClientSystemId());
+//        logEntry.setClientSystemId(logEntryType.getClientSystemId());
         // pic of the child
-        logEntry.setChild(logEntryType.getCustomerPic());
+        logEntry.setCustomer(logEntryType.getCustomerPic());
         // kks.vasu, kks.4v, ..
-        logEntry.setDataItemType(logEntryType.getDataItemType());
+//        logEntry.setDataItemType(logEntryType.getDataItemType());
         // id given by the system that wrote the log
-        logEntry.setLogId(logEntryType.getDataItemId());
+//        logEntry.setLogId(logEntryType.getDataItemId());
         
         // other info about the log entry
         //TODO: this already has all the other fields inside it, should this be used???

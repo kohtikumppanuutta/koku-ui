@@ -200,9 +200,7 @@ public class LogSearchController {
       AuditInfoType audit = new AuditInfoType();
       audit.setComponent("lok"); //FIXME
       audit.setUserId("170777-777X");  // FIXME
-     
-     
-      
+ 
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
 
       // write to admin log about this query
@@ -210,9 +208,11 @@ public class LogSearchController {
       logEntryAdminType.setTimestamp(Calendar.getInstance()); // set timestamp == now
       log.debug("adminentryyn: date "+Calendar.getInstance().getTime().toString());
       logEntryAdminType.setUserPic(audit.getUserId());
-      logEntryAdminType.setCustomerPic(searchCriteria.getPic());
+      logEntryAdminType.setCustomerPic(criteriatype.getCustomerPic());
+      log.debug("customer pic: "+criteriatype.getCustomerPic());
       logEntryAdminType.setOperation("view log");
       logEntryAdminType.setMessage("no message"); //FIXME
+
       // this tells the DAOBean to write to admin log!
       logEntryAdminType.setClientSystemId("log");
       logService.opLog(logEntryAdminType, audit);
@@ -258,8 +258,7 @@ public class LogSearchController {
 
       }
 
-      // TODO: Parempi virheenkäsittely
-   
+  
     
     } // TODO: Parempi virheenkäsittely
  catch (ServiceFault e) {
