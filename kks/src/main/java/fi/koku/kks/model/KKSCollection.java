@@ -24,6 +24,7 @@ public class KKSCollection {
   private String name;
   private String description;
   private String modifier;
+  private String modifierFullName;
   private CollectionState state;
   private Date creationTime;
   private int version;
@@ -316,6 +317,14 @@ public class KKSCollection {
 
   public void setCreator(String creator) {
     this.creator = creator;
+  }
+
+  public String getModifierFullName() {
+    return modifierFullName;
+  }
+
+  public void setModifierFullName(String modifierFullName) {
+    this.modifierFullName = modifierFullName;
   }
 
 }

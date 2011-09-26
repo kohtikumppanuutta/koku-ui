@@ -52,9 +52,7 @@
                                     <label class="portlet-form-field-label" for="clean"> <spring:message code="ui.kks.clear.fields" /> </label>
                                    </span>
                                 </div>
-                                
-                                 
-                                </span>
+                                                                 
                                 <span class="kks-right">
                                 <input type="submit" class="portlet-form-button"
                                 value="<spring:message code="ui.kks.contract.create"/>">
@@ -206,7 +204,7 @@
 	                                                                    </span> 
 	                                                                    </span>
 	                                                                    <div class="portlet-section-text">
-	                                                                     <span class="kks-commenter">${multivalue.recorder} <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${multivalue.creationTime}"/>
+	                                                                     <span class="kks-commenter">${multivalue.modifierFullName} <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${multivalue.creationTime}"/>
 	                                                                        </span> 
 	                                                                    </div>
                                                                     </div>
@@ -234,7 +232,7 @@
                                                     <c:forEach var="multivalue"
                                                         items='${ collection.multiValueEntries[type.id] }'>
 
-                                                        <span class="kks-read-only-text"> <c:out value="${multivalue.value}"/> <c:out value="(${multivalue.recorder}"/> <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${multivalue.creationTime}"/>)</span>
+                                                        <span class="kks-read-only-text"> <c:out value="${multivalue.value}"/> <c:out value="(${multivalue.modifierFullName}"/> <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${multivalue.creationTime}"/>)</span>
                                                         
                                                     </c:forEach>
                                                 </c:if> <c:if test="${ not type.multiValue }">

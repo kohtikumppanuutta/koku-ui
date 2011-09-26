@@ -52,7 +52,7 @@ public class CollectionController {
 
   @ModelAttribute("child")
   public Person getchild(PortletSession session, @RequestParam(value = "pic") String pic) {
-    return kksService.searchChild(pic, Utils.getPicFromSession(session));
+    return kksService.searchCustomer(pic, Utils.getPicFromSession(session));
   }
 
   @ActionMapping(params = "action=saveCollection")

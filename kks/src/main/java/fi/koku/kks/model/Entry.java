@@ -21,6 +21,7 @@ public class Entry {
   private String valueId;
   private Date creationTime;
   private String recorder;
+  private String modifierFullName;
   private String version;
   private KksEntryClassType type;
   private List<KksTagType> tags;
@@ -158,6 +159,14 @@ public class Entry {
       }
     }
     return sb.toString();
+  }
+
+  public String getModifierFullName() {
+    return modifierFullName;
+  }
+
+  public void setModifierFullName(String modifierFullName) {
+    this.modifierFullName = modifierFullName;
   }
 
 }

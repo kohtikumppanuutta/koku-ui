@@ -33,7 +33,10 @@
 	<portlet:param name="action" value="searchEntries" />
 	<portlet:param name="pic" value="${child.pic}" />
 </portlet:actionURL>
-
+<portlet:actionURL var="sendConsentURL">
+	<portlet:param name="action" value="sendConsentRequest" />
+	<portlet:param name="pic" value="${child.pic}" />
+</portlet:actionURL>
 
 <div class="koku-kks"> 
 <div class="portlet-section-body">
@@ -59,6 +62,8 @@
 				<c:if test="${ sessionScope.ammattilainen }">
 					<th><spring:message code="ui.kks.entry.state" />
 					</th>
+					<th><spring:message code="ui.kks.consents" />
+					</th>
 				</c:if>
 			</tr>
 
@@ -66,7 +71,7 @@
 				<c:forEach var="collection" items="${collections}">
 
 					<c:if
-						test="${ sessionScope.ammattilainen || collection.state.active }">
+						test="${ sessionScope.ammattilainen || not collection.versioned }">
 						<tr>
 							<td><span class="collection"> <a
 									href="
@@ -76,7 +81,7 @@
 							<portlet:param name="collection" value="${collection.id}" />
 						</portlet:renderURL>">
 										<strong>${ collection.name }</strong> </a> </span></td>
-							<td>${ collection.modifier } <fmt:formatDate
+							<td>${ collection.modifierFullName } <fmt:formatDate
 									pattern="dd/MM/yyyy" value="${collection.creationTime}" />
 							</td>
 
@@ -84,7 +89,7 @@
 								<td><c:choose>
 										<c:when test="${collection.state.active }">
 											<spring:message code="ui.kks.active" />
-											<span class="linkki"> <a
+											<span class="kks-link"> <a
 												href="
 							                        <portlet:actionURL>
 							                            <portlet:param name="action" value="lock" />
@@ -110,6 +115,19 @@
 											</c:if>
 										</c:otherwise>
 									</c:choose></td>
+									<td>
+										<c:if test="${empty consents[collection.collectionClass.consessionType] }">
+					                        <form:form name="sendForm-${collection.id}"  method="post" action="${sendConsentURL}">
+					                                <input type="hidden" id="collectionId" name="collectionId" value="${ collection.id }"/>
+					                                <input type="hidden" id="consent" name="consent" value="${ collection.collectionClass.consessionType }"/>
+					                                
+					                                <span class="kks-right">
+					                                <input type="submit" class="portlet-form-button" value="<spring:message code="ui.kks.consent.send"/>">
+					                                </span>
+					
+					                        </form:form>
+				                        </c:if>
+									</td>
 							</c:if>
 						</tr>
 					</c:if>

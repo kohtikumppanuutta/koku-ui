@@ -2,6 +2,7 @@ package fi.koku.kks.model;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import fi.koku.kks.ui.common.KksConverter;
+import fi.koku.kks.ui.common.utils.CollectionComparator;
 import fi.koku.kks.ui.common.utils.Constants;
 import fi.koku.kks.ui.common.utils.SearchResult;
 import fi.koku.services.entity.community.v1.CommunitiesType;
@@ -60,11 +62,20 @@ public class KksService {
   private Map<String, KksEntryClassType> entryClasses;
   private Map<String, KksCollectionClassType> collectionClasses;
   private KksConverter converter;
+  private Map<String, List<ConsentRequest>> consents;
 
   public KksService() {
     entryClasses = new HashMap<String, KksEntryClassType>();
     collectionClasses = new HashMap<String, KksCollectionClassType>();
     converter = new KksConverter(this);
+    initConsentReq();
+  }
+
+  private void initConsentReq() {
+
+    if (consents == null) {
+      consents = new HashMap<String, List<ConsentRequest>>();
+    }
   }
 
   public fi.koku.services.entity.customer.v1.AuditInfoType getCustomerAuditInfo(String user) {
@@ -143,10 +154,20 @@ public class KksService {
           tmp.add(converter.fromWsType(kct, false, user));
         }
       }
+      Collections.sort(tmp, new CollectionComparator());
 
+      for (KKSCollection col : tmp) {
+        Person p = searchCustomer(col.getModifier(), user);
+
+        if (p != null) {
+          col.setModifierFullName(p.getName());
+        }
+
+      }
     } catch (ServiceFault e) {
       LOG.error("Failed to get KKS collections", e);
     }
+
     return tmp;
   }
 
@@ -154,7 +175,19 @@ public class KksService {
     try {
       KksServicePortType kksService = getKksService();
       KksCollectionType kks = kksService.opGetKksCollection(collectionId, getKksAuditInfo(user));
-      return converter.fromWsType(kks, true, user);
+
+      KKSCollection col = converter.fromWsType(kks, true, user);
+      for (List<Entry> lst : col.getMultiValueEntries().values()) {
+
+        for (Entry e : lst) {
+          Person pe = searchCustomer(col.getModifier(), user);
+
+          if (pe != null) {
+            e.setModifierFullName(pe.getName());
+          }
+        }
+      }
+      return col;
     } catch (ServiceFault e) {
       LOG.error("Failed to get KKS collection " + collectionId, e);
     }
@@ -378,7 +411,7 @@ public class KksService {
     return list;
   }
 
-  public Person searchChild(String socialSecurityNumber, String user) {
+  public Person searchCustomer(String socialSecurityNumber, String user) {
     try {
       CustomerType t = getCustomerService().opGetCustomer(socialSecurityNumber.trim(), getCustomerAuditInfo(user));
       if (t != null) {
@@ -463,6 +496,44 @@ public class KksService {
         }
       }
     }
+  }
+
+  public void sendConsentRequest(String collectionId, String consentType, String customerId) {
+
+    System.out.println("CONSENT REQ");
+    initConsentReq();
+    ConsentRequest req = new ConsentRequest();
+    req.setConsentType(consentType);
+    req.setCustomerId(customerId);
+
+    if (consents.containsKey(customerId)) {
+      List<ConsentRequest> tmp = consents.get(customerId);
+      tmp.add(req);
+
+    } else {
+      List<ConsentRequest> tmp = new ArrayList<ConsentRequest>();
+      tmp.add(req);
+      consents.put(customerId, tmp);
+    }
+  }
+
+  public Map<String, ConsentRequest> getConsentRequests(String customerId) {
+
+    System.out.println("CONSENT GET REQ");
+    initConsentReq();
+
+    if (!consents.containsKey(customerId)) {
+      return new HashMap<String, ConsentRequest>();
+    }
+
+    List<ConsentRequest> tmp = consents.get(customerId);
+
+    Map<String, ConsentRequest> res = new HashMap<String, ConsentRequest>();
+
+    for (ConsentRequest r : tmp) {
+      res.put(r.getConsentType(), r);
+    }
+    return res;
   }
 
   private void searchEntries(SearchResult result, KKSCollection k, String... classification) {

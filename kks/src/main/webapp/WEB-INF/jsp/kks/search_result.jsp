@@ -56,8 +56,7 @@
 				<c:forEach var="entry" items='${result.entryValues}'>
 					<div class="kks-content">
 						<strong>${entry.type.name}</strong> <div class="kks-read-only-text">${
-							entry.valuesAsText } (<fmt:formatDate value="${entry.creationTime}" />
-							${entry.recorder})</div>
+							entry.valuesAsText } </div>
 					</div>
 				</c:forEach>
 				</br>

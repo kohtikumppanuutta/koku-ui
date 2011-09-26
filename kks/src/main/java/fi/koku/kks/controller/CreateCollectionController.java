@@ -76,7 +76,7 @@ public class CreateCollectionController {
   @ModelAttribute("child")
   public Person getchild(PortletSession session, @RequestParam String pic) {
     LOG.info("getchild");
-    return kksService.searchChild(pic, Utils.getPicFromSession(session));
+    return kksService.searchCustomer(pic, Utils.getPicFromSession(session));
   }
 
   @ModelAttribute("creation")

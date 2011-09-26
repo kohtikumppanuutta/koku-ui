@@ -54,13 +54,29 @@ public class ChildController {
   public String show(PortletSession session, @ModelAttribute(value = "child") Person child,
       @ModelAttribute(value = "creation") Creation creation, RenderResponse response, Model model) {
     LOG.info("show child");
+
     model.addAttribute("child", child);
     model.addAttribute("collections", kksService.getKksCollections(child.getPic(), Utils.getPicFromSession(session)));
     model.addAttribute("creatables",
         kksService.searchPersonCreatableCollections(child, Utils.getPicFromSession(session)));
 
+    model.addAttribute("consents", kksService.getConsentRequests(child.getPic()));
+
     creation.setName("");
     return "child";
+  }
+
+  @ActionMapping(params = "action=sendConsentRequest")
+  public void sendConsentRequest(@ModelAttribute(value = "child") Person child, @RequestParam String collectionId,
+      @RequestParam String consent, ActionResponse response, SessionStatus sessionStatus) {
+    LOG.debug("sendConsentRequest");
+
+    kksService.sendConsentRequest(collectionId, consent, child.getPic());
+
+    response.setRenderParameter("action", "showChild");
+    response.setRenderParameter("pic", child.getPic());
+    getCommandObject();
+    sessionStatus.setComplete();
   }
 
   @RenderMapping(params = "action=showPegasos")
@@ -72,7 +88,7 @@ public class ChildController {
 
   @ModelAttribute("child")
   public Person getChild(PortletSession session, @RequestParam String pic) {
-    return kksService.searchChild(pic, Utils.getPicFromSession(session));
+    return kksService.searchCustomer(pic, Utils.getPicFromSession(session));
   }
 
   @ModelAttribute("creation")

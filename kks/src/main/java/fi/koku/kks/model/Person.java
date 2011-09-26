@@ -85,7 +85,7 @@ public class Person {
   }
 
   public String getName() {
-    return firstName + " " + lastName;
+    return secondName + " " + lastName;
   }
 
   public static Person fromCustomerType(CustomerType c) {

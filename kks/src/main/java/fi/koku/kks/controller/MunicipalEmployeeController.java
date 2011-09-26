@@ -91,7 +91,7 @@ public class MunicipalEmployeeController {
     if (childIds != null) {
       for (String s : childIds) {
         if (!"".equals(s)) {
-          tmp.add(kksService.searchChild(s, user));
+          tmp.add(kksService.searchCustomer(s, user));
         }
       }
     }
