@@ -62,9 +62,6 @@ public class LogSearchController {
     logService = logServiceFactory.getLogService();    
   }
   
-//  @Autowired
-//  private ResourceBundleMessageSource resourceBundle;
-
   // customize form data binding
   @InitBinder
   public void initBinder(WebDataBinder binder) {
@@ -91,20 +88,16 @@ public class LogSearchController {
       @ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, RenderResponse res, Model model) {
 
     log.info("action = searchLog");
-
- //   res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
-
-   
+  
     // these are runtime constants, not given by the user!
       String startDateStr = lu.getDateString(1);
       String endDateStr = lu.getDateString(0);
       model.addAttribute("startDate", startDateStr);
       model.addAttribute("endDate", endDateStr);
       log.debug("startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
-
       
     if (criteria != null) {
-      if (visited != null) { 
+      if (visited != null) { // page has been visited
 
         if (LogConstants.REAL_LOG) {
           //TODO: poista tämä. Virheviestin testausta varten.
@@ -128,8 +121,6 @@ public class LogSearchController {
       }
     }
 
-  
-
     return "search";
   }
 
@@ -141,10 +132,6 @@ public class LogSearchController {
 
     log.debug("action = searchLog");
 
-    // TODO:
-    // Hausta tallentuu tieto tapahtumalokin käsittelylokiin (tapahtumatietona
-    // hakuehdot)
-
     // pass criteria to render phase
     if (visited != null) {
       response.setRenderParameter("visited", visited);
@@ -152,7 +139,6 @@ public class LogSearchController {
     response.setRenderParameter("logSearchCriteria", criteriaSerializer.getAsText(criteria));
     response.setRenderParameter("action", "searchLog");
   }
-
  
  
   /**
@@ -173,8 +159,8 @@ public class LogSearchController {
       
       // the user does not have to give the dates so these might be null!
      //TODO!!! TÄHÄN PITÄÄ SAADA JOKIN TOIMIVA VIRHEENKÄSITTELY!
-      Calendar start = lu.parseGivenDate(searchCriteria.getFrom());     
-      Calendar end = lu.parseGivenDate(searchCriteria.getTo());
+      Calendar start = lu.dateToCalendar(searchCriteria.getFrom());     
+      Calendar end = lu.dateToCalendar(searchCriteria.getTo());
 //TODO: end-aikaan pitäisi lisätä 1 vuorokausi!
       
       log.debug("parsitut päivämäärät: "+start+"\n"+end+"\n");
@@ -187,9 +173,6 @@ public class LogSearchController {
       criteriatype.setDataItemType(searchCriteria.getConcept());
       // log type: loki, lokin seurantaloki
       criteriatype.setLogType(LogConstants.LOG_NORMAL);
-
-      // TODO: ADD HERE WRITING TO LOG
-      // lokiin: tapahtumatieto = hakuehdot
       
       log.debug("criteriatype cust pic: " + criteriatype.getCustomerPic() + "\n" +
           "start: "+ criteriatype.getStartTime() + "\n" + 
@@ -199,25 +182,29 @@ public class LogSearchController {
       // call to log database
       AuditInfoType audit = new AuditInfoType();
       audit.setComponent("lok"); //FIXME
-      audit.setUserId("170777-777X");  // FIXME
+      audit.setUserId("170777-777X");  // FIXME Kirjautuneen käyttäjän hetu!
  
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
 
       // write to admin log about this query
-      LogEntryType logEntryAdminType = new LogEntryType();
+/*      LogEntryType logEntryAdminType = new LogEntryType();
       logEntryAdminType.setTimestamp(Calendar.getInstance()); // set timestamp == now
       log.debug("adminentryyn: date "+Calendar.getInstance().getTime().toString());
       logEntryAdminType.setUserPic(audit.getUserId());
       logEntryAdminType.setCustomerPic(criteriatype.getCustomerPic());
       log.debug("customer pic: "+criteriatype.getCustomerPic());
       logEntryAdminType.setOperation("view log");
-      logEntryAdminType.setMessage("no message"); //FIXME
+      logEntryAdminType.setMessage("start: "+df.format(criteriatype.getStartTime().getTime())+", end: "+df.format(criteriatype.getEndTime().getTime()));
+
+      //logEntryAdminType.setMessage("no message"); //FIXME
 
       // this tells the DAOBean to write to admin log!
       logEntryAdminType.setClientSystemId("log");
       logService.opLog(logEntryAdminType, audit);
+
     log.debug("serviceen meni: "+logEntryAdminType.getTimestamp().getTime().toString());
-      
+*/
+      log.debug("tässä olisi ollut admin-lokiin kirjoitus");
       // the log entries list from the database
       List<LogEntryType> entryTypeList = entriestype.getLogEntry();
 

@@ -41,6 +41,9 @@ public class LogConstants {
   // These are user errors, no error code needed
   public static final String ARCHIVE_INPUT_ERROR = "Arkistointipäivämäärä väärän muotoinen";
   
+  // tämä rivi on kopioitu servicesta
+  public static final int LOG_NOTHING_TO_ARCHIVE = 2200;
+  
   private LogConstants() {
     // Contains only static constants. No need for new instances
   }

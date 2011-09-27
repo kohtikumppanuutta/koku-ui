@@ -20,6 +20,11 @@
 			</form:form>
 		</div>
 		<br />
-
+<%-- 	<c:if test="${not empty error}">
+				<%-- do not show this on the first visit to this page --%>
+<%-- 				<p>
+					<spring:message code="koku.lok.archive.nothing.to.archive" />
+				</p>
+	</c:if>--%>
 	</div>
 </div><!-- end of koku-lok-div -->

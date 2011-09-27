@@ -25,22 +25,10 @@ public class LogUtils {
   SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
   private static final Logger log = LoggerFactory.getLogger(LogUtils.class);
   
-  /**
-   * Method for parsing a Date to a Calendar 
-   * @param cal
-   * @return
-   * @throws KoKuFaultException
-   */
-  public Calendar parseGivenDate(Date date) throws KoKuFaultException {
-    Calendar cal = Calendar.getInstance();
-    
-    if(date!=null){ // if it's null, return a null value
-        cal.setTime(date);
-        log.debug("date: "+date);
-      } else{
-        throw new KoKuFaultException("wrong format of date");
-      }
   
+  public Calendar dateToCalendar(Date d) {
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(d);
     return cal;
   }
   /*

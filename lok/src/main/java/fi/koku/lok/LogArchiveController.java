@@ -48,7 +48,7 @@ public class LogArchiveController {
 
   private static final Logger log = LoggerFactory.getLogger(LogArchiveController.class);
 
-//Use log service
+// Use log service
   private LogServicePortType logService;
   
   private ArchiveSerializer archiveSerializer = new ArchiveSerializer();
@@ -62,9 +62,6 @@ public class LogArchiveController {
     logService = logServiceFactory.getLogService();    
   }
   
-  @Autowired
-  private ResourceBundleMessageSource resourceBundle;
-
   // customize form data binding
   @InitBinder
   public void initBinder(WebDataBinder binder) {
@@ -91,135 +88,168 @@ public class LogArchiveController {
    */
   // portlet render phase
   @RenderMapping(params = "action=archiveLog")
-  public String render(RenderRequest req, @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
+  public String render(RenderRequest req, @RequestParam(value = "visited", required = false) String visited, 
+      @RequestParam(value = "error", required = false) String error,
+      @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
       RenderResponse res, Model model) {
-//  public String render(RenderRequest req, @RequestParam("archiveDateStr") String dateStr,
-//      RenderResponse res, Model model) {
 
-    log.debug("action=archiveLog");
+    log.debug("render archiveLog");
 
     try{
-     // LogArchiveDate date = archiveSerializer.getFromRenderParameter(dateStr);
- 
-   // res.setProperty(key, resourceBundle.getMessage("koku.lok.archive.parsing.error", null, req.getLocale()));
-  // tämä pätkä oli kommentoitu pois 23.9.
-   //   if (dateStr != null && logarchivedate.getEndDate() != null) {
-     if(logarchivedate!=null){
-      log.debug("endDate palauttaa "+logarchivedate.getEndDate());
-      
-      log.debug("Formatointi alkaa");
-      String archiveDateStr = dateFormat.format(logarchivedate.getEndDate());
-      log.debug("Formatoinnin jälkeen: "+archiveDateStr);
-      
-      // this is needed so that the date can be easily formatted to YYYY-MM-dd format on the jsp
-      model.addAttribute("archiveDateDate", logarchivedate.getEndDate());
-      // this is the same in String format, used for logic on the jsp
-      model.addAttribute("archiveDate", archiveDateStr);
-    
-   
-      log.debug("modeliin lisätty archiveDateStr=" + archiveDateStr);
-    } else{
-      log.debug("logarchivedate == null");
-    }
-// ---
-      }catch(KoKuFaultException e){
-        log.error(e.getMessage(), e);
-        //TODO: Lisää virheidenkäsittely
-        // käyttäjälle näytetään virheviesti "koku.lok.archive.parsing.error"
-        
-      }
-//    res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
 
-    // set default archive time that is shown to the user at first. Default is 2
-    // years ago.
-    
-      String defaultDateStr = lu.getDateString(2);
-      model.addAttribute("defaultDate", defaultDateStr);  
-      log.debug("modeliin lisätty defaultDateStr = " + defaultDateStr);
-    
-    
+      if(logarchivedate != null && logarchivedate.getEndDate() != null){
+
+        if (visited != null) { // page has been visited
+
+          log.debug("logarchivedate: "+logarchivedate.getEndDate());
+          String archiveDateStr = dateFormat.format(logarchivedate.getEndDate());
+
+          // this is needed so that the date can be easily formatted to YYYY-MM-dd format on the jsp
+          model.addAttribute("archiveDateDate", logarchivedate.getEndDate());
+          model.addAttribute("logArchiveDate", logarchivedate);
+          
+          model.addAttribute("visited", "---");
+          model.addAttribute("endDate", archiveDateStr);  
+          log.debug("modeliin lisätty archiveDateStr=" + archiveDateStr);
+
+        } else{
+          log.debug("visited == null");
+
+          String defaultDateStr = lu.getDateString(2); // default is two years ago TODO: make static
+          model.addAttribute("endDate", defaultDateStr);  
+          log.debug("modeliin lisätty endDate = " + defaultDateStr);
+          model.addAttribute("endDate", defaultDateStr);
+
+          Calendar time = Calendar.getInstance();
+          time.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR) - 2); // default is  two years ago
+          //TODO: tai ei tehdä parsintaa webbisivulla vaan tässä??
+          model.addAttribute("archiveDateDate", time.getTime());
+         
+          log.debug("modeliin lisätty archiveDate=" + defaultDateStr);
+
+        }
+      }else{
+        log.debug("logarchivedate == null");
+        // set the default archive date
+        String defaultDateStr = lu.getDateString(2); // default is two years ago TODO: make static
+        model.addAttribute("endDate", defaultDateStr);  
+        log.debug("modeliin lisätty endDate = " + defaultDateStr);
+      }
+      log.debug("error = "+error);
+      
+        if(error != null ){
+          model.addAttribute("error", "--"); // TODO: voisi olla virhekoodi tms.
+        }
+
+    }catch(KoKuFaultException e){
+      log.error(e.getMessage(), e);
+      //TODO: Lisää virheidenkäsittely
+      // käyttäjälle näytetään virheviesti "koku.lok.archive.parsing.error"
+
+      }
+
     return "archive";
   }
 
-  // portlet render phase
+  
+  // portlet action phase
+  @ActionMapping(params = "action=archiveLog")
+  public void doArchive(@ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate, 
+      @ModelAttribute(value = "visited") String visited, BindingResult result,
+      ActionResponse response) {
+
+    log.debug("log archive action phase");
+ 
+    String archivedate = archiveSerializer.getAsText(logarchivedate);
+    log.debug("logarchivedate: "+archivedate);
+    
+    if(archivedate == null){
+      log.debug("archivedate on null!");
+      //TODO: PITÄÄ LISÄTÄ KÄYTTÄJÄLLE ILMOITUS RUUDULLE VÄÄRÄSTÄ SYÖTTEESTÄ!
+    } else{
+      log.debug("saatiin jsp-sivulta archive end date: " + logarchivedate.getEndDate());
+    }
+    
+    if (visited != null) {
+      response.setRenderParameter("visited", visited);
+    }
+    response.setRenderParameter("logArchiveDate", archiveSerializer.getAsText(logarchivedate));
+    response.setRenderParameter("action", "archiveLog");
+
+  }
+
+//portlet render phase
   @RenderMapping(params = "action=startArchiveLog")
-  public String renderStart(RenderRequest req, @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
+  public String renderStart(RenderRequest req, @RequestParam(value = "error", required = false) String error,
+      @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
       RenderResponse res, Model model) {
 
-    log.debug("log archive render phase: archiving started");
+    log.debug("start archive render phase: archiving started");
     if (logarchivedate != null) {
       log.debug("archive end date: " + logarchivedate.getEndDate());
     } else{
       log.debug("action: logarchivedate == null!");
     }
 
-   
-//    res.setTitle(resourceBundle.getMessage("koku.lok.portlet.title", null, req.getLocale()));
-
-    return "archive2";
-  }
-
-  // portlet action phase
-  @ActionMapping(params = "action=archiveLog")
-  public void doArchive(@ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate, BindingResult result,
-      ActionResponse response) {
-
-    log.debug("log archive action phase");
-
-    /* TODO:
-     1) vahvistetaan käyttäjältä annettu päivä TOTEUTETTU
-    */
- 
-    String archivedate = archiveSerializer.getAsText(logarchivedate);
-    if(archivedate == null){
-      log.debug("archivedate on null!");
-      //TODO: PITÄÄ LISÄTÄ KÄYTTÄJÄLLE ILMOITUS RUUDULLE VÄÄRÄSTÄ SYÖTTEESTÄ!
+    log.debug("error = "+error);
+    
+    if(error != null){
+      
+      model.addAttribute("error", error); // TODO: voisi olla virhekoodi tms.
+      return "archive";
     }
-    response.setRenderParameter("archiveDateStr", archiveSerializer.getAsText(logarchivedate));
-    response.setRenderParameter("action", "archiveLog");
-
+    return "archive2";
   }
 
   @ActionMapping(params = "action=startArchiveLog")
   public void startArchive(@ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
       BindingResult result, ActionResponse response) {
-    log.debug("log archive action phase: starting archiving");
-
+ 
     try{
     
       LogArchivalParametersType archiveParametersType = new LogArchivalParametersType();
       
-      Calendar end = Calendar.getInstance();
-      end.setTime(logarchivedate.getEndDate());
-      archiveParametersType.setEndDate(end);
+      if(logarchivedate != null && logarchivedate.getEndDate() != null){
+        archiveParametersType.setEndDate(lu.dateToCalendar(logarchivedate.getEndDate()));
 
-      // call to log database
-      AuditInfoType audit = new AuditInfoType();
-      audit.setComponent("lok"); //FIXME
-      audit.setUserId("luser");  // FIXME
-      // call to log archive service
-      logService.opArchiveLog(archiveParametersType, audit);
-      
+        // call to log database
+        AuditInfoType audit = new AuditInfoType();
+        audit.setComponent("lok"); //FIXME Voi olla demossa näin!
+        audit.setUserId("luser");  // FIXME
+
+        log.debug("log archive action phase: starting archiving");
+
+        // call to log archive service
+        logService.opArchiveLog(archiveParametersType, audit);
+
     /* TODO: TÄMÄ TULEE LOKSERVICEEN:
      *  2) kopioi tapahtumalokista lokitiedot arkistolokiin
         2.1) Annetulla aikavälillä ei ole yhtään arkistoitavaa lokitietoa
-          -> Käyttäjälle ilmoitetaan UI:ssa (koku.lok.archive.noResults)
+          -> Käyttäjälle ilmoitetaan UI:ssa (koku.lok.archive.nothing.to.archive)
         2.2) arkistoloki ei vastaa tai kuittaa onnistunutta lokitietojen kopiointia
           -> lokitietoja ei poisteta tapahtumalokista
           -> käsittelylokiin tallennetaan virheviesti
           -> käyttäjälle ilmoitetaan virheestä UI:ssa (koku.lok.archive.error)
      3) poista kopioidut tiedot tapahtumalokista
-     4) taltioi käsittelylokiin tieto arkistoinnista
-    
-     5) ilmoita käyttäjälle, että arkistointi onnistui TOTEUTETTU
+     4) taltioi käsittelylokiin tieto arkistoinnista  
      */
-    
+      }else{
+        response.setRenderParameter("error", "arkistointipvm puuttuu");
+      }
  
     }// TODO: lisää tähän catch sitä varten, että tulee virheet 2.1 tai 2.2
  catch (ServiceFault e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+   log.debug("fault: "+e.getFaultInfo().getCode());
+ 
+   if(LogConstants.LOG_NOTHING_TO_ARCHIVE == e.getFaultInfo().getCode()){
+ 
+     response.setRenderParameter("error", "koku.lok.archive.nothing.to.archive"); //TODO: tuleeko tähän virhekoodi, jolla jsp:ssä valitaan virhe??
+   log.debug("ei arkistoitavaa");
+   }else{
+     response.setRenderParameter("error", "--"); //TODO: mikä olisi tämä yleinen virhe???
+     log.debug("tuntematon virhe startArchivessa");
+   }
+ }
     
      // TODO: Parempi virheenkäsittely
     response.setRenderParameter("archiveDateStr", archiveSerializer.getAsText(logarchivedate));
@@ -241,7 +271,6 @@ public class LogArchiveController {
       if (logarchivedate != null) {
         date = logarchivedate.getEndDate() != null ? df.format(logarchivedate.getEndDate()) : "";
 
-        log.debug("getAsText alkuperäinen archivedate: " + logarchivedate+","+logarchivedate.toString());
         log.debug("getAsText: formatoitu archivedate: " + date);
       }
 

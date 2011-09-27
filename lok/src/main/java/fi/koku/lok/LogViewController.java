@@ -129,7 +129,7 @@ public class LogViewController {
 
     return "view";
     */
-    // testi 23.9. vanha koodi takas:
+   
     // default endtime is now
     Calendar endtime = Calendar.getInstance();
     // default starttime is 1 year ago
@@ -201,13 +201,9 @@ public class LogViewController {
       }
       
       // assume that also null arguments are ok!! TODO: ota huomioon
-      // kantakyselyissä
+      // kantakyselyissä Vai onko pakolliset?
       criteriatype.setStartTime(start);
       criteriatype.setEndTime(end);
-// ei haeta kuin ajoilla! 
-      //     criteriatype.setCustomerPic(criteria.getPic());
- //     log.debug("viewcontroller criteria pic: "+criteria.getPic());
- //     criteriatype.setDataItemType(criteria.getConcept());
       criteriatype.setLogType(LogConstants.LOG_ADMIN);
 
       // TODO: ADD HERE WRITING TO LOG
@@ -220,7 +216,7 @@ public class LogViewController {
       AuditInfoType audit = new AuditInfoType();
       audit.setComponent("lok"); //FIXME
       audit.setUserId("090979-9999");  // FIXME
-      
+/*     
       // write this query to normal log
       LogEntryType logEntryTypeWrite = new LogEntryType();
       logEntryTypeWrite.setUserPic(audit.getUserId());
@@ -233,7 +229,7 @@ public class LogViewController {
       logEntryTypeWrite.setDataItemId("dataitemid");
       // call to lok service
       logService.opLog(logEntryTypeWrite, audit);
- 
+*/ 
       log.debug("criteriatype start: " + criteriatype.getStartTime() + "\n end: " + criteriatype.getEndTime());
     
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);

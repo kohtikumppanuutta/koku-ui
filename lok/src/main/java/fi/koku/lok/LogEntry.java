@@ -2,12 +2,17 @@ package fi.koku.lok;
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 /**
  * 
  * @author aspluma
  */
 public class LogEntry {
   
+  private static final Logger logger = LoggerFactory.getLogger(LogEntry.class);
   
   private String message; // message
   private String logId; // dataItemId: id given by the logging system
@@ -27,11 +32,13 @@ public class LogEntry {
   }
 
   public Date getTimestamp() {
+    logger.debug("portlet get timestamp: "+timestamp);
     return timestamp;
   }
 
   // format for timestamp: yyyy-mm-dd
   public void setTimestamp(Date timestamp) {
+    logger.debug("portlet set timestamp: "+timestamp);
     this.timestamp = timestamp;
   }
 

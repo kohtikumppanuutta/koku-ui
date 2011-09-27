@@ -4,6 +4,7 @@
 
 <portlet:actionURL var="archiveActionURL">
 	<portlet:param name="action" value="archiveLog" />
+	<portlet:param name="visited" value="---" />
 </portlet:actionURL>
  
 <portlet:actionURL var="startArchiveActionURL">
@@ -38,8 +39,7 @@
 			</ul>
 		</div>
 
-		<c:if test="${empty archiveDate}">
-		
+		<c:if test="${empty visited}">
 			<div class="log-archive">
 				<form:form name="logArchiveForm" commandName="logArchiveDate"
 					method="post" action="${archiveActionURL}">
@@ -49,7 +49,7 @@
 					<%-- TODO: Add a javascript date picker here? --%>
 					<span class="form-field-label"><spring:message
 							code="koku.common.archiveDate" /> </span>
-							<form:input path="endDate"value="${defaultDate}" />
+							<form:input path="endDate" value="${endDate}" />
 					<span class="errors"><form:errors path="endDate" />
 					</span>
 						<input type="submit"
@@ -60,33 +60,46 @@
 			</div>
 		</c:if>
 
-		<c:if test="${not empty archiveDate}">
+		<c:if test="${not empty visited}">
+			<p>
+				<spring:message code="koku.lok.archive.confirmation" />
+				<fmt:formatDate pattern="dd.MM.yyyy" value="${archiveDateDate}" />
+				.
+			</p>
 
-<%-- NOTE! The archivedate is not passed back to the first page! If the user wants to 
-change the date, the default date is shown.
-This is because the archiveDate parameter is used in the logic of the page
-(empty or not empty). --%>
-
-	
-		<p><spring:message code="koku.lok.archive.confirmation"/> <fmt:formatDate
-									pattern="dd.MM.yyyy" value="${archiveDateDate}" />.</p> 
-
-			<form:form name="changeArchiveDateForm"	commandName="logArchiveDate" 
+			<form:form name="changeArchiveDateForm" commandName="logArchiveDate"
 				method="post" action="${archiveActionURL}">
 				<input type="submit"
 					value="<spring:message code="koku.common.changeDate"/>">
 			</form:form>
 
 			<form:form method="post" action="${startArchiveActionURL}">
-			
-			<input type="hidden" name="endDate" value="${archiveDate}"/>
-			
-				<input type="submit"				
+
+				<input type="hidden" name="endDate" value="${endDate}" />
+				<%-- oli archiveDate --%>
+
+				<input type="submit"
 					value="<spring:message code="koku.common.startArchive"/>">
 			</form:form>
 		</c:if>
+		<br/>
 	<br/>
-	<br/>
+<%-- 	<c:if test="${not empty error}">
+				
+				<p>tuntematon virhe
+									<%--<spring:message code="koku.lok.archive.noResults" /> --%>
+<%--				</p>
+	</c:if>
+	--%>
+	<c:if test="${not empty error}">
+	<%-- do not show this on the first visit to this page --%>
+				<p>
+				<%--${error}--%>
+				<spring:message code="${error}" /> 
+<%-- 					<spring:message code="koku.lok.archive.nothing.to.archive" />--%>
+				</p>
+	</c:if>
 	</div>
+	
 
 </div><!-- end of koku-lok-div -->
