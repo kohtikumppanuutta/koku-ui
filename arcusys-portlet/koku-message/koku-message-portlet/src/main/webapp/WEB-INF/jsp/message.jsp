@@ -429,22 +429,20 @@
 		}
 		
 		var columnNames = ["<spring:message code="message.choose"/>",
-		                   "<spring:message code="consent.requester"/>",
-		                   "<spring:message code="consent.templateName"/>",
-		                   "<spring:message code="consent.status"/>",
-		                   "<spring:message code="consent.approvalStatus"/>",
-		                   "<spring:message code="consent.createType"/>",
-		                   "<spring:message code="consent.givenDate"/>",
-		                   "<spring:message code="consent.validDate"/>"
+		                   "<spring:message code="tipy.receiver"/>",
+		                   "<spring:message code="tipy.sender"/>",
+		                   "<spring:message code="tipy.targetPerson"/>",
+		                   "<spring:message code="tipy.title"/>",
+		                   "<spring:message code="tipy.status"/>",
+		                   "<spring:message code="tipy.validTill.short"/>"
 		                  ];
 		
-		var columnIds = ["requester",
-		                 "templateName",
-		                 "status",
-		                 "approvalStatus",
-		                 "createType",
-		                 "assignedDate",
-		                 "validDate"];
+		var columnIds = ["recieverName",
+		                 "senderName",
+		                 "targetPersonName",
+		                 "title",
+		                 "localizedStatus",
+		                 "validTill"];
 				
 		return createTable("showTipy", "createBrowseAllConsensts", columnNames, columnIds, tasks);
 	}
