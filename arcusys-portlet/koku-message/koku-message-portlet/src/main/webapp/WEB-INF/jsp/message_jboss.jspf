@@ -91,3 +91,16 @@
 		window.location = url;		
 	}
 	
+	function showTipy(index) {
+		if (pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_BROWSE %>"
+			var requestId = pageObj.tasks[index]['requestId'];	
+			var url= "<%= tipyURL %>";
+			url += "&requestId=" + requestId
+						+ "&currentPage=" + pageObj.currentPage
+						+ "&taskType=" + pageObj.taskType
+						+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
+						+ "&orderType=" + pageObj.orderType;						
+		}
+		window.location = url;
+	}
+	

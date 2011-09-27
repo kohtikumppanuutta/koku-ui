@@ -635,4 +635,50 @@ public class AjaxController extends AbstractController {
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
+	
+	/**
+	 * Creates info (tietopyyntö) render url mainly for gatein portal, and keeps the page
+	 * parameters such as page id, task type, keyword
+	 * 
+	 * @param authorizationId authorization id
+	 * @param currentPage current page
+	 * @param taskType request task type
+	 * @param keyword keyword
+	 * @param orderType order type
+	 * @param modelmap ModelMap
+	 * @param request PortletRequest
+	 * @param response ResourceResponse
+	 * @return Consent render url in Json format
+	 */
+	@ResourceMapping(value = "createTipyRenderUrl")
+	public String createTipyRenderUrl(
+			@RequestParam(value = "requestId") String requestId,
+			@RequestParam(value = "currentPage") String currentPage,
+			@RequestParam(value = "taskType") String taskType,
+			@RequestParam(value = "keyword") String keyword,
+			@RequestParam(value = "orderType") String orderType,
+			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
+
+		PortletURL renderUrlObj = response.createRenderURL();
+		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_TIPY);
+		renderUrlObj.setParameter( ATTR_AUTHORIZATION_ID, requestId);
+		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
+		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
+		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
+		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);	
+		
+		try {
+			renderUrlObj.setWindowState(WindowState.NORMAL);
+		} catch (WindowStateException e) {
+			LOG.error("Create consent render url failed");
+		}
+		String renderUrlString = renderUrlObj.toString();
+		
+		JSONObject jsonModel = new JSONObject();
+		jsonModel.put(JSON_RENDER_URL, renderUrlString);
+		modelmap.addAttribute(RESPONSE, jsonModel);
+		
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
+	
 }

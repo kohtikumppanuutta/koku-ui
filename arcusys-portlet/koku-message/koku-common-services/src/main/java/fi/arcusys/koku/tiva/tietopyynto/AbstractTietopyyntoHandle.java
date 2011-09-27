@@ -7,6 +7,8 @@ import org.springframework.context.NoSuchMessageException;
 
 import fi.arcusys.koku.AbstractHandle;
 import fi.arcusys.koku.tiva.tietopyynto.employee.InformationRequestStatus;
+import fi.arcusys.koku.tiva.tietopyynto.model.KokuInformationAccessType;
+import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationStatus;
 import fi.arcusys.koku.util.MessageUtil;
 
 public class AbstractTietopyyntoHandle extends AbstractHandle {
@@ -38,4 +40,28 @@ public class AbstractTietopyyntoHandle extends AbstractHandle {
 			return type.toString().toLowerCase();
 		}
 	}
+	
+	
+	protected String getLocalizedInfoAccessType(KokuInformationAccessType type) {
+		if (getMessageSource() == null) {
+			LOG.warn(MESSAGE_SOURCE_MISSING);
+			return type.toString().toLowerCase();
+		}
+		Locale locale = MessageUtil.getLocale();
+		
+		try {
+			switch(type) {
+			case MANUAL:
+				return getMessageSource().getMessage("InformationAccessType.PORTAL", null, locale);
+			case PORTAL:
+				return getMessageSource().getMessage("InformationAccessType.MANUAL", null, locale);
+			default:
+				return getMessageSource().getMessage("unknown", null, locale);
+			}
+		} catch (NoSuchMessageException nsme) {
+			LOG.warn(MESSAGE_SOURCE_MISSING);
+			return type.toString().toLowerCase();
+		}
+	}
+	
 }

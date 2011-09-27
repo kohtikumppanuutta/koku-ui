@@ -1,12 +1,15 @@
 package fi.arcusys.koku.tiva.tietopyynto.model;
 
 import java.util.List;
-import fi.arcusys.koku.tiva.tietopyynto.employee.InformationAccessType;
+
+import fi.arcusys.koku.tiva.tietopyynto.employee.InformationRequestDetail;
+import fi.arcusys.koku.util.MessageUtil;
 
 public class KokuInformationRequestDetail {
 
 	
-	private InformationAccessType accessType;
+	private KokuInformationAccessType accessType;
+	private String localizedAccessType;
 	private String additionalInfo;
 	private String additionalReplyInfo;
 	private String attachmentURL;
@@ -20,10 +23,36 @@ public class KokuInformationRequestDetail {
 	
 	
 	
-	public InformationAccessType getAccessType() {
+	public KokuInformationRequestDetail(InformationRequestDetail requestDetails) {
+		this.additionalInfo = requestDetails.getAdditionalInfo();
+		this.attachmentURL = requestDetails.getAttachmentURL();
+		this.categories = requestDetails.getCategories();
+		this.createdDate = MessageUtil.formatTaskDateByDay(requestDetails.getCreatedDate());
+		this.description = requestDetails.getDescription();
+		this.informationDetails = requestDetails.getInformationDetails();
+		this.legislationInfo = requestDetails.getLegislationInfo();
+		this.replyDescription = requestDetails.getReplyDescription();
+		this.requestPurpose = requestDetails.getRequestPurpose();
+		setAccessTypeAsString(requestDetails.getAccessType().toString());	
+	}
+	
+	private final void setAccessTypeAsString(String accessType) {
+		setAccessType(KokuInformationAccessType.fromValue(accessType));
+	}
+
+	
+	public String getLocalizedAccessType() {
+		return localizedAccessType;
+	}
+
+	public void setLocalizedAccessType(String localizedAccessType) {
+		this.localizedAccessType = localizedAccessType;
+	}
+
+	public KokuInformationAccessType getAccessType() {
 		return accessType;
 	}
-	public void setAccessType(InformationAccessType accessType) {
+	public void setAccessType(KokuInformationAccessType accessType) {
 		this.accessType = accessType;
 	}
 	public String getAdditionalInfo() {

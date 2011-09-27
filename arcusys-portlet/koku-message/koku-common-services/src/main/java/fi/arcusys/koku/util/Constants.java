@@ -43,6 +43,7 @@ public class Constants {
 	public static final String MY_ACTION_SHOW_APPOINTMENT				= "showAppointment";
 	public static final String MY_ACTION_SHOW_CONSENT 					= "showConsent";
 	public static final String MY_ACTION_SHOW_WARRANT					= "showWarrant";
+	public static final String MY_ACTION_SHOW_TIPY						= "showTipy";
 	public static final String MY_ACTION_TASKFORM	 					= "taskform";
 
 	
@@ -79,6 +80,7 @@ public class Constants {
 	public static final String VIEW_SHOW_INTALIO_FORM					= "showIntalioForm";
 	public static final String VIEW_SHOW_CONSENT						= "showconsent";
 	public static final String VIEW_SHOW_WARRANT						= "showwarrant";
+	public static final String VIEW_SHOW_TIPY							= "showtipy";
 	public static final String VIEW_SHOW_EMPLOYEE_APPOINTMENT			= "showemployeeappointment";
 	public static final String VIEW_SHOW_CITIZEN_APPOINTMENT			= "showcitizenappointment";
 	public static final String VIEW_MESSAGE								= "message";

@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.springframework.context.NoSuchMessageException;
 
 import fi.arcusys.koku.tiva.tietopyynto.AbstractTietopyyntoHandle;
+import fi.arcusys.koku.tiva.tietopyynto.model.KokuInformationRequestDetail;
 import fi.arcusys.koku.tiva.tietopyynto.model.KokuInformationRequestSummary;
+import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationStatus;
 import fi.arcusys.koku.users.KokuUserService;
 import fi.arcusys.koku.util.MessageUtil;
 
@@ -141,9 +145,14 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 		return getRepliedRequests(userId, criteria, startNum, maxNum);
 	}
 	
+	public KokuInformationRequestDetail getRequestDetails(long requestId) {
+		KokuInformationRequestDetail details =  new KokuInformationRequestDetail(service.getRequestDetails(requestId));
+		details.setLocalizedAccessType(getLocalizedInfoAccessType(details.getAccessType()));
+		return details;
+	}
+	
 	
 	private List<KokuInformationRequestSummary> getRepliedRequests(String userId, InformationRequestCriteria criteria, int startNum, int maxNum) {
-		
 		InformationRequestQuery query = new InformationRequestQuery();
 		query.setStartNum(startNum);
 		query.setMaxNum(maxNum);	
@@ -164,4 +173,8 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 		}
 		return kokuSummaries;
 	}
+
+	
+
+	
 }

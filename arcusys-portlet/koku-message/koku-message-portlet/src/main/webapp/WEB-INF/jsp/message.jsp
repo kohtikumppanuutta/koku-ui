@@ -41,6 +41,11 @@
 	<portlet:param name="myaction" value="showWarrant" />
 </portlet:renderURL>
 
+<portlet:renderURL var="tipyURL" windowState="<%= WindowState.NORMAL.toString() %>" >
+	<portlet:param name="myaction" value="showTipy" />
+</portlet:renderURL>
+
+
 <!-- Not in use currently, but reserved for future use -->
 <portlet:renderURL var="intalioFormURL" windowState="<%= WindowState.NORMAL.toString() %>" >
 	<portlet:param name="myaction" value="showIntalioForm" />
@@ -441,7 +446,7 @@
 		                 "assignedDate",
 		                 "validDate"];
 				
-		return createTable("showConsent", "createBrowseAllConsensts", columnNames, columnIds, tasks);
+		return createTable("showTipy", "createBrowseAllConsensts", columnNames, columnIds, tasks);
 	}
 	
 	
