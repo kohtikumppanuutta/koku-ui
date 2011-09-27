@@ -114,6 +114,9 @@ public class Constants {
 	public static final String RESPONSE_OK 								= "OK";
 	public static final String RESPONSE_FAIL 							= "FAIL";
 	
+	/* JSON_Suggestion types */
+	public static final String SUGGESTION_CONSENT						= "ConsentTemplateSuggestion";
+	public static final String SUGGESTION_WARRANT						= "WarrantTemplateSuggestion";
 	
 	
 }

@@ -6,9 +6,6 @@
 <portlet:resourceURL var="suggestURL" id="getSuggestion">
 </portlet:resourceURL>
 
-<portlet:resourceURL var="suggestWarrantTemplateURL" id ="getWarrantTemplateSuggestion">
-</portlet:resourceURL>
-
 <portlet:resourceURL var="archiveURL" id="archiveMessage">
 </portlet:resourceURL>
 
@@ -85,7 +82,6 @@
 <script type="text/javascript">
 
 	/* JS constants */
-	var WARRANT_SUGGESTION_URL = "<%= suggestWarrantTemplateURL %>";
 	var CONSENT_SUGGESTION_URL = "<%= suggestURL %>";
 
 </script>
@@ -335,6 +331,9 @@
 		var taskHtml = "";
 		var formLink = "";
 		
+		/* Default suggestType */
+		suggestType = '<%= Constants.SUGGESTION_CONSENT %>';
+		
 		if(pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN %>") {
 			taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
@@ -393,6 +392,7 @@
 		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>") {
 			taskHtml += createBrowseUserWarrantsTable(tasks);
 		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS%>") {
+			suggestType = '<%= Constants.SUGGESTION_WARRANT %>';
 			taskHtml += createBrowseUserWarrantsTable(tasks);
 		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED %>") {
 			taskHtml += createBrowseWarrantsToMe(tasks);
@@ -1275,7 +1275,7 @@
 		if (consentTemplates.length == 0 && templateName != '') {
 			pageObj.field = -1;	
 		} else if(consentTemplates.length > 0 && currentNum != -1) {
-			var templateId = consentTemplates[currentNum]['suostumuspohjaId'];
+			var templateId = consentTemplates[currentNum]['templateId'];
 			pageObj.field = templateId;
 		}
 		
@@ -1351,7 +1351,7 @@
 		<div id="warrants-search-warrants" class="basic-search" style="display:none; position:relative;">
 			<form name="searchForm" onsubmit="searchWarrantsByTemplate(); return false;">		
 				<span class="text-bold" ><spring:message code="warrant.templateName" /></span>
-				<input type="text" name="warrantTemplateName" id="warrantTemplateName" style="width:160px;" autocomplete="off" onkeydown="beKeyDown(event)" onkeyup="beKeyUp(event)" onclick="createSuggestDiv('warrants-search-templates', 'warrantTemplateName')" />
+				<input type="text" name="warrantTemplateName" id="warrantTemplateName" style="width:160px;" autocomplete="off" onkeydown="beKeyDown(event)" onkeyup="beKeyUp(event)" onclick="createSuggestDiv('warrants-search-warrants', 'warrantTemplateName')" />
 				
 				<span class="text-bold" ><spring:message code="warrant.groupFilter" /></span>
 				<input type="text" name="warrantGroupFilter" id="warrantGroupFilter" style="width:100px;" />

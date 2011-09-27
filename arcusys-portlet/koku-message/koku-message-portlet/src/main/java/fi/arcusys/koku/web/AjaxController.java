@@ -265,35 +265,30 @@ public class AjaxController extends AbstractController {
 	}
 	
 	@ResourceMapping(value = "getSuggestion")
-	public String getSuggestion(@RequestParam(value = "keyword") String keyword,
-			ModelMap modelmap, PortletRequest request, PortletResponse response) {
+	public String getSuggestion(
+			@RequestParam(value = "keyword") String keyword,
+			@RequestParam(value = "suggestType") String suggestionType,
+			ModelMap modelmap, 
+			PortletRequest request, 
+			PortletResponse response) {
 		
-		TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();		
-		
-		List<SuostumuspohjaShort> consentTemplates = tivaHandle.searchConsentTemplates(keyword, MAX_SUGGESTION_RESULTS);
+		@SuppressWarnings("rawtypes")
+		List resultList = null;
+		if (suggestionType.equals(SUGGESTION_CONSENT)) {
+			TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();					
+			resultList = tivaHandle.searchConsentTemplates(keyword, MAX_SUGGESTION_RESULTS);
+		} else if (suggestionType.equals(SUGGESTION_WARRANT)) {
+			KokuEmployeeWarrantHandle handle = new KokuEmployeeWarrantHandle();
+			resultList = handle.searchWarrantTemplates(keyword, MAX_SUGGESTION_RESULTS);
+		}
 		
 		JSONObject jsonModel = new JSONObject();
-		jsonModel.put(JSON_RESULT, consentTemplates);
+		jsonModel.put(JSON_RESULT, resultList);
 		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
-	@ResourceMapping(value = "getWarrantTemplateSuggestion")
-	public String getWarrantTemplateSuggestion(
-			@RequestParam(value = "keyword") String keyword,
-			ModelMap modelmap,
-			PortletRequest request,
-			PortletResponse response) {
-		
-		KokuEmployeeWarrantHandle handle = new KokuEmployeeWarrantHandle();
-		List<KokuValtakirjapohja> informationRequests = handle.searchWarrantTemplates(keyword, MAX_SUGGESTION_RESULTS);
-		
-		JSONObject jsonModel = new JSONObject();
-		jsonModel.put(JSON_RESULT, informationRequests);
-		modelmap.addAttribute(RESPONSE, jsonModel);		
-		return AjaxViewResolver.AJAX_PREFIX;
-	}
 	
 	/**
 	 * Processes tasks query and get task list from web services

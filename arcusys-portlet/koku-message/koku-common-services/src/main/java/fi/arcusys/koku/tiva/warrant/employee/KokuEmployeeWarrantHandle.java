@@ -127,10 +127,10 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 		// FIXME: Not like this..  
 		for (int i = 0; i < split.length; i++) {
 			if (i == 0) {
-				searchMap.put(TEMPLATE_ID, split[i]);				
+				searchMap.put(RECIEVER_UID, split[i]);				
 			}
 			if (i == 1) {
-				searchMap.put(FILTER, split[i]);				
+				searchMap.put(SENDER_UID, split[i]);				
 			}
 			if (i == 2) {
 				searchMap.put(TARGET_PERSON_UID, split[i]);				
