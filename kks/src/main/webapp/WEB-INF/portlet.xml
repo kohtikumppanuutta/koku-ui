@@ -15,6 +15,11 @@
 		<portlet-info>
 			<title>Sopimukset ja Suunnitelmat</title>
 		</portlet-info>
+	    <init-param>
+	      <name>kunpo</name>
+	      <value>false</value>
+	    </init-param>
+		
 	</portlet>
 	
 	<!-- external portlet-filter from portlet-common-project -->

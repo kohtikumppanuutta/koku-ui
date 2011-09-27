@@ -9,10 +9,6 @@
 <div class="koku-kks"> 
 <div class="portlet-section-body">
 
-	<div class="kks-home">
-		<a href="${homeUrl}"> <spring:message code="ui.kks.back" /> </a>
-	</div>
-	
 	<div class="kks-reset-floating"></div>
 
 	<div class="title">

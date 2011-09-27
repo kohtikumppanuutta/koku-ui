@@ -186,10 +186,10 @@ public class KksConverter {
     for (Entry v : vals) {
 
       if (v.getType().getDataType().equals(DataType.MULTI_SELECT.toString())) {
-
+        KksEntryValueType kevt = new KksEntryValueType();
+        kevt.setId(v.getValueId());
         if (v.getValues() != null) {
-          KksEntryValueType kevt = new KksEntryValueType();
-          kevt.setId(v.getValueId());
+
           StringBuilder b = new StringBuilder();
 
           b.append("");
@@ -201,8 +201,10 @@ public class KksConverter {
             }
           }
           kevt.setValue(b.toString());
-          evt.getEntryValue().add(kevt);
+        } else {
+          kevt.setValue("");
         }
+        evt.getEntryValue().add(kevt);
 
       } else {
         for (String value : v.getValues()) {
