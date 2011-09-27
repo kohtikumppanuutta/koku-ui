@@ -24,7 +24,7 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import com.ixonos.koku.pyh.model.Dependant;
-import com.ixonos.koku.pyh.model.MessageService;
+import com.ixonos.koku.pyh.model.DependantsAndFamily;
 import com.ixonos.koku.pyh.model.Person;
 import com.ixonos.koku.pyh.util.CommunityRole;
 
@@ -47,13 +47,13 @@ public class EditFamilyInformationController {
   @Qualifier(value = "pyhDemoService")
   private PyhDemoService pyhDemoService;
 
-  @Autowired
-  @Qualifier(value = "pyhMessageService")
-  private MessageService messageService;
+//  @Autowired
+//  @Qualifier(value = "pyhMessageService")
+//  private MessageService messageService;
 
   @RenderMapping(params = "action=editFamilyInformation")
   public String render(Model model, PortletSession session) {
-    String userPic = ""; // hard-coded pic for testing
+    String userPic = "";
     
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
     if (userInfo != null) {
@@ -63,20 +63,27 @@ public class EditFamilyInformationController {
       log.error("ERROR: UserInfo returns no PIC!");
     }
     
+    Person user = pyhDemoService.getUser(userPic);
+    DependantsAndFamily daf = pyhDemoService.getDependantsAndFamily(userPic);
     pyhDemoService.clearSearchedUsers();
-    model.addAttribute("user", pyhDemoService.getUser(userPic));
-    model.addAttribute("dependants", pyhDemoService.getDependants(userPic));
+    model.addAttribute("user", user);
+    model.addAttribute("dependants", daf.getDependants());
     model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers(userPic));
     model.addAttribute("parentsFull", pyhDemoService.isParentsSet(userPic));
-    model.addAttribute("messages", messageService.getSentMessages(userPic));
-
+//    model.addAttribute("messages", messageService.getSentMessages(userPic));
+    model.addAttribute("messages", pyhDemoService.getSentMessages(user));
+    
+    String communityId = daf.getFamily().getCommunityId();
+    log.info("EditFamilyInformationController.render: put communityId in session: " + communityId);
+    session.setAttribute("familyCommunityId", communityId);
+    
     return "editfamilyinformation";
   }
 
   // this render method does not clear the search results
   @RenderMapping(params = "action=editFamilyInformationWithSearchResults")
   public String renderWithSearchResults(RenderRequest request, Model model, PortletSession session) {
-    String userPic = ""; // hard-coded pic for testing
+    String userPic = "";
     
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
     if (userInfo != null) {
@@ -86,12 +93,15 @@ public class EditFamilyInformationController {
       log.error("ERROR: UserInfo returns no PIC!");
     }
     
+    Person user = pyhDemoService.getUser(userPic);
+    DependantsAndFamily daf = pyhDemoService.getDependantsAndFamily(userPic);
     request.setAttribute("search", true);
-    model.addAttribute("user", pyhDemoService.getUser(userPic));
-    model.addAttribute("dependants", pyhDemoService.getDependants(userPic));
+    model.addAttribute("user", user);
+    model.addAttribute("dependants", daf.getDependants());
     model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers(userPic));
     model.addAttribute("parentsFull", pyhDemoService.isParentsSet(userPic));
-    model.addAttribute("messages", messageService.getSentMessages(userPic));
+//    model.addAttribute("messages", messageService.getSentMessages(userPic));
+    model.addAttribute("messages", pyhDemoService.getSentMessages(user));
 
     return "editfamilyinformation";
   }
@@ -103,7 +113,7 @@ public class EditFamilyInformationController {
   
   @ActionMapping(params = "action=addDependantAsFamilyMember")
   public void addDependantAsFamilyMember(@RequestParam String dependantPic, ActionResponse response, PortletSession session) {
-    String userPic = ""; // hard-coded pic for testing
+    String userPic = "";
     
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
     if (userInfo != null) {
@@ -120,7 +130,7 @@ public class EditFamilyInformationController {
 
   @ActionMapping(params = "action=removeFamilyMember")
   public void removeFamilyMember(@RequestParam String familyMemberPic, ActionResponse response, PortletSession session) {
-    String userPic = ""; // hard-coded pic for testing
+    String userPic = "";
     
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
     if (userInfo != null) {
@@ -137,7 +147,7 @@ public class EditFamilyInformationController {
 
   @ActionMapping(params = "action=removeDependant")
   public void removeDependant(@RequestParam String familyMemberPic, ActionResponse response, PortletSession session) {
-    String userPic = ""; // hard-coded pic for testing
+    String userPic = "";
     
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
     if (userInfo != null) {
@@ -147,7 +157,7 @@ public class EditFamilyInformationController {
       log.error("ERROR: UserInfo returns no PIC!");
     }
     
-    for (Dependant d : pyhDemoService.getDependants(userPic)) {
+    for (Dependant d : pyhDemoService.getDependantsAndFamily(userPic).getDependants()) {
       if (d.getPic().equals(familyMemberPic)) {
         d.setMemberOfUserFamily(false);
       }
@@ -159,7 +169,7 @@ public class EditFamilyInformationController {
   
   @ActionMapping(params = "action=searchUsers")
   public void searchUsers(ActionRequest request, ActionResponse response, PortletSession session) {
-    String userPic = ""; // hard-coded pic for testing
+    String userPic = "";
     
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
     if (userInfo != null) {
@@ -183,7 +193,7 @@ public class EditFamilyInformationController {
 
   @ActionMapping(params = "action=addUsersToFamily")
   public void addUsersToFamily(ActionRequest request, ActionResponse response, PortletSession session) {
-    String userPic = ""; // hard-coded pic for testing
+    String userPic = "";
     
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
     if (userInfo != null) {
@@ -193,8 +203,9 @@ public class EditFamilyInformationController {
       log.error("ERROR: UserInfo returns no PIC!");
     }
     
-    // TODO: get community id (family community where to add users)
-    String communityId = "test_community_id";
+    // TODO: test if this works; get community id (family community where to add users)
+    String communityId = (String) session.getAttribute("familyCommunityId");
+    log.info("EditFamilyInformationController.addUsersToFamily: get communityId from session: '" + communityId + "'");
     
     HashMap<String, String> parameterMap = new HashMap<String, String>();
     HashMap<String, String> personMap = new HashMap<String, String>();

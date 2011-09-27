@@ -99,6 +99,7 @@
                     
                     <portlet:actionURL var="reject">
                             <portlet:param name="action" value="rejectMessage" />
+                            <portlet:param name="userPic" value="${user.pic}" />
                             <portlet:param name="messageId" value="${message.id}" />
                     </portlet:actionURL>
                     <form:form name="reject" method="post" action="${reject}">
@@ -109,7 +110,7 @@
                     <span class="pyh-right"> 
                     <portlet:actionURL var="accept">
                             <portlet:param name="action" value="acceptMessage" />
-                            <portlet:param name="readerId" value="${user.pic}" />
+                            <portlet:param name="userPic" value="${user.pic}" />
                             <portlet:param name="messageId" value="${message.id}" />
                     </portlet:actionURL>
                     <form:form name="accept" method="post" action="${accept}">
@@ -120,9 +121,8 @@
                  </span> 
                  <div class="pyh-reset-floating"></div>
             
-            
             <div class="portlet-section-text">
-                ${message.description}               
+            	<%-- ${message.description} --%>
             
             <span class="pyh-mail">
             <form:form name="accept" method="post" action="${accept}">

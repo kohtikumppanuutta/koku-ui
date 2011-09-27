@@ -1,9 +1,6 @@
 package com.ixonos.koku.pyh;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.PortletRequest;
 import javax.portlet.PortletSession;
-import javax.portlet.RenderRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,10 +9,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import com.ixonos.koku.pyh.model.MessageService;
+import com.ixonos.koku.pyh.model.DependantsAndFamily;
+import com.ixonos.koku.pyh.model.Family;
+import com.ixonos.koku.pyh.model.Person;
 
 import fi.koku.portlet.filter.userinfo.UserInfo;
 
@@ -33,9 +31,9 @@ public class FamilyInformationController {
 
   private static Logger log = LoggerFactory.getLogger(FamilyInformationController.class);
 
-  @Autowired
-  @Qualifier(value = "pyhMessageService")
-  private MessageService messageService;
+//  @Autowired
+//  @Qualifier(value = "pyhMessageService")
+//  private MessageService messageService;
 
   @Autowired
   @Qualifier(value = "pyhDemoService")
@@ -43,7 +41,7 @@ public class FamilyInformationController {
 
   @RenderMapping
   public String render(PortletSession session, Model model) {
-    String userPic = ""; // hard-coded pic for testing
+    String userPic = "";
     
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
     if (userInfo != null) {
@@ -55,11 +53,15 @@ public class FamilyInformationController {
       log.error("ERROR: UserInfo returns no PIC!");
     }
     
-    model.addAttribute("user", pyhDemoService.getUser(userPic));
-    model.addAttribute("dependants", pyhDemoService.getDependants(userPic));
+    Person user = pyhDemoService.getUser(userPic);
+    DependantsAndFamily daf = pyhDemoService.getDependantsAndFamily(userPic);
+    model.addAttribute("user", user);
+    model.addAttribute("dependants", daf.getDependants());
     model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers(userPic));
-    model.addAttribute("messages", messageService.getMessagesFor(userPic));
-    model.addAttribute("sentMessages", messageService.getSentMessages(userPic));
+//    model.addAttribute("messages", messageService.getMessagesFor(userPic));
+//    model.addAttribute("sentMessages", messageService.getSentMessages(userPic));
+    model.addAttribute("messages", pyhDemoService.getMessagesFor(user));
+    model.addAttribute("sentMessages", pyhDemoService.getSentMessages(user));
     return "familyinformation";
   }
   
