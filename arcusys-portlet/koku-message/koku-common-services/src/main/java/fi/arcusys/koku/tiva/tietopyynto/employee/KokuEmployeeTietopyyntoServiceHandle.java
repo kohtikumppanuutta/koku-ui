@@ -55,6 +55,9 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	 */
 	public List<KokuInformationRequestSummary> getRepliedRequests(String userId, String keyword, int startNum, int maxNum) {
 		Map<String, String> searchMap = getSearchMap(keyword);
+		if (searchMap == null) {
+			return new ArrayList<KokuInformationRequestSummary>();
+		}
 		return getRepliedRequests(
 				userId, 
 				stringToDate(searchMap.get(CREATED_FROM)), 
