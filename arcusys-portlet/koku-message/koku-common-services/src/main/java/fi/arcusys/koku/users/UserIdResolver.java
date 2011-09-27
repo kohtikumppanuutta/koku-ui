@@ -1,9 +1,13 @@
 package fi.arcusys.koku.users;
 
+import org.apache.log4j.Logger;
+
 import fi.arcusys.koku.util.PortalRole;
 
 public class UserIdResolver {
 	
+	private static Logger LOG = Logger.getLogger(UserIdResolver.class);
+
 	private KokuUserService userService;
 	
 	public UserIdResolver() {
@@ -11,14 +15,15 @@ public class UserIdResolver {
 	}
 
 	/**
-	 * Returns unique userId by given username 
+	 * Returns unique userId by given username. 
+	 * If user not found returns null.
 	 * 
-	 * @param username
+	 * @param username or null if user not found
 	 * @return userId
 	 */
 	public String getUserId(String username, PortalRole role) {
 		String userId = null;
-		if (username == null) {
+		if (username == null || username.isEmpty()) {
 			return null;
 		}
 	
@@ -35,10 +40,9 @@ public class UserIdResolver {
 		}
 		
 		if (userId == null) {
-			throw new IllegalArgumentException("Couldn't find userId by given username: " + username + " PortalRole: " + role);
+			LOG.info("Couldn't find userId by given username: " + username + " PortalRole: " + role);
 		}
 		return userId;
 	}
-	
 
 }

@@ -35,7 +35,7 @@ function formatUrl(url) {
 	<span class="text-bold"><spring:message code="warrant.receiver"/>:</span> <c:out value="${warrant.recieverName}" /><br />
 	<span class="text-bold"><spring:message code="warrant.sender"/>:</span> <c:out value="${warrant.senderName}" /><br />	
 	<span class="text-bold"><spring:message code="warrant.status"/>:</span> <c:out value="${warrant.localizedStatus}" /><br />
-	<span class="text-bold"><spring:message code="warrant.createType"/>:</span> <c:out value="${warrant.localizedType}" /><br />
+<%-- 	<span class="text-bold"><spring:message code="warrant.createType"/>:</span> <c:out value="${warrant.localizedType}" /><br /> --%>
 	<span class="text-bold"><spring:message code="warrant.createdAt"/>:</span> <c:out value="${warrant.createdAt}" /><br />
 	<span class="text-bold"><spring:message code="warrant.givenDate"/>:</span> <c:out value="${warrant.givenAt}" /><br />
 	<span class="text-bold"><spring:message code="warrant.validTill"/>:</span> <c:out value="${warrant.validTill}" /><br />

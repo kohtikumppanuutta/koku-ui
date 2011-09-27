@@ -1,19 +1,19 @@
 package fi.arcusys.koku.tiva.warrant.model;
 
-public class Valtakirjapohja {
+public class KokuValtakirjapohja {
 
     private long templateId;
     private String templateName;
     private String description;
     
     
-	public Valtakirjapohja(fi.arcusys.koku.tiva.warrant.employeewarrantservice.Valtakirjapohja template) {
+	public KokuValtakirjapohja(fi.arcusys.koku.tiva.warrant.employeewarrantservice.Valtakirjapohja template) {
 		setTemplateId(template.getTemplateId());
 		setTemplateName(template.getTemplateName());
 		setDescription(template.getDescription());
 	}
 	
-	public Valtakirjapohja(fi.arcusys.koku.tiva.warrant.citizenwarrantservice.Valtakirjapohja template) {
+	public KokuValtakirjapohja(fi.arcusys.koku.tiva.warrant.citizenwarrantservice.Valtakirjapohja template) {
 		setTemplateId(template.getTemplateId());
 		setTemplateName(template.getTemplateName());
 		setDescription(template.getDescription());
@@ -69,7 +69,7 @@ public class Valtakirjapohja {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Valtakirjapohja other = (Valtakirjapohja) obj;
+		KokuValtakirjapohja other = (KokuValtakirjapohja) obj;
 		if (description == null) {
 			if (other.description != null)
 				return false;

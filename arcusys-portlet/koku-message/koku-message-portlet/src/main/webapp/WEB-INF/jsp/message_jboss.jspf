@@ -76,7 +76,10 @@
 	
 	
 	function showWarrant(index) {
-		if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED%>" || pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT%>")  {
+		if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED%>"
+		 || pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT%>"
+		 || pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS %>"
+		 || pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS%>")  {
 			var authorizationId = pageObj.tasks[index]['authorizationId'];	
 			var url= "<%= citizenWarrantURL %>";
 			url += "&authorizationId=" + authorizationId

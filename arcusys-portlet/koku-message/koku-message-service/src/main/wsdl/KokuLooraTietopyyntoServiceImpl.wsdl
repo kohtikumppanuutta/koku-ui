@@ -1,0 +1,299 @@
+<definitions name='KokuLooraTietopyyntoService' targetNamespace='http://soa.tiva.koku.arcusys.fi/' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://soa.tiva.koku.arcusys.fi/' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://soa.tiva.koku.arcusys.fi/' version='1.0' xmlns:tns='http://soa.tiva.koku.arcusys.fi/' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='getRepliedRequests' type='tns:getRepliedRequests'/>
+   <xs:element name='getRepliedRequestsResponse' type='tns:getRepliedRequestsResponse'/>
+   <xs:element name='getRequestDetails' type='tns:getRequestDetails'/>
+   <xs:element name='getRequestDetailsResponse' type='tns:getRequestDetailsResponse'/>
+   <xs:element name='getRequests' type='tns:getRequests'/>
+   <xs:element name='getRequestsResponse' type='tns:getRequestsResponse'/>
+   <xs:element name='getSentRequests' type='tns:getSentRequests'/>
+   <xs:element name='getSentRequestsResponse' type='tns:getSentRequestsResponse'/>
+   <xs:element name='getTotalRepliedRequests' type='tns:getTotalRepliedRequests'/>
+   <xs:element name='getTotalRepliedRequestsResponse' type='tns:getTotalRepliedRequestsResponse'/>
+   <xs:element name='getTotalRequests' type='tns:getTotalRequests'/>
+   <xs:element name='getTotalRequestsResponse' type='tns:getTotalRequestsResponse'/>
+   <xs:element name='getTotalSentRequests' type='tns:getTotalSentRequests'/>
+   <xs:element name='getTotalSentRequestsResponse' type='tns:getTotalSentRequestsResponse'/>
+   <xs:complexType name='getRepliedRequests'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='receiverUid' type='xs:string'/>
+     <xs:element minOccurs='0' name='query' type='tns:informationRequestQuery'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='informationRequestQuery'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='criteria' type='tns:informationRequestCriteria'/>
+     <xs:element name='maxNum' type='xs:int'/>
+     <xs:element name='startNum' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='informationRequestCriteria'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='createdFromDate' type='xs:date'/>
+     <xs:element minOccurs='0' name='createdToDate' type='xs:date'/>
+     <xs:element minOccurs='0' name='receiverUid' type='xs:string'/>
+     <xs:element minOccurs='0' name='repliedFromDate' type='xs:date'/>
+     <xs:element minOccurs='0' name='repliedToDate' type='xs:date'/>
+     <xs:element minOccurs='0' name='senderUid' type='xs:string'/>
+     <xs:element minOccurs='0' name='targetPersonUid' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getRepliedRequestsResponse'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:informationRequestSummary'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='informationRequestSummary'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='receiverUid' type='xs:string'/>
+     <xs:element minOccurs='0' name='requestId' type='xs:long'/>
+     <xs:element minOccurs='0' name='senderUid' type='xs:string'/>
+     <xs:element minOccurs='0' name='status' type='tns:informationRequestStatus'/>
+     <xs:element minOccurs='0' name='targetPersonUid' type='xs:string'/>
+     <xs:element minOccurs='0' name='title' type='xs:string'/>
+     <xs:element minOccurs='0' name='validTill' type='xs:date'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getSentRequests'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='senderUid' type='xs:string'/>
+     <xs:element minOccurs='0' name='query' type='tns:informationRequestQuery'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getSentRequestsResponse'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:informationRequestSummary'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getTotalRepliedRequests'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='receiverUid' type='xs:string'/>
+     <xs:element minOccurs='0' name='criteria' type='tns:informationRequestCriteria'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getTotalRepliedRequestsResponse'>
+    <xs:sequence>
+     <xs:element name='return' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getTotalSentRequests'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='arg0' type='xs:string'/>
+     <xs:element minOccurs='0' name='criteria' type='tns:informationRequestCriteria'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getTotalSentRequestsResponse'>
+    <xs:sequence>
+     <xs:element name='return' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getRequests'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='query' type='tns:informationRequestQuery'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getRequestsResponse'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:informationRequestSummary'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getTotalRequests'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='criteria' type='tns:informationRequestCriteria'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getTotalRequestsResponse'>
+    <xs:sequence>
+     <xs:element name='return' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getRequestDetails'>
+    <xs:sequence>
+     <xs:element name='requestId' type='xs:long'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getRequestDetailsResponse'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='return' type='tns:informationRequestDetail'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='informationRequestDetail'>
+    <xs:complexContent>
+     <xs:extension base='tns:informationRequestSummary'>
+      <xs:sequence>
+       <xs:element minOccurs='0' name='accessType' type='tns:informationAccessType'/>
+       <xs:element minOccurs='0' name='additionalInfo' type='xs:string'/>
+       <xs:element minOccurs='0' name='additionalReplyInfo' type='xs:string'/>
+       <xs:element minOccurs='0' name='attachmentURL' type='xs:string'/>
+       <xs:element maxOccurs='unbounded' minOccurs='0' name='categories' nillable='true' type='xs:string'/>
+       <xs:element minOccurs='0' name='createdDate' type='xs:date'/>
+       <xs:element minOccurs='0' name='description' type='xs:string'/>
+       <xs:element minOccurs='0' name='informationDetails' type='xs:string'/>
+       <xs:element minOccurs='0' name='legislationInfo' type='xs:string'/>
+       <xs:element minOccurs='0' name='replyDescription' type='xs:string'/>
+       <xs:element minOccurs='0' name='requestPurpose' type='xs:string'/>
+      </xs:sequence>
+     </xs:extension>
+    </xs:complexContent>
+   </xs:complexType>
+   <xs:simpleType name='informationRequestStatus'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='Open'/>
+     <xs:enumeration value='Valid'/>
+     <xs:enumeration value='Expired'/>
+     <xs:enumeration value='Declined'/>
+    </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name='informationAccessType'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='Manual'/>
+     <xs:enumeration value='Portal'/>
+    </xs:restriction>
+   </xs:simpleType>
+  </xs:schema>
+ </types>
+ <message name='KokuLooraTietopyyntoService_getRequestsResponse'>
+  <part element='tns:getRequestsResponse' name='getRequestsResponse'></part>
+ </message>
+ <message name='KokuLooraTietopyyntoService_getTotalSentRequestsResponse'>
+  <part element='tns:getTotalSentRequestsResponse' name='getTotalSentRequestsResponse'></part>
+ </message>
+ <message name='KokuLooraTietopyyntoService_getTotalRequestsResponse'>
+  <part element='tns:getTotalRequestsResponse' name='getTotalRequestsResponse'></part>
+ </message>
+ <message name='KokuLooraTietopyyntoService_getRepliedRequestsResponse'>
+  <part element='tns:getRepliedRequestsResponse' name='getRepliedRequestsResponse'></part>
+ </message>
+ <message name='KokuLooraTietopyyntoService_getTotalRequests'>
+  <part element='tns:getTotalRequests' name='getTotalRequests'></part>
+ </message>
+ <message name='KokuLooraTietopyyntoService_getTotalRepliedRequestsResponse'>
+  <part element='tns:getTotalRepliedRequestsResponse' name='getTotalRepliedRequestsResponse'></part>
+ </message>
+ <message name='KokuLooraTietopyyntoService_getTotalRepliedRequests'>
+  <part element='tns:getTotalRepliedRequests' name='getTotalRepliedRequests'></part>
+ </message>
+ <message name='KokuLooraTietopyyntoService_getRequests'>
+  <part element='tns:getRequests' name='getRequests'></part>
+ </message>
+ <message name='KokuLooraTietopyyntoService_getTotalSentRequests'>
+  <part element='tns:getTotalSentRequests' name='getTotalSentRequests'></part>
+ </message>
+ <message name='KokuLooraTietopyyntoService_getRequestDetails'>
+  <part element='tns:getRequestDetails' name='getRequestDetails'></part>
+ </message>
+ <message name='KokuLooraTietopyyntoService_getSentRequestsResponse'>
+  <part element='tns:getSentRequestsResponse' name='getSentRequestsResponse'></part>
+ </message>
+ <message name='KokuLooraTietopyyntoService_getRequestDetailsResponse'>
+  <part element='tns:getRequestDetailsResponse' name='getRequestDetailsResponse'></part>
+ </message>
+ <message name='KokuLooraTietopyyntoService_getSentRequests'>
+  <part element='tns:getSentRequests' name='getSentRequests'></part>
+ </message>
+ <message name='KokuLooraTietopyyntoService_getRepliedRequests'>
+  <part element='tns:getRepliedRequests' name='getRepliedRequests'></part>
+ </message>
+ <portType name='KokuLooraTietopyyntoService'>
+  <operation name='getRepliedRequests' parameterOrder='getRepliedRequests'>
+   <input message='tns:KokuLooraTietopyyntoService_getRepliedRequests'></input>
+   <output message='tns:KokuLooraTietopyyntoService_getRepliedRequestsResponse'></output>
+  </operation>
+  <operation name='getRequestDetails' parameterOrder='getRequestDetails'>
+   <input message='tns:KokuLooraTietopyyntoService_getRequestDetails'></input>
+   <output message='tns:KokuLooraTietopyyntoService_getRequestDetailsResponse'></output>
+  </operation>
+  <operation name='getRequests' parameterOrder='getRequests'>
+   <input message='tns:KokuLooraTietopyyntoService_getRequests'></input>
+   <output message='tns:KokuLooraTietopyyntoService_getRequestsResponse'></output>
+  </operation>
+  <operation name='getSentRequests' parameterOrder='getSentRequests'>
+   <input message='tns:KokuLooraTietopyyntoService_getSentRequests'></input>
+   <output message='tns:KokuLooraTietopyyntoService_getSentRequestsResponse'></output>
+  </operation>
+  <operation name='getTotalRepliedRequests' parameterOrder='getTotalRepliedRequests'>
+   <input message='tns:KokuLooraTietopyyntoService_getTotalRepliedRequests'></input>
+   <output message='tns:KokuLooraTietopyyntoService_getTotalRepliedRequestsResponse'></output>
+  </operation>
+  <operation name='getTotalRequests' parameterOrder='getTotalRequests'>
+   <input message='tns:KokuLooraTietopyyntoService_getTotalRequests'></input>
+   <output message='tns:KokuLooraTietopyyntoService_getTotalRequestsResponse'></output>
+  </operation>
+  <operation name='getTotalSentRequests' parameterOrder='getTotalSentRequests'>
+   <input message='tns:KokuLooraTietopyyntoService_getTotalSentRequests'></input>
+   <output message='tns:KokuLooraTietopyyntoService_getTotalSentRequestsResponse'></output>
+  </operation>
+ </portType>
+ <binding name='KokuLooraTietopyyntoServiceBinding' type='tns:KokuLooraTietopyyntoService'>
+  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='getRepliedRequests'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getRequestDetails'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getRequests'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getSentRequests'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getTotalRepliedRequests'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getTotalRequests'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getTotalSentRequests'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='KokuLooraTietopyyntoService'>
+  <port binding='tns:KokuLooraTietopyyntoServiceBinding' name='KokuLooraTietopyyntoServicePort'>
+   <soap:address location='http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuLooraTietopyyntoServiceImpl'/>
+  </port>
+ </service>
+</definitions>

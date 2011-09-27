@@ -6,6 +6,9 @@
 <portlet:resourceURL var="suggestURL" id="getSuggestion">
 </portlet:resourceURL>
 
+<portlet:resourceURL var="suggestWarrantTemplateURL" id ="getWarrantTemplateSuggestion">
+</portlet:resourceURL>
+
 <portlet:resourceURL var="archiveURL" id="archiveMessage">
 </portlet:resourceURL>
 
@@ -17,7 +20,6 @@
 
 <portlet:resourceURL var="revokeWarrantURL" id="revokeWarrants">
 </portlet:resourceURL>
-
 
 <portlet:resourceURL var="cancelURL" id="cancelAppointment">
 </portlet:resourceURL>
@@ -79,6 +81,16 @@
 		defaultPath = ajaxURL.substring(0, pos1+7);
 	}
 %>
+
+<script type="text/javascript">
+
+	/* JS constants */
+	var WARRANT_SUGGESTION_URL = "<%= suggestWarrantTemplateURL %>";
+	var CONSENT_SUGGESTION_URL = "<%= suggestURL %>";
+
+</script>
+
+<%-- <script type="text/javascript" src="<%=defaultPath%>/js/main.js" /> --%>
 <script type="text/javascript"> 
 /*
  * Handle action for task manager
@@ -86,10 +98,11 @@
  */
 	var refreshTimer; // global refresh timer
 	var configObj = new config();
-	var pageObj = new paging();	
+	var pageObj = new paging();
+	
 
 	jQuery(document).ready(function(){
-		suggestUrl = "<%= suggestURL %>";
+		<%-- % suggestUrl = "<%= suggestURL %>"; --%>
 		checkPageSession();
 		/* Ajax activity support call. Show the ajax loading icon */
 	    jQuery('#task-manager-operation-loading')
@@ -378,7 +391,9 @@
 		} else if(pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>") {			
 			taskHtml += createBrowseEmployeeOwnConsents(tasks);
 		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>") {
-			taskHtml += createBrowseUserConsentsTable(tasks);
+			taskHtml += createBrowseUserWarrantsTable(tasks);
+		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS%>") {
+			taskHtml += createBrowseUserWarrantsTable(tasks);
 		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED %>") {
 			taskHtml += createBrowseWarrantsToMe(tasks);
 		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT %>") {
@@ -390,7 +405,7 @@
 	
 	function createBrowseWarrantsToMe(tasks) {
 		if (tasks == undefined || tasks == null || tasks.length == 0) {
-			return showErrorMsgNoConsents();
+			return showErrorMsgYouDontHaveAnyConsents();
 		}
 		
 		var columnNames = ["<spring:message code="message.choose"/>",
@@ -420,7 +435,7 @@
 	
 	function createBrowseWarrantsFromMe(tasks) {
 		if (tasks == undefined || tasks == null || tasks.length == 0) {
-			return showErrorMsgNoConsents();
+			return showErrorMsgYouDontHaveAnyConsents();
 		}
 		
 		var columnNames = ["<spring:message code="message.choose"/>",
@@ -499,25 +514,53 @@
 	}
 	
 	
-	function createBrowseUserConsentsTable(tasks) {
+	function createBrowseUserWarrantsTable(tasks) {
+		if (tasks == undefined || tasks == null || tasks.length == 0) {
+			return showErrorMsgNoConsents();
+		}
 		var columnNames = ["<spring:message code="message.choose"/>",
-		                   "<spring:message code="consent.status"/>",
-		                   "<spring:message code="consent.templateName"/>",
-		                   "<spring:message code="consent.requester"/>",
-		                   "<spring:message code="consent.givenDate"/>",
-		                   "<spring:message code="consent.validDate"/>"
+		                   "<spring:message code="warrant.sender"/>",
+		                   "<spring:message code="warrant.reciever"/>",
+		                   "<spring:message code="warrant.targetPersonName"/>",
+		                   "<spring:message code="warrant.status"/>",
+		                   "<spring:message code="warrant.templateName"/>",
+		                   "<spring:message code="warrant.givenDate.short"/>",
+		                   "<spring:message code="warrant.validTill.short"/>"
 		                  ];
 		
 		var columnIds = [
-		                 "status",
-		                 "templateName",
-		                 "requester",
-		                 "assignedDate",
-		                 "validDate"];
-		return createTable("showConsent", "browseUserConsentsTable", columnNames, columnIds, tasks);
+		                 "senderName",
+		                 "recieverName",
+		                 "targetPersonName",
+		                 "localizedStatus",
+		                 "templateNameWithDescription",
+		                 "givenAt",
+		                 "validTill"];
+		flattenTasksContent(tasks);
+		createPersonSearchLinks(tasks);
+		return createTable("showWarrant", "browseUserConsentsTable", columnNames, columnIds, tasks);
 	}
 	
+	function createPersonSearchLinks(tasks) {
+		for (var i = 0; i < tasks.length; i++)  {			
+// 			tasks[i]["senderName"] = '<a href="javascript:void(0)" class="personLink" onclick="searchPersonWarrantsByRecieverUserId(\'' + tasks[i]["senderUid"] + '\')">'+ tasks[i]["senderName"] +'</a>';
+// 			tasks[i]["recieverName"] = '<a href="javascript:void(0)" class="personLink" onclick="searchPersonWarrantsByRecieverUserId(\'' + tasks[i]["receiverUid"] + '\')">'+ tasks[i]["recieverName"] +'</a>';
+// 			tasks[i]["targetPersonName"] = '<a href="javascript:void(0)" class="personLink" onclick="searchPersonWarrantsByRecieverUserId(\'' + tasks[i]["targetPersonUid"] + '\')">'+ tasks[i]["targetPersonName"] +'</a>';
+			tasks[i]["templateNameWithDescription"] = '<abbr class="valueWithDesc" title=\''+ tasks[i].template.description +'\' >' + tasks[i].template.templateName +'</abbr>'; 
+		}
+	}
+	
+// 	function searchPersonWarrantsByRecieverUserId(uid) {
+// 		pageObj.keyword = uid;
+// 		pageObj.field = -1;
+// 		ajaxGetTasks();
+// 	}
+	
 	function showErrorMsgNoConsents() {
+		return "<div class='errorMsg noConsents'><spring:message code="consent.errorMsg.noWarrants2"/></div>";
+	}
+	
+	function showErrorMsgYouDontHaveAnyConsents() {
 		return "<div class='errorMsg noConsents'><spring:message code="consent.errorMsg.noWarrants"/></div>";
 	}
 	
@@ -862,7 +905,10 @@
 	function createTasksPage() {
 		var pageHtml = '<ul>';
 		
-		if (pageObj.taskType.indexOf('msg') > -1 || pageObj.taskType.indexOf('cst_own_employee') > -1 || pageObj.taskType.indexOf('cst_browse_customer_consents') > -1) {
+		if (pageObj.taskType.indexOf('msg') > -1
+				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS %>') > -1 
+				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS %>') > -1
+				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="message.search"/>"  onclick="showSearchUI()" /></li>';
 		}			
 		if (pageObj.taskType == 'msg_inbox' || pageObj.taskType == 'msg_outbox') {
@@ -1140,8 +1186,11 @@
 		if(pageObj.taskType.indexOf('msg') > -1) { // for message
 			jQuery('#message-search').show();
 			jQuery('#consent-search').hide();
-		} else if (pageObj.taskType == 'cst_browse_customer_consents') {
-			jQuery('#consent-search-citizens').show();
+		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS %>') {
+			jQuery('#warrants-search-citizens').show();
+			jQuery('#message-search').hide();
+		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>') {
+			jQuery('#warrants-search-warrants').show();
 			jQuery('#message-search').hide();
 		} else if(pageObj.taskType.indexOf('cst') > -1) { // for consent
 			jQuery('#consent-search').show();
@@ -1192,15 +1241,40 @@
 		return false;
 	}
 	
-	function searchCitizenConsents() {
-		var keyword = jQuery("input#customer").val();
-		var templateName = jQuery("input#templateName").val();
+	function searchWarrantsByCitizen() {
+		var keyword = jQuery("input#userIdRecieved").val();
+		keyword += '|' + jQuery("input#userIdSent").val();
+		keyword += '|' + jQuery("input#targetPersonUid").val();
+// 		keyword += '|' + jQuery("input#warrantTemplateNameCitizen").val();
+		
+		var templateName = jQuery("input#warrantTemplateNameCitizen").val();
 		
 		pageObj.field = '';
 		
-		if(consentTemplates.length == 0 && templateName != '') {
+		if (consentTemplates.length == 0 && templateName != '') {
 			pageObj.field = -1;	
-		}else if(consentTemplates.length > 0 && currentNum != -1) {
+		} else if(consentTemplates.length > 0 && currentNum != -1) {
+			var templateId = consentTemplates[currentNum]['suostumuspohjaId'];
+			pageObj.field = templateId;
+		}
+		
+		pageObj.keyword = keyword;			
+		ajaxGetTasks();
+		
+		return false;
+	}
+	
+	function searchWarrantsByTemplate() {
+		var keyword = jQuery("input#warrantTemplateName").val();
+		keyword += '|' + jQuery("input#warrantGroupFilter").val();
+		
+		var templateName = jQuery("input#warrantTemplateNameCitizen").val();
+		
+		pageObj.field = '';
+		
+		if (consentTemplates.length == 0 && templateName != '') {
+			pageObj.field = -1;	
+		} else if(consentTemplates.length > 0 && currentNum != -1) {
 			var templateId = consentTemplates[currentNum]['suostumuspohjaId'];
 			pageObj.field = templateId;
 		}
@@ -1256,13 +1330,31 @@
 				<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
 			</form>
 		</div>
-		<!-- TIVA-12 (and 13?) Selaa asiakkaan suostumuksia -->
-		<div id="consent-search-citizens" class="basic-search" style="display:none; position:relative;">
-			<form name="searchForm" onsubmit="searchCitizenConsents(); return false;">		
-				<span class="text-bold" ><spring:message code="consent.customer" /></span>
-				<input type="text" name="customer" id="customer" style="width:100px;" />
-				<span class="text-bold" ><spring:message code="consent.templateName" /></span>
-				<input type="text" name="templateName" id="templateName" style="width:160px;" autocomplete="off" onkeydown="beKeyDown(event)" onkeyup="beKeyUp(event)" onclick="createSuggestDiv('consent-search', 'templateName')" />
+		
+		<!-- TIVA-13 (and 14?) Selaa asiakkaan suostumuksia -->
+		<div id="warrants-search-citizens" class="basic-search" style="display:none; position:relative;">
+			<form name="searchForm" onsubmit="searchWarrantsByCitizen(); return false;">		
+				<span class="text-bold" ><spring:message code="warrant.recievedWarrants" /></span>
+				<input type="text" name="userIdRecieved" id="userIdRecieved" style="width:100px;" />
+				<span class="text-bold" ><spring:message code="warrant.sendedWarrants" /></span>
+				<input type="text" name="userIdSent" id="userIdSent" style="width:100px;" />
+				<span class="text-bold" ><spring:message code="warrant.targetPerson" /></span>
+				<input type="text" name="targetPersonUid" id="targetPersonUid" style="width:100px;" />
+<%-- 				<span class="text-bold" ><spring:message code="warrant.templateName" /></span> --%>
+<!-- 				<input type="text" name="warrantTemplateNameCitizen" id="warrantTemplateNameCitizen" style="width:160px;" autocomplete="off" onkeydown="beKeyDown(event)" onkeyup="beKeyUp(event)" onclick="createSuggestDiv('warrants-search-citizens', 'warrantTemplateNameCitizen')" /> -->
+				<input type="submit" value="<spring:message code="message.search"/>" />
+				<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
+			</form>
+		</div>
+		
+		<!-- TIVA-14?) Selaa asian suostumuksia -->
+		<div id="warrants-search-warrants" class="basic-search" style="display:none; position:relative;">
+			<form name="searchForm" onsubmit="searchWarrantsByTemplate(); return false;">		
+				<span class="text-bold" ><spring:message code="warrant.templateName" /></span>
+				<input type="text" name="warrantTemplateName" id="warrantTemplateName" style="width:160px;" autocomplete="off" onkeydown="beKeyDown(event)" onkeyup="beKeyUp(event)" onclick="createSuggestDiv('warrants-search-templates', 'warrantTemplateName')" />
+				
+				<span class="text-bold" ><spring:message code="warrant.groupFilter" /></span>
+				<input type="text" name="warrantGroupFilter" id="warrantGroupFilter" style="width:100px;" />
 				<input type="submit" value="<spring:message code="message.search"/>" />
 				<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
 			</form>

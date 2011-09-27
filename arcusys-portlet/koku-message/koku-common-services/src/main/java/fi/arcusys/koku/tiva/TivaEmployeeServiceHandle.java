@@ -178,7 +178,7 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 	
 	private String localizeConsentStatus(ConsentStatus consentStatus) {
 		if (getMessageSource() == null) {
-			LOG.warn("getMessageSource() is null. Localization doesn't work properly");
+			LOG.warn(MESSAGE_SOURCE_MISSING);
 			return consentStatus.toString().toLowerCase();
 		}
 		Locale locale = MessageUtil.getLocale();
@@ -201,14 +201,14 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 				return getMessageSource().getMessage("unknown", null, locale);
 			}
 		} catch (NoSuchMessageException nsme) {
-			LOG.warn("Coulnd't find localized message. Localization doesn't work properly");
+			LOG.warn(MESSAGE_SOURCE_MISSING);
 			return consentStatus.toString().toLowerCase();
 		}
 	}
 	
 	private String localizeActionRequestStatus(ActionRequestStatus actionRequestStatus) {
 		if (getMessageSource() == null) {
-			LOG.warn("getMessageSource() is null. Localization doesn't work properly");
+			LOG.warn(MESSAGE_SOURCE_MISSING);
 			return actionRequestStatus.toString().toLowerCase();
 		}
 		Locale locale = MessageUtil.getLocale();
@@ -222,14 +222,14 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 			return getMessageSource().getMessage("unknown", null, locale);
 		}
 		} catch (NoSuchMessageException nsme) {
-			LOG.warn("Coulnd't find localized message. Localization doesn't work properly");
+			LOG.warn(MESSAGE_SOURCE_MISSING);
 			return actionRequestStatus.toString().toLowerCase();
 		}
 	}
 	
 	private String localizeConsentCreateType(ConsentCreateType type) {
 		if (getMessageSource() == null) {
-			LOG.warn("getMessageSource() is null. Localization doesn't work properly");
+			LOG.warn(MESSAGE_SOURCE_MISSING);
 			return type.toString().toLowerCase();
 		}
 		Locale locale = MessageUtil.getLocale();
@@ -246,7 +246,7 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 				return getMessageSource().getMessage("unknown", null, locale);
 			}
 		} catch (NoSuchMessageException nsme) {
-			LOG.warn("Coulnd't find localized message. Localization doesn't work properly");
+			LOG.warn(MESSAGE_SOURCE_MISSING);
 			return type.toString().toLowerCase();
 		}
 	}
@@ -255,7 +255,7 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 		Locale locale = MessageUtil.getLocale();
 		
 		if (getMessageSource() == null) {
-			LOG.warn("getMessageSource() is null. Localization doesn't work properly");
+			LOG.warn(MESSAGE_SOURCE_MISSING);
 			return approvalStatus.toString().toLowerCase();
 		}
 		
@@ -269,7 +269,7 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 				return getMessageSource().getMessage("unknown", null, locale);
 			}
 		} catch (NoSuchMessageException nsme) {
-			LOG.warn("Coulnd't find localized message. Localization doesn't work properly");
+			LOG.warn(MESSAGE_SOURCE_MISSING);
 			return approvalStatus.toString().toLowerCase();
 		}
 	}

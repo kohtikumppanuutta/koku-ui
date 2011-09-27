@@ -39,26 +39,26 @@ function createSuggestDiv(searchElement, keywordElement) {
 	divSearch.appendChild(divSuggest);
 }
 
-function beKeyDown(e)
-{
+function beKeyDown(e) {
   var keyValue = 0;
   if(isie)
     keyValue = event.keyCode;
   else
     keyValue = e.which;
   //alert(keyValue);
+  // Down (40) && Up(38) 
   if (keyValue == 38 || keyValue == 40)
   {
     if(suggestions.length >0)
       searchKey(keyValue);
+   // TAB / Enter (13) 
   }else if(keyValue == 13){
     searchKey(keyValue);
   }
 }
 
 // add the delay to avoid the interruption when entering keywords
-function beKeyUp(e)
-{
+function beKeyUp(e) {
   clearTimeout(doKeyUp);
   var keyValue = 0;
   if(isie)
@@ -69,8 +69,9 @@ function beKeyUp(e)
   doKeyUp = setTimeout("getCandidateKeywords('" + keyValue + "')",300);
 }
 
-function getCandidateKeywords(keyValue) 
-{                   
+function getCandidateKeywords(keyValue) {          
+  // Down (40),  Up(38), TAB / Enter (13) 
+
   if ((keyValue == 38 || keyValue == 40 || keyValue == 13))
   {
   //searchKey(keyValue);
@@ -82,7 +83,7 @@ function getCandidateKeywords(keyValue)
     keyStr = key;
     if(key.length>0)
     {
-    	var url = suggestUrl;
+    	var url = CONSENT_SUGGESTION_URL;
 		
 		jQuery.ajax({
 			  type: 'POST',
@@ -166,7 +167,8 @@ function beClick(i)
   document.getElementById(keywordId).value=suggestions[i];
   document.getElementById(suggestId).style.display="none";
   document.getElementById(keywordId).focus();
-} 
+}
+
 function searchKey(e)  
 {
   if (e == 38){  // up key

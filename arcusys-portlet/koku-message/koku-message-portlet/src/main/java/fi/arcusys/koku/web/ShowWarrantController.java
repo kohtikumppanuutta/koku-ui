@@ -1,15 +1,7 @@
 package fi.arcusys.koku.web;
 
 
-import static fi.arcusys.koku.util.Constants.ATTR_CURRENT_PAGE;
-import static fi.arcusys.koku.util.Constants.ATTR_KEYWORD;
-import static fi.arcusys.koku.util.Constants.ATTR_ORDER_TYPE;
-import static fi.arcusys.koku.util.Constants.ATTR_TASK_TYPE;
-import static fi.arcusys.koku.util.Constants.ATTR_USERNAME;
-import static fi.arcusys.koku.util.Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED;
-import static fi.arcusys.koku.util.Constants.TASK_TYPE_WARRANT_BROWSE_SENT;
-import static fi.arcusys.koku.util.Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS;
-import static fi.arcusys.koku.util.Constants.VIEW_SHOW_WARRANT;
+import static fi.arcusys.koku.util.Constants.*;
 
 import javax.annotation.Resource;
 import javax.portlet.PortletSession;
@@ -25,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.arcusys.koku.tiva.warrant.citizens.KokuCitizenWarrantHandle;
+import fi.arcusys.koku.tiva.warrant.employee.KokuEmployeeWarrantHandle;
+import fi.arcusys.koku.tiva.warrant.employeewarrantservice.KokuLooraValtakirjaService_Service;
 import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationSummary;
 import fi.arcusys.koku.users.UserIdResolver;
 
@@ -99,9 +93,14 @@ public class ShowWarrantController extends AbstractController {
 			KokuCitizenWarrantHandle handle = new KokuCitizenWarrantHandle();
 			handle.setMessageSource(messageSource);
 			warrant = handle.getAuthorizationSummaryById(authId, userId);
-		} else if (taskType.equals(TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS)) {
-			// TODO: Need some logic here? 
-			// REMOVE ME?
+		} else if (taskType.equals(TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS) || taskType.equals(TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS)) {
+			KokuEmployeeWarrantHandle handle = new KokuEmployeeWarrantHandle();
+			handle.setMessageSource(messageSource);
+			try {
+				warrant = handle.getAuthorizationDetails(Integer.valueOf(authorizationId));					
+			} catch (NumberFormatException nfe) {
+				// Silently catch exception
+			}
 		}
 		return warrant;
 	}

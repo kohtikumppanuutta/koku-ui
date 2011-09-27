@@ -164,6 +164,18 @@
 										<extraarg>-autoNameResolution</extraarg>
 									</extraargs>
 								</wsdlOption>
+								<wsdlOption>
+									<wsdl>${basedir}/src/main/wsdl/KokuLooraTietopyyntoServiceImpl.wsdl</wsdl>
+									<wsdlLocation>classpath:KokuLooraTietopyyntoServiceImpl.wsdl</wsdlLocation>
+									<extraargs>
+										<extraarg>-client</extraarg>
+										<extraarg>-server</extraarg>
+										<extraarg>-impl</extraarg>
+										<extraarg>-p</extraarg>
+										<extraarg>fi.arcusys.koku.tiva.tietopyynto.employee</extraarg>
+										<extraarg>-autoNameResolution</extraarg>
+									</extraargs>
+								</wsdlOption>
 							</wsdlOptions>
 						</configuration>
 						<goals>

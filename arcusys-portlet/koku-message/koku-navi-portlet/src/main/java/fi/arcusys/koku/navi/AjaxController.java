@@ -1,6 +1,7 @@
 package fi.arcusys.koku.navi;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
@@ -45,9 +46,14 @@ public class AjaxController extends AbstractController {
 	public String showAjax(ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		String username = request.getRemoteUser();
 		String userId = null;
-		if (username != null) {
-			UserIdResolver resolver = new UserIdResolver();
-			userId = resolver.getUserId(username, getPortalRole(request));			
+		try {
+			if (username != null) {
+				UserIdResolver resolver = new UserIdResolver();
+				userId = resolver.getUserId(username, getPortalRole(request));			
+			}
+		} catch (Exception e) {
+			//LOGGER.error(e.getMessage(), e);
+			LOGGER.error(e);
 		}
 		JSONObject jsonModel = getJsonModel(userId);
 		modelmap.addAttribute("response", jsonModel);

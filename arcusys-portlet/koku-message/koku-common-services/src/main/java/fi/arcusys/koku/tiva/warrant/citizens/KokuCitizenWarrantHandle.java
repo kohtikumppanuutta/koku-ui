@@ -2,29 +2,21 @@ package fi.arcusys.koku.tiva.warrant.citizens;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.log4j.Logger;
-import org.springframework.context.NoSuchMessageException;
 
-import fi.arcusys.koku.AbstractHandle;
-import fi.arcusys.koku.tiva.citizenservice.ConsentCreateType;
+import fi.arcusys.koku.tiva.warrant.AbstractWarrantHandle;
 import fi.arcusys.koku.tiva.warrant.citizenwarrantservice.AuthorizationShortSummary;
-import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationCreateType;
-import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationStatus;
 import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationSummary;
 import fi.arcusys.koku.users.KokuUserService;
-import fi.arcusys.koku.util.MessageUtil;
 
 
-public class KokuCitizenWarrantHandle extends AbstractHandle {
+public class KokuCitizenWarrantHandle extends AbstractWarrantHandle {
 
 	private Logger LOG = Logger.getLogger(KokuCitizenWarrantHandle.class);
 
-	private KokuCitizenWarrantService service;
-	
-	private KokuUserService userService;
-	
+	private final KokuCitizenWarrantService service;	
+	private final KokuUserService userService;	
 	
 	/**
 	 * Constructor and initialization
@@ -39,7 +31,7 @@ public class KokuCitizenWarrantHandle extends AbstractHandle {
 		 List<KokuAuthorizationSummary> summariesModels = new ArrayList<KokuAuthorizationSummary>();
 		 for (AuthorizationShortSummary summary : summaries) {
 			 KokuAuthorizationSummary shortSummary = new KokuAuthorizationSummary(summary);
-			 shortSummary.setLocalizedStatus(localizeAuthStatus(shortSummary.getStatus()));
+			 shortSummary.setLocalizedStatus(getLocalizedAuthStatus(shortSummary.getStatus()));
 			 summariesModels.add(shortSummary);
 		 }
 		 return summariesModels;
@@ -50,7 +42,7 @@ public class KokuCitizenWarrantHandle extends AbstractHandle {
 		 List<KokuAuthorizationSummary> summariesModels = new ArrayList<KokuAuthorizationSummary>();
 		 for (AuthorizationShortSummary summary : summaries) {
 			 KokuAuthorizationSummary shortSummary = new KokuAuthorizationSummary(summary);
-			 shortSummary.setLocalizedStatus(localizeAuthStatus(shortSummary.getStatus()));
+			 shortSummary.setLocalizedStatus(getLocalizedAuthStatus(shortSummary.getStatus()));
 			 summariesModels.add(shortSummary);
 		 }
 		 return summariesModels;	
@@ -60,10 +52,10 @@ public class KokuCitizenWarrantHandle extends AbstractHandle {
 		
 		KokuAuthorizationSummary summary = new KokuAuthorizationSummary(service.getAuthorizationSummaryById(authorizationId, userId));
 		if (summary.getStatus() != null) {
-			summary.setLocalizedStatus(localizeAuthStatus(summary.getStatus()));
+			summary.setLocalizedStatus(getLocalizedAuthStatus(summary.getStatus()));
 		}
 		if (summary.getType() != null) {
-			summary.setLocalizedType(localizeWarrantCreateType(summary.getType()));
+			summary.setLocalizedType(getLocalizedWarrantCreateType(summary.getType()));
 		}
 		if (summary.getSenderUid() != null && summary.getReceiverUid() != null) {
 			summary.setSenderName(userService.getUserUidByKunpoName(summary.getSenderUid()));
@@ -84,54 +76,6 @@ public class KokuCitizenWarrantHandle extends AbstractHandle {
 		service.revokeOwnAuthorization(authorizationId, user, comment);
 	}
 	
-	private String localizeAuthStatus(KokuAuthorizationStatus type) {
-		if (getMessageSource() == null) {
-			LOG.warn("getMessageSource() is null. Localization doesn't work properly");
-			return type.toString().toLowerCase();
-		}
-		Locale locale = MessageUtil.getLocale();
-		
-		try {
-			switch(type) {
-			case VALID:
-				return getMessageSource().getMessage("AuthorizationStatus.VALID", null, locale);
-			case DECLINED:
-				return getMessageSource().getMessage("AuthorizationStatus.DECLINED", null, locale);
-			case EXPIRED:
-				return getMessageSource().getMessage("AuthorizationStatus.EXPIRED", null, locale);
-			case OPEN:
-				return getMessageSource().getMessage("AuthorizationStatus.OPEN", null, locale);
-			case REVOKED:
-				return getMessageSource().getMessage("AuthorizationStatus.REVOKED", null, locale);
-			default:
-				return getMessageSource().getMessage("unknown", null, locale);
-			}
-		} catch (NoSuchMessageException nsme) {
-			LOG.warn("Coulnd't find localized message. Localization doesn't work properly");
-			return type.toString().toLowerCase();
-		}
-	}
 	
-	private String localizeWarrantCreateType(KokuAuthorizationCreateType  type) {
-		if (getMessageSource() == null) {
-			LOG.warn("getMessageSource() is null. Localization doesn't work properly");
-			return type.toString().toLowerCase();
-		}
-		Locale locale = MessageUtil.getLocale();
-		
-		try {
-			switch(type) {
-			case ELECTRONIC:
-				return getMessageSource().getMessage("AuthorizationType.ELECTRONIC", null, locale);
-			case NON_ELECTRONIC:
-				return getMessageSource().getMessage("AuthorizationType.NON_ELECTRONIC", null, locale);
-			default:
-				return getMessageSource().getMessage("unknown", null, locale);
-			}
-		} catch (NoSuchMessageException nsme) {
-			LOG.warn("Coulnd't find localized message. Localization doesn't work properly");
-			return type.toString().toLowerCase();
-		}
-	}
 	
 }

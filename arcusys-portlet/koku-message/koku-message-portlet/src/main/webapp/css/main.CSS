@@ -323,3 +323,11 @@ abbr.valueWithDesc:hover {
 	color: #0089C1;
 }
 
+.personLink {
+	color: #0089C1;
+	cursor: pointer;
+}
+
+.personLink:hover {
+	text-decoration:underline;	
+}

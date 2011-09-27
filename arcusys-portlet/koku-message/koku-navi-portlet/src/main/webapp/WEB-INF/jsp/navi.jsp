@@ -221,7 +221,6 @@
 			</ul>
 		</li>
 			
-			
 		<!--  PYYNNÖT -->
 		<!-- For citizen in Gatein portal-->
 		<c:if test="${fn:contains(naviURL, '/classic/')}">

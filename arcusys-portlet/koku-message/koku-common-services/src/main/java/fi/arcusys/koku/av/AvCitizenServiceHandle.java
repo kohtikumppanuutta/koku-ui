@@ -162,7 +162,7 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 	
 	private String localizeActionRequestStatus(AppointmentSummaryStatus appointmentStatus) {
 		if (getMessageSource() == null) {
-			LOG.warn("getMessageSource() is null. Localization doesn't work properly");
+			LOG.warn(MESSAGE_SOURCE_MISSING);
 			return appointmentStatus.toString();
 		}
 		Locale locale = MessageUtil.getLocale();

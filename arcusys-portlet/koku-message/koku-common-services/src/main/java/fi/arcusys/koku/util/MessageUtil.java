@@ -2,11 +2,14 @@ package fi.arcusys.koku.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import fi.arcusys.koku.kv.messageservice.FolderType;
@@ -25,7 +28,16 @@ public class MessageUtil {
     }
 	
 	private static final Locale locale = new Locale("fi", "FI");
-		
+    private static DatatypeFactory datatypeFactory = null;
+
+    static {
+        try {
+        	datatypeFactory = DatatypeFactory.newInstance();
+        } catch (DatatypeConfigurationException dce) {
+            throw new IllegalStateException("Cannot instantiate DatatypeFactory!", dce);
+        }
+    }  
+	
 	/**
 	 * Returns default locale
 	 * 
@@ -150,5 +162,24 @@ public class MessageUtil {
 		
 		return recipientStr;
 	}
+	
+	
+
+    /**
+     * Converts Date object to XMLGregorianCalendar
+     *
+     * @param date 
+     * @return {@link XMLGregorianCalendar}
+     */
+    public static XMLGregorianCalendar convertDateToXMLGregorianCalendar(java.util.Date date) {
+        if (date == null) {
+            return null;
+        } else {
+            GregorianCalendar gc = new GregorianCalendar();
+            gc.setTimeInMillis(date.getTime());
+            return datatypeFactory.newXMLGregorianCalendar(gc);
+        }
+    }	
+	
 }
 
