@@ -28,7 +28,7 @@
     <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>customerservice-api</artifactId>
-      <version>0.0.7</version>
+      <version>0.0.9</version>
     </dependency>
 
   </dependencies>
