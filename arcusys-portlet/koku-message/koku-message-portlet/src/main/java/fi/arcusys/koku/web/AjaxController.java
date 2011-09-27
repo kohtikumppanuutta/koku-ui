@@ -389,6 +389,15 @@ public class AjaxController extends AbstractController {
 					summaries = warrantHandle.getSentWarrants(userId, first, max);
 					totalTasksNum = warrantHandle.getTotalSentAuthorizations(userId);
 					jsonModel.put(TASKS, summaries);
+				} else if (taskType.equals(TASK_TYPE_CONSENT_BROWSE)) { // Virkailija: Selaa tietopyyntöjä
+					if (keyword != null && !keyword.isEmpty()) {
+						KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
+						handle.setMessageSource(messageSource);
+						List<KokuInformationRequestSummary> informationSummaries = handle.getRepliedRequests(userId, keyword, first, max);
+						jsonModel.put(TASKS, informationSummaries);						
+					} else {
+						jsonModel.put(TASKS, summaries);						
+					}
 				}
 				
 			} else { // for message

@@ -47,6 +47,7 @@ public class Constants {
 
 	
 	/* ATTR_MY_TASK_TYPE parameter possible values. (Message-portlet) */
+	public static final String TASK_TYPE_CONSENT_BROWSE					= "cst_browse_all_consents";			// Tietopyynnöt - Virkailija: Selaa tietopyyntöjä
 	public static final String TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS		= "cst_own_employee";					// Virkailijan lähetetyt suostumus pyynnöt 
 	public static final String TASK_TYPE_CONSENT_CITIZEN_CONSENTS		= "cst_own_citizen";					// Kansalaiselle vastatut pyynnöt(/suostumukset) 
 	public static final String TASK_TYPE_CONSENT_ASSIGNED_CITIZEN		= "cst_assigned_citizen";	 			// Kansalaiselle saapuneet pyynnöt(/suostumukset) 
@@ -117,6 +118,6 @@ public class Constants {
 	/* JSON_Suggestion types */
 	public static final String SUGGESTION_CONSENT						= "ConsentTemplateSuggestion";
 	public static final String SUGGESTION_WARRANT						= "WarrantTemplateSuggestion";
-	
+	public static final String SUGGESTION_BROWSE_ALL_CONSENTS			= "BrowseAllConsents";	
 	
 }

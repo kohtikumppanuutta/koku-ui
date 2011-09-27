@@ -322,8 +322,9 @@
 						<li id="sendconsent"><a href="<%= defaultPath %>/Message/Ilmoitukset">Valmiit</a></li>
 					</ul>
 				</li>
+				<li id="<%= Constants.TASK_TYPE_CONSENT_BROWSE%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_CONSENT_BROWSE%>')">Selaa tietopyyntöjä</a></li>
 			</ul>
-		</li>	
+		</li>
 		</c:if>	
 		<!--  show only citizens -->
 		<c:if test="${fn:contains(naviURL, '/classic/')}">

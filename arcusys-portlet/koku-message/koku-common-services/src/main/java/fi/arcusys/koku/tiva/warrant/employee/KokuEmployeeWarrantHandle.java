@@ -26,7 +26,6 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 	private final KokuEmployeeWarrantService service;
 	private final KokuUserService userService;
 	
-	private static final String SPLIT_REGEX 		= "\\|";
 	private static final String SENDER_UID 			= "senderUid";
 	private static final String RECIEVER_UID 		= "recieverUid";
 	private static final String TARGET_PERSON_UID 	= "targetPersonUid";

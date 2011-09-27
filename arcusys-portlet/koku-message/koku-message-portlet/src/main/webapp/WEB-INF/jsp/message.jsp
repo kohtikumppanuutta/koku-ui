@@ -96,7 +96,20 @@
 	var configObj = new config();
 	var pageObj = new paging();
 	
-
+	/* Attach datepickers */
+// 	jQuery.datepick.setDefaults($.datepick.regional['fi']);
+// 	jQuery(function() {
+// 		jQuery('input#tipyCreatedTimeRangeFrom').datepick({onSelect: showDate});
+// 		jQuery('input#tipyCreatedTimeRangeTo').datepick({onSelect: showDate});
+// 		jQuery('input#tipyRepliedTimeRangeFrom').datepick({onSelect: showDate});
+// 		jQuery('input#tipyRepliedTimeRangeTo').datepick({onSelect: showDate});
+// 	});
+	
+	
+	function showDate(date) {
+		alert('The date chosen is ' + date);
+	}
+	
 	jQuery(document).ready(function(){
 		<%-- % suggestUrl = "<%= suggestURL %>"; --%>
 		checkPageSession();
@@ -398,8 +411,37 @@
 			taskHtml += createBrowseWarrantsToMe(tasks);
 		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT %>") {
 			taskHtml += createBrowseWarrantsFromMe(tasks);
-		}		
+		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_BROWSE %>") {
+			taskHtml += createBrowseAllConsents(tasks);	
+		}
 		return taskHtml;
+	}
+	
+	function createBrowseAllConsents(tasks) {
+		
+		if (tasks == undefined || tasks == null || tasks.length == 0) {
+			return showErrorMsgYouDontHaveAnyTipys();
+		}
+		
+		var columnNames = ["<spring:message code="message.choose"/>",
+		                   "<spring:message code="consent.requester"/>",
+		                   "<spring:message code="consent.templateName"/>",
+		                   "<spring:message code="consent.status"/>",
+		                   "<spring:message code="consent.approvalStatus"/>",
+		                   "<spring:message code="consent.createType"/>",
+		                   "<spring:message code="consent.givenDate"/>",
+		                   "<spring:message code="consent.validDate"/>"
+		                  ];
+		
+		var columnIds = ["requester",
+		                 "templateName",
+		                 "status",
+		                 "approvalStatus",
+		                 "createType",
+		                 "assignedDate",
+		                 "validDate"];
+				
+		return createTable("showConsent", "createBrowseAllConsensts", columnNames, columnIds, tasks);
 	}
 	
 	
@@ -555,6 +597,8 @@
 // 		pageObj.field = -1;
 // 		ajaxGetTasks();
 // 	}
+
+
 	
 	function showErrorMsgNoConsents() {
 		return "<div class='errorMsg noConsents'><spring:message code="consent.errorMsg.noWarrants2"/></div>";
@@ -563,6 +607,11 @@
 	function showErrorMsgYouDontHaveAnyConsents() {
 		return "<div class='errorMsg noConsents'><spring:message code="consent.errorMsg.noWarrants"/></div>";
 	}
+	
+	function showErrorMsgYouDontHaveAnyTipys() {
+		return "<div class='errorMsg noConsents'><spring:message code="tipy.errorMsg.noData"/></div>";
+	}
+
 	
 	/**
 	 * General use table generator
@@ -908,12 +957,15 @@
 		if (pageObj.taskType.indexOf('msg') > -1
 				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS %>') > -1 
 				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS %>') > -1
+				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_CONSENT_BROWSE %>') > -1
 				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="message.search"/>"  onclick="showSearchUI()" /></li>';
-		}			
+		}
+		
 		if (pageObj.taskType == 'msg_inbox' || pageObj.taskType == 'msg_outbox') {
 			pageHtml += '<li><input type="button" value="<spring:message code="page.archive"/>"  onclick="archiveMessages()" /></li>';
 		}
+		
 		if (pageObj.taskType == '<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS %>') {
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="revokeConsents()" /></li>';
 		} else if ( pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT %>') {
@@ -1192,6 +1244,9 @@
 		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>') {
 			jQuery('#warrants-search-warrants').show();
 			jQuery('#message-search').hide();
+		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_CONSENT_BROWSE %>') {
+			jQuery('#consentsSearchAllConsents').show();
+			jQuery('#message-search').hide();
 		} else if(pageObj.taskType.indexOf('cst') > -1) { // for consent
 			jQuery('#consent-search').show();
 			jQuery('#message-search').hide();
@@ -1285,6 +1340,35 @@
 		return false;
 	}
 	
+	function searchAllConsents() {
+		var keyword = jQuery("input#tipyCreatedTimeRangeFrom").val();		
+		keyword += '|' + jQuery("input#tipyCreatedTimeRangeTo").val();
+		keyword += '|' + jQuery("input#tipyRepliedTimeRangeFrom").val();
+		keyword += '|' + jQuery("input#tipyRepliedTimeRangeTo").val();
+		
+		keyword += '|' + jQuery("input#tipyTargetPerson").val();
+		keyword += '|' + jQuery("input#tipyRequester").val();
+		keyword += '|' + jQuery("input#tipyHandOver").val();
+		keyword += '|' + jQuery("input#tipyInformation").val();
+		keyword += '|' + jQuery("input#tipyFreeTextSearch").val();
+		
+		var templateName = jQuery("input#warrantTemplateNameCitizen").val();
+		
+		pageObj.field = '';
+		
+		if (consentTemplates.length == 0 && templateName != '') {
+			pageObj.field = -1;	
+		} else if (consentTemplates.length > 0 && currentNum != -1) {
+			var templateId = consentTemplates[currentNum]['templateId'];
+			pageObj.field = templateId;
+		}
+		
+		pageObj.keyword = keyword;			
+		ajaxGetTasks();
+		
+		return false;	
+	}
+	
  	/**
  	 * Reset the search result and clear the keyword
  	 */
@@ -1331,7 +1415,7 @@
 			</form>
 		</div>
 		
-		<!-- TIVA-13 (and 14?) Selaa asiakkaan suostumuksia -->
+		<!-- TIVA-13 Selaa asiakkaan suostumuksia -->
 		<div id="warrants-search-citizens" class="basic-search" style="display:none; position:relative;">
 			<form name="searchForm" onsubmit="searchWarrantsByCitizen(); return false;">		
 				<span class="text-bold" ><spring:message code="warrant.recievedWarrants" /></span>
@@ -1347,7 +1431,7 @@
 			</form>
 		</div>
 		
-		<!-- TIVA-14?) Selaa asian suostumuksia -->
+		<!-- TIVA-14 Selaa asian suostumuksia -->
 		<div id="warrants-search-warrants" class="basic-search" style="display:none; position:relative;">
 			<form name="searchForm" onsubmit="searchWarrantsByTemplate(); return false;">		
 				<span class="text-bold" ><spring:message code="warrant.templateName" /></span>
@@ -1357,6 +1441,42 @@
 				<input type="text" name="warrantGroupFilter" id="warrantGroupFilter" style="width:100px;" />
 				<input type="submit" value="<spring:message code="message.search"/>" />
 				<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
+			</form>
+		</div>
+		
+		<!-- TIVA-18 Selaa tietopyyntöjä -->
+		<div id="consentsSearchAllConsents" class="basic-search" style="display:none; position:relative;">
+			<form name="searchForm" onsubmit="searchAllConsents(); return false;">		
+			
+				<p class="searchTimeRange">
+					<span class="text-bold searchTitle" ><spring:message code="tipy.timeRange" /></span>
+					<input type="text" name="tipyCreatedTimeRangeFrom" id="tipyCreatedTimeRangeFrom" style="width:80px;" /> - 
+					<input type="text" name="tipyCreatedTimeRangeTo" id="tipyCreatedTimeRangeTo" style="width:80px;" />
+					
+					<span class="text-bold searchTitle" ><spring:message code="tipy.timeRange" /></span>
+					<input type="text" name="tipyRepliedTimeRangeFrom" id="tipyRepliedTimeRangeFrom" style="width:80px;" /> - 
+					<input type="text" name="tipyRepliedTimeRangeTo" id="tipyRepliedTimeRangeTo" style="width:80px;" />
+				</p>
+				
+				<p class="searchMisc">
+					<span class="text-bold searchTitle"><spring:message code="tipy.targetPerson" /></span>
+					<input type="text" name="tipyTargetPerson" id="tipyTargetPerson" style="width:100px;" />
+					
+					<span class="text-bold searchTitle"><spring:message code="tipy.requester" /></span>
+					<input type="text" name="tipyRequester" id="tipyRequester" style="width:100px;" />
+					
+					<span class="text-bold searchTitle"><spring:message code="tipy.handOver" /></span>
+					<input type="text" name="tipyHandOver" id="tipyHandOver" style="width:100px;" />
+					
+					<span class="text-bold searchTitle"><spring:message code="tipy.information" /></span>
+					<input type="text" name="tipyInformation" id="tipyInformation" style="width:100px;" />
+					
+					<span class="text-bold searchTitle"><spring:message code="tipy.freeTextSearch" /></span>
+					<input type="text" name="tipyFreeTextSearch" id="tipyFreeTextSearch" style="width:100px;" />
+					
+					<input type="submit" value="<spring:message code="message.search"/>" />
+					<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
+				</p>
 			</form>
 		</div>
 		

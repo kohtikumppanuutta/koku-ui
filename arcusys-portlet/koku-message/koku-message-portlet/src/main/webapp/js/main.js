@@ -16,7 +16,7 @@ var keyStr = "";
 var doKeyUp = false;
 var suggestId = 'search_suggest';
 var keywordId = 'templateName';
-var suggestUrl;
+var suggestType;
 
 function createSuggestDiv(searchElement, keywordElement) {
 	
@@ -89,30 +89,34 @@ function getCandidateKeywords(keyValue) {
 			  type: 'POST',
 			  url: url,
 			  global:false,
-			  data: {'keyword':key},
+			  data: {'keyword':key, 'suggestType':suggestType},
 			  success: function(data) {
 				var obj = eval('(' + data + ')');
 				var json = obj.response;
 				consentTemplates = json["result"];
 				
-				for(var i=0; i < consentTemplates.length; i++) {
-					suggestions[i] = consentTemplates[i]['otsikko'];
+				if (suggestType == 'ConsentTemplateSuggestion') {
+					for(var i=0; i < consentTemplates.length; i++) {
+						suggestions[i] = consentTemplates[i]['otsikko'];
+					}					
+				} else if (suggestType == 'WarrantTemplateSuggestion') {
+					for(var i=0; i < consentTemplates.length; i++) {
+						suggestions[i] = consentTemplates[i]['templateName'];
+					}
 				}
 				
-				if(suggestions.length > 0) {
+				if (suggestions.length > 0) {
 					var DivRef= document.getElementById(suggestId);
 			        DivRef.style.border = "solid #777 1px";
 			        document.getElementById(suggestId).innerHTML="";
-			        for(var i=0;i <suggestions.length;i++)
-			        {
-			          if(suggestions[i]!="")
-			          {
+			        for(var i=0;i <suggestions.length;i++) {
+			          if(suggestions[i]!="") {
 			            document.getElementById(suggestId).innerHTML+=" <div id='item" + i + "' class='itemBg' onmouseover='beMouseOver(" + i +")' onmouseout='beMouseOut(" + i + ")' onclick='beClick(" + i + ")'>" + suggestions[i] + " </div>";
 			          }
 			        }
 			        document.getElementById(suggestId).innerHTML+=" <div class='item_button' onclick='hiddenDiv();'> <font color='#0000ff'>close </font> </div>";
 			        document.getElementById(suggestId).style.display="inline";
-				}else {
+				} else {
 					document.getElementById(suggestId).style.display="none";
 				}
 			  }
@@ -167,8 +171,7 @@ function beClick(i)
   document.getElementById(keywordId).value=suggestions[i];
   document.getElementById(suggestId).style.display="none";
   document.getElementById(keywordId).focus();
-}
-
+} 
 function searchKey(e)  
 {
   if (e == 38){  // up key
