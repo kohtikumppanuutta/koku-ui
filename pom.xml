@@ -17,8 +17,10 @@
 			<maven.compiler.plugin.version>2.3.2</maven.compiler.plugin.version>
 			<commons.lang.version>2.6</commons.lang.version>
 			<koku-common.version>0.0.2</koku-common.version>
+			<!-- 
 			<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    		 -->
 		</properties>
 	<build>
 		<plugins>
