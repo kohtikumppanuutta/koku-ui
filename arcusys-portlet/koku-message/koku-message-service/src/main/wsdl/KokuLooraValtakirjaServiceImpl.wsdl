@@ -195,7 +195,7 @@
  </binding>
  <service name='KokuLooraValtakirjaService'>
   <port binding='tns:KokuLooraValtakirjaServiceBinding' name='KokuLooraValtakirjaServicePort'>
-   <soap:address location='htttp://127.0.0.1:8180/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuLooraValtakirjaServiceImpl'/>
+   <soap:address location='http://127.0.0.1:8180/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuLooraValtakirjaServiceImpl'/>
   </port>
  </service>
 </definitions>
