@@ -127,4 +127,11 @@ div.search_bar{
 .FormValuesHelp {
 	padding-top: 10px;
 	width: 100%;
-}	
+}
+
+/* Intalio CSS hack in totally wrong place */
+div[label="IntalioInternal_AttachmentsImageBlock"] {
+    display: none !important;
+}
+
+
