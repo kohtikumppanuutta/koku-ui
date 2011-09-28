@@ -93,15 +93,16 @@ public class LogArchiveController {
       @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
       RenderResponse res, Model model) {
 
-    log.debug("render archiveLog");
-
+    log.debug("render archiveLog: visited= "+visited);
+    
     try{
-
+      
       if(logarchivedate != null && logarchivedate.getEndDate() != null){
-
+        log.debug("logarchivedate: "+logarchivedate.getEndDate());
+        
         if (visited != null) { // page has been visited
 
-          log.debug("logarchivedate: "+logarchivedate.getEndDate());
+        
           String archiveDateStr = dateFormat.format(logarchivedate.getEndDate());
 
           // this is needed so that the date can be easily formatted to YYYY-MM-dd format on the jsp
@@ -110,7 +111,7 @@ public class LogArchiveController {
           
           model.addAttribute("visited", "---");
           model.addAttribute("endDate", archiveDateStr);  
-          log.debug("modeliin lisätty archiveDateStr=" + archiveDateStr);
+          log.debug("modeliin lisätty endDate= " + archiveDateStr);
 
         } else{
           log.debug("visited == null");
@@ -158,7 +159,7 @@ public class LogArchiveController {
       @ModelAttribute(value = "visited") String visited, BindingResult result,
       ActionResponse response) {
 
-    log.debug("log archive action phase");
+    log.debug("action archiveLog, visited: "+visited);
  
     String archivedate = archiveSerializer.getAsText(logarchivedate);
     log.debug("logarchivedate: "+archivedate);
@@ -170,10 +171,12 @@ public class LogArchiveController {
       log.debug("saatiin jsp-sivulta archive end date: " + logarchivedate.getEndDate());
     }
     
-    if (visited != null) {
+   // if (visited != null) {
       response.setRenderParameter("visited", visited);
-    }
-    response.setRenderParameter("logArchiveDate", archiveSerializer.getAsText(logarchivedate));
+   // }
+      log.debug("asetetaan archiveLog:ssa endDate "+archiveSerializer.getAsText(logarchivedate));
+    response.setRenderParameter("endDate", archiveSerializer.getAsText(logarchivedate));
+//    response.setRenderParameter("logArchiveDate", archiveSerializer.getAsText(logarchivedate));
     response.setRenderParameter("action", "archiveLog");
 
   }
@@ -184,7 +187,7 @@ public class LogArchiveController {
       @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
       RenderResponse res, Model model) {
 
-    log.debug("start archive render phase: archiving started");
+    log.debug("startArchiveLog render phase: archiving started");
     if (logarchivedate != null) {
       log.debug("archive end date: " + logarchivedate.getEndDate());
     } else{
@@ -192,12 +195,15 @@ public class LogArchiveController {
     }
 
     log.debug("error = "+error);
-    
     if(error != null){
       
       model.addAttribute("error", error); // TODO: voisi olla virhekoodi tms.
+      log.debug("sivulle archive");
+      
       return "archive";
     }
+    log.debug("sivulle archive2");
+    
     return "archive2";
   }
 
@@ -205,6 +211,12 @@ public class LogArchiveController {
   public void startArchive(@ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
       BindingResult result, ActionResponse response) {
  
+    log.debug("painettiin nappia Käynnistä arkistointi");
+    log.debug("action startArchiveLog");
+    log.debug("logarchivedate: "+logarchivedate);
+    if(logarchivedate != null) 
+      log.debug(logarchivedate.getEndDate().toString());
+    
     try{
     
       LogArchivalParametersType archiveParametersType = new LogArchivalParametersType();
@@ -252,8 +264,12 @@ public class LogArchiveController {
  }
     
      // TODO: Parempi virheenkäsittely
-    response.setRenderParameter("archiveDateStr", archiveSerializer.getAsText(logarchivedate));
-    response.setRenderParameter("action", "startArchiveLog");
+ //  response.setRenderParameter("archiveDateStr", archiveSerializer.getAsText(logarchivedate));
+ 
+   log.debug("asetetaan endDate "+archiveSerializer.getAsText(logarchivedate));
+ 
+   response.setRenderParameter("endDate", archiveSerializer.getAsText(logarchivedate));
+   response.setRenderParameter("action", "startArchiveLog");
 
   }
 
@@ -271,7 +287,7 @@ public class LogArchiveController {
       if (logarchivedate != null) {
         date = logarchivedate.getEndDate() != null ? df.format(logarchivedate.getEndDate()) : "";
 
-        log.debug("getAsText: formatoitu archivedate: " + date);
+  //      log.debug("getAsText: formatoitu archivedate: " + date);
       }
 
       return date;

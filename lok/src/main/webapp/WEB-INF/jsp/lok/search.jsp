@@ -5,14 +5,20 @@
 <portlet:actionURL var="searchActionURL">
 	<portlet:param name="action" value="searchLog" />
 	<portlet:param name="visited" value="---" />
+	<portlet:param name="user" value="${user}" />
+	<portlet:param name="useruid" value="${useruid}" />
 </portlet:actionURL>
 
 <portlet:renderURL var="searchUserURL">
 	<portlet:param name="action" value="searchUser" />
+	<portlet:param name="user" value="${user}" />
+	    <portlet:param name="useruid" value="${useruid}" />
 </portlet:renderURL>
 
 <portlet:renderURL var="archiveURL">
 	<portlet:param name="action" value="archiveLog" />
+	<portlet:param name="user" value="${user}" />
+	    <portlet:param name="useruid" value="${useruid}" />
 </portlet:renderURL>
 
 
@@ -23,7 +29,6 @@
 			<a href="${searchUserURL}"><spring:message code="koku.common.back" />
 			</a>
 		</div>
-
 		<h1 class="portlet-section-header">
 			<spring:message code="koku.lok.header" />
 		</h1>
@@ -51,20 +56,22 @@
 
 		<form:form name="logSearchForm" commandName="logSearchCriteria"
 			method="post" action="${searchActionURL}">
+		
 			<span class="form-field-label"><spring:message
 					code="koku.common.pic" /> </span>
+					<span>${pic}</span> 
 				
-			<form:input path="pic" maxlength="11" size="11" />
-			<span class="errors"><form:errors path="pic" /> </span>
+	 	<form:input type="hidden" path="pic" value="${pic}" />
+			<span class="errors"><form:errors path="pic" /> </span>	
 
-<!--  TÄHÄN VETOVALIKKO, JOSSA MAHDOLLISET ARVOT -->
+<!--TODO:  TÄHÄN VETOVALIKKO, JOSSA MAHDOLLISET ARVOT -->
 
 			<span class="form-field-label"><spring:message
 					code="koku.common.concept" /> </span>
 			<form:input path="concept" maxlength="15" size="15" />
 			<span class="errors"><form:errors path="concept" /> </span>
 
-			<!--  TODO: Javascript date picker will be added here! -->
+<!--  TODO: Javascript date picker will be added here! -->
 			<span class="form-field-label"><spring:message
 					code="koku.common.startTime" /> </span>
 		
@@ -108,14 +115,15 @@ This should be changed! --%>
 					<th width=20% scope="col"><b><spring:message code="ui.lok.data.item.type" /></b></th>
 					<th width=20% scope="col"><b><spring:message code="ui.lok.service" /></b></th>
 				</tr>
-
+<%--  <fmt:formatDate pattern="dd.MM.yyyy" value="${archiveDateDate}" /> --%>
 				<c:forEach var="e" items="${entries}">
 					<tr>
-						<td width=20%><c:out value="${e.timestamp}"/></td>
+					<td width=20%><fmt:formatDate pattern="dd.MM.yyyy hh:mm:ss" value="${e.timestamp}"/></td>
+<%-- OLI NÄIN: 					<td width=20%><c:out value="${e.timestamp}"/></td>	--%>	
 						<td width=20%><c:out value="${e.user}"/></td>
 						<td width=40%><c:out value="${e.operation}"/></td>
 						<td width=20%><c:out value="${e.dataItemType}"/></td>
-						<td width=20%><c:out value="${e.clientSystemId}"/></td>
+						<td width=20%><c:out value="${e.clientSystemId}"/></td>						
 					</tr>
 				</c:forEach>
 			</table>

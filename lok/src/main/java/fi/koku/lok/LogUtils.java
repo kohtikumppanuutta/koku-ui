@@ -1,24 +1,15 @@
 package fi.koku.lok;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.namespace.QName;
-import javax.xml.ws.BindingProvider;
+import javax.portlet.PortletSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fi.koku.KoKuFaultException;
-import fi.koku.services.utility.log.v1.LogService;
-import fi.koku.services.utility.log.v1.LogServicePortType;
+import fi.koku.portlet.filter.userinfo.UserInfo;
 
 public class LogUtils {
 
@@ -31,22 +22,7 @@ public class LogUtils {
     cal.setTime(d);
     return cal;
   }
-  /*
-  if(searchCriteria.getFrom() == null){
-    start = null;
-  } else if{
-    searchCriteria.getFrom() 
-    try{
-      start.setTime(searchCriteria.getFrom());
-    }catch()
-  }
-  Calendar end = Calendar.getInstance();
-  if(searchCriteria.getTo() == null){
-    end = null;
-  } else{
-    end.setTime(searchCriteria.getTo());
-  }
-  */
+ 
  /**
   * The method returns a date X years from today.
   * @param years
@@ -62,25 +38,7 @@ public class LogUtils {
     return dateStr;
   }
   
-  /**
-   * The "real" LOK service.
-   */
-/*  public LogServicePortType getLogService() throws MalformedURLException {
-    String uid = LogConstants.LOG_USERNAME;
-    String pwd = LogConstants.LOG_PASSWORD;
-
-    URL wsdlLocation = new URL(LogConstants.LOG_SERVICE);
-    QName serviceName = new QName("http://services.koku.fi/utility/log/v1", "logService");
-    LogService logService = new LogService(wsdlLocation, serviceName);
-
-    log.debug("got logservice");
-    
-    LogServicePortType port = logService.getLogServiceSoap11Port();
-    ((BindingProvider) port).getRequestContext().put(BindingProvider.USERNAME_PROPERTY, uid);
-    ((BindingProvider) port).getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, pwd);
-    
-    return port;
-  }*/
+  
   
   /**
    * Method for transforming Date to XMLGregorianCalendar format
@@ -88,7 +46,7 @@ public class LogUtils {
    * @return
    * @throws DatatypeConfigurationException
    */
-  XMLGregorianCalendar getXMLGregorianDate(Date date) throws DatatypeConfigurationException {
+/*  XMLGregorianCalendar getXMLGregorianDate(Date date) throws DatatypeConfigurationException {
     XMLGregorianCalendar xmlDate = null;
     
     if(date != null){
@@ -99,14 +57,14 @@ public class LogUtils {
     }
     
     return xmlDate;
-  }
+  }*/
   
   /**
    * Method for transforming a date in XMLGregorianCalendar to String format
    * @param xmlcal
    * @return String date
    */
-  String getDate(XMLGregorianCalendar xmlcal){
+/*  String getDate(XMLGregorianCalendar xmlcal){
     Date date = new Date();
     Calendar cal = Calendar.getInstance();
     cal.set(xmlcal.getYear(), xmlcal.getMonth(), xmlcal.getDay());
@@ -118,6 +76,7 @@ public class LogUtils {
     
     return dateStr;    
   }
+  */
   
   String getDate(Calendar cal){
     Date date = new Date();
@@ -129,6 +88,41 @@ public class LogUtils {
     log.debug("getDate: "+dateStr);
     
     return dateStr;    
+  }
+  
+  public static String getPicFromSession(PortletSession session) {
+    UserInfo info = getUserInfoFromSession(session);
+    if (info == null) {
+      log.debug("cannot get user info from session");
+      return "";
+    }
+    if(info.getPic()==null){
+      log.error("cannot get pic from session");
+    } else{
+      log.debug("got pic from userinfo: "+info.getPic());
+    }
+    
+    return info.getPic();
+  }
+
+  public static String getUsernameFromSession(PortletSession session){
+    UserInfo info = getUserInfoFromSession(session);
+    if (info == null) {
+      log.debug("cannot get user info from session");
+      return "";
+    }
+    if(info.getUid()==null){
+      log.error("cannot get uid from session");
+    } else{
+      log.debug("got uid from userinfo: "+info.getUid());
+    }
+    
+    return info.getUid();
+  }
+  
+  
+  public static UserInfo getUserInfoFromSession(PortletSession session) {
+    return (UserInfo) session.getAttribute(UserInfo.KEY_USER_INFO);
   }
   
 }

@@ -4,9 +4,9 @@
 
 <portlet:actionURL var="archiveActionURL">
 	<portlet:param name="action" value="archiveLog" />
-	<portlet:param name="visited" value="---" />
+	<portlet:param name="visited" value="---" /> 
 </portlet:actionURL>
- 
+
 <portlet:actionURL var="startArchiveActionURL">
 	<portlet:param name="action" value="startArchiveLog" />
 </portlet:actionURL>
@@ -22,7 +22,7 @@
 
 <div class="koku-lok">
 <div class="portlet-section-body">
-
+${endDate}
 	<div class="home">
 		<a href="${homeURL}"><spring:message code="koku.common.back" />
 		</a>
@@ -40,6 +40,8 @@
 		</div>
 
 		<c:if test="${empty visited}">
+		empty visited
+		${endDate}
 			<div class="log-archive">
 				<form:form name="logArchiveForm" commandName="logArchiveDate"
 					method="post" action="${archiveActionURL}">
@@ -61,23 +63,23 @@
 		</c:if>
 
 		<c:if test="${not empty visited}">
+		not empty visited, ${endDate}
 			<p>
 				<spring:message code="koku.lok.archive.confirmation" />
-				<fmt:formatDate pattern="dd.MM.yyyy" value="${archiveDateDate}" />
-				.
+				<fmt:formatDate pattern="dd.MM.yyyy" value="${archiveDateDate}"/>.
+				
 			</p>
 
-			<form:form name="changeArchiveDateForm" commandName="logArchiveDate"
-				method="post" action="${archiveActionURL}">
+		<%--	<form:form name="changeArchiveDateForm" commandName="logArchiveDate" --%>
+		
+			<form:form method="post" action="${archiveActionURL}">
+			 	<input type="hidden" name="endDate" value="${endDate}" />
 				<input type="submit"
 					value="<spring:message code="koku.common.changeDate"/>">
 			</form:form>
 
 			<form:form method="post" action="${startArchiveActionURL}">
-
 				<input type="hidden" name="endDate" value="${endDate}" />
-				<%-- oli archiveDate --%>
-
 				<input type="submit"
 					value="<spring:message code="koku.common.startArchive"/>">
 			</form:form>

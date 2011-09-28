@@ -4,10 +4,27 @@
 
 <portlet:renderURL var="homeURL">
     <portlet:param name="action" value="home" />
+    <portlet:param name="user" value="${user}" />
+    <portlet:param name="useruid" value="${useruid}" />
 </portlet:renderURL>
+
+<portlet:actionURL var="searchUserParamsURL">
+	<portlet:param name="action" value="searchUserWithParams" />
+	<portlet:param name="user" value="${user}" />
+	    <portlet:param name="useruid" value="${useruid}" />
+</portlet:actionURL>
 
 <portlet:renderURL var="archiveURL">
 	<portlet:param name="action" value="archiveLog" />
+	<portlet:param name="user" value="${user}" />
+	    <portlet:param name="useruid" value="${useruid}" />
+</portlet:renderURL>
+
+<portlet:renderURL var="showLogSearchFormURL">
+	<portlet:param name="action" value="searchLog" />
+	<portlet:param name="pic" value="${foundPic}" />
+	<portlet:param name="user" value="${user}" />
+	    <portlet:param name="useruid" value="${useruid}" />
 </portlet:renderURL>
 
 <div class="koku-lok">
@@ -24,7 +41,7 @@
 	
 	<div class="portlet-menu">
 			<ul>
-
+<%-- TODO: POISTA NÄMÄ? Ja samalla kaikki viitteet tältä sivulta arkistointiin --%>
 				<li class="portlet-menu-item-selected"><spring:message code="koku.lok.menu.item.search"/></li>
 				<li class="portlet-menu-item"><a href="${archiveURL}"><spring:message code="koku.lok.menu.item.archive"/></a></li>
 			</ul>
@@ -32,14 +49,10 @@
 	
 	<div class="add">
                     
-		<h3 class="portlet-section-subheader"><spring:message code="ui.lok.search.user" /></h3>
-
-		<portlet:actionURL var="searchUserParams">
-			<portlet:param name="action" value="searchUserWithParams" />
-		</portlet:actionURL>
+		<h3 class="portlet-section-subheader"><spring:message code="ui.lok.search.user" /></h3>	
 
 		<form name="searchUserParams" method="post"
-			action="${searchUserParams}">
+			action="${searchUserParamsURL}">
 			<span class="portlet-form-field-label"><spring:message code="koku.common.pic" />: </span>
 			<span class="portlet-form-input-field"> <input type="text" name="pic" /> </span>
 			<input class="portlet-form-button" type="submit" value="<spring:message code="ui.lok.seek"/>" />
@@ -48,25 +61,28 @@
 <p>
 	<c:choose>
 		<c:when test="${not empty searchedUsers}">
-			<table class="portlet-table-body" width="100%" border="0">
+					<table class="portlet-table-body" width="100%" border="0">
 
-				<tr class="portlet-table-body th">
-					<th><spring:message code="ui.lok.table.name" /></th>
-					<th><spring:message code="koku.common.pic" /></th>
-					<th></th>
-				</tr>
+						<tr class="portlet-table-body th">
+							<th><spring:message code="ui.lok.table.name" />
+							</th>
+							<th><spring:message code="koku.common.pic" />
+							</th>
+							<th></th>
+						</tr>
 
-		<portlet:renderURL var="showLogSearchFormURL">
-						<portlet:param name="action" value="searchLog" />
-						<portlet:param name="pic" value="${foundPic}" />
-					</portlet:renderURL>
-					<tr>
-					<td><c:out value="${foundName}"/> </td><td><c:out value="${foundPic}"/> </td>
-						<td><a href="${showLogSearchFormURL}"><spring:message code="ui.lok.choose.user"/></a></td>
-					</tr>
-			</table>
 
-			<p>&nbsp;</p>
+						<tr>
+							<td><c:out value="${foundName}" /></td>
+							<td><c:out value="${foundPic}" /></td>
+							<td><a href="${showLogSearchFormURL}"><spring:message
+										code="ui.lok.choose.user" />
+							</a>
+							</td>
+						</tr>
+					</table>
+
+					<p>&nbsp;</p>
 	
 		</c:when>
 		<c:otherwise>

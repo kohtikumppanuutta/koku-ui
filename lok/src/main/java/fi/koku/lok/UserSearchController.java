@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
@@ -49,38 +50,56 @@ public class UserSearchController {
  
  
   @RenderMapping(params = "action=home")
-  public String render(Model model){
+  public String render(@RequestParam(value = "user") String user, @RequestParam(value = "useruid") String useruid, Model model){
     log.debug("log search render phase, return main menu");
     model.addAttribute("search", false); //This means that search was NOT done
+    model.addAttribute("user", user);
+    model.addAttribute("useruid", useruid);
+    
+    log.debug("main menu user: "+user+", uiseruid: "+useruid);
+    
     return "menu";
   }
   
   @RenderMapping(params = "action=searchUser")
-  public String renderSearch(RenderRequest req, Model model){
+  public String renderSearch(RenderRequest req, Model model, @RequestParam(value = "user") String user,
+      @RequestParam(value = "useruid") String useruid){
     log.debug("log search render phase, return user search");
+    log.debug("user: "+user+", useruid: "+useruid);
+    
     model.addAttribute("search", false);//This means that search was NOT done
+    model.addAttribute("user", user);
+    model.addAttribute("useruid", useruid);
+
     return "usersearch";
   }
   
   @ActionMapping(params = "action=searchUserWithParams")
-   public void searchUserWithParams(ActionResponse response, @RequestParam(value = "pic", required = false) String pic, Model model){
+   public void searchUserWithParams(ActionResponse response, @RequestParam(value = "user") String user,
+       @RequestParam(value = "useruid") String useruid,
+       @RequestParam(value = "pic", required = false) String pic, Model model){
 
   log.debug("log search user action phase with action=searchUserWithParams "+pic);
-    
+  log.debug("got user "+user+", useruid "+useruid);
     //Form sending required to use ActionURL and now there parameters are send forward to render method
     response.setRenderParameter("pic", pic);
     response.setRenderParameter("action", "searchUserParams");
+    response.setRenderParameter("user", user);
+    response.setRenderParameter("useruid", useruid);
   }
   
   @RenderMapping(params = "action=searchUserParams")
-  public String renderParams(@RequestParam(value = "pic", required = false) String pic, RenderRequest req, RenderResponse res, Model model) {
+  public String renderParams(@RequestParam(value = "pic", required = false) String pic,
+      @RequestParam(value = "user") String user, @RequestParam(value = "useruid") String useruid, RenderRequest req, RenderResponse res, Model model) {
        
-    User user = null;
-    log.debug("log: search user with pic = "+pic); 
+   User customer = null;
+   
+    log.debug("log: search user with pic = "+pic);
+    log.debug("got user "+user+", useruid "+useruid);
     //TODO: poista tämä HAETAAN 4 kovakoodattua KÄYTTÄJÄÄ
    // model.addAttribute("searchedUsers", lokDemoService.findUsers(pic, null, fname, sname));
     try{
-      user = findUser(pic);
+      customer = findUser(pic);
     }catch(ServiceFault fault){
       //TODO: lisää virheviesti
       //TODO: tuleelo väärällä hetulla hausta erityislokitus tapahtumalokiin?
@@ -89,14 +108,16 @@ public class UserSearchController {
       log.debug("SOAPFaultException");
     }
     
-    if(user!=null){
+    if(customer!=null){
  
-      model.addAttribute("searchedUsers", user);
-      model.addAttribute("foundName", user.getSname()+" "+user.getFname());
-      model.addAttribute("foundPic", user.getPic());
+      model.addAttribute("searchedUsers", customer);
+      model.addAttribute("foundName", customer.getSname()+" "+customer.getFname());
+      model.addAttribute("foundPic", customer.getPic());
     }
     
     model.addAttribute("search", true); // This means that search was done
+    model.addAttribute("user", user);
+    model.addAttribute("useruid", useruid);
     
     return "usersearch";
   }
@@ -115,18 +136,18 @@ public class UserSearchController {
     customerAuditInfoType.setComponent(LogConstants.COMPONENT_LOK);
     customerAuditInfoType.setUserId(LogConstants.LOK_USER_ID);
     
-    User user = null;
+    User cust = null;
 
-      customer = customerService.opGetCustomer(pic, customerAuditInfoType);
+    customer = customerService.opGetCustomer(pic, customerAuditInfoType);
 
     if(customer!=null){
     
       //TODO: oletus tässä: getEtunimetNimi() palauttaa kaikki nimet. Tarkista, palauttaako todella!
       // the User instance is needed so that the full name can be shown
-     user = new User(customer.getHenkiloTunnus(), customer.getId(), customer.getEtunimetNimi(), customer.getSukuNimi());
-      log.debug(user.getFname()+", "+user.getSname()+", "+user.getPic());
+      cust = new User(customer.getHenkiloTunnus(), customer.getId(), customer.getEtunimetNimi(), customer.getSukuNimi());
+      log.debug(cust.getFname()+", "+cust.getSname()+", "+cust.getPic());
     }
-      return user;
+      return cust;
   }
 
   

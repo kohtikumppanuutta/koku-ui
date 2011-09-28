@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -17,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
+import javax.xml.ws.soap.SOAPFaultException;
+
 
 import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;
@@ -76,19 +80,15 @@ public class LogSearchController {
     return new LogSearchCriteria();
   }
 
-  // start page
-  @RenderMapping
-  public String render(RenderRequest req, Model model) {
-    return "menu";
-  }
-
   // portlet render phase
   @RenderMapping(params = "action=searchLog")
   public String render(RenderRequest req, @RequestParam(value = "visited", required = false) String visited,
-      @ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, RenderResponse res, Model model) {
+      @ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, 
+      @RequestParam(value = "user") String user, @RequestParam(value = "useruid") String useruid,
+      RenderResponse res, Model model) {
 
     log.info("action = searchLog");
-  
+  log.debug("render user: "+user);
     // these are runtime constants, not given by the user!
       String startDateStr = lu.getDateString(1);
       String endDateStr = lu.getDateString(0);
@@ -103,7 +103,7 @@ public class LogSearchController {
           //TODO: poista tämä. Virheviestin testausta varten.
           //model.addAttribute("entries", new ArrayList<LogEntry>());
 
-          model.addAttribute("entries", getLogEntries(criteria));
+          model.addAttribute("entries", getLogEntries(criteria, user));
         } else { //TODO: poista tämä!
           model.addAttribute("entries", getDemoLogEntries(criteria));
         }
@@ -114,23 +114,27 @@ public class LogSearchController {
       log.info("criteria: " + criteria.getPic() + ", " + criteria.getConcept() + ", " + criteria.getFrom() + ", "
           + criteria.getTo());
 
-    
-
       if (StringUtils.isNotBlank(criteria.getPic())) {
         model.addAttribute("logSearchCriteria", criteria);
       }
     }
-
+    
+    model.addAttribute("pic", criteria.getPic());
+    model.addAttribute("user", user);
+    model.addAttribute("useruid", useruid);
+    
     return "search";
   }
 
   // This is run after the customer has been searched and the user clicks 'Valitse'
   // portlet action phase
   @ActionMapping(params = "action=searchLog")
-  public void doSearch(@ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria,
-      @ModelAttribute(value = "visited") String visited, BindingResult result, ActionResponse response) {
+  public void doSearch(@ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria,  BindingResult result,
+      @RequestParam(value = "visited") String visited, @RequestParam(value = "user") String user, 
+      @RequestParam(value = "useruid") String useruid, ActionResponse response) {
 
     log.debug("action = searchLog");
+log.debug("user: "+user);
 
     // pass criteria to render phase
     if (visited != null) {
@@ -138,6 +142,8 @@ public class LogSearchController {
     }
     response.setRenderParameter("logSearchCriteria", criteriaSerializer.getAsText(criteria));
     response.setRenderParameter("action", "searchLog");
+    response.setRenderParameter("user", user);
+    response.setRenderParameter("useruid", useruid);
   }
  
  
@@ -147,7 +153,7 @@ public class LogSearchController {
    * @param searchCriteria
    * @return
    */
-  private List<LogEntry> getLogEntries(LogSearchCriteria searchCriteria) {
+  private List<LogEntry> getLogEntries(LogSearchCriteria searchCriteria, String user) {
     List<LogEntry> entryList = new ArrayList<LogEntry>();
 
     try {
@@ -179,11 +185,23 @@ public class LogSearchController {
           "end: " + criteriatype.getEndTime() + "\n" + "dataItem: "
           + criteriatype.getDataItemType() + "\n" + "logtype: " + criteriatype.getLogType());
 
+  /*    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
+      if (userInfo != null) {
+        userPic = userInfo.getPic();
+        log.info("Got PIC from session. userPic = " + userPic);
+        
+      } else {
+        // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
+        log.error("ERROR: UserInfo returns no PIC!");
+      }
+    */  
       // call to log database
       AuditInfoType audit = new AuditInfoType();
-      audit.setComponent("lok"); //FIXME
-      audit.setUserId("170777-777X");  // FIXME Kirjautuneen käyttäjän hetu!
- 
+      audit.setComponent("lok"); //FIXME OK DEMOON
+ //     audit.setUserId("170777-777X");  // FIXME Kirjautuneen käyttäjän hetu!
+      log.debug("set user pic: "+user);
+      // set pic that was got from the session
+      audit.setUserId(user);
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
 
       // write to admin log about this query
@@ -204,7 +222,7 @@ public class LogSearchController {
 
     log.debug("serviceen meni: "+logEntryAdminType.getTimestamp().getTime().toString());
 */
-      log.debug("tässä olisi ollut admin-lokiin kirjoitus");
+     
       // the log entries list from the database
       List<LogEntryType> entryTypeList = entriestype.getLogEntry();
 
@@ -250,7 +268,11 @@ public class LogSearchController {
     } // TODO: Parempi virheenkäsittely
  catch (ServiceFault e) {
       // TODO Auto-generated catch block
-      e.printStackTrace();
+     // e.printStackTrace();
+   e.getFaultInfo().getCode();
+ //   }catch(javax.xml.ws.soap.SoapFaultException ee){
+ }catch(Exception ee){
+   log.error("jokin virhe servicesta");
     }
 
     return entryList;
