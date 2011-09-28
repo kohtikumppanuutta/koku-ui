@@ -249,7 +249,7 @@
  </binding>
  <service name='KokuKunpoAppointmentService'>
   <port binding='tns:KokuKunpoAppointmentServiceBinding' name='KokuKunpoAppointmentServicePort'>
-   <soap:address location='http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuKunpoAppointmentServiceImpl'/>
+   <soap:address location='http://127.0.0.1:8180/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuKunpoAppointmentServiceImpl'/>
   </port>
  </service>
 </definitions>
