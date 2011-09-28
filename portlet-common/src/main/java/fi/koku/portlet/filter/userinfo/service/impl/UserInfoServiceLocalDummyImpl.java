@@ -35,7 +35,17 @@ public class UserInfoServiceLocalDummyImpl implements UserInfoService {
       u.setPic("444444-4444");
       u.setFname("Ville");
       u.setSname("Virkailija");
-    } else {
+    } else if ("superadmin".equals(uid)){
+      u.setUid("superadmin");
+      u.setPic("310333-0303");
+      u.setFname("Sanna");
+      u.setSname("Superpaakayttaja");
+    } else if ("admin".equals(uid)){
+      u.setUid("admin");
+      u.setPic("170777-777X");
+      u.setFname("Pekka");
+      u.setSname("Paakayttaja");
+    }else{
       u = null;
     }
     return u;
