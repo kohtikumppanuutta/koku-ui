@@ -66,7 +66,7 @@ public class KksConverter {
 
     }
     if (generateEmptyEntries) {
-      tmp.generateEmptyEntries();
+      tmp.generateEmptyEntries(user);
     }
     return tmp;
   }

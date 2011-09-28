@@ -290,23 +290,23 @@ public class KKSCollection {
     return tmp;
   }
 
-  public void generateEmptyEntries() {
+  public void generateEmptyEntries(String user) {
     for (KksGroupType group : collectionClass.getKksGroups().getKksGroup()) {
 
-      checkAndInsertEntry(group);
+      checkAndInsertEntry(group, user);
 
       for (KksGroupType subGroup : group.getSubGroups().getKksGroup()) {
-        checkAndInsertEntry(subGroup);
+        checkAndInsertEntry(subGroup, user);
       }
 
     }
   }
 
-  private void checkAndInsertEntry(KksGroupType group) {
+  private void checkAndInsertEntry(KksGroupType group, String user) {
     for (KksEntryClassType ect : group.getKksEntryClasses().getKksEntryClass()) {
 
       if (!ect.isMultiValue() && !entries.containsKey("" + ect.getId())) {
-        addEntry(new Entry("", "", new Date(), "1", "", ect));
+        addEntry(new Entry("", "", new Date(), "1", user, ect));
       }
     }
   }

@@ -29,7 +29,6 @@ public class MainController {
   public String render(PortletSession session, RenderRequest req, Model model) {
     String kunpo = ((PortletConfig) req.getAttribute("javax.portlet.config")).getInitParameter("kunpo");
     if (Boolean.valueOf(kunpo)) {
-      System.out.println("************* KUNPO ************************");
       model.addAttribute("childs", getChilds(session));
       return "childs";
     } else {

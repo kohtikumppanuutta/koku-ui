@@ -197,6 +197,7 @@ public class KksService {
   public boolean updateKksCollection(KKSCollection collection, String customer, String user) {
     try {
       KksServicePortType kksService = getKksService();
+      collection.setCreator(user);
       kksService.opUpdateKksCollection(converter.toWsType(collection, customer), getKksAuditInfo(user));
     } catch (ServiceFault e) {
       e.printStackTrace();
