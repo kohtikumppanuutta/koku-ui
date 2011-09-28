@@ -17,17 +17,10 @@
 	<portlet:param name="action" value="guardianFamilyInformation" />
 </portlet:renderURL>
 
-<%--
-<portlet:renderURL var="home">
-    <portlet:param name="action" value="" />
-</portlet:renderURL>
---%>
-
 <div class="koku-pyh">
 <div class="portlet-section-body">
 
 <div class="pyh-temp">
-  <%-- <span> <a href="${home}"> Vaihda k‰ytt‰j‰‰</a> </span> --%>
   <span class="pyh-right"> <a href="${backURL}"> <spring:message code="ui.pyh.back"/></a> </span>
 </div>
 

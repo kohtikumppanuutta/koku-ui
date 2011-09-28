@@ -23,18 +23,13 @@ public class MessageController {
   @Autowired
   @Qualifier(value = "pyhDemoService")
   private PyhDemoService pyhDemoService;
-
-//  @Autowired
-//  @Qualifier(value = "pyhMessageService")
-//  private MessageService messageService;
   
   private boolean debug = true;
   
   /**
-   * TODO: call service to accept a request
+   * Call service to accept a request.
    */
   @ActionMapping(params = "action=acceptMessage")
-  //public void accept(@RequestParam String readerId, @RequestParam String messageId, ActionResponse response) {
   public void accept(@RequestParam String userPic, @RequestParam String messageId, ActionResponse response) {
     if (debug) {
       log.info("calling MessageController.accept() with parameters:");
@@ -43,19 +38,13 @@ public class MessageController {
     }
     
     pyhDemoService.acceptOrRejectMembershipRequest(messageId, userPic /*approver*/, "approved");
-      
-//    Message m = messageService.getMessage(messageId);
-//    m.accept(readerId);
-    
-    //response.setRenderParameter("action", "guardianFamilyInformation");
     response.setRenderParameter("action", "");
   }
 
   /**
-   * TODO: call service to reject a request
+   * Call service to reject a request.
    */
   @ActionMapping(params = "action=rejectMessage")
-  //public void reject(@RequestParam String messageId, ActionResponse response) {
   public void reject(@RequestParam String userPic, @RequestParam String messageId, ActionResponse response) {
     if (debug) {
       log.info("calling MessageController.reject() with parameters:");
@@ -64,11 +53,6 @@ public class MessageController {
     }
     
     pyhDemoService.acceptOrRejectMembershipRequest(messageId, userPic /*approver*/, "rejected");
-      
-//    Message m = messageService.getMessage(messageId);
-//    m.reject();
-    
-    //response.setRenderParameter("action", "guardianFamilyInformation");
     response.setRenderParameter("action", "");
   }
 

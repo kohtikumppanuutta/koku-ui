@@ -44,10 +44,6 @@ public class PyhDemoService {
   private static Logger log = LoggerFactory.getLogger(PyhDemoService.class);
   private List<Person> searchedUsers;
   
-//  @Autowired
-//  @Qualifier(value = "pyhMessageService")
-//  private MessageService messageService;
-  
   private CustomerServicePortType customerService;
   private CommunityServicePortType communityService;
   
@@ -101,7 +97,6 @@ public class PyhDemoService {
   /**
    * Returns user's dependants.
    */
-  //public List<Dependant> getDependants(String userPic) {
   public DependantsAndFamily getDependantsAndFamily(String userPic) {
     List<Dependant> dependants = new ArrayList<Dependant>();
     CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
@@ -181,8 +176,9 @@ public class PyhDemoService {
         }
       }
       dependantsAndFamily.setFamily(userFamily);
-      dependantsAndFamily.setDependants(dependants);
     }
+    
+    dependantsAndFamily.setDependants(dependants);
     
     if (debug) {
       Iterator<Dependant> it = dependants.iterator();
@@ -366,26 +362,6 @@ public class PyhDemoService {
       searchedUsers.clear();
     }
   }
-  
-  /**
-   * Adds a dependant into the user's family.
-   */
-  /*
-  public void addDependantAsFamilyMember(String dependantPic) {
-    // REMOVE COMMENTS, IF CONFIRMATION MESSAGES ARE NEED ALSO FOR DEPENDANT >
-    // FAMILY INSERTION
-    // List<String> tmp = generateRecipients(dependantPic, user, Role.CHILD);
-
-    // if (tmp.size() == 0) {
-    
-    insertDependantToFamily(userPic, dependantPic, CommunityRole.CHILD);
-    
-    // } else {
-    // sendDependantFamilyAdditionMessage(tmp, user,
-    // model.getPerson(dependantPic), Role.CHILD);
-    // }
-  }
-  */
   
   /**
    * Selects persons (PICs) to whom send the confirmation message for a operation, for example adding a dependant 
@@ -619,7 +595,6 @@ public class PyhDemoService {
    * Sends a new membership request for adding a parent into a family. 
    * 
    */
-  //private void sendParentAdditionMessage(String recipient, Person user, String pic, Person person, CommunityRole r) {
   private void sendParentAdditionMessage(String communityId, String memberToAddPic, String requesterPic, CommunityRole role) {
     if (debug) {
       log.info("calling sendParentAdditionMessage()");
@@ -634,22 +609,31 @@ public class PyhDemoService {
     communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
     communityAuditInfoType.setUserId(requesterPic); // requesterPic on kirjautunut käyttäjä
     
-    /* -- UNCOMMENT WHEN THE SERVICE IS IMPLEMENTED
+    // -- UNCOMMENT WHEN THE SERVICE IS IMPLEMENTED
     
     // lisätään henkilöt joilta vaaditaan pyynnön hyväksyntä
     MembershipApprovalType membershipApproval = new MembershipApprovalType();
     membershipApproval.setApproverPic(memberToAddPic); // lisättävän henkilön täytyy hyväksyä pyyntö
     membershipApproval.setStatus("new");
     
-    MembershipApprovalsType membershipApprovals = new MembershipApprovalsType();
-    // TODO: aseta membershipApproval MembershipApprovalsTypeen
+    MembershipApprovalsType membershipApprovalsType = new MembershipApprovalsType();
+    membershipApprovalsType.getApproval().add(membershipApproval);
+    
+    if (debug) {
+      log.info("listing approvals:");
+      Iterator<MembershipApprovalType> mi = membershipApprovalsType.getApproval().iterator();
+      while (mi.hasNext()) {
+        MembershipApprovalType approval = mi.next();
+        log.info("approval: " + approval.getApproverPic() + ", " + approval.getStatus());
+      }
+    }
     
     MembershipRequestType membershipRequest = new MembershipRequestType();
     membershipRequest.setCommunityId(communityId);
     membershipRequest.setMemberRole(role.getRoleID());
     membershipRequest.setMemberPic(memberToAddPic);
     membershipRequest.setRequesterPic(requesterPic);
-    membershipRequest.setApprovals(membershipApprovals);
+    membershipRequest.setApprovals(membershipApprovalsType);
     
     try {
       communityService.opAddMembershipRequest(membershipRequest, communityAuditInfoType);
@@ -657,14 +641,13 @@ public class PyhDemoService {
       log.error("PyhDemoService.sendParentAdditionMessage: opAddMembershipRequest raised a ServiceFault", fault);
     }
     
-    -- */
+    // -- */
     
   }
   
   /**
    * Sends a new membership request for adding a member (not parent) into a family.
    */
-  // private void sendFamilyAdditionMessage(List<String> recipients, Person user, String pic, Person person, CommunityRole r) {
   private void sendFamilyAdditionMessage(String communityId, List<String> recipients, String requesterPic, String memberToAddPic, CommunityRole role) {
     if (debug) {
       log.info("calling sendFamilyAdditionMessage()");
@@ -685,9 +668,9 @@ public class PyhDemoService {
     communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
     communityAuditInfoType.setUserId(requesterPic); // requesterPic on kirjautunut käyttäjä
     
-    /* -- UNCOMMENT WHEN THE SERVICE IS IMPLEMENTED
+    // -- UNCOMMENT WHEN THE SERVICE IS IMPLEMENTED
     
-    MembershipApprovalsType membershipApprovals = new MembershipApprovalsType();
+    MembershipApprovalsType membershipApprovalsType = new MembershipApprovalsType();
     
     Iterator<String> recipientsIterator = recipients.iterator();
     while (recipientsIterator.hasNext()) {
@@ -697,8 +680,16 @@ public class PyhDemoService {
       membershipApproval.setApproverPic(approverPic);
       membershipApproval.setStatus("new");
       
-      // TODO: aseta membershipApproval MembershipApprovalsTypeen
-      
+      membershipApprovalsType.getApproval().add(membershipApproval);
+    }
+    
+    if (debug) {
+      log.info("listing approvals:");
+      Iterator<MembershipApprovalType> mi = membershipApprovalsType.getApproval().iterator();
+      while (mi.hasNext()) {
+        MembershipApprovalType approval = mi.next();
+        log.info("approval: " + approval.getApproverPic() + ", " + approval.getStatus());
+      }
     }
     
     MembershipRequestType membershipRequest = new MembershipRequestType();
@@ -706,7 +697,7 @@ public class PyhDemoService {
     membershipRequest.setMemberRole(role.getRoleID());
     membershipRequest.setMemberPic(memberToAddPic);
     membershipRequest.setRequesterPic(requesterPic);
-    membershipRequest.setApprovals(membershipApprovals);
+    membershipRequest.setApprovals(membershipApprovalsType);
     
     try {
       communityService.opAddMembershipRequest(membershipRequest, communityAuditInfoType);
@@ -714,28 +705,9 @@ public class PyhDemoService {
       log.error("PyhDemoService.sendFamilyAdditionMessage: opAddMembershipRequest raised a ServiceFault", fault);
     }
     
-    -- */
+    // -- */
     
   }
-  
-  /**
-   * TODO: onko tarvetta lähettää huollettavalle hyväksymispyyntö?
-   */
-  /*
-  private void sendDependantFamilyAdditionMessage(List<String> recipients, Person user, Person person, CommunityRole r) {
-    if (debug) {
-      log.info("calling sendDependantFamilyAdditionMessage()");
-    }
-    
-    Message message = Message.createMessage(recipients, user.getPic(), person.getPic(), person.getCapFullName()
-        + " Uusi perheyhteystieto.", "Käyttäjä " + user.getFullName() + " on lisännyt henkilön " + person.getFullName()
-        + " perheyhteisön muuksi jäseneksi. "
-        + "Kaikkien opsapuolten on hyväksyttävä uuden jäsenen liittäminen perheyhteisöön.", new DependantExecutable(
-        user.getPic(), person.getPic(), r, this));
-    person.setRequestPending(true);
-    messageService.addMessage(message);
-  }
-  */
   
   /**
    * Inserts a new member into a family community.
@@ -950,11 +922,10 @@ public class PyhDemoService {
     communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
     communityAuditInfoType.setUserId(user.getPic());
     
-    /* -- UNCOMMENT WHEN THE SERVICE IS IMPLEMENTED
+    // -- UNCOMMENT WHEN THE SERVICE IS IMPLEMENTED
     
     MembershipRequestQueryCriteriaType membershipRequestQueryCriteria = new MembershipRequestQueryCriteriaType();
-    // muutos rajapinnassa:
-    // membershipRequestQueryCriteria.setApproverPic(userPic);
+    membershipRequestQueryCriteria.setApproverPic(user.getPic());
     MembershipRequestsType membershipRequestsType = null;
     
     try {
@@ -977,19 +948,12 @@ public class PyhDemoService {
       
       String messageText = "Uusi perheyhteystieto. Käyttäjä ... haluaa lisätä sinut/henkilön... perheyhteisönsä jäseneksi. " +
       "Hyväksymällä pyynnön lisääminen tapahtuu automaattisesti.";
-      Message message = Message.createMessage(messageId, senderPic, messageText);
+      Message message = new Message(messageId, senderPic, messageText);
       
       requestMessages.add(message);
     }
     
-    -- */
-    
-    // TODO: remove this test message --
-    String messageText = "Uusi perheyhteystieto. Käyttäjä ... haluaa lisätä sinut/henkilön... perheyhteisönsä jäseneksi. " +
-    "Hyväksymällä pyynnön lisääminen tapahtuu automaattisesti.";
-    Message message = Message.createMessage("1", "111111-1111", messageText);
-    requestMessages.add(message);
-    // --
+    // -- */
     
     return requestMessages;
   }
@@ -1009,7 +973,7 @@ public class PyhDemoService {
     communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
     communityAuditInfoType.setUserId(user.getPic());
     
-    /* -- UNCOMMENT WHEN THE SERVICE IS IMPLEMENTED
+    // -- UNCOMMENT WHEN THE SERVICE IS IMPLEMENTED
     
     MembershipRequestQueryCriteriaType membershipRequestQueryCriteria = new MembershipRequestQueryCriteriaType();
     membershipRequestQueryCriteria.setRequesterPic(user.getPic());
@@ -1046,17 +1010,11 @@ public class PyhDemoService {
         messageText = "Lähettämäsi perheyhteyspyyntö: lisättävän henkilön tietoja ei ole saatavilla.";
       }
       
-      Message message = Message.createMessage(messageId, senderPic, messageText);
+      Message message = new Message(messageId, senderPic, messageText);
       requestMessages.add(message);
     }
     
-    -- */
-    
-    // TODO: remove this test message --
-    String messageText = "Lähettämäsi perheyhteyspyyntö: lisää henkilö ... perheyhteisöösi odottaa hyväksyntää.";
-    Message message = Message.createMessage("2", "111111-1111", messageText);
-    requestMessages.add(message);
-    // --
+    // -- */
     
     return requestMessages;
   }
@@ -1074,7 +1032,7 @@ public class PyhDemoService {
       log.info("status: " + status);
     }
     
-    /* UNCOMMENT WHEN SERVICE IS IMPLEMENTED --
+    // UNCOMMENT WHEN SERVICE IS IMPLEMENTED --
     
     MembershipApprovalType membershipApproval = new MembershipApprovalType();
     membershipApproval.setApproverPic(approverPic);
@@ -1091,7 +1049,7 @@ public class PyhDemoService {
       log.error("PyhDemoService.acceptMembershipRequest: opUpdateMembershipApproval raised a ServiceFault", fault);
     }
     
-    -- */
+    // -- */
     
   }
   

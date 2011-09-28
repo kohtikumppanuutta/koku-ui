@@ -31,10 +31,6 @@ public class FamilyInformationController {
 
   private static Logger log = LoggerFactory.getLogger(FamilyInformationController.class);
 
-//  @Autowired
-//  @Qualifier(value = "pyhMessageService")
-//  private MessageService messageService;
-
   @Autowired
   @Qualifier(value = "pyhDemoService")
   private PyhDemoService pyhDemoService;
@@ -58,8 +54,6 @@ public class FamilyInformationController {
     model.addAttribute("user", user);
     model.addAttribute("dependants", daf.getDependants());
     model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers(userPic));
-//    model.addAttribute("messages", messageService.getMessagesFor(userPic));
-//    model.addAttribute("sentMessages", messageService.getSentMessages(userPic));
     model.addAttribute("messages", pyhDemoService.getMessagesFor(user));
     model.addAttribute("sentMessages", pyhDemoService.getSentMessages(user));
     return "familyinformation";

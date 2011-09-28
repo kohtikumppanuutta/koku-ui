@@ -25,6 +25,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import com.ixonos.koku.pyh.model.Dependant;
 import com.ixonos.koku.pyh.model.DependantsAndFamily;
+import com.ixonos.koku.pyh.model.Family;
 import com.ixonos.koku.pyh.model.Person;
 import com.ixonos.koku.pyh.util.CommunityRole;
 
@@ -47,10 +48,6 @@ public class EditFamilyInformationController {
   @Qualifier(value = "pyhDemoService")
   private PyhDemoService pyhDemoService;
 
-//  @Autowired
-//  @Qualifier(value = "pyhMessageService")
-//  private MessageService messageService;
-
   @RenderMapping(params = "action=editFamilyInformation")
   public String render(Model model, PortletSession session) {
     String userPic = "";
@@ -70,10 +67,16 @@ public class EditFamilyInformationController {
     model.addAttribute("dependants", daf.getDependants());
     model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers(userPic));
     model.addAttribute("parentsFull", pyhDemoService.isParentsSet(userPic));
-//    model.addAttribute("messages", messageService.getSentMessages(userPic));
     model.addAttribute("messages", pyhDemoService.getSentMessages(user));
     
-    String communityId = daf.getFamily().getCommunityId();
+    Family family = daf.getFamily();
+    String communityId = "";
+    if (family != null) {
+       communityId = family.getCommunityId();
+    }
+    
+    // TODO: mitä jos communityId:tä ei ole?
+    
     log.info("EditFamilyInformationController.render: put communityId in session: " + communityId);
     session.setAttribute("familyCommunityId", communityId);
     
@@ -100,7 +103,6 @@ public class EditFamilyInformationController {
     model.addAttribute("dependants", daf.getDependants());
     model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers(userPic));
     model.addAttribute("parentsFull", pyhDemoService.isParentsSet(userPic));
-//    model.addAttribute("messages", messageService.getSentMessages(userPic));
     model.addAttribute("messages", pyhDemoService.getSentMessages(user));
 
     return "editfamilyinformation";
@@ -124,7 +126,6 @@ public class EditFamilyInformationController {
     }
     
     pyhDemoService.insertDependantToFamily(userPic, dependantPic, CommunityRole.CHILD);
-
     response.setRenderParameter("action", "editFamilyInformation");
   }
 
@@ -141,7 +142,6 @@ public class EditFamilyInformationController {
     }
     
     pyhDemoService.removeFamilyMember(familyMemberPic, userPic);
-
     response.setRenderParameter("action", "editFamilyInformation");
   }
 
@@ -163,7 +163,6 @@ public class EditFamilyInformationController {
       }
     }
     pyhDemoService.removeFamilyMember(familyMemberPic, userPic);
-    
     response.setRenderParameter("action", "editFamilyInformation");
   }
   
@@ -187,7 +186,6 @@ public class EditFamilyInformationController {
     // users are returned as a model attribute object searchedUsers
     // TODO: what is the correct search criteria?
     pyhDemoService.searchUsers(fn, sn, pic, userPic /*customer id == user pic*/, userPic);
-
     response.setRenderParameter("action", "editFamilyInformationWithSearchResults");
   }
 
@@ -236,9 +234,7 @@ public class EditFamilyInformationController {
       }
     }
 
-    // call service to add users to family
     pyhDemoService.addPersonsAsFamilyMembers(personMap, userPic, communityId);
-
     response.setRenderParameter("action", "editFamilyInformation");
   }
 
