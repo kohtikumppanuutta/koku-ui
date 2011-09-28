@@ -1324,7 +1324,7 @@
 	
 	function searchWarrantsByTemplate() {
 		var keyword = jQuery("input#warrantTemplateName").val();
-		keyword += '|' + jQuery("input#warrantGroupFilter").val();
+// 		keyword += '|' + jQuery("input#warrantGroupFilter").val();
 		
 		var templateName = jQuery("input#warrantTemplateNameCitizen").val();
 		
@@ -1440,8 +1440,8 @@
 				<span class="text-bold" ><spring:message code="warrant.templateName" /></span>
 				<input type="text" name="warrantTemplateName" id="warrantTemplateName" style="width:160px;" autocomplete="off" onkeydown="beKeyDown(event)" onkeyup="beKeyUp(event)" onclick="createSuggestDiv('warrants-search-warrants', 'warrantTemplateName')" />
 				
-				<span class="text-bold" ><spring:message code="warrant.groupFilter" /></span>
-				<input type="text" name="warrantGroupFilter" id="warrantGroupFilter" style="width:100px;" />
+<%-- 				<span style="display: hidden;" class="text-bold" ><spring:message code="warrant.groupFilter" /></span> --%>
+<%-- 				<input style="display: hidden;" type="text" name="warrantGroupFilter" id="warrantGroupFilter" style="width:100px;" /> --%>
 				<input type="submit" value="<spring:message code="message.search"/>" />
 				<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
 			</form>
