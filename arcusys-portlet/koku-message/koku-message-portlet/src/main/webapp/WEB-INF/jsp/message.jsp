@@ -93,6 +93,7 @@
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.datepick.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.datepick-fi.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.jgrowl_minimized.js"></script>
 
 
 
@@ -124,7 +125,9 @@
 	 		jQuery('input#tipyRepliedTimeRangeFrom').datepick({showTrigger: '#calImg'});
 	 		jQuery('input#tipyRepliedTimeRangeTo').datepick({showTrigger: '#calImg'});
 	 	});
-	
+	 	
+	 	 jQuery.jGrowl.defaults.position = 'top-right';
+
 		
 		checkPageSession();
 		/* Ajax activity support call. Show the ajax loading icon */
@@ -1079,6 +1082,7 @@
 			var result = json["result"];
 			
 			if(result == 'OK') {
+				jQuery.jGrowl("<spring:message code="notification.archive.message"/>");
 				ajaxGetTasks();
 			}else {
 				var message = "<spring:message code="error.unLogin" />";
@@ -1110,6 +1114,7 @@
 			var result = json["result"];
 			
 			if(result == 'OK') {
+				jQuery.jGrowl("<spring:message code="notification.delete.message"/>");
 				ajaxGetTasks();
 			}else {
 				var message = "<spring:message code="error.unLogin" />";
@@ -1152,6 +1157,7 @@
 			var result = json["result"];
 			
 			if(result == 'OK') {
+				jQuery.jGrowl("<spring:message code="notification.canceled.appointment"/>");
 				ajaxGetTasks();
 			}else {
 				var message = "<spring:message code="error.unLogin" />";
@@ -1189,6 +1195,7 @@
 			var result = json["result"];
 			
 			if(result == 'OK') {
+				jQuery.jGrowl("<spring:message code="notification.revoke.consent"/>");
 				ajaxGetTasks();
 			}else {
 				var message = "<spring:message code="error.unLogin" />";
@@ -1236,6 +1243,7 @@
 			var result = json["result"];
 			
 			if (result == 'OK') {
+				jQuery.jGrowl("<spring:message code="notification.revoke.warrant"/>");
 				ajaxGetTasks();
 			} else {
 				var message = "<spring:message code="error.unLogin" />";
@@ -1380,7 +1388,6 @@
 		
 		pageObj.keyword = keyword;			
 		ajaxGetTasks();
-		
 		return false;	
 	}
 	

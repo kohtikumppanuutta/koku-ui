@@ -6,6 +6,10 @@
 		<portlet-name>kokuMessageService</portlet-name>
 		<header-content>
 			<link type="text/css" rel="stylesheet" href="/css/main.CSS" />
+			<link type="text/css" rel="stylesheet" href="/css/jquery.datepick.css" />
+			<link type="text/css" rel="stylesheet" href="/css/jquery.jgrowl.css" />			
+				
+<!-- 			Removed because jquery will cause conflict with navi jquery (plugins won't work) -->
 			<script type="text/javascript" src="/js/jquery-1.5.2.min.js" />
 			<script type="text/javascript" src="/js/main.js" />
 		</header-content>
