@@ -4,6 +4,7 @@
 
 <portlet:renderURL var="homeURL">
 	<portlet:param name="action" value="choose" />
+	<portlet:param name="user" value="${user}" />
 </portlet:renderURL>
 
 <div class="koku-lok">

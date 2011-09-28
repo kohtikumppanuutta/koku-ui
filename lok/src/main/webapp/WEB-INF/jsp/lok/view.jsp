@@ -94,7 +94,8 @@
 
 						<c:forEach var="e" items="${entries}">
 							<tr>
-								<td width=15%><c:out value="${e.timestamp}"/></td>
+						<td width=15%><fmt:formatDate pattern="dd.MM.yyyy hh:mm:ss" value="${e.timestamp}"/></td>
+							<%-- 	<td width=15%><c:out value="${e.timestamp}"/></td>--%>
 								<td width=15%><c:out value="${e.user}"/></td>
 								<td width=15%><c:out value="${e.operation}"/></td>
 								<td width=55%><c:out value="${e.message}"/>

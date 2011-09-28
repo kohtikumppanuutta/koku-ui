@@ -4,25 +4,36 @@
 
 <portlet:actionURL var="archiveActionURL">
 	<portlet:param name="action" value="archiveLog" />
-	<portlet:param name="visited" value="---" /> 
+	<portlet:param name="visited" value="---" />
+	<portlet:param name="user" value="${user}" />
+</portlet:actionURL>
+ <%--<portlet:param name="visited" value="---" />  --%>
+
+<portlet:actionURL var="changeActionURL">
+	<portlet:param name="action" value="archiveLog" />
+	<portlet:param name="change" value="change" />
+	<portlet:param name="visited" value="---" />
+	<portlet:param name="user" value="${user}" />
 </portlet:actionURL>
 
 <portlet:actionURL var="startArchiveActionURL">
 	<portlet:param name="action" value="startArchiveLog" />
+	<portlet:param name="user" value="${user}" />
 </portlet:actionURL>
 
 <portlet:renderURL var="homeURL">
 	<portlet:param name="action" value="choose" />
+	<portlet:param name="user" value="${user}" />
 </portlet:renderURL>
 
 <portlet:renderURL var="searchUserURL">
 	<portlet:param name="action" value="searchUser" />
+	<portlet:param name="user" value="${user}" />
 </portlet:renderURL>
 
 
 <div class="koku-lok">
 <div class="portlet-section-body">
-${endDate}
 	<div class="home">
 		<a href="${homeURL}"><spring:message code="koku.common.back" />
 		</a>
@@ -40,8 +51,7 @@ ${endDate}
 		</div>
 
 		<c:if test="${empty visited}">
-		empty visited
-		${endDate}
+		
 			<div class="log-archive">
 				<form:form name="logArchiveForm" commandName="logArchiveDate"
 					method="post" action="${archiveActionURL}">
@@ -61,9 +71,10 @@ ${endDate}
 				</form:form>			
 			</div>
 		</c:if>
-
+		
+<%-- confirm the date --%>
 		<c:if test="${not empty visited}">
-		not empty visited, ${endDate}
+	
 			<p>
 				<spring:message code="koku.lok.archive.confirmation" />
 				<fmt:formatDate pattern="dd.MM.yyyy" value="${archiveDateDate}"/>.
@@ -72,7 +83,7 @@ ${endDate}
 
 		<%--	<form:form name="changeArchiveDateForm" commandName="logArchiveDate" --%>
 		
-			<form:form method="post" action="${archiveActionURL}">
+			<form:form method="post" action="${changeActionURL}">
 			 	<input type="hidden" name="endDate" value="${endDate}" />
 				<input type="submit"
 					value="<spring:message code="koku.common.changeDate"/>">

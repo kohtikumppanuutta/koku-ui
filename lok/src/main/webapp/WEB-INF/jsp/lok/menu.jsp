@@ -3,7 +3,7 @@
 <portlet:renderURL var="archiveURL">
 	<portlet:param name="action" value="archiveLog" />
 	<portlet:param name="user" value="${user}" />
-	    <portlet:param name="useruid" value="${useruid}" />
+	<portlet:param name="useruid" value="${useruid}" />
 </portlet:renderURL>
 
 <portlet:renderURL var="searchUserURL">
