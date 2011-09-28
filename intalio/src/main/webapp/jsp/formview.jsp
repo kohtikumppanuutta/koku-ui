@@ -240,7 +240,7 @@
 	
 	<span>
 		<jsp:include page="/jsp/breadCrumb.jsp" />
-		<span style="display: inline">» ${formholder.name}</span>
+		<%-- <span style="display: inline">» ${formholder.name}</span> --%>
 	</span>
 
 </div>
