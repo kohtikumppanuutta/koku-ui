@@ -3,6 +3,9 @@
  */
 package fi.koku.portlet.filter.userinfo.service.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import fi.koku.portlet.filter.userinfo.UserInfo;
 import fi.koku.portlet.filter.userinfo.service.UserInfoService;
 
@@ -11,120 +14,46 @@ import fi.koku.portlet.filter.userinfo.service.UserInfoService;
  * 
  */
 public class UserInfoServiceLocalDummyImpl implements UserInfoService {
+  private Map<String, UserInfo> uidMap = new HashMap<String, UserInfo>();
+  private Map<String, UserInfo> picMap = new HashMap<String, UserInfo>();
 
-  public UserInfo getUserInfoById(String uid) {
-    UserInfo u = new UserInfo();
-
-   if ("kirsi.kuntalainen".equals(uid)) {
-    u.setUid("kirsi.kuntalainen");
-    u.setPic("222222-2222");
-    u.setFname("Kirsi");
-    u.setSname("Kuntalainen");
-  } else if ("kalle.kuntalainen".equals(uid)) {
-    u.setUid("kalle.kuntalainen");
-    u.setPic("111111-1111");
-    u.setFname("Kalle");
-    u.setSname("Kuntalainen");
-  } else if ("kaisa.kuntalainen".equals(uid)) {
-    u.setUid("kaisa.kuntalainen");
-    u.setPic("444444-4444");
-    u.setFname("Kaisa");
-    u.setSname("Kuntalainen");
-  } else if ("kauko.kuntalainen".equals(uid)) {
-    u.setUid("kauko.kuntalainen");
-    u.setPic("555555-5555");
-    u.setFname("Kauko");
-    u.setSname("Kuntalainen");
-  } else if ("keijo.keinonen".equals(uid)) {
-    u.setUid("keijo.keinonen");
-    u.setPic("131313-1313");
-    u.setFname("Keijo");
-    u.setSname("Kepuli");
-  } else if ("kerttu.kuntalainen".equals(uid)) {
-    u.setUid("kerttu.kuntalainen");
-    u.setPic("333333-3333");
-    u.setFname("Kerttu");
-    u.setSname("Kuntalainen");
-  } else if ("paivi.paivakoti".equals(uid)) {
-    u.setUid("paivi.paivakoti");
-    u.setPic("777777-7777");
-    u.setFname("Paivi");
-    u.setSname("Paivakoti");
-  } else if ("nelli.neuvola".equals(uid)) {
-    u.setUid("nelli.neuvola");
-    u.setPic("888888-8888");
-    u.setFname("Nelli");
-    u.setSname("Neuvola");
-  } else if ("veeti.virkamies".equals(uid)) {
-    u.setUid("veeti.virkamies");
-    u.setPic("999999-9999");
-    u.setFname("Veeti");
-    u.setSname("Virkamies");
-  } else if ("pertti.paakayttaja".equals(uid)) {
-    u.setUid("pertti.paakayttaja");
-    u.setPic("101010-1010");
-    u.setFname("Pertti");
-    u.setSname("Paakayttaja");
-  } else if ("piia.paakayttaja".equals(uid)) {
-    u.setUid("piia.paakayttaja");
-    u.setPic("121212-1212");
-    u.setFname("Piia");
-    u.setSname("Paakayttaja");
-  } else if ("liisa.lahtinen".equals(uid)) {
-    u.setUid("liisa.lahtinen");
-    u.setPic("141414-1414");
-    u.setFname("Liisa");
-    u.setSname("Lahtinen");
-  } else if ("sami.salminen".equals(uid)) {
-    u.setUid("sami.salminen");
-    u.setPic("151515-1515");
-    u.setFname("Sami");
-    u.setSname("Salminen");
-  } else if ("sanni.suhonen".equals(uid)) {
-    u.setUid("sanni.suhonen");
-    u.setPic("161616-1616");
-    u.setFname("Sanni");
-    u.setSname("Suhonen");
-  } else if ("sulo.simonen".equals(uid)) {
-    u.setUid("sulo.simonen");
-    u.setPic("171717-1717");
-    u.setFname("Sulo");
-    u.setSname("Simonen");
-    
-  //OLD USERS  
-  } else if ("isa".equals(uid)) {
-      u.setUid("isa");
-      u.setPic("111111-1111");
-      u.setFname("Isa");
-      u.setSname("Iisakkila");
-    } else if ("aiti".equals(uid)) {
-      u.setUid("aiti");
-      u.setPic("222222-2222");
-      u.setFname("Aiti");
-      u.setSname("Aitanen");
-    } else if ("mummo".equals(uid)) {
-      u.setUid("mummo");
-      u.setPic("333333-3333");
-      u.setFname("Mummo");
-      u.setSname("Mummolainen");
-    } else if ("virkailija".equals(uid)) {
-      u.setUid("virkailija");
-      u.setPic("444444-4444");
-      u.setFname("Ville");
-      u.setSname("Virkailija");
-    } else if ("superadmin".equals(uid)){
-      u.setUid("superadmin");
-      u.setPic("310333-0303");
-      u.setFname("Sanna");
-      u.setSname("Superpaakayttaja");
-    } else if ("admin".equals(uid)){
-      u.setUid("admin");
-      u.setPic("170777-777X");
-      u.setFname("Pekka");
-      u.setSname("Paakayttaja");
-    }else{
-      u = null;
+  public UserInfoServiceLocalDummyImpl() {
+    UserInfo[] users = new UserInfo[] {
+        //OLD USERS
+        new UserInfo("isa", "111111-1111", "Isa", "Iisakkila"),
+        new UserInfo("aiti", "222222-2222", "Aiti", "Aitanen"),
+        new UserInfo("mummo", "333333-3333", "Mummo", "Mummolainen"),
+        new UserInfo("virkailija", "444444-4444", "Ville", "Virkailija"),
+        new UserInfo("superadmin", "310333-0303", "Sanna", "Superpaakayttaja"),
+        new UserInfo("admin", "170777-777X", "Pekka", "Paakayttaja"),
+        //new users
+        new UserInfo("kirsi.kuntalainen", "222222-2222", "Kirsi", "Kuntalainen"),
+        new UserInfo("kalle.kuntalainen", "111111-1111", "Kalle", "Kuntalainen"),
+        new UserInfo("kaisa.kuntalainen", "444444-4444", "Kaisa", "Kuntalainen"),
+        new UserInfo("kauko.kuntalainen", "555555-5555", "Kauko", "Kuntalainen"),
+        new UserInfo("keijo.keinonen", "131313-1313", "Keijo", "Kepuli"),
+        new UserInfo("kerttu.kuntalainen", "333333-3333", "Kerttu", "Kuntalainen"),
+        new UserInfo("paivi.paivakoti", "777777-7777", "Paivi", "Paivakoti"),
+        new UserInfo("nelli.neuvola", "888888-8888", "Nelli", "Neuvola"),
+        new UserInfo("veeti.virkamies", "999999-9999", "Veeti", "Virkamies"),
+        new UserInfo("pertti.paakayttaja", "101010-1010", "Pertti", "Paakayttaja"),
+        new UserInfo("piia.paakayttaja", "121212-1212", "Piia", "Paakayttaja"),
+        new UserInfo("liisa.lahtinen", "141414-1414", "Liisa", "Lahtinen"),
+        new UserInfo("sami.salminen", "151515-1515", "Sami", "Salminen"),
+        new UserInfo("sanni.suhonen", "161616-1616", "Sanni", "Suhonen"),
+        new UserInfo("sulo.simonen", "171717-1717", "Sulo", "Simonen"),
+    };
+    for(int i=0; i<users.length; i++) {
+      uidMap.put(users[i].getUid(), users[i]);
+      picMap.put(users[i].getPic(), users[i]);
     }
-    return u;
+  }
+  
+  public UserInfo getUserInfoById(String uid) {
+    return uidMap.get(uid);
+  }
+  
+  public UserInfo getUserInfoByPic(String pic) {
+    return picMap.get(pic);
   }
 }

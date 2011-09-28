@@ -9,7 +9,6 @@ package fi.koku.portlet.filter.userinfo;
  *
  */
 public class UserInfo {
-
   public static final String KEY_USER_INFO = "fi.koku.userinfo";
   
   private String pic;
@@ -19,8 +18,15 @@ public class UserInfo {
   private String email;
   
   public UserInfo() {  
-    
   }
+  
+  public UserInfo(String uid, String pic, String fname, String sname) {
+    this.uid = uid;
+    this.pic = pic;
+    this.fname = fname;
+    this.sname = sname;
+  }
+
 
   public String getPic() {
     return pic;
