@@ -55,12 +55,13 @@ public class ChildController {
       @ModelAttribute(value = "creation") Creation creation, RenderResponse response, Model model) {
     LOG.info("show child");
 
+    String pic = Utils.getPicFromSession(session);
     model.addAttribute("child", child);
-    model.addAttribute("collections", kksService.getKksCollections(child.getPic(), Utils.getPicFromSession(session)));
-    model.addAttribute("creatables",
-        kksService.searchPersonCreatableCollections(child, Utils.getPicFromSession(session)));
+    model.addAttribute("collections", kksService.getKksCollections(child.getPic(), pic));
+    model.addAttribute("creatables", kksService.searchPersonCreatableCollections(child, pic));
 
     model.addAttribute("consents", kksService.getConsentRequests(child.getPic()));
+    model.addAttribute("registries", kksService.getAuthorizedRegistries(pic));
 
     creation.setName("");
     return "child";

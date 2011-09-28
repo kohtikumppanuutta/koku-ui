@@ -20,6 +20,8 @@ import fi.koku.kks.ui.common.KksConverter;
 import fi.koku.kks.ui.common.utils.CollectionComparator;
 import fi.koku.kks.ui.common.utils.Constants;
 import fi.koku.kks.ui.common.utils.SearchResult;
+import fi.koku.portlet.filter.userinfo.UserInfo;
+import fi.koku.portlet.filter.userinfo.service.impl.UserInfoServiceLocalDummyImpl;
 import fi.koku.services.entity.community.v1.CommunitiesType;
 import fi.koku.services.entity.community.v1.CommunityQueryCriteriaType;
 import fi.koku.services.entity.community.v1.CommunityServiceFactory;
@@ -46,6 +48,9 @@ import fi.koku.services.entity.kks.v1.KksServicePortType;
 import fi.koku.services.entity.kks.v1.KksTagNamesType;
 import fi.koku.services.entity.kks.v1.KksType;
 import fi.koku.services.entity.kks.v1.ServiceFault;
+import fi.koku.services.entity.userinfo.v1.UserInfoService;
+import fi.koku.services.entity.userinfo.v1.impl.UserInfoServiceDummyImpl;
+import fi.koku.services.entity.userinfo.v1.model.Registry;
 
 /**
  * Service demoa varten
@@ -63,11 +68,13 @@ public class KksService {
   private Map<String, KksCollectionClassType> collectionClasses;
   private KksConverter converter;
   private Map<String, List<ConsentRequest>> consents;
+  UserInfoServiceLocalDummyImpl userInfo;
 
   public KksService() {
     entryClasses = new HashMap<String, KksEntryClassType>();
     collectionClasses = new HashMap<String, KksCollectionClassType>();
     converter = new KksConverter(this);
+    userInfo = new UserInfoServiceLocalDummyImpl();
     initConsentReq();
   }
 
@@ -99,6 +106,16 @@ public class KksService {
     return a;
   }
 
+  public Map<String, Registry> getAuthorizedRegistries(String user) {
+    UserInfoService uis = new UserInfoServiceDummyImpl();
+    Map<String, Registry> tmp = new HashMap<String, Registry>();
+    List<Registry> register = uis.getUsersAuthorizedRegistries(user);
+    for (Registry r : register) {
+      tmp.put(r.getId(), r);
+    }
+    return tmp;
+  }
+
   private KksServicePortType getKksService() {
     KksServiceFactory kksServiceFactory = new KksServiceFactory(Constants.KKS_SERVICE_USER_ID,
         Constants.KKS_SERVICE_PASSWORD, Constants.ENDPOINT);
@@ -115,6 +132,24 @@ public class KksService {
     CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory(Constants.CUSTOMER_SERVICE_USER_ID,
         Constants.CUSTOMER_SERVICE_PASSWORD, Constants.ENDPOINT);
     return customerServiceFactory.getCustomerService();
+  }
+
+  public boolean hasAuthorizedData(KksCollectionClassType c, String user) {
+    Map<String, Registry> tmp = getAuthorizedRegistries(user);
+
+    for (KksGroupType g : c.getKksGroups().getKksGroup()) {
+      if (tmp.containsKey(g.getRegister())) {
+        return true;
+      }
+
+      for (KksGroupType sg : g.getSubGroups().getKksGroup()) {
+        if (tmp.containsKey(sg.getRegister())) {
+          return true;
+        }
+      }
+    }
+
+    return true;
   }
 
   public KksEntryClassType getEntryClassType(String id, String user) {
@@ -151,16 +186,23 @@ public class KksService {
       if (collections != null) {
 
         for (KksCollectionType kct : collections) {
-          tmp.add(converter.fromWsType(kct, false, user));
+
+          if (hasAuthorizedData(getCollectionClassType(kct.getCollectionClassId(), user), user)) {
+            tmp.add(converter.fromWsType(kct, false, user));
+          } else {
+            LOG.info("No rights to see collection type " + kct.getId());
+          }
+
         }
       }
       Collections.sort(tmp, new CollectionComparator());
 
       for (KKSCollection col : tmp) {
-        Person p = searchCustomer(col.getModifier(), user);
+        // FIXME: userinfo serviceen pitää päästä käsiksi
+        UserInfo u = null;// userInfo.getUserInfoByPic(col.getCreator());
 
-        if (p != null) {
-          col.setModifierFullName(p.getName());
+        if (u != null) {
+          col.setModifierFullName(u.getFname() + " " + u.getSname());
         }
 
       }
@@ -171,19 +213,19 @@ public class KksService {
     return tmp;
   }
 
-  public KKSCollection getKksCollection(String collectionId, String user) {
+  public KKSCollection getKksCollection(String collectionId, UserInfo info) {
     try {
       KksServicePortType kksService = getKksService();
-      KksCollectionType kks = kksService.opGetKksCollection(collectionId, getKksAuditInfo(user));
+      KksCollectionType kks = kksService.opGetKksCollection(collectionId, getKksAuditInfo(info.getPic()));
 
-      KKSCollection col = converter.fromWsType(kks, true, user);
+      KKSCollection col = converter.fromWsType(kks, true, info.getPic());
       for (List<Entry> lst : col.getMultiValueEntries().values()) {
 
         for (Entry e : lst) {
-          Person pe = searchCustomer(col.getModifier(), user);
-
-          if (pe != null) {
-            e.setModifierFullName(pe.getName());
+          // FIXME: userinfo serviceen pitää päästä käsiksi
+          UserInfo u = null;// userInfo.getUserInfoById(e.getRecorder());
+          if (u != null) {
+            e.setModifierFullName(u.getFname() + " " + u.getSname());
           }
         }
       }
@@ -200,19 +242,19 @@ public class KksService {
       collection.setCreator(user);
       kksService.opUpdateKksCollection(converter.toWsType(collection, customer), getKksAuditInfo(user));
     } catch (ServiceFault e) {
-      e.printStackTrace();
       LOG.error("Failed to update KKS collection " + collection.getId(), e);
       return false;
     }
     return true;
   }
 
-  public boolean updateKksCollectionStatus(String collectionId, String status, String user) {
+  public boolean updateKksCollectionStatus(String customer, String collectionId, String status, String user) {
     try {
       KksServicePortType kksService = getKksService();
       KksCollectionStateCriteriaType state = new KksCollectionStateCriteriaType();
       state.setCollectionId(collectionId);
       state.setState(status);
+      state.setCustomer(customer);
       kksService.opUpdateKksCollectionStatus(state, getKksAuditInfo(user));
     } catch (ServiceFault e) {
       LOG.error("Failed to update KKS collection status " + collectionId + " : " + status, e);
@@ -268,7 +310,37 @@ public class KksService {
       KksCollectionsType collections = kksService.opQueryKks(kksQueryCriteria, getKksAuditInfo(user));
 
       for (KksCollectionType type : collections.getKksCollection()) {
-        tmp.add(converter.fromWsType(type, false, user));
+        if (hasAuthorizedData(getCollectionClassType(type.getCollectionClassId(), user), user)) {
+          tmp.add(converter.fromWsType(type, false, user));
+        }
+      }
+
+      for (KKSCollection collection : tmp) {
+        List<Entry> entries = new ArrayList<Entry>(collection.getEntryValues());
+
+        if (!collection.getCreator().equals(user) && !isParent(user, customer)) {
+          collection.clearEntries();
+          Map<String, Registry> reg = getAuthorizedRegistries(user);
+          KksCollectionClassType cc = collection.getCollectionClass();
+
+          Map<String, KksGroupType> groups = new HashMap<String, KksGroupType>();
+
+          for (KksGroupType i : cc.getKksGroups().getKksGroup()) {
+            groups.put(i.getId(), i);
+
+            for (KksGroupType ii : i.getSubGroups().getKksGroup()) {
+              groups.put(ii.getId(), ii);
+            }
+          }
+          for (Entry e : entries) {
+            KksGroupType gt = groups.get(e.getType().getGroupId());
+
+            if (reg.containsKey(gt.getRegister())) {
+              collection.addEntry(e);
+            }
+          }
+        }
+
       }
 
     } catch (ServiceFault e) {
@@ -398,6 +470,17 @@ public class KksService {
     return childs;
   }
 
+  public boolean isParent(String user, String child) {
+    List<Person> tmp = getChilds(user);
+
+    for (Person p : tmp) {
+      if (p.getPic().equals(child)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public List<Person> searchPerson(Person target, String user) {
     List<Person> list = new ArrayList<Person>();
     try {
@@ -501,7 +584,6 @@ public class KksService {
 
   public void sendConsentRequest(String collectionId, String consentType, String customerId) {
 
-    System.out.println("CONSENT REQ");
     initConsentReq();
     ConsentRequest req = new ConsentRequest();
     req.setConsentType(consentType);
@@ -520,7 +602,6 @@ public class KksService {
 
   public Map<String, ConsentRequest> getConsentRequests(String customerId) {
 
-    System.out.println("CONSENT GET REQ");
     initConsentReq();
 
     if (!consents.containsKey(customerId)) {

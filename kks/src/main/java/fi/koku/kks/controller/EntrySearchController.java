@@ -53,6 +53,7 @@ public class EntrySearchController {
     model.addAttribute("child", child);
     model.addAttribute("collections", collections);
     model.addAttribute("description", description);
+    model.addAttribute("authorized", kksService.getAuthorizedRegistries(Utils.getPicFromSession(session)));
 
     return "search_result";
   }

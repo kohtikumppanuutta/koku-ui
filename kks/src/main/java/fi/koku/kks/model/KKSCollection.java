@@ -327,4 +327,11 @@ public class KKSCollection {
     this.modifierFullName = modifierFullName;
   }
 
+  public void clearEntries() {
+    entries.clear();
+  }
+
+  public void clearMultiEntries() {
+    multiValueEntries.clear();
+  }
 }

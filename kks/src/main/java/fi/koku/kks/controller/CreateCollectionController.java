@@ -89,7 +89,8 @@ public class CreateCollectionController {
   public void activate(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "collection") String collection, ActionResponse response, SessionStatus sessionStatus) {
 
-    kksService.updateKksCollectionStatus(collection, State.ACTIVE.toString(), Utils.getPicFromSession(session));
+    kksService.updateKksCollectionStatus(child.getPic(), collection, State.ACTIVE.toString(),
+        Utils.getPicFromSession(session));
     response.setRenderParameter("action", "showChild");
     response.setRenderParameter("pic", child.getPic());
     sessionStatus.setComplete();
@@ -99,7 +100,8 @@ public class CreateCollectionController {
   public void lock(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "collection") String collection, ActionResponse response, SessionStatus sessionStatus) {
 
-    kksService.updateKksCollectionStatus(collection, State.LOCKED.toString(), Utils.getPicFromSession(session));
+    kksService.updateKksCollectionStatus(child.getPic(), collection, State.LOCKED.toString(),
+        Utils.getPicFromSession(session));
 
     response.setRenderParameter("action", "showChild");
     response.setRenderParameter("pic", child.getPic());

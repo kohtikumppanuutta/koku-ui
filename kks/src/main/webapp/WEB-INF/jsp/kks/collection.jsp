@@ -118,7 +118,7 @@
                 action="${saveActionUrl}">
 
                 <c:forEach var="group" items="${collection.collectionClass.kksGroups.kksGroup }">
-
+					<c:if test="${not empty authorized[group.register] || master }">	
                     <c:if test="${not empty group.name}">
                         <h2 class="portlet-section-subheader"><c:out value="${group.name}"/></h2>
                     </c:if>
@@ -129,7 +129,7 @@
                     </c:if>
                     
                     <c:forEach var="childGroup" items='${group.subGroups.kksGroup}'>
-
+						<c:if test="${not empty authorized[childGroup.register] || master }"> 
                         <c:if test="${not empty childGroup.name}">
                             <h3 class="portlet-section-subheader"><c:out value="${childGroup.name}"/></h3>
                         </c:if>
@@ -244,8 +244,12 @@
                                         
                                     </c:if>
                                 </div>
+                  
                             </c:forEach>
+                  </c:if>
                     </c:forEach>
+                    
+                    </c:if>
                 </c:forEach>
 
                 <div class="kks-right">

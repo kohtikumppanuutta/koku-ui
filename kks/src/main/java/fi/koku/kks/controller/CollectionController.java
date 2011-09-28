@@ -45,8 +45,15 @@ public class CollectionController {
   public String show(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "collection") String collection, RenderResponse response, Model model) {
     LOG.info("show collection");
+
+    KKSCollection c = kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
+    boolean master = c.getCreator().equals(Utils.getPicFromSession(session))
+        || kksService.isParent(Utils.getPicFromSession(session), child.getPic());
     model.addAttribute("child", child);
-    model.addAttribute("collection", kksService.getKksCollection(collection, Utils.getPicFromSession(session)));
+    model.addAttribute("collection", c);
+    model.addAttribute("authorized", kksService.getAuthorizedRegistries(Utils.getPicFromSession(session)));
+    model.addAttribute("master", master);
+
     return "collection";
   }
 
@@ -88,7 +95,7 @@ public class CollectionController {
       @RequestParam(value = "pic") String pic) {
     LOG.debug("get command object");
 
-    KKSCollection k = kksService.getKksCollection(collection, Utils.getPicFromSession(session));
+    KKSCollection k = kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
 
     return k;
   }
@@ -139,7 +146,7 @@ public class CollectionController {
       @RequestParam(value = "valueId", required = false) String valueId, RenderResponse response, Model model) {
     LOG.info("show collection");
 
-    KKSCollection kok = kksService.getKksCollection(collection, Utils.getPicFromSession(session));
+    KKSCollection kok = kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
 
     KksEntryClassType t = kksService.getEntryClassType(entryType, Utils.getPicFromSession(session));
 
