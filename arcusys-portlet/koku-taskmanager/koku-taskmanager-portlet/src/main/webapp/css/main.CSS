@@ -199,3 +199,8 @@
 	background-color: #FFB6C1;
 	border: 1px solid #FF3333; /* table background color */
 }
+
+/* Intalio CSS hack in totally wrong place */
+div[label="IntalioInternal_AttachmentsImageBlock"] {
+    display: none !important;
+}

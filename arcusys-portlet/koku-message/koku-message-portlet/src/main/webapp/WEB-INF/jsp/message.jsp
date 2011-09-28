@@ -91,6 +91,11 @@
 
 </script>
 
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.datepick.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.datepick-fi.js"></script>
+
+
+
 <%-- <script type="text/javascript" src="<%=defaultPath%>/js/main.js" /> --%>
 <script type="text/javascript"> 
 /*
@@ -101,14 +106,6 @@
 	var configObj = new config();
 	var pageObj = new paging();
 	
-	/* Attach datepickers */
-// 	jQuery.datepick.setDefaults($.datepick.regional['fi']);
-// 	jQuery(function() {
-// 		jQuery('input#tipyCreatedTimeRangeFrom').datepick({onSelect: showDate});
-// 		jQuery('input#tipyCreatedTimeRangeTo').datepick({onSelect: showDate});
-// 		jQuery('input#tipyRepliedTimeRangeFrom').datepick({onSelect: showDate});
-// 		jQuery('input#tipyRepliedTimeRangeTo').datepick({onSelect: showDate});
-// 	});
 	
 	
 	function showDate(date) {
@@ -117,6 +114,18 @@
 	
 	jQuery(document).ready(function(){
 		<%-- % suggestUrl = "<%= suggestURL %>"; --%>
+		
+		/* Attach datepickers */
+		jQuery.datepick.setDefaults($.datepick.regional['fi']);
+		
+	 	jQuery(function() {
+	 		jQuery('input#tipyCreatedTimeRangeFrom').datepick({showTrigger: '#calImg'});
+	 		jQuery('input#tipyCreatedTimeRangeTo').datepick({showTrigger: '#calImg'});
+	 		jQuery('input#tipyRepliedTimeRangeFrom').datepick({showTrigger: '#calImg'});
+	 		jQuery('input#tipyRepliedTimeRangeTo').datepick({showTrigger: '#calImg'});
+	 	});
+	
+		
 		checkPageSession();
 		/* Ajax activity support call. Show the ajax loading icon */
 	    jQuery('#task-manager-operation-loading')
@@ -143,6 +152,9 @@
 	    });
 				
 	});
+		
+	
+
 
 	/**
 	 * Execute ajax query in Post way, and parse the Json format response, and
@@ -1452,31 +1464,36 @@
 			<form name="searchForm" onsubmit="searchAllConsents(); return false;">		
 			
 				<p class="searchTimeRange">
-					<span class="text-bold searchTitle" ><spring:message code="tipy.timeRange" /></span>
-					<input type="text" name="tipyCreatedTimeRangeFrom" id="tipyCreatedTimeRangeFrom" style="width:80px;" /> - 
-					<input type="text" name="tipyCreatedTimeRangeTo" id="tipyCreatedTimeRangeTo" style="width:80px;" />
+					<span class="text-bold searchTitle" ><spring:message code="tipy.timeRangeSend" /></span>
+					<input class="searchTime" type="text" name="tipyCreatedTimeRangeFrom" id="tipyCreatedTimeRangeFrom"  /> - 
+					<input class="searchTime" type="text" name="tipyCreatedTimeRangeTo" id="tipyCreatedTimeRangeTo" />
 					
-					<span class="text-bold searchTitle" ><spring:message code="tipy.timeRange" /></span>
-					<input type="text" name="tipyRepliedTimeRangeFrom" id="tipyRepliedTimeRangeFrom" style="width:80px;" /> - 
-					<input type="text" name="tipyRepliedTimeRangeTo" id="tipyRepliedTimeRangeTo" style="width:80px;" />
+					<span class="text-bold searchTitle" ><spring:message code="tipy.timeRangeReplied" /></span>
+					<input class="searchTime" type="text" name="tipyRepliedTimeRangeFrom" id="tipyRepliedTimeRangeFrom"  /> - 
+					<input class="searchTime" type="text" name="tipyRepliedTimeRangeTo" id="tipyRepliedTimeRangeTo" />
 				</p>
 				
 				<p class="searchMisc">
 					<span class="text-bold searchTitle"><spring:message code="tipy.targetPerson" /></span>
-					<input type="text" name="tipyTargetPerson" id="tipyTargetPerson" style="width:100px;" />
+					<input type="text" name="tipyTargetPerson" id="tipyTargetPerson" style="width:200px;" />
 					
 					<span class="text-bold searchTitle"><spring:message code="tipy.requester" /></span>
-					<input type="text" name="tipyRequester" id="tipyRequester" style="width:100px;" />
-					
+					<input type="text" name="tipyRequester" id="tipyRequester" style="width:200px;" />
+				</p>
+
+				<p class="searchMisc">					
 					<span class="text-bold searchTitle"><spring:message code="tipy.handOver" /></span>
-					<input type="text" name="tipyHandOver" id="tipyHandOver" style="width:100px;" />
-					
+					<input type="text" name="tipyHandOver" id="tipyHandOver" style="width:200px;" />
+
 					<span class="text-bold searchTitle"><spring:message code="tipy.information" /></span>
-					<input type="text" name="tipyInformation" id="tipyInformation" style="width:100px;" />
-					
+					<input type="text" name="tipyInformation" id="tipyInformation" style="width:200px;" />
+				</p>
+				<p class="searchMisc">
+
 					<span class="text-bold searchTitle"><spring:message code="tipy.freeTextSearch" /></span>
-					<input type="text" name="tipyFreeTextSearch" id="tipyFreeTextSearch" style="width:100px;" />
-					
+					<input type="text" name="tipyFreeTextSearch" id="tipyFreeTextSearch" style="width:200px;" />
+				</p>
+				<p class="searchMisc searchButtonArea">
 					<input type="submit" value="<spring:message code="message.search"/>" />
 					<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
 				</p>

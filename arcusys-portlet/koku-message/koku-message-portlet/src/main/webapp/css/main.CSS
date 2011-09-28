@@ -343,5 +343,17 @@ abbr.valueWithDesc:hover {
 }
 
 .basic-search p span.searchTitle {
-	padding-left: 5px;
-}	
+	display: inline-table;
+    padding-left: 5px;
+    width: 100px;
+}
+
+.basic-search p.searchTimeRange input.searchTime {
+	width: 90px;	
+}
+
+
+.basic-search p.searchButtonArea {
+	text-align: right;	
+	padding-top: 7px;
+}
