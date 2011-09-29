@@ -61,10 +61,12 @@
                 <td> 
                 <span class="actions">
                         <span class="pyh-link"> <c:choose>
+		                        <%--
 		                        <c:when test="${child.requestPending}">
 		                          //nothing at the moment
 		                          Odottaa hyv‰ksynt‰‰
 		                        </c:when>
+		                        --%>
                                 <c:when test="${child.memberOfUserFamily}">
                                    <span class="pyh-link"> 
                                          <portlet:actionURL var="removeFamilyMember">
@@ -115,7 +117,7 @@
         <c:forEach var="message" items="${messages}">            
             
             <div class="pyh-message">
-                ${message.text}  <spring:message code="ui.pyh.waiting.approval" />
+                ${message.text}  <%-- <spring:message code="ui.pyh.waiting.approval" /> --%>
             </div>
             
         </c:forEach>

@@ -115,7 +115,7 @@ public class PyhDemoService {
     try {
       communitiesType = communityService.opQueryCommunities(communityQueryCriteria, communityAuditInfoType);
     } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
-      log.error("PyhDemoService.getDependants: opQueryCommunities raised a ServiceFault", fault);
+      log.error("PyhDemoService.getDependantsAndFamily: opQueryCommunities raised a ServiceFault", fault);
     }
     
     if (communitiesType != null) {
@@ -136,7 +136,7 @@ public class PyhDemoService {
               dependants.add(new Dependant(customer));
             }
             catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
-              log.error("PyhDemoService.getDependants: opGetCustomer raised an ServiceFault", fault);
+              log.error("PyhDemoService.getDependantsAndFamily: opGetCustomer raised an ServiceFault", fault);
             }
           }
         }
@@ -150,11 +150,11 @@ public class PyhDemoService {
       userFamily = getFamily(userPic);
     } catch (FamilyNotFoundException fnfe) {
       userFamily = null;
-      log.error("getDependants(): caught FamilyNotFoundException: cannot set Dependant.memberOfUserFamily because userFamily is null!");
+      log.error("getDependantsAndFamily(): caught FamilyNotFoundException: cannot set Dependant.memberOfUserFamily because userFamily is null!");
       log.error(fnfe.getMessage());
     } catch (TooManyFamiliesException tmfe) {
       userFamily = null;
-      log.error("getDependants(): caught TooManyFamiliesException: cannot set Dependant.memberOfUserFamily because userFamily is null!");
+      log.error("getDependantsAndFamily(): caught TooManyFamiliesException: cannot set Dependant.memberOfUserFamily because userFamily is null!");
       log.error(tmfe.getMessage());
     }
     
@@ -182,7 +182,7 @@ public class PyhDemoService {
     
     if (debug) {
       Iterator<Dependant> it = dependants.iterator();
-      log.info("getDependants(), returning dependants:");
+      log.info("getDependantsAndFamily(), returning dependants:");
       while (it.hasNext()) {
         log.info("dep pic: " + it.next().getPic());
       }
@@ -554,7 +554,7 @@ public class PyhDemoService {
    * Creates a recipient list for confirmation request message for adding persons as family members.
    * Then the message sending method is called or if there are no recipients then persons are added immediately.
    */
-  public void addPersonsAsFamilyMembers(HashMap<String, String> personMap, String userPic, String communityId) {
+  public void addPersonsAsFamilyMembers(HashMap<String, String> personMap, String userPic, String communityId) throws FamilyNotFoundException {
     
     // personMap parameter contains (personPIC, role) pairs
     
@@ -566,6 +566,10 @@ public class PyhDemoService {
         String personPic = it.next();
         log.info("person pic: " + personPic);
       }
+    }
+    
+    if (communityId == null) {
+      throw new FamilyNotFoundException("PyhDemoService.addPersonsAsFamilyMembers: cannot add family members because family community does not exist!");
     }
     
     Set<String> keys = personMap.keySet();
@@ -795,7 +799,7 @@ public class PyhDemoService {
       
       try {
         communityService.opUpdateCommunity(family.getCommunity(), communityAuditInfoType);
-      } catch (ServiceFault fault) {
+      } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
         log.error("PyhDemoService.insertParentInto: opUpdateCommunity raised a ServiceFault", fault);
       }
       
@@ -814,6 +818,36 @@ public class PyhDemoService {
     if (combine != null) {
       removeFamily(combine, toFamilyPic); // toFamilyPic is current user's pic
     }
+  }
+  
+  public String addFamily(String userPic) {
+    if (debug) {
+      log.info("CALLING ADD FAMILY");
+    }
+    
+    fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
+    communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
+    communityAuditInfoType.setUserId(userPic);
+    
+    MemberType member = new MemberType();
+    member.setPic(userPic);
+    member.setRole(PyhConstants.ROLE_PARENT);
+    
+    MembersType members = new MembersType();
+    members.getMember().add(member);
+    
+    CommunityType community = new CommunityType();
+    community.setMembers(members);
+    community.setType(PyhConstants.COMMUNITY_TYPE_FAMILY);
+    
+    String communityId = null;
+    try {
+      communityId = communityService.opAddCommunity(community, communityAuditInfoType);
+    } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
+      log.error("PyhDemoService.addFamily: opAddCommunity raised a ServiceFault", fault);
+    }
+    
+    return communityId;
   }
   
   /**
@@ -912,11 +946,16 @@ public class PyhDemoService {
    * 
    */
   public List<Message> getMessagesFor(Person user) {
+    
+    List<Message> requestMessages = new ArrayList<Message>();
+    
+    if (user == null) {
+      return requestMessages;
+    }
+    
     if (debug) {
       log.info("calling getMessagesFor() with pic = " + user.getPic());
     }
-    
-    List<Message> requestMessages = new ArrayList<Message>();
     
     fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
     communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
@@ -934,23 +973,60 @@ public class PyhDemoService {
       log.error("PyhDemoService.getMessagesFor: opQueryMembershipRequests raised a ServiceFault", fault);
     }
     
-    List<MembershipRequestType> membershipRequests = membershipRequestsType.getMembershipRequest();
-    Iterator<MembershipRequestType> mrti = membershipRequests.iterator();
-    while (mrti.hasNext()) {
-      MembershipRequestType membershipRequest = mrti.next();
-      
-//      MembershipApprovalsType membershipApprovals = membershipRequest.getApprovals();
-//      membershipRequest.getCommunityId(); // TODO: onko tyyppi String?
-      String messageId = membershipRequest.getId();
-//      membershipRequest.getMemberPic(); // TODO: onko tyyppi String?
-//      membershipRequest.getMemberRole(); // TODO: onko tyyppi String?
-      String senderPic = (String) membershipRequest.getRequesterPic(); // TODO: onko tyyppi String?
-      
-      String messageText = "Uusi perheyhteystieto. Käyttäjä ... haluaa lisätä sinut/henkilön... perheyhteisönsä jäseneksi. " +
-      "Hyväksymällä pyynnön lisääminen tapahtuu automaattisesti.";
-      Message message = new Message(messageId, senderPic, messageText);
-      
-      requestMessages.add(message);
+    if (membershipRequestsType != null) {
+      List<MembershipRequestType> membershipRequests = membershipRequestsType.getMembershipRequest();
+      Iterator<MembershipRequestType> mrti = membershipRequests.iterator();
+      while (mrti.hasNext()) {
+        MembershipRequestType membershipRequest = mrti.next();
+        
+        String messageId = membershipRequest.getId();
+        String memberToAddPic = membershipRequest.getMemberPic();
+        String senderPic = membershipRequest.getRequesterPic();
+        
+        MembershipApprovalsType membershipApprovalsType = membershipRequest.getApprovals();
+        List<MembershipApprovalType> approvals = membershipApprovalsType.getApproval();
+        Iterator<MembershipApprovalType> ait = approvals.iterator();
+        String userApprovalStatus = "";
+        while (ait.hasNext()) {
+          MembershipApprovalType approval = ait.next();
+          String approverPic = approval.getApproverPic();
+          if (approverPic.equals(user.getPic())) {
+            userApprovalStatus = approval.getStatus();
+            break;
+          }
+        }
+        
+        if (userApprovalStatus.equals("new")) {
+          // TODO: etäkutsut pitää poistaa silmukasta
+          Person requestSender = getPerson(senderPic);
+          Person targetPerson = getPerson(memberToAddPic);
+          String senderName = "";
+          String targetName = "";
+          
+          if (requestSender != null) {
+            senderName = requestSender.getFullName();
+          } else {
+            senderName = senderPic;
+          }
+          
+          if (memberToAddPic.equals(user.getPic())) {
+            // if the target person is current user
+            targetName = "sinut";
+          } else {
+            if (targetPerson != null) {
+              targetName = "käyttäjän " + targetPerson.getFullName();
+            } else {
+              targetName = "käyttäjän " + memberToAddPic;
+            }
+          }
+          
+          String messageText = "Uusi perheyhteyspyyntö: käyttäjä " + senderName + " haluaa lisätä " + targetName + 
+            " perheyhteisönsä jäseneksi. " + "Hyväksymällä pyynnön lisääminen tapahtuu automaattisesti.";
+          
+          Message message = new Message(messageId, senderPic, messageText);
+          requestMessages.add(message);
+        }
+      }
     }
     
     // -- */
@@ -963,11 +1039,16 @@ public class PyhDemoService {
    * 
    */
   public List<Message> getSentMessages(Person user) {
+    
+    List<Message> requestMessages = new ArrayList<Message>();
+    
+    if (user == null) {
+      return requestMessages;
+    }
+    
     if (debug) {
       log.info("calling getSentMessages() with pic = " + user.getPic());
     }
-    
-    List<Message> requestMessages = new ArrayList<Message>();
     
     fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
     communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
@@ -985,33 +1066,31 @@ public class PyhDemoService {
       log.error("PyhDemoService.getSentMessages: opQueryMembershipRequests raised a ServiceFault", fault);
     }
     
-    List<MembershipRequestType> membershipRequests = membershipRequestsType.getMembershipRequest();
-    Iterator<MembershipRequestType> mrti = membershipRequests.iterator();
-    while (mrti.hasNext()) {
-      MembershipRequestType membershipRequest = mrti.next();
-      
-//      MembershipApprovalsType membershipApprovals = membershipRequest.getApprovals();
-//      membershipRequest.getCommunityId(); // TODO: onko tyyppi String?
-      String messageId = membershipRequest.getId();
-      String memberPic = (String) membershipRequest.getMemberPic(); // TODO: onko tyyppi String?
-      CommunityRole role = CommunityRole.createFromRoleID((String)membershipRequest.getMemberRole()); // TODO: onko tyyppi String?
-      String senderPic = (String) membershipRequest.getRequesterPic(); // TODO: onko tyyppi String?
-      
-      String messageText = "";
-      
-      // TODO: etäkutsu pitää poistaa silmukasta
-      Person member = getPerson(memberPic);
-      
-      if (member != null) {
-        String memberNameAndPic = member.getFullName() + " " + member.getPic();
-        messageText = "Lähettämäsi perheyhteyspyyntö: lisää " + role.toString() + memberNameAndPic + " perheyhteisöösi odottaa hyväksyntää.";
+    if (membershipRequestsType != null) {
+      List<MembershipRequestType> membershipRequests = membershipRequestsType.getMembershipRequest();
+      Iterator<MembershipRequestType> mrti = membershipRequests.iterator();
+      while (mrti.hasNext()) {
+        MembershipRequestType membershipRequest = mrti.next();
+        
+        String messageId = membershipRequest.getId();
+        String memberToAddPic = membershipRequest.getMemberPic();
+        String senderPic = membershipRequest.getRequesterPic();
+        
+        // TODO: etäkutsu pitää poistaa silmukasta
+        Person targetPerson = getPerson(memberToAddPic);
+        String targetName = "";
+        
+        if (targetPerson != null) {
+          targetName = "käyttäjä " + targetPerson.getFullName();
+        } else {
+          targetName = "käyttäjä " + memberToAddPic;
+        }
+        
+        String messageText = "Lähettämäsi perheyhteyspyyntö: lisää " + targetName + " perheyhteisöösi odottaa hyväksyntää.";
+        
+        Message message = new Message(messageId, senderPic, messageText);
+        requestMessages.add(message);
       }
-      else {
-        messageText = "Lähettämäsi perheyhteyspyyntö: lisättävän henkilön tietoja ei ole saatavilla.";
-      }
-      
-      Message message = new Message(messageId, senderPic, messageText);
-      requestMessages.add(message);
     }
     
     // -- */

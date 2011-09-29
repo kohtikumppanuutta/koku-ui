@@ -106,7 +106,7 @@
                         <input type="submit" class="portlet-form-button" value="<spring:message code="ui.pyh.deny" />"/>                        
                     </form:form>     
                     </span>  
-                                        
+                    
                     <span class="pyh-right"> 
                     <portlet:actionURL var="accept">
                             <portlet:param name="action" value="acceptMessage" />

@@ -22,6 +22,7 @@ public class PyhConstants {
   
   final public static String ROLE_DEPENDANT = "dependant";
   final public static String ROLE_GUARDIAN = "guardian";
+  final public static String ROLE_PARENT = "parent";
   
   final public static String COMPONENT_PYH = "PYH";
   

@@ -70,12 +70,12 @@ public class EditFamilyInformationController {
     model.addAttribute("messages", pyhDemoService.getSentMessages(user));
     
     Family family = daf.getFamily();
-    String communityId = "";
+    String communityId;
     if (family != null) {
        communityId = family.getCommunityId();
+    } else {
+      communityId = pyhDemoService.addFamily(userPic); // create a family community for user if does not exist
     }
-    
-    // TODO: mitä jos communityId:tä ei ole?
     
     log.info("EditFamilyInformationController.render: put communityId in session: " + communityId);
     session.setAttribute("familyCommunityId", communityId);
@@ -234,7 +234,13 @@ public class EditFamilyInformationController {
       }
     }
 
-    pyhDemoService.addPersonsAsFamilyMembers(personMap, userPic, communityId);
+    try {
+      pyhDemoService.addPersonsAsFamilyMembers(personMap, userPic, communityId);
+    } catch (FamilyNotFoundException fnfe) {
+      log.error("EditFamilyInformationController.addUsersToFamily() caught FamilyNotFoundException!");
+      log.error(fnfe.getMessage());
+    }
+    
     response.setRenderParameter("action", "editFamilyInformation");
   }
 
