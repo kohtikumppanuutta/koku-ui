@@ -158,7 +158,8 @@
 				<tr class="portlet-table-body th">
 					<th width="38%"><spring:message code="ui.pyh.table.name" /></th>
 					<th width="26%"><spring:message code="ui.pyh.table.pic" /></th>
-					<th width="10%"><spring:message code="ui.pyh.table.add" /></th>
+					<%-- hide text for checkbox column --%>
+					<th width="10%"> <%-- <spring:message code="ui.pyh.table.add" /> --%> </th>
 					<th width="26%"><spring:message code="ui.pyh.table.role" /></th>
 				</tr>
 
@@ -171,8 +172,12 @@
 							name="userPic_${userVar}" type="hidden" value="${user.pic}" />
 						</td>
 
-						<td><input name="addUserCheckbox_${userVar}"
-							value="${userVar}" type="checkbox" /></td>
+						<td>
+						<%-- hack: check box is hidden because at the moment we have only one search result by PIC --%>
+						<div style="visibility: hidden;">
+						<input name="addUserCheckbox_${userVar}" value="${userVar}" type="checkbox" />
+						</div>
+						</td>
 
 						<td><select id="user_role_${userVar}" class="syntmaika">
 								<option value="${ MEMBER }"><spring:message code="${MEMBER.bundleId}"/></option>
@@ -233,8 +238,12 @@
 
 	function doSubmitForm() {
 
+		<%--
 		var $checkboxes = $('input[name^="addUserCheckbox_"]').filter(
 				":checked");
+		--%>
+		<%-- select all checkboxes. *at the moment* we have only one search result and it must be selected always. --%>
+		var $checkboxes = $('input[name^="addUserCheckbox_"]');
 
 		$checkboxes.each(function() {
 			addUserToForm($(this).val());
