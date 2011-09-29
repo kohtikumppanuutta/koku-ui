@@ -6,13 +6,13 @@
 	<portlet:param name="action" value="viewLog" />
 	<portlet:param name="visited" value="---" />
 	<portlet:param name="user" value="${user}" />
-	 <portlet:param name="useruid" value="${useruid}" />
+	 <portlet:param name="userRole" value="${userRole}" />
 </portlet:actionURL>
 
 <portlet:renderURL var="homeURL">
     <portlet:param name="action" value="home" />
     <portlet:param name="user" value="${user}" />
-    <portlet:param name="useruid" value="${useruid}" />
+    <portlet:param name="userRole" value="${userRole}" />
 </portlet:renderURL>
 
 <div class="koku-lok">

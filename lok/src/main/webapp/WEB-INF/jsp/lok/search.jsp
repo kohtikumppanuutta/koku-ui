@@ -6,19 +6,19 @@
 	<portlet:param name="action" value="searchLog" />
 	<portlet:param name="visited" value="---" />
 	<portlet:param name="user" value="${user}" />
-	<portlet:param name="useruid" value="${useruid}" />
+	<portlet:param name="userRole" value="${userRole}" />
 </portlet:actionURL>
 
 <portlet:renderURL var="searchUserURL">
 	<portlet:param name="action" value="searchUser" />
 	<portlet:param name="user" value="${user}" />
-	    <portlet:param name="useruid" value="${useruid}" />
+	    <portlet:param name="userRole" value="${userRole}" />
 </portlet:renderURL>
 
 <portlet:renderURL var="archiveURL">
 	<portlet:param name="action" value="archiveLog" />
 	<portlet:param name="user" value="${user}" />
-	    <portlet:param name="useruid" value="${useruid}" />
+	    <portlet:param name="userRole" value="${userRole}" />
 </portlet:renderURL>
 
 

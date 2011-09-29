@@ -29,6 +29,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.koku.services.entity.userinfo.v1.UserInfoService;
+import fi.koku.services.entity.userinfo.v1.impl.UserInfoServiceDummyImpl;
+import fi.koku.services.entity.userinfo.v1.model.Role;
 import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;
 import fi.koku.services.utility.log.v1.LogEntryType;
@@ -45,37 +48,32 @@ import fi.koku.services.utility.log.v1.ServiceFault;
 @Controller(value = "logController")
 @RequestMapping(value = "VIEW")
 public class LogController {
-
   private static final Logger log = LoggerFactory.getLogger(LogSearchController.class);
-  LogUtils lu = new LogUtils();
+  private LogUtils lu = new LogUtils();
+  private UserInfoService userInfoService;
 
+  public LogController() {
+    userInfoService = new UserInfoServiceDummyImpl();
+  }
  
-  // start page
- // @RenderMapping
-//  public String render(RenderRequest req, Model model) {
  
   @RenderMapping
   public String render(PortletSession session,  Model model) {
     log.debug("Main Log controller");
     
-/*    String userPic = ""; // hard-coded pic for testing
+
+    model.addAttribute("user", LogUtils.getPicFromSession(session));
     
-    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
-    if (userInfo != null) {
-      userPic = userInfo.getPic();
-      log.info("Got PIC from session. userPic = " + userPic);
-      
-    } else {
-      // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
-      log.error("ERROR: UserInfo returns no PIC!");
+    // this is used for selecting which part of the page to show
+    for(Role r : userInfoService.getUsersRoles("lok", LogUtils.getPicFromSession(session))) {
+      log.debug(r.getId());
+      if(r.getId().startsWith("ROLE_LOG_")) { // FIXME
+        model.addAttribute("userRole", r.getId());
+        log.debug("added user role "+r.getId());
+        break;
+      }
     }
     
-    model.addAttribute("user", userPic);
-  */
-    model.addAttribute("user", lu.getPicFromSession(session));
-    // this is used for selecting which part of the page to show
-    model.addAttribute("useruid", lu.getUsernameFromSession(session));
- 
     
     return "menu";
   }

@@ -84,10 +84,10 @@ public class LogSearchController {
   @RenderMapping(params = "action=searchLog")
   public String render(RenderRequest req, @RequestParam(value = "visited", required = false) String visited,
       @ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, 
-      @RequestParam(value = "user") String user, @RequestParam(value = "useruid") String useruid,
+      @RequestParam(value = "user") String user, @RequestParam(value = "userRole") String userRole,
       RenderResponse res, Model model) {
 
-    log.info("action = searchLog");
+    log.info("render searchLog");
   log.debug("render user: "+user);
     // these are runtime constants, not given by the user!
       String startDateStr = lu.getDateString(1);
@@ -118,7 +118,7 @@ public class LogSearchController {
     
     model.addAttribute("pic", criteria.getPic());
     model.addAttribute("user", user);
-    model.addAttribute("useruid", useruid);
+    model.addAttribute("userRole", userRole);
     
     return "search";
   }
@@ -128,7 +128,7 @@ public class LogSearchController {
   @ActionMapping(params = "action=searchLog")
   public void doSearch(@ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria,  BindingResult result,
       @RequestParam(value = "visited") String visited, @RequestParam(value = "user") String user, 
-      @RequestParam(value = "useruid") String useruid, ActionResponse response) {
+      @RequestParam(value = "userRole") String userRole, ActionResponse response) {
 
     log.debug("action = searchLog");
 log.debug("user: "+user);
@@ -140,7 +140,7 @@ log.debug("user: "+user);
     response.setRenderParameter("logSearchCriteria", criteriaSerializer.getAsText(criteria));
     response.setRenderParameter("action", "searchLog");
     response.setRenderParameter("user", user);
-    response.setRenderParameter("useruid", useruid);
+    response.setRenderParameter("userRole", userRole);
   }
  
  

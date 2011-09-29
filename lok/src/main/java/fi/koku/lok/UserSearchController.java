@@ -50,52 +50,52 @@ public class UserSearchController {
  
  
   @RenderMapping(params = "action=home")
-  public String render(@RequestParam(value = "user") String user, @RequestParam(value = "useruid") String useruid, Model model){
+  public String render(@RequestParam(value = "user") String user, @RequestParam(value = "userRole") String userRole, Model model){
     log.debug("log search render phase, return main menu");
     model.addAttribute("search", false); //This means that search was NOT done
     model.addAttribute("user", user);
-    model.addAttribute("useruid", useruid);
+    model.addAttribute("userRole", userRole);
     
-    log.debug("main menu user: "+user+", uiseruid: "+useruid);
+    log.debug("main menu user: "+user+", uiseruid: "+userRole);
     
     return "menu";
   }
   
   @RenderMapping(params = "action=searchUser")
   public String renderSearch(RenderRequest req, Model model, @RequestParam(value = "user") String user,
-      @RequestParam(value = "useruid") String useruid){
+      @RequestParam(value = "userRole") String userRole){
     log.debug("log search render phase, return user search");
-    log.debug("user: "+user+", useruid: "+useruid);
+    log.debug("user: "+user+", userRole: "+userRole);
     
     model.addAttribute("search", false);//This means that search was NOT done
     model.addAttribute("user", user);
-    model.addAttribute("useruid", useruid);
+    model.addAttribute("userRole", userRole);
 
     return "usersearch";
   }
   
   @ActionMapping(params = "action=searchUserWithParams")
    public void searchUserWithParams(ActionResponse response, @RequestParam(value = "user") String user,
-       @RequestParam(value = "useruid") String useruid,
+       @RequestParam(value = "userRole") String userRole,
        @RequestParam(value = "pic", required = false) String pic, Model model){
 
   log.debug("log search user action phase with action=searchUserWithParams "+pic);
-  log.debug("got user "+user+", useruid "+useruid);
+  log.debug("got user "+user+", userRole "+userRole);
     //Form sending required to use ActionURL and now there parameters are send forward to render method
     response.setRenderParameter("pic", pic);
     response.setRenderParameter("action", "searchUserParams");
     response.setRenderParameter("user", user);
-    response.setRenderParameter("useruid", useruid);
+    response.setRenderParameter("userRole", userRole);
   }
   
   @RenderMapping(params = "action=searchUserParams")
   public String renderParams(@RequestParam(value = "pic", required = false) String pic,
-      @RequestParam(value = "user") String user, @RequestParam(value = "useruid") String useruid, RenderRequest req, RenderResponse res, Model model) {
+      @RequestParam(value = "user") String user, @RequestParam(value = "userRole") String userRole, RenderRequest req, RenderResponse res, Model model) {
        
    User customer = null;
    
     log.debug("log: search user with pic = "+pic);
-    log.debug("got user "+user+", useruid "+useruid);
+    log.debug("got user "+user+", userRole "+userRole);
     //TODO: poista tämä HAETAAN 4 kovakoodattua KÄYTTÄJÄÄ
    // model.addAttribute("searchedUsers", lokDemoService.findUsers(pic, null, fname, sname));
     try{
@@ -117,7 +117,7 @@ public class UserSearchController {
     
     model.addAttribute("search", true); // This means that search was done
     model.addAttribute("user", user);
-    model.addAttribute("useruid", useruid);
+    model.addAttribute("userRole", userRole);
     
     return "usersearch";
   }

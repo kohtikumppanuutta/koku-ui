@@ -83,7 +83,7 @@ public class LogViewController {
   @RenderMapping(params = "action=viewLog")
   public String render(RenderRequest req, 
       @RequestParam(value = "visited", required = false) String visited, @RequestParam(value = "user") String user,
-      @RequestParam(value = "useruid") String useruid,
+      @RequestParam(value = "userRole") String userRole,
       @ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, RenderResponse res, Model model) {
 
 
@@ -169,7 +169,7 @@ public class LogViewController {
     }
 
     model.addAttribute("user", user);
-    model.addAttribute("useruid", useruid);
+    model.addAttribute("userRole", userRole);
     
     return "view";
   }
@@ -180,7 +180,7 @@ public class LogViewController {
       BindingResult result,
       @RequestParam(value = "visited") String visited, 
       @RequestParam(value = "user") String user, 
-      @RequestParam(value = "useruid") String useruid, ActionResponse response) {
+      @RequestParam(value = "userRole") String userRole, ActionResponse response) {
 
     if (visited != null) {
       response.setRenderParameter("visited", visited);
@@ -202,7 +202,7 @@ public class LogViewController {
     }
     //    response.setRenderParameter("logSearchCriteria", criteriaSerializer.getAsText(criteria));
     response.setRenderParameter("user", user);
-    response.setRenderParameter("useruid", useruid);
+    response.setRenderParameter("userRole", userRole);
     response.setRenderParameter("action", "viewLog");
   }
 
