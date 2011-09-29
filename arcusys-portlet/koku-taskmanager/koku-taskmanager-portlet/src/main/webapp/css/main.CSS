@@ -75,13 +75,13 @@
 /* main table data cells */
 .task-manager-table td {
 	padding: 6px; /* cell padding */
-	border: 1px solid; /* cell spacing */
-	border-color: #CCCCCC; /* table background color */
-	text-align: center;
+	text-align: left;
 	word-wrap: break-word;
 	word-break: break-all;
 	overflow: hidden;
 	white-space: nowrap;
+	font-family: "Trebuchet MS",Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	font-size: 14px;
 }
 
 .task-manager-table td.left {
@@ -90,29 +90,19 @@
 
 /* main table header cells */
 .task-manager-table .trheader {
-	background-color: #666666; /* header color */
-	color: #FFFFFF; /* header font color */
-	vertical-align: top;
+/* 	background-color: #666666; /* header color */
+/* 	color: #FFFFFF; header font color */
+/* 	vertical-align: top;  */
+	
+	border-bottom: 1px solid #EFEFEF;
+    font-weight: bold;
+    vertical-align: top;
 }
 
-.task-manager-table .trheader td a:link {
-	text-decoration: underline;
-	color: #FFFFFF;
+.task-manager-table .trheader td a {
+	color: #666;
 }
 
-.task-manager-table .trheader td a:visited {
-	text-decoration: underline;
-	color: #FFFFFF;
-}
-
-.task-manager-table .trheader td a:hover {
-	text-decoration: underline;
-	color: #FFFF99;
-}
-
-.task-manager-table .trheader td a:active {
-	text-decoration: underline;
-}
 
 /* main table row color */
 .oddRow {

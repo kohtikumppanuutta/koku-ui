@@ -172,9 +172,9 @@
 			taskHtml += '<td><spring:message code="task.edit" /></td>';
 		</c:if>
 		/* process does not have state field */
-		if(pageObj.taskType != 'process') {
+		<%-- if(pageObj.taskType != 'process') {
 			taskHtml += '<td><a href="javascript:void(0)" onclick="orderTask(\'state\')"><spring:message code="task.state" /></a></td>';
-		}
+		} --%>
 		
 		taskHtml += '<td><a href="javascript:void(0)" onclick="orderTask(\'creationDate\')"><spring:message code="task.creationDate" /></a></td>'								
 				 + '</tr> ';
@@ -193,9 +193,9 @@
 				taskHtml += '<td><div><spring:message code="task.edit" /></div></td>';	
 			}
 			/* process does not have state field */
-			if(pageObj.taskType != 'process') {
+			<%--if(pageObj.taskType != 'process') {
 				taskHtml += '<td>' + getTaskState(tasks[i]["state"]) + '</td>';
-			}
+			} --%>
 			
 			taskHtml += '<td>' + tasks[i]["creationDate"] + '</td>' 
 					 + '</tr>';
@@ -255,9 +255,9 @@
 		<c:if test="<%= Boolean.valueOf(editable) %>">
 			taskHtml += '<td><spring:message code="task.edit" /></td>';
 		</c:if>
-		taskHtml += '<td><spring:message code="task.state" /></td>'
-				+ '<td><spring:message code="task.creationDate" /></td>'								
-				+ '</tr></table>';
+		<%-- taskHtml += '<td><spring:message code="task.state" /></td>' --%>
+		taskHtml += '<td><spring:message code="task.creationDate" /></td>'								
+				  + '</tr></table>';
 				
 		return taskHtml;
 	}
@@ -673,19 +673,19 @@
 		var orderType = pageObj.orderType;
 		var newOrderType;
 		
-		if(type == 'description') {
+		if (type == 'description') {
 			if(orderType == 'description_asc') {
 				newOrderType = 'description_desc';
 			}else {
 				newOrderType = 'description_asc';
 			}			
-		}else if(type == 'state') {
+		} else if(type == 'state') {
 			if(orderType == 'state_asc') {
 				newOrderType = 'state_desc';
 			}else {
 				newOrderType = 'state_asc';
 			}
-		}else if(type == 'creationDate') {
+		} else if(type == 'creationDate') {
 			if(orderType == 'creationDate_desc') {
 				newOrderType = 'creationDate_asc';
 			}else {
@@ -718,7 +718,7 @@
 				<c:if test="<%= Boolean.valueOf(editable) %>">
 					<td><spring:message code="task.edit" /></td>
 				</c:if>
-				<td><spring:message code="task.state" /></td>
+				<%-- <td><spring:message code="task.state" /></td> --%>
 				<td><spring:message code="task.creationDate" /></td>								
 			</tr> 
 		</table>
