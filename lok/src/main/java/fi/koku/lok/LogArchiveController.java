@@ -281,11 +281,6 @@ public class LogArchiveController {
    response.setRenderParameter("user", user);
  }
 
-    
-     // TODO: Parempi virheenkäsittely
- //  response.setRenderParameter("archiveDateStr", archiveSerializer.getAsText(logarchivedate));
- 
-   log.debug("asetetaan endDate "+archiveSerializer.getAsText(logarchivedate));
  
    response.setRenderParameter("endDate", archiveSerializer.getAsText(logarchivedate));
    response.setRenderParameter("action", "startArchiveLog");
@@ -317,7 +312,6 @@ public class LogArchiveController {
       if (logarchivedate != null) {
         date = logarchivedate.getEndDate() != null ? df.format(logarchivedate.getEndDate()) : "";
 
-  //      log.debug("getAsText: formatoitu archivedate: " + date);
       }
 
       return date;

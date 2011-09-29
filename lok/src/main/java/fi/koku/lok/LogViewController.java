@@ -81,10 +81,12 @@ public class LogViewController {
 
   // portlet render phase
   @RenderMapping(params = "action=viewLog")
-  public String render(RenderRequest req, @RequestParam(value = "visited", required = false) String visited,
+  public String render(RenderRequest req, 
+      @RequestParam(value = "visited", required = false) String visited, @RequestParam(value = "user") String user,
+      @RequestParam(value = "useruid") String useruid,
       @ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, RenderResponse res, Model model) {
 
-//    res.setTitle(resourceBundle.getMessage("koku.lok.header.view", null, req.getLocale()));
+
 /** TESTI 23.9.
     try {
       String startDateStr = lu.getDateString(1); // 1 year ago
@@ -129,8 +131,14 @@ public class LogViewController {
 
     return "view";
     */
-   
-    // default endtime is now
+  
+    // these are runtime constants, not given by the user!
+    String startDateStr = lu.getDateString(1);
+    String endDateStr = lu.getDateString(0);
+    model.addAttribute("startDate", startDateStr);
+    model.addAttribute("endDate", endDateStr);
+    
+ /*   // default endtime is now
     Calendar endtime = Calendar.getInstance();
     // default starttime is 1 year ago
     Calendar starttime = Calendar.getInstance();
@@ -140,36 +148,61 @@ public class LogViewController {
     model.addAttribute("startDate", startDateStr);
     String endDateStr = dateFormat.format(endtime.getTime());
     model.addAttribute("endDate", endDateStr);
-
+*/
     log.debug("modeliin lisätty startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
     
-    if (visited != null) {
     if (criteria != null) {
-      model.addAttribute("entries", getAdminLogEntries(criteria));
-      model.addAttribute("searchParams", criteria);
-      
-    
+      if (visited != null) {
+      //TODO: tähän kohtaan jokin virheenkäsittely?
+        // make the query to the admin log
+        model.addAttribute("entries", getAdminLogEntries(criteria, user));
+        
+        model.addAttribute("searchParams", criteria);
+        log.debug("criteria: " + criteria.getFrom() + ", " + criteria.getTo());
         model.addAttribute("visited", "---");
       }
       
-      log.debug("criteria: " + criteria.getFrom() + ", " + criteria.getTo());
+      model.addAttribute("logSearchCriteria", criteria);
+      
     } else {
       log.debug("criteria: null");
     }
 
+    model.addAttribute("user", user);
+    model.addAttribute("useruid", useruid);
+    
     return "view";
   }
 
   // portlet action phase
   @ActionMapping(params = "action=viewLog")
   public void doSearchArchive(@ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria,
-      @ModelAttribute(value = "visited") String visited, BindingResult result, ActionResponse response) {
+      BindingResult result,
+      @RequestParam(value = "visited") String visited, 
+      @RequestParam(value = "user") String user, 
+      @RequestParam(value = "useruid") String useruid, ActionResponse response) {
 
     if (visited != null) {
       response.setRenderParameter("visited", visited);
     }
 
-    response.setRenderParameter("logSearchCriteria", criteriaSerializer.getAsText(criteria));
+    log.debug("action criteria = "+criteria);
+ /*   if(criteria != null){
+      log.debug("from: "+criteria.getFrom().toString());
+      log.debug("to: "+criteria.getTo().toString());
+    }
+   */
+    // If something goes wrong in serializing the criteria, the portlet must not die
+    // and the portlet must not query the log service
+    try{
+      String[] logSearchCriteria = criteriaSerializer.getAsText(criteria);
+      response.setRenderParameter("logSearchCriteria", logSearchCriteria);
+    }catch(IllegalArgumentException e){
+      log.error("illegal argument");
+    }
+    //    response.setRenderParameter("logSearchCriteria", criteriaSerializer.getAsText(criteria));
+    response.setRenderParameter("user", user);
+    response.setRenderParameter("useruid", useruid);
     response.setRenderParameter("action", "viewLog");
   }
 
@@ -179,7 +212,7 @@ public class LogViewController {
    * @param criteria
    * @return
    */
-  private List<AdminLogEntry> getAdminLogEntries(LogSearchCriteria criteria) {
+  private List<AdminLogEntry> getAdminLogEntries(LogSearchCriteria criteria, String user) {
     List<AdminLogEntry> entryList = new ArrayList<AdminLogEntry>();
 
     try {
@@ -210,28 +243,24 @@ public class LogViewController {
       // "tapahtumatieto = hakuehdot"
 
       // Set the user information
-      //TODO: muutos!
-      //TODO: TÄMÄ ALKUUN?
+    
       // call to log database
       AuditInfoType audit = new AuditInfoType();
       audit.setComponent("lok"); //FIXME
-      audit.setUserId("090979-9999");  // FIXME
-/*     
-      // write this query to normal log
-      LogEntryType logEntryTypeWrite = new LogEntryType();
-      logEntryTypeWrite.setUserPic(audit.getUserId());
-      // LOK-4: "Tapahtumatietona hakuehdot"
-      logEntryTypeWrite.setMessage("start: "+dateFormat.format(criteriatype.getStartTime().getTime())+", end: "+dateFormat.format(criteriatype.getEndTime().getTime()));
-      logEntryTypeWrite.setTimestamp(Calendar.getInstance());
-      logEntryTypeWrite.setOperation("search");
-      logEntryTypeWrite.setClientSystemId("adminlog");
-      logEntryTypeWrite.setDataItemType("log");
-      logEntryTypeWrite.setDataItemId("dataitemid");
-      // call to lok service
-      logService.opLog(logEntryTypeWrite, audit);
-*/ 
+      audit.setUserId(user);  
+
       log.debug("criteriatype start: " + criteriatype.getStartTime() + "\n end: " + criteriatype.getEndTime());
+    if(criteriatype.getStartTime() == null || criteriatype.getEndTime() == null){
+      log.debug("null-arvoja kriteriassa");
+    }else{
+      // set the end time 1 day later so that everything added on the last day will be found
+      Calendar endday = criteriatype.getEndTime();
+      log.debug("endday "+endday.getTime());
     
+      endday.set(Calendar.DATE, endday.get(Calendar.DATE) +1);
+      log.debug("endday "+endday.getTime());
+      criteriatype.setEndTime(endday);
+      // call to lok service
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
 
       // get the log entries list from the database
@@ -249,18 +278,12 @@ public class LogViewController {
         logEntry.setUser(logEntryType.getUserPic());
         logEntry.setOperation(logEntryType.getOperation()); // read, write, ..
 
-        // "käsitelty tieto": all these together!
-        // kks, pyh, kunpo, ..
-//        logEntry.setClientSystemId(logEntryType.getClientSystemId());
+ 
         // pic of the child
         logEntry.setCustomer(logEntryType.getCustomerPic());
         // kks.vasu, kks.4v, ..
-//        logEntry.setDataItemType(logEntryType.getDataItemType());
-        // id given by the system that wrote the log
-//        logEntry.setLogId(logEntryType.getDataItemId());
-        
+
         // other info about the log entry
-        //TODO: this already has all the other fields inside it, should this be used???
         logEntry.setMessage(logEntryType.getMessage());
 
         entryList.add(logEntry);
@@ -268,7 +291,7 @@ public class LogViewController {
 
    // TODO: Parempi virheenkäsittely
   
-    
+    }
     } // TODO: Parempi virheenkäsittely
  catch (ServiceFault e) {
       // TODO Auto-generated catch block
@@ -306,8 +329,10 @@ public class LogViewController {
 
     public String[] getAsText(LogSearchCriteria c) {
       SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
+     // log.debug(c.getFrom()+", "+df.format(c.getFrom()));
       String[] text = new String[] { c.getFrom() != null ? df.format(c.getFrom()) : "",
           c.getTo() != null ? df.format(c.getTo()) : "" };
+    
       return text;
     }
 
@@ -318,6 +343,7 @@ public class LogViewController {
         if (ArrayUtils.isNotEmpty(text)) {
           if (StringUtils.isNotBlank(text[0])) {
             d1 = df.parse(text[0]);
+            log.debug("d1 = "+d1);
           }
 
           if (StringUtils.isNotBlank(text[1])) {

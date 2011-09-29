@@ -100,15 +100,12 @@ public class LogSearchController {
       if (visited != null) { // page has been visited
 
         if (LogConstants.REAL_LOG) {
-          //TODO: poista tämä. Virheviestin testausta varten.
-          //model.addAttribute("entries", new ArrayList<LogEntry>());
-
+//TODO: tähän kohtaan jokin virheenkäsittely?
           model.addAttribute("entries", getLogEntries(criteria, user));
         } else { //TODO: poista tämä!
           model.addAttribute("entries", getDemoLogEntries(criteria));
         }
         model.addAttribute("searchParams", criteria);
-
         model.addAttribute("visited", "---");
       }
       log.info("criteria: " + criteria.getPic() + ", " + criteria.getConcept() + ", " + criteria.getFrom() + ", "
@@ -163,8 +160,7 @@ log.debug("user: "+user);
       criteriatype.setCustomerPic(searchCriteria.getPic());
       log.debug("searchcriteria: from="+searchCriteria.getFrom()+", to="+searchCriteria.getTo());
       
-      // the user does not have to give the dates so these might be null!
-     //TODO!!! TÄHÄN PITÄÄ SAADA JOKIN TOIMIVA VIRHEENKÄSITTELY!
+      //The from and to fields are not allowed to be null
       Calendar start = lu.dateToCalendar(searchCriteria.getFrom());     
       Calendar end = lu.dateToCalendar(searchCriteria.getTo());
 //TODO: end-aikaan pitäisi lisätä 1 vuorokausi!
@@ -325,6 +321,7 @@ log.debug("user: "+user);
 
       SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
 
+	  log.debug("getAsText from: "+c.getFrom());
       if (c != null) {
         text = new String[] { c.getPic(), c.getConcept(), c.getFrom() != null ? df.format(c.getFrom()) : "",
             c.getTo() != null ? df.format(c.getTo()) : "" };

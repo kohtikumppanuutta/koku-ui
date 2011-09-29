@@ -5,10 +5,14 @@
 <portlet:actionURL var="viewActionURL">
 	<portlet:param name="action" value="viewLog" />
 	<portlet:param name="visited" value="---" />
+	<portlet:param name="user" value="${user}" />
+	 <portlet:param name="useruid" value="${useruid}" />
 </portlet:actionURL>
 
 <portlet:renderURL var="homeURL">
     <portlet:param name="action" value="home" />
+    <portlet:param name="user" value="${user}" />
+    <portlet:param name="useruid" value="${useruid}" />
 </portlet:renderURL>
 
 <div class="koku-lok">
@@ -39,13 +43,13 @@
 					<span class="form-field-label"><spring:message
 							code="koku.common.startTime" /> </span>
 					<form:input path="from"
-						value="${startDate}" />
+						value="${startDate}" maxlength="10" size="10" />
 					<span class="errors"><form:errors path="from" />
 					</span>
 
 					<span class="form-field-label"><spring:message
 							code="koku.common.endTime" /> </span>
-					<form:input path="to" value="${endDate}" />
+					<form:input path="to" value="${endDate}" maxlength="10" size="10" />
 					<span class="errors"><form:errors path="to" />
 					</span>
 
