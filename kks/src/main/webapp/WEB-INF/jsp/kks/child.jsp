@@ -82,7 +82,7 @@
 						</portlet:renderURL>">
 										<strong>${ collection.name }</strong> </a> </span></td>
 							<td>${ collection.modifierFullName } <fmt:formatDate
-									pattern="hh:mm:ss dd/MM/yyyy" value="${collection.creationTime}" />
+									pattern="HH:mm:ss dd/MM/yyyy" value="${collection.creationTime}" />
 							</td>
 
 							<c:if test="${ sessionScope.ammattilainen }">
@@ -121,8 +121,8 @@
 					                                <input type="hidden" id="collectionId" name="collectionId" value="${ collection.id }"/>
 					                                <input type="hidden" id="consent" name="consent" value="${ collection.collectionClass.consessionType }"/>
 					                                
-					                                <span class="kks-right">
-					                                <input type="submit" class="portlet-form-button" value="<spring:message code="ui.kks.consent.send"/>">
+					                                <span>
+					                                	<input type="submit" class="portlet-form-button" value="<spring:message code="ui.kks.consent.send"/>">
 					                                </span>
 					
 					                        </form:form>

@@ -149,7 +149,7 @@ public class KksService {
       }
     }
 
-    return true;
+    return false;
   }
 
   public KksEntryClassType getEntryClassType(String id, String user) {
@@ -173,6 +173,7 @@ public class KksService {
 
   public List<KKSCollection> getKksCollections(String pic, String user) {
     List<KKSCollection> tmp = new ArrayList<KKSCollection>();
+    List<KKSCollection> authorized = new ArrayList<KKSCollection>();
     try {
 
       KksCollectionsCriteriaType criteria = new KksCollectionsCriteriaType();
@@ -186,31 +187,28 @@ public class KksService {
       if (collections != null) {
 
         for (KksCollectionType kct : collections) {
+          tmp.add(converter.fromWsType(kct, false, user));
+        }
+      }
 
-          if (hasAuthorizedData(getCollectionClassType(kct.getCollectionClassId(), user), user)) {
-            tmp.add(converter.fromWsType(kct, false, user));
-          } else {
-            LOG.info("No rights to see collection type " + kct.getId());
+      for (KKSCollection c : tmp) {
+        if (isMaster(pic, user, c) || hasAuthorizedData(c.getCollectionClass(), user)) {
+          authorized.add(c);
+
+          UserInfo u = userInfo.getUserInfoByPic(c.getCreator());
+
+          if (u != null) {
+            c.setModifierFullName(u.getFname() + " " + u.getSname());
           }
-
         }
       }
-      Collections.sort(tmp, new CollectionComparator());
+      Collections.sort(authorized, new CollectionComparator());
 
-      for (KKSCollection col : tmp) {
-        // FIXME: userinfo serviceen pitää päästä käsiksi
-        UserInfo u = null;// userInfo.getUserInfoByPic(col.getCreator());
-
-        if (u != null) {
-          col.setModifierFullName(u.getFname() + " " + u.getSname());
-        }
-
-      }
     } catch (ServiceFault e) {
       LOG.error("Failed to get KKS collections", e);
     }
 
-    return tmp;
+    return authorized;
   }
 
   public KKSCollection getKksCollection(String collectionId, UserInfo info) {
@@ -222,8 +220,7 @@ public class KksService {
       for (List<Entry> lst : col.getMultiValueEntries().values()) {
 
         for (Entry e : lst) {
-          // FIXME: userinfo serviceen pitää päästä käsiksi
-          UserInfo u = null;// userInfo.getUserInfoById(e.getRecorder());
+          UserInfo u = userInfo.getUserInfoByPic(e.getRecorder());
           if (u != null) {
             e.setModifierFullName(u.getFname() + " " + u.getSname());
           }
@@ -299,7 +296,7 @@ public class KksService {
 
   public List<KKSCollection> searchKksCollections(List<String> tagNames, String customer, String user) {
     List<KKSCollection> tmp = new ArrayList<KKSCollection>();
-
+    List<KKSCollection> authorized = new ArrayList<KKSCollection>();
     try {
       KksQueryCriteriaType kksQueryCriteria = new KksQueryCriteriaType();
       kksQueryCriteria.setPic(customer);
@@ -310,43 +307,48 @@ public class KksService {
       KksCollectionsType collections = kksService.opQueryKks(kksQueryCriteria, getKksAuditInfo(user));
 
       for (KksCollectionType type : collections.getKksCollection()) {
-        if (hasAuthorizedData(getCollectionClassType(type.getCollectionClassId(), user), user)) {
-          tmp.add(converter.fromWsType(type, false, user));
-        }
+        tmp.add(converter.fromWsType(type, false, user));
       }
 
       for (KKSCollection collection : tmp) {
         List<Entry> entries = new ArrayList<Entry>(collection.getEntryValues());
 
-        if (!collection.getCreator().equals(user) && !isParent(user, customer)) {
-          collection.clearEntries();
-          Map<String, Registry> reg = getAuthorizedRegistries(user);
-          KksCollectionClassType cc = collection.getCollectionClass();
+        if (isMaster(customer, user, collection) || hasAuthorizedData(collection.getCollectionClass(), user)) {
+          authorized.add(collection);
 
-          Map<String, KksGroupType> groups = new HashMap<String, KksGroupType>();
+          if (!isMaster(customer, user, collection)) {
+            collection.clearEntries();
+            Map<String, Registry> reg = getAuthorizedRegistries(user);
+            KksCollectionClassType cc = collection.getCollectionClass();
 
-          for (KksGroupType i : cc.getKksGroups().getKksGroup()) {
-            groups.put(i.getId(), i);
+            Map<String, KksGroupType> groups = new HashMap<String, KksGroupType>();
 
-            for (KksGroupType ii : i.getSubGroups().getKksGroup()) {
-              groups.put(ii.getId(), ii);
+            for (KksGroupType i : cc.getKksGroups().getKksGroup()) {
+              groups.put(i.getId(), i);
+
+              for (KksGroupType ii : i.getSubGroups().getKksGroup()) {
+                groups.put(ii.getId(), ii);
+              }
             }
-          }
-          for (Entry e : entries) {
-            KksGroupType gt = groups.get(e.getType().getGroupId());
+            for (Entry e : entries) {
+              KksGroupType gt = groups.get(e.getType().getGroupId());
 
-            if (reg.containsKey(gt.getRegister())) {
-              collection.addEntry(e);
+              if (reg.containsKey(gt.getRegister())) {
+                collection.addEntry(e);
+              }
             }
           }
         }
-
       }
 
     } catch (ServiceFault e) {
       LOG.error("Failed to search KKS collections", e);
     }
-    return tmp;
+    return authorized;
+  }
+
+  private boolean isMaster(String customer, String user, KKSCollection collection) {
+    return collection.getCreator().equals(user) || isParent(user, customer);
   }
 
   public String addKksEntry(String collectionId, String customer, String entryId, String entryClassId, String valueId,
