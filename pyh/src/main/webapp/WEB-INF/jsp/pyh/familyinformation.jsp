@@ -49,14 +49,7 @@
             <tr>
                 <td> ${child.fullName} </td>
                 <td> ${child.pic} </td>
-                <td> <spring:message code="${dp.bundleId}"/> 
-                    <c:if test="${child.memberOfUserFamily}">
-                     (<spring:message code="ui.pyh.added.into.family" />)
-                    </c:if>   
-                    <c:if test="${!child.memberOfUserFamily}">
-                     (<spring:message code="ui.pyh.not.added.into.family" />)
-                    </c:if>               
-                </td>
+                <td><spring:message code="${dp.bundleId}"/><c:if test="${child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.added.into.family" /></c:if><c:if test="${!child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.not.added.into.family" /></c:if></td>
             </tr>
             </c:forEach>
             
