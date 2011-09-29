@@ -328,7 +328,7 @@ public class PyhDemoService {
       while (ci.hasNext()) {
         CustomerType customer = ci.next();
         // filter out user's dependants from search results
-        if (!depPics.contains(customer.getHenkiloTunnus())) {
+        if (!depPics.contains(customer.getHenkiloTunnus()) && !currentUserPic.equals(customer.getHenkiloTunnus())) {
           searchedUsers.add(new Person(customer));
         }
       }
