@@ -82,7 +82,7 @@
 						</portlet:renderURL>">
 										<strong>${ collection.name }</strong> </a> </span></td>
 							<td>${ collection.modifierFullName } <fmt:formatDate
-									pattern="HH:mm:ss dd/MM/yyyy" value="${collection.creationTime}" />
+									pattern="HH:mm:ss dd.MM.yyyy" value="${collection.creationTime}" />
 							</td>
 
 							<c:if test="${ sessionScope.ammattilainen }">

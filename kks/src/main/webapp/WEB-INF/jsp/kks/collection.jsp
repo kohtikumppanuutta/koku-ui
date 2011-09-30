@@ -204,7 +204,7 @@
 	                                                                    </span> 
 	                                                                    </span>
 	                                                                    <div class="portlet-section-text">
-	                                                                     <span class="kks-commenter">${multivalue.modifierFullName} <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${multivalue.creationTime}"/>
+	                                                                     <span class="kks-commenter">${multivalue.modifierFullName} <fmt:formatDate type="both" pattern="dd.MM.yyyy HH:mm:ss" value="${multivalue.creationTime}"/>
 	                                                                        </span> 
 	                                                                    </div>
                                                                     </div>

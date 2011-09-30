@@ -28,7 +28,6 @@ public class KKSCollection {
   private CollectionState state;
   private Date creationTime;
   private int version;
-  private List<Classification> classifications;
   private Map<String, Entry> entries;
   private Map<String, List<Entry>> multiValueEntries;
   private String nextVersion;
@@ -129,14 +128,6 @@ public class KKSCollection {
 
   public void setVersion(int version) {
     this.version = version;
-  }
-
-  public List<Classification> getClassifications() {
-    return classifications;
-  }
-
-  public void setClassifications(List<Classification> classifications) {
-    this.classifications = classifications;
   }
 
   public KksCollectionClassType getCollectionClass() {

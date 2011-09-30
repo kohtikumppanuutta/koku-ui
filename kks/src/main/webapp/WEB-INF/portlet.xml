@@ -17,7 +17,7 @@
 		</portlet-info>
 	    <init-param>
 	      <name>kunpo</name>
-	      <value>false</value>
+	      <value>true</value>
 	    </init-param>
 		
 	</portlet>
