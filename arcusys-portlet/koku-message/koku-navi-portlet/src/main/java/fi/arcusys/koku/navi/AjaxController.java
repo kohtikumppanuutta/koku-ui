@@ -53,7 +53,7 @@ public class AjaxController extends AbstractController {
 			}
 		} catch (Exception e) {
 			//LOGGER.error(e.getMessage(), e);
-			LOGGER.error(e);
+			LOGGER.error("Error while trying to resolve userId. See following error msg: ", e);
 		}
 		JSONObject jsonModel = getJsonModel(userId);
 		modelmap.addAttribute("response", jsonModel);
