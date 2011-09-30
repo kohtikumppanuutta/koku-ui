@@ -322,7 +322,8 @@
 						<li id="sendconsent"><a href="<%= defaultPath %>/Message/Ilmoitukset">Valmiit</a></li>
 					</ul>
 				</li>
-				<li id="<%= Constants.TASK_TYPE_CONSENT_BROWSE%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_CONSENT_BROWSE%>')">Selaa tietopyyntöjä</a></li>
+				<li id="<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED%>')">Selaa lähetettyjä tietopyyntöjä</a></li>
+				<li id="<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT%>')">Selaa vastattuja tietopyyntöjä</a></li>
 			</ul>
 		</li>
 		</c:if>	
