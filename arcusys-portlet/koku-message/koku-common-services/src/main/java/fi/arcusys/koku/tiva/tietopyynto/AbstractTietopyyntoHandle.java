@@ -6,16 +6,15 @@ import org.apache.log4j.Logger;
 import org.springframework.context.NoSuchMessageException;
 
 import fi.arcusys.koku.AbstractHandle;
-import fi.arcusys.koku.tiva.tietopyynto.employee.InformationRequestStatus;
 import fi.arcusys.koku.tiva.tietopyynto.model.KokuInformationAccessType;
-import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationStatus;
+import fi.arcusys.koku.tiva.tietopyynto.model.KokuInformationRequestStatus;
 import fi.arcusys.koku.util.MessageUtil;
 
 public class AbstractTietopyyntoHandle extends AbstractHandle {
 
 	private Logger LOG = Logger.getLogger(AbstractTietopyyntoHandle.class);
 
-	protected String getLocalizedInformationRequestSummary(InformationRequestStatus type) {
+	protected String getLocalizedInformationRequestSummary(KokuInformationRequestStatus type) {
 		if (getMessageSource() == null) {
 			LOG.warn(MESSAGE_SOURCE_MISSING);
 			return type.toString().toLowerCase();

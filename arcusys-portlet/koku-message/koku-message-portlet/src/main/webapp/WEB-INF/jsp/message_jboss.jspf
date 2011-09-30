@@ -92,7 +92,7 @@
 	}
 	
 	function showTipy(index) {
-		if (pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_BROWSE %>" ) {
+		if (pageObj.taskType == "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>" ||pageObj.taskType == "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT %>" ) {
 			var requestId = pageObj.tasks[index]['requestId'];	
 			var url= "<%= tipyURL %>";
 			url += "&requestId=" + requestId

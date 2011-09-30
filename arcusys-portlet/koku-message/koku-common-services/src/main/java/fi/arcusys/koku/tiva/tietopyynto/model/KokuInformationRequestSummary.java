@@ -22,10 +22,10 @@ public class KokuInformationRequestSummary {
 		this.receiverUid = summary.getReceiverUid();
 		this.requestId = summary.getRequestId();
 		this.senderUid = summary.getSenderUid();
-		setStatusAsString(summary.getStatus().toString());
+		setStatusAsString(summary.getStatus().value());
 		this.targetPersonUid = summary.getTargetPersonUid();
 		this.title = summary.getTitle();
-		this.validTill = MessageUtil.formatTaskDate(summary.getValidTill());
+		this.validTill = MessageUtil.formatTaskDateByDay(summary.getValidTill());
 	}
 	
 	private final void setStatusAsString(String status) {

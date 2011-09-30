@@ -1,11 +1,12 @@
 package fi.arcusys.koku.tiva.tietopyynto.model;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import fi.arcusys.koku.tiva.tietopyynto.employee.InformationRequestDetail;
 import fi.arcusys.koku.util.MessageUtil;
 
-public class KokuInformationRequestDetail {
+public class KokuInformationRequestDetail extends KokuInformationRequestSummary {
 
 	
 	private KokuInformationAccessType accessType;
@@ -24,16 +25,26 @@ public class KokuInformationRequestDetail {
 	
 	
 	public KokuInformationRequestDetail(InformationRequestDetail requestDetails) {
+		super(requestDetails);
+		if (requestDetails == null) {
+			throw new IllegalArgumentException("InformationRequestDetail can't be null!");
+		}
 		this.additionalInfo = requestDetails.getAdditionalInfo();
 		this.attachmentURL = requestDetails.getAttachmentURL();
-		this.categories = requestDetails.getCategories();
+		if (requestDetails.getCategories() == null) {
+			this.categories = new LinkedList<String>();
+		} else {
+			this.categories = requestDetails.getCategories();			
+		}
 		this.createdDate = MessageUtil.formatTaskDateByDay(requestDetails.getCreatedDate());
 		this.description = requestDetails.getDescription();
 		this.informationDetails = requestDetails.getInformationDetails();
 		this.legislationInfo = requestDetails.getLegislationInfo();
 		this.replyDescription = requestDetails.getReplyDescription();
 		this.requestPurpose = requestDetails.getRequestPurpose();
-		setAccessTypeAsString(requestDetails.getAccessType().toString());	
+		if (requestDetails.getAccessType() != null) {
+			setAccessTypeAsString(requestDetails.getAccessType().toString());	
+		}
 	}
 	
 	private final void setAccessTypeAsString(String accessType) {

@@ -120,10 +120,8 @@
 		jQuery.datepick.setDefaults($.datepick.regional['fi']);
 		
 	 	jQuery(function() {
-	 		jQuery('input#tipyCreatedTimeRangeFrom').datepick({showTrigger: '#calImg'});
-	 		jQuery('input#tipyCreatedTimeRangeTo').datepick({showTrigger: '#calImg'});
-	 		jQuery('input#tipyRepliedTimeRangeFrom').datepick({showTrigger: '#calImg'});
-	 		jQuery('input#tipyRepliedTimeRangeTo').datepick({showTrigger: '#calImg'});
+	 		jQuery('input#tipyTimeRangeFrom').datepick({showTrigger: '#calImg'});
+	 		jQuery('input#tipyTimeRangeTo').datepick({showTrigger: '#calImg'});
 	 	});
 	 	
 	 	 jQuery.jGrowl.defaults.position = 'top-right';
@@ -209,14 +207,17 @@
 	 */
 	function presentTasks(tasks) {
 		var taskHtml = "";
-		if(pageObj.taskType == 'req_valid') // for request
+		if (pageObj.taskType == 'req_valid') { // for request
 			taskHtml += createRequestsTable(tasks);
-		else if(pageObj.taskType.indexOf('app') == 0) // for appointment
+		} else if(pageObj.taskType.indexOf('app') == 0) { // for appointment
 			taskHtml += createAppoitmentsTable(tasks);
-		else if(pageObj.taskType.indexOf('cst') == 0) // for consent
+		} else if(pageObj.taskType.indexOf('cst') == 0) { // for consent
 			taskHtml += createConsentsTable(tasks);
-		else // for message
+		} else if (pageObj.taskType.indexOf('info_req') == 0) { // for infoRequests (tietopyyntö)
+			taskHtml += createInfoRequestsTable(tasks);		
+		} else {											// for message
 			taskHtml += createMessagesTable(tasks);
+		}
 		 
 		jQuery('#task-manager-tasklist').html(taskHtml);
 		decorateTable();
@@ -431,13 +432,21 @@
 			taskHtml += createBrowseWarrantsToMe(tasks);
 		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT %>") {
 			taskHtml += createBrowseWarrantsFromMe(tasks);
-		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_BROWSE %>") {
-			taskHtml += createBrowseAllConsents(tasks);	
+		} 
+		return taskHtml;
+	}
+	
+	function createInfoRequestsTable(tasks) {
+		var taskHtml = "";
+		if (pageObj.taskType === "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>") {
+			taskHtml += createBrowseInfoRequests(tasks);	
+		} else if (pageObj.taskType === "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT %>") {
+			taskHtml += createBrowseInfoRequests(tasks);
 		}
 		return taskHtml;
 	}
 	
-	function createBrowseAllConsents(tasks) {
+	function createBrowseInfoRequests(tasks, type) {
 		
 		if (tasks == undefined || tasks == null || tasks.length == 0) {
 			return showErrorMsgYouDontHaveAnyTipys();
@@ -458,8 +467,8 @@
 		                 "title",
 		                 "localizedStatus",
 		                 "validTill"];
-				
-		return createTable("showTipy", "createBrowseAllConsensts", columnNames, columnIds, tasks);
+		
+		return createTable("showTipy", "browseInfoRequests", columnNames, columnIds, tasks);		
 	}
 	
 	
@@ -975,7 +984,8 @@
 		if (pageObj.taskType.indexOf('msg') > -1
 				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS %>') > -1 
 				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS %>') > -1
-				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_CONSENT_BROWSE %>') > -1
+				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>') > -1
+				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT %>') > -1
 				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="message.search"/>"  onclick="showSearchUI()" /></li>';
 		}
@@ -1267,17 +1277,31 @@
 		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>') {
 			jQuery('#warrants-search-warrants').show();
 			jQuery('#message-search').hide();
-		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_CONSENT_BROWSE %>') {
-			jQuery('#consentsSearchAllConsents').show();
+		} else if (pageObj.taskType === '<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>' || pageObj.taskType === '<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT %>') {
+			jQuery('#infoRequestsSearch').show();
 			jQuery('#message-search').hide();
 		} else if(pageObj.taskType.indexOf('cst') > -1) { // for consent
 			jQuery('#consent-search').show();
 			jQuery('#message-search').hide();
 		} else {
 			return;
-		}	
+		}
 		
 		jQuery('#task-manager-search').toggle('fast');
+	}
+	
+	function switchSearchTimeMode() {
+		if (jQuery('input#tipyNonReplied:checked').length) {
+			jQuery('span#tipyReplyTime').hide();
+			jQuery("input#tipyRepliedTimeRangeFrom").val('');
+			jQuery("input#tipyRepliedTimeRangeTo").val('');
+			jQuery('span#tipyCreateTime').show();
+		} else {
+			jQuery('span#tipyCreateTime').hide();
+			jQuery("input#tipyCreatedTimeRangeFrom").val('');
+			jQuery("input#tipyCreatedTimeRangeTo").val('');
+			jQuery('span#tipyReplyTime').show();
+		}
 	}
 	
 	/**
@@ -1363,17 +1387,20 @@
 		return false;
 	}
 	
-	function searchAllConsents() {
-		var keyword = jQuery("input#tipyCreatedTimeRangeFrom").val();		
-		keyword += '|' + jQuery("input#tipyCreatedTimeRangeTo").val();
-		keyword += '|' + jQuery("input#tipyRepliedTimeRangeFrom").val();
-		keyword += '|' + jQuery("input#tipyRepliedTimeRangeTo").val();
-		
+	function searchInfoRequests() {
+		var keyword = jQuery("input#tipyTimeRangeFrom").val();		
+		keyword += '|' + jQuery("input#tipyTimeRangeTo").val();		
 		keyword += '|' + jQuery("input#tipyTargetPerson").val();
 		keyword += '|' + jQuery("input#tipyRequester").val();
 		keyword += '|' + jQuery("input#tipyHandOver").val();
 		keyword += '|' + jQuery("input#tipyInformation").val();
 		keyword += '|' + jQuery("input#tipyFreeTextSearch").val();
+		
+		if (pageObj.taskType === '<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT%>') {
+			keyword += '|' + "Sent";
+		} else if(pageObj.taskType === '<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED%>') {
+			keyword += '|' + "Replied";		
+		}
 		
 		var templateName = jQuery("input#warrantTemplateNameCitizen").val();
 		
@@ -1398,7 +1425,19 @@
 		jQuery("input#keyword").val('');
 		jQuery("input#recipient").val('');
 		jQuery("input#customer").val('');
-		jQuery("input#templateName").val('');
+		
+		jQuery("input#targetPersonUid").val('');
+		jQuery("input#userIdRecieved").val('');
+		jQuery("input#userIdSent").val('');
+		jQuery("input#warrantTemplateName").val('');
+		
+		jQuery("input#tipyTimeRangeFrom").val('');
+		jQuery("input#tipyTimeRangeTo").val('');
+		jQuery("input#tipyTargetPerson").val('');
+		jQuery("input#tipyRequester").val('');
+		jQuery("input#tipyHandOver").val('');
+		jQuery("input#tipyInformation").val('');
+		jQuery("input#tipyFreeTextSearch").val('');
 		jQuery('input:checkbox[name="field"]').attr('checked', true);
 		pageObj.keyword = '';
 		ajaxGetTasks();
@@ -1467,37 +1506,34 @@
 		</div>
 		
 		<!-- TIVA-18 Selaa tietopyyntöjä -->
-		<div id="consentsSearchAllConsents" class="basic-search" style="display:none; position:relative;">
-			<form name="searchForm" onsubmit="searchAllConsents(); return false;">		
+		<div id="infoRequestsSearch" class="basic-search" style="display:none; position:relative;">
+			<form name="searchForm" onsubmit="searchInfoRequests(); return false;">		
 			
 				<p class="searchTimeRange">
-					<span class="text-bold searchTitle" ><spring:message code="tipy.timeRangeSend" /></span>
-					<input class="searchTime" type="text" name="tipyCreatedTimeRangeFrom" id="tipyCreatedTimeRangeFrom"  /> - 
-					<input class="searchTime" type="text" name="tipyCreatedTimeRangeTo" id="tipyCreatedTimeRangeTo" />
-					
-					<span class="text-bold searchTitle" ><spring:message code="tipy.timeRangeReplied" /></span>
-					<input class="searchTime" type="text" name="tipyRepliedTimeRangeFrom" id="tipyRepliedTimeRangeFrom"  /> - 
-					<input class="searchTime" type="text" name="tipyRepliedTimeRangeTo" id="tipyRepliedTimeRangeTo" />
+					<span id="tipyCreateTime">
+						<span class="text-bold searchTitle" ><spring:message code="tipy.search.timeRange" /></span>
+						<input class="searchTime" type="text" name="tipyTimeRangeFrom" id="tipyTimeRangeFrom"  /> - 
+						<input class="searchTime" type="text" name="tipyTimeRangeTo" id="tipyTimeRangeTo" />
+					</span>
 				</p>
 				
 				<p class="searchMisc">
-					<span class="text-bold searchTitle"><spring:message code="tipy.targetPerson" /></span>
+					<span class="text-bold searchTitle"><spring:message code="tipy.search.targetPerson" /></span>
 					<input type="text" name="tipyTargetPerson" id="tipyTargetPerson" style="width:200px;" />
 					
-					<span class="text-bold searchTitle"><spring:message code="tipy.requester" /></span>
+					<span class="text-bold searchTitle"><spring:message code="tipy.search.requester" /></span>
 					<input type="text" name="tipyRequester" id="tipyRequester" style="width:200px;" />
 				</p>
 
 				<p class="searchMisc">					
-					<span class="text-bold searchTitle"><spring:message code="tipy.handOver" /></span>
+					<span class="text-bold searchTitle"><spring:message code="tipy.search.handOver" /></span>
 					<input type="text" name="tipyHandOver" id="tipyHandOver" style="width:200px;" />
 
-					<span class="text-bold searchTitle"><spring:message code="tipy.information" /></span>
+					<span class="text-bold searchTitle"><spring:message code="tipy.search.information" /></span>
 					<input type="text" name="tipyInformation" id="tipyInformation" style="width:200px;" />
 				</p>
 				<p class="searchMisc">
-
-					<span class="text-bold searchTitle"><spring:message code="tipy.freeTextSearch" /></span>
+					<span class="text-bold searchTitle"><spring:message code="tipy.search.freeTextSearch" /></span>
 					<input type="text" name="tipyFreeTextSearch" id="tipyFreeTextSearch" style="width:200px;" />
 				</p>
 				<p class="searchMisc searchButtonArea">

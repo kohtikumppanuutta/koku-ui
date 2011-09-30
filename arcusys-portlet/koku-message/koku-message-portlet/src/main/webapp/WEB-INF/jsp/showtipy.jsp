@@ -30,27 +30,35 @@ function formatUrl(url) {
 </script>
 <div id="task-manager-wrap" class="single">
 	<div id="show-message" style="padding:12px">
-	<span class="text-bold"><spring:message code="warrant.templateName" />:</span> <c:out value="${warrant.template.templateName}" /><br />
-	<span class="text-bold"><spring:message code="warrant.templateDescription" />:</span> <c:out value="${warrant.template.description}" /><br />
-	<span class="text-bold"><spring:message code="warrant.receiver"/>:</span> <c:out value="${warrant.recieverName}" /><br />
-	<span class="text-bold"><spring:message code="warrant.sender"/>:</span> <c:out value="${warrant.senderName}" /><br />	
-	<span class="text-bold"><spring:message code="warrant.status"/>:</span> <c:out value="${warrant.localizedStatus}" /><br />
-<%-- 	<span class="text-bold"><spring:message code="warrant.createType"/>:</span> <c:out value="${warrant.localizedType}" /><br /> --%>
-	<span class="text-bold"><spring:message code="warrant.createdAt"/>:</span> <c:out value="${warrant.createdAt}" /><br />
-	<span class="text-bold"><spring:message code="warrant.givenDate"/>:</span> <c:out value="${warrant.givenAt}" /><br />
-	<span class="text-bold"><spring:message code="warrant.validTill"/>:</span> <c:out value="${warrant.validTill}" /><br />
-	<span class="text-bold"><spring:message code="warrant.replyTill"/>:</span> <c:out value="${warrant.replyTill}" /><br />
+		<span class="text-bold"><spring:message code="tipy.details.reciever" />:</span> <c:out value="${tipy.recieverName}" /><br />
+		<span class="text-bold"><spring:message code="tipy.details.sender" />:</span> <c:out value="${tipy.senderName}" /><br />
+		<span class="text-bold"><spring:message code="tipy.details.targetPerson" />:</span> <c:out value="${tipy.targetPersonName}" /><br />
+		<span class="text-bold"><spring:message code="tipy.details.requestStatus" />:</span> <c:out value="${tipy.localizedStatus}" /><br />
+		<span class="text-bold"><spring:message code="tipy.details.title" />:</span> <c:out value="${tipy.title}" /><br />
+		<span class="text-bold"><spring:message code="tipy.details.legislationinfo" />:</span> <c:out value="${tipy.legislationInfo}" /><br />
+		<span class="text-bold"><spring:message code="tipy.details.replyDescription" />:</span> <c:out value="${tipy.replyDescription}" /><br />
+		<span class="text-bold"><spring:message code="tipy.details.requestPurpose"/>:</span> <c:out value="${tipy.requestPurpose}" /><br />
+		<span class="text-bold"><spring:message code="tipy.details.description"/>:</span> <c:out value="${tipy.description}" /><br />	
+		<span class="text-bold"><spring:message code="tipy.details.createdDate"/>:</span> <c:out value="${tipy.createdDate}" /><br />
+		<span class="text-bold"><spring:message code="tipy.details.validTill"/>:</span> <c:out value="${tipy.validTill}" /><br />
+		<span class="text-bold"><spring:message code="tipy.details.attachmentURL"/>:</span> <c:out value="${tipy.attachmentURL}" /><br />
+		<span class="text-bold"><spring:message code="tipy.details.additionalInfo"/>:</span> <c:out value="${tipy.additionalInfo}" /><br />
+		<span class="text-bold"><spring:message code="tipy.details.additionalReplyInfo"/>:</span> <c:out value="${tipy.additionalReplyInfo}" /><br />
+		<span class="text-bold"><spring:message code="tipy.details.accessType"/>:</span> <c:out value="${tipy.localizedAccessType}" /><br />
+		<span class="text-bold"><spring:message code="tipy.details.informationDetails"/>:</span> <c:out value="${tipy.informationDetails}" /><br />
+		
 	
-<%--     <h3><spring:message code="consent.actionRequest"/></h3> --%>
-<!--     <table class="request-table"> -->
-<%--     	<tr><td class="head"><spring:message code="consent.description"/></td><td class="head"><spring:message code="consent.status"/></td></tr> --%>
-<%--     	<c:forEach var="request" items="${warrant.actionRequests}" varStatus="loopStatus"> --%>
-<%--         <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}"> --%>
-<%--           <td>${request.description}</td> --%>
-<%--           <td>${request.status}</td>     --%>
-<!--         </tr> -->
-<%--       	</c:forEach> --%>
-<!--     </table>   -->
+    <h3><spring:message code="tipy.details.categoryHeader"/></h3>
+    <table class="request-table">
+    	<tr>
+    		<td class="head"><spring:message code="tipy.details.categoryTableHeader"/></td>
+    	</tr>
+    	<c:forEach var="cat" items="${tipy.categories}" varStatus="loopStatus">
+	        <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
+	          <td>${cat}</td>
+	        </tr>
+      	</c:forEach>
+    </table>  
 
 	</div>
 	<div id="task-manager-operation" class="task-manager-operation-part">

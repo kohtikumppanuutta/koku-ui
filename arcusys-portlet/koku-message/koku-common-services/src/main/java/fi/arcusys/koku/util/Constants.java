@@ -48,7 +48,6 @@ public class Constants {
 
 	
 	/* ATTR_MY_TASK_TYPE parameter possible values. (Message-portlet) */
-	public static final String TASK_TYPE_CONSENT_BROWSE					= "cst_browse_all_consents";			// Tietopyynnöt - Virkailija: Selaa tietopyyntöjä
 	public static final String TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS		= "cst_own_employee";					// Virkailijan lähetetyt suostumus pyynnöt 
 	public static final String TASK_TYPE_CONSENT_CITIZEN_CONSENTS		= "cst_own_citizen";					// Kansalaiselle vastatut pyynnöt(/suostumukset) 
 	public static final String TASK_TYPE_CONSENT_ASSIGNED_CITIZEN		= "cst_assigned_citizen";	 			// Kansalaiselle saapuneet pyynnöt(/suostumukset) 
@@ -61,6 +60,8 @@ public class Constants {
 	public static final String TASK_TYPE_APPOINTMENT_INBOX_CITIZEN 		= "app_inbox_citizen";
 	public static final String TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE 	= "app_inbox_employee";	
 	public static final String TASK_TYPE_REQUEST_VALID_EMPLOYEE			= "req_valid";
+	public static final String TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED	= "info_req_browse_replied";			// Tietopyynnöt - Virkailija: Selaa vastattuja tietopyyntöjä
+	public static final String TASK_TYPE_INFO_REQUEST_BROWSE_SENT		= "info_req_browse_sent";				// Tietopyynnöt - Virkailija: Selaa lähetettyjä tietopyyntöjä
 	
 	/* ATTR_PORTAL_INFO possible values */ 
 	public static final String PORTAL_LIFERAY							= "liferay";
@@ -80,7 +81,7 @@ public class Constants {
 	public static final String VIEW_SHOW_INTALIO_FORM					= "showIntalioForm";
 	public static final String VIEW_SHOW_CONSENT						= "showconsent";
 	public static final String VIEW_SHOW_WARRANT						= "showwarrant";
-	public static final String VIEW_SHOW_TIPY							= "showtipy";
+	public static final String VIEW_SHOW_INFO_REQUEST					= "showtipy";
 	public static final String VIEW_SHOW_EMPLOYEE_APPOINTMENT			= "showemployeeappointment";
 	public static final String VIEW_SHOW_CITIZEN_APPOINTMENT			= "showcitizenappointment";
 	public static final String VIEW_MESSAGE								= "message";
