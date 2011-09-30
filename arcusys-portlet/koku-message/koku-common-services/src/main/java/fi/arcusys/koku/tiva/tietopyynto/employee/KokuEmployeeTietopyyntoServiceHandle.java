@@ -171,7 +171,7 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 		}
 		
 		Calendar cal = Calendar.getInstance(new Locale("fi", "FI"));
-		cal.set(Integer.valueOf(splitted[2]), Integer.valueOf(splitted[1]), Integer.valueOf(splitted[0]), 0, 0, 0);
+		cal.set(Integer.valueOf(splitted[2]), Integer.valueOf(splitted[1])-1, Integer.valueOf(splitted[0]), 0, 0, 0);
 		return cal.getTime();
 	}
 	
