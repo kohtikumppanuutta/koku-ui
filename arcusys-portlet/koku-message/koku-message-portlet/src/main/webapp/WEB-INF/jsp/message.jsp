@@ -438,10 +438,10 @@
 	
 	function createInfoRequestsTable(tasks) {
 		var taskHtml = "";
-		if (pageObj.taskType === "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>") {
+		if (pageObj.taskType === "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>"
+				|| pageObj.taskType === "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT %>"
+				|| pageObj.taskType === "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE %>") {
 			taskHtml += createBrowseInfoRequests(tasks);	
-		} else if (pageObj.taskType === "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT %>") {
-			taskHtml += createBrowseInfoRequests(tasks);
 		}
 		return taskHtml;
 	}
@@ -986,6 +986,7 @@
 				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS %>') > -1
 				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>') > -1
 				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT %>') > -1
+				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE %>') > -1
 				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="message.search"/>"  onclick="showSearchUI()" /></li>';
 		}
@@ -1277,7 +1278,9 @@
 		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>') {
 			jQuery('#warrants-search-warrants').show();
 			jQuery('#message-search').hide();
-		} else if (pageObj.taskType === '<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>' || pageObj.taskType === '<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT %>') {
+		} else if (pageObj.taskType === '<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>' 
+				|| pageObj.taskType === '<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT %>'
+				|| pageObj.taskType === '<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE %>') {
 			jQuery('#infoRequestsSearch').show();
 			jQuery('#message-search').hide();
 		} else if(pageObj.taskType.indexOf('cst') > -1) { // for consent

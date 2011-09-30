@@ -62,6 +62,8 @@ public class Constants {
 	public static final String TASK_TYPE_REQUEST_VALID_EMPLOYEE			= "req_valid";
 	public static final String TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED	= "info_req_browse_replied";			// Tietopyynnöt - Virkailija: Selaa vastattuja tietopyyntöjä
 	public static final String TASK_TYPE_INFO_REQUEST_BROWSE_SENT		= "info_req_browse_sent";				// Tietopyynnöt - Virkailija: Selaa lähetettyjä tietopyyntöjä
+	public static final String TASK_TYPE_INFO_REQUEST_BROWSE			= "info_req_browse";					// Tietopyynnöt - ADMIN: Selaa tietopyyntöjä
+
 	
 	/* ATTR_PORTAL_INFO possible values */ 
 	public static final String PORTAL_LIFERAY							= "liferay";

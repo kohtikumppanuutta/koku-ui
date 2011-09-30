@@ -76,31 +76,24 @@
 	
 	
 	function showWarrant(index) {
-		if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED%>"
-		 || pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT%>"
-		 || pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS %>"
-		 || pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS%>")  {
-			var authorizationId = pageObj.tasks[index]['authorizationId'];	
-			var url= "<%= citizenWarrantURL %>";
-			url += "&authorizationId=" + authorizationId
-						+ "&currentPage=" + pageObj.currentPage
-						+ "&taskType=" + pageObj.taskType
-						+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
-						+ "&orderType=" + pageObj.orderType;						
-		}
+		var authorizationId = pageObj.tasks[index]['authorizationId'];	
+		var url= "<%= citizenWarrantURL %>";
+		url += "&authorizationId=" + authorizationId
+					+ "&currentPage=" + pageObj.currentPage
+					+ "&taskType=" + pageObj.taskType
+					+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
+					+ "&orderType=" + pageObj.orderType;						
 		window.location = url;		
 	}
 	
 	function showTipy(index) {
-		if (pageObj.taskType == "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>" ||pageObj.taskType == "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT %>" ) {
-			var requestId = pageObj.tasks[index]['requestId'];	
-			var url= "<%= tipyURL %>";
-			url += "&requestId=" + requestId
-						+ "&currentPage=" + pageObj.currentPage
-						+ "&taskType=" + pageObj.taskType
-						+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
-						+ "&orderType=" + pageObj.orderType;						
-		}
+		var requestId = pageObj.tasks[index]['requestId'];	
+		var url= "<%= tipyURL %>";
+		url += "&requestId=" + requestId
+					+ "&currentPage=" + pageObj.currentPage
+					+ "&taskType=" + pageObj.taskType
+					+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
+					+ "&orderType=" + pageObj.orderType;						
 		window.location = url;
 	}
 	

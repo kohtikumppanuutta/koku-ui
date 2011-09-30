@@ -319,11 +319,12 @@
 				<li id="ilmoitukset"><a href="<%= defaultPath %>/Message/Ilmoitukset">Lähetetyt</a>
 					<ul class="child">
 						<li id="cst_new"><a href="<%= defaultPath %>/Message/Ilmoitukset">Avoimet</a></li>
-						<li id="sendconsent"><a href="<%= defaultPath %>/Message/Ilmoitukset">Valmiit</a></li>
+						<%-- <li id="sendconsent"><a href="<%= defaultPath %>/Message/Ilmoitukset">Valmiit</a></li> --%>
+						<li id="<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED%>')">Selaa lähetettyjä</a></li>
+						<li id="<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT%>')">Selaa vastattuja</a></li>
 					</ul>
 				</li>
-				<li id="<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED%>')">Selaa lähetettyjä tietopyyntöjä</a></li>
-				<li id="<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT%>')">Selaa vastattuja tietopyyntöjä</a></li>
+				<li id="<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE%>')">Selaa tietopyyntöjä (ADMIN)</a></li>				
 			</ul>
 		</li>
 		</c:if>	

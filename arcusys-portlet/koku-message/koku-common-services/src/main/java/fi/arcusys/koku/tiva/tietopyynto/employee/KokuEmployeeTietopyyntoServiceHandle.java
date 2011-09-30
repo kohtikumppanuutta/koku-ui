@@ -138,7 +138,6 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 		return createLocalPojos(service.getRequests(getInformationReqQuery(criteria, startNum, maxNum)));
 	}
 
-	
 	private InformationRequestCriteria createCriteria(Map<String, String> searchMap) {
 		InformationRequestCriteria criteria = new InformationRequestCriteria();
 		criteria.setCreatedFromDate(MessageUtil.convertDateToXMLGregorianCalendar(stringToDate(searchMap.get(CREATED_FROM))));
