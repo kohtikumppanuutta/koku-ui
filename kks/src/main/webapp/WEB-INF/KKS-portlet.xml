@@ -37,6 +37,11 @@
 		</property>
 	</bean>
 
+    <!-- Error page configuration -->
+    <bean id="exceptionResolver" class="org.springframework.web.portlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultErrorView" value="error"/>
+    </bean>
+
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
