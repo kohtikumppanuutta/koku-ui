@@ -357,3 +357,61 @@ abbr.valueWithDesc:hover {
 	text-align: right;	
 	padding-top: 7px;
 }
+
+
+
+/* ShowMessages css */
+
+#normalMessage {
+	padding-left: 10px;
+	padding-bottom: 20px;
+}
+
+#messageStructure  {
+
+}
+
+.notificationMessageHeader {
+	background-color: #25AAE1;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 12px 0;
+    padding: 8px 15px;
+    text-transform: uppercase;
+}
+
+.notificationMessageContent {
+	padding-left: 15px;
+}
+
+#messageSenderHeader  {
+}
+
+#messageRecipientsHeader  {
+
+}
+
+#messageSubject  {
+
+}
+
+#messageSender  {
+
+}
+
+#messageRecipients  {
+
+}
+
+#messageBody  {
+
+}
+
+#messageHeader {
+	font-size: 24px;
+    font-weight: normal;
+    margin: 12px 0;	
+    text-transform: uppercase;
+}
+
