@@ -5,10 +5,14 @@
 <portlet:renderURL var="homeURL">
 	<portlet:param name="action" value="choose" />
 	<portlet:param name="user" value="${user}" />
+	<portlet:param name="userRole" value="${userRole}" />
 </portlet:renderURL>
 
 <div class="koku-lok">
 	<div class="portlet-section-body">
+	<c:choose>
+	<c:when test="${userRole == 'ROLE_LOG_VIEWER'}">
+	
 		<p>
 			<spring:message code="koku.lok.archivingstatus.success" />
 		</p>
@@ -27,5 +31,13 @@
 					<spring:message code="koku.lok.archive.nothing.to.archive" />
 				</p>
 	</c:if>--%>
+	
+	</c:when>
+
+<c:otherwise>
+	<spring:message code="ui.lok.no.user.rights" />
+</c:otherwise>
+</c:choose>
+
 	</div>
 </div><!-- end of koku-lok-div -->

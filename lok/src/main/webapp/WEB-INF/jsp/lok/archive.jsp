@@ -6,34 +6,40 @@
 	<portlet:param name="action" value="archiveLog" />
 	<portlet:param name="visited" value="---" />
 	<portlet:param name="user" value="${user}" />
+	<portlet:param name="userRole" value="${userRole}" />
 </portlet:actionURL>
- <%--<portlet:param name="visited" value="---" />  --%>
 
 <portlet:actionURL var="changeActionURL">
 	<portlet:param name="action" value="archiveLog" />
 	<portlet:param name="change" value="change" />
 	<portlet:param name="visited" value="---" />
 	<portlet:param name="user" value="${user}" />
+	<portlet:param name="userRole" value="${userRole}" />
 </portlet:actionURL>
 
 <portlet:actionURL var="startArchiveActionURL">
 	<portlet:param name="action" value="startArchiveLog" />
 	<portlet:param name="user" value="${user}" />
+	<portlet:param name="userRole" value="${userRole}" />
 </portlet:actionURL>
 
 <portlet:renderURL var="homeURL">
 	<portlet:param name="action" value="choose" />
 	<portlet:param name="user" value="${user}" />
+	<portlet:param name="userRole" value="${userRole}" />
 </portlet:renderURL>
 
 <portlet:renderURL var="searchUserURL">
 	<portlet:param name="action" value="searchUser" />
 	<portlet:param name="user" value="${user}" />
+	<portlet:param name="userRole" value="${userRole}" />
 </portlet:renderURL>
 
 
 <div class="koku-lok">
 <div class="portlet-section-body">
+<c:choose>
+	<c:when test="${userRole == 'ROLE_LOG_VIEWER'}">
 	<div class="home">
 		<a href="${homeURL}"><spring:message code="koku.common.back" />
 		</a>
@@ -60,7 +66,7 @@
 					parsing error is shown on the web page. --%> 
 					<%-- TODO: Add a javascript date picker here? --%>
 					<span class="form-field-label"><spring:message
-							code="koku.common.archiveDate" /> </span>
+							code="koku.lok.archiveDate" /> </span>
 							<form:input path="endDate" value="${endDate}" />
 					<span class="errors"><form:errors path="endDate" />
 					</span>
@@ -77,11 +83,11 @@
 	
 			<p>
 				<spring:message code="koku.lok.archive.confirmation" />
-				<fmt:formatDate pattern="dd.MM.yyyy" value="${archiveDateDate}"/>.
+				<fmt:formatDate pattern="dd.MM.yyyy" value="${archiveDateDate}"/>
+				<spring:message code="koku.lok.archive.confirmation2" />
 				
 			</p>
 
-		<%--	<form:form name="changeArchiveDateForm" commandName="logArchiveDate" --%>
 		
 			<form:form method="post" action="${changeActionURL}">
 			 	<input type="hidden" name="endDate" value="${endDate}" />
@@ -92,18 +98,12 @@
 			<form:form method="post" action="${startArchiveActionURL}">
 				<input type="hidden" name="endDate" value="${endDate}" />
 				<input type="submit"
-					value="<spring:message code="koku.common.startArchive"/>">
+					value="<spring:message code="koku.lok.archive.startArchive"/>">
 			</form:form>
 		</c:if>
 		<br/>
 	<br/>
-<%-- 	<c:if test="${not empty error}">
-				
-				<p>tuntematon virhe
-									<%--<spring:message code="koku.lok.archive.noResults" /> --%>
-<%--				</p>
-	</c:if>
-	--%>
+
 	<c:if test="${not empty error}">
 	<%-- do not show this on the first visit to this page --%>
 				<p>
@@ -112,6 +112,11 @@
 <%-- 					<spring:message code="koku.lok.archive.nothing.to.archive" />--%>
 				</p>
 	</c:if>
+</c:when>
+<c:otherwise>
+	<spring:message code="ui.lok.no.user.rights" />
+</c:otherwise>
+</c:choose>	
 	</div>
 	
 

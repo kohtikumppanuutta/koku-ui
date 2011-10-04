@@ -56,7 +56,7 @@ public class UserSearchController {
     model.addAttribute("user", user);
     model.addAttribute("userRole", userRole);
     
-    log.debug("main menu user: "+user+", uiseruid: "+userRole);
+    log.debug("main menu user: "+user+", role: "+userRole);
     
     return "menu";
   }
@@ -64,7 +64,7 @@ public class UserSearchController {
   @RenderMapping(params = "action=searchUser")
   public String renderSearch(RenderRequest req, Model model, @RequestParam(value = "user") String user,
       @RequestParam(value = "userRole") String userRole){
-    log.debug("log search render phase, return user search");
+    log.debug("log user search render phase, return user search");
     log.debug("user: "+user+", userRole: "+userRole);
     
     model.addAttribute("search", false);//This means that search was NOT done

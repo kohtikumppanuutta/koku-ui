@@ -2,6 +2,8 @@ package fi.koku.lok;
 
 import java.util.Locale;
 
+import fi.koku.services.entity.userinfo.v1.model.Role;
+
 /**
  * Log constants.
  * 
@@ -40,6 +42,9 @@ public class LogConstants {
   
   // These are user errors, no error code needed
   public static final String ARCHIVE_INPUT_ERROR = "Arkistointipäivämäärä väärän muotoinen";
+  
+  public static Role ROLE_LOG_VIEWER = new Role("ROLE_LOG_VIEWER");
+  public static Role ROLE_LOG_ADMIN = new Role("ROLE_LOG_ADMIN");
   
   // tämä rivi on kopioitu servicesta
   public static final int LOG_NOTHING_TO_ARCHIVE = 2200;

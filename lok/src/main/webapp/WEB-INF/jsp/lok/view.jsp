@@ -17,16 +17,19 @@
 
 <div class="koku-lok">
 	<div class="portlet-section-body">
-
-		<div class="home">
+<c:choose>
+	<c:when test="${userRole == 'ROLE_LOG_ADMIN'}">
+	
+	<%-- 	<div class="home">
 			<a href="${homeURL}"><spring:message code="koku.common.back" />
 			</a>
 		</div>
+		--%>
 
-		<h1 class="portlet-section-header">
+<!--  		<h1 class="portlet-section-header">
 			<spring:message code="koku.lok.header.view" />
 		</h1>
-
+-->
 
 		<div class="portlet-form-field">
 			<div class="portlet-form-field-label">
@@ -54,7 +57,7 @@
 					</span>
 
 					<input type="submit"
-						value="<spring:message code="koku.common.search"/>">
+						value="<spring:message code="koku.lok.search"/>">
 
 					<div class="clear"></div>
 				</form:form>
@@ -127,6 +130,12 @@
 		</c:if>
 
 		<br />
+</c:when>
+
+<c:otherwise>
+	<spring:message code="ui.lok.no.user.rights" />
+</c:otherwise>
+</c:choose>
 	</div>
 </div>
 <!-- end of koku-lok-div -->

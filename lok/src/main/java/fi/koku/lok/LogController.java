@@ -59,9 +59,9 @@ public class LogController {
  
   @RenderMapping
   public String render(PortletSession session,  Model model) {
-    log.debug("Main Log controller");
+    log.debug("Main Log controller");  
+    String currentRole = null;
     
-
     model.addAttribute("user", LogUtils.getPicFromSession(session));
     
     // this is used for selecting which part of the page to show
@@ -69,13 +69,22 @@ public class LogController {
       log.debug(r.getId());
       if(r.getId().startsWith("ROLE_LOG_")) { // FIXME
         model.addAttribute("userRole", r.getId());
+        currentRole = r.getId();
         log.debug("added user role "+r.getId());
-        break;
       }
-    }
+    }   
     
+    log.debug(LogConstants.ROLE_LOG_ADMIN.getName());
+    log.debug(currentRole);
+ /*   if(LogConstants.ROLE_LOG_ADMIN.getId().equals(currentRole)){
+      log.debug("return page view");
+      model.addAttribute("action", "viewLog");
+      return "view";
+    }else {*/
+      log.debug("return page menu");
+      return "menu";
+ //   }
     
-    return "menu";
   }
 
 }

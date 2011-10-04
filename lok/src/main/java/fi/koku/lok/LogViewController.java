@@ -85,52 +85,6 @@ public class LogViewController {
       @RequestParam(value = "visited", required = false) String visited, @RequestParam(value = "user") String user,
       @RequestParam(value = "userRole") String userRole,
       @ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, RenderResponse res, Model model) {
-
-
-/** TESTI 23.9.
-    try {
-      String startDateStr = lu.getDateString(1); // 1 year ago
-      String endDateStr = lu.getDateString(0); // now
-      model.addAttribute("startDate", startDateStr);
-      model.addAttribute("endDate", endDateStr);
-      // set dates to criteria
-      criteria.setFrom(dateFormat.parse(startDateStr));
-      criteria.setTo(dateFormat.parse(endDateStr));
-      log.debug("startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
-    } catch (Exception e) {
-      log.error(e.getMessage(), e);
-      // TODO: Lisää virheidenkäsittely
-    }
-
-   
-    // note: empty results error handling is on the jsp page
-    if (criteria != null) {
-
-      if (LogConstants.REAL_ADMIN_LOG) {
-        // TODO: poista tämä (Virheviestin testausta varten)
-        // model.addAttribute("entries", new ArrayList<LogEntry>());
-        model.addAttribute("entries", getAdminLogEntries(criteria));
-      } else {
-        model.addAttribute("entries", getDemoAdminLogEntries(criteria));
-      }
-
-      model.addAttribute("searchParams", criteria);
-
-      if (visited != null) {
-        model.addAttribute("visited", "---");
-      }
-
-      log.info("criteria: " + criteria.getPic() + ", " + criteria.getConcept() + ", " + criteria.getFrom() + ", "
-          + criteria.getTo());
-      
-    
-//      log.debug("criteria: " + criteria.getFrom() + ", " + criteria.getTo());
-    } else {
-      log.debug("criteria: null");
-    }
-
-    return "view";
-    */
   
     // these are runtime constants, not given by the user!
     String startDateStr = lu.getDateString(1);
@@ -138,17 +92,6 @@ public class LogViewController {
     model.addAttribute("startDate", startDateStr);
     model.addAttribute("endDate", endDateStr);
     
- /*   // default endtime is now
-    Calendar endtime = Calendar.getInstance();
-    // default starttime is 1 year ago
-    Calendar starttime = Calendar.getInstance();
-    starttime.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR) - 1);
-
-    String startDateStr = dateFormat.format(starttime.getTime());
-    model.addAttribute("startDate", startDateStr);
-    String endDateStr = dateFormat.format(endtime.getTime());
-    model.addAttribute("endDate", endDateStr);
-*/
     log.debug("modeliin lisätty startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
     
     if (criteria != null) {
@@ -187,11 +130,7 @@ public class LogViewController {
     }
 
     log.debug("action criteria = "+criteria);
- /*   if(criteria != null){
-      log.debug("from: "+criteria.getFrom().toString());
-      log.debug("to: "+criteria.getTo().toString());
-    }
-   */
+ 
     // If something goes wrong in serializing the criteria, the portlet must not die
     // and the portlet must not query the log service
     try{
@@ -255,10 +194,9 @@ public class LogViewController {
     }else{
       // set the end time 1 day later so that everything added on the last day will be found
       Calendar endday = criteriatype.getEndTime();
-      log.debug("endday "+endday.getTime());
-    
       endday.set(Calendar.DATE, endday.get(Calendar.DATE) +1);
-      log.debug("endday "+endday.getTime());
+      
+      log.debug("The query end date has been set 1 day later in order to get all results from the given end date");
       criteriatype.setEndTime(endday);
       // call to lok service
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
@@ -278,7 +216,6 @@ public class LogViewController {
         logEntry.setUser(logEntryType.getUserPic());
         logEntry.setOperation(logEntryType.getOperation()); // read, write, ..
 
- 
         // pic of the child
         logEntry.setCustomer(logEntryType.getCustomerPic());
         // kks.vasu, kks.4v, ..

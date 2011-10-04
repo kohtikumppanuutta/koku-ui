@@ -24,12 +24,15 @@
 	<portlet:param name="action" value="searchLog" />
 	<portlet:param name="pic" value="${foundPic}" />
 	<portlet:param name="user" value="${user}" />
-	    <portlet:param name="userRole" value="${userRole}" />
+	<portlet:param name="userRole" value="${userRole}" />
 </portlet:renderURL>
 
 <div class="koku-lok">
 <div class="portlet-section-body">
 
+<c:choose>
+	<c:when test="${userRole == 'ROLE_LOG_VIEWER'}">
+	
 	<div class="home">
 			<a href="${homeURL}"><spring:message code="koku.common.back" /></a>
 	</div>
@@ -70,8 +73,6 @@
 							</th>
 							<th></th>
 						</tr>
-
-
 						<tr>
 							<td><c:out value="${foundName}" /></td>
 							<td><c:out value="${foundPic}" /></td>
@@ -91,6 +92,14 @@
 			</c:if>
 		</c:otherwise>
 	</c:choose>
+
+
+</c:when>
+
+<c:otherwise>
+	<spring:message code="ui.lok.no.user.rights" />
+</c:otherwise>
+</c:choose>
 
 </div>
 

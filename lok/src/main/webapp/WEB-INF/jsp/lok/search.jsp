@@ -12,19 +12,20 @@
 <portlet:renderURL var="searchUserURL">
 	<portlet:param name="action" value="searchUser" />
 	<portlet:param name="user" value="${user}" />
-	    <portlet:param name="userRole" value="${userRole}" />
+	<portlet:param name="userRole" value="${userRole}" />
 </portlet:renderURL>
 
 <portlet:renderURL var="archiveURL">
 	<portlet:param name="action" value="archiveLog" />
 	<portlet:param name="user" value="${user}" />
-	    <portlet:param name="userRole" value="${userRole}" />
+	<portlet:param name="userRole" value="${userRole}" />
 </portlet:renderURL>
 
 
 <div class="koku-lok">
 	<div class="portlet-section-body">
-
+<c:choose>
+	<c:when test="${userRole == 'ROLE_LOG_VIEWER'}">
 		<div class="home">
 			<a href="${searchUserURL}"><spring:message code="koku.common.back" />
 			</a>
@@ -115,7 +116,6 @@ This should be changed! --%>
 					<th width=20% scope="col"><b><spring:message code="ui.lok.data.item.type" /></b></th>
 					<th width=20% scope="col"><b><spring:message code="ui.lok.service" /></b></th>
 				</tr>
-<%--  <fmt:formatDate pattern="dd.MM.yyyy" value="${archiveDateDate}" /> --%>
 				<c:forEach var="e" items="${entries}">
 					<tr>
 					<td width=20%><fmt:formatDate pattern="dd.MM.yyyy hh:mm:ss" value="${e.timestamp}"/></td>
@@ -130,7 +130,6 @@ This should be changed! --%>
 		</c:if>
 	</c:if>
 
-
 		<c:if test="${empty entries}">
 			<c:if test="${not empty visited}">
 				<%-- do not show this on the first visit to this page --%>
@@ -140,5 +139,12 @@ This should be changed! --%>
 			</c:if>
 		</c:if>
 		<br /> <br />
+		
+		</c:when>
+
+<c:otherwise>
+	<spring:message code="ui.lok.no.user.rights" />
+</c:otherwise>
+</c:choose>
 	</div>
 </div><!-- end of koku-lok-div -->

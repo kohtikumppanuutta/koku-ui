@@ -88,14 +88,15 @@ public class LogArchiveController {
       @RequestParam(value = "error", required = false) String error,
       @RequestParam(value = "change", required = false) String change,  
       @RequestParam(value = "user") String user,
+      @RequestParam(value = "userRole") String userRole,
       RenderResponse res, Model model) {
 
     log.debug("user: "+user);
+    log.debug("userRole: "+userRole);
     log.debug("render archiveLog: visited= "+visited);
     log.debug("render archiveLog: change= "+change);
     if(change != null){
       log.debug("Painettiin nappia Vaihda päivämäärää");
-      
     }
     try{
       
@@ -156,8 +157,11 @@ public class LogArchiveController {
 
     }
 
-    model.addAttribute("user", user);
+    log.debug("userRole = "+userRole);
     
+    model.addAttribute("user", user);
+    model.addAttribute("userRole", userRole);
+  
     return "archive";
   }
 
@@ -169,9 +173,11 @@ public class LogArchiveController {
       @RequestParam(value = "visited") String visited, 
       @RequestParam(value = "change", required = false) String change, 
       @RequestParam(value = "user") String user,
+      @RequestParam(value = "userRole") String userRole,
       ActionResponse response) {
 
     log.debug("user: "+user);
+    log.debug("userRole: "+userRole);
     log.debug("action archiveLog, visited: "+visited);
 
     String archivedate = archiveSerializer.getAsText(logarchivedate);
@@ -194,6 +200,7 @@ public class LogArchiveController {
 //    response.setRenderParameter("logArchiveDate", archiveSerializer.getAsText(logarchivedate));
     response.setRenderParameter("action", "archiveLog");
     response.setRenderParameter("user", user);
+    response.setRenderParameter("userRole", userRole);
   }
 
 //portlet render phase
@@ -201,10 +208,14 @@ public class LogArchiveController {
   public String renderStart(RenderRequest req, @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
       @RequestParam(value = "error", required = false) String error,
       @RequestParam(value = "user") String user,
+      @RequestParam(value = "userRole") String userRole,
       RenderResponse res, Model model) {
 
-    log.debug("user: "+user);
+   
     log.debug("startArchiveLog render phase: archiving started");
+    log.debug("user: "+user);
+    log.debug("userRole: "+userRole);
+    
     if (logarchivedate != null) {
       log.debug("archive end date: " + logarchivedate.getEndDate());
     } else{
@@ -212,10 +223,10 @@ public class LogArchiveController {
     }
 
     model.addAttribute("user", user);
+    model.addAttribute("userRole", userRole);
     
     log.debug("error = "+error);
-    if(error != null){
-      
+    if(error != null){  
      
       model.addAttribute("error", error); // TODO: voisi olla virhekoodi tms.
       log.debug("logarchivedate: "+logarchivedate.getEndDate());
@@ -232,23 +243,34 @@ public class LogArchiveController {
   public void startArchive(@ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
       BindingResult result, 
       @RequestParam(value = "user") String user,
+      @RequestParam(value = "userRole") String userRole,
       ActionResponse response) {
-    log.debug("user: "+user);
+    
     log.debug("painettiin nappia Käynnistä arkistointi");
     log.debug("action startArchiveLog");
+    log.debug("user: "+user);
+    log.debug("userRole: "+userRole);
+    
     log.debug("logarchivedate: "+logarchivedate);
     if(logarchivedate != null) {
       log.debug(logarchivedate.getEndDate().toString());
     }
 	
- 
     try{
-    
       LogArchivalParametersType archiveParametersType = new LogArchivalParametersType();
       
       if(logarchivedate != null && logarchivedate.getEndDate() != null){
+    
+        
         archiveParametersType.setEndDate(lu.dateToCalendar(logarchivedate.getEndDate()));
 
+        // set the end time 1 day later so that everything added on the last day will be found
+        Calendar endday = archiveParametersType.getEndDate();
+        endday.set(Calendar.DATE, endday.get(Calendar.DATE) +1);
+       
+        log.debug("The archive end date has been set 1 day later in order to archive also the end date");
+        archiveParametersType.setEndDate(endday);
+        
         // call to log database
         AuditInfoType audit = new AuditInfoType();
         audit.setComponent("lok"); //FIXME Voi olla demossa näin!
@@ -265,6 +287,7 @@ public class LogArchiveController {
       }
       
       response.setRenderParameter("user", user);
+      response.setRenderParameter("userRole", userRole);
     }// TODO: lisää tähän catch sitä varten, että tulee virheet 2.1 tai 2.2
  catch (ServiceFault e) {
    log.debug("fault: "+e.getFaultInfo().getCode());
@@ -279,8 +302,8 @@ public class LogArchiveController {
    }
    
    response.setRenderParameter("user", user);
+   response.setRenderParameter("userRole", userRole);
  }
-
  
    response.setRenderParameter("endDate", archiveSerializer.getAsText(logarchivedate));
    response.setRenderParameter("action", "startArchiveLog");
@@ -311,7 +334,6 @@ public class LogArchiveController {
 
       if (logarchivedate != null) {
         date = logarchivedate.getEndDate() != null ? df.format(logarchivedate.getEndDate()) : "";
-
       }
 
       return date;

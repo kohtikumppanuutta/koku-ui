@@ -163,8 +163,7 @@ log.debug("user: "+user);
       //The from and to fields are not allowed to be null
       Calendar start = lu.dateToCalendar(searchCriteria.getFrom());     
       Calendar end = lu.dateToCalendar(searchCriteria.getTo());
-//TODO: end-aikaan pitäisi lisätä 1 vuorokausi!
-      
+
       log.debug("parsitut päivämäärät: "+start+"\n"+end+"\n");
       // assume that null arguments are ok
  
@@ -181,43 +180,20 @@ log.debug("user: "+user);
           "end: " + criteriatype.getEndTime() + "\n" + "dataItem: "
           + criteriatype.getDataItemType() + "\n" + "logtype: " + criteriatype.getLogType());
 
-  /*    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
-      if (userInfo != null) {
-        userPic = userInfo.getPic();
-        log.info("Got PIC from session. userPic = " + userPic);
-        
-      } else {
-        // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
-        log.error("ERROR: UserInfo returns no PIC!");
-      }
-    */  
       // call to log database
       AuditInfoType audit = new AuditInfoType();
-      audit.setComponent("lok"); //FIXME OK DEMOON
- //     audit.setUserId("170777-777X");  // FIXME Kirjautuneen käyttäjän hetu!
+      audit.setComponent("lok"); //FIXME 
       log.debug("set user pic: "+user);
       // set pic that was got from the session
       audit.setUserId(user);
+      
+      // set the end time 1 day later so that everything added on the last day will be found
+      Calendar endday = criteriatype.getEndTime();
+      endday.set(Calendar.DATE, endday.get(Calendar.DATE) +1);
+     
+      log.debug("The query end date has been set 1 day later in order to get all results from the given end date");
+      criteriatype.setEndTime(endday);
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
-
-      // write to admin log about this query
-/*      LogEntryType logEntryAdminType = new LogEntryType();
-      logEntryAdminType.setTimestamp(Calendar.getInstance()); // set timestamp == now
-      log.debug("adminentryyn: date "+Calendar.getInstance().getTime().toString());
-      logEntryAdminType.setUserPic(audit.getUserId());
-      logEntryAdminType.setCustomerPic(criteriatype.getCustomerPic());
-      log.debug("customer pic: "+criteriatype.getCustomerPic());
-      logEntryAdminType.setOperation("view log");
-      logEntryAdminType.setMessage("start: "+df.format(criteriatype.getStartTime().getTime())+", end: "+df.format(criteriatype.getEndTime().getTime()));
-
-      //logEntryAdminType.setMessage("no message"); //FIXME
-
-      // this tells the DAOBean to write to admin log!
-      logEntryAdminType.setClientSystemId("log");
-      logService.opLog(logEntryAdminType, audit);
-
-    log.debug("serviceen meni: "+logEntryAdminType.getTimestamp().getTime().toString());
-*/
      
       // the log entries list from the database
       List<LogEntryType> entryTypeList = entriestype.getLogEntry();
@@ -229,13 +205,6 @@ log.debug("user: "+user);
         LogEntry logEntry = new LogEntry();
         LogEntryType logEntryType = (LogEntryType) i.next();
         
- /*       log.debug(logEntryType.getClientSystemId()+"\n");
-        log.debug(logEntryType.getCustomerPic()+"\n");
-        log.debug(logEntryType.getDataItemId()+"\n");
-        log.debug(logEntryType.getDataItemType()+"\n");
-        log.debug(logEntryType.getOperation()+"\n");
-        log.debug(logEntryType.getUserPic()+"\n");
-   */
         log.debug(logEntryType.getTimestamp()+"\n");
         // put values that were read from the database in logEntry for showing
         // them to the user
@@ -256,11 +225,8 @@ log.debug("user: "+user);
         logEntry.setUser(logEntryType.getUserPic());
 
         entryList.add(logEntry);
-
       }
-
-  
-    
+   
     } // TODO: Parempi virheenkäsittely
  catch (ServiceFault e) {
       // TODO Auto-generated catch block
