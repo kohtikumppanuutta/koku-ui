@@ -30,7 +30,7 @@ public class KokuAuthorizationSummary {
 		setTargetPersonUid(authShortSummary.getTargetPersonUid());
 		setTemplateCitizen(authShortSummary.getTemplate());
 		if (authShortSummary.getValidTill() != null) {
-			setValidTill(MessageUtil.formatTaskDate(authShortSummary.getValidTill()));
+			setValidTill(MessageUtil.formatTaskDateByDay(authShortSummary.getValidTill()));
 		}
 	}
 	
@@ -54,7 +54,7 @@ public class KokuAuthorizationSummary {
 		setTargetPersonUid(authShortSummary.getTargetPersonUid());
 		setTemplateEmployee(authShortSummary.getTemplate());
 		if (authShortSummary.getValidTill() != null) {
-			setValidTill(MessageUtil.formatTaskDate(authShortSummary.getValidTill()));			
+			setValidTill(MessageUtil.formatTaskDateByDay(authShortSummary.getValidTill()));			
 		}
 	}
 	
