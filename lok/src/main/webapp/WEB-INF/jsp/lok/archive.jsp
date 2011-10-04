@@ -79,32 +79,34 @@
 		</c:if>
 		
 <%-- confirm the date --%>
-		<c:if test="${not empty visited}">
-	
-			<p>
-				<spring:message code="koku.lok.archive.confirmation" />
-				<fmt:formatDate pattern="dd.MM.yyyy" value="${archiveDateDate}"/>
-				<spring:message code="koku.lok.archive.confirmation2" />
-				
-			</p>
+				<c:if test="${not empty visited}">
 
-		
-			<form:form method="post" action="${changeActionURL}">
-			 	<input type="hidden" name="endDate" value="${endDate}" />
-				<input type="submit"
-					value="<spring:message code="koku.common.changeDate"/>">
-			</form:form>
+					<p>
+						<spring:message code="koku.lok.archive.confirmation" />
+						<fmt:formatDate pattern="dd.MM.yyyy" value="${archiveDateDate}" />
+						<spring:message code="koku.lok.archive.confirmation2" />
 
-			<form:form method="post" action="${startArchiveActionURL}">
-				<input type="hidden" name="endDate" value="${endDate}" />
-				<input type="submit"
-					value="<spring:message code="koku.lok.archive.startArchive"/>">
-			</form:form>
-		</c:if>
-		<br/>
-	<br/>
+					</p>
 
-	<c:if test="${not empty error}">
+
+					<form:form method="post" action="${changeActionURL}">
+						<input type="hidden" name="endDate" value="${endDate}" />
+						<input type="submit"
+							value="<spring:message code="koku.common.changeDate"/>">
+					</form:form>
+
+					<c:if test="${empty error}">
+						<form:form method="post" action="${startArchiveActionURL}">
+							<input type="hidden" name="endDate" value="${endDate}" />
+							<input type="submit"
+								value="<spring:message code="koku.lok.archive.startArchive"/>">
+						</form:form>
+					</c:if>
+				</c:if>
+				<br />
+				<br />
+
+				<c:if test="${not empty error}">
 	<%-- do not show this on the first visit to this page --%>
 				<p>
 				<%--${error}--%>

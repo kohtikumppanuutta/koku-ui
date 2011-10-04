@@ -95,6 +95,7 @@ public class LogArchiveController {
     log.debug("userRole: "+userRole);
     log.debug("render archiveLog: visited= "+visited);
     log.debug("render archiveLog: change= "+change);
+ 
     if(change != null){
       log.debug("Painettiin nappia Vaihda päivämäärää");
     }
@@ -147,7 +148,7 @@ public class LogArchiveController {
       log.debug("error = "+error);
 
       if(error != null ){
-        model.addAttribute("error", "--"); // TODO: voisi olla virhekoodi tms.
+        model.addAttribute("error", error); 
       }
 
     }catch(KoKuFaultException e){
@@ -191,13 +192,16 @@ public class LogArchiveController {
     }
    
     response.setRenderParameter("visited", visited); 
+    
     if(change!=null){
       response.setRenderParameter("change", change);
     }
-    log.debug("asetetaan archiveLog:ssa visited "+visited+" ja change "+change); 
-      log.debug("asetetaan archiveLog:ssa endDate "+archiveSerializer.getAsText(logarchivedate));
+  
+    // Check that archiving date is earlier than today
+    if(!lu.isBeforeToday(logarchivedate.getEndDate())){
+      response.setRenderParameter("error", "koku.lok.archive.error.wrongDate");
+    }
     response.setRenderParameter("endDate", archiveSerializer.getAsText(logarchivedate));
-//    response.setRenderParameter("logArchiveDate", archiveSerializer.getAsText(logarchivedate));
     response.setRenderParameter("action", "archiveLog");
     response.setRenderParameter("user", user);
     response.setRenderParameter("userRole", userRole);

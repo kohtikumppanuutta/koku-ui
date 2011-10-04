@@ -18,11 +18,44 @@ public class LogUtils {
   
   
   public Calendar dateToCalendar(Date d) {
+    log.debug("dateToCalendar date = "+d.getTime());
     Calendar cal = Calendar.getInstance();
     cal.setTime(d);
+    log.debug("cal = "+cal.getTime());
     return cal;
   }
  
+  public boolean isBeforeToday(Date date){
+    
+    Calendar today = Calendar.getInstance();
+   log.debug("today: "+today.getTime());
+    today.set(Calendar.HOUR_OF_DAY, 0);
+    today.set(Calendar.MINUTE, 0);
+    today.set(Calendar.SECOND, 0);
+    today.set(Calendar.MILLISECOND, 0);
+    log.debug("after set today: "+today.getTime());
+    //   todayDate.set(Calendar.DATE, today.get(Calendar.DATE));
+ //   todayDate.set(Calendar.MONTH, today.get(Calendar.MONTH));
+ //   todayDate.set(Calendar.YEAR, today.get(Calendar.YEAR));
+    Calendar newDate = dateToCalendar(date);
+    log.debug("newdate: "+newDate.getTime());
+    newDate.set(Calendar.HOUR_OF_DAY, 0);
+    newDate.set(Calendar.MINUTE, 0);
+    newDate.set(Calendar.SECOND, 0);
+    newDate.set(Calendar.MILLISECOND, 0);
+    log.debug("after set new date: "+newDate.getTime());
+ /*   newDate.set(Calendar.DATE, date.get(Calendar.DATE));
+    newDate.set(Calendar.MONTH, today.get(Calendar.MONTH));
+    newDate.set(Calendar.YEAR, today.get(Calendar.YEAR));
+   */ 
+    if(newDate.before(today)){
+      return true;
+    } else{
+      return false;
+    }
+  }
+  
+  
  /**
   * The method returns a date X years from today.
   * @param years
