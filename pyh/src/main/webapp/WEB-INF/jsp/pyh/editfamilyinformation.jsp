@@ -176,7 +176,7 @@
 
 						<td><select id="user_role_${userVar}" class="syntmaika">
 								<option value="${ MEMBER }"><spring:message code="${MEMBER.bundleId}"/></option>
-								<option value="${ DEPENDANT }"><spring:message code="${DEPENDANT.bundleId}"/></option>
+								<%-- <option value="${ DEPENDANT }"><spring:message code="${DEPENDANT.bundleId}"/></option> --%>
 								<option value="${ CHILD }"><spring:message code="${CHILD.bundleId }"/></option>
 								
 								<c:if test="${ not parentsFull }">

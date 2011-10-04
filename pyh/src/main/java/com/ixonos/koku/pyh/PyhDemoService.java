@@ -24,6 +24,7 @@ import fi.koku.services.entity.community.v1.CommunityQueryCriteriaType;
 import fi.koku.services.entity.community.v1.CommunityServiceFactory;
 import fi.koku.services.entity.community.v1.CommunityServicePortType;
 import fi.koku.services.entity.community.v1.CommunityType;
+import fi.koku.services.entity.community.v1.MemberPicsType;
 import fi.koku.services.entity.community.v1.MemberType;
 import fi.koku.services.entity.community.v1.MembersType;
 import fi.koku.services.entity.community.v1.MembershipApprovalType;
@@ -37,6 +38,7 @@ import fi.koku.services.entity.customer.v1.CustomerServiceFactory;
 import fi.koku.services.entity.customer.v1.CustomerServicePortType;
 import fi.koku.services.entity.customer.v1.CustomerType;
 import fi.koku.services.entity.customer.v1.CustomersType;
+import fi.koku.services.entity.customer.v1.PicsType;
 
 @Service(value = "pyhDemoService")
 public class PyhDemoService {
@@ -101,7 +103,11 @@ public class PyhDemoService {
     List<Dependant> dependants = new ArrayList<Dependant>();
     CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
     communityQueryCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_GUARDIAN_COMMUNITY);
-    communityQueryCriteria.setMemberPic(userPic);
+    
+    MemberPicsType memberPics = new MemberPicsType();
+    memberPics.getMemberPic().add(userPic);
+    communityQueryCriteria.setMemberPics(memberPics);
+    
     CommunitiesType communitiesType = null;
     
     fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
@@ -189,7 +195,6 @@ public class PyhDemoService {
       log.info("--");
     }
     
-    //return dependants;
     return dependantsAndFamily;
   }
   
@@ -207,7 +212,11 @@ public class PyhDemoService {
     List<FamilyMember> otherFamilyMembers = new ArrayList<FamilyMember>();
     CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
     communityQueryCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_FAMILY);
-    communityQueryCriteria.setMemberPic(userPic);
+    
+    MemberPicsType memberPics = new MemberPicsType();
+    memberPics.getMemberPic().add(userPic);
+    communityQueryCriteria.setMemberPics(memberPics);
+    
     CommunitiesType communitiesType = null;
     
     fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
@@ -306,7 +315,11 @@ public class PyhDemoService {
     clearSearchedUsers();
     
     CustomerQueryCriteriaType customerCriteria = new CustomerQueryCriteriaType();
-    customerCriteria.setPic(customerPic);
+    
+    PicsType pics = new PicsType();
+    pics.getPic().add(customerPic);
+    customerCriteria.setPics(pics);
+    
     customerCriteria.setSelection("full"); // FIXME: tätä käytetään vain silloin kun tarvitaan käyttäjän kaikki tiedot
     CustomersType customersType = null;
     
@@ -373,7 +386,11 @@ public class PyhDemoService {
     if (CommunityRole.CHILD.equals(role)) {
       CommunityQueryCriteriaType communityCriteria = new CommunityQueryCriteriaType();
       communityCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_GUARDIAN_COMMUNITY);
-      communityCriteria.setMemberPic(targetPic);
+      
+      MemberPicsType memberPics = new MemberPicsType();
+      memberPics.getMemberPic().add(targetPic);
+      communityCriteria.setMemberPics(memberPics);
+      
       CommunitiesType communitiesType = null;
 
       fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
@@ -502,7 +519,10 @@ public class PyhDemoService {
   public void removeFamilyMember(String familyMemberPic, String userPic) {
     CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
     communityQueryCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_FAMILY);
-    communityQueryCriteria.setMemberPic(familyMemberPic);
+    
+    MemberPicsType memberPics = new MemberPicsType();
+    memberPics.getMemberPic().add(familyMemberPic);
+    communityQueryCriteria.setMemberPics(memberPics);
     
     fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
     communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
@@ -882,7 +902,11 @@ public class PyhDemoService {
     List<Family> families = new ArrayList<Family>();
     CommunityQueryCriteriaType communityCriteria = new CommunityQueryCriteriaType();
     communityCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_FAMILY);
-    communityCriteria.setMemberPic(pic);
+    
+    MemberPicsType memberPics = new MemberPicsType();
+    memberPics.getMemberPic().add(pic);
+    communityCriteria.setMemberPics(memberPics);
+    
     CommunitiesType communitiesType = null;
     
     fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
