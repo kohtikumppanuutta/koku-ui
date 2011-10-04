@@ -76,6 +76,11 @@ public class ShowConsentController extends AbstractController {
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole(request));
 		
+		if (userId == null) {
+			LOG.error("UserId is null. Can't show consent details! Given username: "+username);
+			return consent;
+		}
+		
 		if(taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS)) {
 			TivaCitizenServiceHandle handle = new TivaCitizenServiceHandle(userId);
 			handle.setMessageSource(messageSource);
