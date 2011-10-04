@@ -1,11 +1,6 @@
 package fi.arcusys.koku.av;
 
-import static fi.arcusys.koku.util.Constants.DATE;
-import static fi.arcusys.koku.util.Constants.RESPONSE_FAIL;
-import static fi.arcusys.koku.util.Constants.RESPONSE_OK;
-import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN;
-import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN;
-import static fi.arcusys.koku.util.Constants.TIME;
+import static fi.arcusys.koku.util.Constants.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -55,13 +50,16 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 	 * @return a list of appointments
 	 */
 	public List<KokuAppointment> getAppointments(String userId, int startNum, int maxNum, String taskType) {
-		List<AppointmentWithTarget> appSummaryList;
+		List<AppointmentWithTarget> appSummaryList = null;
 		List<KokuAppointment> appList = new ArrayList<KokuAppointment>();
 		
 		if (taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_CITIZEN)) {
 			appSummaryList = acs.getAssignedAppointments(userId, startNum, maxNum);		
 		} else if (taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)) {
 			appSummaryList = acs.getRespondedAppointments(userId, startNum, maxNum);			
+		} else if (taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD)) {
+			// TODO: Correct WebService will be needed
+			appSummaryList = new ArrayList<AppointmentWithTarget>();
 		} else {
 			return appList;	
 		}
@@ -122,6 +120,9 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 			return acs.getTotalAssignedAppointmentNum(userId);
 		} else if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)) {
 			return acs.getTotalRespondedAppointmentNum(userId);
+		} else if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD)) {
+			// TODO: Change total responded to correct method
+			return 0;
 		} else {
 			return 0;
 		}

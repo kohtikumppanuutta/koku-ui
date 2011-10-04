@@ -338,7 +338,9 @@ public class AjaxController extends AbstractController {
 				KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
 				handle.setMessageSource(messageSource);
 				tasks = handle.getRequests(keyword, first, max);
-			} else if (taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_CITIZEN) || taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)) {	// Tapaamiset - Vastausta odottavat / vastatut 
+			} else if (taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_CITIZEN)
+					|| taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD)
+					|| taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)) {	// Tapaamiset - Vastausta odottavat / vastatut 
 				AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
 				handle.setMessageSource(messageSource);
 				tasks = handle.getAppointments(userId, first, max, taskType);
