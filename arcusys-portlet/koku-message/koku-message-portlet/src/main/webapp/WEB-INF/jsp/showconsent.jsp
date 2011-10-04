@@ -4,6 +4,23 @@
 	<portlet:param name="myaction" value="home" />
 </portlet:renderURL>
 
+<portlet:resourceURL var="ajaxURL" id="getTask">
+</portlet:resourceURL>
+
+<%
+	/* Parses the parent path url from the portlet ajaxURL */
+	
+	String defaultPath = "";
+
+	int pos = ajaxURL.indexOf("default");
+	if(pos > -1) { // for Jboss portal
+		defaultPath = ajaxURL.substring(0, pos+7);		
+	}else { // for Gatein portal
+		int pos1 = ajaxURL.indexOf("classic");
+		defaultPath = ajaxURL.substring(0, pos1+7);
+	}
+%>
+
 <script type="text/javascript"> 
 
 /**
@@ -41,6 +58,11 @@ function formatUrl(url) {
 	<span class="text-bold"><spring:message code="consent.secondApprover"/>:</span> <c:out value="${consent.anotherPermitterUid}" /><br />
 	</c:if>
 	<span class="text-bold"><spring:message code="consent.recipients"/>:</span> <c:out value="${consent.recipients}" /><br />
+	
+	<span class="modifyConsentLink">
+		<a href="<%= defaultPath %>/Message/NewConsent?FormID=<c:out value="${consent.consentId}"/>"><spring:message code="consent.modifyConsentLink"/></a>
+	</span><br />
+	
     <h3><spring:message code="consent.actionRequest"/></h3>
     <table class="request-table">
     	<tr><td class="head"><spring:message code="consent.description"/></td><td class="head"><spring:message code="consent.status"/></td></tr>
