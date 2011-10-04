@@ -107,7 +107,6 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 		for (AuthorizationShortSummary shortSummary : authShortSummaries) {
 			KokuAuthorizationSummary kokuSummary = new KokuAuthorizationSummary(shortSummary);
 			localize(kokuSummary);
-			kokuSummary.setValidTill(MessageUtil.formatTaskDate(shortSummary.getValidTill()));
 			summaries.add(kokuSummary);
 		}
 		return summaries;
@@ -208,7 +207,6 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 		for (AuthorizationShortSummary shortSummary : authShortSummaries) {
 			KokuAuthorizationSummary kokuSummary = new KokuAuthorizationSummary(shortSummary);
 			localize(kokuSummary);
-			kokuSummary.setValidTill(MessageUtil.formatTaskDateByDay(shortSummary.getValidTill()));
 			summaries.add(kokuSummary);
 		}
 		return summaries;

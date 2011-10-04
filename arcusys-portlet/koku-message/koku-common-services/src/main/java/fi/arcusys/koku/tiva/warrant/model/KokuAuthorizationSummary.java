@@ -40,6 +40,7 @@ public class KokuAuthorizationSummary {
 		setReplyTill((MessageUtil.formatTaskDateByDay(authSummary.getReplyTill())));
 		setGivenAt(MessageUtil.formatTaskDateByDay(authSummary.getGivenAt()));
 		setCreatedAt(MessageUtil.formatTaskDateByDay(authSummary.getCreatedAt()));
+		setValidTill(MessageUtil.formatTaskDateByDay(authSummary.getValidTill()));
 		setReceiverUid(authSummary.getReceiverUid());
 		setSenderUid(authSummary.getSenderUid());
 		setStatusAsString(authSummary.getStatus().toString());
@@ -64,6 +65,7 @@ public class KokuAuthorizationSummary {
 		setReplyTill((MessageUtil.formatTaskDateByDay(authSummary.getReplyTill())));		
 		setGivenAt(MessageUtil.formatTaskDateByDay(authSummary.getGivenAt()));
 		setCreatedAt(MessageUtil.formatTaskDateByDay(authSummary.getCreatedAt()));
+		setValidTill(MessageUtil.formatTaskDateByDay(authSummary.getValidTill()));
 		setReceiverUid(authSummary.getReceiverUid());
 		setSenderUid(authSummary.getSenderUid());
 		setStatusAsString(authSummary.getStatus().toString());

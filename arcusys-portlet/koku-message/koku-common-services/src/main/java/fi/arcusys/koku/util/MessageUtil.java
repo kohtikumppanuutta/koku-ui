@@ -113,10 +113,8 @@ public class MessageUtil {
 	 * @param xmlGregorianCalendar
 	 * @return formatted date string
 	 */
-	public static String formatTaskDateByDay(XMLGregorianCalendar xmlGregorianCalendar) {		
-		String dateString = "d.M.yyyy";
-		
-		return formatDateByString(xmlGregorianCalendar, dateString);
+	public static String formatTaskDateByDay(XMLGregorianCalendar xmlGregorianCalendar) {				
+		return formatDateByString(xmlGregorianCalendar, DATE);
 	}
 
 	
@@ -127,7 +125,6 @@ public class MessageUtil {
 	 * @return formatted date string
 	 */
 	public static String formatDateByString(XMLGregorianCalendar xmlGregorianCalendar, String formatString) {
-		
 		if(xmlGregorianCalendar != null ) {
 			Calendar cal = xmlGregorianCalendar.toGregorianCalendar();
 			SimpleDateFormat dateformat = new SimpleDateFormat(formatString);	
