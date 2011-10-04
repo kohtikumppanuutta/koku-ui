@@ -146,8 +146,13 @@ public class MessageHandle extends AbstractHandle {
 	 * @return detailed message
 	 */
 	public Message getMessageById(String messageId) {
-		String parsedMsg = messageId.replaceAll(",", ".");
-		long  msgId = (long) Long.parseLong(parsedMsg);
+		long  msgId = 0;
+		try {
+			 msgId = (long) Long.parseLong(messageId);			
+		} catch (NumberFormatException nfe) {
+			LOG.error("Couldn't show message details, because messageId can't parse properly (must be long). Given MessageId: "+messageId, nfe);
+			return new Message();
+		}
 		setMessageStatus(msgId);
 		
 		fi.arcusys.koku.kv.messageservice.Message msg = ms.getMessageById(msgId);
@@ -159,7 +164,6 @@ public class MessageHandle extends AbstractHandle {
 		message.setContent(msg.getContent());
 		message.setCreationDate(MessageUtil.formatTaskDate(msg.getCreationDate()));
 		message.setMessageStatus(localizeMsgStatus(msg.getMessageStatus()));	
-		
 		return message;
 	}
 	
