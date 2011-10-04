@@ -194,3 +194,8 @@
 div[label="IntalioInternal_AttachmentsImageBlock"] {
     display: none !important;
 }
+
+div#task-manager-wrap {
+	min-width: 760px;
+}
+

@@ -3,7 +3,7 @@
 <portlet:resourceURL var="ajaxURL" id="getTask">
 </portlet:resourceURL>
 
-<portlet:renderURL var="formURL" windowState="<%= WindowState.MAXIMIZED.toString() %>" >
+<portlet:renderURL var="formURL" windowState="<%= WindowState.NORMAL.toString() %>" >
 	<portlet:param name="myaction" value="taskform" />
 	<portlet:param name="tasklink" value= "CONSTANT_TASK_FORM_LINK" />
 	<portlet:param name="currentPage" value= "CONSTANT_TASK_CURRENT_PAGE" />

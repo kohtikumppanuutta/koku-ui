@@ -1,5 +1,25 @@
 package fi.koku.taskmanager.controller;
 
+import static fi.arcusys.koku.util.Constants.ATTR_CURRENT_PAGE;
+import static fi.arcusys.koku.util.Constants.ATTR_KEYWORD;
+import static fi.arcusys.koku.util.Constants.ATTR_MY_ACTION;
+import static fi.arcusys.koku.util.Constants.ATTR_ORDER_TYPE;
+import static fi.arcusys.koku.util.Constants.ATTR_TASK_LINK;
+import static fi.arcusys.koku.util.Constants.ATTR_TASK_TYPE;
+import static fi.arcusys.koku.util.Constants.ATTR_TOKEN;
+import static fi.arcusys.koku.util.Constants.ATTR_USERNAME;
+import static fi.arcusys.koku.util.Constants.JSON_EDITABLE;
+import static fi.arcusys.koku.util.Constants.JSON_RENDER_URL;
+import static fi.arcusys.koku.util.Constants.JSON_TASKS;
+import static fi.arcusys.koku.util.Constants.JSON_TASK_STATE;
+import static fi.arcusys.koku.util.Constants.JSON_TOKEN_STATUS;
+import static fi.arcusys.koku.util.Constants.JSON_TOTAL_ITEMS;
+import static fi.arcusys.koku.util.Constants.JSON_TOTAL_PAGES;
+import static fi.arcusys.koku.util.Constants.MY_ACTION_TASKFORM;
+import static fi.arcusys.koku.util.Constants.PREF_EDITABLE;
+import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_INVALID;
+import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_VALID;
+
 import java.util.List;
 
 import javax.portlet.PortletPreferences;
@@ -20,12 +40,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
-import fi.arcusys.koku.users.UserIdResolver;
 import fi.koku.taskmanager.model.Task;
 import fi.koku.taskmanager.model.TaskHandle;
 import fi.koku.taskmanager.util.TaskUtil;
-
-import static fi.arcusys.koku.util.Constants.*;
 /**
  * Handles ajax request from web and returns the data with json string
  * @author Jinhua Chen
@@ -35,7 +52,7 @@ import static fi.arcusys.koku.util.Constants.*;
 @RequestMapping(value = "VIEW")
 public class AjaxController extends AbstractController {
 	
-	private static Logger logger = Logger.getLogger(AjaxController.class);
+	private static Logger LOG = Logger.getLogger(AjaxController.class);
 	private static final String RESPONSE 		= "response";
 
 	/**
@@ -90,7 +107,7 @@ public class AjaxController extends AbstractController {
 		
 		if (token == null) {
 			jsonModel.put(JSON_TOKEN_STATUS, TOKEN_STATUS_INVALID);
-			logger.info("Intalio token is invalid!");
+			LOG.info("Intalio token is invalid!");
 		} else {
 			TaskHandle taskhandle = new TaskHandle(token, username);
 			String taskState = taskhandle.getTaskStatus(taskId);
@@ -115,7 +132,7 @@ public class AjaxController extends AbstractController {
 		
 		if (token == null) {
 			jsonModel.put(JSON_TOKEN_STATUS, TOKEN_STATUS_INVALID);
-			logger.info("Intalio token is invalid!");
+			LOG.info("Intalio token is invalid!");
 		} else {
 			TaskHandle taskhandle = new TaskHandle(token, username);
 			int numPerPage = TaskUtil.PAGE_NUMBER;
@@ -169,9 +186,9 @@ public class AjaxController extends AbstractController {
 		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
 		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);	
 		try {
-			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
+			renderUrlObj.setWindowState(WindowState.NORMAL);
 		} catch (WindowStateException e) {
-			logger.error("Create request render url failed");
+			LOG.error("Create request render url failed");
 		}
 		String renderUrlString = renderUrlObj.toString();
 		
@@ -192,7 +209,7 @@ public class AjaxController extends AbstractController {
 		try {
 			renderUrlObj.setWindowState(WindowState.MAXIMIZED);
 		} catch (WindowStateException e) {
-			logger.error("Create request render url failed");
+			LOG.error("Create request render url failed");
 		}
 		String renderUrlString = renderUrlObj.toString();
 		
