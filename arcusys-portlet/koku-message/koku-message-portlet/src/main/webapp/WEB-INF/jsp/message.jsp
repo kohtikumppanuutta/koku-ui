@@ -997,8 +997,6 @@
 		
 		if (pageObj.taskType == '<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS %>') {
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="revokeConsents()" /></li>';
-		} else if ( pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT %>') {
-			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="revokeWarrants()" /></li>';
 		} else if(pageObj.taskType.indexOf('msg') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="page.removeSelected"/>"  onclick="deleteMessages()" /></li>';
 		} else if( pageObj.taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE %>' 
@@ -1215,6 +1213,8 @@
 		});
 	}
 	
+
+	<%-- 	
 	/**
 	 * Revokes a list of warrants selected by user
 	 */
@@ -1263,7 +1263,7 @@
 		});
 	}
 	
-
+--%> 
 	/**
 	 * Show/hide search user interface
 	 */
