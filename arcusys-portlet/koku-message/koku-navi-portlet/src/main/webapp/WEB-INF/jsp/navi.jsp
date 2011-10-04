@@ -209,7 +209,10 @@
 		
 		<li><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')" >Viestit</a>
 			<ul class="child">
+					<!-- Show "New message" only for employee in Jboss portal -->
+				<c:if test="${fn:contains(naviURL, '/default/')}">
 				<li id="msg_new"><a href="<%= defaultPath %>/Message/NewMessage">Uusi viesti</a> </li>
+				</c:if>
 				<li id="msg_inbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')">Saapuneet <span id="inbox_num" class="message_num"></span></a></li>
 				<li id="msg_outbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_outbox')">Lähetetyt</a></li>
 				<li><a href="javascript:void(0)" onclick="showArchiveUI()">Arkistoidut</a>
@@ -274,7 +277,7 @@
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
 			<li><a href="#">Suostumukset</a>
 				<ul class="child">
-					<li id="cst_assigned_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_assigned_citizen')">Saapuneet pyynnöt</a></li>
+					<li id="cst_assigned_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_assigned_citizen')">Saapuneet</a></li>
 					<li id="cst_own_citizen"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_citizen')">Vastatut</a></li>
 					<li id="cst_own_citizen_old"><a href="javascript:void(0)" onclick="navigateToPage('cst_own_citizen')">Vanhat</a></li>					
 				</ul>
