@@ -373,6 +373,7 @@
 				+ '<tr class="task-manager-table trheader">'
 				+ '<td>' + '<spring:message code="consent.requester" />' + '</td>'
 				+ '<td>' + '<spring:message code="consent.templateName" />'+ '</td>'
+				+ '<td>' + '<spring:message code="consent.replyTill" />'+ '</td>'
 				+ '</tr>';
 				 
 			for ( var i = 0; i < tasks.length; i++) {
@@ -385,6 +386,7 @@
 			
 				taskHtml += '<td class="messageItem">' + tasks[i]["requester"] + '</td>'
 					 	 + '<td class="messageItem">' + tasks[i]["templateName"] + '</td>'
+					 	 + '<td class="messageItem">' + tasks[i]["replyTill"] + '</td>'
 					 	 + '</tr>';
 			}
 

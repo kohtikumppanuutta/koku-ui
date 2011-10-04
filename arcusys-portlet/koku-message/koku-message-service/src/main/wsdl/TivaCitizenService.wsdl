@@ -7,6 +7,7 @@
    <xs:element name='getConsentByIdResponse' type='tns:getConsentByIdResponse'/>
    <xs:element name='getOwnConsents' type='tns:getOwnConsents'/>
    <xs:element name='getOwnConsentsResponse' type='tns:getOwnConsentsResponse'/>
+
    <xs:element name='getTotalAssignedConsents' type='tns:getTotalAssignedConsents'/>
    <xs:element name='getTotalAssignedConsentsResponse' type='tns:getTotalAssignedConsentsResponse'/>
    <xs:element name='getTotalOwnConsents' type='tns:getTotalOwnConsents'/>
@@ -16,6 +17,7 @@
    <xs:complexType name='getAssignedConsents'>
     <xs:sequence>
      <xs:element minOccurs='0' name='user' type='xs:string'/>
+
      <xs:element name='startNum' type='xs:int'/>
      <xs:element name='maxNum' type='xs:int'/>
     </xs:sequence>
@@ -25,14 +27,17 @@
      <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:consentShortSummary'/>
     </xs:sequence>
    </xs:complexType>
+
    <xs:complexType name='consentShortSummary'>
     <xs:sequence>
      <xs:element minOccurs='0' name='anotherPermitterUid' type='xs:string'/>
      <xs:element minOccurs='0' name='consentId' type='xs:long'/>
      <xs:element minOccurs='0' name='createType' type='tns:consentCreateType'/>
+     <xs:element minOccurs='0' name='replyTill' type='xs:date'/>
      <xs:element minOccurs='0' name='requestor' type='xs:string'/>
      <xs:element minOccurs='0' name='templateName' type='xs:string'/>
     </xs:sequence>
+
    </xs:complexType>
    <xs:complexType name='getTotalAssignedConsents'>
     <xs:sequence>
@@ -42,6 +47,7 @@
    <xs:complexType name='getTotalAssignedConsentsResponse'>
     <xs:sequence>
      <xs:element name='return' type='xs:int'/>
+
     </xs:sequence>
    </xs:complexType>
    <xs:complexType name='getOwnConsents'>
@@ -51,6 +57,7 @@
      <xs:element name='maxNum' type='xs:int'/>
     </xs:sequence>
    </xs:complexType>
+
    <xs:complexType name='getOwnConsentsResponse'>
     <xs:sequence>
      <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:consentSummary'/>
@@ -60,6 +67,7 @@
     <xs:complexContent>
      <xs:extension base='tns:consentShortSummary'>
       <xs:sequence>
+
        <xs:element minOccurs='0' name='approvalStatus' type='tns:consentApprovalStatus'/>
        <xs:element minOccurs='0' name='givenAt' type='xs:date'/>
        <xs:element maxOccurs='unbounded' minOccurs='0' name='receipients' nillable='true' type='xs:string'/>
@@ -69,6 +77,7 @@
      </xs:extension>
     </xs:complexContent>
    </xs:complexType>
+
    <xs:complexType name='getConsentById'>
     <xs:sequence>
      <xs:element name='suostumusId' type='xs:long'/>
@@ -78,6 +87,7 @@
    <xs:complexType name='getConsentByIdResponse'>
     <xs:sequence>
      <xs:element minOccurs='0' name='return' type='tns:consentTO'/>
+
     </xs:sequence>
    </xs:complexType>
    <xs:complexType name='consentTO'>
@@ -87,6 +97,7 @@
        <xs:element maxOccurs='unbounded' minOccurs='0' name='actionRequests' nillable='true' type='tns:actionRequestSummary'/>
       </xs:sequence>
      </xs:extension>
+
     </xs:complexContent>
    </xs:complexType>
    <xs:complexType name='actionRequestSummary'>
@@ -96,6 +107,7 @@
      <xs:element minOccurs='0' name='status' type='tns:actionRequestStatus'/>
     </xs:sequence>
    </xs:complexType>
+
    <xs:complexType name='getTotalOwnConsents'>
     <xs:sequence>
      <xs:element minOccurs='0' name='user' type='xs:string'/>
@@ -105,6 +117,7 @@
     <xs:sequence>
      <xs:element name='return' type='xs:int'/>
     </xs:sequence>
+
    </xs:complexType>
    <xs:complexType name='revokeOwnConsent'>
     <xs:sequence>
@@ -114,6 +127,7 @@
    </xs:complexType>
    <xs:complexType name='revokeOwnConsentResponse'>
     <xs:sequence/>
+
    </xs:complexType>
    <xs:simpleType name='consentCreateType'>
     <xs:restriction base='xs:string'>
@@ -123,6 +137,7 @@
     </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name='consentApprovalStatus'>
+
     <xs:restriction base='xs:string'>
      <xs:enumeration value='Approved'/>
      <xs:enumeration value='Declined'/>
@@ -132,6 +147,7 @@
     <xs:restriction base='xs:string'>
      <xs:enumeration value='Open'/>
      <xs:enumeration value='PartiallyGiven'/>
+
      <xs:enumeration value='Valid'/>
      <xs:enumeration value='Expired'/>
      <xs:enumeration value='Revoked'/>
@@ -141,6 +157,7 @@
    <xs:simpleType name='actionRequestStatus'>
     <xs:restriction base='xs:string'>
      <xs:enumeration value='Given'/>
+
      <xs:enumeration value='Declined'/>
     </xs:restriction>
    </xs:simpleType>
@@ -150,6 +167,7 @@
   <part element='tns:getTotalAssignedConsentsResponse' name='getTotalAssignedConsentsResponse'></part>
  </message>
  <message name='KokuKunpoSuostumusService_getAssignedConsentsResponse'>
+
   <part element='tns:getAssignedConsentsResponse' name='getAssignedConsentsResponse'></part>
  </message>
  <message name='KokuKunpoSuostumusService_getTotalOwnConsents'>
@@ -159,6 +177,7 @@
   <part element='tns:getConsentById' name='getConsentById'></part>
  </message>
  <message name='KokuKunpoSuostumusService_revokeOwnConsent'>
+
   <part element='tns:revokeOwnConsent' name='revokeOwnConsent'></part>
  </message>
  <message name='KokuKunpoSuostumusService_getTotalAssignedConsents'>
@@ -168,6 +187,7 @@
   <part element='tns:getTotalOwnConsentsResponse' name='getTotalOwnConsentsResponse'></part>
  </message>
  <message name='KokuKunpoSuostumusService_getOwnConsentsResponse'>
+
   <part element='tns:getOwnConsentsResponse' name='getOwnConsentsResponse'></part>
  </message>
  <message name='KokuKunpoSuostumusService_revokeOwnConsentResponse'>
@@ -177,6 +197,7 @@
   <part element='tns:getOwnConsents' name='getOwnConsents'></part>
  </message>
  <message name='KokuKunpoSuostumusService_getConsentByIdResponse'>
+
   <part element='tns:getConsentByIdResponse' name='getConsentByIdResponse'></part>
  </message>
  <message name='KokuKunpoSuostumusService_getAssignedConsents'>
@@ -186,6 +207,7 @@
   <operation name='getAssignedConsents' parameterOrder='getAssignedConsents'>
    <input message='tns:KokuKunpoSuostumusService_getAssignedConsents'></input>
    <output message='tns:KokuKunpoSuostumusService_getAssignedConsentsResponse'></output>
+
   </operation>
   <operation name='getConsentById' parameterOrder='getConsentById'>
    <input message='tns:KokuKunpoSuostumusService_getConsentById'></input>
@@ -195,6 +217,7 @@
    <input message='tns:KokuKunpoSuostumusService_getOwnConsents'></input>
    <output message='tns:KokuKunpoSuostumusService_getOwnConsentsResponse'></output>
   </operation>
+
   <operation name='getTotalAssignedConsents' parameterOrder='getTotalAssignedConsents'>
    <input message='tns:KokuKunpoSuostumusService_getTotalAssignedConsents'></input>
    <output message='tns:KokuKunpoSuostumusService_getTotalAssignedConsentsResponse'></output>
@@ -204,6 +227,7 @@
    <output message='tns:KokuKunpoSuostumusService_getTotalOwnConsentsResponse'></output>
   </operation>
   <operation name='revokeOwnConsent' parameterOrder='revokeOwnConsent'>
+
    <input message='tns:KokuKunpoSuostumusService_revokeOwnConsent'></input>
    <output message='tns:KokuKunpoSuostumusService_revokeOwnConsentResponse'></output>
   </operation>
@@ -213,6 +237,7 @@
   <operation name='getAssignedConsents'>
    <soap:operation soapAction=''/>
    <input>
+
     <soap:body use='literal'/>
    </input>
    <output>
@@ -222,6 +247,7 @@
   <operation name='getConsentById'>
    <soap:operation soapAction=''/>
    <input>
+
     <soap:body use='literal'/>
    </input>
    <output>
@@ -231,6 +257,7 @@
   <operation name='getOwnConsents'>
    <soap:operation soapAction=''/>
    <input>
+
     <soap:body use='literal'/>
    </input>
    <output>
@@ -240,6 +267,7 @@
   <operation name='getTotalAssignedConsents'>
    <soap:operation soapAction=''/>
    <input>
+
     <soap:body use='literal'/>
    </input>
    <output>
@@ -249,6 +277,7 @@
   <operation name='getTotalOwnConsents'>
    <soap:operation soapAction=''/>
    <input>
+
     <soap:body use='literal'/>
    </input>
    <output>
@@ -258,6 +287,7 @@
   <operation name='revokeOwnConsent'>
    <soap:operation soapAction=''/>
    <input>
+
     <soap:body use='literal'/>
    </input>
    <output>
@@ -267,6 +297,7 @@
  </binding>
  <service name='KokuKunpoSuostumusService'>
   <port binding='tns:KokuKunpoSuostumusServiceBinding' name='KokuKunpoSuostumusServicePort'>
+
    <soap:address location='http://127.0.0.1:8180/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuKunpoSuostumusServiceImpl'/>
   </port>
  </service>

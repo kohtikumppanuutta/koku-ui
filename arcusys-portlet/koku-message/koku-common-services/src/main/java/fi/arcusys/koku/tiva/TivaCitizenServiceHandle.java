@@ -70,9 +70,9 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 			kokuConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
 			kokuConsent.setRequester(consent.getRequestor());
 			kokuConsent.setTemplateName(consent.getTemplateName());
+			kokuConsent.setReplyTill(MessageUtil.formatTaskDateByDay(consent.getReplyTill()));
 			consentList.add(kokuConsent);
 		}
-		
 		return consentList;
 	}
 	
@@ -97,7 +97,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 		kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
 		kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
 		kokuConsent.setActionRequests(convertActionRequests(consent.getActionRequests()));
-		
+		kokuConsent.setReplyTill(MessageUtil.formatTaskDateByDay(consent.getReplyTill()));		
 		return kokuConsent;
 	}
 	
@@ -130,6 +130,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 			kokuConsent.setApprovalStatus(localizeApprovalConsentStatus(consent.getApprovalStatus()));			
 			kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
 			kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
+			kokuConsent.setReplyTill(MessageUtil.formatTaskDateByDay(consent.getReplyTill()));
 			consentList.add(kokuConsent);
 		}
 		
