@@ -230,9 +230,10 @@
 		<li><a href="#">Pyynnöt</a>
 			<ul class="child">
 				<li id="req_valid_request"><a href="<%= defaultPath %>/Message/ValidRequest">Saapuneet</a></li>
-				<li><a href="#">Vastatut</a></li>
-				<li><a href="#">Vanhat</a></li>
-			</ul></li>
+				<li id="<%=Constants.TASK_TYPE_REQUEST_REPLIED %>"><a href="javascript:void(0)" onclick="navigateToPage('<%=Constants.TASK_TYPE_REQUEST_REPLIED %>')">Vastatut</a></li>
+				<li id="<%=Constants.TASK_TYPE_REQUEST_OLD %>"><a href="javascript:void(0)" onclick="navigateToPage('<%=Constants.TASK_TYPE_REQUEST_OLD %>')">Vanhat</a></li>
+			</ul>
+		</li>
 		</c:if>
 		<!-- For employee in Jboss portal -->
 		<c:if test="${fn:contains(naviURL, '/default/')}">
@@ -242,8 +243,8 @@
 				<li id="luopohja"><a href="<%= defaultPath %>/Message/LuoPohja">Luo uusi pohja</a></li>
 				<li>Lähetetyt
 					<ul class="child">
-						<li id="req_valid"><a href="javascript:void(0)" onclick="navigateToPage('req_valid')">Avoimet</a></li>
-						<li><a href="#">Valmiit</a></li>
+						<li id="<%=Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>"><a href="javascript:void(0)" onclick="navigateToPage('<%=Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>')">Avoimet</a></li>
+						<li id="<%=Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE %>"><a  href="javascript:void(0)" onclick="navigateToPage('<%=Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE %>')">Valmiit</a></li>
 					</ul>
 				</li>
 			</ul>

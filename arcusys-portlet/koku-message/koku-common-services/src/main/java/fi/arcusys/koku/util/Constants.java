@@ -63,7 +63,10 @@ public class Constants {
 	public static final String TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE 	   	= "app_response_employee";				// Virkam.: Tapaamiset - Vastatut
 	public static final String TASK_TYPE_APPOINTMENT_INBOX_CITIZEN 			= "app_inbox_citizen";
 	public static final String TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE 		= "app_inbox_employee";	
-	public static final String TASK_TYPE_REQUEST_VALID_EMPLOYEE				= "req_valid";
+	public static final String TASK_TYPE_REQUEST_VALID_EMPLOYEE				= "req_valid";							// Pyynnöt - Avoimet
+	public static final String TASK_TYPE_REQUEST_DONE_EMPLOYEE				= "req_valid_done";						// Pyynnöt - Valmiit
+	public static final String TASK_TYPE_REQUEST_REPLIED					= "req_replied";						// Pyynnöt - Vastatut 
+	public static final String TASK_TYPE_REQUEST_OLD						= "req_old";							// Pyynnöt - Vanhat
 	public static final String TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED		= "info_req_browse_replied";			// Tietopyynnöt - Virkailija: Selaa vastattuja tietopyyntöjä
 	public static final String TASK_TYPE_INFO_REQUEST_BROWSE_SENT			= "info_req_browse_sent";				// Tietopyynnöt - Virkailija: Selaa lähetettyjä tietopyyntöjä
 	public static final String TASK_TYPE_INFO_REQUEST_BROWSE				= "info_req_browse";					// Tietopyynnöt - ADMIN: Selaa tietopyyntöjä

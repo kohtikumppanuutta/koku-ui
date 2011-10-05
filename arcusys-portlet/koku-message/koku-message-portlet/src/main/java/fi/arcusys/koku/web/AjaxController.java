@@ -1,5 +1,6 @@
 package fi.arcusys.koku.web;
 
+import static fi.arcusys.koku.util.Constants.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,24 +26,16 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import fi.arcusys.koku.av.AvCitizenServiceHandle;
 import fi.arcusys.koku.av.AvEmployeeServiceHandle;
-import fi.arcusys.koku.av.KokuAppointment;
-import fi.arcusys.koku.kv.KokuRequest;
-import fi.arcusys.koku.kv.Message;
 import fi.arcusys.koku.kv.MessageHandle;
 import fi.arcusys.koku.kv.RequestHandle;
 import fi.arcusys.koku.tiva.KokuConsent;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
-import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
 import fi.arcusys.koku.tiva.tietopyynto.employee.KokuEmployeeTietopyyntoServiceHandle;
-import fi.arcusys.koku.tiva.tietopyynto.model.KokuInformationRequestSummary;
 import fi.arcusys.koku.tiva.warrant.citizens.KokuCitizenWarrantHandle;
 import fi.arcusys.koku.tiva.warrant.employee.KokuEmployeeWarrantHandle;
-import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationSummary;
-import fi.arcusys.koku.tiva.warrant.model.KokuValtakirjapohja;
 import fi.arcusys.koku.users.UserIdResolver;
 import fi.arcusys.koku.util.PortalRole;
-import static fi.arcusys.koku.util.Constants.*;
 
 /**
  * Hanldes ajax request from portlet and returns the response with json string
@@ -326,7 +319,13 @@ public class AjaxController extends AbstractController {
 				RequestHandle reqHandle = new RequestHandle();
 				tasks = reqHandle.getRequests(userId, "valid", "", first, max);
 				totalTasksNum = reqHandle.getTotalRequestsNum(userId, "valid");
-			} else if (taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED)) { // Virkailija: Selaa vastaanotettuja tietopyyntöjä
+			} else if (taskType.equals(TASK_TYPE_REQUEST_REPLIED)
+					|| taskType.equals(TASK_TYPE_REQUEST_OLD)
+					|| taskType.equals(TASK_TYPE_REQUEST_DONE_EMPLOYEE)) { // Pyynnöt - vastatut/vanhat
+				// TODO: Need proper WS service
+				tasks = Collections.EMPTY_LIST;
+				totalTasksNum = 0;				
+			}else if (taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED)) { // Virkailija: Selaa vastaanotettuja tietopyyntöjä
 				KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
 				handle.setMessageSource(messageSource);
 				tasks = handle.getRepliedRequests(userId, keyword, first, max);
@@ -360,6 +359,12 @@ public class AjaxController extends AbstractController {
 				tivaHandle.setMessageSource(messageSource);
 				tasks = tivaHandle.getOwnConsents(userId, first, max);
 				totalTasksNum = tivaHandle.getTotalOwnConsents(userId);
+			} else if(taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD)) { // consent (Valtakirja / Suostumus) Kansalaiselle vastatut vanhentuneet pyynnöt(/suostumukset) 
+				TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
+				tivaHandle.setMessageSource(messageSource);
+				// TODO Need proper WS
+				tasks = new ArrayList<KokuConsent>();
+				totalTasksNum = 0;
 			} else if(taskType.equals(TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS)) { // Virkailijan lähetetyt suostumus pyynnöt
 				TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
 				tivaHandle.setMessageSource(messageSource);

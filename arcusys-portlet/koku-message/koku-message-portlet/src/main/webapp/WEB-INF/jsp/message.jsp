@@ -396,7 +396,6 @@
 			taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
 				+ '<td class="choose"><spring:message code="message.choose" /></td>'
-				+ '<td>' + '<spring:message code="consent.requester" />' + '</td>'
 				+ '<td style="width:250px;">' + '<spring:message code="consent.templateName" />' + '</td>'
 				+ '<td>' + '<spring:message code="consent.status" />' + '</td>'
 				+ '<td>' + '<spring:message code="consent.approvalStatus" />' + '</td>'
@@ -410,7 +409,6 @@
 			
 				taskHtml += generateRowTr(i);			
 				taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
-						 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["requester"] + '</td>'
 					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["templateName"] + '</td>'
 					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["status"] + '</td>'
 					  	 + '<td class="messageItem" onclick="showConsent(\''+ i + '\')" >' + tasks[i]["approvalStatus"] + '</td>'
