@@ -67,19 +67,27 @@
 			} else { 
 				jQuery("#msg_inbox").css("font-weight", "bold");
 			}
-		} else if(currentPage == 'NewMessage')
+		} else if(currentPage == 'NewMessage') {
 			jQuery("#msg_new").css("font-weight", "bold");
-		else if(currentPage == 'NewRequest')
+		} else if(currentPage == 'NewRequest') {
 			jQuery("#req_new").css("font-weight", "bold");
-		else if(currentPage == 'ValidRequest')
+		} else if(currentPage == 'ValidRequest') {
 			jQuery("#req_valid_request").css("font-weight", "bold");
-		else if(currentPage == 'NewAppointment')
-			jQuery("#app_new").css("font-weight", "bold");
-		else if(currentPage == 'NewKindergarten')
-			jQuery("#kid_new").css("font-weight", "bold");
-		else if(currentPage == 'NewConsent')
-			jQuery("#cst_new").css("font-weight", "bold");
-		else {
+		} else if(currentPage == 'NewAppointment') {
+			jQuery("#app_new").css("font-weight", "bold");			
+		} else if(currentPage == 'NewKindergarten') {
+			jQuery("#kid_new").css("font-weight", "bold");			
+		} else if(currentPage == 'NewConsent') {
+			jQuery("#cst_new").css("font-weight", "bold");			
+		} else if(currentPage == 'FillConsent') {
+			jQuery("#fillconsent").css("font-weight", "bold");			
+		} else if(currentPage == 'SendConsent') {
+			jQuery("#sendconsent").css("font-weight", "bold");			
+		} else if(currentPage == 'SelaaValtakirjoja') {
+			jQuery("#selaaOmiaValtakirjoja").css("font-weight", "bold");			
+		} else if(currentPage == 'Ilmoitukset') {
+			jQuery("#info_request_open").css("font-weight", "bold");			
+		} else {
 			var obj = "#" + currentPage.toLowerCase();
 			jQuery(obj).css("font-weight", "bold");
 		}
@@ -155,6 +163,7 @@
 		else
 			jQuery('#archive_inbox_num').html("");
 	}
+	
 	<%  //for jboss portal
 	if(defaultPath.contains("default")) { %>
 	function navigateToPage(naviType) {		
@@ -320,15 +329,15 @@
 			<ul class="child">
 				<li id="newinformation"><a href="<%= defaultPath %>/Message/NewInformation">Uusi tietopyyntö</a></li>
 				<li id="informationbox"><a href="<%= defaultPath %>/Message/InformationBox">Saapuneet</a></li>
-				<li id="ilmoitukset"><a href="<%= defaultPath %>/Message/Ilmoitukset">Lähetetyt</a>
+				<li>Lähetetyt
 					<ul class="child">
-						<li id="cst_new"><a href="<%= defaultPath %>/Message/Ilmoitukset">Avoimet</a></li>
+						<li id="info_request_open"><a href="<%= defaultPath %>/Message/Ilmoitukset">Avoimet</a></li>
 						<%-- <li id="sendconsent"><a href="<%= defaultPath %>/Message/Ilmoitukset">Valmiit</a></li> --%>
-						<li id="<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED%>')">Selaa lähetettyjä</a></li>
-						<li id="<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT%>')">Selaa vastattuja</a></li>
+						<li id="<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED%>')">Lähetetyt</a></li>
+						<li id="<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT%>')">Vastatut</a></li>
 					</ul>
 				</li>
-				<li id="<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE%>')">Selaa tietopyyntöjä (ADMIN)</a></li>				
+				<li id="<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE%>')">Selaa tietopyyntöjä</a></li>				
 			</ul>
 		</li>
 		</c:if>	
