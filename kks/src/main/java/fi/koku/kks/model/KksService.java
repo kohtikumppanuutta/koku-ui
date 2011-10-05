@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +23,7 @@ import fi.koku.services.entity.community.v1.CommunityQueryCriteriaType;
 import fi.koku.services.entity.community.v1.CommunityServiceFactory;
 import fi.koku.services.entity.community.v1.CommunityServicePortType;
 import fi.koku.services.entity.community.v1.CommunityType;
+import fi.koku.services.entity.community.v1.MemberPicsType;
 import fi.koku.services.entity.community.v1.MemberType;
 import fi.koku.services.entity.community.v1.MembersType;
 import fi.koku.services.entity.customer.v1.CustomerServiceFactory;
@@ -130,24 +130,6 @@ public class KksService {
     return customerServiceFactory.getCustomerService();
   }
 
-  public boolean hasAuthorizedData(KksCollectionClassType c, String user) {
-    Map<String, Registry> tmp = getAuthorizedRegistries(user);
-
-    for (KksGroupType g : c.getKksGroups().getKksGroup()) {
-      if (tmp.containsKey(g.getRegister())) {
-        return true;
-      }
-
-      for (KksGroupType sg : g.getSubGroups().getKksGroup()) {
-        if (tmp.containsKey(sg.getRegister())) {
-          return true;
-        }
-      }
-    }
-
-    return false;
-  }
-
   public KksEntryClassType getEntryClassType(String id, String user) {
     if (entryClasses.isEmpty()) {
       collectMetadata(user);
@@ -169,7 +151,6 @@ public class KksService {
 
   public List<KKSCollection> getKksCollections(String pic, String user) {
     List<KKSCollection> tmp = new ArrayList<KKSCollection>();
-    List<KKSCollection> authorized = new ArrayList<KKSCollection>();
     try {
 
       KksCollectionsCriteriaType criteria = new KksCollectionsCriteriaType();
@@ -188,23 +169,20 @@ public class KksService {
       }
 
       for (KKSCollection c : tmp) {
-        if (isMaster(pic, user, c) || hasAuthorizedData(c.getCollectionClass(), user)) {
-          authorized.add(c);
 
-          UserInfo u = userInfo.getUserInfoByPic(c.getCreator());
+        UserInfo u = userInfo.getUserInfoByPic(c.getCreator());
 
-          if (u != null) {
-            c.setModifierFullName(u.getFname() + " " + u.getSname());
-          }
+        if (u != null) {
+          c.setModifierFullName(u.getFname() + " " + u.getSname());
         }
       }
-      Collections.sort(authorized, new CollectionComparator());
+      Collections.sort(tmp, new CollectionComparator());
 
     } catch (ServiceFault e) {
       LOG.error("Failed to get KKS collections", e);
     }
 
-    return authorized;
+    return tmp;
   }
 
   public KKSCollection getKksCollection(String collectionId, UserInfo info) {
@@ -292,7 +270,7 @@ public class KksService {
 
   public List<KKSCollection> searchKksCollections(List<String> tagNames, String customer, String user) {
     List<KKSCollection> tmp = new ArrayList<KKSCollection>();
-    List<KKSCollection> authorized = new ArrayList<KKSCollection>();
+
     try {
       KksQueryCriteriaType kksQueryCriteria = new KksQueryCriteriaType();
       kksQueryCriteria.setPic(customer);
@@ -309,38 +287,36 @@ public class KksService {
       for (KKSCollection collection : tmp) {
         List<Entry> entries = new ArrayList<Entry>(collection.getEntryValues());
 
-        if (isMaster(customer, user, collection) || hasAuthorizedData(collection.getCollectionClass(), user)) {
-          authorized.add(collection);
+        if (!isMaster(customer, user, collection)) {
+          collection.clearEntries();
+          Map<String, Registry> reg = getAuthorizedRegistries(user);
+          KksCollectionClassType cc = collection.getCollectionClass();
 
-          if (!isMaster(customer, user, collection)) {
-            collection.clearEntries();
-            Map<String, Registry> reg = getAuthorizedRegistries(user);
-            KksCollectionClassType cc = collection.getCollectionClass();
+          Map<String, KksGroupType> groups = new HashMap<String, KksGroupType>();
 
-            Map<String, KksGroupType> groups = new HashMap<String, KksGroupType>();
+          for (KksGroupType i : cc.getKksGroups().getKksGroup()) {
+            groups.put(i.getId(), i);
 
-            for (KksGroupType i : cc.getKksGroups().getKksGroup()) {
-              groups.put(i.getId(), i);
-
-              for (KksGroupType ii : i.getSubGroups().getKksGroup()) {
-                groups.put(ii.getId(), ii);
-              }
+            for (KksGroupType ii : i.getSubGroups().getKksGroup()) {
+              groups.put(ii.getId(), ii);
             }
-            for (Entry e : entries) {
-              KksGroupType gt = groups.get(e.getType().getGroupId());
+          }
+          for (Entry e : entries) {
+            KksGroupType gt = groups.get(e.getType().getGroupId());
 
-              if (reg.containsKey(gt.getRegister())) {
-                collection.addEntry(e);
-              }
+            if (reg.containsKey(gt.getRegister())) {
+              collection.addEntry(e);
             }
           }
         }
+
       }
 
     } catch (ServiceFault e) {
       LOG.error("Failed to search KKS collections", e);
     }
-    return authorized;
+    Collections.sort(tmp, new CollectionComparator());
+    return tmp;
   }
 
   private boolean isMaster(String customer, String user, KKSCollection collection) {
@@ -426,7 +402,9 @@ public class KksService {
     List<Person> childs = new ArrayList<Person>();
     CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
     communityQueryCriteria.setCommunityType(Constants.COMMUNITY_TYPE_GUARDIAN_COMMUNITY);
-    communityQueryCriteria.setMemberPic(pic);
+    MemberPicsType mpt = new MemberPicsType();
+    mpt.getMemberPic().add(pic);
+    communityQueryCriteria.setMemberPics(mpt);
     CommunitiesType communitiesType = null;
 
     try {
@@ -440,9 +418,8 @@ public class KksService {
       for (CommunityType community : communities) {
         MembersType membersType = community.getMembers();
         List<MemberType> members = membersType.getMember();
-        Iterator<MemberType> mi = members.iterator();
-        while (mi.hasNext()) {
-          MemberType member = mi.next();
+
+        for (MemberType member : members) {
           if (member.getRole().equals(Constants.ROLE_DEPENDANT)) {
             try {
               CustomerType customer = getCustomerService().opGetCustomer(member.getPic(), getCustomerAuditInfo(pic));

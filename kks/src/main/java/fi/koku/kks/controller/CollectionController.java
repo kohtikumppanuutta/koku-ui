@@ -19,6 +19,8 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.koku.kks.model.Entry;
+import fi.koku.kks.model.EntryValue;
 import fi.koku.kks.model.KKSCollection;
 import fi.koku.kks.model.KksService;
 import fi.koku.kks.model.Person;
@@ -100,6 +102,11 @@ public class CollectionController {
     return k;
   }
 
+  @ModelAttribute("multi")
+  public EntryValue getEntryValue() {
+    return new EntryValue();
+  }
+
   @ActionMapping(params = "action=addMultivalue")
   public void saveMultivalue(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "entryType") String entryType, @RequestParam(value = "collection") String collection,
@@ -154,10 +161,17 @@ public class CollectionController {
     model.addAttribute("collection", kok);
     model.addAttribute("type", t);
     model.addAttribute("valueId", valueId);
-
+    EntryValue e = new EntryValue();
     if (StringUtils.isNotEmpty(entry)) {
-      model.addAttribute("entryvalue", kok.getEntryWithValue(valueId));
+      Entry ent = kok.getEntryWithValue(valueId);
+      model.addAttribute("entryvalue", ent);
+
+      model.addAttribute("value", ent == null ? "" : ent.getValue());
+
+    } else {
+      model.addAttribute("value", "");
     }
+    model.addAttribute("value", e);
 
     return "multivalue";
   }
