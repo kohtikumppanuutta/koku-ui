@@ -37,6 +37,7 @@ public class Constants {
 	public static final String ATTR_MY_ACTION								= "myaction";
 	public static final String ATTR_TARGET_PERSON							= "targetPerson";
 	public static final String ATTR_PORTAL_INFO								= "portalInfo";
+	public static final String ATTR_NAVI_TYPE								= "naviType";
 	                                                                    
 	/* ATTR_MY_ACTION parameter possible values.
 	 * These values define which .jsp file action will referred e.g. showRequest.jsp etc.  
@@ -46,6 +47,7 @@ public class Constants {
 	public static final String MY_ACTION_SHOW_CONSENT 						= "showConsent";
 	public static final String MY_ACTION_SHOW_WARRANT						= "showWarrant";
 	public static final String MY_ACTION_SHOW_TIPY							= "showTipy";
+	public static final String MY_ACTION_SHOW_NAVI							= "showNavi";
 	public static final String MY_ACTION_TASKFORM	 						= "taskform";
 
 	
@@ -105,6 +107,8 @@ public class Constants {
 	public static final String JSON_RENDER_URL								= "renderUrl";
 	public static final String JSON_RESULT									= "result";
 	public static final String JSON_LOGIN_STATUS							= "loginStatus";
+	public static final String JSON_INBOX									= "inbox";
+	public static final String JSON_ARCHIVE_INBOX							= "archive_inbox";
                                                                     	
 	/* PortletPreferences keys: */                                  	
 	public static final String PREF_REFRESH_DURATION 						= "refreshDuration";

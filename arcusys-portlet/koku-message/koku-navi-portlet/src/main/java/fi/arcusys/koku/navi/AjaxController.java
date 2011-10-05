@@ -1,11 +1,15 @@
 package fi.arcusys.koku.navi;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.URL;
-import java.net.URLConnection;
+import static fi.arcusys.koku.util.Constants.ATTR_MY_ACTION;
+import static fi.arcusys.koku.util.Constants.ATTR_NAVI_TYPE;
+import static fi.arcusys.koku.util.Constants.JSON_ARCHIVE_INBOX;
+import static fi.arcusys.koku.util.Constants.JSON_INBOX;
+import static fi.arcusys.koku.util.Constants.JSON_LOGIN_STATUS;
+import static fi.arcusys.koku.util.Constants.JSON_RENDER_URL;
+import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_NAVI;
+import static fi.arcusys.koku.util.Constants.RESPONSE;
+import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_INVALID;
+import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_VALID;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
@@ -21,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import fi.arcusys.koku.kv.KokuFolderType;
+import fi.arcusys.koku.kv.MessageHandle;
 import fi.arcusys.koku.users.UserIdResolver;
 
 /**
@@ -56,7 +62,7 @@ public class AjaxController extends AbstractController {
 			LOGGER.error("Error while trying to resolve userId. See following error msg: ", e);
 		}
 		JSONObject jsonModel = getJsonModel(userId);
-		modelmap.addAttribute("response", jsonModel);
+		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
@@ -72,81 +78,30 @@ public class AjaxController extends AbstractController {
 		String  newArchiveMessageNum = "0";
 		
 		if (userId == null) {
-			jsonModel.put("loginStatus", "INVALID");
+			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_INVALID);
 		} else {
-			jsonModel.put("loginStatus", "VALID");
-			newInboxMessageNum = getNewMessageNum(userId, "Inbox");
-			jsonModel.put("inbox", newInboxMessageNum);
+			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_VALID);
+			newInboxMessageNum = String.valueOf(getNewMessageNum(userId, KokuFolderType.INBOX));
+			jsonModel.put(JSON_INBOX, newInboxMessageNum);
 			
-			newArchiveMessageNum = getNewMessageNum(userId, "Archive_Inbox");
-			jsonModel.put("archive_inbox", newArchiveMessageNum);
-						
+			newArchiveMessageNum = String.valueOf(getNewMessageNum(userId, KokuFolderType.ARCHIVE_INBOX));
+			jsonModel.put(JSON_ARCHIVE_INBOX, newArchiveMessageNum);
 		}		
-		
-		return jsonModel;	
+		return jsonModel;
 	}
 	
 	/**
 	 * Gets number of new messages in the given folder type from web services
-	 * @param username  user that message belong to
-	 * @param folderType: message folder type such as Inbox, Archive_Inbox
+	 * 
+	 * @param userId
+	 * @param folderType
 	 * @return number of messages
 	 */
-	public String getNewMessageNum(String username, String folderType) {
-		String num = "0";
-		
-		try {
-			String xmldata = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:soa=\"http://soa.kv.koku.arcusys.fi/\">"
-					+ "<soapenv:Header/>"
-					+ "<soapenv:Body>"
-					+ "<soa:getUnreadMessages>"
-					+ "<user>" + username + "</user>"
-					+ "<folderType>" + folderType + "</folderType>"
-					+ "</soa:getUnreadMessages>"
-					+ "</soapenv:Body>"
-					+ "</soapenv:Envelope>";
-
-			String soapUrl = "http://127.0.0.1:8180/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuMessageServiceImpl";
-			URL url = new URL(soapUrl);
-			URLConnection con = url.openConnection();
-
-			// specify that we will send output and accept input
-			con.setDoInput(true);
-			con.setDoOutput(true);
-			con.setConnectTimeout(20000); // long timeout, but not infinite
-			con.setReadTimeout(20000);
-			// con.setUseCaches (false);
-			// con.setDefaultUseCaches (false);
-			// tell the web server what we are sending
-			con.setRequestProperty("Content-Type", "text/xml");
-
-			OutputStreamWriter writer = new OutputStreamWriter(
-					con.getOutputStream());
-			writer.write(xmldata);
-			writer.flush();
-			writer.close();
-			
-			BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			String xmlStr = "";
-			String line;
-			
-			while ((line = rd.readLine()) != null) {
-				xmlStr += line;
-			}
-									
-			int pos1 = xmlStr.indexOf("<return>");
-			int pos2 = xmlStr.indexOf("</return>");
-			
-			num = xmlStr.substring(pos1+8, pos2);			
-			
-		} catch (Exception e) {
-			LOGGER.info("Getting the number of new messages service failed");
-			//e.printStackTrace();
-		}
-		
-		return num;
+	public int getNewMessageNum(String userId, KokuFolderType folderType) {
+		MessageHandle messageHandle = new MessageHandle();
+		return messageHandle.getUnreadMessages(userId, folderType);
 	}
-
+	
 	/**
 	 * Creates render url mainly for gatein portal container
 	 * @param newNaviType navigation tab name
@@ -160,12 +115,12 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "newNaviType") String newNaviType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 		PortletURL renderUrlObj = response.createRenderURL();
-		renderUrlObj.setParameter( "myaction", "showNavi");
-		renderUrlObj.setParameter( "naviType", newNaviType);	
+		renderUrlObj.setParameter(ATTR_MY_ACTION, MY_ACTION_SHOW_NAVI);
+		renderUrlObj.setParameter(ATTR_NAVI_TYPE, newNaviType);
 		String renderUrlString = renderUrlObj.toString();
 		JSONObject jsonModel = new JSONObject();
-		jsonModel.put("renderUrl", renderUrlString);
-		modelmap.addAttribute("response", jsonModel);
+		jsonModel.put(JSON_RENDER_URL, renderUrlString);
+		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}

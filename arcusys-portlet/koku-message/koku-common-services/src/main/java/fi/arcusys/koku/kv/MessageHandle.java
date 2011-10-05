@@ -35,6 +35,11 @@ public class MessageHandle extends AbstractHandle {
 		ms = new MessageService();
 	}
 	
+	public int getUnreadMessages(String username, KokuFolderType folderType) {
+		FolderType type = FolderType.valueOf(folderType.toString());
+		return ms.getUnreadMessageNum(username, type);
+	}	
+	
 	/**
 	 * Gets messages with filtering conditions
 	 * @param user user name
@@ -290,5 +295,7 @@ public class MessageHandle extends AbstractHandle {
 
 		return criteria;
 	}
+
+	
 	
 }

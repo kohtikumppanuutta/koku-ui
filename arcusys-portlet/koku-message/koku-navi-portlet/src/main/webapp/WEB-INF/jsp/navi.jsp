@@ -64,9 +64,10 @@
 			if(naviType != "") {
 				var obj = "#" + naviType;
 				jQuery(obj).css("font-weight", "bold");
-					
-			}else jQuery("#msg_inbox").css("font-weight", "bold");
-		}else if(currentPage == 'NewMessage')
+			} else { 
+				jQuery("#msg_inbox").css("font-weight", "bold");
+			}
+		} else if(currentPage == 'NewMessage')
 			jQuery("#msg_new").css("font-weight", "bold");
 		else if(currentPage == 'NewRequest')
 			jQuery("#req_new").css("font-weight", "bold");
