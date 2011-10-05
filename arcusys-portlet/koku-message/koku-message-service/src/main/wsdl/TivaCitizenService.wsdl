@@ -5,130 +5,159 @@
    <xs:element name='getAssignedConsentsResponse' type='tns:getAssignedConsentsResponse'/>
    <xs:element name='getConsentById' type='tns:getConsentById'/>
    <xs:element name='getConsentByIdResponse' type='tns:getConsentByIdResponse'/>
+   <xs:element name='getOldConsents' type='tns:getOldConsents'/>
+   <xs:element name='getOldConsentsResponse' type='tns:getOldConsentsResponse'/>
+
    <xs:element name='getOwnConsents' type='tns:getOwnConsents'/>
    <xs:element name='getOwnConsentsResponse' type='tns:getOwnConsentsResponse'/>
-
    <xs:element name='getTotalAssignedConsents' type='tns:getTotalAssignedConsents'/>
    <xs:element name='getTotalAssignedConsentsResponse' type='tns:getTotalAssignedConsentsResponse'/>
+   <xs:element name='getTotalOldConsents' type='tns:getTotalOldConsents'/>
+   <xs:element name='getTotalOldConsentsResponse' type='tns:getTotalOldConsentsResponse'/>
    <xs:element name='getTotalOwnConsents' type='tns:getTotalOwnConsents'/>
    <xs:element name='getTotalOwnConsentsResponse' type='tns:getTotalOwnConsentsResponse'/>
    <xs:element name='revokeOwnConsent' type='tns:revokeOwnConsent'/>
+
    <xs:element name='revokeOwnConsentResponse' type='tns:revokeOwnConsentResponse'/>
    <xs:complexType name='getAssignedConsents'>
     <xs:sequence>
      <xs:element minOccurs='0' name='user' type='xs:string'/>
-
      <xs:element name='startNum' type='xs:int'/>
      <xs:element name='maxNum' type='xs:int'/>
     </xs:sequence>
    </xs:complexType>
    <xs:complexType name='getAssignedConsentsResponse'>
+
     <xs:sequence>
      <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:consentShortSummary'/>
     </xs:sequence>
    </xs:complexType>
-
    <xs:complexType name='consentShortSummary'>
     <xs:sequence>
      <xs:element minOccurs='0' name='anotherPermitterUid' type='xs:string'/>
      <xs:element minOccurs='0' name='consentId' type='xs:long'/>
      <xs:element minOccurs='0' name='createType' type='tns:consentCreateType'/>
+
      <xs:element minOccurs='0' name='replyTill' type='xs:date'/>
      <xs:element minOccurs='0' name='requestor' type='xs:string'/>
      <xs:element minOccurs='0' name='templateName' type='xs:string'/>
     </xs:sequence>
-
    </xs:complexType>
    <xs:complexType name='getTotalAssignedConsents'>
     <xs:sequence>
      <xs:element minOccurs='0' name='user' type='xs:string'/>
     </xs:sequence>
+
    </xs:complexType>
    <xs:complexType name='getTotalAssignedConsentsResponse'>
     <xs:sequence>
      <xs:element name='return' type='xs:int'/>
-
     </xs:sequence>
    </xs:complexType>
    <xs:complexType name='getTotalOwnConsents'>
     <xs:sequence>
      <xs:element minOccurs='0' name='user' type='xs:string'/>
+
     </xs:sequence>
    </xs:complexType>
    <xs:complexType name='getTotalOwnConsentsResponse'>
     <xs:sequence>
-
      <xs:element name='return' type='xs:int'/>
     </xs:sequence>
    </xs:complexType>
    <xs:complexType name='getOwnConsents'>
     <xs:sequence>
+
      <xs:element minOccurs='0' name='user' type='xs:string'/>
      <xs:element name='startNum' type='xs:int'/>
      <xs:element name='maxNum' type='xs:int'/>
     </xs:sequence>
-
    </xs:complexType>
    <xs:complexType name='getOwnConsentsResponse'>
     <xs:sequence>
      <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:consentSummary'/>
     </xs:sequence>
+
    </xs:complexType>
    <xs:complexType name='consentSummary'>
     <xs:complexContent>
      <xs:extension base='tns:consentShortSummary'>
-
       <xs:sequence>
        <xs:element minOccurs='0' name='approvalStatus' type='tns:consentApprovalStatus'/>
        <xs:element minOccurs='0' name='givenAt' type='xs:date'/>
        <xs:element maxOccurs='unbounded' minOccurs='0' name='receipients' nillable='true' type='xs:string'/>
        <xs:element minOccurs='0' name='status' type='tns:consentStatus'/>
+
        <xs:element minOccurs='0' name='validTill' type='xs:date'/>
       </xs:sequence>
      </xs:extension>
     </xs:complexContent>
-
    </xs:complexType>
    <xs:complexType name='getConsentById'>
     <xs:sequence>
      <xs:element name='suostumusId' type='xs:long'/>
      <xs:element minOccurs='0' name='arg1' type='xs:string'/>
+
     </xs:sequence>
    </xs:complexType>
    <xs:complexType name='getConsentByIdResponse'>
     <xs:sequence>
-
      <xs:element minOccurs='0' name='return' type='tns:consentTO'/>
     </xs:sequence>
    </xs:complexType>
    <xs:complexType name='consentTO'>
     <xs:complexContent>
+
      <xs:extension base='tns:consentSummary'>
       <xs:sequence>
        <xs:element maxOccurs='unbounded' minOccurs='0' name='actionRequests' nillable='true' type='tns:actionRequestSummary'/>
       </xs:sequence>
-
      </xs:extension>
     </xs:complexContent>
    </xs:complexType>
    <xs:complexType name='actionRequestSummary'>
     <xs:sequence>
+
      <xs:element minOccurs='0' name='description' type='xs:string'/>
      <xs:element minOccurs='0' name='name' type='xs:string'/>
      <xs:element minOccurs='0' name='status' type='tns:actionRequestStatus'/>
     </xs:sequence>
-
    </xs:complexType>
    <xs:complexType name='revokeOwnConsent'>
     <xs:sequence>
      <xs:element name='suostumusId' type='xs:long'/>
      <xs:element minOccurs='0' name='arg1' type='xs:string'/>
+
     </xs:sequence>
    </xs:complexType>
    <xs:complexType name='revokeOwnConsentResponse'>
     <xs:sequence/>
+   </xs:complexType>
+   <xs:complexType name='getTotalOldConsents'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='user' type='xs:string'/>
+    </xs:sequence>
 
    </xs:complexType>
+   <xs:complexType name='getTotalOldConsentsResponse'>
+    <xs:sequence>
+     <xs:element name='return' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getOldConsents'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='user' type='xs:string'/>
+
+     <xs:element name='startNum' type='xs:int'/>
+     <xs:element name='maxNum' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getOldConsentsResponse'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:consentSummary'/>
+    </xs:sequence>
+   </xs:complexType>
+
    <xs:simpleType name='consentCreateType'>
     <xs:restriction base='xs:string'>
      <xs:enumeration value='Electronic'/>
@@ -137,8 +166,8 @@
     </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name='consentApprovalStatus'>
-
     <xs:restriction base='xs:string'>
+
      <xs:enumeration value='Approved'/>
      <xs:enumeration value='Declined'/>
     </xs:restriction>
@@ -147,8 +176,8 @@
     <xs:restriction base='xs:string'>
      <xs:enumeration value='Open'/>
      <xs:enumeration value='PartiallyGiven'/>
-
      <xs:enumeration value='Valid'/>
+
      <xs:enumeration value='Expired'/>
      <xs:enumeration value='Revoked'/>
      <xs:enumeration value='Declined'/>
@@ -157,8 +186,8 @@
    <xs:simpleType name='actionRequestStatus'>
     <xs:restriction base='xs:string'>
      <xs:enumeration value='Given'/>
-
      <xs:enumeration value='Declined'/>
+
     </xs:restriction>
    </xs:simpleType>
   </xs:schema>
@@ -166,68 +195,90 @@
  <message name='KokuKunpoSuostumusService_getTotalAssignedConsentsResponse'>
   <part element='tns:getTotalAssignedConsentsResponse' name='getTotalAssignedConsentsResponse'></part>
  </message>
- <message name='KokuKunpoSuostumusService_getAssignedConsentsResponse'>
+ <message name='KokuKunpoSuostumusService_getTotalOldConsents'>
+  <part element='tns:getTotalOldConsents' name='getTotalOldConsents'></part>
 
-  <part element='tns:getAssignedConsentsResponse' name='getAssignedConsentsResponse'></part>
  </message>
  <message name='KokuKunpoSuostumusService_getTotalOwnConsents'>
   <part element='tns:getTotalOwnConsents' name='getTotalOwnConsents'></part>
  </message>
+ <message name='KokuKunpoSuostumusService_getConsentByIdResponse'>
+  <part element='tns:getConsentByIdResponse' name='getConsentByIdResponse'></part>
+ </message>
+ <message name='KokuKunpoSuostumusService_getOwnConsents'>
+  <part element='tns:getOwnConsents' name='getOwnConsents'></part>
+
+ </message>
+ <message name='KokuKunpoSuostumusService_getTotalOldConsentsResponse'>
+  <part element='tns:getTotalOldConsentsResponse' name='getTotalOldConsentsResponse'></part>
+ </message>
+ <message name='KokuKunpoSuostumusService_getAssignedConsentsResponse'>
+  <part element='tns:getAssignedConsentsResponse' name='getAssignedConsentsResponse'></part>
+ </message>
  <message name='KokuKunpoSuostumusService_getConsentById'>
   <part element='tns:getConsentById' name='getConsentById'></part>
+
+ </message>
+ <message name='KokuKunpoSuostumusService_getOldConsentsResponse'>
+  <part element='tns:getOldConsentsResponse' name='getOldConsentsResponse'></part>
  </message>
  <message name='KokuKunpoSuostumusService_revokeOwnConsent'>
-
   <part element='tns:revokeOwnConsent' name='revokeOwnConsent'></part>
  </message>
  <message name='KokuKunpoSuostumusService_getTotalAssignedConsents'>
   <part element='tns:getTotalAssignedConsents' name='getTotalAssignedConsents'></part>
+
  </message>
  <message name='KokuKunpoSuostumusService_getTotalOwnConsentsResponse'>
   <part element='tns:getTotalOwnConsentsResponse' name='getTotalOwnConsentsResponse'></part>
  </message>
  <message name='KokuKunpoSuostumusService_getOwnConsentsResponse'>
-
   <part element='tns:getOwnConsentsResponse' name='getOwnConsentsResponse'></part>
  </message>
  <message name='KokuKunpoSuostumusService_revokeOwnConsentResponse'>
   <part element='tns:revokeOwnConsentResponse' name='revokeOwnConsentResponse'></part>
- </message>
- <message name='KokuKunpoSuostumusService_getOwnConsents'>
-  <part element='tns:getOwnConsents' name='getOwnConsents'></part>
- </message>
- <message name='KokuKunpoSuostumusService_getConsentByIdResponse'>
 
-  <part element='tns:getConsentByIdResponse' name='getConsentByIdResponse'></part>
  </message>
  <message name='KokuKunpoSuostumusService_getAssignedConsents'>
   <part element='tns:getAssignedConsents' name='getAssignedConsents'></part>
  </message>
+ <message name='KokuKunpoSuostumusService_getOldConsents'>
+  <part element='tns:getOldConsents' name='getOldConsents'></part>
+ </message>
  <portType name='KokuKunpoSuostumusService'>
   <operation name='getAssignedConsents' parameterOrder='getAssignedConsents'>
+
    <input message='tns:KokuKunpoSuostumusService_getAssignedConsents'></input>
    <output message='tns:KokuKunpoSuostumusService_getAssignedConsentsResponse'></output>
-
   </operation>
   <operation name='getConsentById' parameterOrder='getConsentById'>
    <input message='tns:KokuKunpoSuostumusService_getConsentById'></input>
    <output message='tns:KokuKunpoSuostumusService_getConsentByIdResponse'></output>
   </operation>
+  <operation name='getOldConsents' parameterOrder='getOldConsents'>
+   <input message='tns:KokuKunpoSuostumusService_getOldConsents'></input>
+
+   <output message='tns:KokuKunpoSuostumusService_getOldConsentsResponse'></output>
+  </operation>
   <operation name='getOwnConsents' parameterOrder='getOwnConsents'>
    <input message='tns:KokuKunpoSuostumusService_getOwnConsents'></input>
    <output message='tns:KokuKunpoSuostumusService_getOwnConsentsResponse'></output>
   </operation>
-
   <operation name='getTotalAssignedConsents' parameterOrder='getTotalAssignedConsents'>
    <input message='tns:KokuKunpoSuostumusService_getTotalAssignedConsents'></input>
    <output message='tns:KokuKunpoSuostumusService_getTotalAssignedConsentsResponse'></output>
+
+  </operation>
+  <operation name='getTotalOldConsents' parameterOrder='getTotalOldConsents'>
+   <input message='tns:KokuKunpoSuostumusService_getTotalOldConsents'></input>
+   <output message='tns:KokuKunpoSuostumusService_getTotalOldConsentsResponse'></output>
   </operation>
   <operation name='getTotalOwnConsents' parameterOrder='getTotalOwnConsents'>
    <input message='tns:KokuKunpoSuostumusService_getTotalOwnConsents'></input>
    <output message='tns:KokuKunpoSuostumusService_getTotalOwnConsentsResponse'></output>
   </operation>
-  <operation name='revokeOwnConsent' parameterOrder='revokeOwnConsent'>
 
+  <operation name='revokeOwnConsent' parameterOrder='revokeOwnConsent'>
    <input message='tns:KokuKunpoSuostumusService_revokeOwnConsent'></input>
    <output message='tns:KokuKunpoSuostumusService_revokeOwnConsentResponse'></output>
   </operation>
@@ -236,8 +287,8 @@
   <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
   <operation name='getAssignedConsents'>
    <soap:operation soapAction=''/>
-   <input>
 
+   <input>
     <soap:body use='literal'/>
    </input>
    <output>
@@ -246,8 +297,18 @@
   </operation>
   <operation name='getConsentById'>
    <soap:operation soapAction=''/>
-   <input>
 
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getOldConsents'>
+   <soap:operation soapAction=''/>
+
+   <input>
     <soap:body use='literal'/>
    </input>
    <output>
@@ -256,8 +317,8 @@
   </operation>
   <operation name='getOwnConsents'>
    <soap:operation soapAction=''/>
-   <input>
 
+   <input>
     <soap:body use='literal'/>
    </input>
    <output>
@@ -266,8 +327,18 @@
   </operation>
   <operation name='getTotalAssignedConsents'>
    <soap:operation soapAction=''/>
-   <input>
 
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getTotalOldConsents'>
+   <soap:operation soapAction=''/>
+
+   <input>
     <soap:body use='literal'/>
    </input>
    <output>
@@ -276,8 +347,8 @@
   </operation>
   <operation name='getTotalOwnConsents'>
    <soap:operation soapAction=''/>
-   <input>
 
+   <input>
     <soap:body use='literal'/>
    </input>
    <output>
@@ -286,8 +357,8 @@
   </operation>
   <operation name='revokeOwnConsent'>
    <soap:operation soapAction=''/>
-   <input>
 
+   <input>
     <soap:body use='literal'/>
    </input>
    <output>
@@ -296,8 +367,8 @@
   </operation>
  </binding>
  <service name='KokuKunpoSuostumusService'>
-  <port binding='tns:KokuKunpoSuostumusServiceBinding' name='KokuKunpoSuostumusServicePort'>
 
+  <port binding='tns:KokuKunpoSuostumusServiceBinding' name='KokuKunpoSuostumusServicePort'>
    <soap:address location='http://127.0.0.1:8180/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuKunpoSuostumusServiceImpl'/>
   </port>
  </service>

@@ -83,7 +83,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	 */
 	public KokuConsent getConsentById(String consentIdStr) {
 		long  consentId = (long) Long.parseLong(consentIdStr);
-		KokuConsent kokuConsent = new KokuConsent();		
+		KokuConsent kokuConsent = new KokuConsent();
 		ConsentTO consent = tcs.getConsentById(consentId, this.userId);
 		kokuConsent.setConsentId(consent.getConsentId());
 		kokuConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
@@ -111,30 +111,45 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	 * @return a list of consents
 	 */
 	public List<KokuConsent> getOwnConsents(String userId, int startNum, int maxNum) {
-		List<ConsentSummary> consentSummary = tcs.getOwnConsents(userId, startNum, maxNum);
+		return convertConsentsToKokuConsents(tcs.getOwnConsents(userId, startNum, maxNum));
+	}
+	
+	/**
+	 * Gets own old consents and generates koku consent data model for use
+	 * @param user user name
+	 * @param startNum start index of consent
+	 * @param maxNum maximum number of consents
+	 * @return a list of consents
+	 */
+	public List<KokuConsent> getOwnOldConsents(String userId, int startNum, int maxNum) {
+		return convertConsentsToKokuConsents(tcs.getOldConsents(userId, startNum, maxNum));
+	}
+	
+	private List<KokuConsent> convertConsentsToKokuConsents(List<ConsentSummary> consentSummary) {
 		List<KokuConsent> consentList = new ArrayList<KokuConsent>();
-		KokuConsent kokuConsent;	
-		Iterator<ConsentSummary> it = consentSummary.iterator();
-		
+		Iterator<ConsentSummary> it = consentSummary.iterator();		
 		while(it.hasNext()) {
-			ConsentSummary consent = it.next();
-			kokuConsent = new KokuConsent();
-			kokuConsent.setConsentId(consent.getConsentId());
-			kokuConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
-			kokuConsent.setRequester(consent.getRequestor());
-			kokuConsent.setTemplateName(consent.getTemplateName());
-			kokuConsent.setCreateType(localizeConsentCreateType(consent.getCreateType()));
-			if(consent.getStatus() != null) {
-				kokuConsent.setStatus(localizeConsentStatus(consent.getStatus()));
-			}
-			kokuConsent.setApprovalStatus(localizeApprovalConsentStatus(consent.getApprovalStatus()));			
-			kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
-			kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
-			kokuConsent.setReplyTill(MessageUtil.formatTaskDateByDay(consent.getReplyTill()));
-			consentList.add(kokuConsent);
-		}
-		
+			ConsentSummary consent = it.next();			
+			consentList.add(convertConsentToKokuConsent(consent));
+		}		
 		return consentList;
+	}
+	
+	private KokuConsent convertConsentToKokuConsent(ConsentSummary consent) {
+		KokuConsent kokuConsent = new KokuConsent();
+		kokuConsent.setConsentId(consent.getConsentId());
+		kokuConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
+		kokuConsent.setRequester(consent.getRequestor());
+		kokuConsent.setTemplateName(consent.getTemplateName());
+		kokuConsent.setCreateType(localizeConsentCreateType(consent.getCreateType()));
+		if(consent.getStatus() != null) {
+			kokuConsent.setStatus(localizeConsentStatus(consent.getStatus()));
+		}
+		kokuConsent.setApprovalStatus(localizeApprovalConsentStatus(consent.getApprovalStatus()));			
+		kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
+		kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
+		kokuConsent.setReplyTill(MessageUtil.formatTaskDateByDay(consent.getReplyTill()));
+		return kokuConsent;
 	}
 	
 	
@@ -154,6 +169,15 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	 */
 	public int getTotalOwnConsents(String userId) {
 		return tcs.getTotalOwnConsents(userId);
+	}
+	
+	/**
+	 * Gets the total number of old own consents
+	 * @param user user name
+	 * @return the total number of old own consents
+	 */
+	public int getTotalOwnOldConsents(String userId) {
+		return tcs.getTotalOldConsents(userId);
 	}
 	
 	/**

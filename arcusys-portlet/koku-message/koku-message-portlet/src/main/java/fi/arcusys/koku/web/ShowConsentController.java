@@ -81,7 +81,7 @@ public class ShowConsentController extends AbstractController {
 			return consent;
 		}
 		
-		if(taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS)) {
+		if(taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS) || taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD)) {
 			TivaCitizenServiceHandle handle = new TivaCitizenServiceHandle(userId);
 			handle.setMessageSource(messageSource);
 			consent = handle.getConsentById(consentId);

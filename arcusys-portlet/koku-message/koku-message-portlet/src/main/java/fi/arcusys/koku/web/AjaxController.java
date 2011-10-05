@@ -362,9 +362,8 @@ public class AjaxController extends AbstractController {
 			} else if(taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD)) { // consent (Valtakirja / Suostumus) Kansalaiselle vastatut vanhentuneet pyynnöt(/suostumukset) 
 				TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
 				tivaHandle.setMessageSource(messageSource);
-				// TODO Need proper WS
-				tasks = new ArrayList<KokuConsent>();
-				totalTasksNum = 0;
+				tasks = tivaHandle.getOwnOldConsents(userId, first, max);
+				totalTasksNum = tivaHandle.getTotalOwnOldConsents(userId);
 			} else if(taskType.equals(TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS)) { // Virkailijan lähetetyt suostumus pyynnöt
 				TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
 				tivaHandle.setMessageSource(messageSource);

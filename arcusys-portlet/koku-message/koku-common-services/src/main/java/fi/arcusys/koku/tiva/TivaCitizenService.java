@@ -57,6 +57,19 @@ public class TivaCitizenService {
 	}
 	
 	/**
+	 * Gets own old/revoked/expired consents
+	 * 
+	 * @param userId
+	 * @param startNum
+	 * @param maxNum
+	 * @return a list of consents
+	 */
+	public List<ConsentSummary> getOldConsents(String userId, int startNum, int maxNum) {
+		return kks.getKokuKunpoSuostumusServicePort().getOldConsents(userId, startNum, maxNum);
+	}
+	
+	
+	/**
 	 * Gets the total number of assigned consents
 	 * @param user user name
 	 * @return the total number of assigned consents
@@ -75,11 +88,23 @@ public class TivaCitizenService {
 	}
 	
 	/**
+	 * Gets the total number of old own consents
+	 * @param user user name
+	 * @return the total number of own consents
+	 */
+	public int getTotalOldConsents(String user) {
+		return kks.getKokuKunpoSuostumusServicePort().getTotalOldConsents(user);
+	}
+	
+	/**
 	 * Revokes consent
 	 * @param consentId consent id
 	 */
 	public void revokeOwnConsent(long consentId, String user) {
 		kks.getKokuKunpoSuostumusServicePort().revokeOwnConsent(consentId, user);
 	}
+	
+	
+	
 	
 }
