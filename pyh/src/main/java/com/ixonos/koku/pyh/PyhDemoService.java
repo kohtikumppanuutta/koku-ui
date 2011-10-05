@@ -633,8 +633,6 @@ public class PyhDemoService {
     communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
     communityAuditInfoType.setUserId(requesterPic); // requesterPic on kirjautunut käyttäjä
     
-    // -- UNCOMMENT WHEN THE SERVICE IS IMPLEMENTED
-    
     // lisätään henkilöt joilta vaaditaan pyynnön hyväksyntä
     MembershipApprovalType membershipApproval = new MembershipApprovalType();
     membershipApproval.setApproverPic(memberToAddPic); // lisättävän henkilön täytyy hyväksyä pyyntö
@@ -691,8 +689,6 @@ public class PyhDemoService {
     fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
     communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
     communityAuditInfoType.setUserId(requesterPic); // requesterPic on kirjautunut käyttäjä
-    
-    // -- UNCOMMENT WHEN THE SERVICE IS IMPLEMENTED
     
     MembershipApprovalsType membershipApprovalsType = new MembershipApprovalsType();
     
@@ -842,7 +838,8 @@ public class PyhDemoService {
   
   public String addFamily(String userPic) {
     if (debug) {
-      log.info("CALLING ADD FAMILY");
+      log.info("calling addFamily() with parameter:");
+      log.info("userPic: " + userPic);
     }
     
     fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
@@ -985,8 +982,6 @@ public class PyhDemoService {
     communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
     communityAuditInfoType.setUserId(user.getPic());
     
-    // -- UNCOMMENT WHEN THE SERVICE IS IMPLEMENTED
-    
     MembershipRequestQueryCriteriaType membershipRequestQueryCriteria = new MembershipRequestQueryCriteriaType();
     membershipRequestQueryCriteria.setApproverPic(user.getPic());
     MembershipRequestsType membershipRequestsType = null;
@@ -1033,21 +1028,29 @@ public class PyhDemoService {
             senderName = senderPic;
           }
           
+          boolean tooManyParentsInFamily;
           if (memberToAddPic.equals(user.getPic())) {
             // if the target person is current user
             targetName = "sinut";
+            
+            tooManyParentsInFamily = true;
+            // TODO: tarkista kuuluuko käyttäjä perheyhteisöön, jossa on jo kaksi vanhempaa
+            // ja opasta käyttäjää hylkäämään pyyntö tai poistamaan toinen vanhempi
+            
           } else {
             if (targetPerson != null) {
               targetName = "käyttäjän " + targetPerson.getFullName();
             } else {
               targetName = "käyttäjän " + memberToAddPic;
             }
+            
+            tooManyParentsInFamily = false;
           }
           
           String messageText = "Uusi perheyhteyspyyntö: käyttäjä " + senderName + " haluaa lisätä " + targetName + 
             " perheyhteisönsä jäseneksi. " + "Hyväksymällä pyynnön lisääminen tapahtuu automaattisesti.";
           
-          Message message = new Message(messageId, senderPic, messageText);
+          Message message = new Message(messageId, senderPic, messageText, tooManyParentsInFamily);
           requestMessages.add(message);
         }
       }
@@ -1077,8 +1080,6 @@ public class PyhDemoService {
     fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
     communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
     communityAuditInfoType.setUserId(user.getPic());
-    
-    // -- UNCOMMENT WHEN THE SERVICE IS IMPLEMENTED
     
     MembershipRequestQueryCriteriaType membershipRequestQueryCriteria = new MembershipRequestQueryCriteriaType();
     membershipRequestQueryCriteria.setRequesterPic(user.getPic());
@@ -1112,7 +1113,7 @@ public class PyhDemoService {
         
         String messageText = "Lähettämäsi perheyhteyspyyntö: lisää " + targetName + " perheyhteisöösi odottaa hyväksyntää.";
         
-        Message message = new Message(messageId, senderPic, messageText);
+        Message message = new Message(messageId, senderPic, messageText, false);
         requestMessages.add(message);
       }
     }
@@ -1134,8 +1135,6 @@ public class PyhDemoService {
       log.info("approverPic: " + approverPic);
       log.info("status: " + status);
     }
-    
-    // UNCOMMENT WHEN SERVICE IS IMPLEMENTED --
     
     MembershipApprovalType membershipApproval = new MembershipApprovalType();
     membershipApproval.setApproverPic(approverPic);

@@ -100,22 +100,23 @@
                     </form:form>     
                     </span>  
                     
-                    <span class="pyh-right"> 
-                    <portlet:actionURL var="accept">
-                            <portlet:param name="action" value="acceptMessage" />
-                            <portlet:param name="userPic" value="${user.pic}" />
-                            <portlet:param name="messageId" value="${message.id}" />
-                    </portlet:actionURL>
-                    <form:form name="accept" method="post" action="${accept}">
-                        <input type="submit" class="portlet-form-button" value="<spring:message code="ui.pyh.accept" />"/>                      
-                    </form:form>
-                    </span>
+                    <c:if test="${!message.tooManyParentsInFamily}">
+	                    <span class="pyh-right"> 
+	                    <portlet:actionURL var="accept">
+	                            <portlet:param name="action" value="acceptMessage" />
+	                            <portlet:param name="userPic" value="${user.pic}" />
+	                            <portlet:param name="messageId" value="${message.id}" />
+	                    </portlet:actionURL>
+	                    <form:form name="accept" method="post" action="${accept}">
+	                        <input type="submit" class="portlet-form-button" value="<spring:message code="ui.pyh.accept" />"/>                      
+	                    </form:form>
+	                    </span>
+                    </c:if>
                           
                  </span> 
                  <div class="pyh-reset-floating"></div>
             
             <div class="portlet-section-text">
-            	<%-- ${message.description} --%>
             
             <span class="pyh-mail">
             <form:form name="accept" method="post" action="${accept}">

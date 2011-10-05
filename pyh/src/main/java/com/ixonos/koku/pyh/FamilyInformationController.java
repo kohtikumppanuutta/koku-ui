@@ -1,6 +1,7 @@
 package com.ixonos.koku.pyh;
 
 import javax.portlet.PortletSession;
+import javax.portlet.RenderRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,18 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import com.ixonos.koku.pyh.model.DependantsAndFamily;
-import com.ixonos.koku.pyh.model.Family;
 import com.ixonos.koku.pyh.model.Person;
 
 import fi.koku.portlet.filter.userinfo.UserInfo;
-
-/**
- * Controller for viewing user's family information. This is the controller for
- * the main view of PYH portlet.
- * 
- * @author hurulmi
- * 
- */
 
 @Controller(value = "familyInformationController")
 @RequestMapping(value = "VIEW")
@@ -36,7 +28,8 @@ public class FamilyInformationController {
   private PyhDemoService pyhDemoService;
 
   @RenderMapping
-  public String render(PortletSession session, Model model) {
+  public String render(PortletSession session, Model model, RenderRequest request) {
+    
     String userPic = "";
     
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
