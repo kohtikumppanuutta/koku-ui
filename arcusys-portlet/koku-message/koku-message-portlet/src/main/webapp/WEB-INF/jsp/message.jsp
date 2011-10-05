@@ -1152,11 +1152,12 @@
 			}		    
 		});
 		
-		if(messageList.length == 0) return; // no message selected
+		if (messageList.length == 0) {
+			return; // no message selected
+		}
 		
-		var comment = prompt('<spring:message code="consent.cancelPrompt"/>',"");
-		if(comment == null)	return;
-		
+		var comment = prompt('<spring:message code="appointment.cancel"/>',"");
+		if(comment == null)	return;		
 		var url="<%= cancelURL %>";
 		url = formatUrl(url);
 		
