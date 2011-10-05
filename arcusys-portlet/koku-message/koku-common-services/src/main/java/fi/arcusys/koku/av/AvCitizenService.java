@@ -47,6 +47,19 @@ public class AvCitizenService {
 	}
 	
 	/**
+	 * Gets the already expired or cancelled appointments
+	 * 
+	 * @param userId
+	 * @param startNum
+	 * @param maxNum
+	 * @return a list of summary of appointments
+	 */
+	public List<AppointmentWithTarget>  getOldAppointments(String userId, int startNum, int maxNum) {
+		return as.getKokuKunpoAppointmentServicePort().getOldAppointments(userId, startNum, maxNum);
+	}
+	
+	
+	/**
 	 * Gets the amount of assigned appointments
 	 * @param user user name
 	 * @return the number of assigned appointments
@@ -62,6 +75,15 @@ public class AvCitizenService {
 	 */
 	public int getTotalRespondedAppointmentNum(String user) {
 		return as.getKokuKunpoAppointmentServicePort().getTotalRespondedAppointments(user);
+	}
+	
+	/**
+	 * Gets the amount of old (expired/cancelled) appointments
+	 * @param user user name
+	 * @return the number of old appointments
+	 */
+	public int getTotalOldAppointments(String userId) {
+		return as.getKokuKunpoAppointmentServicePort().getTotalOldAppointments(userId);
 	}
 	
 	/**
@@ -84,4 +106,5 @@ public class AvCitizenService {
 		as.getKokuKunpoAppointmentServicePort().cancelRespondedAppointment(appointmentId, targetUser, user, comment);
 	}
 	
+
 }

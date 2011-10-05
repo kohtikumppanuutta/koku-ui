@@ -50,14 +50,25 @@
 
     </xs:sequence>
    </xs:complexType>
+   <xs:complexType name='getTotalOwnConsents'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='user' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getTotalOwnConsentsResponse'>
+    <xs:sequence>
+
+     <xs:element name='return' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
    <xs:complexType name='getOwnConsents'>
     <xs:sequence>
      <xs:element minOccurs='0' name='user' type='xs:string'/>
      <xs:element name='startNum' type='xs:int'/>
      <xs:element name='maxNum' type='xs:int'/>
     </xs:sequence>
-   </xs:complexType>
 
+   </xs:complexType>
    <xs:complexType name='getOwnConsentsResponse'>
     <xs:sequence>
      <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:consentSummary'/>
@@ -66,8 +77,8 @@
    <xs:complexType name='consentSummary'>
     <xs:complexContent>
      <xs:extension base='tns:consentShortSummary'>
-      <xs:sequence>
 
+      <xs:sequence>
        <xs:element minOccurs='0' name='approvalStatus' type='tns:consentApprovalStatus'/>
        <xs:element minOccurs='0' name='givenAt' type='xs:date'/>
        <xs:element maxOccurs='unbounded' minOccurs='0' name='receipients' nillable='true' type='xs:string'/>
@@ -76,8 +87,8 @@
       </xs:sequence>
      </xs:extension>
     </xs:complexContent>
-   </xs:complexType>
 
+   </xs:complexType>
    <xs:complexType name='getConsentById'>
     <xs:sequence>
      <xs:element name='suostumusId' type='xs:long'/>
@@ -86,8 +97,8 @@
    </xs:complexType>
    <xs:complexType name='getConsentByIdResponse'>
     <xs:sequence>
-     <xs:element minOccurs='0' name='return' type='tns:consentTO'/>
 
+     <xs:element minOccurs='0' name='return' type='tns:consentTO'/>
     </xs:sequence>
    </xs:complexType>
    <xs:complexType name='consentTO'>
@@ -96,8 +107,8 @@
       <xs:sequence>
        <xs:element maxOccurs='unbounded' minOccurs='0' name='actionRequests' nillable='true' type='tns:actionRequestSummary'/>
       </xs:sequence>
-     </xs:extension>
 
+     </xs:extension>
     </xs:complexContent>
    </xs:complexType>
    <xs:complexType name='actionRequestSummary'>
@@ -105,17 +116,6 @@
      <xs:element minOccurs='0' name='description' type='xs:string'/>
      <xs:element minOccurs='0' name='name' type='xs:string'/>
      <xs:element minOccurs='0' name='status' type='tns:actionRequestStatus'/>
-    </xs:sequence>
-   </xs:complexType>
-
-   <xs:complexType name='getTotalOwnConsents'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='user' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getTotalOwnConsentsResponse'>
-    <xs:sequence>
-     <xs:element name='return' type='xs:int'/>
     </xs:sequence>
 
    </xs:complexType>

@@ -7,11 +7,17 @@
    <xs:element name='getAppointmentRespondedByIdResponse' type='tns:getAppointmentRespondedByIdResponse'/>
    <xs:element name='getAssignedAppointments' type='tns:getAssignedAppointments'/>
    <xs:element name='getAssignedAppointmentsResponse' type='tns:getAssignedAppointmentsResponse'/>
+
+   <xs:element name='getOldAppointments' type='tns:getOldAppointments'/>
+   <xs:element name='getOldAppointmentsResponse' type='tns:getOldAppointmentsResponse'/>
    <xs:element name='getRespondedAppointments' type='tns:getRespondedAppointments'/>
    <xs:element name='getRespondedAppointmentsResponse' type='tns:getRespondedAppointmentsResponse'/>
    <xs:element name='getTotalAssignedAppointments' type='tns:getTotalAssignedAppointments'/>
    <xs:element name='getTotalAssignedAppointmentsResponse' type='tns:getTotalAssignedAppointmentsResponse'/>
+   <xs:element name='getTotalOldAppointments' type='tns:getTotalOldAppointments'/>
+   <xs:element name='getTotalOldAppointmentsResponse' type='tns:getTotalOldAppointmentsResponse'/>
    <xs:element name='getTotalRespondedAppointments' type='tns:getTotalRespondedAppointments'/>
+
    <xs:element name='getTotalRespondedAppointmentsResponse' type='tns:getTotalRespondedAppointmentsResponse'/>
    <xs:complexType name='getAssignedAppointments'>
     <xs:sequence>
@@ -21,6 +27,7 @@
     </xs:sequence>
    </xs:complexType>
    <xs:complexType name='getAssignedAppointmentsResponse'>
+
     <xs:sequence>
      <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:appointmentWithTarget'/>
     </xs:sequence>
@@ -30,6 +37,7 @@
      <xs:extension base='tns:appointmentSummary'>
       <xs:sequence>
        <xs:element minOccurs='0' name='targetPerson' type='xs:string'/>
+
       </xs:sequence>
      </xs:extension>
     </xs:complexContent>
@@ -39,6 +47,7 @@
      <xs:element name='appointmentId' type='xs:long'/>
      <xs:element minOccurs='0' name='status' type='tns:appointmentSummaryStatus'/>
      <xs:element minOccurs='0' name='sender' type='xs:string'/>
+
      <xs:element minOccurs='0' name='subject' type='xs:string'/>
      <xs:element minOccurs='0' name='description' type='xs:string'/>
     </xs:sequence>
@@ -48,6 +57,7 @@
      <xs:element minOccurs='0' name='user' type='xs:string'/>
     </xs:sequence>
    </xs:complexType>
+
    <xs:complexType name='getTotalAssignedAppointmentsResponse'>
     <xs:sequence>
      <xs:element name='return' type='xs:int'/>
@@ -57,6 +67,7 @@
     <xs:sequence>
      <xs:element minOccurs='0' name='user' type='xs:string'/>
     </xs:sequence>
+
    </xs:complexType>
    <xs:complexType name='getTotalRespondedAppointmentsResponse'>
     <xs:sequence>
@@ -66,6 +77,7 @@
    <xs:complexType name='getRespondedAppointments'>
     <xs:sequence>
      <xs:element minOccurs='0' name='user' type='xs:string'/>
+
      <xs:element name='startNum' type='xs:int'/>
      <xs:element name='maxNum' type='xs:int'/>
     </xs:sequence>
@@ -75,6 +87,7 @@
      <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:appointmentWithTarget'/>
     </xs:sequence>
    </xs:complexType>
+
    <xs:complexType name='getAppointmentRespondedById'>
     <xs:sequence>
      <xs:element name='appointmentId' type='xs:long'/>
@@ -84,6 +97,7 @@
    <xs:complexType name='getAppointmentRespondedByIdResponse'>
     <xs:sequence>
      <xs:element minOccurs='0' name='return' type='tns:appointmentRespondedTO'/>
+
     </xs:sequence>
    </xs:complexType>
    <xs:complexType name='appointmentRespondedTO'>
@@ -93,6 +107,7 @@
        <xs:element minOccurs='0' name='approvedSlot' type='tns:appointmentSlot'/>
        <xs:element minOccurs='0' name='replier' type='xs:string'/>
        <xs:element minOccurs='0' name='replierComment' type='xs:string'/>
+
        <xs:element minOccurs='0' name='targetPerson' type='xs:string'/>
       </xs:sequence>
      </xs:extension>
@@ -102,6 +117,7 @@
     <xs:sequence>
      <xs:element name='slotNumber' type='xs:int'/>
      <xs:element minOccurs='0' name='appointmentDate' type='xs:date'/>
+
      <xs:element minOccurs='0' name='startTime' type='xs:time'/>
      <xs:element minOccurs='0' name='endTime' type='xs:time'/>
      <xs:element minOccurs='0' name='location' type='xs:string'/>
@@ -111,6 +127,7 @@
    <xs:complexType name='cancelRespondedAppointment'>
     <xs:sequence>
      <xs:element name='appointmentId' type='xs:long'/>
+
      <xs:element minOccurs='0' name='targetUser' type='xs:string'/>
      <xs:element minOccurs='0' name='user' type='xs:string'/>
      <xs:element minOccurs='0' name='comment' type='xs:string'/>
@@ -119,24 +136,68 @@
    <xs:complexType name='cancelRespondedAppointmentResponse'>
     <xs:sequence/>
    </xs:complexType>
+   <xs:complexType name='getTotalOldAppointments'>
+
+    <xs:sequence>
+     <xs:element minOccurs='0' name='user' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getTotalOldAppointmentsResponse'>
+    <xs:sequence>
+     <xs:element name='return' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+
+   <xs:complexType name='getOldAppointments'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='user' type='xs:string'/>
+     <xs:element name='startNum' type='xs:int'/>
+     <xs:element name='maxNum' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getOldAppointmentsResponse'>
+    <xs:sequence>
+
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:appointmentWithTarget'/>
+    </xs:sequence>
+   </xs:complexType>
    <xs:simpleType name='appointmentSummaryStatus'>
     <xs:restriction base='xs:string'>
      <xs:enumeration value='Created'/>
      <xs:enumeration value='Approved'/>
      <xs:enumeration value='Cancelled'/>
     </xs:restriction>
+
    </xs:simpleType>
   </xs:schema>
  </types>
+ <message name='KokuKunpoAppointmentService_getTotalOldAppointments'>
+  <part element='tns:getTotalOldAppointments' name='getTotalOldAppointments'></part>
+ </message>
  <message name='KokuKunpoAppointmentService_getAppointmentRespondedById'>
   <part element='tns:getAppointmentRespondedById' name='getAppointmentRespondedById'></part>
+ </message>
+
+ <message name='KokuKunpoAppointmentService_getOldAppointments'>
+  <part element='tns:getOldAppointments' name='getOldAppointments'></part>
+ </message>
+ <message name='KokuKunpoAppointmentService_getOldAppointmentsResponse'>
+  <part element='tns:getOldAppointmentsResponse' name='getOldAppointmentsResponse'></part>
+ </message>
+ <message name='KokuKunpoAppointmentService_getTotalOldAppointmentsResponse'>
+  <part element='tns:getTotalOldAppointmentsResponse' name='getTotalOldAppointmentsResponse'></part>
+ </message>
+
+ <message name='KokuKunpoAppointmentService_getTotalAssignedAppointments'>
+  <part element='tns:getTotalAssignedAppointments' name='getTotalAssignedAppointments'></part>
+ </message>
+ <message name='KokuKunpoAppointmentService_getTotalRespondedAppointmentsResponse'>
+  <part element='tns:getTotalRespondedAppointmentsResponse' name='getTotalRespondedAppointmentsResponse'></part>
  </message>
  <message name='KokuKunpoAppointmentService_getTotalAssignedAppointmentsResponse'>
   <part element='tns:getTotalAssignedAppointmentsResponse' name='getTotalAssignedAppointmentsResponse'></part>
  </message>
- <message name='KokuKunpoAppointmentService_getTotalAssignedAppointments'>
-  <part element='tns:getTotalAssignedAppointments' name='getTotalAssignedAppointments'></part>
- </message>
+
  <message name='KokuKunpoAppointmentService_getAssignedAppointments'>
   <part element='tns:getAssignedAppointments' name='getAssignedAppointments'></part>
  </message>
@@ -146,27 +207,27 @@
  <message name='KokuKunpoAppointmentService_getRespondedAppointmentsResponse'>
   <part element='tns:getRespondedAppointmentsResponse' name='getRespondedAppointmentsResponse'></part>
  </message>
+
  <message name='KokuKunpoAppointmentService_getAssignedAppointmentsResponse'>
   <part element='tns:getAssignedAppointmentsResponse' name='getAssignedAppointmentsResponse'></part>
  </message>
  <message name='KokuKunpoAppointmentService_getTotalRespondedAppointments'>
   <part element='tns:getTotalRespondedAppointments' name='getTotalRespondedAppointments'></part>
  </message>
- <message name='KokuKunpoAppointmentService_getTotalRespondedAppointmentsResponse'>
-  <part element='tns:getTotalRespondedAppointmentsResponse' name='getTotalRespondedAppointmentsResponse'></part>
+ <message name='KokuKunpoAppointmentService_cancelRespondedAppointment'>
+  <part element='tns:cancelRespondedAppointment' name='cancelRespondedAppointment'></part>
+ </message>
+
+ <message name='KokuKunpoAppointmentService_cancelRespondedAppointmentResponse'>
+  <part element='tns:cancelRespondedAppointmentResponse' name='cancelRespondedAppointmentResponse'></part>
  </message>
  <message name='KokuKunpoAppointmentService_getAppointmentRespondedByIdResponse'>
   <part element='tns:getAppointmentRespondedByIdResponse' name='getAppointmentRespondedByIdResponse'></part>
  </message>
- <message name='KokuKunpoAppointmentService_cancelRespondedAppointmentResponse'>
-  <part element='tns:cancelRespondedAppointmentResponse' name='cancelRespondedAppointmentResponse'></part>
- </message>
- <message name='KokuKunpoAppointmentService_cancelRespondedAppointment'>
-  <part element='tns:cancelRespondedAppointment' name='cancelRespondedAppointment'></part>
- </message>
  <portType name='KokuKunpoAppointmentService'>
   <operation name='cancelRespondedAppointment' parameterOrder='cancelRespondedAppointment'>
    <input message='tns:KokuKunpoAppointmentService_cancelRespondedAppointment'></input>
+
    <output message='tns:KokuKunpoAppointmentService_cancelRespondedAppointmentResponse'></output>
   </operation>
   <operation name='getAppointmentRespondedById' parameterOrder='getAppointmentRespondedById'>
@@ -176,16 +237,27 @@
   <operation name='getAssignedAppointments' parameterOrder='getAssignedAppointments'>
    <input message='tns:KokuKunpoAppointmentService_getAssignedAppointments'></input>
    <output message='tns:KokuKunpoAppointmentService_getAssignedAppointmentsResponse'></output>
+
+  </operation>
+  <operation name='getOldAppointments' parameterOrder='getOldAppointments'>
+   <input message='tns:KokuKunpoAppointmentService_getOldAppointments'></input>
+   <output message='tns:KokuKunpoAppointmentService_getOldAppointmentsResponse'></output>
   </operation>
   <operation name='getRespondedAppointments' parameterOrder='getRespondedAppointments'>
    <input message='tns:KokuKunpoAppointmentService_getRespondedAppointments'></input>
    <output message='tns:KokuKunpoAppointmentService_getRespondedAppointmentsResponse'></output>
   </operation>
+
   <operation name='getTotalAssignedAppointments' parameterOrder='getTotalAssignedAppointments'>
    <input message='tns:KokuKunpoAppointmentService_getTotalAssignedAppointments'></input>
    <output message='tns:KokuKunpoAppointmentService_getTotalAssignedAppointmentsResponse'></output>
   </operation>
+  <operation name='getTotalOldAppointments' parameterOrder='getTotalOldAppointments'>
+   <input message='tns:KokuKunpoAppointmentService_getTotalOldAppointments'></input>
+   <output message='tns:KokuKunpoAppointmentService_getTotalOldAppointmentsResponse'></output>
+  </operation>
   <operation name='getTotalRespondedAppointments' parameterOrder='getTotalRespondedAppointments'>
+
    <input message='tns:KokuKunpoAppointmentService_getTotalRespondedAppointments'></input>
    <output message='tns:KokuKunpoAppointmentService_getTotalRespondedAppointmentsResponse'></output>
   </operation>
@@ -195,6 +267,7 @@
   <operation name='cancelRespondedAppointment'>
    <soap:operation soapAction=''/>
    <input>
+
     <soap:body use='literal'/>
    </input>
    <output>
@@ -204,6 +277,7 @@
   <operation name='getAppointmentRespondedById'>
    <soap:operation soapAction=''/>
    <input>
+
     <soap:body use='literal'/>
    </input>
    <output>
@@ -213,6 +287,17 @@
   <operation name='getAssignedAppointments'>
    <soap:operation soapAction=''/>
    <input>
+
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getOldAppointments'>
+   <soap:operation soapAction=''/>
+   <input>
+
     <soap:body use='literal'/>
    </input>
    <output>
@@ -222,6 +307,7 @@
   <operation name='getRespondedAppointments'>
    <soap:operation soapAction=''/>
    <input>
+
     <soap:body use='literal'/>
    </input>
    <output>
@@ -231,6 +317,17 @@
   <operation name='getTotalAssignedAppointments'>
    <soap:operation soapAction=''/>
    <input>
+
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getTotalOldAppointments'>
+   <soap:operation soapAction=''/>
+   <input>
+
     <soap:body use='literal'/>
    </input>
    <output>
@@ -240,6 +337,7 @@
   <operation name='getTotalRespondedAppointments'>
    <soap:operation soapAction=''/>
    <input>
+
     <soap:body use='literal'/>
    </input>
    <output>
@@ -249,6 +347,7 @@
  </binding>
  <service name='KokuKunpoAppointmentService'>
   <port binding='tns:KokuKunpoAppointmentServiceBinding' name='KokuKunpoAppointmentServicePort'>
+
    <soap:address location='http://127.0.0.1:8180/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuKunpoAppointmentServiceImpl'/>
   </port>
  </service>

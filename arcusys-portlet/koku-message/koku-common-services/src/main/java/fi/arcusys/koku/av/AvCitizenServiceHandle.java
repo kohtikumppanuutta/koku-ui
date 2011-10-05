@@ -58,8 +58,7 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 		} else if (taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)) {
 			appSummaryList = acs.getRespondedAppointments(userId, startNum, maxNum);			
 		} else if (taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD)) {
-			// TODO: Correct WebService will be needed
-			appSummaryList = new ArrayList<AppointmentWithTarget>();
+			appSummaryList = acs.getOldAppointments(userId, startNum, maxNum);
 		} else {
 			return appList;	
 		}
@@ -121,8 +120,7 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 		} else if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)) {
 			return acs.getTotalRespondedAppointmentNum(userId);
 		} else if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD)) {
-			// TODO: Change total responded to correct method
-			return 0;
+			return acs.getTotalOldAppointments(userId);
 		} else {
 			return 0;
 		}
