@@ -34,7 +34,9 @@
 		var targetPerson = task['targetPerson'];
 		var url="";
 		
-		if(pageObj.taskType == "app_response_employee" || pageObj.taskType == "app_response_citizen") {
+		if (pageObj.taskType == "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE%>" 
+			|| pageObj.taskType == "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN%>"
+			|| pageObj.taskType == "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD%>") {
 			url = "<%= appointmentRenderURL %>";
 			url = formatUrl(url);
 			
@@ -45,13 +47,13 @@
 				var renderUrl = json["renderUrl"];
 				window.location = renderUrl;
 			});
-		}else if(pageObj.taskType == "app_inbox_employee"){
+		} else if(pageObj.taskType == "app_inbox_employee") {
 			url = "<%= defaultPath %>" + "/Message/NewAppointment" + "?FormID=" + appointmentId;
 			window.location = url;
-		}else if(pageObj.taskType == "app_inbox_citizen") {
+		} else if(pageObj.taskType == "app_inbox_citizen") {
 			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;	
 			window.location = url;
-		}				
+		}
 	}
 	
 	//Creates a renderURL by ajax,to show the detailed consent page

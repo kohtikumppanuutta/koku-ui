@@ -81,7 +81,8 @@ public class ShowAppointmentController {
 		
 		KokuAppointment app = null;
 		
-		if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)) {
+		if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)
+				|| taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD)) {
 			AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
 			handle.setMessageSource(messageSource);
 			app = handle.getAppointmentById(appointmentId, targetPerson);
