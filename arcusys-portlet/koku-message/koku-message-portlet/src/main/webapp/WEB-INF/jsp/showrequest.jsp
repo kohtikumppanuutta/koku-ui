@@ -101,7 +101,9 @@ function exportFile() {
 <div id="task-manager-wrap" class="single">
 	<div id="show-message" style="padding:12px">
 	<span class="request-c-1"><c:out value="${request.subject}" /> </span><br />
-	<span class="request-c-1"><spring:message code="request.valid"/>:</span> <c:out value="${request.creationDate}" /> - <c:out value="${request.endDate}" /> <br />
+	<span class="request-c-1"><spring:message code="request.createdAt"/>:</span> <c:out value="${request.creationDate}" />  <br />
+	<span class="request-c-1"><spring:message code="request.validTill"/>:</span> <c:out value="${request.endDate}" /> <br />
+	
 	<iframe id="msgFrame" name="msgFrame" style="width:100%;" frameborder="0" scrolling="no"></iframe>
 	<!--  
 	<span class="request-c-1">Questions:</span> <c:forEach var="question" items="${request.questions}" varStatus="status">
