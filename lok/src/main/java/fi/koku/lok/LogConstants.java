@@ -48,6 +48,7 @@ public class LogConstants {
   
   // tämä rivi on kopioitu servicesta
   public static final int LOG_NOTHING_TO_ARCHIVE = 2200;
+  public static final int LOG_UNKNOWN_ERROR = 1000;
   
   private LogConstants() {
     // Contains only static constants. No need for new instances

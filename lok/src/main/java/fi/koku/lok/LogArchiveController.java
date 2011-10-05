@@ -27,6 +27,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.KoKuFaultException;
 import fi.koku.services.utility.log.v1.AuditInfoType;
+import fi.koku.services.utility.log.v1.IntType;
 import fi.koku.services.utility.log.v1.LogArchivalParametersType;
 import fi.koku.services.utility.log.v1.LogServiceFactory;
 import fi.koku.services.utility.log.v1.LogServicePortType;
@@ -283,9 +284,14 @@ public class LogArchiveController {
         log.debug("log archive action phase: starting archiving");
 
         // call to log archive service
-        logService.opArchiveLog(archiveParametersType, audit);
-
-   
+        IntType archiveCount = logService.opArchiveLog(archiveParametersType, audit);
+        
+        if(archiveCount.getArchiveCount() == 0){
+          response.setRenderParameter("error", "koku.lok.archive.nothing.to.archive"); 
+          log.debug("ei arkistoitavaa");
+        }else{
+          log.debug("arkistoitiin "+archiveCount.getArchiveCount()+ " entrya");
+        }
       }else{
         response.setRenderParameter("error", "arkistointipvm puuttuu");
       }
@@ -296,14 +302,10 @@ public class LogArchiveController {
  catch (ServiceFault e) {
    log.debug("fault: "+e.getFaultInfo().getCode());
  
-   if(LogConstants.LOG_NOTHING_TO_ARCHIVE == e.getFaultInfo().getCode()){
- 
-     response.setRenderParameter("error", "koku.lok.archive.nothing.to.archive"); //TODO: tuleeko tähän virhekoodi, jolla jsp:ssä valitaan virhe??
-   log.debug("ei arkistoitavaa");
-   }else{
-     response.setRenderParameter("error", "--"); //TODO: mikä olisi tämä yleinen virhe???
+ // if(e.getFaultInfo().getCode()==LogConstants.LOG_UNKNOWN_ERROR){
+     response.setRenderParameter("error", "koku.lok.archive.error.unknown"); //TODO: mikä olisi tämä yleinen virhe???
      log.debug("tuntematon virhe startArchivessa");
-   }
+  // }
    
    response.setRenderParameter("user", user);
    response.setRenderParameter("userRole", userRole);
@@ -348,6 +350,7 @@ public class LogArchiveController {
      * @param text
      * @return
      */
+   /*
     public LogArchiveDate getFromRenderParameter(String text) {
 
       Date d1 = null;
@@ -377,4 +380,6 @@ public class LogArchiveController {
       return new LogArchiveDate(d1);
     }
   }
+  */
+}
 }
