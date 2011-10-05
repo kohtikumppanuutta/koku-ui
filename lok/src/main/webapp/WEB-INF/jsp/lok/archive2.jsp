@@ -11,7 +11,7 @@
 <div class="koku-lok">
 	<div class="portlet-section-body">
 	<c:choose>
-	<c:when test="${userRole == 'ROLE_LOG_VIEWER'}">
+	<c:when test="${userRole == 'ROLE_LOK_ADMIN'}">
 	
 		<p>
 			<spring:message code="koku.lok.archivingstatus.success" />

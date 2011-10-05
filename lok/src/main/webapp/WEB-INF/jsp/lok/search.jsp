@@ -25,7 +25,7 @@
 <div class="koku-lok">
 	<div class="portlet-section-body">
 <c:choose>
-	<c:when test="${userRole == 'ROLE_LOG_VIEWER'}">
+	<c:when test="${userRole == 'ROLE_LOK_ADMIN'}">
 		<div class="home">
 			<a href="${searchUserURL}"><spring:message code="koku.common.back" />
 			</a>
@@ -88,7 +88,7 @@
 			<span class="errors"><form:errors path="to" /> </span>
 
 			<input type="submit"
-				value="<spring:message code="koku.common.search"/>">
+				value="<spring:message code="koku.lok.search"/>">
 
 			<div class="clear"></div>
 		</form:form>

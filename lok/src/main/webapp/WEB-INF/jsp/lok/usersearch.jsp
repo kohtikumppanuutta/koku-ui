@@ -31,7 +31,7 @@
 <div class="portlet-section-body">
 
 <c:choose>
-	<c:when test="${userRole == 'ROLE_LOG_VIEWER'}">
+	<c:when test="${userRole == 'ROLE_LOK_ADMIN'}">
 	
 	<div class="home">
 			<a href="${homeURL}"><spring:message code="koku.common.back" /></a>
@@ -74,12 +74,8 @@
 							<th></th>
 						</tr>
 						<tr>
-							<td><c:out value="${foundName}" /></td>
+							<td><a href="${showLogSearchFormURL}"><c:out value="${foundName}" /></a></td>
 							<td><c:out value="${foundPic}" /></td>
-							<td><a href="${showLogSearchFormURL}"><spring:message
-										code="ui.lok.choose.user" />
-							</a>
-							</td>
 						</tr>
 					</table>
 

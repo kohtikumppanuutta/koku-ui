@@ -67,15 +67,15 @@ public class LogController {
     // this is used for selecting which part of the page to show
     for(Role r : userInfoService.getUsersRoles("lok", LogUtils.getPicFromSession(session))) {
       log.debug(r.getId());
-      if(r.getId().startsWith("ROLE_LOG_")) { // FIXME
+      if(r.getId().startsWith("ROLE_LOK_")) { // FIXME
         model.addAttribute("userRole", r.getId());
         currentRole = r.getId();
         log.debug("added user role "+r.getId());
       }
     }   
     
-    log.debug(LogConstants.ROLE_LOG_ADMIN.getName());
-    log.debug(currentRole);
+    log.debug(LogConstants.ROLE_LOK_LOG_ADMIN.getName());
+    log.debug("current role: "+currentRole);
  /*   if(LogConstants.ROLE_LOG_ADMIN.getId().equals(currentRole)){
       log.debug("return page view");
       model.addAttribute("action", "viewLog");

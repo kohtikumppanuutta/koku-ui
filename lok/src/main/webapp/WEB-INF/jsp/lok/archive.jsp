@@ -39,7 +39,7 @@
 <div class="koku-lok">
 <div class="portlet-section-body">
 <c:choose>
-	<c:when test="${userRole == 'ROLE_LOG_VIEWER'}">
+	<c:when test="${userRole == 'ROLE_LOK_ADMIN'}">
 	<div class="home">
 		<a href="${homeURL}"><spring:message code="koku.common.back" />
 		</a>
@@ -109,7 +109,7 @@
 				<c:if test="${not empty error}">
 	<%-- do not show this on the first visit to this page --%>
 				<p>
-				<%--${error}--%>
+			
 				<spring:message code="${error}" /> 
 <%-- 					<spring:message code="koku.lok.archive.nothing.to.archive" />--%>
 				</p>

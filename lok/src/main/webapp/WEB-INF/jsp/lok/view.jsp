@@ -18,7 +18,7 @@
 <div class="koku-lok">
 	<div class="portlet-section-body">
 <c:choose>
-	<c:when test="${userRole == 'ROLE_LOG_ADMIN'}">
+	<c:when test="${userRole == 'ROLE_LOK_LOG_ADMIN'}">
 	
 	<%-- 	<div class="home">
 			<a href="${homeURL}"><spring:message code="koku.common.back" />

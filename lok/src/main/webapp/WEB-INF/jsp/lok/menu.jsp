@@ -22,25 +22,21 @@
 <p>
 
 		<c:choose>
-			<c:when test="${userRole == 'ROLE_LOG_VIEWER'}">
+			<c:when test="${userRole == 'ROLE_LOK_ADMIN'}">
 	
 		<a href="${searchUserURL}"><spring:message code="koku.lok.search"/></a>
 		<p>
 		
-		<a href="${archiveURL}"><spring:message code="koku.lok.archive"/></a>
-		
-	
+		<a href="${archiveURL}"><spring:message code="koku.lok.archive"/></a>	
 			</c:when>
-			
-			
- 
-			<c:when test="${userRole == 'ROLE_LOG_ADMIN'}">
-		 	<script type="text/javascript">
-  window.location.href = "${searchLogViewsURL}";
-</script>
-				
+
+			<c:when test="${userRole == 'ROLE_LOK_LOG_ADMIN'}">
+				<script type="text/javascript">
+					window.location.href = "${searchLogViewsURL}";
+				</script>
+
 			</c:when>
-<%-- 	<a href="${searchLogViewsURL}"><spring:message code="koku.lok.view"/></a>  --%>	
+			<%-- 	<a href="${searchLogViewsURL}"><spring:message code="koku.lok.view"/></a>  --%>	
 			<c:otherwise>
 			<spring:message code="ui.lok.no.user.rights" />
 			</c:otherwise>
