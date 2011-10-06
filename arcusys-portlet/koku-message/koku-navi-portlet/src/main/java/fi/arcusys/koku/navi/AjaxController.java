@@ -1,15 +1,6 @@
 package fi.arcusys.koku.navi;
 
-import static fi.arcusys.koku.util.Constants.ATTR_MY_ACTION;
-import static fi.arcusys.koku.util.Constants.ATTR_NAVI_TYPE;
-import static fi.arcusys.koku.util.Constants.JSON_ARCHIVE_INBOX;
-import static fi.arcusys.koku.util.Constants.JSON_INBOX;
-import static fi.arcusys.koku.util.Constants.JSON_LOGIN_STATUS;
-import static fi.arcusys.koku.util.Constants.JSON_RENDER_URL;
-import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_NAVI;
-import static fi.arcusys.koku.util.Constants.RESPONSE;
-import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_INVALID;
-import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_VALID;
+import static fi.arcusys.koku.util.Constants.*;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
@@ -25,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import fi.arcusys.koku.av.AvCitizenServiceHandle;
 import fi.arcusys.koku.kv.KokuFolderType;
 import fi.arcusys.koku.kv.MessageHandle;
+import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.users.UserIdResolver;
 
 /**
- * Hanldes ajax request and return the response with json string
+ * Handles ajax request and return the response with json string
  * @author Jinhua Chen
  * Jun 22, 2011
  */
@@ -74,18 +67,15 @@ public class AjaxController extends AbstractController {
 	 */
 	public JSONObject getJsonModel(String userId) {
 		JSONObject jsonModel = new JSONObject();
-		String newInboxMessageNum = "0";
-		String  newArchiveMessageNum = "0";
-		
 		if (userId == null) {
 			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_INVALID);
 		} else {
-			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_VALID);
-			newInboxMessageNum = String.valueOf(getNewMessageNum(userId, KokuFolderType.INBOX));
-			jsonModel.put(JSON_INBOX, newInboxMessageNum);
-			
-			newArchiveMessageNum = String.valueOf(getNewMessageNum(userId, KokuFolderType.ARCHIVE_INBOX));
-			jsonModel.put(JSON_ARCHIVE_INBOX, newArchiveMessageNum);
+			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_VALID);			
+			jsonModel.put(JSON_INBOX, String.valueOf(getNewMessageNum(userId, KokuFolderType.INBOX)));			
+			jsonModel.put(JSON_ARCHIVE_INBOX, String.valueOf(getNewMessageNum(userId, KokuFolderType.ARCHIVE_INBOX)));
+			jsonModel.put(JSON_CONSENTS_TOTAL, String.valueOf(getTotalAssignedConsents(userId)));
+			jsonModel.put(JSON_APPOINTMENT_TOTAL, String.valueOf(getTotalAssignedAppointments(userId)));
+			jsonModel.put(JSON_REQUESTS_TOTAL, String.valueOf(getTotalRequests(userId)));
 		}		
 		return jsonModel;
 	}
@@ -97,10 +87,43 @@ public class AjaxController extends AbstractController {
 	 * @param folderType
 	 * @return number of messages
 	 */
-	public int getNewMessageNum(String userId, KokuFolderType folderType) {
+	private int getNewMessageNum(String userId, KokuFolderType folderType) {
 		MessageHandle messageHandle = new MessageHandle();
 		return messageHandle.getUnreadMessages(userId, folderType);
 	}
+	
+	/**
+	 * Returns total amount of assigned consents (not just new ones)
+	 * 
+	 * @param userId
+	 * @return number of assigned consents
+	 */
+	private int getTotalAssignedConsents(String userId) {
+		TivaCitizenServiceHandle handle = new TivaCitizenServiceHandle();
+		return handle.getTotalAssignedConsents(userId);
+	}
+	
+	/**
+	 * Returns total amount of assigned appointments
+	 * 
+	 * @param userId
+	 * @return number of assigned appointments
+	 */
+	private int getTotalAssignedAppointments(String userId) {
+		AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
+		return handle.getTotalAppointmentsNum(userId, TASK_TYPE_APPOINTMENT_INBOX_CITIZEN);
+	}
+	
+	/**
+	 * Returns total amount of requests
+	 * 
+	 * @param userId
+	 * @return number or requests
+	 */
+	private int getTotalRequests(String userId) {
+		return 0;
+	}
+	
 	
 	/**
 	 * Creates render url mainly for gatein portal container
@@ -121,7 +144,6 @@ public class AjaxController extends AbstractController {
 		JSONObject jsonModel = new JSONObject();
 		jsonModel.put(JSON_RENDER_URL, renderUrlString);
 		modelmap.addAttribute(RESPONSE, jsonModel);
-		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 

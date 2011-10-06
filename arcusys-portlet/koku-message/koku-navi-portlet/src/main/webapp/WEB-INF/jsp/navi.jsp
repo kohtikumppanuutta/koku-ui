@@ -17,14 +17,14 @@
 	String actionParam = "";
 	
 	int pos = naviURL.indexOf("default");
-	if(pos > -1) { // for Jboss portal
+	if (pos > -1) { // for Jboss portal
 		defaultPath = naviURL.substring(0, pos+7);
 		int pos1 = naviURL.lastIndexOf("/");
 		actionParam = naviURL.substring(pos1);
 		String currentPath = naviURL.substring(0, pos1);
 		int pos2 = currentPath.lastIndexOf("/");
 		currentPage = currentPath.substring(pos2+1);		
-	}else { // for Gatein portal
+	} else { // for Gatein portal
 		int pos1 = naviURL.indexOf("classic");
 		defaultPath = naviURL.substring(0, pos1+7);
 		int pos2 = naviURL.indexOf("?");
@@ -53,6 +53,22 @@
 		naviRefreshTimer = setInterval('ajaxUpdate()', duration);		
 	});
 
+	/* 
+	var pageList = {
+		'NewMessage': '#msg_new',
+		'NewRequest': '#req_new',
+		'ValidRequest': '#req_valid_request',
+		'NewAppointment': '#app_new',
+		'NewKindergarten': '#kid_new',
+		'NewConsent': '#cst_new',
+		'FillConsent': '#cst_new',
+		'SendConsent': '#cst_new',
+		'SelaaValtakirjoja': '#cst_new',
+		'Ilmoitukset': '#cst_new',
+		'Message': '#msg_inbox'
+	}
+	*/ 
+	
 	/**
 	 * Finds the current item in navigation list and decorates the item, e.g. bold font 
 	 */
@@ -108,6 +124,7 @@
 		}		
 		return naviType;
 	}
+	
 	/**
 	 * Execute ajax query in Post way, and parse the Json format response, and
 	 * then create tasks in table and task page filed.
@@ -125,16 +142,19 @@
 			  success: function(data) {
 					var obj = eval('(' + data + ')');
 					var json = obj.response;
-					var navi_login_status = json["loginStatus"];
+					var navi_login_status = json["<%=Constants.JSON_LOGIN_STATUS %>"];
 					
-					if(navi_login_status == 'VALID') {
-						var inbox_num = json["inbox"];
-						var archive_inbox_num = json["archive_inbox"];
-						updateMessageNum(inbox_num, archive_inbox_num);
-					}else {}
+					if(navi_login_status == '<%=Constants.TOKEN_STATUS_VALID %>') {
+						updateMessageNum(
+								json["<%=Constants.JSON_INBOX %>"],
+								json["<%=Constants.JSON_ARCHIVE_INBOX %>"],
+								json["<%=Constants.JSON_CONSENTS_TOTAL %>"],
+								json["<%=Constants.JSON_APPOINTMENT_TOTAL %>"],
+								json["<%=Constants.JSON_REQUESTS_TOTAL %>"]								
+							);
+					}
 			  }
-			  
-			});		
+			});
 	}
 	
 	/* Formats url mainly for gatein epp*/
@@ -151,17 +171,20 @@
 	/**
 	 * Updates the new message number to indicate user
 	 */
-	function updateMessageNum(inbox_num, archive_inbox_num) {
-		
-		if(inbox_num != 0)
-			jQuery('#inbox_num').html('(' + inbox_num + ')');
-		else
-			jQuery('#inbox_num').html("");
-		
-		if(archive_inbox_num != 0) 
-			jQuery('#archive_inbox_num').html('(' + archive_inbox_num + ')');
-		else
-			jQuery('#archive_inbox_num').html("");
+	function updateMessageNum(inboxNum, archiveInboxNum, consentsTotal, appointmentsTotal, requestsTotal) {	
+		updateMsgCounter(jQuery('#inbox_num'), inboxNum);
+		updateMsgCounter(jQuery('#archive_inbox_num'), archiveInboxNum);
+		updateMsgCounter(jQuery('#consents_num'), consentsTotal);
+		updateMsgCounter(jQuery('#appointments_num'), appointmentsTotal);
+		updateMsgCounter(jQuery('#requests_num'), requestsTotal);
+	}
+	
+	function updateMsgCounter(element, count) {
+		if (count != 0) {
+			element.html('(' + count + ')');			
+		} else {
+			element.html("");
+		}
 	}
 	
 	<%  //for jboss portal
@@ -239,7 +262,7 @@
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
 		<li><a href="#">Pyynnöt</a>
 			<ul class="child">
-				<li id="req_valid_request"><a href="<%= defaultPath %>/Message/ValidRequest">Saapuneet</a></li>
+				<li id="req_valid_request"><a href="<%= defaultPath %>/Message/ValidRequest">Saapuneet</a><span id="requests_num" class="message_num"></li>
 				<li id="<%=Constants.TASK_TYPE_REQUEST_REPLIED %>"><a href="javascript:void(0)" onclick="navigateToPage('<%=Constants.TASK_TYPE_REQUEST_REPLIED %>')">Vastatut</a></li>
 				<li id="<%=Constants.TASK_TYPE_REQUEST_OLD %>"><a href="javascript:void(0)" onclick="navigateToPage('<%=Constants.TASK_TYPE_REQUEST_OLD %>')">Vanhat</a></li>
 			</ul>
@@ -266,7 +289,7 @@
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
 		<li><a href="#">Tapaamiset</a>
 			<ul class="child">
-				<li id="<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN%>')">Vastausta odottavat</a></li>
+				<li id="<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN%>')">Vastausta odottavat</a><span id="appointments_num" class="message_num"></li>
 				<li id="<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN%>')">Vastatut</a></li>
 				<li id="<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD%>')">Vanhat</a></li>
 			</ul>
@@ -287,7 +310,7 @@
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
 			<li><a href="#">Suostumukset</a>
 				<ul class="child">
-					<li id="<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>')">Saapuneet</a></li>
+					<li id="<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>')">Saapuneet</a><span id="consents_num" class="message_num"></li>
 					<li id="<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS%>')">Vastatut</a></li>
 					<li id="<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD%>')">Vanhat</a></li>					
 				</ul>

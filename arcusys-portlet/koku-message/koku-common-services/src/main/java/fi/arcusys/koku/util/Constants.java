@@ -109,6 +109,9 @@ public class Constants {
 	public static final String JSON_LOGIN_STATUS							= "loginStatus";
 	public static final String JSON_INBOX									= "inbox";
 	public static final String JSON_ARCHIVE_INBOX							= "archive_inbox";
+	public static final String JSON_CONSENTS_TOTAL							= "consentsTotal";
+	public static final String JSON_APPOINTMENT_TOTAL						= "appointmentsTotal";
+	public static final String JSON_REQUESTS_TOTAL							= "requestsTotal";
                                                                     	
 	/* PortletPreferences keys: */                                  	
 	public static final String PREF_REFRESH_DURATION 						= "refreshDuration";
