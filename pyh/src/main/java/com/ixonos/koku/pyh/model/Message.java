@@ -17,9 +17,9 @@ public class Message {
   private String id;
   private String from;
   private String text;
-  private boolean tooManyParentsInFamily;
+  private boolean twoParentsInFamily;
 
-  public Message(String id, String fromUserPic, String text, boolean tooManyParentsInFamily) {
+  public Message(String id, String fromUserPic, String text, boolean twoParentsInFamily) {
     if (debug) {
       log.info("Message.constructor: creating a Message with parameters:");
       log.info("id: " + id);
@@ -30,7 +30,7 @@ public class Message {
     this.id = id;
     this.from = fromUserPic;
     this.text = text;
-    this.tooManyParentsInFamily = tooManyParentsInFamily;
+    this.twoParentsInFamily = twoParentsInFamily;
   }
 
   public String getId() {
@@ -57,8 +57,8 @@ public class Message {
     this.text = text;
   }
   
-  public boolean getTooManyParentsInFamily() {
-    return tooManyParentsInFamily;
+  public boolean getTwoParentsInFamily() {
+    return twoParentsInFamily;
   }
   
 }

@@ -302,7 +302,7 @@ public class PyhDemoService {
     }
     
     if (debug) {
-      log.info("isParentsSet(): returning false");
+      log.info("isParentsSet(): family == null, returning false");
     }
     
     return false;
@@ -663,8 +663,6 @@ public class PyhDemoService {
       log.error("PyhDemoService.sendParentAdditionMessage: opAddMembershipRequest raised a ServiceFault", fault);
     }
     
-    // -- */
-    
   }
   
   /**
@@ -724,8 +722,6 @@ public class PyhDemoService {
     } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
       log.error("PyhDemoService.sendFamilyAdditionMessage: opAddMembershipRequest raised a ServiceFault", fault);
     }
-    
-    // -- */
     
   }
   
@@ -1028,14 +1024,14 @@ public class PyhDemoService {
             senderName = senderPic;
           }
           
-          boolean tooManyParentsInFamily;
+          boolean twoParentsInFamily;
           if (memberToAddPic.equals(user.getPic())) {
             // if the target person is current user
             targetName = "sinut";
             
-            tooManyParentsInFamily = true;
-            // TODO: tarkista kuuluuko käyttäjä perheyhteisöön, jossa on jo kaksi vanhempaa
-            // ja opasta käyttäjää hylkäämään pyyntö tai poistamaan toinen vanhempi
+            // twoParentsInFamily is set if there are two (or more; this is theoretical, 
+            // shouldn't be possible) parents in the family
+            twoParentsInFamily = isParentsSet(user.getPic());
             
           } else {
             if (targetPerson != null) {
@@ -1044,19 +1040,27 @@ public class PyhDemoService {
               targetName = "käyttäjän " + memberToAddPic;
             }
             
-            tooManyParentsInFamily = false;
+            // here it does not matter whether there are two parents in the family or not
+            // so twoParentsInFamily can be set to false
+            twoParentsInFamily = false;
           }
           
-          String messageText = "Uusi perheyhteyspyyntö: käyttäjä " + senderName + " haluaa lisätä " + targetName + 
-            " perheyhteisönsä jäseneksi. " + "Hyväksymällä pyynnön lisääminen tapahtuu automaattisesti.";
+          String messageText = "";
+          if (twoParentsInFamily) {
+            messageText = "Uusi perheyhteyspyyntö: käyttäjä " + senderName + 
+            " on lisäämässä sinua perheyhteisönsä jäseneksi, mutta et voi hyväksyä pyyntöä, koska perheessänne on jo kaksi vanhempaa. " +
+            "Voit hylätä pyynnön tai poistaa toisen vanhemman perheyhteisöstäsi, minkä jälkeen voit hyväksyä pyynnön.";
+          }
+          else {
+            messageText = "Uusi perheyhteyspyyntö: käyttäjä " + senderName + " haluaa lisätä " + targetName + 
+              " perheyhteisönsä jäseneksi. " + "Hyväksymällä pyynnön lisääminen tapahtuu automaattisesti.";
+          }
           
-          Message message = new Message(messageId, senderPic, messageText, tooManyParentsInFamily);
+          Message message = new Message(messageId, senderPic, messageText, twoParentsInFamily);
           requestMessages.add(message);
         }
       }
     }
-    
-    // -- */
     
     return requestMessages;
   }
@@ -1118,8 +1122,6 @@ public class PyhDemoService {
       }
     }
     
-    // -- */
-    
     return requestMessages;
   }
   
@@ -1151,24 +1153,6 @@ public class PyhDemoService {
       log.error("PyhDemoService.acceptMembershipRequest: opUpdateMembershipApproval raised a ServiceFault", fault);
     }
     
-    // -- */
-    
   }
   
-  /**
-   * Checks if a dependant is user's dependant.
-   */
-  /*
-  private boolean isUsersDependant(String dependantPic) {
-    List<Dependant> dependants = getDependants();
-    Iterator<Dependant> di = dependants.iterator();
-    while (di.hasNext()) {
-      Dependant dependant = di.next();
-      if (dependantPic.equals(dependant.getPic())) {
-        return true;
-      }
-    }
-    return false;
-  }
-  */
 }

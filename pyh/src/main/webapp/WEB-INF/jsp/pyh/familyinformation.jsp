@@ -100,7 +100,7 @@
                     </form:form>     
                     </span>  
                     
-                    <c:if test="${!message.tooManyParentsInFamily}">
+                    <c:if test="${!message.twoParentsInFamily}">
 	                    <span class="pyh-right"> 
 	                    <portlet:actionURL var="accept">
 	                            <portlet:param name="action" value="acceptMessage" />
