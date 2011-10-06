@@ -31,7 +31,6 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import javax.xml.ws.soap.SOAPFaultException;
 
-
 import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;
 import fi.koku.services.utility.log.v1.LogEntryType;
@@ -54,18 +53,17 @@ public class LogSearchController {
 
   // Use log service
   private LogServicePortType logService;
-  
+
   private CriteriaSerializer criteriaSerializer = new CriteriaSerializer();
   SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
   LogUtils lu = new LogUtils();
 
-  public LogSearchController(){
-    LogServiceFactory logServiceFactory = new LogServiceFactory(
-        LogConstants.LOG_SERVICE_USER_ID, LogConstants.LOG_SERVICE_PASSWORD,
-        LogConstants.LOG_SERVICE_ENDPOINT);
-    logService = logServiceFactory.getLogService();    
+  public LogSearchController() {
+    LogServiceFactory logServiceFactory = new LogServiceFactory(LogConstants.LOG_SERVICE_USER_ID,
+        LogConstants.LOG_SERVICE_PASSWORD, LogConstants.LOG_SERVICE_ENDPOINT);
+    logService = logServiceFactory.getLogService();
   }
-  
+
   // customize form data binding
   @InitBinder
   public void initBinder(WebDataBinder binder) {
@@ -83,30 +81,43 @@ public class LogSearchController {
   // portlet render phase
   @RenderMapping(params = "action=searchLog")
   public String render(RenderRequest req, @RequestParam(value = "visited", required = false) String visited,
-      @ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, 
-      @RequestParam(value = "user") String user, @RequestParam(value = "userRole") String userRole,
-      RenderResponse res, Model model) {
+      @ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria,
+      @RequestParam(value = "user") String user, @RequestParam(value = "userRole") String userRole, RenderResponse res,
+      Model model) {
 
     log.info("render searchLog");
-  log.debug("render user: "+user);
+    log.debug("render user: " + user);
     // these are runtime constants, not given by the user!
-      String startDateStr = lu.getDateString(1);
-      String endDateStr = lu.getDateString(0);
-      model.addAttribute("startDate", startDateStr);
-      model.addAttribute("endDate", endDateStr);
-      log.debug("startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
-      
+    String startDateStr = lu.getDateString(1);
+    String endDateStr = lu.getDateString(0);
+    model.addAttribute("startDate", startDateStr);
+    model.addAttribute("endDate", endDateStr);
+    log.debug("startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
+
     if (criteria != null) {
       if (visited != null) { // page has been visited
+        
+        // Check that the input parameters are not null and in the correct format
+        String[] errors = lu.checkInputParameters(criteria);
+        model.addAttribute("error0", errors[0]);
+        model.addAttribute("error1", errors[1]);
+        model.addAttribute("error2", errors[2]);
+        
+      //  log.debug(errors[0]+", "+errors[1]+", "+errors[2]);
+        
+        // if (LogConstants.REAL_LOG) {
+        // TODO: tähän kohtaan jokin virheenkäsittely?
 
-        if (LogConstants.REAL_LOG) {
-//TODO: tähän kohtaan jokin virheenkäsittely?
+        if(errors[0] ==null && errors[1] == null && errors[2] ==null){
+          // get the entries from the database
           model.addAttribute("entries", getLogEntries(criteria, user));
-        } else { //TODO: poista tämä!
-          model.addAttribute("entries", getDemoLogEntries(criteria));
+          /*
+           * } else { //TODO: poista tämä! model.addAttribute("entries",
+           * getDemoLogEntries(criteria)); }
+           */
+          model.addAttribute("searchParams", criteria);
+          model.addAttribute("visited", "---");
         }
-        model.addAttribute("searchParams", criteria);
-        model.addAttribute("visited", "---");
       }
       log.info("criteria: " + criteria.getPic() + ", " + criteria.getConcept() + ", " + criteria.getFrom() + ", "
           + criteria.getTo());
@@ -119,19 +130,19 @@ public class LogSearchController {
     model.addAttribute("pic", criteria.getPic());
     model.addAttribute("user", user);
     model.addAttribute("userRole", userRole);
-    
+
     return "search";
   }
 
-  // This is run after the customer has been searched and the user clicks 'Valitse'
+  // This is run after the customer has been searched and the user clicks
+  // 'Valitse'
   // portlet action phase
   @ActionMapping(params = "action=searchLog")
-  public void doSearch(@ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria,  BindingResult result,
-      @RequestParam(value = "visited") String visited, @RequestParam(value = "user") String user, 
+  public void doSearch(@ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, BindingResult result,
+      @RequestParam(value = "visited") String visited, @RequestParam(value = "user") String user,
       @RequestParam(value = "userRole") String userRole, ActionResponse response) {
 
-    log.debug("action = searchLog");
-log.debug("user: "+user);
+    log.debug("user: " + user);
 
     // pass criteria to render phase
     if (visited != null) {
@@ -142,8 +153,7 @@ log.debug("user: "+user);
     response.setRenderParameter("user", user);
     response.setRenderParameter("userRole", userRole);
   }
- 
- 
+
   /**
    * Method for reading log entries
    * 
@@ -158,77 +168,75 @@ log.debug("user: "+user);
 
       // set the criteria
       criteriatype.setCustomerPic(searchCriteria.getPic());
-      log.debug("searchcriteria: from="+searchCriteria.getFrom()+", to="+searchCriteria.getTo());
-      
-      //The from and to fields are not allowed to be null
-      Calendar start = lu.dateToCalendar(searchCriteria.getFrom());     
+      log.debug("searchcriteria: from=" + searchCriteria.getFrom() + ", to=" + searchCriteria.getTo());
+
+      // The from and to fields are not allowed to be null
+      Calendar start = lu.dateToCalendar(searchCriteria.getFrom());
       Calendar end = lu.dateToCalendar(searchCriteria.getTo());
 
-      log.debug("parsitut päivämäärät: "+start+"\n"+end+"\n");
-      // assume that null arguments are ok
- 
-      criteriatype.setStartTime(start); 
+      log.debug("parsitut päivämäärät: " + start + "\n" + end + "\n");
+      // these have been null-checked earlier
+      criteriatype.setStartTime(start);
       criteriatype.setEndTime(end);
 
       // data item type: kks.vasu, kks.4v, family/community info, consent, ...
       criteriatype.setDataItemType(searchCriteria.getConcept());
       // log type: loki, lokin seurantaloki
       criteriatype.setLogType(LogConstants.LOG_NORMAL);
-      
-      log.debug("criteriatype cust pic: " + criteriatype.getCustomerPic() + "\n" +
-          "start: "+ criteriatype.getStartTime() + "\n" + 
-          "end: " + criteriatype.getEndTime() + "\n" + "dataItem: "
+
+      log.debug("criteriatype cust pic: " + criteriatype.getCustomerPic() + "\n" + "start: "
+          + criteriatype.getStartTime() + "\n" + "end: " + criteriatype.getEndTime() + "\n" + "dataItem: "
           + criteriatype.getDataItemType() + "\n" + "logtype: " + criteriatype.getLogType());
 
       // call to log database
       AuditInfoType audit = new AuditInfoType();
-      audit.setComponent("lok"); //FIXME 
-      log.debug("set user pic: "+user);
+      audit.setComponent("lok"); // FIXME
+      log.debug("set user pic: " + user);
       // set pic that was got from the session
       audit.setUserId(user);
-      
+
       // call to log service
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
-     
+
       // the log entries list from the database
       List<LogEntryType> entryTypeList = entriestype.getLogEntry();
 
-      log.debug("entrytype list size: " + entryTypeList.size());    
+      log.debug("entrytype list size: " + entryTypeList.size());
 
       for (Iterator<?> i = entryTypeList.iterator(); i.hasNext();) {
         LogEntry logEntry = new LogEntry();
         LogEntryType logEntryType = (LogEntryType) i.next();
-        
-        log.debug(logEntryType.getTimestamp()+"\n");
+
+        log.debug(logEntryType.getTimestamp() + "\n");
         // put values that were read from the database in logEntry for showing
         // them to the user
-     
+
         // kks, pyh, kunpo, ..
-        logEntry.setClientSystemId(logEntryType.getClientSystemId()); 
+        logEntry.setClientSystemId(logEntryType.getClientSystemId());
         // pic of the child
-        logEntry.setChild(logEntryType.getCustomerPic()); 
+        logEntry.setChild(logEntryType.getCustomerPic());
         // kks.vasu, kks.4v, ..
-        logEntry.setDataItemType(logEntryType.getDataItemType()); 
-        // read, write, ..                            
-        logEntry.setOperation(logEntryType.getOperation()); 
+        logEntry.setDataItemType(logEntryType.getDataItemType());
+        // read, write, ..
+        logEntry.setOperation(logEntryType.getOperation());
         // id given by the system that wrote the log
-        logEntry.setLogId(logEntryType.getDataItemId()); 
+        logEntry.setLogId(logEntryType.getDataItemId());
         // other info about the log entry
-        logEntry.setMessage(logEntryType.getMessage()); 
+        logEntry.setMessage(logEntryType.getMessage());
         logEntry.setTimestamp(logEntryType.getTimestamp().getTime());
         logEntry.setUser(logEntryType.getUserPic());
 
         entryList.add(logEntry);
       }
-   
+
     } // TODO: Parempi virheenkäsittely
- catch (ServiceFault e) {
+    catch (ServiceFault e) {
       // TODO Auto-generated catch block
-     // e.printStackTrace();
-   e.getFaultInfo().getCode();
- //   }catch(javax.xml.ws.soap.SoapFaultException ee){
- }catch(Exception ee){
-   log.error("jokin virhe servicesta");
+      // e.printStackTrace();
+      e.getFaultInfo().getCode();
+      // }catch(javax.xml.ws.soap.SoapFaultException ee){
+    } catch (Exception ee) {
+      log.error("jokin virhe servicesta");
     }
 
     return entryList;
@@ -281,7 +289,7 @@ log.debug("user: "+user);
 
       SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
 
-	  log.debug("getAsText from: "+c.getFrom());
+      log.debug("getAsText from: " + c.getFrom());
       if (c != null) {
         text = new String[] { c.getPic(), c.getConcept(), c.getFrom() != null ? df.format(c.getFrom()) : "",
             c.getTo() != null ? df.format(c.getTo()) : "" };

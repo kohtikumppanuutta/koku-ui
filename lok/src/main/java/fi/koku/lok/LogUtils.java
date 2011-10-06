@@ -50,7 +50,24 @@ public class LogUtils {
     }
   }
   
+  public String[] checkInputParameters(LogSearchCriteria criteria){
+    String[] error = new String[3];
   
+   
+    log.debug("hakuparametrit: " + criteria.getConcept() + "," + criteria.getFrom() + "," + criteria.getTo());
+    if (criteria.getConcept() == null || criteria.getConcept().isEmpty()) {
+      error[0] = "koku.lok.search.null.concept";
+    }
+    if (criteria.getFrom() == null) {
+      log.debug("from on null");
+      error[1] = "koku.lok.search.null.from";
+    }
+    if(criteria.getTo() == null){
+      error[2] = "koku.lok.search.null.to";
+    }
+    
+    return error;
+  }
  /**
   * The method returns a date X years from today.
   * @param years

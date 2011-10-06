@@ -140,7 +140,20 @@ This should be changed! --%>
 			</c:if>
 		</c:if>
 		<br /> <br />
-		
+		<p>
+					<c:if test="${not empty error0}">
+						<spring:message code="${error0}" />
+					</c:if>
+					<br>
+					<c:if test="${not empty error1}">
+						<spring:message code="${error1}" />
+					</c:if>
+					<br>
+					<c:if test="${not empty error2}">
+						<spring:message code="${error2}" />
+					</c:if>
+				</p>
+	
 		</c:when>
 
 <c:otherwise>

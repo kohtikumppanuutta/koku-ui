@@ -81,8 +81,6 @@ public class LogController {
     
     log.debug(LogConstants.ROLE_LOK_LOG_ADMIN.getName());
     log.debug("current role: "+currentRole);
- 
-    log.debug("return page menu");
 
     return "menu";
 
