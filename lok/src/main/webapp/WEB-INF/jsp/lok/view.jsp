@@ -94,25 +94,15 @@
 							<th width=15% scope="col"><b><spring:message code="ui.lok.operation" /></b>
 							</th>
 							<th width=55% scope="col"><b><spring:message code="ui.lok.data.item.type" /></b>
-						
-							
 							</th>
 						</tr>
 
 						<c:forEach var="e" items="${entries}">
 							<tr>
 						<td width=15%><fmt:formatDate pattern="dd.MM.yyyy hh:mm:ss" value="${e.timestamp}"/></td>
-							<%-- 	<td width=15%><c:out value="${e.timestamp}"/></td>--%>
 								<td width=15%><c:out value="${e.user}"/></td>
 								<td width=15%><c:out value="${e.operation}"/></td>
-								<td width=55%><c:out value="${e.message}"/>
-								<%-- 
-								<c:out value="${e.dataItemType}"/>
-												<c:out value="${e.clientSystemId}"/>
-												<c:out value="${e.child}"/>
-												<c:out value="${e.logId}"/>
-												<%--<c:out value="${e.message}"/> --%>
-												</td>
+								<td width=55%><c:out value="${e.message}"/></td>
 							</tr>
 						</c:forEach>
 					</table>
@@ -130,8 +120,17 @@
 		</c:if>
 
 		<br />
+		<p>
+	<c:if test="${not empty error0}">
+						<spring:message code="${error0}" />
+					</c:if>
+					<br>
+					<c:if test="${not empty error1}">
+						<spring:message code="${error1}" />
+					</c:if>
 </c:when>
 
+					
 <c:otherwise>
 	<spring:message code="ui.lok.no.user.rights" />
 </c:otherwise>

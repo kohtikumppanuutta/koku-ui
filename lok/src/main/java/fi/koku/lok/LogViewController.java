@@ -96,15 +96,24 @@ public class LogViewController {
     
     if (criteria != null) {
       if (visited != null) {
-      //TODO: tähän kohtaan jokin virheenkäsittely?
-        // make the query to the admin log
-        model.addAttribute("entries", getAdminLogEntries(criteria, user));
         
-        model.addAttribute("searchParams", criteria);
-        log.debug("criteria: " + criteria.getFrom() + ", " + criteria.getTo());
-        model.addAttribute("visited", "---");
+        // Check that the input parameters are not null and in the correct format
+        String[] errors = lu.checkInputParameters(criteria, LogConstants.LOG_NORMAL);
+        model.addAttribute("error0", errors[0]);
+        model.addAttribute("error1", errors[1]);
+              
+      //  log.debug(errors[0]+", "+errors[1]+", "+errors[2]);
+       if(errors[0] ==null && errors[1] == null){
+
+          //TODO: tähän kohtaan jokin virheenkäsittely?
+          // make the query to the admin log
+          model.addAttribute("entries", getAdminLogEntries(criteria, user));
+
+          model.addAttribute("searchParams", criteria);
+          log.debug("criteria: " + criteria.getFrom() + ", " + criteria.getTo());
+          model.addAttribute("visited", "---");
+        }
       }
-      
       model.addAttribute("logSearchCriteria", criteria);
       
     } else {
@@ -178,12 +187,7 @@ public class LogViewController {
       criteriatype.setEndTime(end);
       criteriatype.setLogType(LogConstants.LOG_ADMIN);
 
-      // TODO: ADD HERE WRITING TO LOG
-      // "tapahtumatieto = hakuehdot"
-
       // Set the user information
-    
-      // call to log database
       AuditInfoType audit = new AuditInfoType();
       audit.setComponent("lok"); //FIXME
       audit.setUserId(user);  
@@ -192,13 +196,7 @@ public class LogViewController {
     if(criteriatype.getStartTime() == null || criteriatype.getEndTime() == null){
       log.debug("null-arvoja kriteriassa");
     }else{
-      // set the end time 1 day later so that everything added on the last day will be found
-/*      Calendar endday = criteriatype.getEndTime();
-      endday.set(Calendar.DATE, endday.get(Calendar.DATE) +1);
-      
-      log.debug("The query end date has been set 1 day later in order to get all results from the given end date");
-      criteriatype.setEndTime(endday);
-  */
+ 
       // call to lok service
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
 

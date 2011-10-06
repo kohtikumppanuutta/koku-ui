@@ -98,7 +98,7 @@ public class LogSearchController {
       if (visited != null) { // page has been visited
         
         // Check that the input parameters are not null and in the correct format
-        String[] errors = lu.checkInputParameters(criteria);
+        String[] errors = lu.checkInputParameters(criteria, LogConstants.LOG_NORMAL);
         model.addAttribute("error0", errors[0]);
         model.addAttribute("error1", errors[1]);
         model.addAttribute("error2", errors[2]);
