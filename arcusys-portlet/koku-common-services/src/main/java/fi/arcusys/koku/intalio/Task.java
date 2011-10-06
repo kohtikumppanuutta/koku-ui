@@ -21,7 +21,6 @@ public class Task {
 		this.processId = processId;
 		this.description = description;
 		this.creationDate = creationDate;
-
 	}
 	
 	public Task() {}

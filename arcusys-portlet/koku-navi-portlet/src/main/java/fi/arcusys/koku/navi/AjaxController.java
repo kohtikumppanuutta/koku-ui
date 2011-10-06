@@ -47,8 +47,6 @@ public class AjaxController extends AbstractController {
 	@ResourceMapping(value = "update")
 	public String showAjax(ModelMap modelmap, PortletRequest request, PortletResponse response) {
 
-		PortletSession portletSession = request.getPortletSession();				
-		String token = (String) portletSession.getAttribute(ATTR_TOKEN);
 		String username = request.getRemoteUser();
 		String userId = null;
 		try {
@@ -60,7 +58,7 @@ public class AjaxController extends AbstractController {
 			//LOGGER.error(e.getMessage(), e);
 			LOGGER.error("Error while trying to resolve userId. See following error msg: ", e);
 		}
-		JSONObject jsonModel = getJsonModel(userId, token);
+		JSONObject jsonModel = getJsonModel(userId);
 		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
@@ -71,7 +69,7 @@ public class AjaxController extends AbstractController {
 	 * @param userId user that message belong to
 	 * @return Json object contains result
 	 */
-	public JSONObject getJsonModel(String userId, String token) {
+	public JSONObject getJsonModel(String userId) {
 		JSONObject jsonModel = new JSONObject();
 		if (userId == null) {
 			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_INVALID);
@@ -81,7 +79,7 @@ public class AjaxController extends AbstractController {
 			jsonModel.put(JSON_ARCHIVE_INBOX, String.valueOf(getNewMessageNum(userId, KokuFolderType.ARCHIVE_INBOX)));
 			jsonModel.put(JSON_CONSENTS_TOTAL, String.valueOf(getTotalAssignedConsents(userId)));
 			jsonModel.put(JSON_APPOINTMENT_TOTAL, String.valueOf(getTotalAssignedAppointments(userId)));
-			jsonModel.put(JSON_REQUESTS_TOTAL, String.valueOf(getTotalRequests(userId, token)));
+			jsonModel.put(JSON_REQUESTS_TOTAL, String.valueOf(getTotalRequests(userId)));
 		}		
 		return jsonModel;
 	}
@@ -126,10 +124,11 @@ public class AjaxController extends AbstractController {
 	 * @param userId
 	 * @return number or requests
 	 */
-	private int getTotalRequests(String userId, String token) {
-		return 0;
-//		TaskHandle handle = new TaskHandle(token, userId);
-//		return handle.getRequestsTasksTotalNumber();		
+	private int getTotalRequests(String userId) {
+		TaskHandle handle = new TaskHandle();
+		// Magic password! Fix also TaskManagerController magic password when possible.  
+		handle.setToken(handle.getTokenByUser("koku/"+userId, "test"));
+		return handle.getRequestsTasksTotalNumber();
 	}
 	
 	/**

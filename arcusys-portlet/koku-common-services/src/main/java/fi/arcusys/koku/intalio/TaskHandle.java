@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 
 import fi.arcusys.intalio.tms.TaskMetadata;
 import fi.arcusys.koku.util.TaskUtil;
+import static fi.arcusys.koku.util.Constants.*;
 
 /**
  * Handles the intalio task processing including querying tasks, formatting task
@@ -134,11 +135,9 @@ public class TaskHandle {
 	 */
 	public String formatTaskDate(XMLGregorianCalendar xmlGregorianCalendar) {
 		Calendar cal = xmlGregorianCalendar.toGregorianCalendar();
-		SimpleDateFormat dataformat = new SimpleDateFormat(
-		"d.M.yyyy HH:mm:ss");
-		dataformat.setTimeZone(TimeZone.getTimeZone("Europe/Helsinki"));
-		String dateStr = dataformat.format(cal.getTime());
-		
+		SimpleDateFormat dataformat = new SimpleDateFormat(DATE_FORMAT);
+		dataformat.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
+		String dateStr = dataformat.format(cal.getTime());		
 		return dateStr;		
 	}
 	
@@ -201,7 +200,7 @@ public class TaskHandle {
 	public int getRequestsTasksTotalNumber() {
 		int taskType = 1;
 		TaskManagementService taskMngServ = new TaskManagementService();
-		return Integer.valueOf(taskMngServ.getTotalTasksNumber(participantToken, String.valueOf(taskType), createTotalNumSubQuery(taskType, "Valtakirja")));
+		return Integer.valueOf(taskMngServ.getTotalTasksNumber(participantToken, TaskUtil.TASK_TYPE, createTotalNumSubQuery(taskType, "Valtakirja")));
 	}
 	
 	/**
@@ -305,7 +304,6 @@ public class TaskHandle {
 		String token = null;
 		TaskManagementService taskMngServ = new TaskManagementService();
 		token = taskMngServ.getParticipantToken(username, password);
-
 		return token;
 	}
 

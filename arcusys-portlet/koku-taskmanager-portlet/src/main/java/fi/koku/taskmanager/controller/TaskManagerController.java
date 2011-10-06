@@ -106,7 +106,8 @@ public class TaskManagerController {
 				if(token == null) {
 					TaskHandle taskhandle = new TaskHandle();
 					//String username = "Kalle Kuntalainen";
-					// FIXME: Okay.. How to get user password?
+					// FIXME: Okay.. How to get proper user password?
+					// Fix also koku-navi-portlet AjaxController request counter which uses same method
 					String username = "koku/"+userid;
 					String password = "test";
 					token = taskhandle.getTokenByUser(username, password);
