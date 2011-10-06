@@ -102,7 +102,9 @@ public class LogArchiveController {
     }
     try{
       
-      if(logarchivedate != null && logarchivedate.getEndDate() != null){
+      //TODO: tähän tulee: jos !error
+     // if(logarchivedate != null && logarchivedate.getEndDate() != null){
+      if(error==null){
         log.debug("logarchivedate: "+logarchivedate.getEndDate());
 
         if (visited != null || change != null ) { // page has been visited
@@ -139,11 +141,12 @@ public class LogArchiveController {
           log.debug("modeliin lisätty archiveDate=" + defaultDateStr);
 
         }
-      }else{
+      }else{ //Jos on error
         log.debug("logarchivedate == null");
         // set the default archive date
         String defaultDateStr = lu.getDateString(2); // default is two years ago TODO: make static
         model.addAttribute("endDate", defaultDateStr);  
+       
         log.debug("modeliin lisätty endDate = " + defaultDateStr);
       }
       log.debug("error = "+error);
@@ -183,7 +186,8 @@ public class LogArchiveController {
     log.debug("action archiveLog, visited: "+visited);
 
     String archivedate = archiveSerializer.getAsText(logarchivedate);
-    log.debug("logarchivedate: "+archivedate);
+    log.debug("logarchivedate: "+logarchivedate);
+    log.debug("archivedate: "+archivedate);
     
     if(archivedate == null){
       log.debug("archivedate on null!");
@@ -198,8 +202,11 @@ public class LogArchiveController {
       response.setRenderParameter("change", change);
     }
   
+    if(logarchivedate==null || logarchivedate.getEndDate()==null){   
+      response.setRenderParameter("error", "koku.lok.archive.parsing.error");
+    }
     // Check that archiving date is earlier than today
-    if(!lu.isBeforeToday(logarchivedate.getEndDate())){
+    else if(!lu.isBeforeToday(logarchivedate.getEndDate())){
       response.setRenderParameter("error", "koku.lok.archive.error.wrongDate");
     }
     response.setRenderParameter("endDate", archiveSerializer.getAsText(logarchivedate));

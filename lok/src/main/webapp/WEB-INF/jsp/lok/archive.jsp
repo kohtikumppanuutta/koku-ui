@@ -67,7 +67,8 @@
 					<%-- TODO: Add a javascript date picker here? --%>
 					<span class="form-field-label"><spring:message
 							code="koku.lok.archiveDate" /> </span>
-							<form:input path="endDate" value="${endDate}" />
+							<form:input path="endDate" value="${endDate}" 
+							maxlength="10" size="10"/>
 					<span class="errors"><form:errors path="endDate" />
 					</span>
 						<input type="submit"
