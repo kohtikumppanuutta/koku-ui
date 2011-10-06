@@ -18,7 +18,7 @@
 </portlet:renderURL>
 
 <div class="koku-pyh">
-<div class="portlet-section-body">
+<div class="portlet-section-body" id="portlet-section-body">
 
 <div class="pyh-temp">
   <span class="pyh-right"> <a href="${backURL}"> <spring:message code="ui.pyh.back"/></a> </span>
@@ -71,12 +71,16 @@
                             <a href="${removeFamilyMember}"><spring:message code="ui.pyh.remove.family" /></a> </span> 
                                 </c:when>
                                 <c:otherwise>
+                                    <div id="add_family_member_dialog">
                                     <portlet:actionURL var="addDependantAsFamilyMember">
                                         <portlet:param name="action"
                                             value="addDependantAsFamilyMember" />
                                         <portlet:param name="dependantPic" value="${child.pic}" />
                                     </portlet:actionURL>
-                                    <a href="${addDependantAsFamilyMember}"><spring:message code="ui.pyh.add.into.family" /></a>
+                                    
+                                    <%-- <a href="${addDependantAsFamilyMember}"><spring:message code="ui.pyh.add.into.family" /></a> --%>
+                                    <a href="javascript:doAddAsFamilyMember()"> testi: <spring:message code="ui.pyh.add.into.family" /> </a>
+                                    </div>
                                 </c:otherwise>
                             </c:choose> </span> </span>
                 </td>
@@ -222,17 +226,14 @@
 <script type="text/javascript" language="JavaScript">
 
 	function addUserToForm(user) {
-
 		$('#addUsersToFamilyForm').append($('#user_pic_' + user));
 		var userRole = $('#user_role_' + user + ' option:selected').val();
 		$('#addUsersToFamilyForm')
 				.append(
 						'<input name="userRole_' + user + '" type="hidden" value="' + userRole + '"/>');
-
 	}
 
 	function doSubmitForm() {
-
 		<%--
 		var $checkboxes = $('input[name^="addUserCheckbox_"]').filter(
 				":checked");
@@ -245,7 +246,29 @@
 		});
 
 		$('#addUsersToFamilyForm').submit();
-
 	}
+	
+	function doAddAsFamilyMember() {
+		
+		<%-- TODO: miksei toimi? --%>
+		
+		$('#add_family_member_dialog').dialog({
+			autoOpen: false,
+			width: 400,
+			modal: true,
+			resizable: false,
+			buttons: {
+				"Kyllä": function() {
+					alert("valitsit kyllä");
+				},
+				"Ei": function() {
+					$(this).dialog('close');
+				}
+			}
+		});
+		$('#add_family_member_dialog').dialog('open');
+		
+	}
+	
 </script>
 
