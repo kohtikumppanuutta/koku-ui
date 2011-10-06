@@ -17,53 +17,34 @@ import fi.koku.services.entity.kks.v1.KksTagsType;
 public class Entry {
 
   private String id;
-  private String value;
-  private String valueId;
   private Date creationTime;
   private String recorder;
   private String modifierFullName;
   private String version;
   private KksEntryClassType type;
   private List<KksTagType> tags;
-  private List<String> values;
+  private List<EntryValue> entryValues;
 
-  public Entry(String id, String valueId, String value, Date creation, String version, String recorder,
-      KksEntryClassType type) {
+  public Entry(String id, Date creation, String version, String recorder, KksEntryClassType type) {
     super();
     this.id = id;
-    this.value = value;
-    this.valueId = valueId;
     this.creationTime = creation;
     this.version = version;
     this.type = type;
-    this.values = new ArrayList<String>();
     this.recorder = recorder;
-    this.values.add(value);
     this.tags = new ArrayList<KksTagType>();
+    this.entryValues = new ArrayList<EntryValue>();
   }
 
-  public Entry(String value, String valueId, Date creation, String version, String recorder, KksEntryClassType type) {
+  public Entry(Date creation, String version, String recorder, KksEntryClassType type) {
     super();
     this.id = null;
-    this.value = value;
     this.creationTime = creation;
-    this.valueId = valueId;
     this.version = version;
     this.type = type;
-    this.values = new ArrayList<String>();
     this.recorder = recorder;
-    this.values.add(value);
     this.tags = new ArrayList<KksTagType>();
-  }
-
-  public String getValue() {
-    return value;
-  }
-
-  public void setValue(String value) {
-    this.values.remove(this.value);
-    this.value = value;
-    this.values.add(value);
+    this.entryValues = new ArrayList<EntryValue>();
   }
 
   public Date getCreationTime() {
@@ -102,18 +83,6 @@ public class Entry {
     this.tags = classifications;
   }
 
-  public List<String> getValues() {
-    return values;
-  }
-
-  public void setValues(List<String> values) {
-    this.values = values;
-
-    if (values.size() > 0) {
-      this.value = values.get(0);
-    }
-  }
-
   public String getRecorder() {
     return recorder;
   }
@@ -140,27 +109,6 @@ public class Entry {
     this.id = id;
   }
 
-  public String getValueId() {
-    return valueId;
-  }
-
-  public void setValueId(String valueId) {
-    this.valueId = valueId;
-  }
-
-  public String getValuesAsText() {
-    StringBuffer sb = new StringBuffer();
-
-    for (int i = 0; i < values.size(); i++) {
-      sb.append(values.get(i));
-
-      if ((i + 1) < values.size()) {
-        sb.append(", ");
-      }
-    }
-    return sb.toString();
-  }
-
   public String getModifierFullName() {
     return modifierFullName;
   }
@@ -169,4 +117,33 @@ public class Entry {
     this.modifierFullName = modifierFullName;
   }
 
+  public List<EntryValue> getEntryValues() {
+    return entryValues;
+  }
+
+  public void setEntryValues(List<EntryValue> entryValues) {
+    this.entryValues = entryValues;
+  }
+
+  public void addEntryValue(EntryValue e) {
+    entryValues.add(e);
+  }
+
+  public EntryValue getEntryValue(String id) {
+    for (EntryValue v : entryValues) {
+      if (v.getId().equals(id)) {
+        return v;
+      }
+    }
+    return null;
+  }
+
+  public EntryValue getFirstValue() {
+    if (entryValues.size() == 0) {
+      EntryValue v = new EntryValue();
+      addEntryValue(v);
+    }
+
+    return entryValues.get(0);
+  }
 }

@@ -2,13 +2,14 @@ package fi.koku.kks.ui.common;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import fi.koku.kks.model.CollectionState;
 import fi.koku.kks.model.Entry;
+import fi.koku.kks.model.EntryValue;
 import fi.koku.kks.model.KKSCollection;
 import fi.koku.kks.model.KksService;
 import fi.koku.services.entity.kks.v1.EntryValuesType;
@@ -17,8 +18,6 @@ import fi.koku.services.entity.kks.v1.KksEntriesType;
 import fi.koku.services.entity.kks.v1.KksEntryClassType;
 import fi.koku.services.entity.kks.v1.KksEntryType;
 import fi.koku.services.entity.kks.v1.KksEntryValueType;
-import fi.koku.services.entity.kks.v1.KksTagIdsType;
-import fi.koku.services.entity.kks.v1.KksTagType;
 
 /**
  * Class for converting ui classes to ws types and vice versa
@@ -51,17 +50,8 @@ public class KksConverter {
       KksEntryClassType metaEntry = kksService.getEntryClassType(entryType.getEntryClassId(), user);
 
       if (metaEntry != null) {
-        if (metaEntry.isMultiValue()) {
-          // multivalue is handled as a separate entries in UI side
-          for (KksEntryValueType val : entryType.getEntryValues().getEntryValue()) {
-            Entry e = fromWsType(entryType, val, metaEntry);
-            tmp.addMultivalue(e);
-          }
-
-        } else {
-          Entry e = fromWsType(entryType, metaEntry);
-          tmp.addEntry(e);
-        }
+        Entry e = fromWsType(entryType, metaEntry);
+        tmp.addEntry(e);
       }
 
     }
@@ -88,19 +78,36 @@ public class KksConverter {
     tmp.setStatus(collection.getState().getState().toString());
 
     KksEntriesType entriesType = new KksEntriesType();
+    Calendar cal = new GregorianCalendar();
+    cal.setTime(new Date());
 
     if (!empty) {
       for (Entry entry : collection.getEntries().values()) {
-        entriesType.getEntries().add(toWsType(entry, customer));
-      }
+        KksEntryType kksEntryType = new KksEntryType();
+        kksEntryType.setId(entry.getId());
+        kksEntryType.setCreator(entry.getRecorder());
+        kksEntryType.setCustomerId(customer);
+        kksEntryType.setEntryClassId(entry.getType().getId());
+        kksEntryType.setModified(cal);
 
-      for (List<Entry> entries : collection.getMultiValueEntries().values()) {
-        List<Entry> tmpList = new ArrayList<Entry>();
+        EntryValuesType values = new EntryValuesType();
+        for (EntryValue ev : entry.getEntryValues()) {
+          KksEntryValueType value = new KksEntryValueType();
+          value.setId(ev.getId());
+          value.setValue(ev.getValue());
+          value.setModifier(ev.getModifier());
 
-        for (Entry entry : entries) {
-          tmpList.add(entry);
+          if (ev.getModified() == null) {
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(ev.getModified());
+            value.setModified(cal);
+          }
+          values.getEntryValue().add(value);
+
         }
-        entriesType.getEntries().add(toWsType(entries.get(0), customer, tmpList.toArray(new Entry[0])));
+
+        kksEntryType.setEntryValues(values);
+        entriesType.getEntries().add(kksEntryType);
       }
     }
 
@@ -115,7 +122,6 @@ public class KksConverter {
   }
 
   public CollectionState fromWsType(String status) {
-
     if (State.ACTIVE.toString().equals(status)) {
       return new CollectionState(State.ACTIVE);
     }
@@ -131,8 +137,14 @@ public class KksConverter {
     String valId = val == null ? "" : val.getId();
     String value = val == null ? "" : val.getValue();
 
-    Entry e = new Entry(entry.getId(), valId, value, entry.getModified().getTime(), entry.getVersion().toString(),
+    Entry e = new Entry(entry.getId(), entry.getModified().getTime(), entry.getVersion().toString(),
         entry.getCreator(), metaEntry);
+
+    EntryValue entryValue = new EntryValue();
+    entryValue.setId(valId);
+    entryValue.setValue(value);
+    entryValue.setModified(val.getModified().getTime());
+    entryValue.setModifier(val.getModifier());
 
     if (metaEntry.getDataType().equals(DataType.MULTI_SELECT.toString())) {
       String tmp[] = value.split(",");
@@ -141,93 +153,33 @@ public class KksConverter {
       for (String s : tmp) {
         values.add(s);
       }
-      e.setValues(values);
-
+      entryValue.setValues(values);
     }
+
+    e.addEntryValue(entryValue);
 
     return e;
   }
 
   public Entry fromWsType(KksEntryType entry, List<KksEntryValueType> values, KksEntryClassType metaEntry) {
 
-    Entry e = null;
-    if (values.size() > 1) {
-      e = new Entry(entry.getId(), null, "", entry.getModified().getTime(), entry.getVersion().toString(),
-          entry.getCreator(), metaEntry);
-      List<String> tmp = new ArrayList<String>();
-      for (KksEntryValueType kev : values) {
-        tmp.add(kev.getValue());
-      }
-      e.setValues(tmp);
+    Entry e = new Entry(entry.getId(), entry.getModified().getTime(), entry.getVersion().toString(),
+        entry.getCreator(), metaEntry);
 
-    } else if (values.size() > 0) {
-      e = fromWsType(entry, values.get(0), metaEntry);
+    for (KksEntryValueType kev : values) {
+      EntryValue entryValue = new EntryValue();
+      entryValue.setId(kev.getId());
+      entryValue.setValue(kev.getValue());
+
+      if (kev.getModified() == null) {
+        entryValue.setModified(new Date());
+      } else {
+        entryValue.setModified(kev.getModified().getTime());
+      }
+      entryValue.setModifier(kev.getModifier());
+      e.addEntryValue(entryValue);
     }
     return e;
   }
 
-  public KksEntryType toWsType(Entry entry, String customer) {
-    return toWsType(entry, customer, entry);
-  }
-
-  public KksEntryType toWsType(Entry entry, String customer, Entry... values) {
-    if (values == null) {
-      return null;
-    }
-
-    KksEntryType tmp = new KksEntryType();
-    tmp.setId(entry.getId());
-    tmp.setCreator(entry.getRecorder());
-    tmp.setCustomerId(customer);
-    tmp.setEntryClassId(entry.getType().getId());
-
-    List<Entry> vals = Arrays.asList(values);
-    EntryValuesType evt = new EntryValuesType();
-    for (Entry v : vals) {
-
-      if (v.getType().getDataType().equals(DataType.MULTI_SELECT.toString())) {
-        KksEntryValueType kevt = new KksEntryValueType();
-        kevt.setId(v.getValueId());
-        if (v.getValues() != null) {
-
-          StringBuilder b = new StringBuilder();
-
-          b.append("");
-
-          for (int i = 0; i < v.getValues().size(); i++) {
-            b.append(v.getValues().get(i));
-            if ((i + 1) < v.getValues().size()) {
-              b.append(",");
-            }
-          }
-          kevt.setValue(b.toString());
-        } else {
-          kevt.setValue("");
-        }
-        evt.getEntryValue().add(kevt);
-
-      } else {
-        for (String value : v.getValues()) {
-          KksEntryValueType kevt = new KksEntryValueType();
-          kevt.setId(v.getValueId());
-          kevt.setValue(value);
-          evt.getEntryValue().add(kevt);
-        }
-      }
-    }
-    tmp.setEntryValues(evt);
-
-    KksTagIdsType ids = new KksTagIdsType();
-
-    for (KksTagType tag : entry.getType().getKksTags().getKksTag()) {
-      ids.getKksTagId().add(tag.getId());
-    }
-
-    tmp.setKksTagIds(ids);
-    Calendar c = new GregorianCalendar();
-    c.setTime(entry.getCreationTime());
-    tmp.setModified(c);
-    tmp.setVersion(new BigInteger(entry.getVersion()));
-    return tmp;
-  }
 }

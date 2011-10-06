@@ -1,7 +1,6 @@
 package fi.koku.kks.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -10,7 +9,6 @@ import java.util.Map;
 import fi.koku.services.entity.kks.v1.KksCollectionClassType;
 import fi.koku.services.entity.kks.v1.KksEntryClassType;
 import fi.koku.services.entity.kks.v1.KksGroupType;
-import fi.koku.services.entity.kks.v1.KksTagType;
 
 /**
  * Single collection
@@ -42,24 +40,6 @@ public class KKSCollection {
     this(id, previous.getName(), previous.getDescription(), state, creationTime, version, previous.getCollectionClass());
     prevVersion = previous.getId();
     buildFromExisting = true;
-
-    for (Entry k : previous.getEntries().values()) {
-      // addEntry(new Entry(clear ? "" : k.getValue(), new Date(),
-      // k.getVersion(), k.getRecorder(), k.getType()));
-    }
-
-    for (List<Entry> tmp : previous.getMultiValueEntries().values()) {
-      for (Entry k : tmp) {
-
-        /*
-         * if (!containsClassification(k.getClassifications(),
-         * Constants.LUOKITUS_KOMMENTTI)) { addMultivalue(new Entry(clear ? "" :
-         * k.getValue(), new Date(), k.getVersion(), k.getRegister(),
-         * k.getRecorder(), k.getType())); }
-         */
-      }
-    }
-
   }
 
   public KKSCollection(String id, String name, String description, CollectionState state, Date creationTime,
@@ -78,16 +58,6 @@ public class KKSCollection {
     this.collectionClass = type;
     entries = new LinkedHashMap<String, Entry>();
     multiValueEntries = new LinkedHashMap<String, List<Entry>>();
-  }
-
-  private boolean containsClassification(List<KksTagType> classifications, String... checkedStrings) {
-    List<String> tmp = new ArrayList<String>(Arrays.asList(checkedStrings));
-    for (KksTagType l : classifications) {
-      if (tmp.contains(l.getName())) {
-        return true;
-      }
-    }
-    return false;
   }
 
   public String getName() {
@@ -230,18 +200,12 @@ public class KKSCollection {
 
   public Entry getEntryWithValue(String id) {
 
-    for (List<Entry> tmp : multiValueEntries.values()) {
-      for (Entry k : tmp) {
+    for (Entry k : entries.values()) {
+      for (EntryValue v : k.getEntryValues()) {
 
-        if (k.getValueId().equals(id)) {
+        if (v.getId().equals(id)) {
           return k;
         }
-      }
-    }
-
-    for (Entry k : entries.values()) {
-      if (k.getValueId().equals(id)) {
-        return k;
       }
     }
 
@@ -297,7 +261,11 @@ public class KKSCollection {
     for (KksEntryClassType ect : group.getKksEntryClasses().getKksEntryClass()) {
 
       if (!ect.isMultiValue() && !entries.containsKey("" + ect.getId())) {
-        addEntry(new Entry("", "", new Date(), "1", user, ect));
+        Entry e = new Entry(new Date(), "1", user, ect);
+        EntryValue v = new EntryValue();
+        v.setValue("");
+        e.addEntryValue(v);
+        addEntry(e);
       }
     }
   }

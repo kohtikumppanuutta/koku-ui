@@ -194,9 +194,12 @@ public class KksService {
       for (List<Entry> lst : col.getMultiValueEntries().values()) {
 
         for (Entry e : lst) {
-          UserInfo u = userInfo.getUserInfoByPic(e.getRecorder());
-          if (u != null) {
-            e.setModifierFullName(u.getFname() + " " + u.getSname());
+
+          for (EntryValue v : e.getEntryValues()) {
+            UserInfo u = userInfo.getUserInfoByPic(e.getRecorder());
+            if (u != null) {
+              v.setModifierFullName(u.getFname() + " " + u.getSname());
+            }
           }
         }
       }

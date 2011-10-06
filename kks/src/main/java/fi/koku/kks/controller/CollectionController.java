@@ -163,15 +163,23 @@ public class CollectionController {
     model.addAttribute("valueId", valueId);
     EntryValue e = new EntryValue();
     if (StringUtils.isNotEmpty(entry)) {
-      Entry ent = kok.getEntryWithValue(valueId);
-      model.addAttribute("entryvalue", ent);
+      Entry ent = kok.getEntry(entry);
+      EntryValue val = ent.getEntryValue(valueId);
 
-      model.addAttribute("value", ent == null ? "" : ent.getValue());
+      if (val == null) {
+        val = new EntryValue();
+        val.setValue("");
+        ent.addEntryValue(val);
+      }
+      model.addAttribute("entry", ent);
+
+      model.addAttribute("value", val);
 
     } else {
-      model.addAttribute("value", "");
+      EntryValue val = new EntryValue();
+      val.setValue("");
+      model.addAttribute("value", val);
     }
-    model.addAttribute("value", e);
 
     return "multivalue";
   }

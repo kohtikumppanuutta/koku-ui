@@ -25,7 +25,7 @@
 	<portlet:param name="valueId" value="${valueId}" />
 	
 	<c:if test="${ not empty entryvalue }">
-	   <portlet:param name="entryId" value="${entryvalue.id}" />
+	   <portlet:param name="entryId" value="${entry.id}" />
 	</c:if>
 </portlet:actionURL>
 <portlet:actionURL var="removeMultivalue">
@@ -34,8 +34,8 @@
     <portlet:param name="collection" value="${collection.id}" />
     <portlet:param name="valueId" value="${valueId}" />
     
-    <c:if test="${ not empty entryvalue }">
-       <portlet:param name="entryId" value="${entryvalue.id}" />
+    <c:if test="${ not empty entry }">
+       <portlet:param name="entryId" value="${entry.id}" />
     </c:if>
 </portlet:actionURL>
 <portlet:actionURL var="cancelMultivalue">
@@ -60,7 +60,7 @@
 
 	<div class="kks-entry">
 
-		<form:form name="addMultivalue" 
+		<form:form name="addMultivalue" commandName="value"
 			method="post" action="${addMultivalue}">
 			<input type="hidden" name="entryType" value="${type.id }" />		
 			         
@@ -69,22 +69,13 @@
 				<c:out value="${type.name }"/>
 				
 				</span>
-				<c:if test="${ not empty entryvalue }">
+				<c:if test="${ not empty entry }">
 				    <span class="kks-right"> <a href="${removeMultivalue}"><spring:message code="ui.kks.remove" /> </a> </span>
 				</c:if>
 				
-				
-				
 				<div class="portlet-form-field">
-
-                <c:if test="${ not empty entryvalue }">
-                <textarea id="value" class="portlet-form-input-field" title="${type.description }" name="value">${entryvalue.value}</textarea>
-                </c:if>
-                <c:if test="${ empty entryvalue }">
-                <textarea id="value" class="portlet-form-input-field" title="${type.description }" name="value"></textarea>
-                </c:if>
-
-            </div>
+                	<form:textarea path="value" id="value" class="portlet-form-input-field" title="${type.description }" name="value"/>
+            	</div>
 
 			<span class="kks-right"> 			
 			 <input type="submit" class="portlet-form-button"

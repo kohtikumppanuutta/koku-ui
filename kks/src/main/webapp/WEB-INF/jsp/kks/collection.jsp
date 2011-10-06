@@ -150,71 +150,70 @@
                                     </span>
    
                                     <c:if test="${ collection.state.active }">
-                                        <c:choose>
-                                            <c:when
-                                                test="${ type.dataType eq multi_select.name }">
-                                                <div class="portlet-form-field"> <c:forEach
-                                                        items="${type.valueSpaces.valueSpace }" var="value">
-                                                        <form:checkbox  class="portlet-form-input-field" title="${type.description }"
-                                                            path="entries['${type.id}'].values"
-                                                            value="${ value }" label="${value}" />
-                                                    </c:forEach> </div>
-                                            </c:when>
-                                            <c:when test="${ type.dataType eq select.name }">
-                                                <div class="portlet-form-field"> <c:forEach
-                                                        items="${type.valueSpaces.valueSpace}" var="value">
-                                                        <form:radiobutton class="portlet-form-input-field" title="${type.description }"
-                                                            path="entries['${type.id}'].values"
-                                                            value="${ value }" label="${value}" />
-                                                    </c:forEach> </div>
-                                            </c:when>
-                                            <c:when test="${ type.dataType eq text.name }">
-                                                <div class="portlet-form-field" >
-                                                    <form:input title="${type.description }" class="portlet-form-input-field"
-                                                        path="entries['${type.id}'].value" />
+                                    
+                                        <c:if test="${type.multiValue}">                                        
+                                            <div class="kks-free-text">
+
+                                                <div class="kks-multi-value-entries">
+
+                                                  <c:if
+                                                      test="${empty collection.entries[type.id]}">
+                                                      <div class="portlet-section-text"><spring:message
+                                                              code="ui.kks.no.entries" />
+                                                      </div>
+                                                  </c:if>
+
+                                                  <c:forEach var="multivalue" items='${ collection.entries[type.id].entryValues }'>
+                                                      
+                                                      <div class="kks-comment">
+                                                       <span class="kks-entry-value"><p><c:out value="${multivalue.value}"/> </p><span class="kks-right">
+                                                       <a
+                                                               href="javascript:void(0)" onclick="doSubmitForm('${type.id}', '${collection.entries[type.id].id}', '${multivalue.id}' );">
+                                                                   <spring:message code="ui.kks.modify" /> </a>
+                                                       </span> 
+                                                       </span>
+                                                       <div class="portlet-section-text">
+                                                        <span class="kks-commenter">${multivalue.modifierFullName} <fmt:formatDate type="both" pattern="dd.MM.yyyy HH:mm:ss" value="${multivalue.modified}"/>
+                                                           </span> 
+                                                       </div>
+                                                      </div>
+                                                  </c:forEach>
                                                 </div>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <div class="portlet-form-field">
-                                                    <c:if test="${not type.multiValue}">
-                                                        <form:textarea class="portlet-form-input-field" title="${type.description}" 
-                                                            path="entries['${type.id}'].value" />
-                                                    </c:if>
-                                                    <c:if test="${type.multiValue}">
-
-                                                        <div class="kks-free-text">
-
-                                                            <div class="kks-multi-value-entries">
-
-                                                                <c:if
-                                                                    test="${empty collection.multiValueEntries[type.id]}">
-                                                                    <div class="portlet-section-text"><spring:message
-                                                                            code="ui.kks.no.entries" />
-                                                                    </div>
-                                                                </c:if>
-
-                                                                <c:forEach var="multivalue"
-                                                                    items='${ collection.multiValueEntries[type.id] }'>
-                                                                    
-                                                                    <div class="kks-comment">
-	                                                                    <span class="kks-entry-value"><c:out value="${multivalue.value}"/> <span class="kks-right">
-	                                                                    <a
-	                                                                            href="javascript:void(0)" onclick="doSubmitForm('${type.id}', '${multivalue.id}', '${multivalue.valueId}' );">
-	                                                                                <spring:message code="ui.kks.modify" /> </a>
-	                                                                    </span> 
-	                                                                    </span>
-	                                                                    <div class="portlet-section-text">
-	                                                                     <span class="kks-commenter">${multivalue.modifierFullName} <fmt:formatDate type="both" pattern="dd.MM.yyyy HH:mm:ss" value="${multivalue.creationTime}"/>
-	                                                                        </span> 
-	                                                                    </div>
-                                                                    </div>
-                                                                </c:forEach>
-                                                            </div>
-                                                        </div>
-                                                    </c:if>
-                                                </div>
-                                            </c:otherwise>
-                                        </c:choose>
+                                            </div>                                        
+                                        </c:if>
+                                        <c:if test="${not type.multiValue}">
+	                                        <c:choose>
+	                                            <c:when
+	                                                test="${ type.dataType eq multi_select.name }">
+	                                                <div class="portlet-form-field"> <c:forEach
+	                                                        items="${type.valueSpaces.valueSpace }" var="value">
+	                                                        <form:checkbox  class="portlet-form-input-field" title="${type.description }"
+	                                                            path="entries['${type.id}'].firstValue.values"
+	                                                            value="${ value }" label="${value}" />
+	                                                    </c:forEach> </div>
+	                                            </c:when>
+	                                            <c:when test="${ type.dataType eq select.name }">
+	                                                <div class="portlet-form-field"> <c:forEach
+	                                                        items="${type.valueSpaces.valueSpace}" var="value">
+	                                                        <form:radiobutton class="portlet-form-input-field" title="${type.description }"
+	                                                            path="entries['${type.id}'].firstValue.values"
+	                                                            value="${ value }" label="${value}" />
+	                                                    </c:forEach> </div>
+	                                            </c:when>
+	                                            <c:when test="${ type.dataType eq text.name }">
+	                                                <div class="portlet-form-field" >
+	                                                    <form:input title="${type.description }" class="portlet-form-input-field"
+	                                                        path="entries['${type.id}'].firstValue.value" />
+	                                                </div>
+	                                            </c:when>
+	                                            <c:otherwise>
+	                                                <div class="portlet-form-field">                                                    
+	                                                        <form:textarea class="portlet-form-input-field" title="${type.description}" 
+	                                                            path="entries['${type.id}'].firstValue.value" /> 
+	                                                </div>
+	                                            </c:otherwise>
+	                                        </c:choose>
+                                        </c:if>
                                     </c:if>
 
                                     <c:if test="${ not collection.state.active }">
@@ -223,22 +222,18 @@
                                         
                                         <c:choose>
                                             <c:when
-                                                test="${ empty collection.multiValueEntries[type.id] && empty collection.entries[type.id].value }">
+                                                test="${ empty collection.entries[type.id] || empty collection.entries[type.id].value }">
                                                 <span class="kks-read-only-text">-</span>
                                             </c:when>
                                             <c:otherwise>
-                                             <c:if
-                                                    test="${ type.multiValue }">
-                                                    <c:forEach var="multivalue"
-                                                        items='${ collection.multiValueEntries[type.id] }'>
-
-                                                        <span class="kks-read-only-text"> <c:out value="${multivalue.value}"/> <c:out value="(${multivalue.modifierFullName}"/> <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${multivalue.creationTime}"/>)</span>
-                                                        
-                                                    </c:forEach>
-                                                </c:if> <c:if test="${ not type.multiValue }">
-                                                    <span class="kks-read-only-text"><c:out value="${collection.entries[type.id].value}"></c:out> </span>
-                                                </c:if> 
-                                                </c:otherwise>
+	                                             <c:if test="${ type.multiValue }">
+	                                                    <c:forEach var="multivalue" items='${ collection.entries[type.id].entryValues }'>
+	                                                        <span class="kks-read-only-text"><p><c:out value="${multivalue.value}"/></p><c:out value="(${multivalue.modifierFullName}"/> <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${multivalue.modified}"/>)</span>                                                       
+	                                                    </c:forEach>
+	                                                </c:if> <c:if test="${ not type.multiValue }">
+	                                                    <span class="kks-read-only-text"><p><c:out value="${collection.entries[type.id].firstValue.value}</p>"></c:out> </span>
+	                                              </c:if> 
+                                            </c:otherwise>
                                         </c:choose>
                                            </div>
                                         
