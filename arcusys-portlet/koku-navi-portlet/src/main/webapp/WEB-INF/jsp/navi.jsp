@@ -49,8 +49,6 @@
 		focusCurrentItem();	
 		ajaxUpdate();		
 		clearInterval(naviRefreshTimer);
-		var duration = 5 * 1000; // 5 seconds
-		naviRefreshTimer = setInterval('ajaxUpdate()', duration);		
 	});
 
 	/* 
@@ -153,6 +151,7 @@
 								json["<%=Constants.JSON_REQUESTS_TOTAL %>"]								
 							);
 					}
+					naviRefreshTimer = setInterval('ajaxUpdate()', 5000);		
 			  }
 			});
 	}
