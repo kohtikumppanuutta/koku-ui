@@ -196,7 +196,12 @@ public class TaskHandle {
 		totalNum = Integer.parseInt(totalNumStr);
 		
 		return totalNum;		
-		
+	}
+	
+	public int getRequestsTasksTotalNumber() {
+		int taskType = 1;
+		TaskManagementService taskMngServ = new TaskManagementService();
+		return Integer.valueOf(taskMngServ.getTotalTasksNumber(participantToken, String.valueOf(taskType), createTotalNumSubQuery(taskType, "Valtakirja")));
 	}
 	
 	/**
