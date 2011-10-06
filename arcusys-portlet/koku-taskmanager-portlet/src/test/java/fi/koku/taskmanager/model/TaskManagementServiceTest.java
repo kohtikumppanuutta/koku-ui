@@ -16,7 +16,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import fi.arcusys.intalio.tms.TaskMetadata;
-import fi.koku.taskmanager.model.TaskManagementService;
+import fi.arcusys.koku.intalio.TaskManagementService;
 
 public class TaskManagementServiceTest {
 	

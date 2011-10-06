@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import fi.koku.taskmanager.model.TaskHandle;
+import fi.arcusys.koku.intalio.TaskHandle;
 import static fi.arcusys.koku.util.Constants.*;
 
 

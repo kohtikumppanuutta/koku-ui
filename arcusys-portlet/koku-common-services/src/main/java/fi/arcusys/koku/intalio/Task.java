@@ -1,4 +1,4 @@
-package fi.koku.taskmanager.model;
+package fi.arcusys.koku.intalio;
 
 /**
  * task data model for task manager, modified from to intalio task object

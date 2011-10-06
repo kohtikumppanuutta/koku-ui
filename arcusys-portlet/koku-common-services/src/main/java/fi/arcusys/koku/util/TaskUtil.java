@@ -1,4 +1,4 @@
-package fi.koku.taskmanager.util;
+package fi.arcusys.koku.util;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

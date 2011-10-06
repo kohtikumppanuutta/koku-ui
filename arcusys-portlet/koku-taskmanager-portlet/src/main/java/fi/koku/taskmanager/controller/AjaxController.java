@@ -40,9 +40,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
-import fi.koku.taskmanager.model.Task;
-import fi.koku.taskmanager.model.TaskHandle;
-import fi.koku.taskmanager.util.TaskUtil;
+import fi.arcusys.koku.intalio.Task;
+import fi.arcusys.koku.intalio.TaskHandle;
+import fi.arcusys.koku.util.TaskUtil;
 /**
  * Handles ajax request from web and returns the data with json string
  * @author Jinhua Chen

@@ -16,9 +16,9 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import fi.arcusys.intalio.tms.TaskMetadata;
-import fi.koku.taskmanager.model.Task;
-import fi.koku.taskmanager.model.TaskHandle;
-import fi.koku.taskmanager.model.TaskManagementService;
+import fi.arcusys.koku.intalio.Task;
+import fi.arcusys.koku.intalio.TaskHandle;
+import fi.arcusys.koku.intalio.TaskManagementService;
 
 
 public class TaskHandleTest{

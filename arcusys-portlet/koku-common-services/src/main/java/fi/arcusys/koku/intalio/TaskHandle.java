@@ -1,4 +1,4 @@
-package fi.koku.taskmanager.model;
+package fi.arcusys.koku.intalio;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -15,7 +15,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.log4j.Logger;
 
 import fi.arcusys.intalio.tms.TaskMetadata;
-import fi.koku.taskmanager.util.TaskUtil;
+import fi.arcusys.koku.util.TaskUtil;
 
 /**
  * Handles the intalio task processing including querying tasks, formatting task

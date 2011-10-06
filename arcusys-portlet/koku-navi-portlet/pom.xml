@@ -110,6 +110,13 @@
            <version>1.0</version>
            <type>jar</type>
         </dependency>
+        <dependency>
+			<groupId>fi.arcusys</groupId>
+			<artifactId>koku-intalio-services</artifactId>
+			<version>1.0</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 
 	</dependencies>
 </project>
