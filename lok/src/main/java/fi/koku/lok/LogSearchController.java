@@ -187,19 +187,13 @@ log.debug("user: "+user);
       // set pic that was got from the session
       audit.setUserId(user);
       
-      // set the end time 1 day later so that everything added on the last day will be found
-      Calendar endday = criteriatype.getEndTime();
-      endday.set(Calendar.DATE, endday.get(Calendar.DATE) +1);
-     
-      log.debug("The query end date has been set 1 day later in order to get all results from the given end date");
-      criteriatype.setEndTime(endday);
+      // call to log service
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
      
       // the log entries list from the database
       List<LogEntryType> entryTypeList = entriestype.getLogEntry();
 
-      log.debug("entrytype list size: " + entryTypeList.size());
-    
+      log.debug("entrytype list size: " + entryTypeList.size());    
 
       for (Iterator<?> i = entryTypeList.iterator(); i.hasNext();) {
         LogEntry logEntry = new LogEntry();

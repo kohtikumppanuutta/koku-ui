@@ -193,11 +193,12 @@ public class LogViewController {
       log.debug("null-arvoja kriteriassa");
     }else{
       // set the end time 1 day later so that everything added on the last day will be found
-      Calendar endday = criteriatype.getEndTime();
+/*      Calendar endday = criteriatype.getEndTime();
       endday.set(Calendar.DATE, endday.get(Calendar.DATE) +1);
       
       log.debug("The query end date has been set 1 day later in order to get all results from the given end date");
       criteriatype.setEndTime(endday);
+  */
       // call to lok service
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
 
@@ -238,29 +239,7 @@ public class LogViewController {
     return entryList;
   }
 
-  /**
-   * Method creates random log entries for admin log for demo purposes.
-   * 
-   * @param searchCriteria
-   * @return
-   */
-  private List<LogEntry> getDemoAdminLogEntries(LogSearchCriteria searchCriteria) {
-
-    if (searchCriteria != null) {
-      log.debug("searchCriteria=" + searchCriteria.toString());
-    }
-
-    List<LogEntry> r = null;
-    LogDemoFactory factory = new LogDemoFactory();
-    r = new ArrayList<LogEntry>();
-
-    for (int i = 0; i < 5; i++) {
-      r.add(factory.createLogEntry(i, LogDemoFactory.MANIPULATION_LOG));
-    }
-
-    return r;
-
-  }
+  
 
   private static class CriteriaSerializer {
 
@@ -272,26 +251,5 @@ public class LogViewController {
     
       return text;
     }
-
-    public LogSearchCriteria getFromRenderParameter(String[] text) {
-      SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
-      Date d1 = null, d2 = null;
-      try {
-        if (ArrayUtils.isNotEmpty(text)) {
-          if (StringUtils.isNotBlank(text[0])) {
-            d1 = df.parse(text[0]);
-            log.debug("d1 = "+d1);
-          }
-
-          if (StringUtils.isNotBlank(text[1])) {
-            d2 = df.parse(text[1]);
-          }
-        }
-      } catch (ParseException e) {
-        throw new IllegalArgumentException("error parsing date string", e);
-      }
-      return new LogSearchCriteria(d1, d2);
-    }
   }
-
 }

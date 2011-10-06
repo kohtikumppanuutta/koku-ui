@@ -29,9 +29,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import fi.koku.services.entity.userinfo.v1.UserInfoService;
-import fi.koku.services.entity.userinfo.v1.impl.UserInfoServiceDummyImpl;
-import fi.koku.services.entity.userinfo.v1.model.Role;
+import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
+import fi.koku.services.entity.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
+import fi.koku.services.entity.authorizationinfo.v1.model.Group;
+import fi.koku.services.entity.authorizationinfo.v1.model.OrgUnit;
+import fi.koku.services.entity.authorizationinfo.v1.model.Registry;
+import fi.koku.services.entity.authorizationinfo.v1.model.Role;
+import fi.koku.services.entity.authorizationinfo.v1.model.User;
 import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;
 import fi.koku.services.utility.log.v1.LogEntryType;
@@ -50,10 +54,11 @@ import fi.koku.services.utility.log.v1.ServiceFault;
 public class LogController {
   private static final Logger log = LoggerFactory.getLogger(LogSearchController.class);
   private LogUtils lu = new LogUtils();
-  private UserInfoService userInfoService;
-
+ 
+  private AuthorizationInfoService authorizationInfoService;
+  
   public LogController() {
-    userInfoService = new UserInfoServiceDummyImpl();
+    authorizationInfoService = new AuthorizationInfoServiceDummyImpl();
   }
  
  
@@ -65,7 +70,7 @@ public class LogController {
     model.addAttribute("user", LogUtils.getPicFromSession(session));
     
     // this is used for selecting which part of the page to show
-    for(Role r : userInfoService.getUsersRoles("lok", LogUtils.getPicFromSession(session))) {
+    for(Role r : authorizationInfoService.getUsersRoles("lok", LogUtils.getPicFromSession(session))) {
       log.debug(r.getId());
       if(r.getId().startsWith("ROLE_LOK_")) { // FIXME
         model.addAttribute("userRole", r.getId());
@@ -76,14 +81,11 @@ public class LogController {
     
     log.debug(LogConstants.ROLE_LOK_LOG_ADMIN.getName());
     log.debug("current role: "+currentRole);
- /*   if(LogConstants.ROLE_LOG_ADMIN.getId().equals(currentRole)){
-      log.debug("return page view");
-      model.addAttribute("action", "viewLog");
-      return "view";
-    }else {*/
-      log.debug("return page menu");
-      return "menu";
- //   }
+ 
+    log.debug("return page menu");
+
+    return "menu";
+
     
   }
 

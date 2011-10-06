@@ -94,8 +94,8 @@ public class LogEntry {
   }
   
   public String getMessage() {
-    message = logId +" "+ timestamp +" "+ user +" "+ child +" "+ dataItemType +" "+ 
-      operation +" "+ clientSystemId;
+  //  message = logId +" "+ timestamp +" "+ user +" "+ child +" "+ dataItemType +" "+ 
+  //    operation +" "+ clientSystemId;
     
     return message;
   }

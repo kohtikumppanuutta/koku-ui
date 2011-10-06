@@ -2,7 +2,9 @@ package fi.koku.lok;
 
 import java.util.Locale;
 
-import fi.koku.services.entity.userinfo.v1.model.Role;
+import fi.koku.services.entity.authorizationinfo.v1.model.Role;
+
+
 
 /**
  * Log constants.

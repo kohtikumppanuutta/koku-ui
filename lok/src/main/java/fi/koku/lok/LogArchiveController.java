@@ -27,7 +27,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.KoKuFaultException;
 import fi.koku.services.utility.log.v1.AuditInfoType;
-import fi.koku.services.utility.log.v1.IntType;
+import fi.koku.services.utility.log.v1.ArchivalResultsType;
 import fi.koku.services.utility.log.v1.LogArchivalParametersType;
 import fi.koku.services.utility.log.v1.LogServiceFactory;
 import fi.koku.services.utility.log.v1.LogServicePortType;
@@ -265,17 +265,9 @@ public class LogArchiveController {
       LogArchivalParametersType archiveParametersType = new LogArchivalParametersType();
       
       if(logarchivedate != null && logarchivedate.getEndDate() != null){
-    
         
         archiveParametersType.setEndDate(lu.dateToCalendar(logarchivedate.getEndDate()));
 
-        // set the end time 1 day later so that everything added on the last day will be found
-        Calendar endday = archiveParametersType.getEndDate();
-        endday.set(Calendar.DATE, endday.get(Calendar.DATE) +1);
-       
-        log.debug("The archive end date has been set 1 day later in order to archive also the end date");
-        archiveParametersType.setEndDate(endday);
-        
         // call to log database
         AuditInfoType audit = new AuditInfoType();
         audit.setComponent("lok"); //FIXME Voi olla demossa näin!
@@ -284,13 +276,13 @@ public class LogArchiveController {
         log.debug("log archive action phase: starting archiving");
 
         // call to log archive service
-        IntType archiveCount = logService.opArchiveLog(archiveParametersType, audit);
+        ArchivalResultsType archiveCount = logService.opArchiveLog(archiveParametersType, audit);
         
-        if(archiveCount.getArchiveCount() == 0){
+        if(archiveCount.getLogEntryCount() == 0){
           response.setRenderParameter("error", "koku.lok.archive.nothing.to.archive"); 
           log.debug("ei arkistoitavaa");
         }else{
-          log.debug("arkistoitiin "+archiveCount.getArchiveCount()+ " entrya");
+          log.debug("arkistoitiin "+archiveCount.getLogEntryCount()+ " entrya");
         }
       }else{
         response.setRenderParameter("error", "arkistointipvm puuttuu");
