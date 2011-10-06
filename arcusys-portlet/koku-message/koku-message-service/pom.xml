@@ -7,7 +7,7 @@
   <name>koku-message-service</name>
   
   <parent>
-    <artifactId>koku-message</artifactId>
+    <artifactId>arcusys-portlets</artifactId>
     <groupId>fi.arcusys</groupId>
     <version>1.0</version>
   </parent>
