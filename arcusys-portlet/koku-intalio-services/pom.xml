@@ -8,7 +8,7 @@
 	<packaging>jar</packaging>
 
 	<parent>
-		<artifactId>koku-taskmanager</artifactId>
+		<artifactId>arcusys-portlets</artifactId>
   		<groupId>fi.arcusys</groupId>
 		<version>1.0</version>
 	</parent>
