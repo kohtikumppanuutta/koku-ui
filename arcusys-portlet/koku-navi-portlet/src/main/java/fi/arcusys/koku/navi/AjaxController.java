@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import fi.arcusys.koku.av.AvCitizenServiceHandle;
+import fi.arcusys.koku.intalio.TaskHandle;
 import fi.arcusys.koku.kv.KokuFolderType;
 import fi.arcusys.koku.kv.MessageHandle;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.users.UserIdResolver;
+import fi.arcusys.koku.util.TaskUtil;
 
 /**
  * Handles ajax request and return the response with json string
@@ -121,9 +123,9 @@ public class AjaxController extends AbstractController {
 	 * @return number or requests
 	 */
 	private int getTotalRequests(String userId) {
-		return 0;
+		TaskHandle handle = new TaskHandle();
+		return handle.getRequestsTasksTotalNumber();		
 	}
-	
 	
 	/**
 	 * Creates render url mainly for gatein portal container
