@@ -164,7 +164,7 @@ public class KksService {
       if (collections != null) {
 
         for (KksCollectionType kct : collections) {
-          tmp.add(converter.fromWsType(kct, false, user));
+          tmp.add(converter.fromWsType(kct, user));
         }
       }
 
@@ -190,18 +190,20 @@ public class KksService {
       KksServicePortType kksService = getKksService();
       KksCollectionType kks = kksService.opGetKksCollection(collectionId, getKksAuditInfo(info.getPic()));
 
-      KKSCollection col = converter.fromWsType(kks, true, info.getPic());
-      for (List<Entry> lst : col.getMultiValueEntries().values()) {
+      KKSCollection col = converter.fromWsType(kks, info.getPic());
+      col.setMaster(isParent(info.getPic(), col.getCustomer()));
+      col.setAuthorizedRegistrys(getAuthorizedRegistries(info.getPic()));
+      col.generateEmptyEntries(info.getPic());
 
-        for (Entry e : lst) {
+      for (Entry e : col.getEntries().values()) {
 
+        if (e.getType().isMultiValue())
           for (EntryValue v : e.getEntryValues()) {
             UserInfo u = userInfo.getUserInfoByPic(e.getRecorder());
             if (u != null) {
               v.setModifierFullName(u.getFname() + " " + u.getSname());
             }
           }
-        }
       }
       return col;
     } catch (ServiceFault e) {
@@ -284,7 +286,7 @@ public class KksService {
       KksCollectionsType collections = kksService.opQueryKks(kksQueryCriteria, getKksAuditInfo(user));
 
       for (KksCollectionType type : collections.getKksCollection()) {
-        tmp.add(converter.fromWsType(type, false, user));
+        tmp.add(converter.fromWsType(type, user));
       }
 
       for (KKSCollection collection : tmp) {

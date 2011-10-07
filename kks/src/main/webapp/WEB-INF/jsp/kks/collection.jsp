@@ -111,6 +111,8 @@
 </div>
 <div class="kks-reset-floating"></div>
     <div class="kks-content">
+    
+        <c:if test="${ empty_collection }"><spring:message code="ui.kks.no.authorization" /></c:if>
 
         <c:if test="${not empty collection.collectionClass }">
 
@@ -193,8 +195,8 @@
 	                                                    </c:forEach> </div>
 	                                            </c:when>
 	                                            <c:when test="${ type.dataType eq select.name }">
-	                                                <div class="portlet-form-field"> <c:forEach
-	                                                        items="${type.valueSpaces.valueSpace}" var="value">
+	                                                <div class="portlet-form-field"> 
+	                                                <c:forEach items="${type.valueSpaces.valueSpace}" var="value">
 	                                                        <form:radiobutton class="portlet-form-input-field" title="${type.description }"
 	                                                            path="entries['${type.id}'].firstValue.values"
 	                                                            value="${ value }" label="${value}" />
@@ -228,10 +230,10 @@
                                             <c:otherwise>
 	                                             <c:if test="${ type.multiValue }">
 	                                                    <c:forEach var="multivalue" items='${ collection.entries[type.id].entryValues }'>
-	                                                        <span class="kks-read-only-text"><p><c:out value="${multivalue.value}"/></p><c:out value="(${multivalue.modifierFullName}"/> <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${multivalue.modified}"/>)</span>                                                       
+	                                                        <span class="kks-read-only-text"><c:out value="${multivalue.value}"/><c:out value="(${multivalue.modifierFullName}"/> <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${multivalue.modified}"/>)</span>                                                       
 	                                                    </c:forEach>
 	                                                </c:if> <c:if test="${ not type.multiValue }">
-	                                                    <span class="kks-read-only-text"><p><c:out value="${collection.entries[type.id].firstValue.value}</p>"></c:out> </span>
+	                                                    <span class="kks-read-only-text"><c:out value="${collection.entries[type.id].firstValue.value}"></c:out> </span>
 	                                              </c:if> 
                                             </c:otherwise>
                                         </c:choose>

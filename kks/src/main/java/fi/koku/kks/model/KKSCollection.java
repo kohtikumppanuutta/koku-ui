@@ -2,6 +2,7 @@ package fi.koku.kks.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Map;
 import fi.koku.services.entity.kks.v1.KksCollectionClassType;
 import fi.koku.services.entity.kks.v1.KksEntryClassType;
 import fi.koku.services.entity.kks.v1.KksGroupType;
+import fi.koku.services.entity.userinfo.v1.model.Registry;
 
 /**
  * Single collection
@@ -20,6 +22,7 @@ public class KKSCollection {
   private String id;
 
   private String name;
+  private String customer;
   private String description;
   private String modifier;
   private String modifierFullName;
@@ -27,19 +30,21 @@ public class KKSCollection {
   private Date creationTime;
   private int version;
   private Map<String, Entry> entries;
-  private Map<String, List<Entry>> multiValueEntries;
   private String nextVersion;
   private String prevVersion;
   private boolean versioned;
   private boolean buildFromExisting;
   private KksCollectionClassType collectionClass;
   private String creator;
+  private Map<String, Registry> authorizedRegistrys;
+  private boolean master;
 
   public KKSCollection(String id, KKSCollection previous, boolean clear, Date creationTime, CollectionState state,
       int version) {
     this(id, previous.getName(), previous.getDescription(), state, creationTime, version, previous.getCollectionClass());
     prevVersion = previous.getId();
     buildFromExisting = true;
+    authorizedRegistrys = new HashMap<String, Registry>();
   }
 
   public KKSCollection(String id, String name, String description, CollectionState state, Date creationTime,
@@ -57,7 +62,7 @@ public class KKSCollection {
     this.version = version;
     this.collectionClass = type;
     entries = new LinkedHashMap<String, Entry>();
-    multiValueEntries = new LinkedHashMap<String, List<Entry>>();
+    authorizedRegistrys = new HashMap<String, Registry>();
   }
 
   public String getName() {
@@ -147,47 +152,7 @@ public class KKSCollection {
     this.id = id;
   }
 
-  public Map<String, List<Entry>> getMultiValueEntries() {
-    return multiValueEntries;
-  }
-
-  public void setMultiValueEntries(Map<String, List<Entry>> multiValueEntries) {
-    this.multiValueEntries = multiValueEntries;
-  }
-
-  public final void addMultivalue(Entry entry) {
-
-    String key = "" + entry.getType().getId();
-    if (multiValueEntries.containsKey(key)) {
-      multiValueEntries.get(key).add(entry);
-    } else {
-      List<Entry> tmp = new ArrayList<Entry>();
-      tmp.add(entry);
-      multiValueEntries.put(key, tmp);
-    }
-  }
-
-  public void removeMultivalue(String id) {
-    for (List<Entry> kirjaukset : multiValueEntries.values()) {
-
-      List<Entry> tmp = new ArrayList<Entry>(kirjaukset);
-      for (Entry k : tmp) {
-        if (k.getId().equals(id)) {
-          kirjaukset.remove(k);
-        }
-      }
-    }
-  }
-
   public Entry getEntry(String id) {
-
-    for (List<Entry> tmp : multiValueEntries.values()) {
-      for (Entry k : tmp) {
-        if (k.getId().equals(id)) {
-          return k;
-        }
-      }
-    }
 
     for (Entry k : entries.values()) {
       if (k.getId().equals(id)) {
@@ -239,19 +204,21 @@ public class KKSCollection {
   public List<Entry> getEntryValues() {
     List<Entry> tmp = new ArrayList<Entry>();
     tmp.addAll(entries.values());
-    for (List<Entry> l : multiValueEntries.values()) {
-      tmp.addAll(l);
-    }
+
     return tmp;
   }
 
   public void generateEmptyEntries(String user) {
     for (KksGroupType group : collectionClass.getKksGroups().getKksGroup()) {
 
-      checkAndInsertEntry(group, user);
+      if (master || authorizedRegistrys.containsKey(group.getRegister())) {
+        checkAndInsertEntry(group, user);
+      }
 
       for (KksGroupType subGroup : group.getSubGroups().getKksGroup()) {
-        checkAndInsertEntry(subGroup, user);
+        if (master || authorizedRegistrys.containsKey(group.getRegister())) {
+          checkAndInsertEntry(subGroup, user);
+        }
       }
 
     }
@@ -290,7 +257,28 @@ public class KKSCollection {
     entries.clear();
   }
 
-  public void clearMultiEntries() {
-    multiValueEntries.clear();
+  public String getCustomer() {
+    return customer;
   }
+
+  public void setCustomer(String customer) {
+    this.customer = customer;
+  }
+
+  public Map<String, Registry> getAuthorizedRegistrys() {
+    return authorizedRegistrys;
+  }
+
+  public void setAuthorizedRegistrys(Map<String, Registry> authorizedRegistrys) {
+    this.authorizedRegistrys = authorizedRegistrys;
+  }
+
+  public boolean isMaster() {
+    return master;
+  }
+
+  public void setMaster(boolean master) {
+    this.master = master;
+  }
+
 }

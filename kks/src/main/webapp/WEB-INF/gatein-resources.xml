@@ -10,12 +10,5 @@
 		<css-path>/css/kks.CSS</css-path>
 	</portlet-skin>
 
-	<javascript>
-		<param>
-			<js-module>KKS</js-module>
-			<js-path>/js/hello.js</js-path>
-			<js-priority>0</js-priority>
-	</param>
-	</javascript>
 
 </gatein-resources>

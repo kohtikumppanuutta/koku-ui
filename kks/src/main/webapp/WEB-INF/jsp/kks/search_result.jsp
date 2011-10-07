@@ -55,8 +55,12 @@
 				</c:if>
 				<c:forEach var="entry" items='${result.entryValues}'>
 					<div class="kks-content">
-						<strong>${entry.type.name}</strong> <div class="kks-read-only-text">${
-							entry.valuesAsText } </div>
+						<strong>${entry.type.name}</strong> 
+						<c:forEach var="val" items='${entry.entryValues}'>
+							<div class="kks-read-only-text">
+								${val.valuesAsText } 
+							</div>
+						</c:forEach>
 					</div>
 				</c:forEach>
 				</br>
