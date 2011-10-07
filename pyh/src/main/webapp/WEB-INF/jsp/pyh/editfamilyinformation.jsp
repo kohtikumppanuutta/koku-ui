@@ -68,19 +68,15 @@
                                         <portlet:param name="action" value="removeDependant" />
                                         <portlet:param name="familyMemberPic" value="${child.pic}" />
                                     </portlet:actionURL>
-                            <a href="${removeFamilyMember}"><spring:message code="ui.pyh.remove.family" /></a> </span> 
+                                    <a href="${removeFamilyMember}" onclick="return doRemoveFamilyMemberConfirmation()"><spring:message code="ui.pyh.remove.family" /></a> </span> 
                                 </c:when>
                                 <c:otherwise>
-                                    <div id="add_family_member_dialog">
                                     <portlet:actionURL var="addDependantAsFamilyMember">
                                         <portlet:param name="action"
                                             value="addDependantAsFamilyMember" />
                                         <portlet:param name="dependantPic" value="${child.pic}" />
                                     </portlet:actionURL>
-                                    
-                                    <%-- <a href="${addDependantAsFamilyMember}"><spring:message code="ui.pyh.add.into.family" /></a> --%>
-                                    <a href="javascript:doAddAsFamilyMember()"> testi: <spring:message code="ui.pyh.add.into.family" /> </a>
-                                    </div>
+                                    <a href="${addDependantAsFamilyMember}" onclick="return doAddFamilyMemberConfirmation()"><spring:message code="ui.pyh.add.into.family" /></a>
                                 </c:otherwise>
                             </c:choose> </span> </span>
                 </td>
@@ -248,26 +244,12 @@
 		$('#addUsersToFamilyForm').submit();
 	}
 	
-	function doAddAsFamilyMember() {
-		
-		<%-- TODO: miksei toimi? --%>
-		
-		$('#add_family_member_dialog').dialog({
-			autoOpen: false,
-			width: 400,
-			modal: true,
-			resizable: false,
-			buttons: {
-				"Kyllä": function() {
-					alert("valitsit kyllä");
-				},
-				"Ei": function() {
-					$(this).dialog('close');
-				}
-			}
-		});
-		$('#add_family_member_dialog').dialog('open');
-		
+	function doAddFamilyMemberConfirmation() {
+		return confirm("Haluatko lisätä huollettavan lapsen perheenjäseneksi?");
+	}
+	
+	function doRemoveFamilyMemberConfirmation() {
+		return confirm("Haluatko poistaa huollettavan lapsen perheenjäsenyyden?");
 	}
 	
 </script>
