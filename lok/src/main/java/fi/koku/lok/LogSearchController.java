@@ -103,7 +103,6 @@ public class LogSearchController {
       model.addAttribute("allowedToView", true);
     }
     
-   
     // these are runtime constants, not given by the user!
     String startDateStr = lu.getDateString(1);
     String endDateStr = lu.getDateString(0);

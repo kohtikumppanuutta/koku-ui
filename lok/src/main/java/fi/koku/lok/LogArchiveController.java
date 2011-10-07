@@ -78,7 +78,6 @@ public class LogArchiveController {
   public LogArchiveDate getCommandObject() {
     return new LogArchiveDate();
   }
-
  
   // portlet render phase
   @RenderMapping(params = "action=archiveLog")
@@ -109,7 +108,6 @@ public class LogArchiveController {
     try{
       
       //TODO: tähän tulee: jos !error
-     // if(logarchivedate != null && logarchivedate.getEndDate() != null){
       if(error==null){
         log.debug("logarchivedate: "+logarchivedate.getEndDate());
 

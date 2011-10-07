@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -28,6 +29,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.koku.services.entity.authorizationinfo.util.AuthUtils;
+import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
+import fi.koku.services.entity.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
+import fi.koku.services.entity.authorizationinfo.v1.model.Role;
 import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;
 import fi.koku.services.utility.log.v1.LogEntryType;
@@ -53,6 +58,8 @@ public class LogViewController {
   // Use log service
   private LogServicePortType logService;
   
+  private AuthorizationInfoService authorizationInfoService;
+  
   private CriteriaSerializer criteriaSerializer = new CriteriaSerializer();
   private SimpleDateFormat dateFormat = new SimpleDateFormat(LogConstants.DATE_FORMAT);
 
@@ -64,6 +71,8 @@ public class LogViewController {
         LogConstants.LOG_SERVICE_ENDPOINT);
     logService = logServiceFactory.getLogService();    
     log.debug("Got logService!");
+    
+    authorizationInfoService = new AuthorizationInfoServiceDummyImpl();
   }
   // customize form data binding
   @InitBinder
@@ -81,16 +90,28 @@ public class LogViewController {
 
   // portlet render phase
   @RenderMapping(params = "action=viewLog")
-  public String render(RenderRequest req, 
-      @RequestParam(value = "visited", required = false) String visited, @RequestParam(value = "user") String user,
-      @RequestParam(value = "userRole") String userRole,
-      @ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, RenderResponse res, Model model) {
+  public String render(PortletSession session, RenderRequest req, 
+      @RequestParam(value = "visited", required = false) String visited, 
+      @ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, 
+      RenderResponse res, Model model) {
   
     // these are runtime constants, not given by the user!
     String startDateStr = lu.getDateString(1);
     String endDateStr = lu.getDateString(0);
     model.addAttribute("startDate", startDateStr);
     model.addAttribute("endDate", endDateStr);
+    
+    // get user pic and role
+    String userPic = LogUtils.getPicFromSession(session);
+      
+    List<Role> userRoles = authorizationInfoService.getUsersRoles("lok", userPic);
+    
+ 
+    // add a flag for allowing this user to see the operations on page search.jsp 
+    if (AuthUtils.isOperationAllowed("ViewAdminLogFile", userRoles)) {
+      log.debug("lisätään allowedToView");
+      model.addAttribute("allowedToView", true);
+    }
     
     log.debug("modeliin lisätty startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
     
@@ -102,12 +123,11 @@ public class LogViewController {
         model.addAttribute("error0", errors[0]);
         model.addAttribute("error1", errors[1]);
               
-      //  log.debug(errors[0]+", "+errors[1]+", "+errors[2]);
        if(errors[0] ==null && errors[1] == null){
 
           //TODO: tähän kohtaan jokin virheenkäsittely?
           // make the query to the admin log
-          model.addAttribute("entries", getAdminLogEntries(criteria, user));
+          model.addAttribute("entries", getAdminLogEntries(criteria, userPic));
 
           model.addAttribute("searchParams", criteria);
           log.debug("criteria: " + criteria.getFrom() + ", " + criteria.getTo());
@@ -119,9 +139,6 @@ public class LogViewController {
     } else {
       log.debug("criteria: null");
     }
-
-    model.addAttribute("user", user);
-    model.addAttribute("userRole", userRole);
     
     return "view";
   }
@@ -131,8 +148,7 @@ public class LogViewController {
   public void doSearchArchive(@ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria,
       BindingResult result,
       @RequestParam(value = "visited") String visited, 
-      @RequestParam(value = "user") String user, 
-      @RequestParam(value = "userRole") String userRole, ActionResponse response) {
+      ActionResponse response) {
 
     if (visited != null) {
       response.setRenderParameter("visited", visited);
@@ -148,9 +164,7 @@ public class LogViewController {
     }catch(IllegalArgumentException e){
       log.error("illegal argument");
     }
-    //    response.setRenderParameter("logSearchCriteria", criteriaSerializer.getAsText(criteria));
-    response.setRenderParameter("user", user);
-    response.setRenderParameter("userRole", userRole);
+    
     response.setRenderParameter("action", "viewLog");
   }
 
