@@ -22,7 +22,7 @@
 <p>
 
 		<c:choose>
-			<c:when test="${userRole == 'ROLE_LOK_ADMIN'}">
+			<c:when test="${not empty requestScope.showMenu}">
 	
 		<a href="${searchUserURL}"><spring:message code="koku.lok.search"/></a>
 		<p>
@@ -30,7 +30,7 @@
 		<a href="${archiveURL}"><spring:message code="koku.lok.archive"/></a>	
 			</c:when>
 
-			<c:when test="${userRole == 'ROLE_LOK_LOG_ADMIN'}">
+			<c:when test="${not empty requestScope.redirectToSearch}">
 				<script type="text/javascript">
 					window.location.href = "${searchLogViewsURL}";
 				</script>
