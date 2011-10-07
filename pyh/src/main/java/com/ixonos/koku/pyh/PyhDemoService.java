@@ -1,10 +1,13 @@
 package com.ixonos.koku.pyh;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -45,6 +48,7 @@ public class PyhDemoService {
   
   private static Logger log = LoggerFactory.getLogger(PyhDemoService.class);
   private List<Person> searchedUsers;
+  private boolean childsGuardianshipInformationNotFound;
   
   private CustomerServicePortType customerService;
   private CommunityServicePortType communityService;
@@ -52,6 +56,7 @@ public class PyhDemoService {
   private boolean debug = true;
   
   public PyhDemoService() {
+    childsGuardianshipInformationNotFound = false;
     
     CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory(PyhConstants.CUSTOMER_SERVICE_USER_ID, PyhConstants.CUSTOMER_SERVICE_PASSWORD, PyhConstants.CUSTOMER_SERVICE_ENDPOINT);
     customerService = customerServiceFactory.getCustomerService();
@@ -311,7 +316,7 @@ public class PyhDemoService {
   /**
    * Query persons by name, PIC and customer ID and stores them in the searchedUsers list.
    */
-  public void searchUsers(String firstname, String surname, String customerPic, String customerID, String currentUserPic) {
+  public void searchUsers(String surname, String customerPic, String customerID, String currentUserPic) {
     clearSearchedUsers();
     
     CustomerQueryCriteriaType customerCriteria = new CustomerQueryCriteriaType();
@@ -319,6 +324,7 @@ public class PyhDemoService {
     PicsType pics = new PicsType();
     pics.getPic().add(customerPic);
     customerCriteria.setPics(pics);
+    // TODO: set surname as criteria too
     
     customerCriteria.setSelection("full"); // FIXME: tätä käytetään vain silloin kun tarvitaan käyttäjän kaikki tiedot
     CustomersType customersType = null;
@@ -380,7 +386,7 @@ public class PyhDemoService {
    * Selects persons (PICs) to whom send the confirmation message for a operation, for example adding a dependant 
    * into a family.
    */
-  private List<String> generateRecipients(String targetPic, Person user, CommunityRole role, String currentUserPic) {
+  private List<String> generateRecipients(String memberToAddPic, Person user, CommunityRole role, String currentUserPic) {
     List<String> recipientPics = new ArrayList<String>();
     
     if (CommunityRole.CHILD.equals(role)) {
@@ -388,7 +394,7 @@ public class PyhDemoService {
       communityCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_GUARDIAN_COMMUNITY);
       
       MemberPicsType memberPics = new MemberPicsType();
-      memberPics.getMemberPic().add(targetPic);
+      memberPics.getMemberPic().add(memberToAddPic);
       communityCriteria.setMemberPics(memberPics);
       
       CommunitiesType communitiesType = null;
@@ -440,7 +446,7 @@ public class PyhDemoService {
       Family family = null;
       
       try {
-        family = getFamily(targetPic);
+        family = getFamily(memberToAddPic);
       } catch (TooManyFamiliesException tme) {
         log.error("PyhDemoService.generateRecipients(): getFamily(targetPic) threw a TooManyFamiliesException!");
         log.error(tme.getMessage());
@@ -607,6 +613,13 @@ public class PyhDemoService {
       if (CommunityRole.PARENT.equals(communityRole) || CommunityRole.FATHER.equals(communityRole) || 
           CommunityRole.MOTHER.equals(communityRole)) {
         sendParentAdditionMessage(communityId, memberToAddPic, userPic, communityRole);
+      } else if (CommunityRole.CHILD.equals(communityRole) && recipients.size() == 0) {
+        // we don't have guardian information for the child so we can't send the request
+        
+        // TODO: send email to support and inform that guardianship information is missing for this child
+        log.info("TESTING: Child's guardianship information not found!");
+        childsGuardianshipInformationNotFound = true;
+        
       } else if (recipients.size() == 0) {
         insertInto(userPic, memberToAddPic, communityRole);
       } else {
@@ -1153,6 +1166,14 @@ public class PyhDemoService {
       log.error("PyhDemoService.acceptMembershipRequest: opUpdateMembershipApproval raised a ServiceFault", fault);
     }
     
+  }
+  
+  public void setChildsGuardianshipInformationNotFound(boolean isFound) {
+    this.childsGuardianshipInformationNotFound = isFound;
+  }
+  
+  public boolean getChildGuardianshipInformationNotFound() {
+    return this.childsGuardianshipInformationNotFound;
   }
   
 }

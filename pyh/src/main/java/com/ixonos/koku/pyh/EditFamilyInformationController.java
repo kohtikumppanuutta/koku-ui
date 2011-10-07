@@ -69,6 +69,10 @@ public class EditFamilyInformationController {
     model.addAttribute("parentsFull", pyhDemoService.isParentsSet(userPic));
     model.addAttribute("messages", pyhDemoService.getSentMessages(user));
     
+    // if child's guardianship information is not found show a notification in JSP
+    model.addAttribute("childsGuardianshipInformationNotFound", pyhDemoService.getChildGuardianshipInformationNotFound());
+    pyhDemoService.setChildsGuardianshipInformationNotFound(false);
+    
     Family family = daf.getFamily();
     String communityId;
     if (family != null) {
@@ -178,14 +182,13 @@ public class EditFamilyInformationController {
       log.error("ERROR: UserInfo returns no PIC!");
     }
     
-    String fn = request.getParameter("searchFirstname");
     String sn = request.getParameter("searchSurname");
     String pic = request.getParameter("searchPic");
-
+    
     // call service to query users,
     // users are returned as a model attribute object searchedUsers
     // TODO: what is the correct search criteria?
-    pyhDemoService.searchUsers(fn, sn, pic, userPic /*customer id == user pic*/, userPic);
+    pyhDemoService.searchUsers(sn, pic, userPic /*customer id == user pic*/, userPic);
     response.setRenderParameter("action", "editFamilyInformationWithSearchResults");
   }
 

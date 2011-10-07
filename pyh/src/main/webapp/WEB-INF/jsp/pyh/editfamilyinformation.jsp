@@ -130,17 +130,12 @@
 
 		<form:form name="searchUsersForm" method="post"
 			action="${searchUsers}">
-			<%--
-			<span class="portlet-form-field-label"><spring:message code="ui.pyh.form.first.name" /></span>
-			<span class="portlet-form-input-field"> <input
-				name="searchFirstname" /> </span>
+			
 			<span class="portlet-form-field-label"><spring:message code="ui.pyh.form.last.name" /></span>
-			<span class="portlet-form-input-field"> <input
-				name="searchSurname" /> </span>
-			--%>
+			<span class="portlet-form-input-field"> <input name="searchSurname" /> </span>
+			
 			<span class="portlet-form-field-label"><spring:message code="ui.pyh.table.pic" />: </span>
-			<span class="portlet-form-input-field"> <input
-				name="searchPic" /> </span>
+			<span class="portlet-form-input-field"> <input name="searchPic" /> </span>
 			<input class="portlet-form-button" type="submit" value="<spring:message code="ui.pyh.seek"/>" />
 		</form:form>
 	</div>
@@ -211,6 +206,11 @@
 			</c:if>
 		</c:otherwise>
 	</c:choose>
+	
+	<%-- TODO: if searched child's guardianship information is missing then show a message --%>
+	<c:if test="${childsGuardianshipInformationNotFound}">
+		<p>Perheyhteyspyyntöä ei voida lähettää!</p>
+	</c:if>
 
 </div>
 </div>
