@@ -5,41 +5,31 @@
 <portlet:actionURL var="archiveActionURL">
 	<portlet:param name="action" value="archiveLog" />
 	<portlet:param name="visited" value="---" />
-	<portlet:param name="user" value="${user}" />
-	<portlet:param name="userRole" value="${userRole}" />
 </portlet:actionURL>
 
 <portlet:actionURL var="changeActionURL">
 	<portlet:param name="action" value="archiveLog" />
 	<portlet:param name="change" value="change" />
 	<portlet:param name="visited" value="---" />
-	<portlet:param name="user" value="${user}" />
-	<portlet:param name="userRole" value="${userRole}" />
 </portlet:actionURL>
 
 <portlet:actionURL var="startArchiveActionURL">
 	<portlet:param name="action" value="startArchiveLog" />
-	<portlet:param name="user" value="${user}" />
-	<portlet:param name="userRole" value="${userRole}" />
 </portlet:actionURL>
 
 <portlet:renderURL var="homeURL">
 	<portlet:param name="action" value="choose" />
-	<portlet:param name="user" value="${user}" />
-	<portlet:param name="userRole" value="${userRole}" />
 </portlet:renderURL>
 
 <portlet:renderURL var="searchUserURL">
 	<portlet:param name="action" value="searchUser" />
-	<portlet:param name="user" value="${user}" />
-	<portlet:param name="userRole" value="${userRole}" />
 </portlet:renderURL>
 
 
 <div class="koku-lok">
 <div class="portlet-section-body">
 <c:choose>
-	<c:when test="${userRole == 'ROLE_LOK_ADMIN'}">
+	<c:when test="${not empty requestScope.allowedToView}">
 	<div class="home">
 		<a href="${homeURL}"><spring:message code="koku.common.back" />
 		</a>

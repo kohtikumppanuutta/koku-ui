@@ -1,16 +1,15 @@
 package fi.koku.lok;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -26,8 +25,12 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.KoKuFaultException;
-import fi.koku.services.utility.log.v1.AuditInfoType;
+import fi.koku.services.entity.authorizationinfo.util.AuthUtils;
+import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
+import fi.koku.services.entity.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
+import fi.koku.services.entity.authorizationinfo.v1.model.Role;
 import fi.koku.services.utility.log.v1.ArchivalResultsType;
+import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogArchivalParametersType;
 import fi.koku.services.utility.log.v1.LogServiceFactory;
 import fi.koku.services.utility.log.v1.LogServicePortType;
@@ -47,6 +50,8 @@ public class LogArchiveController {
 // Use log service
   private LogServicePortType logService;
   
+  private AuthorizationInfoService authorizationInfoService;
+  
   private ArchiveSerializer archiveSerializer = new ArchiveSerializer();
   SimpleDateFormat dateFormat = new SimpleDateFormat(LogConstants.DATE_FORMAT);
   LogUtils lu = new LogUtils();
@@ -55,7 +60,9 @@ public class LogArchiveController {
     LogServiceFactory logServiceFactory = new LogServiceFactory(
         LogConstants.LOG_SERVICE_USER_ID, LogConstants.LOG_SERVICE_PASSWORD,
         LogConstants.LOG_SERVICE_ENDPOINT);
-    logService = logServiceFactory.getLogService();    
+    logService = logServiceFactory.getLogService();  
+    
+    authorizationInfoService = new AuthorizationInfoServiceDummyImpl();
   }
   
   // customize form data binding
@@ -72,31 +79,30 @@ public class LogArchiveController {
     return new LogArchiveDate();
   }
 
-  /**
-   * public String show(@ModelAttribute(value = "child") Person child,
-   * 
-   * @RequestParam(value = "collection") String collection, RenderResponse
-   *                     response, Model model) {
-   * @param req
-   * @param res
-   * @param model
-   * @return
-   */
+ 
   // portlet render phase
   @RenderMapping(params = "action=archiveLog")
-  public String render(RenderRequest req, @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
+  public String render(PortletSession session, RenderRequest req, @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
       @RequestParam(value = "visited", required = false) String visited, 
       @RequestParam(value = "error", required = false) String error,
       @RequestParam(value = "change", required = false) String change,  
-      @RequestParam(value = "user") String user,
-      @RequestParam(value = "userRole") String userRole,
       RenderResponse res, Model model) {
-
-    log.debug("user: "+user);
-    log.debug("userRole: "+userRole);
+    
     log.debug("render archiveLog: visited= "+visited);
     log.debug("render archiveLog: change= "+change);
  
+    // get user pic and role
+    String userPic = LogUtils.getPicFromSession(session);
+      
+    List<Role> userRoles = authorizationInfoService.getUsersRoles("lok", userPic);
+    
+    log.debug("render searchLog");
+    // add a flag for allowing this user to see the operations on page search.jsp 
+    if (AuthUtils.isOperationAllowed("AdminSystemLogFile", userRoles)) {
+      log.debug("lisätään allowedToView");
+      model.addAttribute("allowedToView", true);
+    }
+    
     if(change != null){
       log.debug("Painettiin nappia Vaihda päivämäärää");
     }
@@ -161,11 +167,6 @@ public class LogArchiveController {
       // käyttäjälle näytetään virheviesti "koku.lok.archive.parsing.error"
 
     }
-
-    log.debug("userRole = "+userRole);
-    
-    model.addAttribute("user", user);
-    model.addAttribute("userRole", userRole);
   
     return "archive";
   }
@@ -177,12 +178,8 @@ public class LogArchiveController {
       BindingResult result,
       @RequestParam(value = "visited") String visited, 
       @RequestParam(value = "change", required = false) String change, 
-      @RequestParam(value = "user") String user,
-      @RequestParam(value = "userRole") String userRole,
       ActionResponse response) {
 
-    log.debug("user: "+user);
-    log.debug("userRole: "+userRole);
     log.debug("action archiveLog, visited: "+visited);
 
     String archivedate = archiveSerializer.getAsText(logarchivedate);
@@ -211,31 +208,34 @@ public class LogArchiveController {
     }
     response.setRenderParameter("endDate", archiveSerializer.getAsText(logarchivedate));
     response.setRenderParameter("action", "archiveLog");
-    response.setRenderParameter("user", user);
-    response.setRenderParameter("userRole", userRole);
   }
 
 //portlet render phase
   @RenderMapping(params = "action=startArchiveLog")
-  public String renderStart(RenderRequest req, @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
+  public String renderStart(PortletSession session, RenderRequest req, 
+      @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
       @RequestParam(value = "error", required = false) String error,
-      @RequestParam(value = "user") String user,
-      @RequestParam(value = "userRole") String userRole,
       RenderResponse res, Model model) {
 
-   
+    // get user pic and role
+    String userPic = LogUtils.getPicFromSession(session);
+      
+    List<Role> userRoles = authorizationInfoService.getUsersRoles("lok", userPic);
+    
+  
+    // add a flag for allowing this user to see the operations on page search.jsp 
+    if (AuthUtils.isOperationAllowed("AdminSystemLogFile", userRoles)) {
+      log.debug("lisätään allowedToView");
+      model.addAttribute("allowedToView", true);
+    }
+    
     log.debug("startArchiveLog render phase: archiving started");
-    log.debug("user: "+user);
-    log.debug("userRole: "+userRole);
     
     if (logarchivedate != null) {
       log.debug("archive end date: " + logarchivedate.getEndDate());
     } else{
       log.debug("action: logarchivedate == null!");
     }
-
-    model.addAttribute("user", user);
-    model.addAttribute("userRole", userRole);
     
     log.debug("error = "+error);
     if(error != null){  
@@ -252,16 +252,12 @@ public class LogArchiveController {
   }
 
   @ActionMapping(params = "action=startArchiveLog")
-  public void startArchive(@ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
+  public void startArchive(PortletSession session, @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
       BindingResult result, 
-      @RequestParam(value = "user") String user,
-      @RequestParam(value = "userRole") String userRole,
       ActionResponse response) {
     
     log.debug("painettiin nappia Käynnistä arkistointi");
     log.debug("action startArchiveLog");
-    log.debug("user: "+user);
-    log.debug("userRole: "+userRole);
     
     log.debug("logarchivedate: "+logarchivedate);
     if(logarchivedate != null) {
@@ -275,10 +271,13 @@ public class LogArchiveController {
         
         archiveParametersType.setEndDate(lu.dateToCalendar(logarchivedate.getEndDate()));
 
+        // get user pic and role
+        String userPic = LogUtils.getPicFromSession(session);
+        
         // call to log database
         AuditInfoType audit = new AuditInfoType();
         audit.setComponent("lok"); //FIXME Voi olla demossa näin!
-        audit.setUserId(user);  // FIXME
+        audit.setUserId(userPic);  // FIXME
 
         log.debug("log archive action phase: starting archiving");
 
@@ -295,8 +294,6 @@ public class LogArchiveController {
         response.setRenderParameter("error", "arkistointipvm puuttuu");
       }
       
-      response.setRenderParameter("user", user);
-      response.setRenderParameter("userRole", userRole);
     }// TODO: lisää tähän catch sitä varten, että tulee virheet 2.1 tai 2.2
  catch (ServiceFault e) {
    log.debug("fault: "+e.getFaultInfo().getCode());
@@ -306,8 +303,6 @@ public class LogArchiveController {
      log.debug("tuntematon virhe startArchivessa");
   // }
    
-   response.setRenderParameter("user", user);
-   response.setRenderParameter("userRole", userRole);
  }
  
    response.setRenderParameter("endDate", archiveSerializer.getAsText(logarchivedate));
@@ -315,17 +310,7 @@ public class LogArchiveController {
 
   }
 
-  /* TODO: TÄMÄ TULEE LOKSERVICEEN:
-   *  2) kopioi tapahtumalokista lokitiedot arkistolokiin
-      2.1) Annetulla aikavälillä ei ole yhtään arkistoitavaa lokitietoa
-        -> Käyttäjälle ilmoitetaan UI:ssa (koku.lok.archive.nothing.to.archive)
-      2.2) arkistoloki ei vastaa tai kuittaa onnistunutta lokitietojen kopiointia
-        -> lokitietoja ei poisteta tapahtumalokista
-        -> käsittelylokiin tallennetaan virheviesti
-        -> käyttäjälle ilmoitetaan virheestä UI:ssa (koku.lok.archive.error)
-   3) poista kopioidut tiedot tapahtumalokista
-   4) taltioi käsittelylokiin tieto arkistoinnista  
-   */
+  
   private static class ArchiveSerializer {
 
     private SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
