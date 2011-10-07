@@ -39,6 +39,7 @@ public class Constants {
 	public static final String ATTR_MY_ACTION								= "myaction";
 	public static final String ATTR_TARGET_PERSON							= "targetPerson";
 	public static final String ATTR_PORTAL_INFO								= "portalInfo";
+	public static final String ATTR_PORTAL_ROLE								= "portalRole";
 	public static final String ATTR_NAVI_TYPE								= "naviType";
 	                                                                    
 	/* ATTR_MY_ACTION parameter possible values.

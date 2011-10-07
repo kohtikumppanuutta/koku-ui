@@ -178,8 +178,8 @@
 		updateMsgCounter(jQuery('#requests_num'), requestsTotal);
 	}
 	
-	function updateMsgCounter(element, count) {
-		if (count != 0) {
+	function updateMsgCounter(element, count) {		
+		if (count !== undefined && count != 0) {
 			element.html('(' + count + ')');			
 		} else {
 			element.html("");

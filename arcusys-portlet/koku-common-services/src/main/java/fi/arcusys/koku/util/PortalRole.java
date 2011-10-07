@@ -11,6 +11,25 @@ package fi.arcusys.koku.util;
  */
 public enum PortalRole {
 	
-	CITIZEN,
-	EMPLOYEE
+	CITIZEN("Citizen"),
+	EMPLOYEE("Employee");
+	
+	private final String value;
+	
+	PortalRole(String value) {
+		this.value = value;
+	}
+	
+    public String value() {
+	    return value;
+	}
+
+	public static PortalRole fromValue(String v) {
+	    for (PortalRole c: PortalRole.values()) {
+	        if (c.toString().equals(v)) {
+	            return c;
+	        }
+	    }
+	    throw new IllegalArgumentException(v);
+	}
 }

@@ -23,6 +23,7 @@ import fi.arcusys.koku.kv.KokuFolderType;
 import fi.arcusys.koku.kv.MessageHandle;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.users.UserIdResolver;
+import fi.arcusys.koku.util.PortalRole;
 import fi.arcusys.koku.util.TaskUtil;
 
 /**
@@ -66,7 +67,16 @@ public class AjaxController extends AbstractController {
 			session.setAttribute(ATTR_TOKEN, token);
 		}
 		
-		JSONObject jsonModel = getJsonModel(userId, token);
+		String portal = (String) session.getAttribute(ATTR_PORTAL_ROLE);
+		PortalRole portalRole = null;
+		if (portal == null || portal.isEmpty()) {
+			portalRole = getPortalRole(request);
+			session.setAttribute(ATTR_PORTAL_ROLE, portalRole.toString());
+		} else {
+			portalRole = PortalRole.fromValue(portal);		
+		}
+		
+		JSONObject jsonModel = getJsonModel(userId, token, portalRole);
 		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
@@ -83,7 +93,7 @@ public class AjaxController extends AbstractController {
 	 * @param userId user that message belong to
 	 * @return Json object contains result
 	 */
-	public JSONObject getJsonModel(String userId, String token) {
+	public JSONObject getJsonModel(String userId, String token, PortalRole role) {
 		JSONObject jsonModel = new JSONObject();
 		if (userId == null) {
 			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_INVALID);
@@ -91,10 +101,12 @@ public class AjaxController extends AbstractController {
 			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_VALID);			
 			jsonModel.put(JSON_INBOX, String.valueOf(getNewMessageNum(userId, KokuFolderType.INBOX)));			
 			jsonModel.put(JSON_ARCHIVE_INBOX, String.valueOf(getNewMessageNum(userId, KokuFolderType.ARCHIVE_INBOX)));
-			jsonModel.put(JSON_CONSENTS_TOTAL, String.valueOf(getTotalAssignedConsents(userId)));
-			jsonModel.put(JSON_APPOINTMENT_TOTAL, String.valueOf(getTotalAssignedAppointments(userId)));
-			jsonModel.put(JSON_REQUESTS_TOTAL, String.valueOf(getTotalRequests(userId, token)));
-		}		
+			if (role.equals(PortalRole.CITIZEN)) {				
+				jsonModel.put(JSON_CONSENTS_TOTAL, String.valueOf(getTotalAssignedConsents(userId)));
+				jsonModel.put(JSON_APPOINTMENT_TOTAL, String.valueOf(getTotalAssignedAppointments(userId)));
+				jsonModel.put(JSON_REQUESTS_TOTAL, String.valueOf(getTotalRequests(userId, token)));
+			}
+		}
 		return jsonModel;
 	}
 	
@@ -163,6 +175,26 @@ public class AjaxController extends AbstractController {
 		jsonModel.put(JSON_RENDER_URL, renderUrlString);
 		modelmap.addAttribute(RESPONSE, jsonModel);
 		return AjaxViewResolver.AJAX_PREFIX;
+	}
+	
+	/**
+	 * Resolves which portalRole portal has
+	 * 
+	 * FIXME: Super stupid portalRole resolving. For now
+	 * we determine if portal is citizen or employee only by portal name. 
+	 * 
+	 * @param request PortletRequest
+	 * @return PortalRole
+	 */
+	protected PortalRole getPortalRole(PortletRequest request) {
+		
+		LOGGER.debug("Currently used portal: " + request.getPortalContext().getPortalInfo());
+		String portalInfo = request.getPortalContext().getPortalInfo();
+		if (portalInfo.contains("EPP") || portalInfo.contains("GateIn")) {
+			return PortalRole.CITIZEN;
+		} else {
+			return PortalRole.EMPLOYEE;
+		}
 	}
 
 }
