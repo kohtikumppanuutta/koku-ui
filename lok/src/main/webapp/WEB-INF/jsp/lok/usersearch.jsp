@@ -4,39 +4,30 @@
 
 <portlet:renderURL var="homeURL">
     <portlet:param name="action" value="home" />
-    <portlet:param name="user" value="${user}" />
-    <portlet:param name="userRole" value="${userRole}" />
 </portlet:renderURL>
 
 <portlet:actionURL var="searchUserParamsURL">
 	<portlet:param name="action" value="searchUserWithParams" />
-	<portlet:param name="user" value="${user}" />
-	    <portlet:param name="userRole" value="${userRole}" />
 </portlet:actionURL>
 
 <portlet:renderURL var="archiveURL">
 	<portlet:param name="action" value="archiveLog" />
-	<portlet:param name="user" value="${user}" />
-	    <portlet:param name="userRole" value="${userRole}" />
 </portlet:renderURL>
 
 <portlet:renderURL var="showLogSearchFormURL">
 	<portlet:param name="action" value="searchLog" />
 	<portlet:param name="pic" value="${foundPic}" />
-	<portlet:param name="user" value="${user}" />
-	<portlet:param name="userRole" value="${userRole}" />
 </portlet:renderURL>
 
 <div class="koku-lok">
 <div class="portlet-section-body">
 
 <c:choose>
-	<c:when test="${userRole == 'ROLE_LOK_ADMIN'}">
+	<c:when test="${not empty requestScope.allowedToView}">
 	
 	<div class="home">
 			<a href="${homeURL}"><spring:message code="koku.common.back" /></a>
 	</div>
-
 
 	<h1 class="portlet-section-header">
 		<spring:message code="koku.lok.header" />

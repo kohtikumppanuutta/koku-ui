@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.services.entity.authorizationinfo.util.AuthUtils;
@@ -31,12 +32,29 @@ public class LogController {
     authorizationInfoService = new AuthorizationInfoServiceDummyImpl();
   }
  
- 
+  @RenderMapping(params = "action=home")
+  public String renderHome(PortletSession session, Model model){
+    log.debug("log search render phase, return main menu");
+    
+  List<Role> userRoles = authorizationInfoService.getUsersRoles("lok", LogUtils.getPicFromSession(session));
+    
+    if (AuthUtils.isOperationAllowed("AdminSystemLogFile", userRoles)) {
+      model.addAttribute("showMenu", true);
+    } else if (AuthUtils.isOperationAllowed("ViewAdminLogFile", userRoles)) {
+      model.addAttribute("redirectToSearch", true);
+    }
+    
+    model.addAttribute("search", false); //This means that search was NOT done
+    
+   
+    return "menu";
+  }
+  
   @RenderMapping
   public String render(PortletSession session,  Model model) {
     log.debug("Main Log controller");
     
-    model.addAttribute("user", LogUtils.getPicFromSession(session));
+   // model.addAttribute("user", LogUtils.getPicFromSession(session));
     
     // this is used for selecting which part of the page to show
     List<Role> userRoles = authorizationInfoService.getUsersRoles("lok", LogUtils.getPicFromSession(session));
@@ -46,7 +64,7 @@ public class LogController {
     } else if (AuthUtils.isOperationAllowed("ViewAdminLogFile", userRoles)) {
       model.addAttribute("redirectToSearch", true);
     }
-
+    
     return "menu";
   }
 

@@ -70,7 +70,7 @@ public class LogUtils {
       error[1] = "koku.lok.search.null.to";
     }
     
-    if(logtype.equalsIgnoreCase(LogConstants.LOG_NORMAL)){
+    if(LogConstants.LOG_NORMAL.equalsIgnoreCase(logtype)){
       if (criteria.getConcept() == null || criteria.getConcept().isEmpty()) {
         error[2] = "koku.lok.search.null.concept";
       }

@@ -2,14 +2,10 @@
 
 <portlet:renderURL var="archiveURL">
 	<portlet:param name="action" value="archiveLog" />
-	<portlet:param name="user" value="${user}" />
-	<portlet:param name="userRole" value="${userRole}" />
 </portlet:renderURL>
 
 <portlet:renderURL var="searchUserURL">
 	<portlet:param name="action" value="searchUser" />
-	<portlet:param name="user" value="${user}" />
-	<portlet:param name="userRole" value="${userRole}" />
 </portlet:renderURL>
 
 <portlet:renderURL var="searchLogViewsURL">

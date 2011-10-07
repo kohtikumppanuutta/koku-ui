@@ -31,6 +31,10 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import javax.xml.ws.soap.SOAPFaultException;
 
+import fi.koku.services.entity.authorizationinfo.util.AuthUtils;
+import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
+import fi.koku.services.entity.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
+import fi.koku.services.entity.authorizationinfo.v1.model.Role;
 import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;
 import fi.koku.services.utility.log.v1.LogEntryType;
@@ -51,6 +55,8 @@ public class LogSearchController {
 
   private static final Logger log = LoggerFactory.getLogger(LogSearchController.class);
 
+  private AuthorizationInfoService authorizationInfoService;
+  
   // Use log service
   private LogServicePortType logService;
 
@@ -62,6 +68,8 @@ public class LogSearchController {
     LogServiceFactory logServiceFactory = new LogServiceFactory(LogConstants.LOG_SERVICE_USER_ID,
         LogConstants.LOG_SERVICE_PASSWORD, LogConstants.LOG_SERVICE_ENDPOINT);
     logService = logServiceFactory.getLogService();
+    
+    authorizationInfoService = new AuthorizationInfoServiceDummyImpl();
   }
 
   // customize form data binding
@@ -80,13 +88,22 @@ public class LogSearchController {
 
   // portlet render phase
   @RenderMapping(params = "action=searchLog")
-  public String render(RenderRequest req, @RequestParam(value = "visited", required = false) String visited,
-      @ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria,
-      @RequestParam(value = "user") String user, @RequestParam(value = "userRole") String userRole, RenderResponse res,
-      Model model) {
+  public String render(PortletSession session, RenderRequest req, @RequestParam(value = "visited", required = false) String visited,
+      @ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, RenderResponse res, Model model) {
 
-    log.info("render searchLog");
-    log.debug("render user: " + user);
+    // get user pic and role
+    String userPic = LogUtils.getPicFromSession(session);
+      
+    List<Role> userRoles = authorizationInfoService.getUsersRoles("lok", userPic);
+    
+    log.debug("render searchLog");
+    // add a flag for allowing this user to see the operations on page search.jsp 
+    if (AuthUtils.isOperationAllowed("AdminSystemLogFile", userRoles)) {
+      log.debug("lisätään allowedToView");
+      model.addAttribute("allowedToView", true);
+    }
+    
+   
     // these are runtime constants, not given by the user!
     String startDateStr = lu.getDateString(1);
     String endDateStr = lu.getDateString(0);
@@ -102,19 +119,11 @@ public class LogSearchController {
         model.addAttribute("error0", errors[0]);
         model.addAttribute("error1", errors[1]);
         model.addAttribute("error2", errors[2]);
-        
-      //  log.debug(errors[0]+", "+errors[1]+", "+errors[2]);
-        
-        // if (LogConstants.REAL_LOG) {
-        // TODO: tähän kohtaan jokin virheenkäsittely?
-
+ 
         if(errors[0] ==null && errors[1] == null && errors[2] ==null){
           // get the entries from the database
-          model.addAttribute("entries", getLogEntries(criteria, user));
-          /*
-           * } else { //TODO: poista tämä! model.addAttribute("entries",
-           * getDemoLogEntries(criteria)); }
-           */
+          model.addAttribute("entries", getLogEntries(criteria, userPic));
+         
           model.addAttribute("searchParams", criteria);
           model.addAttribute("visited", "---");
         }
@@ -128,21 +137,15 @@ public class LogSearchController {
     }
     
     model.addAttribute("pic", criteria.getPic());
-    model.addAttribute("user", user);
-    model.addAttribute("userRole", userRole);
 
     return "search";
   }
 
-  // This is run after the customer has been searched and the user clicks
-  // 'Valitse'
+  // This is run after the customer has been searched and clicked
   // portlet action phase
   @ActionMapping(params = "action=searchLog")
   public void doSearch(@ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria, BindingResult result,
-      @RequestParam(value = "visited") String visited, @RequestParam(value = "user") String user,
-      @RequestParam(value = "userRole") String userRole, ActionResponse response) {
-
-    log.debug("user: " + user);
+      @RequestParam(value = "visited") String visited, ActionResponse response) {   
 
     // pass criteria to render phase
     if (visited != null) {
@@ -150,8 +153,6 @@ public class LogSearchController {
     }
     response.setRenderParameter("logSearchCriteria", criteriaSerializer.getAsText(criteria));
     response.setRenderParameter("action", "searchLog");
-    response.setRenderParameter("user", user);
-    response.setRenderParameter("userRole", userRole);
   }
 
   /**
@@ -191,7 +192,7 @@ public class LogSearchController {
       // call to log database
       AuditInfoType audit = new AuditInfoType();
       audit.setComponent("lok"); // FIXME
-      log.debug("set user pic: " + user);
+    
       // set pic that was got from the session
       audit.setUserId(user);
 
