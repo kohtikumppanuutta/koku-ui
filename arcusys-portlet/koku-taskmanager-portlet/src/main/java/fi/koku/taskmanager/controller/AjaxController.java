@@ -1,24 +1,6 @@
 package fi.koku.taskmanager.controller;
 
-import static fi.arcusys.koku.util.Constants.ATTR_CURRENT_PAGE;
-import static fi.arcusys.koku.util.Constants.ATTR_KEYWORD;
-import static fi.arcusys.koku.util.Constants.ATTR_MY_ACTION;
-import static fi.arcusys.koku.util.Constants.ATTR_ORDER_TYPE;
-import static fi.arcusys.koku.util.Constants.ATTR_TASK_LINK;
-import static fi.arcusys.koku.util.Constants.ATTR_TASK_TYPE;
-import static fi.arcusys.koku.util.Constants.ATTR_TOKEN;
-import static fi.arcusys.koku.util.Constants.ATTR_USERNAME;
-import static fi.arcusys.koku.util.Constants.JSON_EDITABLE;
-import static fi.arcusys.koku.util.Constants.JSON_RENDER_URL;
-import static fi.arcusys.koku.util.Constants.JSON_TASKS;
-import static fi.arcusys.koku.util.Constants.JSON_TASK_STATE;
-import static fi.arcusys.koku.util.Constants.JSON_TOKEN_STATUS;
-import static fi.arcusys.koku.util.Constants.JSON_TOTAL_ITEMS;
-import static fi.arcusys.koku.util.Constants.JSON_TOTAL_PAGES;
-import static fi.arcusys.koku.util.Constants.MY_ACTION_TASKFORM;
-import static fi.arcusys.koku.util.Constants.PREF_EDITABLE;
-import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_INVALID;
-import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_VALID;
+import static fi.arcusys.koku.util.Constants.*;
 
 import java.util.List;
 
@@ -53,7 +35,6 @@ import fi.arcusys.koku.util.TaskUtil;
 public class AjaxController extends AbstractController {
 	
 	private static Logger LOG = Logger.getLogger(AjaxController.class);
-	private static final String RESPONSE 		= "response";
 
 	/**
 	 * Shows ajax for retrieving intalio tasks

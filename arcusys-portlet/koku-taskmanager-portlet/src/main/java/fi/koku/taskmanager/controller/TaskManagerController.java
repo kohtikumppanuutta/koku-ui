@@ -24,7 +24,7 @@ import static fi.arcusys.koku.util.Constants.*;
 @RequestMapping(value = "VIEW")
 public class TaskManagerController {
 
-	Logger logger = Logger.getLogger(TaskManagerController.class);
+	Logger LOG = Logger.getLogger(TaskManagerController.class);
 
 	/**
 	 * Handles the portlet request to show default page
@@ -108,24 +108,25 @@ public class TaskManagerController {
 					//String username = "Kalle Kuntalainen";
 					// FIXME: Okay.. How to get proper user password?
 					// Fix also koku-navi-portlet AjaxController request counter which uses same method
-					String username = "koku/"+userid;
+					String username = INTALIO_GROUP_PREFIX + userid;
 					String password = "test";
 					token = taskhandle.getTokenByUser(username, password);
 					portletSession.setAttribute(ATTR_TOKEN, token);
 					portletSession.setAttribute(ATTR_USERNAME, username);
+					LOG.warn("Intalio username: '" + username + "' Password:  '" + password + "' Intalio token: '" + token + "'");
 				}
-				logger.info("Login user:" + userid);
+				LOG.info("Login user:" + userid);
 			}
 
 		} catch (Exception e) {
-			logger.error("Exception when getting user id");
+			LOG.error("Exception when getting user id");
 		}
 		
 		if (token != null) {
-			logger.info("Intalio token is valid!");
+			LOG.info("Intalio token is valid! Token: '"+ token +"'");
 			return true;
 		} else {
-			logger.info("Intalio token is invalid!");
+			LOG.info("Intalio token is invalid!");
 			return false;
 		}
 	}
