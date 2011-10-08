@@ -24,6 +24,7 @@ import fi.koku.kks.model.EntryValue;
 import fi.koku.kks.model.KKSCollection;
 import fi.koku.kks.model.KksService;
 import fi.koku.kks.model.Person;
+import fi.koku.kks.model.Version;
 import fi.koku.kks.ui.common.utils.Utils;
 import fi.koku.services.entity.kks.v1.KksEntryClassType;
 
@@ -55,6 +56,12 @@ public class CollectionController {
     model.addAttribute("authorized", kksService.getAuthorizedRegistries(Utils.getPicFromSession(session)));
     model.addAttribute("master", master);
     model.addAttribute("empty_collection", c.getEntries().size() == 0);
+
+    if (!model.containsAttribute("version")) {
+      Version v = new Version();
+      v.setName(c.getName());
+      model.addAttribute("version", v);
+    }
 
     return "collection";
   }

@@ -46,13 +46,12 @@ public class ChildController {
 
     response.setRenderParameter("action", "showChild");
     response.setRenderParameter("pic", child.getPic());
-    getCommandObject();
     sessionStatus.setComplete();
   }
 
   @RenderMapping(params = "action=showChild")
-  public String show(PortletSession session, @ModelAttribute(value = "child") Person child,
-      @ModelAttribute(value = "creation") Creation creation, RenderResponse response, Model model) {
+  public String show(PortletSession session, @ModelAttribute(value = "child") Person child, RenderResponse response,
+      Model model) {
     LOG.info("show child");
 
     String pic = Utils.getPicFromSession(session);
@@ -63,7 +62,10 @@ public class ChildController {
     model.addAttribute("consents", kksService.getConsentRequests(child.getPic()));
     model.addAttribute("registries", kksService.getAuthorizedRegistries(pic));
 
-    creation.setName("");
+    if (!model.containsAttribute("creation")) {
+      model.addAttribute("creation", new Creation());
+    }
+
     return "child";
   }
 
@@ -76,7 +78,7 @@ public class ChildController {
 
     response.setRenderParameter("action", "showChild");
     response.setRenderParameter("pic", child.getPic());
-    getCommandObject();
+    // getCommandObject();
     sessionStatus.setComplete();
   }
 
@@ -92,10 +94,10 @@ public class ChildController {
     return kksService.searchCustomer(pic, Utils.getPicFromSession(session));
   }
 
-  @ModelAttribute("creation")
-  public Creation getCommandObject() {
-    LOG.debug("get creation command object");
-    return new Creation();
-  }
+  // @ModelAttribute("creation")
+  // public Creation getCommandObject() {
+  // LOG.debug("get creation command object");
+  // return new Creation();
+  // }
 
 }

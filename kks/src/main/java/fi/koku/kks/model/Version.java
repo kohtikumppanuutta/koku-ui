@@ -4,24 +4,10 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-/**
- * Class for holding information for collection creation
- * 
- * @author tuomape
- * 
- */
-public class Creation implements Validator {
+public class Version implements Validator {
 
   private String name;
-  private String field;
-
-  public String getField() {
-    return field;
-  }
-
-  public void setField(String field) {
-    this.field = field;
-  }
+  private boolean clear;
 
   public String getName() {
     return name;
@@ -31,15 +17,26 @@ public class Creation implements Validator {
     this.name = name;
   }
 
+  public boolean isClear() {
+    return clear;
+  }
+
+  public boolean getClear() {
+    return clear;
+  }
+
+  public void setClear(boolean clear) {
+    this.clear = clear;
+  }
+
   @Override
   public boolean supports(Class<?> clazz) {
-    return Creation.class.isAssignableFrom(clazz);
+    return Version.class.isAssignableFrom(clazz);
   }
 
   @Override
   public void validate(Object target, Errors errors) {
     ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty.creation.name");
-    ValidationUtils.rejectIfEmptyOrWhitespace(errors, "field", "NotEmpty.creation.field");
   }
 
 }

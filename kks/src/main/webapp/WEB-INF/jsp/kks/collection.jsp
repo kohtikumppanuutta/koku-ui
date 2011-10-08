@@ -36,28 +36,35 @@
 
     <div class="kks-left">
     <div class="kks-collection">
+    		<div class="error-bindings">
+				<spring:hasBindErrors name="version">
+			     <spring:bind path="version.*">
+			       <c:forEach var="error" items="${status.errorMessages}">
+			         <div class="error"><c:out value="${error}"/></div>
+			       </c:forEach>
+			     </spring:bind>
+				</spring:hasBindErrors>
+			</div>
                 <c:if test="${ sessionScope.ammattilainen && !collection.versioned }">
                     <a class="create"> <spring:message code="ui.kks.new.version" /><span
                         class="kks-close"><spring:message code="ui.kks.hide" /> </span> </a>
                     <div class="kks-fields" style="display: none;">
           
-                        <form:form name="newVersionForm"  method="post" action="${createVersionURL}">
+                        <form:form name="newVersionForm" commandName="version" method="post" action="${createVersionURL}">
                                 <input type="hidden" id="id" name="id" value="${ collection.id }"/>
                                 <div class="portlet-form-field-label"><spring:message code="ui.kks.contract.name" /></div>
-                                <div class="portlet-form-field" style="width: 98%"><input  class="portlet-form-input-field" type="text" id="name" name="name" style="width: 100%" value="${ collection.name }"/>
-                                 
+                                <div class="portlet-form-field">
+                                	<form:input path="name" maxlength="250" size="70" class="portlet-form-input-field"  />                                 
                                 </div>
                                 <div class="portlet-form-field-label">
-                                   <span class="portlet-form-field"><input class="portlet-form-input-field" type="checkbox" id="clean" name="clean" value="true"/>
-                                    <label class="portlet-form-field-label" for="clean"> <spring:message code="ui.kks.clear.fields" /> </label>
+                                   <span class="portlet-form-field"><form:checkbox path="clear" class="portlet-form-input-field" />
+                                    <label class="portlet-form-field-label" for="clear"> <spring:message code="ui.kks.clear.fields" /> </label>
                                    </span>
-                                </div>
-                                                                 
+                                </div>                                                                 
                                 <span class="kks-right">
                                 <input type="submit" class="portlet-form-button"
                                 value="<spring:message code="ui.kks.contract.create"/>">
                                 </span>
-
                         </form:form>
 
                     </div>
@@ -204,13 +211,13 @@
 	                                            </c:when>
 	                                            <c:when test="${ type.dataType eq text.name }">
 	                                                <div class="portlet-form-field" >
-	                                                    <form:input title="${type.description }" class="portlet-form-input-field"
+	                                                    <form:input maxlength="2000" title="${type.description }" class="portlet-form-input-field"
 	                                                        path="entries['${type.id}'].firstValue.value" />
 	                                                </div>
 	                                            </c:when>
 	                                            <c:otherwise>
 	                                                <div class="portlet-form-field">                                                    
-	                                                        <form:textarea class="portlet-form-input-field" title="${type.description}" 
+	                                                        <form:textarea maxlength="2000" class="portlet-form-input-field" title="${type.description}" 
 	                                                            path="entries['${type.id}'].firstValue.value" /> 
 	                                                </div>
 	                                            </c:otherwise>
@@ -224,7 +231,7 @@
                                         
                                         <c:choose>
                                             <c:when
-                                                test="${ empty collection.entries[type.id] || empty collection.entries[type.id].value }">
+                                                test="${ empty collection.entries[type.id] || empty collection.entries[type.id].firstValue.value }">
                                                 <span class="kks-read-only-text">-</span>
                                             </c:when>
                                             <c:otherwise>
@@ -275,6 +282,27 @@
 <script type="text/javascript"
 	src="http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.4.js"></script>
 <script type="text/javascript">
+
+window.onload = function() { 
+	  var txts = document.getElementsByTagName('TEXTAREA') 
+
+	  for(var i = 0, l = txts.length; i < l; i++) {
+	    if(/^[0-9]+$/.test(txts[i].getAttribute("maxlength"))) { 
+	      var func = function() { 
+	        var len = parseInt(this.getAttribute("maxlength"), 10); 
+
+	        if(this.value.length > len) { 
+	          this.value = this.value.substr(0, len); 
+	          return false; 
+	        } 
+	      }
+
+	      txts[i].onkeyup = func;
+	      txts[i].onblur = func;
+	    } 
+	  } 
+	}
+
 	$(document).ready(function() {
 
 		$("a.create").click(function() {

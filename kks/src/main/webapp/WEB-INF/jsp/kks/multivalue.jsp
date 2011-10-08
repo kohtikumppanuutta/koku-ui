@@ -74,7 +74,7 @@
 				</c:if>
 				
 				<div class="portlet-form-field">
-                	<form:textarea path="value" id="value" class="portlet-form-input-field" title="${type.description }" name="value"/>
+                	<form:textarea maxlength="2000" path="value" id="value" class="portlet-form-input-field" title="${type.description }" name="value"/>
             	</div>
 
 			<span class="kks-right"> 			
@@ -90,3 +90,26 @@
 
 </div>
 </div>
+
+<script type="text/javascript">
+
+window.onload = function() { 
+	  var txts = document.getElementsByTagName('TEXTAREA') 
+
+	  for(var i = 0, l = txts.length; i < l; i++) {
+	    if(/^[0-9]+$/.test(txts[i].getAttribute("maxlength"))) { 
+	      var func = function() { 
+	        var len = parseInt(this.getAttribute("maxlength"), 10); 
+
+	        if(this.value.length > len) { 
+	          this.value = this.value.substr(0, len); 
+	          return false; 
+	        } 
+	      }
+
+	      txts[i].onkeyup = func;
+	      txts[i].onblur = func;
+	    } 
+	  } 
+	}
+</script>

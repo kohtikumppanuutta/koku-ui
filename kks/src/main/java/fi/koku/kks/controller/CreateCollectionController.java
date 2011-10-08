@@ -19,6 +19,7 @@ import fi.koku.kks.model.Creatable;
 import fi.koku.kks.model.Creation;
 import fi.koku.kks.model.KksService;
 import fi.koku.kks.model.Person;
+import fi.koku.kks.model.Version;
 import fi.koku.kks.ui.common.State;
 import fi.koku.kks.ui.common.utils.Utils;
 
@@ -39,38 +40,51 @@ public class CreateCollectionController {
 
   @ActionMapping(params = "action=createNewVersion")
   public void createVersion(PortletSession session, @ModelAttribute(value = "child") Person child,
-      @RequestParam String id, @RequestParam String name, @RequestParam(required = false) String clean,
-      ActionResponse response, SessionStatus sessionStatus) {
+      @RequestParam String id, Version version, BindingResult result, ActionResponse response,
+      SessionStatus sessionStatus) {
 
-    LOG.debug("create new version");
+    version.validate(version, result);
+    if (!result.hasErrors()) {
+      LOG.debug("create new version");
+      String collection = kksService.createKksCollectionVersion(version.getName(), id, child.getPic(),
+          version.isClear(), Utils.getPicFromSession(session));
 
-    String collection = kksService.createKksCollectionVersion(name, id, child.getPic(), Boolean.valueOf(clean),
-        Utils.getPicFromSession(session));
-
-    response.setRenderParameter("action", "showCollection");
-    response.setRenderParameter("pic", child.getPic());
-    response.setRenderParameter("collection", collection);
-
-    sessionStatus.setComplete();
+      version.setClear(false);
+      response.setRenderParameter("action", "showCollection");
+      response.setRenderParameter("pic", child.getPic());
+      response.setRenderParameter("collection", collection);
+      sessionStatus.setComplete();
+    } else {
+      response.setRenderParameter("action", "showCollection");
+      response.setRenderParameter("pic", child.getPic());
+      response.setRenderParameter("collection", id);
+    }
   }
 
   @ActionMapping(params = "action=createCollection")
-  public void create(PortletSession session, @ModelAttribute(value = "child") Person child,
-      @ModelAttribute(value = "creation") Creation creation, BindingResult bindingResult, ActionResponse response,
-      SessionStatus sessionStatus) {
+  public void create(PortletSession session, @ModelAttribute(value = "child") Person child, Creation creation,
+      BindingResult bindingResult, ActionResponse response, SessionStatus sessionStatus) {
 
     LOG.debug("create collection");
 
-    Creatable a = Creatable.create(creation.getField());
-    String name = "".equals(creation.getName()) ? a.getName() : creation.getName();
-    String collection = kksService.createKksCollection(name, a.getId(), child.getPic(),
-        Utils.getPicFromSession(session));
+    creation.validate(creation, bindingResult);
+    if (!bindingResult.hasErrors()) {
 
-    response.setRenderParameter("action", "showChild");
-    response.setRenderParameter("pic", child.getPic());
-    creation.setName("");
-    creation.setField("");
-    sessionStatus.setComplete();
+      Creatable a = Creatable.create(creation.getField());
+      String name = "".equals(creation.getName()) ? a.getName() : creation.getName();
+      String collection = kksService.createKksCollection(name, a.getId(), child.getPic(),
+          Utils.getPicFromSession(session));
+
+      creation.setField("");
+      creation.setName("");
+      response.setRenderParameter("action", "showChild");
+      response.setRenderParameter("pic", child.getPic());
+      sessionStatus.setComplete();
+    } else {
+      response.setRenderParameter("action", "showChild");
+      response.setRenderParameter("pic", child.getPic());
+    }
+
   }
 
   @ModelAttribute("child")
@@ -79,11 +93,11 @@ public class CreateCollectionController {
     return kksService.searchCustomer(pic, Utils.getPicFromSession(session));
   }
 
-  @ModelAttribute("creation")
-  public Creation getCommandObject() {
-    LOG.debug("get creation command object");
-    return new Creation();
-  }
+  // @ModelAttribute("creation")
+  // public Creation getCommandObject() {
+  // LOG.debug("get creation command object");
+  // return new Creation();
+  // }
 
   @ActionMapping(params = "action=activate")
   public void activate(PortletSession session, @ModelAttribute(value = "child") Person child,

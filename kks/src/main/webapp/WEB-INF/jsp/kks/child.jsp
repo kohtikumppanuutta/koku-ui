@@ -52,7 +52,17 @@
 		<spring:message code="ui.kks.title" />
 	</h1>
 
-	<div class="kks-table">
+	<div class="error-bindings">
+		<spring:hasBindErrors name="creation">
+	     <spring:bind path="creation.*">
+	       <c:forEach var="error" items="${status.errorMessages}">
+	         <div class="error"><c:out value="${error}"/></div>
+	       </c:forEach>
+	     </spring:bind>
+		</spring:hasBindErrors>
+	</div>
+	<div class="kks-table">	
+
 		<table class="portlet-table-body" width="100%" border="0">
 			<tr>
 				<th><spring:message code="ui.kks.collection" /></th>
@@ -80,14 +90,14 @@
 							<portlet:param name="pic" value="${child.pic}" />
 							<portlet:param name="collection" value="${collection.id}" />
 						</portlet:renderURL>">
-										<strong>${ collection.name }</strong> </a> </span></td>
-							<td>${ collection.modifierFullName } <fmt:formatDate
+										<strong><c:out value="${ collection.name }"/></strong> </a> </span></td>
+							<td><c:out value="${collection.modifierFullName}"/> <fmt:formatDate
 									pattern="HH:mm:ss dd.MM.yyyy" value="${collection.creationTime}" />
 							</td>
 
 							<c:if test="${ sessionScope.ammattilainen }">
 								<td><c:choose>
-										<c:when test="${collection.state.active }">
+										<c:when test="${collection.state.active}">
 											<spring:message code="ui.kks.active" />
 											<span class="kks-link"> <a
 												href="
@@ -227,7 +237,10 @@
 						<form:form name="creationForm" commandName="creation"
 							method="post" action="${creationActionUrl}">
    
-								<div class="portlet-form-field-label"><spring:message code="ui.kks.contract.type" /></div>
+								<div class="portlet-form-field-label"><spring:message code="ui.kks.contract.type" />
+								
+								<form:errors path="field" />
+								</div>
 
     
 								<span class="portlet-form-field"> <form:select id="kks.select"
@@ -246,8 +259,9 @@
 
 										</c:forEach>
 									</form:select> </span>
-								<div class="portlet-form-field-label"><spring:message code="ui.kks.contract.name" /></div>
-								<span class="portlet-form-field"><form:input  id="kks.name" path="name" size="70" />
+								<div class="portlet-form-field-label"><spring:message code="ui.kks.contract.name" />
+								<form:errors path="name" /></div>
+								<span class="portlet-form-field"><form:input maxlength="250" id="kks.name" path="name" size="70" />
 								</span>
 							
 
