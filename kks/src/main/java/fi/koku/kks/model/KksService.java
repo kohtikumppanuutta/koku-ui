@@ -18,6 +18,9 @@ import fi.koku.kks.ui.common.utils.CollectionComparator;
 import fi.koku.kks.ui.common.utils.Constants;
 import fi.koku.portlet.filter.userinfo.UserInfo;
 import fi.koku.portlet.filter.userinfo.service.impl.UserInfoServiceLocalDummyImpl;
+import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
+import fi.koku.services.entity.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
+import fi.koku.services.entity.authorizationinfo.v1.model.Registry;
 import fi.koku.services.entity.community.v1.CommunitiesType;
 import fi.koku.services.entity.community.v1.CommunityQueryCriteriaType;
 import fi.koku.services.entity.community.v1.CommunityServiceFactory;
@@ -45,9 +48,6 @@ import fi.koku.services.entity.kks.v1.KksServicePortType;
 import fi.koku.services.entity.kks.v1.KksTagNamesType;
 import fi.koku.services.entity.kks.v1.KksType;
 import fi.koku.services.entity.kks.v1.ServiceFault;
-import fi.koku.services.entity.userinfo.v1.UserInfoService;
-import fi.koku.services.entity.userinfo.v1.impl.UserInfoServiceDummyImpl;
-import fi.koku.services.entity.userinfo.v1.model.Registry;
 
 /**
  * Service demoa varten
@@ -103,7 +103,7 @@ public class KksService {
   }
 
   public Map<String, Registry> getAuthorizedRegistries(String user) {
-    UserInfoService uis = new UserInfoServiceDummyImpl();
+    AuthorizationInfoService uis = new AuthorizationInfoServiceDummyImpl();
     Map<String, Registry> tmp = new HashMap<String, Registry>();
     List<Registry> register = uis.getUsersAuthorizedRegistries(user);
     for (Registry r : register) {

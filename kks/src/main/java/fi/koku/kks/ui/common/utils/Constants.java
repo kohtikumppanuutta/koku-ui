@@ -1,5 +1,7 @@
 package fi.koku.kks.ui.common.utils;
 
+import fi.koku.settings.KoKuPropertiesUtil;
+
 public final class Constants {
 
   private static final String LINE_BREAK = "</br>";
@@ -8,7 +10,7 @@ public final class Constants {
 
   }
 
-  final public static String ENDPOINT = "http://localhost:8180";
+  final public static String ENDPOINT = KoKuPropertiesUtil.get("kks.service.endpointaddress");
 
   final public static String CUSTOMER_SERVICE_USER_ID = "marko";
   final public static String CUSTOMER_SERVICE_PASSWORD = "marko";
