@@ -1,18 +1,16 @@
 package com.ixonos.koku.pyh;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
@@ -325,7 +323,7 @@ public class PyhDemoService {
   /**
    * Query persons by name, PIC and customer ID and stores them in the searchedUsers list.
    */
-  public void searchUsers(String surname, String customerPic, String customerID, String currentUserPic) {
+  public void searchUsers(String surname, String customerPic, /*String customerID,*/ String currentUserPic) {
     
     // this search can return only one result because search criteria includes PIC
     
@@ -628,10 +626,23 @@ public class PyhDemoService {
         sendParentAdditionMessage(communityId, memberToAddPic, userPic, communityRole);
       } else if (CommunityRole.CHILD.equals(communityRole) && recipients.size() == 0) {
         // we don't have guardian information for the child so we can't send the request
-        
-        // TODO: send email to support and inform that guardianship information is missing for this child
-        log.info("TESTING: Child's guardianship information not found!");
         childsGuardianshipInformationNotFound = true;
+        
+        // TODO: move mail addresses into configuration file
+        
+        String messageSubject = "KoKu: puutteelliset tiedot järjestelmässä";
+        String messageText = "Järjestelmästä ei löydy lapsen huoltajatietoja. Lapsen HETU: " + memberToAddPic;
+        
+        SimpleMailMessage mailMessage = new SimpleMailMessage(this.templateMessage);
+        mailMessage.setFrom("yllapito@kohtikumppanuutta.fi");
+        mailMessage.setTo("mikko.hurula@ixonos.com");
+        mailMessage.setSubject(messageSubject);
+        mailMessage.setText(messageText);
+        try {
+          this.mailSender.send(mailMessage);
+        } catch (MailException me) {
+          log.error("PyhDemoService.addPersonsAsFamilyMembers: sending message to KoKu support failed!", me);
+        }
         
       } else if (recipients.size() == 0) {
         insertInto(userPic, memberToAddPic, communityRole);

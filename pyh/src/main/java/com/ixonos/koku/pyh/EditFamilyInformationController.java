@@ -187,8 +187,7 @@ public class EditFamilyInformationController {
     
     // call service to query users,
     // users are returned as a model attribute object searchedUsers
-    // TODO: what is the correct search criteria?
-    pyhDemoService.searchUsers(surname, pic, userPic /*customer id == user pic*/, userPic);
+    pyhDemoService.searchUsers(surname, pic /*, userPic /*customer id == user pic*/, userPic);
     response.setRenderParameter("action", "editFamilyInformationWithSearchResults");
   }
 
