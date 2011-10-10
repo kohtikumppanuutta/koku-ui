@@ -219,24 +219,23 @@
 
 
 <div id="koku-navigation">
-	<a href="#"><img src="<%= request.getContextPath() %>/images/kklogo.jpg" width="189"
-		height="59" />
+	<a href="#"><img src="<%= request.getContextPath() %>/images/kklogo.jpg" width="189" height="59" />
 	</a>
 	<ul class="main">
-	
+		
 		<!--  VIESTIT -->
 		<li><a href="javascript:void(0)" >Etusivu</a></li>
 		<!-- For citizen in Gatein portal-->
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
 		<li id="kks"><a href="/portal/private/classic/KKS">Sopimukset ja suunnitelmat</a>
-		<li id="pyh"><a href="/portal/private/classic/PYH" >Omat tiedot</a></li>
-		<li id="lok"><a href="/portal/private/classic/LOK" >Lokihallinta</a></li>
+		<li id="pyh"><a href="/portal/private/classic/PYH">Omat tiedot</a></li>
+		<li id="lok"><a href="/portal/private/classic/LOK">Lokihallinta</a></li>
 		</c:if>
 		<!-- For employee in Jboss portal -->
 		<c:if test="${fn:contains(naviURL, '/default/')}">
 		<li id="kks"><a href="/portal/auth/portal/default/KKS">Sopimukset ja suunnitelmat</a>
-		<li id="pyh"><a href="/portal/auth/portal/default/PYH" >Omat tiedot</a></li>
-		<li id="lok"><a href="/portal/auth/portal/default/LOK" >Lokihallinta</a></li>
+		<li id="pyh"><a href="/portal/auth/portal/default/PYH">Omat tiedot</a></li>
+		<li id="lok"><a href="/portal/auth/portal/default/LOK">Lokihallinta</a></li>
 		</c:if>
 		
 		<li><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')" >Viestit</a>
@@ -245,11 +244,11 @@
 				<c:if test="${fn:contains(naviURL, '/default/')}">
 				<li id="msg_new"><a href="<%= defaultPath %>/Message/NewMessage">Uusi viesti</a> </li>
 				</c:if>
-				<li id="msg_inbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')">Saapuneet <span id="inbox_num" class="message_num"></span></a></li>
+				<li id="msg_inbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')">Saapuneet</a><span id="inbox_num" class="message_num"></span></li>
 				<li id="msg_outbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_outbox')">Lähetetyt</a></li>
 				<li><a href="javascript:void(0)" onclick="showArchiveUI()">Arkistoidut</a>
 					<ul id="archive-part">
-						<li id="msg_archive_inbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_archive_inbox')">Saapuneet <span id="archive_inbox_num" class="message_num"></span></a></li>
+						<li id="msg_archive_inbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_archive_inbox')">Saapuneet</span></a><span id="archive_inbox_num" class="message_num"></span></li>
 						<li id="msg_archive_outbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_archive_outbox')">Lähetetyt</a></li>
 					</ul>
 				</li>
@@ -261,7 +260,7 @@
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
 		<li><a href="#">Pyynnöt</a>
 			<ul class="child">
-				<li id="req_valid_request"><a href="<%= defaultPath %>/Message/ValidRequest">Saapuneet</a><span id="requests_num" class="message_num"></li>
+				<li id="req_valid_request"><a href="<%= defaultPath %>/Message/ValidRequest">Saapuneet</a><span id="requests_num" class="message_num"></span></li>
 				<li id="<%=Constants.TASK_TYPE_REQUEST_REPLIED %>"><a href="javascript:void(0)" onclick="navigateToPage('<%=Constants.TASK_TYPE_REQUEST_REPLIED %>')">Vastatut</a></li>
 				<li id="<%=Constants.TASK_TYPE_REQUEST_OLD %>"><a href="javascript:void(0)" onclick="navigateToPage('<%=Constants.TASK_TYPE_REQUEST_OLD %>')">Vanhat</a></li>
 			</ul>
@@ -288,7 +287,7 @@
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
 		<li><a href="#">Tapaamiset</a>
 			<ul class="child">
-				<li id="<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN%>')">Vastausta odottavat</a><span id="appointments_num" class="message_num"></li>
+				<li id="<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN%>')">Vastausta odottavat</a><span id="appointments_num" class="message_num"></span></li>
 				<li id="<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN%>')">Vastatut</a></li>
 				<li id="<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD%>')">Vanhat</a></li>
 			</ul>
@@ -309,7 +308,7 @@
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
 			<li><a href="#">Suostumukset</a>
 				<ul class="child">
-					<li id="<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>')">Saapuneet</a><span id="consents_num" class="message_num"></li>
+					<li id="<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>')">Saapuneet</a><span id="consents_num" class="message_num"></span></li>
 					<li id="<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS%>')">Vastatut</a></li>
 					<li id="<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD%>')">Vanhat</a></li>					
 				</ul>

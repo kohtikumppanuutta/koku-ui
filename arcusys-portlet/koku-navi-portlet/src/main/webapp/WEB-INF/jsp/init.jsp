@@ -5,5 +5,4 @@
 <%@ page import="javax.portlet.WindowState" %>
 <%@ page import="fi.arcusys.koku.util.Constants" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %> 
-
 <portlet:defineObjects />
