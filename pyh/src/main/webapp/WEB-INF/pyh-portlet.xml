@@ -32,4 +32,14 @@
     <property name="suffix" value=".jsp" />
   </bean>
 
+  <!-- email config -->
+  <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="host" value="smtp.mermit.fi"/>
+  </bean>
+
+  <bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
+    <property name="from" value="customerservice@mycompany.com"/>
+    <property name="subject" value="Your order"/>
+  </bean>
+
 </beans>

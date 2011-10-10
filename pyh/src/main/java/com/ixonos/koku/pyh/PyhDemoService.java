@@ -12,6 +12,9 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import com.ixonos.koku.pyh.model.Dependant;
@@ -52,6 +55,12 @@ public class PyhDemoService {
   
   private CustomerServicePortType customerService;
   private CommunityServicePortType communityService;
+  
+  @Autowired
+  private MailSender mailSender;
+  
+  @Autowired
+  private SimpleMailMessage templateMessage;
   
   private boolean debug = true;
   
@@ -1174,6 +1183,14 @@ public class PyhDemoService {
   
   public boolean getChildGuardianshipInformationNotFound() {
     return this.childsGuardianshipInformationNotFound;
+  }
+
+  public void setMailSender(MailSender mailSender) {
+    this.mailSender = mailSender;
+  }
+
+  public void setTemplateMessage(SimpleMailMessage templateMessage) {
+    this.templateMessage = templateMessage;
   }
   
 }
