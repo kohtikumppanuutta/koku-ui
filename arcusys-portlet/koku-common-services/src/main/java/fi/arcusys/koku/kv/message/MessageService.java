@@ -1,4 +1,4 @@
-package fi.arcusys.koku.kv;
+package fi.arcusys.koku.kv.message;
 
 import java.net.URL;
 import java.util.List;

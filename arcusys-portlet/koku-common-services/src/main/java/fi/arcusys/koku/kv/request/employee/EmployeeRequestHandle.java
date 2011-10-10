@@ -1,31 +1,32 @@
-package fi.arcusys.koku.kv;
+package fi.arcusys.koku.kv.request.employee;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import fi.arcusys.koku.AbstractHandle;
 import fi.arcusys.koku.kv.requestservice.Request;
 import fi.arcusys.koku.kv.requestservice.RequestSummary;
 import fi.arcusys.koku.kv.requestservice.RequestType;
+import fi.arcusys.koku.kv.model.KokuRequest;
 import fi.arcusys.koku.users.KokuUserService;
-import fi.arcusys.koku.util.MessageUtil;
-import fi.arcusys.koku.util.PortalRole;
 
 /**
  * Handles request related operations
  * @author Jinhua Chen
  * Aug 22, 2011
  */
-public class RequestHandle extends AbstractHandle {
+public class EmployeeRequestHandle extends AbstractHandle {
 	
-	private RequestService rs;
-	
+	private EmployeeRequestService rs;
+	private final KokuUserService userService;	
+
 	/**
 	 * Constructor and initialization
 	 */
-	public RequestHandle() {
-		rs = new RequestService();
+	public EmployeeRequestHandle() {
+		rs = new EmployeeRequestService();
+		userService = new KokuUserService();
+
 	}
 	
 	/**
@@ -40,30 +41,16 @@ public class RequestHandle extends AbstractHandle {
 	public List<KokuRequest> getRequests(String userId, String requestTypeStr, String subQuery, int startNum, int maxNum) {
 		RequestType requestType;
 		
-		if(requestTypeStr.equals("valid")) {
+		if (requestTypeStr.equals("valid")) {
 			requestType = RequestType.VALID;
-		}else {
+		} else {
 			requestType = RequestType.OUTDATED;
 		}
 		List<KokuRequest> reqList = new ArrayList<KokuRequest>();
 		List<RequestSummary> reqs = rs.getRequests(userId, requestType, subQuery, startNum, maxNum);
-		Iterator<RequestSummary> it = reqs.iterator();
-		KokuRequest req;
-		
-		while(it.hasNext()) {
-			RequestSummary reqSum = it.next();
-			req = new KokuRequest();
-			req.setRequestId(reqSum.getRequestId());
-			req.setSender(reqSum.getSender());
-			req.setSubject(reqSum.getSubject());
-			req.setRespondedAmount(reqSum.getRespondedAmount());
-			req.setMissedAmount(reqSum.getMissedAmout());
-			req.setCreationDate(MessageUtil.formatTaskDate(reqSum.getCreationDate()));
-			req.setEndDate(MessageUtil.formatTaskDate(reqSum.getEndDate()));
-		
-			reqList.add(req);
+		for (RequestSummary summary : reqs) {
+			reqList.add(new KokuRequest(summary));			
 		}
-		
 		return reqList;
 	}
 	
@@ -75,17 +62,7 @@ public class RequestHandle extends AbstractHandle {
 	public KokuRequest getKokuRequestById(String requestId) {	
 		long  reqId = (long) Long.parseLong(requestId);
 		Request req = rs.getRequestById(reqId);
-		KokuRequest kokuReq = new KokuRequest();
-		kokuReq.setRequestId(req.getRequestId());
-		kokuReq.setSender(req.getSender());
-		kokuReq.setSubject(req.getSubject());
-		kokuReq.setContent(req.getContent());
-		kokuReq.setCreationDate(MessageUtil.formatTaskDate(req.getCreationDate()));
-		kokuReq.setEndDate(MessageUtil.formatTaskDate(req.getEndDate()));
-		kokuReq.setRespondedList(req.getResponses());
-		kokuReq.setUnrespondedList(req.getNotResponded());
-		kokuReq.setQuestions(req.getQuestions());
-		
+		KokuRequest kokuReq = new KokuRequest(req);		
 		return kokuReq;
 	}
 	
@@ -96,14 +73,12 @@ public class RequestHandle extends AbstractHandle {
 	 * @return the total number of requests
 	 */
 	public int getTotalRequestsNum(String userId, String requestTypeStr) {
-		RequestType requestType;
-		
-		if(requestTypeStr.equals("valid")) {
+		RequestType requestType;		
+		if (requestTypeStr.equals("valid")) {
 			requestType = RequestType.VALID;
-		}else {
+		} else {
 			requestType = RequestType.OUTDATED;
-		}
-		
+		}		
 		return rs.getTotalRequestNum(userId, requestType);
 	}
 

@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import fi.arcusys.koku.kv.Message;
-import fi.arcusys.koku.kv.MessageHandle;
+import fi.arcusys.koku.kv.message.MessageHandle;
+import fi.arcusys.koku.kv.model.Message;
 import static fi.arcusys.koku.util.Constants.*;
 
 /**

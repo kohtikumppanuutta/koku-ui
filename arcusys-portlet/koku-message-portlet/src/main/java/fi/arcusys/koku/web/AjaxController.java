@@ -26,8 +26,9 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import fi.arcusys.koku.av.AvCitizenServiceHandle;
 import fi.arcusys.koku.av.AvEmployeeServiceHandle;
-import fi.arcusys.koku.kv.MessageHandle;
-import fi.arcusys.koku.kv.RequestHandle;
+import fi.arcusys.koku.kv.message.MessageHandle;
+import fi.arcusys.koku.kv.request.citizen.CitizenRequestHandle;
+import fi.arcusys.koku.kv.request.employee.EmployeeRequestHandle;
 import fi.arcusys.koku.tiva.KokuConsent;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
@@ -296,15 +297,15 @@ public class AjaxController extends AbstractController {
 	 * @param keyword keyword for filtering
 	 * @param field field for filtering
 	 * @param orderType order of tasks
-	 * @param userId the user to which the tasks belong 
+	 * @param userUid the user to which the tasks belong 
 	 * @return task information in Json format
 	 */
-	public JSONObject getJsonModel(String taskType, int page, String keyword, String field, String orderType, String userId) {
+	public JSONObject getJsonModel(String taskType, int page, String keyword, String field, String orderType, String userUid) {
 		JSONObject jsonModel = new JSONObject();
 		
 		LOG.debug("Ajax call");
 		
-		if(userId == null) {
+		if(userUid == null) {
 			jsonModel.put("loginStatus", "INVALID");
 			LOG.info("No logged in user");
 		} else {			
@@ -316,23 +317,29 @@ public class AjaxController extends AbstractController {
 			Object tasks = Collections.EMPTY_LIST; // Returned tasks
 			
 			if (taskType.equals(TASK_TYPE_REQUEST_VALID_EMPLOYEE)) { // for request (Pyynnöt) - employee Avoimet
-				RequestHandle reqHandle = new RequestHandle();
-				tasks = reqHandle.getRequests(userId, "valid", "", first, max);
-				totalTasksNum = reqHandle.getTotalRequestsNum(userId, "valid");
-			} else if (taskType.equals(TASK_TYPE_REQUEST_REPLIED)
-					|| taskType.equals(TASK_TYPE_REQUEST_OLD)
-					|| taskType.equals(TASK_TYPE_REQUEST_DONE_EMPLOYEE)) { // Pyynnöt - vastatut/vanhat
+				EmployeeRequestHandle reqHandle = new EmployeeRequestHandle();
+				tasks = reqHandle.getRequests(userUid, "valid", "", first, max);
+				totalTasksNum = reqHandle.getTotalRequestsNum(userUid, "valid");
+			} else if (taskType.equals(TASK_TYPE_REQUEST_REPLIED)) { // Pyynnöt - vastatut
+				CitizenRequestHandle handle = new CitizenRequestHandle();
+				tasks = handle.getRepliedRequests(userUid, first, max);
+				totalTasksNum = handle.getTotalRepliedRequests(userUid);
+			}  else if (taskType.equals(TASK_TYPE_REQUEST_OLD)) { // Pyynnöt - vanhat
+				CitizenRequestHandle handle = new CitizenRequestHandle();
+				tasks = handle.getOldRequests(userUid, first, max);
+				totalTasksNum = handle.getTotalOldRequests(userUid);
+			} else if (taskType.equals(TASK_TYPE_REQUEST_DONE_EMPLOYEE)) { // Pyynnöt - vastatut/vanhat
 				// TODO: Need proper WS service
 				tasks = Collections.EMPTY_LIST;
 				totalTasksNum = 0;				
-			}else if (taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED)) { // Virkailija: Selaa vastaanotettuja tietopyyntöjä
+			} else if (taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED)) { // Virkailija: Selaa vastaanotettuja tietopyyntöjä
 				KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
 				handle.setMessageSource(messageSource);
-				tasks = handle.getRepliedRequests(userId, keyword, first, max);
+				tasks = handle.getRepliedRequests(userUid, keyword, first, max);
 			} else if (taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_SENT)) { // Virkailija: Selaa lähetettyjä tietopyyntöjä
 				KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
 				handle.setMessageSource(messageSource);
-				tasks = handle.getSentRequests(userId, keyword, first, max);
+				tasks = handle.getSentRequests(userUid, keyword, first, max);
 			} else if (taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE)) { // ADMIN: Selaa tietopyyntöjä
 				KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
 				handle.setMessageSource(messageSource);
@@ -342,33 +349,33 @@ public class AjaxController extends AbstractController {
 					|| taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)) {	// Tapaamiset - Vastausta odottavat / vastatut 
 				AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
 				handle.setMessageSource(messageSource);
-				tasks = handle.getAppointments(userId, first, max, taskType);
-				totalTasksNum = handle.getTotalAppointmentsNum(userId, taskType);
+				tasks = handle.getAppointments(userUid, first, max, taskType);
+				totalTasksNum = handle.getTotalAppointmentsNum(userUid, taskType);
 			} else if(taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE) || taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE)) { // Tapaamiset - Avoimet / Valmiit
 				AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
 				handle.setMessageSource(messageSource);
-				tasks = handle.getAppointments(userId, first, max, taskType);
-				totalTasksNum = handle.getTotalAppointmentsNum(userId, taskType);
+				tasks = handle.getAppointments(userUid, first, max, taskType);
+				totalTasksNum = handle.getTotalAppointmentsNum(userUid, taskType);
 			} else if (taskType.equals(TASK_TYPE_CONSENT_ASSIGNED_CITIZEN)) { // consent (Valtakirja / Suostumus) Kansalaiselle saapuneet pyynnöt(/suostumukset) 
 				TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
 				tivaHandle.setMessageSource(messageSource);
-				tasks = tivaHandle.getAssignedConsents(userId, first, max);
-				totalTasksNum = tivaHandle.getTotalAssignedConsents(userId);
+				tasks = tivaHandle.getAssignedConsents(userUid, first, max);
+				totalTasksNum = tivaHandle.getTotalAssignedConsents(userUid);
 			} else if(taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS)) { // consent (Valtakirja / Suostumus) Kansalaiselle vastatut pyynnöt(/suostumukset) 
 				TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
 				tivaHandle.setMessageSource(messageSource);
-				tasks = tivaHandle.getOwnConsents(userId, first, max);
-				totalTasksNum = tivaHandle.getTotalOwnConsents(userId);
+				tasks = tivaHandle.getOwnConsents(userUid, first, max);
+				totalTasksNum = tivaHandle.getTotalOwnConsents(userUid);
 			} else if(taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD)) { // consent (Valtakirja / Suostumus) Kansalaiselle vastatut vanhentuneet pyynnöt(/suostumukset) 
 				TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
 				tivaHandle.setMessageSource(messageSource);
-				tasks = tivaHandle.getOwnOldConsents(userId, first, max);
-				totalTasksNum = tivaHandle.getTotalOwnOldConsents(userId);
+				tasks = tivaHandle.getOwnOldConsents(userUid, first, max);
+				totalTasksNum = tivaHandle.getTotalOwnOldConsents(userUid);
 			} else if(taskType.equals(TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS)) { // Virkailijan lähetetyt suostumus pyynnöt
 				TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
 				tivaHandle.setMessageSource(messageSource);
-				tasks = tivaHandle.getConsents(userId, keyword, field, first, max);
-				totalTasksNum = tivaHandle.getTotalConsents(userId, keyword, field);
+				tasks = tivaHandle.getConsents(userUid, keyword, field, first, max);
+				totalTasksNum = tivaHandle.getTotalConsents(userUid, keyword, field);
 			} else if(taskType.equals(TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS)) {	// Virkailija: Selaa asiakkaan valtakirjoja TIVA-13
 				if (keyword != null && !keyword.isEmpty()) {
 					KokuEmployeeWarrantHandle warrantHandle = new KokuEmployeeWarrantHandle();
@@ -386,18 +393,18 @@ public class AjaxController extends AbstractController {
 			} else if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_RECEIEVED)) {	// Kuntalainen: Valtuuttajana TIVA-11
 				KokuCitizenWarrantHandle warrantHandle = new KokuCitizenWarrantHandle();
 				warrantHandle.setMessageSource(messageSource);
-				tasks = warrantHandle.getReceivedAuthorizations(userId, first, max);
-				totalTasksNum = warrantHandle.getTotalReceivedAuthorizations(userId);
+				tasks = warrantHandle.getReceivedAuthorizations(userUid, first, max);
+				totalTasksNum = warrantHandle.getTotalReceivedAuthorizations(userUid);
 			} else if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_SENT)) {	// Kuntalainen: Valtuutettuna TIVA-11
 				KokuCitizenWarrantHandle warrantHandle = new KokuCitizenWarrantHandle();
 				warrantHandle.setMessageSource(messageSource);
-				tasks = warrantHandle.getSentWarrants(userId, first, max);
-				totalTasksNum = warrantHandle.getTotalSentAuthorizations(userId);
+				tasks = warrantHandle.getSentWarrants(userUid, first, max);
+				totalTasksNum = warrantHandle.getTotalSentAuthorizations(userUid);
 			} else { // for message
 				MessageHandle msgHandle = new MessageHandle();
 				msgHandle.setMessageSource(messageSource);
-				tasks = msgHandle.getMessages(userId, taskType, keyword, field, orderType, first, max);			
-				totalTasksNum = msgHandle.getTotalMessageNum(userId, taskType, keyword, field);
+				tasks = msgHandle.getMessages(userUid, taskType, keyword, field, orderType, first, max);			
+				totalTasksNum = msgHandle.getTotalMessageNum(userUid, taskType, keyword, field);
 			}
 			
 			totalPages = (totalTasksNum == 0) ? 1:(int) Math.ceil((double)totalTasksNum/numPerPage);
@@ -475,6 +482,49 @@ public class AjaxController extends AbstractController {
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_REQUEST);
 		renderUrlObj.setParameter( ATTR_REQUEST_ID, requestId);
+		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
+		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
+		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
+		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);	
+		try {
+			renderUrlObj.setWindowState(WindowState.NORMAL);
+		} catch (WindowStateException e) {
+			LOG.error("Create request render url failed");
+		}
+		String renderUrlString = renderUrlObj.toString();
+		
+		JSONObject jsonModel = new JSONObject();
+		jsonModel.put(JSON_RENDER_URL, renderUrlString);
+		modelmap.addAttribute(RESPONSE, jsonModel);
+		
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
+	
+	/**
+	 * Creates request response render url mainly for gatein portal, and keeps the page
+	 * parameters such as page id, task type, keyword
+	 * @param requestId request id
+	 * @param currentPage current page
+	 * @param taskType request task type
+	 * @param keyword keyword
+	 * @param orderType order type
+	 * @param modelmap ModelMap
+	 * @param request PortletRequest
+	 * @param response ResourceResponse
+	 * @return Request render url in Json format
+	 */
+	@ResourceMapping(value = "createResponseRenderUrl")
+	public String createResponseRenderUrl (
+			@RequestParam(value = "responseId") String responseId,
+			@RequestParam(value = "currentPage") String currentPage,
+			@RequestParam(value = "taskType") String taskType,
+			@RequestParam(value = "keyword") String keyword,
+			@RequestParam(value = "orderType") String orderType,
+			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
+		
+		PortletURL renderUrlObj = response.createRenderURL();
+		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_REQUEST_RESPONSE);
+		renderUrlObj.setParameter( ATTR_RESPONSE_ID, responseId);
 		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
 		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
 		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);

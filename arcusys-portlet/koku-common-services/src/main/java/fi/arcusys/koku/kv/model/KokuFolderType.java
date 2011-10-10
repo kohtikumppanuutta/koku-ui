@@ -1,4 +1,4 @@
-package fi.arcusys.koku.kv;
+package fi.arcusys.koku.kv.model;
 
 
 public enum KokuFolderType {

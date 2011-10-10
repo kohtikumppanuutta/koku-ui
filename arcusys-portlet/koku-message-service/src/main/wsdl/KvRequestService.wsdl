@@ -7,6 +7,7 @@
    <xs:element name='getRequestsResponse' type='tns:getRequestsResponse'/>
    <xs:element name='getTotalRequests' type='tns:getTotalRequests'/>
    <xs:element name='getTotalRequestsResponse' type='tns:getTotalRequestsResponse'/>
+
    <xs:complexType name='getRequestById'>
     <xs:sequence>
      <xs:element name='requestId' type='xs:long'/>
@@ -16,6 +17,7 @@
     <xs:sequence>
      <xs:element minOccurs='0' name='return' type='tns:request'/>
     </xs:sequence>
+
    </xs:complexType>
    <xs:complexType name='request'>
     <xs:complexContent>
@@ -25,17 +27,28 @@
        <xs:element maxOccurs='unbounded' minOccurs='0' name='notResponded' nillable='true' type='xs:string'/>
        <xs:element maxOccurs='unbounded' minOccurs='0' name='questions' nillable='true' type='tns:question'/>
        <xs:element maxOccurs='unbounded' minOccurs='0' name='responses' nillable='true' type='tns:response'/>
+
       </xs:sequence>
      </xs:extension>
     </xs:complexContent>
    </xs:complexType>
    <xs:complexType name='requestSummary'>
+    <xs:complexContent>
+     <xs:extension base='tns:requestShortSummary'>
+      <xs:sequence>
+       <xs:element name='missedAmout' type='xs:int'/>
+
+       <xs:element name='respondedAmount' type='xs:int'/>
+      </xs:sequence>
+     </xs:extension>
+    </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name='requestShortSummary'>
     <xs:sequence>
      <xs:element minOccurs='0' name='creationDate' type='xs:dateTime'/>
      <xs:element minOccurs='0' name='endDate' type='xs:dateTime'/>
-     <xs:element name='missedAmout' type='xs:int'/>
+
      <xs:element name='requestId' type='xs:long'/>
-     <xs:element name='respondedAmount' type='xs:int'/>
      <xs:element minOccurs='0' name='sender' type='xs:string'/>
      <xs:element minOccurs='0' name='subject' type='xs:string'/>
     </xs:sequence>
@@ -44,6 +57,7 @@
     <xs:sequence>
      <xs:element minOccurs='0' name='description' type='xs:string'/>
      <xs:element name='number' type='xs:int'/>
+
      <xs:element minOccurs='0' name='type' type='tns:questionType'/>
     </xs:sequence>
    </xs:complexType>
@@ -53,6 +67,7 @@
      <xs:element minOccurs='0' name='name' type='xs:string'/>
     </xs:sequence>
    </xs:complexType>
+
    <xs:complexType name='answer'>
     <xs:sequence>
      <xs:element minOccurs='0' name='answer' type='xs:string'/>
@@ -62,6 +77,7 @@
    </xs:complexType>
    <xs:complexType name='getRequests'>
     <xs:sequence>
+
      <xs:element minOccurs='0' name='user' type='xs:string'/>
      <xs:element minOccurs='0' name='requestType' type='tns:requestType'/>
      <xs:element minOccurs='0' name='subQuery' type='xs:string'/>
@@ -71,6 +87,7 @@
    </xs:complexType>
    <xs:complexType name='getRequestsResponse'>
     <xs:sequence>
+
      <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:requestSummary'/>
     </xs:sequence>
    </xs:complexType>
@@ -80,6 +97,7 @@
      <xs:element minOccurs='0' name='requestType' type='tns:requestType'/>
     </xs:sequence>
    </xs:complexType>
+
    <xs:complexType name='getTotalRequestsResponse'>
     <xs:sequence>
      <xs:element name='return' type='xs:int'/>
@@ -89,7 +107,9 @@
     <xs:restriction base='xs:string'>
      <xs:enumeration value='YES_NO'/>
      <xs:enumeration value='FREE_TEXT'/>
+
      <xs:enumeration value='MULTIPLE_CHOICE'/>
+     <xs:enumeration value='CALENDAR'/>
     </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name='requestType'>
@@ -97,6 +117,7 @@
      <xs:enumeration value='Valid'/>
      <xs:enumeration value='Outdated'/>
     </xs:restriction>
+
    </xs:simpleType>
   </xs:schema>
  </types>
@@ -106,6 +127,7 @@
  <message name='KokuRequestService_getTotalRequests'>
   <part element='tns:getTotalRequests' name='getTotalRequests'></part>
  </message>
+
  <message name='KokuRequestService_getRequests'>
   <part element='tns:getRequests' name='getRequests'></part>
  </message>
@@ -115,6 +137,7 @@
  <message name='KokuRequestService_getRequestById'>
   <part element='tns:getRequestById' name='getRequestById'></part>
  </message>
+
  <message name='KokuRequestService_getRequestsResponse'>
   <part element='tns:getRequestsResponse' name='getRequestsResponse'></part>
  </message>
@@ -124,6 +147,7 @@
    <output message='tns:KokuRequestService_getRequestByIdResponse'></output>
   </operation>
   <operation name='getRequests' parameterOrder='getRequests'>
+
    <input message='tns:KokuRequestService_getRequests'></input>
    <output message='tns:KokuRequestService_getRequestsResponse'></output>
   </operation>
@@ -133,6 +157,7 @@
   </operation>
  </portType>
  <binding name='KokuRequestServiceBinding' type='tns:KokuRequestService'>
+
   <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
   <operation name='getRequestById'>
    <soap:operation soapAction=''/>
@@ -142,6 +167,7 @@
    <output>
     <soap:body use='literal'/>
    </output>
+
   </operation>
   <operation name='getRequests'>
    <soap:operation soapAction=''/>
@@ -151,6 +177,7 @@
    <output>
     <soap:body use='literal'/>
    </output>
+
   </operation>
   <operation name='getTotalRequests'>
    <soap:operation soapAction=''/>
@@ -160,6 +187,7 @@
    <output>
     <soap:body use='literal'/>
    </output>
+
   </operation>
  </binding>
  <service name='KokuRequestService'>

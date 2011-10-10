@@ -26,7 +26,25 @@
 			var renderUrl = json["renderUrl"];
 			window.location = renderUrl;
 		});
-	}	
+	}
+	
+	//Creates a renderURL by ajax, to show the detailed request page
+	function showResponse(index) {
+		var task = pageObj.tasks[index];
+		var responseId = task["responseId"];
+	
+		var url = "<%= responseRenderURL %>";
+		url = formatUrl(url);
+		
+		jQuery.post(url, {responseId:responseId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+			keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+			var obj = eval('(' + data + ')');
+			var json = obj.response;
+			var renderUrl = json["renderUrl"];
+			window.location = renderUrl;
+		});
+	}
+	
 	//Creates a renderURL by ajax,to show the detailed appointment page
 	function showAppointment(index) {
 		var task = pageObj.tasks[index];

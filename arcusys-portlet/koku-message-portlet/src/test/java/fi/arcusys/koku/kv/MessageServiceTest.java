@@ -12,6 +12,8 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import fi.arcusys.koku.kv.message.MessageHandle;
+import fi.arcusys.koku.kv.message.MessageService;
 import fi.arcusys.koku.kv.messageservice.Criteria;
 import fi.arcusys.koku.kv.messageservice.Fields;
 import fi.arcusys.koku.kv.messageservice.FolderType;

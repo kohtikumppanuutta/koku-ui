@@ -26,9 +26,9 @@ import fi.arcusys.intalio.token.TokenService;
  */
 public class TaskManagementService {
 	
-	private Logger logger = Logger.getLogger(TaskManagementService.class);
-	private final  URL TMS_WSDL_LOCATION = getClass().getClassLoader().getResource("TaskManagement.wsdl");
-	private final  URL TOKEN_WSDL_LOCATION = getClass().getClassLoader().getResource("TokenService.wsdl");
+	private static final Logger logger = Logger.getLogger(TaskManagementService.class);
+	private final URL TMS_WSDL_LOCATION = getClass().getClassLoader().getResource("TaskManagement.wsdl");
+	private final URL TOKEN_WSDL_LOCATION = getClass().getClassLoader().getResource("TokenService.wsdl");
 	
 	/**
 	 * Constructor

@@ -33,6 +33,7 @@ public class Constants {
 	public static final String ATTR_TOKEN									= "USER_token";
 	public static final String ATTR_MESSAGE_ID								= "messageId";
 	public static final String ATTR_REQUEST_ID								= "requestId";
+	public static final String ATTR_RESPONSE_ID								= "responseId";
 	public static final String ATTR_APPOIMENT_ID							= "appointmentId";
 	public static final String ATTR_CONSENT_ID								= "consentId";
 	public static final String ATTR_AUTHORIZATION_ID						= "authorizationId";
@@ -52,6 +53,7 @@ public class Constants {
 	public static final String MY_ACTION_SHOW_TIPY							= "showTipy";
 	public static final String MY_ACTION_SHOW_NAVI							= "showNavi";
 	public static final String MY_ACTION_TASKFORM	 						= "taskform";
+	public static final String MY_ACTION_SHOW_REQUEST_RESPONSE				= "showResponse";
 
 	
 	/* ATTR_MY_TASK_TYPE parameter possible values. (Message-portlet) */
@@ -91,6 +93,7 @@ public class Constants {
                                                                         	
 	/* Message-portlet Views*/                                          	
 	public static final String VIEW_SHOW_REQUEST							= "showrequest";
+	public static final String VIEW_SHOW_RESPONSE							= "showresponse";
 	public static final String VIEW_SHOW_MESSAGE							= "showmessage";	
 	public static final String VIEW_SHOW_INTALIO_FORM						= "showIntalioForm";
 	public static final String VIEW_SHOW_CONSENT							= "showconsent";

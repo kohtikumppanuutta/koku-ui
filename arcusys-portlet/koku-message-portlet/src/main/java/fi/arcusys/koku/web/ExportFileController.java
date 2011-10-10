@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
-import fi.arcusys.koku.kv.KokuRequest;
-import fi.arcusys.koku.kv.RequestHandle;
+import fi.arcusys.koku.kv.model.KokuAnswer;
+import fi.arcusys.koku.kv.model.KokuQuestion;
+import fi.arcusys.koku.kv.model.KokuRequest;
+import fi.arcusys.koku.kv.model.KokuResponse;
+import fi.arcusys.koku.kv.request.employee.EmployeeRequestHandle;
 import fi.arcusys.koku.kv.requestservice.Answer;
 import fi.arcusys.koku.kv.requestservice.Question;
 import fi.arcusys.koku.kv.requestservice.Response;
@@ -42,7 +45,7 @@ public class ExportFileController {
 			ResourceRequest resourceRequest, ResourceResponse response) {
 		response.setContentType("text/csv; charset=utf-8");
 		response.setProperty("Content-Disposition", "attachment; filename=response.csv");
-		RequestHandle reqhandle = new RequestHandle();
+		EmployeeRequestHandle reqhandle = new EmployeeRequestHandle();
 		KokuRequest kokuRequest = reqhandle.getKokuRequestById(requestId);
 
 		try {
@@ -55,10 +58,10 @@ public class ExportFileController {
 				writer.newLine();
 				writer.write(addQuote()+",");
 
-				Iterator<Question> it_q = kokuRequest.getQuestions().iterator();
+				Iterator<KokuQuestion> it_q = kokuRequest.getQuestions().iterator();
 
 				while (it_q.hasNext()) {
-					Question q = it_q.next();
+					KokuQuestion q = it_q.next();
 					writer.write(addQuote(q.getDescription()) + "," +addQuote()+ ",");
 				}
 				writer.newLine();
@@ -69,15 +72,15 @@ public class ExportFileController {
 				}
 				writer.newLine();
 
-				Iterator<Response> it_res = kokuRequest.getRespondedList()
+				Iterator<KokuResponse> it_res = kokuRequest.getRespondedList()
 						.iterator();
 				while (it_res.hasNext()) {
-					Response res = it_res.next();
+					KokuResponse res = it_res.next();
 					writer.write(addQuote(res.getName()) + ",");
 
-					Iterator<Answer> it_ans = res.getAnswers().iterator();
+					Iterator<KokuAnswer> it_ans = res.getAnswers().iterator();
 					while (it_ans.hasNext()) {
-						Answer answer = it_ans.next();
+						KokuAnswer answer = it_ans.next();
 						writer.write(addQuote(answer.getAnswer()) + ","
 								+ addQuote(answer.getComment()) + ",");
 					}

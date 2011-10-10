@@ -1,4 +1,4 @@
-package fi.arcusys.koku.kv;
+package fi.arcusys.koku.kv.request.employee;
 
 import java.net.URL;
 import java.util.List;
@@ -13,7 +13,7 @@ import fi.arcusys.koku.kv.requestservice.RequestType;
  * @author Jinhua Chen
  * Aug 22, 2011
  */
-public class RequestService {
+public class EmployeeRequestService {
 	
 	public final URL REQUEST_WSDL_LOCATION = getClass().getClassLoader().getResource("KvRequestService.wsdl");
 	private KokuRequestService_Service rs;
@@ -21,7 +21,7 @@ public class RequestService {
 	/**
 	 * Constructor and initialization
 	 */
-	public RequestService() {
+	public EmployeeRequestService() {
 		this.rs = new KokuRequestService_Service(REQUEST_WSDL_LOCATION);
 	}
 	

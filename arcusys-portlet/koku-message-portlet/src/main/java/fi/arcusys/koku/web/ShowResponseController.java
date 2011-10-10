@@ -1,5 +1,11 @@
 package fi.arcusys.koku.web;
 
+import static fi.arcusys.koku.util.Constants.ATTR_CURRENT_PAGE;
+import static fi.arcusys.koku.util.Constants.ATTR_KEYWORD;
+import static fi.arcusys.koku.util.Constants.ATTR_ORDER_TYPE;
+import static fi.arcusys.koku.util.Constants.ATTR_TASK_TYPE;
+import static fi.arcusys.koku.util.Constants.VIEW_SHOW_RESPONSE;
+
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -10,31 +16,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import fi.arcusys.koku.kv.model.KokuRequest;
+import fi.arcusys.koku.kv.model.KokuResponseDetail;
 import fi.arcusys.koku.kv.request.citizen.CitizenRequestHandle;
-import fi.arcusys.koku.kv.request.employee.EmployeeRequestHandle;
 import fi.arcusys.koku.util.Constants;
-import static fi.arcusys.koku.util.Constants.*;
 
 
 /**
- * Shows request details page and store the current query information on the jsp page
+ * Shows request response details page and store the current query information on the jsp page
  * @author Jinhua Chen
  * Jul 29, 2011
  */
-@Controller("singleRequestController")
+@Controller("singleResponseController")
 @RequestMapping(value = "VIEW")
-public class ShowRequestController {
+public class ShowResponseController {
 	
 	/**
 	 * Shows request page
 	 * @param response RenderResponse
 	 * @return request page
 	 */
-	@RenderMapping(params = "myaction=showRequest")
+	@RenderMapping(params = "myaction=showResponse")
 	public String showPageView(RenderResponse response) {
-
-		return VIEW_SHOW_REQUEST;
+		return VIEW_SHOW_RESPONSE;
 	}
 		
 	/**
@@ -47,8 +50,8 @@ public class ShowRequestController {
 	 * @param request RenderRequest
 	 * @return request data model
 	 */
-	@ModelAttribute(value = "request")
-	public KokuRequest model(@RequestParam String requestId,
+	@ModelAttribute(value = "response")
+	public KokuResponseDetail model(@RequestParam String responseId,
 			@RequestParam String currentPage,@RequestParam String taskType, 
 			@RequestParam String keyword, @RequestParam String orderType,
 			RenderRequest request) {
@@ -59,15 +62,11 @@ public class ShowRequestController {
 		request.getPortletSession().setAttribute(ATTR_KEYWORD, keyword, PortletSession.APPLICATION_SCOPE);
 		request.getPortletSession().setAttribute(ATTR_ORDER_TYPE, orderType, PortletSession.APPLICATION_SCOPE);
 		
-		
-		KokuRequest kokuRequest = null;
-		if (taskType.equals(Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE)) {
-			EmployeeRequestHandle reqhandle = new EmployeeRequestHandle();
-			kokuRequest = reqhandle.getKokuRequestById(requestId);			
-		} 	
-		
-		return kokuRequest;
+		KokuResponseDetail details = null;
+		if (taskType.equals(Constants.TASK_TYPE_REQUEST_REPLIED)) {
+			CitizenRequestHandle handle = new CitizenRequestHandle();
+			details = handle.getResponseById(responseId);
+		}
+		return details;
 	}
-	
-
 }

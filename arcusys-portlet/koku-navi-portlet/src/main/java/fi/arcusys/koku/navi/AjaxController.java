@@ -19,8 +19,8 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import fi.arcusys.koku.av.AvCitizenServiceHandle;
 import fi.arcusys.koku.intalio.TaskHandle;
-import fi.arcusys.koku.kv.KokuFolderType;
-import fi.arcusys.koku.kv.MessageHandle;
+import fi.arcusys.koku.kv.message.MessageHandle;
+import fi.arcusys.koku.kv.model.KokuFolderType;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.users.UserIdResolver;
 import fi.arcusys.koku.util.PortalRole;

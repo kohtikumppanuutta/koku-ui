@@ -1,4 +1,4 @@
-package fi.arcusys.koku.kv;
+package fi.arcusys.koku.kv.message;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +18,8 @@ import fi.arcusys.koku.kv.messageservice.MessageStatus;
 import fi.arcusys.koku.kv.messageservice.MessageSummary;
 import fi.arcusys.koku.kv.messageservice.OrderBy;
 import fi.arcusys.koku.kv.messageservice.Type;
+import fi.arcusys.koku.kv.model.KokuFolderType;
+import fi.arcusys.koku.kv.model.Message;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**

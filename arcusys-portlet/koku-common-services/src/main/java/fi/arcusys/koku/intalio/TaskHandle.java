@@ -27,11 +27,14 @@ import static fi.arcusys.koku.util.Constants.*;
 
 public class TaskHandle {
 	
-	private Logger logger = Logger.getLogger(TaskHandle.class);
+	// TODO: We probably need some sort filter here?
+	public static final String TASKMGR_REQUESTS_FILTER = "";
+	private static final Logger logger = Logger.getLogger(TaskHandle.class);
+	
 	private String message;
 	private String participantToken;
 	private String username;
-
+	
 	/**
 	 * Constructor and initialization
 	 */
@@ -200,7 +203,7 @@ public class TaskHandle {
 	public int getRequestsTasksTotalNumber() {
 		int taskType = 1;
 		TaskManagementService taskMngServ = new TaskManagementService();
-		return Integer.valueOf(taskMngServ.getTotalTasksNumber(participantToken, TaskUtil.TASK_TYPE, createTotalNumSubQuery(taskType, "Valtakirja")));
+		return Integer.valueOf(taskMngServ.getTotalTasksNumber(participantToken, TaskUtil.TASK_TYPE, createTotalNumSubQuery(taskType, TASKMGR_REQUESTS_FILTER)));
 	}
 	
 	/**

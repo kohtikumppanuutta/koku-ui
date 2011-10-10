@@ -58,6 +58,9 @@
 <portlet:resourceURL var="requestRenderURL" id="createRequestRenderUrl">
 </portlet:resourceURL> 
 
+<portlet:resourceURL var="responseRenderURL" id="createResponseRenderUrl">
+</portlet:resourceURL> 
+
 <portlet:resourceURL var="appointmentRenderURL" id="createAppointmentRenderUrl">
 </portlet:resourceURL> 
 
@@ -207,7 +210,7 @@
 	 */
 	function presentTasks(tasks) {
 		var taskHtml = "";
-		if (pageObj.taskType == 'req_valid') { // for request
+		if (pageObj.taskType.indexOf('req_') == 0) { // for request
 			taskHtml += createRequestsTable(tasks);
 		} else if(pageObj.taskType.indexOf('app') == 0) { // for appointment
 			taskHtml += createAppoitmentsTable(tasks);
@@ -285,46 +288,81 @@
 	 * Create requests table in Html
 	 */
 	function createRequestsTable(tasks) {
+		
 		var taskHtml = "";
 		var formLink = "";
-		
-		taskHtml = '<table class="task-manager-table">'
-				+ '<tr class="task-manager-table trheader">'
-				+ '<td class="choose"><spring:message code="message.choose" /></td>'
-				+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
-				+ '<td>' + '<spring:message code="request.responded"/>' + '</td>'
-				+ '<td>' + '<spring:message code="request.missed"/>'+ '</td>'
-				+ '<td>' + '<spring:message code="request.start"/>'+ '</td>'
-				+ '<td>' + '<spring:message code="request.end"/>'+ '</td>'
-				+ '</tr>';
-				 
-		for ( var i = 0; i < tasks.length; i++) {
+		if (pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE %>") {
 			
-			if((i+1)%2 == 0) {
-				if(tasks[i]["messageStatus"] == 'unread') // for new messages
-					taskHtml += '<tr class="evenRow new">';
-				else
+			
+			taskHtml = '<table class="task-manager-table">'
+					+ '<tr class="task-manager-table trheader">'
+					+ '<td class="choose"><spring:message code="message.choose" /></td>'
+					+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
+					+ '<td>' + '<spring:message code="request.responded"/>' + '</td>'
+					+ '<td>' + '<spring:message code="request.missed"/>'+ '</td>'
+					+ '<td>' + '<spring:message code="request.start"/>'+ '</td>'
+					+ '<td>' + '<spring:message code="request.end"/>'+ '</td>'
+					+ '</tr>';
+					 
+			for ( var i = 0; i < tasks.length; i++) {
+				
+				if ((i+1)%2 == 0) {
 					taskHtml += '<tr class="evenRow">';	
-			}else {
-				if(tasks[i]["messageStatus"] == 'unread')
-					taskHtml += '<tr class="new">';
-				else
+				} else {
 					taskHtml += '<tr>';
+				}
+				
+				taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["requestId"] + '" />' + '</td>'
+						 + '<td class="messageItem" onclick="showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["subject"] + '</td>'
+						 + '<td class="messageItem" onclick="showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["respondedAmount"] + '</td>'
+						 + '<td class="messageItem" onclick="showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["missedAmount"] + '</td>'
+						 + '<td class="messageItem" onclick="showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["creationDate"] + '</td>'
+						 + '<td class="messageItem" onclick="showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["endDate"] + '</td>'
+						 + '</tr>';
 			}
-			
-			taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["requestId"] + '" />' + '</td>'
-					 + '<td class="messageItem" onclick="showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["subject"] + '</td>'
-					 + '<td class="messageItem" onclick="showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["respondedAmount"] + '</td>'
-					 + '<td class="messageItem" onclick="showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["missedAmount"] + '</td>'
-					 + '<td class="messageItem" onclick="showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["creationDate"] + '</td>'
-					 + '<td class="messageItem" onclick="showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["endDate"] + '</td>'
-					 + '</tr>';
+	
+			taskHtml += '</table>';
+		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_REPLIED %>" || pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_OLD %>") {
+			taskHtml += createRequestReplied(tasks);
 		}
-
-		taskHtml += '</table>';
-
 		return taskHtml;
+
 	}
+	
+	function createRequestReplied(tasks) {
+		if (tasks == undefined || tasks == null || tasks.length == 0) {
+			return showErrorMsgYouDontHaveAnyTipys();
+		}
+		
+		var columnNames = ["<spring:message code="message.choose"/>",
+		                   "<spring:message code="response.reciever"/>",
+		                   "<spring:message code="response.sender"/>",
+		                   "<spring:message code="response.subject"/>",
+		                   "<spring:message code="response.createdAt"/>",
+		                   "<spring:message code="response.endDate"/>"
+		                  ];
+		
+		var columnIds = ["replierName",
+		                 "sender",
+		                 "subject",
+		                 "creationDate",
+		                 "endDate"
+		                ];
+		flattenTasksRepliedTasks(tasks);
+		return createTable("showResponse", "browseRepliedRequests", columnNames, columnIds, tasks);
+
+	}
+	
+	function flattenTasksRepliedTasks(tasks) {
+		for (var i = 0; i < tasks.length; i++)  {			
+			tasks[i]["sender"] = tasks[i].request.sender;
+			tasks[i]["subject"] = tasks[i].request.subject;
+			tasks[i]["endDate"] = tasks[i].request.endDate;
+			tasks[i]["creationDate"] = tasks[i].request.creationDate;
+		}
+	}
+
+	
 	
 	/**
 	 * Create appointments table in Html
@@ -1214,57 +1252,6 @@
 		});
 	}
 	
-
-	<%-- 	
-	/**
-	 * Revokes a list of warrants selected by user
-	 */
-	function revokeWarrants() {		
-		var messageList = [];		
-		jQuery('input:checkbox[name="message"]:checked').each(function(){
-			var id = jQuery(this).val();
-			var authorizationId = pageObj.tasks[id]['authorizationId'];
-			var warrantStatus = pageObj.tasks[id]['status'];
-			
-			if(warrantStatus != '<spring:message code="ConsentStatus.REVOKED"/>') { // not revoked yet
-				messageList.push(authorizationId);
-			}    	
-		});
-		
-		if(messageList.length == 0) {
-			return; // no message selected
-		}
-		
-		var conf = confirm("<spring:message code="info.conformRevokeWarrantWarning"/>");
-		
-		if(!conf) {
-			return;
-		}
-		
-		var comment = prompt('<spring:message code="warrant.cancelPrompt"/>',"");
-		if (comment == null) {
-			return;
-		}
-		
-		var url="<%= revokeWarrantURL %>";
-		url = formatUrl(url);
-		
-		jQuery.post(url, {'messageList':messageList, 'comment':comment}, function(data) {
-			var obj = eval('(' + data + ')');
-			var json = obj.response;
-			var result = json["result"];
-			
-			if (result == 'OK') {
-				jQuery.jGrowl("<spring:message code="notification.revoke.warrant"/>");
-				ajaxGetTasks();
-			} else {
-				var message = "<spring:message code="error.unLogin" />";
-				showErrorMessage(message);
-			}
-		});
-	}
-	
---%> 
 	/**
 	 * Show/hide search user interface
 	 */

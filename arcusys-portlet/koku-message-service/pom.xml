@@ -81,6 +81,18 @@
 									</extraargs>
 								</wsdlOption>
 								<wsdlOption>
+									<wsdl>${basedir}/src/main/wsdl/KokuKunpoRequestServiceImpl.wsdl</wsdl>
+									<wsdlLocation>classpath:KokuKunpoRequestServiceImpl.wsdl</wsdlLocation>
+									<extraargs>
+										<extraarg>-client</extraarg>
+										<extraarg>-server</extraarg>
+										<extraarg>-impl</extraarg>
+										<extraarg>-p</extraarg>
+										<extraarg>fi.arcusys.koku.kv.requestservice</extraarg>
+										<extraarg>-autoNameResolution</extraarg>
+									</extraargs>
+								</wsdlOption>
+								<wsdlOption>
 									<wsdl>${basedir}/src/main/wsdl/AvCitizenService.wsdl</wsdl>
 									<wsdlLocation>classpath:AvCitizenService.wsdl</wsdlLocation>
 									<extraargs>
