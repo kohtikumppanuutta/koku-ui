@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.portlet.PortletSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
+import org.springframework.web.portlet.util.PortletUtils;
 
 import com.ixonos.koku.pyh.model.Dependant;
 import com.ixonos.koku.pyh.model.DependantsAndFamily;
@@ -49,7 +52,6 @@ public class PyhDemoService {
   
   private static Logger log = LoggerFactory.getLogger(PyhDemoService.class);
   private List<Person> searchedUsers;
-  private boolean childsGuardianshipInformationNotFound;
   
   private CustomerServicePortType customerService;
   private CommunityServicePortType communityService;
@@ -63,7 +65,6 @@ public class PyhDemoService {
   private boolean debug = true;
   
   public PyhDemoService() {
-    childsGuardianshipInformationNotFound = false;
     
     CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory(PyhConstants.CUSTOMER_SERVICE_USER_ID, PyhConstants.CUSTOMER_SERVICE_PASSWORD, PyhConstants.CUSTOMER_SERVICE_ENDPOINT);
     customerService = customerServiceFactory.getCustomerService();
@@ -591,7 +592,7 @@ public class PyhDemoService {
    * Creates a recipient list for confirmation request message for adding persons as family members.
    * Then the message sending method is called or if there are no recipients then persons are added immediately.
    */
-  public void addPersonsAsFamilyMembers(HashMap<String, String> personMap, String userPic, String communityId) throws FamilyNotFoundException {
+  public void addPersonsAsFamilyMembers(HashMap<String, String> personMap, String userPic, String communityId, PortletSession session) throws FamilyNotFoundException {
     
     // personMap parameter contains (personPIC, role) pairs
     
@@ -626,9 +627,7 @@ public class PyhDemoService {
         sendParentAdditionMessage(communityId, memberToAddPic, userPic, communityRole);
       } else if (CommunityRole.CHILD.equals(communityRole) && recipients.size() == 0) {
         // we don't have guardian information for the child so we can't send the request
-        childsGuardianshipInformationNotFound = true;
-        
-        // TODO: move mail addresses into configuration file
+        session.setAttribute("childsGuardianshipInformationNotFound", new Boolean(true));
         
         String messageSubject = "KoKu: puutteelliset tiedot järjestelmässä";
         String messageText = "Järjestelmästä ei löydy lapsen huoltajatietoja. Lapsen HETU: " + memberToAddPic;
@@ -1192,14 +1191,6 @@ public class PyhDemoService {
     
   }
   
-  public void setChildsGuardianshipInformationNotFound(boolean isFound) {
-    this.childsGuardianshipInformationNotFound = isFound;
-  }
-  
-  public boolean getChildGuardianshipInformationNotFound() {
-    return this.childsGuardianshipInformationNotFound;
-  }
-
   public void setMailSender(MailSender mailSender) {
     this.mailSender = mailSender;
   }

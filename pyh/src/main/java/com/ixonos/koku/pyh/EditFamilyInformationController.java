@@ -70,8 +70,13 @@ public class EditFamilyInformationController {
     model.addAttribute("messages", pyhDemoService.getSentMessages(user));
     
     // if child's guardianship information is not found show a notification in JSP
-    model.addAttribute("childsGuardianshipInformationNotFound", pyhDemoService.getChildGuardianshipInformationNotFound());
-    pyhDemoService.setChildsGuardianshipInformationNotFound(false);
+    Boolean childsGuardianshipInformationNotFound = (Boolean)session.getAttribute("childsGuardianshipInformationNotFound");
+    if (childsGuardianshipInformationNotFound != null) {
+      model.addAttribute("childsGuardianshipInformationNotFound", childsGuardianshipInformationNotFound.booleanValue());
+    } else {
+      model.addAttribute("childsGuardianshipInformationNotFound", false);
+    }
+    session.setAttribute("childsGuardianshipInformationNotFound", new Boolean(false));
     
     Family family = daf.getFamily();
     String communityId;
@@ -237,7 +242,7 @@ public class EditFamilyInformationController {
     }
 
     try {
-      pyhDemoService.addPersonsAsFamilyMembers(personMap, userPic, communityId);
+      pyhDemoService.addPersonsAsFamilyMembers(personMap, userPic, communityId, session);
     } catch (FamilyNotFoundException fnfe) {
       log.error("EditFamilyInformationController.addUsersToFamily() caught FamilyNotFoundException!");
       log.error(fnfe.getMessage());
