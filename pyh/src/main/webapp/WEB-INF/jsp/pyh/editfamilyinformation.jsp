@@ -207,9 +207,8 @@
 		</c:otherwise>
 	</c:choose>
 	
-	<%-- TODO: if searched child's guardianship information is missing then show a message --%>
 	<c:if test="${childsGuardianshipInformationNotFound}">
-		<p>Perheyhteyspyyntöä ei voida lähettää!</p>
+		<p><spring:message code="ui.pyh.cannot.send.request"/></p>
 	</c:if>
 
 </div>
@@ -245,11 +244,11 @@
 	}
 	
 	function doAddFamilyMemberConfirmation() {
-		return confirm("Haluatko lisätä huollettavan lapsen perheenjäseneksi?");
+		return confirm("<spring:message code="ui.pyh.add.dependant.family.member.question"/>");
 	}
 	
 	function doRemoveFamilyMemberConfirmation() {
-		return confirm("Haluatko poistaa huollettavan lapsen perheenjäsenyyden?");
+		return confirm("<spring:message code="ui.pyh.remove.dependant.family.member.question"/>");
 	}
 	
 </script>

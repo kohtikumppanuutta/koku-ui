@@ -182,13 +182,13 @@ public class EditFamilyInformationController {
       log.error("ERROR: UserInfo returns no PIC!");
     }
     
-    String sn = request.getParameter("searchSurname");
+    String surname = request.getParameter("searchSurname");
     String pic = request.getParameter("searchPic");
     
     // call service to query users,
     // users are returned as a model attribute object searchedUsers
     // TODO: what is the correct search criteria?
-    pyhDemoService.searchUsers(sn, pic, userPic /*customer id == user pic*/, userPic);
+    pyhDemoService.searchUsers(surname, pic, userPic /*customer id == user pic*/, userPic);
     response.setRenderParameter("action", "editFamilyInformationWithSearchResults");
   }
 

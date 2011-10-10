@@ -326,6 +326,9 @@ public class PyhDemoService {
    * Query persons by name, PIC and customer ID and stores them in the searchedUsers list.
    */
   public void searchUsers(String surname, String customerPic, String customerID, String currentUserPic) {
+    
+    // this search can return only one result because search criteria includes PIC
+    
     clearSearchedUsers();
     
     CustomerQueryCriteriaType customerCriteria = new CustomerQueryCriteriaType();
@@ -333,9 +336,8 @@ public class PyhDemoService {
     PicsType pics = new PicsType();
     pics.getPic().add(customerPic);
     customerCriteria.setPics(pics);
-    // TODO: set surname as criteria too
     
-    customerCriteria.setSelection("full"); // FIXME: tätä käytetään vain silloin kun tarvitaan käyttäjän kaikki tiedot
+    //customerCriteria.setSelection("full"); // FIXME: tätä käytetään vain silloin kun tarvitaan käyttäjän kaikki tiedot
     CustomersType customersType = null;
     
     fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
@@ -355,8 +357,10 @@ public class PyhDemoService {
       Iterator<CustomerType> ci = customers.iterator();
       while (ci.hasNext()) {
         CustomerType customer = ci.next();
-        // filter out user's dependants from search results
-        if (!depPics.contains(customer.getHenkiloTunnus()) && !currentUserPic.equals(customer.getHenkiloTunnus())) {
+        // filter out user and his/hers dependants from search results
+        // surname given as search parameter must match the customer's surname (searching by PIC alone is forbidden)
+        if (!depPics.contains(customer.getHenkiloTunnus()) && !currentUserPic.equals(customer.getHenkiloTunnus()) && 
+            surname.equalsIgnoreCase(customer.getSukuNimi())) {
           searchedUsers.add(new Person(customer));
         }
       }
