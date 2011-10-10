@@ -50,11 +50,12 @@ public class CollectionController {
     LOG.info("show collection");
 
     KKSCollection c = kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
-    boolean master = kksService.isParent(Utils.getPicFromSession(session), child.getPic());
+    boolean parent = kksService.isParent(Utils.getPicFromSession(session), child.getPic());
     model.addAttribute("child", child);
     model.addAttribute("collection", c);
     model.addAttribute("authorized", kksService.getAuthorizedRegistries(Utils.getPicFromSession(session)));
-    model.addAttribute("master", master);
+    model.addAttribute("master", parent);
+    model.addAttribute("parent", parent);
     model.addAttribute("empty_collection", c.getEntries().size() == 0);
 
     if (!model.containsAttribute("version")) {

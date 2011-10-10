@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import fi.koku.services.entity.kks.v1.KksCollectionClassType;
-import fi.koku.services.entity.kks.v1.KksEntryClassType;
-import fi.koku.services.entity.kks.v1.KksGroupType;
 import fi.koku.services.entity.userinfo.v1.model.Registry;
 
 /**
@@ -206,35 +204,6 @@ public class KKSCollection {
     tmp.addAll(entries.values());
 
     return tmp;
-  }
-
-  public void generateEmptyEntries(String user) {
-    for (KksGroupType group : collectionClass.getKksGroups().getKksGroup()) {
-
-      if (master || authorizedRegistrys.containsKey(group.getRegister())) {
-        checkAndInsertEntry(group, user);
-      }
-
-      for (KksGroupType subGroup : group.getSubGroups().getKksGroup()) {
-        if (master || authorizedRegistrys.containsKey(group.getRegister())) {
-          checkAndInsertEntry(subGroup, user);
-        }
-      }
-
-    }
-  }
-
-  private void checkAndInsertEntry(KksGroupType group, String user) {
-    for (KksEntryClassType ect : group.getKksEntryClasses().getKksEntryClass()) {
-
-      if (!ect.isMultiValue() && !entries.containsKey("" + ect.getId())) {
-        Entry e = new Entry(new Date(), "1", user, ect);
-        EntryValue v = new EntryValue();
-        v.setValue("");
-        e.addEntryValue(v);
-        addEntry(e);
-      }
-    }
   }
 
   public String getCreator() {

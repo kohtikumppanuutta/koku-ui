@@ -66,11 +66,13 @@ public class EntryValue {
   public String getValuesAsText() {
     StringBuffer sb = new StringBuffer();
 
-    for (int i = 0; i < values.size(); i++) {
-      sb.append(values.get(i));
+    if (values != null) {
+      for (int i = 0; i < values.size(); i++) {
+        sb.append(values.get(i));
 
-      if ((i + 1) < values.size()) {
-        sb.append(", ");
+        if ((i + 1) < values.size()) {
+          sb.append(", ");
+        }
       }
     }
     return sb.toString();

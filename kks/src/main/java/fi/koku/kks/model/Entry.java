@@ -138,6 +138,19 @@ public class Entry {
     return null;
   }
 
+  public List<String> getValueChoices() {
+    List<String> tmp = new ArrayList<String>();
+
+    List<String> valuaSpaces = type.getValueSpaces().getValueSpace();
+
+    if (valuaSpaces != null) {
+      for (String s : valuaSpaces) {
+        tmp.add(s.trim());
+      }
+    }
+    return tmp;
+  }
+
   public EntryValue getFirstValue() {
     if (entryValues.size() == 0) {
       EntryValue v = new EntryValue();

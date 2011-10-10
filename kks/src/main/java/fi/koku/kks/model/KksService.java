@@ -193,7 +193,6 @@ public class KksService {
       KKSCollection col = converter.fromWsType(kks, info.getPic());
       col.setMaster(isParent(info.getPic(), col.getCustomer()));
       col.setAuthorizedRegistrys(getAuthorizedRegistries(info.getPic()));
-      col.generateEmptyEntries(info.getPic());
 
       for (Entry e : col.getEntries().values()) {
 
@@ -216,7 +215,7 @@ public class KksService {
     try {
       KksServicePortType kksService = getKksService();
       collection.setCreator(user);
-      kksService.opUpdateKksCollection(converter.toWsType(collection, customer), getKksAuditInfo(user));
+      kksService.opUpdateKksCollection(converter.toWsType(collection, customer, user), getKksAuditInfo(user));
     } catch (ServiceFault e) {
       LOG.error("Failed to update KKS collection " + collection.getId(), e);
       return false;

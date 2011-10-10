@@ -1,10 +1,12 @@
 <%@page import="fi.koku.kks.ui.common.DataType"%>
+<%@page import="fi.koku.kks.ui.common.Accountable"%>
 <%@ include file="imports.jsp" %>
 
 <c:set var="free_text" value="<%=DataType.FREE_TEXT%>" />
 <c:set var="text" value="<%=DataType.TEXT%>" />
 <c:set var="multi_select" value="<%=DataType.MULTI_SELECT%>" />
 <c:set var="select" value="<%=DataType.SELECT%>" />
+<c:set var="guardian" value="<%=Accountable.GUARDIAN%>" />
 
 
 <fmt:setBundle basename="com.ixonos.eservices.koku.bundle.KokuBundle" />
@@ -148,10 +150,11 @@
 	                             <span class="kks-read-only-description"><c:out value="${childGroup.description}"/></span>
 	                        </div>
                     	</c:if>
+                    	<c:set var="block_guardian" value="${ parent && not (guardian.name eq childGroup.accountable) }" />
                             <c:forEach var="type" items='${ childGroup.kksEntryClasses.kksEntryClass  }'>
                                 <div class="kks-entry">
-                                    <span class="portlet-form-field-label">${type.name} <c:if
-                                            test="${type.multiValue && collection.state.active }">
+                                    <span class="portlet-form-field-label">${type.name} 
+                                       <c:if test="${not block_guardian && type.multiValue && collection.state.active }">
                                             <a
                                                 href="javascript:void(0)" onclick="doSubmitNewMulti('${type.id}');">	
                                                 (<spring:message code="ui.kks.add.multivalue" />) </a>
@@ -175,11 +178,14 @@
                                                   <c:forEach var="multivalue" items='${ collection.entries[type.id].entryValues }'>
                                                       
                                                       <div class="kks-comment">
-                                                       <span class="kks-entry-value"><p><c:out value="${multivalue.value}"/> </p><span class="kks-right">
-                                                       <a
-                                                               href="javascript:void(0)" onclick="doSubmitForm('${type.id}', '${collection.entries[type.id].id}', '${multivalue.id}' );">
-                                                                   <spring:message code="ui.kks.modify" /> </a>
-                                                       </span> 
+                                                       <span class="kks-entry-value"><c:out value="${multivalue.value}"/>
+                                                       
+                                                       <c:if test="${not block_guardian}">
+	                                                       <span class="kks-right">
+	                                                          <a href="javascript:void(0)" onclick="doSubmitForm('${type.id}', '${collection.entries[type.id].id}', '${multivalue.id}' );">
+	                                                                   <spring:message code="ui.kks.modify" /> </a>                                                       
+	                                                       </span> 
+                                                       </c:if>
                                                        </span>
                                                        <div class="portlet-section-text">
                                                         <span class="kks-commenter">${multivalue.modifierFullName} <fmt:formatDate type="both" pattern="dd.MM.yyyy HH:mm:ss" value="${multivalue.modified}"/>
@@ -192,13 +198,18 @@
                                         </c:if>
                                         <c:if test="${not type.multiValue}">
 	                                        <c:choose>
+	                                            <c:when test="${ block_guardian }">
+	                                            	<span class="kks-read-only-text"><c:out value="${collection.entries[type.id].firstValue.value}"></c:out> </span>	                                            
+	                                            </c:when>
 	                                            <c:when
 	                                                test="${ type.dataType eq multi_select.name }">
-	                                                <div class="portlet-form-field"> <c:forEach
-	                                                        items="${type.valueSpaces.valueSpace }" var="value">
+	                                                <div class="portlet-form-field"> 
+	                                                <c:forEach
+	                                                        items="${collection.entries[type.id].valueChoices}" var="value">                                                        
+	                                                        
 	                                                        <form:checkbox  class="portlet-form-input-field" title="${type.description }"
 	                                                            path="entries['${type.id}'].firstValue.values"
-	                                                            value="${ value }" label="${value}" />
+	                                                            value="${value}" label="${value}" />
 	                                                    </c:forEach> </div>
 	                                            </c:when>
 	                                            <c:when test="${ type.dataType eq select.name }">
