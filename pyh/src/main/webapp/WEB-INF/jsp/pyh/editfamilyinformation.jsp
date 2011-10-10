@@ -56,12 +56,7 @@
                 <td> 
                 <span class="actions">
                         <span class="pyh-link"> <c:choose>
-		                        <%--
-		                        <c:when test="${child.requestPending}">
-		                          //nothing at the moment
-		                          Odottaa hyv‰ksynt‰‰
-		                        </c:when>
-		                        --%>
+		                        
                                 <c:when test="${child.memberOfUserFamily}">
                                    <span class="pyh-link"> 
                                          <portlet:actionURL var="removeFamilyMember">

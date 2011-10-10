@@ -9,17 +9,10 @@
 	<portlet:param name="action" value="editFamilyInformation" />
 </portlet:renderURL>
 
-<%--
-<portlet:renderURL var="home">
-    <portlet:param name="action" value="" />
-</portlet:renderURL>
---%>
-
 <div class="koku-pyh">
 <div class="portlet-section-body">
 
 <div class="pyh-temp">
-  <%-- <span> <a href="${home}"> Vaihda käyttäjää</a> </span> --%> 
   <span class="pyh-right"> <a href="${editFamilyInformation}"> <spring:message code="ui.pyh.modify.info" /> </a> </span>
 </div>
 
@@ -121,7 +114,7 @@
             <span class="pyh-mail">
             <form:form name="accept" method="post" action="${accept}">
                 
-                <a href="mailto:yllapito@kohtikumppanuutta.fi?subject=Asiaton perheyhteyspyyntö (Viesti ID:${ message.id })">Ilmoita asiaton perheyhteyspyyntö</a> 
+                <a href="mailto:${supportEmailAddress}?subject=<spring:message code="ui.pyh.inappropriate.request.email.subject" />:${ message.id }"><spring:message code="ui.pyh.report.inappropriate.request" /></a> 
                 </form:form>
                 </span>
                 </div>

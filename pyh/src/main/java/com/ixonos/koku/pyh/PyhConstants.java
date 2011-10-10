@@ -1,5 +1,7 @@
 package com.ixonos.koku.pyh;
 
+import fi.koku.settings.KoKuPropertiesUtil;
+
 /**
  * This class contains static constants used in PYH.
  * 
@@ -8,8 +10,11 @@ package com.ixonos.koku.pyh;
  */
 public class PyhConstants {
 
-  final public static String CUSTOMER_SERVICE_ENDPOINT = "http://localhost:8180/customer-service-0.0.1-SNAPSHOT/CustomerServiceEndpointBean?wsdl";
-  final public static String COMMUNITY_SERVICE_ENDPOINT = "http://localhost:8180/customer-service-0.0.1-SNAPSHOT/CommunityServiceEndpointBean?wsdl";
+  public static final String CUSTOMER_SERVICE_ENDPOINT = KoKuPropertiesUtil.get("customer.service.endpointaddress");
+  public static final String COMMUNITY_SERVICE_ENDPOINT = KoKuPropertiesUtil.get("community.service.endpointaddress");
+  
+  public static final String KOKU_FROM_EMAIL_ADDRESS = KoKuPropertiesUtil.get("koku.from.email.address");
+  public static final String KOKU_SUPPORT_EMAIL_ADDRESS = KoKuPropertiesUtil.get("koku.support.email.address");
   
   final public static String CUSTOMER_SERVICE_USER_ID = "marko";
   final public static String CUSTOMER_SERVICE_PASSWORD = "marko";

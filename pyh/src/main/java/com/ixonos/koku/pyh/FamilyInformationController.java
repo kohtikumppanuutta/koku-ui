@@ -49,6 +49,9 @@ public class FamilyInformationController {
     model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers(userPic));
     model.addAttribute("messages", pyhDemoService.getMessagesFor(user));
     model.addAttribute("sentMessages", pyhDemoService.getSentMessages(user));
+    
+    model.addAttribute("supportEmailAddress", PyhConstants.KOKU_SUPPORT_EMAIL_ADDRESS);
+    
     return "familyinformation";
   }
   

@@ -298,7 +298,7 @@ public class PyhDemoService {
     try {
       family = getFamily(userPic);
     } catch (TooManyFamiliesException tme) {
-      log.error("PyhDemoService.isParentsSet(): getFamily(userPic) threw a TooManyFamiliesException!");
+      log.error("PyhDemoService.isParentsSet(): getFamily(userPic) threw a TooManyFamiliesException!", tme);
       log.error(tme.getMessage());
     } catch (FamilyNotFoundException fnfe) {
       log.error("PyhDemoService.isParentsSet(): getFamily(userPic) threw a FamilyNotFoundException!");
@@ -444,7 +444,7 @@ public class PyhDemoService {
       try {
         familyMember = getFamily(currentUserPic).getOtherParent(user.getPic());
       } catch (TooManyFamiliesException tme) {
-        log.error("PyhDemoService.generateRecipients(): getFamily(userPic) threw a TooManyFamiliesException!");
+        log.error("PyhDemoService.generateRecipients(): getFamily(userPic) threw a TooManyFamiliesException!", tme);
         log.error(tme.getMessage());
       } catch (FamilyNotFoundException fnfe) {
         log.error("PyhDemoService.generateRecipients(): getFamily(userPic) threw a FamilyNotFoundException!");
@@ -459,7 +459,7 @@ public class PyhDemoService {
       try {
         family = getFamily(memberToAddPic);
       } catch (TooManyFamiliesException tme) {
-        log.error("PyhDemoService.generateRecipients(): getFamily(targetPic) threw a TooManyFamiliesException!");
+        log.error("PyhDemoService.generateRecipients(): getFamily(targetPic) threw a TooManyFamiliesException!", tme);
         log.error(tme.getMessage());
       } catch (FamilyNotFoundException fnfe) {
         log.error("PyhDemoService.generateRecipients(): getFamily(targetPic) threw a FamilyNotFoundException!");
@@ -495,7 +495,7 @@ public class PyhDemoService {
       try {
         family = getFamily(userPic);
       } catch (TooManyFamiliesException tme) {
-        log.error("PyhDemoService.insertDependantToFamily: getFamily(userPic) threw a TooManyFamiliesException!");
+        log.error("PyhDemoService.insertDependantToFamily: getFamily(userPic) threw a TooManyFamiliesException!", tme);
         log.error(tme.getMessage());
         return;
       } catch (FamilyNotFoundException fnfe) {
@@ -634,8 +634,8 @@ public class PyhDemoService {
         String messageText = "Järjestelmästä ei löydy lapsen huoltajatietoja. Lapsen HETU: " + memberToAddPic;
         
         SimpleMailMessage mailMessage = new SimpleMailMessage(this.templateMessage);
-        mailMessage.setFrom("yllapito@kohtikumppanuutta.fi");
-        mailMessage.setTo("mikko.hurula@ixonos.com");
+        mailMessage.setFrom(PyhConstants.KOKU_FROM_EMAIL_ADDRESS);
+        mailMessage.setTo(PyhConstants.KOKU_SUPPORT_EMAIL_ADDRESS);
         mailMessage.setSubject(messageSubject);
         mailMessage.setText(messageText);
         try {
