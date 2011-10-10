@@ -56,11 +56,11 @@ public class CollectionController {
     model.addAttribute("authorized", kksService.getAuthorizedRegistries(Utils.getPicFromSession(session)));
     model.addAttribute("master", parent);
     model.addAttribute("parent", parent);
-    model.addAttribute("empty_collection", c.getEntries().size() == 0);
+    model.addAttribute("empty_collection", c == null || c.getEntries() == null || c.getEntries().size() == 0);
 
     if (!model.containsAttribute("version")) {
       Version v = new Version();
-      v.setName(c.getName());
+      v.setName(c == null ? "" : c.getName());
       model.addAttribute("version", v);
     }
 
@@ -103,7 +103,6 @@ public class CollectionController {
   @ModelAttribute("entry")
   public KKSCollection getCommandObject(PortletSession session, @RequestParam(value = "collection") String collection,
       @RequestParam(value = "pic") String pic) {
-    LOG.debug("get command object");
 
     KKSCollection k = kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
 

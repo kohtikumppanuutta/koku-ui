@@ -37,6 +37,12 @@ public class KKSCollection {
   private Map<String, Registry> authorizedRegistrys;
   private boolean master;
 
+  public KKSCollection() {
+    authorizedRegistrys = new HashMap<String, Registry>();
+    entries = new LinkedHashMap<String, Entry>();
+    authorizedRegistrys = new HashMap<String, Registry>();
+  }
+
   public KKSCollection(String id, KKSCollection previous, boolean clear, Date creationTime, CollectionState state,
       int version) {
     this(id, previous.getName(), previous.getDescription(), state, creationTime, version, previous.getCollectionClass());

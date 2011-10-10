@@ -125,7 +125,7 @@
 
         <c:if test="${not empty collection.collectionClass }">
 
-            <form:form class="form-wrapper" name="entryForm" commandName="entry" method="post"
+            <form:form class="form-wrapper" name="entryForm" commandName="collection" method="post"
                 action="${saveActionUrl}">
 
                 <c:forEach var="group" items="${collection.collectionClass.kksGroups.kksGroup }">

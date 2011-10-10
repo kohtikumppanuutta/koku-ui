@@ -2,7 +2,6 @@ package fi.koku.kks.controller;
 
 import java.util.List;
 
-import javax.portlet.PortletConfig;
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 
@@ -16,6 +15,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import fi.koku.kks.model.KksService;
 import fi.koku.kks.model.Person;
 import fi.koku.kks.ui.common.utils.Utils;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 @Controller("mainController")
 @RequestMapping(value = "VIEW")
@@ -27,8 +27,9 @@ public class MainController {
 
   @RenderMapping
   public String render(PortletSession session, RenderRequest req, Model model) {
-    String kunpo = ((PortletConfig) req.getAttribute("javax.portlet.config")).getInitParameter("kunpo");
-    if (Boolean.valueOf(kunpo)) {
+
+    String kunpo = KoKuPropertiesUtil.get("environment.portlet.server.name");
+    if ("kunpo".equalsIgnoreCase(kunpo)) {
       model.addAttribute("childs", getChilds(session));
       return "childs";
     } else {

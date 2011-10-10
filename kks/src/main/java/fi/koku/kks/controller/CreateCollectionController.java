@@ -93,12 +93,6 @@ public class CreateCollectionController {
     return kksService.searchCustomer(pic, Utils.getPicFromSession(session));
   }
 
-  // @ModelAttribute("creation")
-  // public Creation getCommandObject() {
-  // LOG.debug("get creation command object");
-  // return new Creation();
-  // }
-
   @ActionMapping(params = "action=activate")
   public void activate(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "collection") String collection, ActionResponse response, SessionStatus sessionStatus) {

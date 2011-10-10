@@ -31,7 +31,7 @@ import fi.koku.kks.ui.common.utils.Utils;
  * @author tuomape
  * 
  */
-@Controller(value = "kuntaTyontekijaController")
+@Controller(value = "municipalEmplouyeeController")
 @RequestMapping(value = "VIEW")
 public class MunicipalEmployeeController {
 

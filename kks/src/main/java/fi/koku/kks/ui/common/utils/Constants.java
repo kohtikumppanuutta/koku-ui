@@ -11,6 +11,8 @@ public final class Constants {
   }
 
   final public static String ENDPOINT = KoKuPropertiesUtil.get("kks.service.endpointaddress");
+  final public static String CUSTOMER_ENDPOINT = KoKuPropertiesUtil.get("customer.service.endpointaddress");
+  final public static String COMMUNITY_ENDPOINT = KoKuPropertiesUtil.get("community.service.endpointaddress");
 
   final public static String CUSTOMER_SERVICE_USER_ID = "marko";
   final public static String CUSTOMER_SERVICE_PASSWORD = "marko";

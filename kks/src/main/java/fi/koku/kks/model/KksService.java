@@ -29,9 +29,12 @@ import fi.koku.services.entity.community.v1.CommunityType;
 import fi.koku.services.entity.community.v1.MemberPicsType;
 import fi.koku.services.entity.community.v1.MemberType;
 import fi.koku.services.entity.community.v1.MembersType;
+import fi.koku.services.entity.customer.v1.CustomerQueryCriteriaType;
 import fi.koku.services.entity.customer.v1.CustomerServiceFactory;
 import fi.koku.services.entity.customer.v1.CustomerServicePortType;
 import fi.koku.services.entity.customer.v1.CustomerType;
+import fi.koku.services.entity.customer.v1.CustomersType;
+import fi.koku.services.entity.customer.v1.PicsType;
 import fi.koku.services.entity.kks.v1.KksCollectionClassType;
 import fi.koku.services.entity.kks.v1.KksCollectionCreationCriteriaType;
 import fi.koku.services.entity.kks.v1.KksCollectionStateCriteriaType;
@@ -120,13 +123,13 @@ public class KksService {
 
   private CommunityServicePortType getCommunityService() {
     CommunityServiceFactory csf = new CommunityServiceFactory(Constants.COMMUNITY_SERVICE_USER_ID,
-        Constants.COMMUNITY_SERVICE_PASSWORD, Constants.ENDPOINT);
+        Constants.COMMUNITY_SERVICE_PASSWORD, Constants.COMMUNITY_ENDPOINT);
     return csf.getCommunityService();
   }
 
   private CustomerServicePortType getCustomerService() {
     CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory(Constants.CUSTOMER_SERVICE_USER_ID,
-        Constants.CUSTOMER_SERVICE_PASSWORD, Constants.ENDPOINT);
+        Constants.CUSTOMER_SERVICE_PASSWORD, Constants.CUSTOMER_ENDPOINT);
     return customerServiceFactory.getCustomerService();
   }
 
@@ -186,6 +189,11 @@ public class KksService {
   }
 
   public KKSCollection getKksCollection(String collectionId, UserInfo info) {
+
+    if (info == null) {
+      return null;
+    }
+
     try {
       KksServicePortType kksService = getKksService();
       KksCollectionType kks = kksService.opGetKksCollection(collectionId, getKksAuditInfo(info.getPic()));
@@ -212,6 +220,10 @@ public class KksService {
   }
 
   public boolean updateKksCollection(KKSCollection collection, String customer, String user) {
+
+    if (collection == null) {
+      return false;
+    }
     try {
       KksServicePortType kksService = getKksService();
       collection.setCreator(user);
@@ -417,6 +429,7 @@ public class KksService {
       LOG.error("Failed to get communities", fault);
     }
 
+    List<String> pics = new ArrayList<String>();
     if (communitiesType != null) {
       List<CommunityType> communities = communitiesType.getCommunity();
       for (CommunityType community : communities) {
@@ -425,14 +438,24 @@ public class KksService {
 
         for (MemberType member : members) {
           if (member.getRole().equals(Constants.ROLE_DEPENDANT)) {
-            try {
-              CustomerType customer = getCustomerService().opGetCustomer(member.getPic(), getCustomerAuditInfo(pic));
-              childs.add(Person.fromCustomerType(customer));
-            } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
-              LOG.error("Failed to get community person details", fault);
-            }
+            pics.add(member.getPic());
           }
         }
+      }
+    }
+
+    if (pics.size() > 0) {
+      try {
+        CustomerQueryCriteriaType criteria = new CustomerQueryCriteriaType();
+        PicsType pt = new PicsType();
+        pt.getPic().addAll(pics);
+        criteria.setPics(pt);
+        CustomersType customers = getCustomerService().opQueryCustomers(criteria, getCustomerAuditInfo(pic));
+        for (CustomerType customer : customers.getCustomer()) {
+          childs.add(Person.fromCustomerType(customer));
+        }
+      } catch (fi.koku.services.entity.customer.v1.ServiceFault e) {
+        LOG.error("Failed to get customers", e);
       }
     }
     return childs;

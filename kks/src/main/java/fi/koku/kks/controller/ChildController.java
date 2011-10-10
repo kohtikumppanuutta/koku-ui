@@ -78,7 +78,6 @@ public class ChildController {
 
     response.setRenderParameter("action", "showChild");
     response.setRenderParameter("pic", child.getPic());
-    // getCommandObject();
     sessionStatus.setComplete();
   }
 
@@ -93,11 +92,5 @@ public class ChildController {
   public Person getChild(PortletSession session, @RequestParam String pic) {
     return kksService.searchCustomer(pic, Utils.getPicFromSession(session));
   }
-
-  // @ModelAttribute("creation")
-  // public Creation getCommandObject() {
-  // LOG.debug("get creation command object");
-  // return new Creation();
-  // }
 
 }
