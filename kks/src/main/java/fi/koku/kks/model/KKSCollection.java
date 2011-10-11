@@ -36,11 +36,15 @@ public class KKSCollection {
   private String creator;
   private Map<String, Registry> authorizedRegistrys;
   private boolean master;
+  private boolean consentRequested;
+  private String userConsentStatus;
 
   public KKSCollection() {
     authorizedRegistrys = new HashMap<String, Registry>();
     entries = new LinkedHashMap<String, Entry>();
     authorizedRegistrys = new HashMap<String, Registry>();
+    consentRequested = false;
+    userConsentStatus = "";
   }
 
   public KKSCollection(String id, KKSCollection previous, boolean clear, Date creationTime, CollectionState state,
@@ -49,6 +53,8 @@ public class KKSCollection {
     prevVersion = previous.getId();
     buildFromExisting = true;
     authorizedRegistrys = new HashMap<String, Registry>();
+    consentRequested = false;
+    userConsentStatus = "";
   }
 
   public KKSCollection(String id, String name, String description, CollectionState state, Date creationTime,
@@ -67,6 +73,8 @@ public class KKSCollection {
     this.collectionClass = type;
     entries = new LinkedHashMap<String, Entry>();
     authorizedRegistrys = new HashMap<String, Registry>();
+    consentRequested = false;
+    userConsentStatus = "";
   }
 
   public String getName() {
@@ -254,6 +262,22 @@ public class KKSCollection {
 
   public void setMaster(boolean master) {
     this.master = master;
+  }
+
+  public boolean isConsentRequested() {
+    return consentRequested;
+  }
+
+  public void setConsentRequested(boolean consentRequested) {
+    this.consentRequested = consentRequested;
+  }
+
+  public String getUserConsentStatus() {
+    return userConsentStatus;
+  }
+
+  public void setUserConsentStatus(String userConsentStatus) {
+    this.userConsentStatus = userConsentStatus;
   }
 
 }

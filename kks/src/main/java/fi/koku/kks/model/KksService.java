@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import fi.koku.kks.ui.common.KksConverter;
 import fi.koku.kks.ui.common.utils.CollectionComparator;
+import fi.koku.kks.ui.common.utils.ConsentServiceFactory;
 import fi.koku.kks.ui.common.utils.Constants;
 import fi.koku.portlet.filter.userinfo.UserInfo;
 import fi.koku.portlet.filter.userinfo.service.impl.UserInfoServiceLocalDummyImpl;
@@ -51,6 +52,9 @@ import fi.koku.services.entity.kks.v1.KksServicePortType;
 import fi.koku.services.entity.kks.v1.KksTagNamesType;
 import fi.koku.services.entity.kks.v1.KksType;
 import fi.koku.services.entity.kks.v1.ServiceFault;
+import fi.koku.services.entity.tiva.v1.Consent;
+import fi.koku.services.entity.tiva.v1.ConsentTemplate;
+import fi.koku.services.entity.tiva.v1.KokuTivaToKksService;
 
 /**
  * Service demoa varten
@@ -512,24 +516,6 @@ public class KksService {
     return creatables;
   }
 
-  public void sendConsentRequest(String collectionId, String consentType, String customerId) {
-
-    initConsentReq();
-    ConsentRequest req = new ConsentRequest();
-    req.setConsentType(consentType);
-    req.setCustomerId(customerId);
-
-    if (consents.containsKey(customerId)) {
-      List<ConsentRequest> tmp = consents.get(customerId);
-      tmp.add(req);
-
-    } else {
-      List<ConsentRequest> tmp = new ArrayList<ConsentRequest>();
-      tmp.add(req);
-      consents.put(customerId, tmp);
-    }
-  }
-
   public Map<String, ConsentRequest> getConsentRequests(String customerId) {
 
     initConsentReq();
@@ -546,6 +532,63 @@ public class KksService {
       res.put(r.getConsentType(), r);
     }
     return res;
+  }
+
+  /**
+   * Creates consent request for given customer and consentType
+   * 
+   * @param customer
+   * @param user
+   *          that requests the consent
+   * @param consentType
+   *          that is requested (example
+   *          kks.suostumus.4-vuotiaan.neuvolatarkastus)
+   * @return true if request is success false if failed
+   */
+  public boolean sendConsentRequest(String consentType, String customerId, String user) {
+
+    KokuTivaToKksService tivaService = getTivaService();
+
+    List<ConsentTemplate> templates = tivaService.queryConsentTemplates(consentType, 1);
+
+    if (templates.size() == 0) {
+      return false;
+    }
+
+    ConsentTemplate template = templates.get(0);
+
+    Consent consent = new Consent();
+    consent.setTargetPerson(customerId);
+    consent.setTemplate(template);
+
+    List<String> guardians = getCustomerGuardians();
+
+    if (guardians == null) {
+      return false;
+    }
+
+    // TODO: change to contain id & name from organization?
+    consent.getGivenTo().addAll(getOrganizationNames(user));
+    consent.getConsentProviders().addAll(guardians);
+    tivaService.createConsent(consent);
+    return true;
+  }
+
+  private List<String> getCustomerGuardians() {
+
+    // TODO
+    return new ArrayList<String>();
+  }
+
+  private List<String> getOrganizationNames(String user) {
+
+    // TODO
+    return new ArrayList<String>();
+  }
+
+  private KokuTivaToKksService getTivaService() {
+    ConsentServiceFactory csf = new ConsentServiceFactory("", "", Constants.TIVA_ENDPOINT);
+    return csf.getService();
   }
 
 }

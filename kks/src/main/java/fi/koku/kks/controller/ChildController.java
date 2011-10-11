@@ -58,8 +58,6 @@ public class ChildController {
     model.addAttribute("child", child);
     model.addAttribute("collections", kksService.getKksCollections(child.getPic(), pic));
     model.addAttribute("creatables", kksService.searchPersonCreatableCollections(child, pic));
-
-    model.addAttribute("consents", kksService.getConsentRequests(child.getPic()));
     model.addAttribute("registries", kksService.getAuthorizedRegistries(pic));
 
     if (!model.containsAttribute("creation")) {
@@ -70,11 +68,12 @@ public class ChildController {
   }
 
   @ActionMapping(params = "action=sendConsentRequest")
-  public void sendConsentRequest(@ModelAttribute(value = "child") Person child, @RequestParam String collectionId,
-      @RequestParam String consent, ActionResponse response, SessionStatus sessionStatus) {
+  public void sendConsentRequest(PortletSession session, @ModelAttribute(value = "child") Person child,
+      @RequestParam String collectionId, @RequestParam String consent, ActionResponse response,
+      SessionStatus sessionStatus) {
     LOG.debug("sendConsentRequest");
 
-    kksService.sendConsentRequest(collectionId, consent, child.getPic());
+    kksService.sendConsentRequest(consent, child.getPic(), Utils.getPicFromSession(session));
 
     response.setRenderParameter("action", "showChild");
     response.setRenderParameter("pic", child.getPic());

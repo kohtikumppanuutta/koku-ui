@@ -21,7 +21,7 @@
 	<dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>kksservice-api</artifactId>
-      <version>0.2.1</version>
+      <version>0.2.2</version>
     </dependency>
     
 	<dependency>  
@@ -35,6 +35,12 @@
 	    <artifactId>authorizationinfoservice-api</artifactId>  
 	    <version>0.0.4</version>  
 	</dependency> 
+	
+		    <dependency>  
+		    <groupId>kohti-kumppanuutta</groupId>  
+		    <artifactId>tivaservice-api</artifactId>  
+		    <version>0.0.1</version>  
+		</dependency> 
       
  </dependencies>
   

@@ -48,6 +48,8 @@ public class KksConverter {
     tmp.setVersioned(collection.getNextVersion() != null);
     tmp.setCreator(collection.getCreator());
     tmp.setCustomer(collection.getCustomerId());
+    tmp.setConsentRequested(collection.isConsentRequested());
+    tmp.setUserConsentStatus(collection.getUserConsentStatus());
     for (KksEntryType entryType : collection.getKksEntries().getEntries()) {
 
       KksEntryClassType metaEntry = kksService.getEntryClassType(entryType.getEntryClassId(), user);
@@ -79,6 +81,8 @@ public class KksConverter {
     tmp.setNextVersion(collection.getNextVersion());
     tmp.setStatus(collection.getState().getState().toString());
     tmp.setModifier(user);
+    tmp.setConsentRequested(collection.isConsentRequested());
+    tmp.setUserConsentStatus(collection.getUserConsentStatus());
 
     Calendar cal = new GregorianCalendar();
     cal.setTime(new Date());
