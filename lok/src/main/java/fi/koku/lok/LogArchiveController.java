@@ -86,9 +86,6 @@ public class LogArchiveController {
       @RequestParam(value = "error", required = false) String error,
       @RequestParam(value = "change", required = false) String change,  
       RenderResponse res, Model model) {
-    
-    log.debug("render archiveLog: visited= "+visited);
-    log.debug("render archiveLog: change= "+change);
  
     // get user pic and role
     String userPic = LogUtils.getPicFromSession(session);
@@ -98,7 +95,6 @@ public class LogArchiveController {
     log.debug("render searchLog");
     // add a flag for allowing this user to see the operations on page search.jsp 
     if (AuthUtils.isOperationAllowed("AdminSystemLogFile", userRoles)) {
-      log.debug("lisätään allowedToView");
       model.addAttribute("allowedToView", true);
     }
     
