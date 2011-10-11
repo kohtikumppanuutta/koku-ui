@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fi.arcusys.koku.user.usersandgroupsservice.Child;
+import fi.arcusys.koku.user.usersandgroupsservice.ChildWithHetu;
 import fi.arcusys.koku.user.usersandgroupsservice.Group;
 import fi.arcusys.koku.user.usersandgroupsservice.User;
 import fi.arcusys.koku.user.usersandgroupsservice.UsersAndGroupsService_Service;
@@ -61,8 +62,8 @@ public class KokuUserService {
 	
 	public List<KokuChild> getUsersChildren(String userUid) {
 		List<KokuChild> childs = new ArrayList<KokuChild>();
-		List<Child> childrens = service.getUsersAndGroupsServicePort().getUsersChildren(userUid);
-		for (Child child : childrens) {
+		List<ChildWithHetu> childrens = service.getUsersAndGroupsServicePort().getUsersChildren(userUid);
+		for (ChildWithHetu child : childrens) {
 			childs.add(new KokuChild(child));
 		}
 		return childs;

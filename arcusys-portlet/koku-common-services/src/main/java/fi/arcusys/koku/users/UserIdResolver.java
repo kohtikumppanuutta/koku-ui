@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import fi.arcusys.koku.util.PortalRole;
 
+
 public class UserIdResolver {
 	
 	private static Logger LOG = Logger.getLogger(UserIdResolver.class);
