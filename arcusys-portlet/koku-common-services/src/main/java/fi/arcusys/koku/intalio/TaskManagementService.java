@@ -86,11 +86,11 @@ public class TaskManagementService {
 			availTasksRes = tms.getTaskManagementServicesSOAP().getAvailableTasks(getAvailTasksReq);
 			taskList = availTasksRes.getTask();
 		} catch (InvalidParticipantTokenFault_Exception e) {
-			logger.error("InvalidParticipantTokenFault_Exception");
+			logger.error("InvalidParticipantTokenFault_Exception", e);
 		} catch (InvalidInputMessageFault_Exception e) {
-			logger.error("InvalidInputMessageFault_Exception");
+			logger.error("InvalidInputMessageFault_Exception", e);
 		} catch (Exception e) {
-			logger.error("Intalio exception");
+			logger.error("Intalio exception",e);
 		}
 		
 		return taskList;
