@@ -51,7 +51,6 @@ import fi.koku.services.entity.customer.v1.PicsType;
 public class PyhDemoService {
   
   private static Logger log = LoggerFactory.getLogger(PyhDemoService.class);
-  private List<Person> searchedUsers;
   
   private CustomerServicePortType customerService;
   private CommunityServicePortType communityService;
@@ -322,13 +321,11 @@ public class PyhDemoService {
   }
   
   /**
-   * Query persons by name, PIC and customer ID and stores them in the searchedUsers list.
+   * Query persons by name, PIC and customer ID and stores them in the portlet session as a List<Person> list.
    */
-  public void searchUsers(String surname, String customerPic, /*String customerID,*/ String currentUserPic) {
+  public void searchUsers(String surname, String customerPic, /*String customerID,*/ String currentUserPic, PortletSession session) {
     
     // this search can return only one result because search criteria includes PIC
-    
-    clearSearchedUsers();
     
     CustomerQueryCriteriaType customerCriteria = new CustomerQueryCriteriaType();
     
@@ -350,6 +347,8 @@ public class PyhDemoService {
     }
     
     Set<String> depPics = getDependantPics(currentUserPic);
+    
+    List<Person> searchedUsers = new ArrayList<Person>();
     
     if (customersType != null) {
       List<CustomerType> customers = customersType.getCustomer();
@@ -374,24 +373,7 @@ public class PyhDemoService {
       }
     }
     
-  }
-  
-  /**
-   * Returns the results of a query for persons.
-   */
-  public List<Person> getSearchedUsers() {
-    return searchedUsers;
-  }
-  
-  /**
-   * Clears the search results.
-   */
-  public void clearSearchedUsers() {
-    if (searchedUsers == null) {
-      searchedUsers = new ArrayList<Person>();
-    } else {
-      searchedUsers.clear();
-    }
+    session.setAttribute("searchedUsers", searchedUsers);
   }
   
   /**

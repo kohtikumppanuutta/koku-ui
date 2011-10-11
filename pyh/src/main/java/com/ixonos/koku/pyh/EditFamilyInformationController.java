@@ -60,14 +60,17 @@ public class EditFamilyInformationController {
       log.error("ERROR: UserInfo returns no PIC!");
     }
     
+    // clear search results
+    session.setAttribute("searchedUsers", null);
+    
     Person user = pyhDemoService.getUser(userPic);
     DependantsAndFamily daf = pyhDemoService.getDependantsAndFamily(userPic);
-    pyhDemoService.clearSearchedUsers();
     model.addAttribute("user", user);
     model.addAttribute("dependants", daf.getDependants());
     model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers(userPic));
     model.addAttribute("parentsFull", pyhDemoService.isParentsSet(userPic));
     model.addAttribute("messages", pyhDemoService.getSentMessages(user));
+    model.addAttribute("searchedUsers", null);
     
     // if child's guardianship information is not found show a notification in JSP
     Boolean childsGuardianshipInformationNotFound = (Boolean)session.getAttribute("childsGuardianshipInformationNotFound");
@@ -91,7 +94,7 @@ public class EditFamilyInformationController {
     
     return "editfamilyinformation";
   }
-
+  
   // this render method does not clear the search results
   @RenderMapping(params = "action=editFamilyInformationWithSearchResults")
   public String renderWithSearchResults(RenderRequest request, Model model, PortletSession session) {
@@ -105,6 +108,8 @@ public class EditFamilyInformationController {
       log.error("ERROR: UserInfo returns no PIC!");
     }
     
+    List<Person> searchedUsers = (List<Person>)session.getAttribute("searchedUsers");
+    
     Person user = pyhDemoService.getUser(userPic);
     DependantsAndFamily daf = pyhDemoService.getDependantsAndFamily(userPic);
     request.setAttribute("search", true);
@@ -113,13 +118,9 @@ public class EditFamilyInformationController {
     model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers(userPic));
     model.addAttribute("parentsFull", pyhDemoService.isParentsSet(userPic));
     model.addAttribute("messages", pyhDemoService.getSentMessages(user));
-
+    model.addAttribute("searchedUsers", searchedUsers);
+    
     return "editfamilyinformation";
-  }
-  
-  @ModelAttribute(value = "searchedUsers")
-  private List<Person> getSearchedUsers() {
-    return pyhDemoService.getSearchedUsers();
   }
   
   @ActionMapping(params = "action=addDependantAsFamilyMember")
@@ -192,7 +193,7 @@ public class EditFamilyInformationController {
     
     // call service to query users,
     // users are returned as a model attribute object searchedUsers
-    pyhDemoService.searchUsers(surname, pic /*, userPic /*customer id == user pic*/, userPic);
+    pyhDemoService.searchUsers(surname, pic /*, userPic /*customer id == user pic*/, userPic, session);
     response.setRenderParameter("action", "editFamilyInformationWithSearchResults");
   }
 
