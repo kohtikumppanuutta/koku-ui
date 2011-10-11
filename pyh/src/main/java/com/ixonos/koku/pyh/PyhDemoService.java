@@ -321,9 +321,9 @@ public class PyhDemoService {
   }
   
   /**
-   * Query persons by name, PIC and customer ID and stores them in the portlet session as a List<Person> list.
+   * Query persons by name, PIC and customer ID and returns results in a List<Person> list.
    */
-  public void searchUsers(String surname, String customerPic, /*String customerID,*/ String currentUserPic, PortletSession session) {
+  public List<Person> searchUsers(String surname, String customerPic, /*String customerID,*/ String currentUserPic) {
     
     // this search can return only one result because search criteria includes PIC
     
@@ -373,7 +373,7 @@ public class PyhDemoService {
       }
     }
     
-    session.setAttribute("searchedUsers", searchedUsers);
+    return searchedUsers;
   }
   
   /**

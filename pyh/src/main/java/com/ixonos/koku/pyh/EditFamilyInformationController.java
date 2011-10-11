@@ -108,7 +108,11 @@ public class EditFamilyInformationController {
       log.error("ERROR: UserInfo returns no PIC!");
     }
     
-    List<Person> searchedUsers = (List<Person>)session.getAttribute("searchedUsers");
+    String surname = request.getParameter("surname");
+    String pic = request.getParameter("pic");
+    log.info("EditFamilyInformationController.renderWithSearchResults: calling pyhDemoService.searchUsers() with parameters:");
+    log.info("surname = " + surname + ", pic = " + pic);
+    List<Person> searchedUsers = pyhDemoService.searchUsers(surname, pic, userPic);
     
     Person user = pyhDemoService.getUser(userPic);
     DependantsAndFamily daf = pyhDemoService.getDependantsAndFamily(userPic);
@@ -191,9 +195,10 @@ public class EditFamilyInformationController {
     String surname = request.getParameter("searchSurname");
     String pic = request.getParameter("searchPic");
     
-    // call service to query users,
-    // users are returned as a model attribute object searchedUsers
-    pyhDemoService.searchUsers(surname, pic /*, userPic /*customer id == user pic*/, userPic, session);
+    // TODO: refactoring: this method will not be called but we call render method directly
+    //pyhDemoService.searchUsers(surname, pic /*, userPic /*customer id == user pic*/, userPic);
+    response.setRenderParameter("surname", surname);
+    response.setRenderParameter("pic", pic);
     response.setRenderParameter("action", "editFamilyInformationWithSearchResults");
   }
 
