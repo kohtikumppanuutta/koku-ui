@@ -229,12 +229,10 @@
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
 		<li id="kks"><a href="/portal/private/classic/KKS">Sopimukset ja suunnitelmat</a>
 		<li id="pyh"><a href="/portal/private/classic/PYH">Omat tiedot</a></li>
-		<li id="lok"><a href="/portal/private/classic/LOK">Lokihallinta</a></li>
 		</c:if>
 		<!-- For employee in Jboss portal -->
 		<c:if test="${fn:contains(naviURL, '/default/')}">
 		<li id="kks"><a href="/portal/auth/portal/default/KKS">Sopimukset ja suunnitelmat</a>
-		<li id="pyh"><a href="/portal/auth/portal/default/PYH">Omat tiedot</a></li>
 		<li id="lok"><a href="/portal/auth/portal/default/LOK">Lokihallinta</a></li>
 		</c:if>
 		
