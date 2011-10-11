@@ -176,6 +176,7 @@ public class ViewController extends FormHolderController {
 					LOG.debug("t status: " + (t == null));
 					// Fallback. Try to get form by Id
 					if (t == null) {
+						LOG.error("Fallback! Couldn't find task by description name. Trying to get form by Id. Description: '" + prefs.getValue(SHOW_ONLY_FORM_BY_DESCRIPTION, null) + "'");
 						t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue(SHOW_ONLY_FORM_BY_ID, null));
 					}
 				}
