@@ -211,6 +211,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 			actionReq = new ActionRequest();
 			actionReq.setDescription(actionSummary.getDescription());
 			actionReq.setStatus(localizeActionRequestStatus(actionSummary.getStatus()));
+			actionReq.setName(actionSummary.getName());
 			actionList.add(actionReq);
 		}
 		

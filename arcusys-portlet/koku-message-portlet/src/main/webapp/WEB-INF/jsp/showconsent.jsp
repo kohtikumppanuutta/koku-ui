@@ -65,9 +65,14 @@ function formatUrl(url) {
 	
     <h3><spring:message code="consent.actionRequest"/></h3>
     <table class="request-table">
-    	<tr><td class="head"><spring:message code="consent.description"/></td><td class="head"><spring:message code="consent.status"/></td></tr>
+    	<tr>
+    		<td class="head"><spring:message code="consent.name"/></td>
+    		<td class="head"><spring:message code="consent.description"/></td>
+    		<td class="head"><spring:message code="consent.status"/></td>
+    	</tr>
     	<c:forEach var="request" items="${consent.actionRequests}" varStatus="loopStatus">
         <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
+          <td>${request.name}</td>
           <td>${request.description}</td>
           <td>${request.status}</td>    
         </tr>
