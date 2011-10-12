@@ -1,6 +1,5 @@
 package fi.koku.lok;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,8 +12,6 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -40,8 +37,6 @@ import fi.koku.services.utility.log.v1.LogQueryCriteriaType;
 import fi.koku.services.utility.log.v1.LogServiceFactory;
 import fi.koku.services.utility.log.v1.LogServicePortType;
 import fi.koku.services.utility.log.v1.ServiceFault;
-
-import fi.koku.lok.*;
 
 /**
  * Controller for viewing log views, for admin. This implements LOK-4 (Tarkista
@@ -125,10 +120,12 @@ public class LogViewController {
               
        if(errors[0] ==null && errors[1] == null){
 
-          //TODO: tähän kohtaan jokin virheenkäsittely?
+        try{
           // make the query to the admin log
           model.addAttribute("entries", getAdminLogEntries(criteria, userPic));
-
+        }catch(ServiceFault fault){
+          model.addAttribute("error", "koku.lok.error.viewlog");
+        }
           model.addAttribute("searchParams", criteria);
           log.debug("criteria: " + criteria.getFrom() + ", " + criteria.getTo());
           model.addAttribute("visited", "---");
@@ -174,10 +171,10 @@ public class LogViewController {
    * @param criteria
    * @return
    */
-  private List<AdminLogEntry> getAdminLogEntries(LogSearchCriteria criteria, String userPic) {
+  private List<AdminLogEntry> getAdminLogEntries(LogSearchCriteria criteria, String userPic) throws ServiceFault{
     List<AdminLogEntry> entryList = new ArrayList<AdminLogEntry>();
 
-    try {
+   // try {
      
       LogQueryCriteriaType criteriatype = new LogQueryCriteriaType();
 
@@ -223,6 +220,7 @@ public class LogViewController {
         AdminLogEntry logEntry = new AdminLogEntry();
         LogEntryType logEntryType = (LogEntryType) i.next();
 
+        log.debug("got from service timestamp: "+logEntryType.getTimestamp().get(Calendar.HOUR_OF_DAY)+":"+logEntryType.getTimestamp().get(Calendar.MINUTE)+":"+logEntryType.getTimestamp().get(Calendar.SECOND));
         // put values that were read from the database in logEntry for showing
         // them to the user
         logEntry.setTimestamp(logEntryType.getTimestamp().getTime());
@@ -242,12 +240,12 @@ public class LogViewController {
    // TODO: Parempi virheenkäsittely
   
     }
-    } // TODO: Parempi virheenkäsittely
- catch (ServiceFault e) {
+  //  } // TODO: Parempi virheenkäsittely
+ /*catch (ServiceFault e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-
+*/
     return entryList;
   }
 

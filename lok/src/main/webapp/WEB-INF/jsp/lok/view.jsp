@@ -109,6 +109,14 @@
 						</c:if>
 				</div>
 
+					<c:choose>
+					<c:when test="${not empty error}">
+						<br>
+						<spring:message code="${error}" />
+						<p>
+					</c:when>
+					<c:otherwise>
+				
 				<c:if test="${empty entries}">
 					<c:if test="${not empty visited}">
 						<%-- do not show this on the first visit to this page --%>
@@ -128,6 +136,9 @@
 					<c:if test="${not empty error1}">
 						<spring:message code="${error1}" />
 					</c:if>
+					
+					</c:otherwise>
+					</c:choose>
 			</c:when>
 
 

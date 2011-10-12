@@ -84,7 +84,14 @@
 
 			<div class="clear"></div>
 		</form:form>
-
+	
+	<c:choose>
+	<c:when test="${not empty error}">
+	<br>
+						<spring:message code="${error}" />
+						<p>
+					</c:when>
+					<c:otherwise>
 
 				<c:if test="${not empty entries}">
 					<c:if test="${not empty visited}">
@@ -170,8 +177,10 @@ This should be changed! --%>
 					</c:if>
 					
 				</p>
-	
+				</c:otherwise>
+	</c:choose>
 		</c:when>
+
 
 <c:otherwise>
 	<spring:message code="ui.lok.no.user.rights" />

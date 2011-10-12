@@ -119,16 +119,22 @@ public class LogSearchController {
         model.addAttribute("error1", errors[1]);
         model.addAttribute("error2", errors[2]);
  
-        if(errors[0] ==null && errors[1] == null && errors[2] ==null){
-          // get the entries from the database
-          model.addAttribute("entries", getLogEntries(criteria, userPic));
+        if(errors[0] == null && errors[1] == null && errors[2] == null){
+          
+          try{
+            // get the entries from the database
+            model.addAttribute("entries", getLogEntries(criteria, userPic));
          
+          }catch(ServiceFault fault){
+            model.addAttribute("error", "koku.lok.error.log");
+          }catch(Exception e){
+            log.debug("Other exception: "+e.getMessage());
+          }
+          
           model.addAttribute("searchParams", criteria);
           model.addAttribute("visited", "---");
         }
       }
-      log.info("criteria: " + criteria.getPic() + ", " + criteria.getConcept() + ", " + criteria.getFrom() + ", "
-          + criteria.getTo());
 
       if (StringUtils.isNotBlank(criteria.getPic())) {
         model.addAttribute("logSearchCriteria", criteria);
@@ -160,16 +166,15 @@ public class LogSearchController {
    * @param searchCriteria
    * @return
    */
-  private List<LogEntry> getLogEntries(LogSearchCriteria searchCriteria, String userPic) {
+  private List<LogEntry> getLogEntries(LogSearchCriteria searchCriteria, String userPic) throws ServiceFault{
     List<LogEntry> entryList = new ArrayList<LogEntry>();
 
-    try {
+  //  try {
       LogQueryCriteriaType criteriatype = new LogQueryCriteriaType();
 
       // set the criteria
       criteriatype.setCustomerPic(searchCriteria.getPic());
-      log.debug("searchcriteria: from=" + searchCriteria.getFrom() + ", to=" + searchCriteria.getTo());
-
+   
       // The from and to fields are not allowed to be null
       Calendar start = lu.dateToCalendar(searchCriteria.getFrom());
       Calendar end = lu.dateToCalendar(searchCriteria.getTo());
@@ -184,18 +189,15 @@ public class LogSearchController {
       // log type: loki, lokin seurantaloki
       criteriatype.setLogType(LogConstants.LOG_NORMAL);
 
-      log.debug("criteriatype cust pic: " + criteriatype.getCustomerPic() + "\n" + "start: "
-          + criteriatype.getStartTime() + "\n" + "end: " + criteriatype.getEndTime() + "\n" + "dataItem: "
-          + criteriatype.getDataItemType() + "\n" + "logtype: " + criteriatype.getLogType());
-
       // call to log database
       AuditInfoType audit = new AuditInfoType();
       audit.setComponent(LogConstants.COMPONENT_LOK); 
       audit.setUserId(userPic); // pic from the session    
-
+      
       // call to log service
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
 
+    
       // the log entries list from the database
       List<LogEntryType> entryTypeList = entriestype.getLogEntry();
 
@@ -227,16 +229,18 @@ public class LogSearchController {
         entryList.add(logEntry);
       }
 
-    } // TODO: Parempi virheenkäsittely
-    catch (ServiceFault e) {
+    // TODO: Parempi virheenkäsittely
+/*    catch (ServiceFault e) {
       // TODO Auto-generated catch block
       // e.printStackTrace();
       e.getFaultInfo().getCode();
       // }catch(javax.xml.ws.soap.SoapFaultException ee){
-    } catch (Exception ee) {
+    }
+     catch (Exception ee) {
       log.error("jokin virhe servicesta");
     }
-
+*/
+  
     return entryList;
   }
 
