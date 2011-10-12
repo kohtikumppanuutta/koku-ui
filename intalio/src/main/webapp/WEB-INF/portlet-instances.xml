@@ -4,6 +4,7 @@
    "http://www.jboss.org/portal/dtd/portlet-instances_2_6.dtd">
 <deployments>
 
+	
 <!-- Citizen & employee -->
    <deployment>
       <instance>
@@ -52,7 +53,7 @@
 			</preference>
 			<preference>
 				<name>showOnlyFormByDescription</name>
-				<value>Dynaaminen lomake</value>
+				<value>Uusi pyyntö</value>
 			</preference>
 			<preference>
 				<name>useTaskId</name>
@@ -83,7 +84,7 @@
 			</preference>
 			<preference>
 				<name>showOnlyFormByDescription</name>
-				<value>KOKU - Pohjan luominen</value>
+				<value>Kyselypohjan luominen</value>
 			</preference>
 			<preference>
 				<name>useTaskId</name>
@@ -114,7 +115,7 @@
 			</preference>
 			<preference>
 				<name>showOnlyFormByDescription</name>
-				<value>Dynaaminen lomake [*]2</value>
+				<value>Ajanvaraus - Virkailija</value>
 			</preference>
 			<preference>
 				<name>useTaskId</name>
@@ -145,7 +146,7 @@
 			</preference>
 			<preference>
 				<name>showOnlyFormByDescription</name>
-				<value>TIVA Suostumus - Template Creation NEW</value>
+				<value>TIVA Suostumus - Uusi Suostumuspohja</value>
 			</preference>
 			<preference>
 				<name>useTaskId</name>
@@ -176,7 +177,7 @@
 			</preference>
 			<preference>
 				<name>showOnlyFormByDescription</name>
-				<value>TIVA Suostumus - Send Consent</value>
+				<value>TIVA Suostumus - Uusi Suostumuspyyntö</value>
 			</preference>
 			<preference>
 				<name>useTaskId</name>
@@ -207,7 +208,7 @@
 			</preference>
 			<preference>
 				<name>showOnlyFormByDescription</name>
-				<value>TIVA Suostumus - Send Consent</value>
+				<value>Uusi tietopyyntö</value>
 			</preference>
 			<preference>
 				<name>useTaskId</name>
