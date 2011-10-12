@@ -90,7 +90,7 @@ public class LogArchiveController {
     // get user pic and role
     String userPic = LogUtils.getPicFromSession(session);
       
-    List<Role> userRoles = authorizationInfoService.getUsersRoles("lok", userPic);
+    List<Role> userRoles = authorizationInfoService.getUsersRoles(LogConstants.COMPONENT_LOK, userPic);
     
     log.debug("render searchLog");
     // add a flag for allowing this user to see the operations on page search.jsp 
@@ -214,7 +214,7 @@ public class LogArchiveController {
     // get user pic and role
     String userPic = LogUtils.getPicFromSession(session);
       
-    List<Role> userRoles = authorizationInfoService.getUsersRoles("lok", userPic);
+    List<Role> userRoles = authorizationInfoService.getUsersRoles(LogConstants.COMPONENT_LOK, userPic);
     
   
     // add a flag for allowing this user to see the operations on page search.jsp 
@@ -270,7 +270,7 @@ public class LogArchiveController {
         
         // call to log database
         AuditInfoType audit = new AuditInfoType();
-        audit.setComponent("lok"); //FIXME Voi olla demossa näin!
+        audit.setComponent(LogConstants.COMPONENT_LOK); 
         audit.setUserId(userPic);  // FIXME
 
         log.debug("log archive action phase: starting archiving");

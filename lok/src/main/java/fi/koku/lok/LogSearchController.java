@@ -18,7 +18,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
-import javax.xml.ws.soap.SOAPFaultException;
 
 import fi.koku.services.entity.authorizationinfo.util.AuthUtils;
 import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
@@ -65,8 +63,10 @@ public class LogSearchController {
   LogUtils lu = new LogUtils();
 
   public LogSearchController() {
-    LogServiceFactory logServiceFactory = new LogServiceFactory(LogConstants.LOG_SERVICE_USER_ID,
-        LogConstants.LOG_SERVICE_PASSWORD, LogConstants.LOG_SERVICE_ENDPOINT);
+    LogServiceFactory logServiceFactory = new LogServiceFactory(
+        LogConstants.LOG_SERVICE_USER_ID,
+        LogConstants.LOG_SERVICE_PASSWORD, 
+        LogConstants.LOG_SERVICE_ENDPOINT);
     logService = logServiceFactory.getLogService();
     
     authorizationInfoService = new AuthorizationInfoServiceDummyImpl();
@@ -94,7 +94,7 @@ public class LogSearchController {
     // get user pic and role
     String userPic = LogUtils.getPicFromSession(session);
       
-    List<Role> userRoles = authorizationInfoService.getUsersRoles("lok", userPic);
+    List<Role> userRoles = authorizationInfoService.getUsersRoles(LogConstants.COMPONENT_LOK, userPic);
     
     log.debug("render searchLog");
     // add a flag for allowing this user to see the operations on page search.jsp 
@@ -160,7 +160,7 @@ public class LogSearchController {
    * @param searchCriteria
    * @return
    */
-  private List<LogEntry> getLogEntries(LogSearchCriteria searchCriteria, String user) {
+  private List<LogEntry> getLogEntries(LogSearchCriteria searchCriteria, String userPic) {
     List<LogEntry> entryList = new ArrayList<LogEntry>();
 
     try {
@@ -190,10 +190,8 @@ public class LogSearchController {
 
       // call to log database
       AuditInfoType audit = new AuditInfoType();
-      audit.setComponent("lok"); // FIXME
-    
-      // set pic that was got from the session
-      audit.setUserId(user);
+      audit.setComponent(LogConstants.COMPONENT_LOK); 
+      audit.setUserId(userPic); // pic from the session    
 
       // call to log service
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);

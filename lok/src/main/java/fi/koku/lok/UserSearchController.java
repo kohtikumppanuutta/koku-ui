@@ -51,7 +51,8 @@ public class UserSearchController {
   
   public UserSearchController() {
     CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory(
-        LogConstants.CUSTOMER_SERVICE_USER_ID, LogConstants.CUSTOMER_SERVICE_PASSWORD,
+        LogConstants.CUSTOMER_SERVICE_USER_ID, 
+		LogConstants.CUSTOMER_SERVICE_PASSWORD,
         LogConstants.CUSTOMER_SERVICE_ENDPOINT);
     customerService = customerServiceFactory.getCustomerService();
     
@@ -66,7 +67,7 @@ public class UserSearchController {
     // get user pic and role
     String userPic = LogUtils.getPicFromSession(session);
       
-    List<Role> userRoles = authorizationInfoService.getUsersRoles("lok", userPic);
+    List<Role> userRoles = authorizationInfoService.getUsersRoles(LogConstants.COMPONENT_LOK, userPic);
     
     
     // add a flag for allowing this user to see the operations on page search.jsp 
@@ -96,14 +97,14 @@ public class UserSearchController {
   public String renderParams(PortletSession session, @RequestParam(value = "pic", required = false) String pic,
       RenderRequest req, RenderResponse res, Model model) {
        
-   User customer = null;
+    User customer = null;
    
     log.debug("log: search user with pic = "+pic);
    
     // get user pic and role
     String userPic = LogUtils.getPicFromSession(session);
       
-    List<Role> userRoles = authorizationInfoService.getUsersRoles("lok", userPic);
+    List<Role> userRoles = authorizationInfoService.getUsersRoles(LogConstants.COMPONENT_LOK, userPic);
     
     
     // add a flag for allowing this user to see the operations on page search.jsp 
@@ -113,7 +114,7 @@ public class UserSearchController {
     }
     
     try{
-      customer = findUser(pic);
+      customer = findUser(pic, userPic);
     }catch(ServiceFault fault){
       //TODO: lisää virheviesti
       //TODO: tuleelo väärällä hetulla hausta erityislokitus tapahtumalokiin?
@@ -138,7 +139,7 @@ public class UserSearchController {
   /*
    * Finds a user in the customer database by pic. There can be only one matching user! 
    */
-  public User findUser(String pic) throws ServiceFault, SOAPFaultException{
+  public User findUser(String pic, String userPic) throws ServiceFault, SOAPFaultException{
   
     log.info("pic=" + pic);
     
@@ -146,7 +147,7 @@ public class UserSearchController {
    
     fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
     customerAuditInfoType.setComponent(LogConstants.COMPONENT_LOK);
-    customerAuditInfoType.setUserId(LogConstants.LOK_USER_ID);
+    customerAuditInfoType.setUserId(userPic);
     
     User cust = null;
 
@@ -163,15 +164,4 @@ public class UserSearchController {
   }
 
   
-   // DEMO-KÄYTTÄJÄT:
-    // Return list of users if one of the search params is not null and not
-    // empty string. Else return empty arraylist.
- /*
-  *    if (StringUtils.isNotBlank(pic) | StringUtils.isNotBlank(fname) | StringUtils.isNotBlank(sname)) {
-      log.info("Returning searchedUsers.size=" + searchedUsers.size());
-      return searchedUsers;
-    } else {
-      return new ArrayList<User>(0);
-    }
-*/
 }

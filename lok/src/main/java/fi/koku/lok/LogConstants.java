@@ -2,6 +2,7 @@ package fi.koku.lok;
 
 import java.util.Locale;
 
+import fi.koku.services.entity.authorizationinfo.v1.Constants;
 import fi.koku.services.entity.authorizationinfo.v1.model.Role;
 import fi.koku.settings.KoKuPropertiesUtil;
 
@@ -29,9 +30,11 @@ public class LogConstants {
   public static final String CUSTOMER_SERVICE_USER_ID = "marko";
   public static final String CUSTOMER_SERVICE_PASSWORD = "marko";
 
-  public static final String COMPONENT_LOK = "LOK";
-  public static final String LOK_USER_ID = "susanna";
+  public static final String COMPONENT_LOK = "lok";
+  public static final String LOK_USER_ID = "susanna"; //"101010-1010"; // has the right to view and archive
+//  public static final String LOK_LOG_USER_ID = "121212-1212"; // has the right to view the view log
 
+  
   // String ep =
   // "http://localhost:8080/log-service-0.0.1-SNAPSHOT/LogServiceBean?wsdl";
   // TODO: Muuta tämä, kun siirrytään pois mockista!
@@ -39,7 +42,6 @@ public class LogConstants {
 //24.9. vaihda portiksi 8580, jos tutkitaan tcpmonilla
 //  public static final String LOG_SERVICE_ENDPOINT = "http://localhost:8580/lok-service-0.0.1-SNAPSHOT.jar";
   public static final String LOG_SERVICE_ENDPOINT = KoKuPropertiesUtil.get("lok.service.endpointaddress");
-  
   public static final String LOG_SERVICE_USER_ID = "marko";
   public static final String LOG_SERVICE_PASSWORD = "marko";
   

@@ -36,7 +36,7 @@ public class LogController {
   public String renderHome(PortletSession session, Model model){
     log.debug("log search render phase, return main menu");
     
-  List<Role> userRoles = authorizationInfoService.getUsersRoles("lok", LogUtils.getPicFromSession(session));
+  List<Role> userRoles = authorizationInfoService.getUsersRoles(LogConstants.COMPONENT_LOK, LogUtils.getPicFromSession(session));
     
     if (AuthUtils.isOperationAllowed("AdminSystemLogFile", userRoles)) {
       model.addAttribute("showMenu", true);
@@ -57,7 +57,7 @@ public class LogController {
    // model.addAttribute("user", LogUtils.getPicFromSession(session));
     
     // this is used for selecting which part of the page to show
-    List<Role> userRoles = authorizationInfoService.getUsersRoles("lok", LogUtils.getPicFromSession(session));
+    List<Role> userRoles = authorizationInfoService.getUsersRoles(LogConstants.COMPONENT_LOK, LogUtils.getPicFromSession(session));
     
     if (AuthUtils.isOperationAllowed("AdminSystemLogFile", userRoles)) {
       model.addAttribute("showMenu", true);

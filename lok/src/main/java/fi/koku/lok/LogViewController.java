@@ -104,7 +104,7 @@ public class LogViewController {
     // get user pic and role
     String userPic = LogUtils.getPicFromSession(session);
       
-    List<Role> userRoles = authorizationInfoService.getUsersRoles("lok", userPic);
+    List<Role> userRoles = authorizationInfoService.getUsersRoles(LogConstants.COMPONENT_LOK, userPic);
     
  
     // add a flag for allowing this user to see the operations on page search.jsp 
@@ -174,7 +174,7 @@ public class LogViewController {
    * @param criteria
    * @return
    */
-  private List<AdminLogEntry> getAdminLogEntries(LogSearchCriteria criteria, String user) {
+  private List<AdminLogEntry> getAdminLogEntries(LogSearchCriteria criteria, String userPic) {
     List<AdminLogEntry> entryList = new ArrayList<AdminLogEntry>();
 
     try {
@@ -203,8 +203,8 @@ public class LogViewController {
 
       // Set the user information
       AuditInfoType audit = new AuditInfoType();
-      audit.setComponent("lok"); //FIXME
-      audit.setUserId(user);  
+      audit.setComponent(LogConstants.COMPONENT_LOK); 
+      audit.setUserId(userPic);  
 
       log.debug("criteriatype start: " + criteriatype.getStartTime() + "\n end: " + criteriatype.getEndTime());
     if(criteriatype.getStartTime() == null || criteriatype.getEndTime() == null){
