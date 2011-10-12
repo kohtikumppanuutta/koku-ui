@@ -129,7 +129,7 @@
 										<c:if test="${not collection.consentRequested}">
 					                        <form:form name="sendForm-${collection.id}"  method="post" action="${sendConsentURL}">
 					                                <input type="hidden" id="collectionId" name="collectionId" value="${ collection.id }"/>
-					                                <input type="hidden" id="consent" name="consent" value="${ collection.collectionClass.consessionType }"/>
+					                                <input type="hidden" id="consent" name="consent" value="${ collection.collectionClass.consentType }"/>
 					                                
 					                                <span>
 					                                	<input type="submit" class="portlet-form-button" value="<spring:message code="ui.kks.consent.send"/>">

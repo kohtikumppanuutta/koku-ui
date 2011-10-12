@@ -18,9 +18,9 @@ import fi.koku.kks.ui.common.utils.CollectionComparator;
 import fi.koku.kks.ui.common.utils.ConsentServiceFactory;
 import fi.koku.kks.ui.common.utils.Constants;
 import fi.koku.portlet.filter.userinfo.UserInfo;
-import fi.koku.portlet.filter.userinfo.service.impl.UserInfoServiceLocalDummyImpl;
 import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
 import fi.koku.services.entity.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
+import fi.koku.services.entity.authorizationinfo.v1.model.OrgUnit;
 import fi.koku.services.entity.authorizationinfo.v1.model.Registry;
 import fi.koku.services.entity.community.v1.CommunitiesType;
 import fi.koku.services.entity.community.v1.CommunityQueryCriteriaType;
@@ -36,6 +36,7 @@ import fi.koku.services.entity.customer.v1.CustomerServicePortType;
 import fi.koku.services.entity.customer.v1.CustomerType;
 import fi.koku.services.entity.customer.v1.CustomersType;
 import fi.koku.services.entity.customer.v1.PicsType;
+import fi.koku.services.entity.family.v1.FamilyService;
 import fi.koku.services.entity.kks.v1.KksCollectionClassType;
 import fi.koku.services.entity.kks.v1.KksCollectionCreationCriteriaType;
 import fi.koku.services.entity.kks.v1.KksCollectionStateCriteriaType;
@@ -52,9 +53,13 @@ import fi.koku.services.entity.kks.v1.KksServicePortType;
 import fi.koku.services.entity.kks.v1.KksTagNamesType;
 import fi.koku.services.entity.kks.v1.KksType;
 import fi.koku.services.entity.kks.v1.ServiceFault;
+import fi.koku.services.entity.person.v1.PersonConstants;
+import fi.koku.services.entity.person.v1.PersonService;
 import fi.koku.services.entity.tiva.v1.Consent;
 import fi.koku.services.entity.tiva.v1.ConsentTemplate;
+import fi.koku.services.entity.tiva.v1.GivenTo;
 import fi.koku.services.entity.tiva.v1.KokuTivaToKksService;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
  * Service demoa varten
@@ -71,13 +76,11 @@ public class KksService {
   private Map<String, KksCollectionClassType> collectionClasses;
   private KksConverter converter;
   private Map<String, List<ConsentRequest>> consents;
-  UserInfoServiceLocalDummyImpl userInfo;
 
   public KksService() {
     entryClasses = new HashMap<String, KksEntryClassType>();
     collectionClasses = new HashMap<String, KksCollectionClassType>();
     converter = new KksConverter(this);
-    userInfo = new UserInfoServiceLocalDummyImpl();
     initConsentReq();
   }
 
@@ -165,7 +168,6 @@ public class KksService {
       criteria.setKksScope("minimum");
       KksServicePortType kksService = getKksService();
       KksType kks = kksService.opGetKks(criteria, getKksAuditInfo(user));
-
       List<KksCollectionType> collections = kks.getKksCollections().getKksCollection();
 
       if (collections != null) {
@@ -175,14 +177,7 @@ public class KksService {
         }
       }
 
-      for (KKSCollection c : tmp) {
-
-        UserInfo u = userInfo.getUserInfoByPic(c.getCreator());
-
-        if (u != null) {
-          c.setModifierFullName(u.getFname() + " " + u.getSname());
-        }
-      }
+      setCollectionCreators(user, tmp);
       Collections.sort(tmp, new CollectionComparator());
 
     } catch (ServiceFault e) {
@@ -190,6 +185,41 @@ public class KksService {
     }
 
     return tmp;
+  }
+
+  private void setCollectionCreators(String user, List<KKSCollection> tmp) {
+
+    List<String> creators = new ArrayList<String>();
+
+    for (KKSCollection c : tmp) {
+      creators.add(c.getCreator());
+    }
+
+    Map<String, String> personMap = getPersonsMap(user, creators);
+
+    for (KKSCollection c : tmp) {
+      c.setModifierFullName(personMap.get(c.getCreator()));
+    }
+  }
+
+  private Map<String, String> getPersonsMap(String user, List<String> creators) {
+    List<fi.koku.services.entity.person.v1.Person> persons = getPersonsFromService(user, creators);
+
+    Map<String, String> personMap = new HashMap<String, String>();
+
+    for (fi.koku.services.entity.person.v1.Person p : persons) {
+      personMap.put(p.getPic(), p.getFname() + " " + p.getSname());
+    }
+    return personMap;
+  }
+
+  private List<fi.koku.services.entity.person.v1.Person> getPersonsFromService(String user, List<String> creators) {
+    PersonService ps = new PersonService();
+    String kunpo = KoKuPropertiesUtil.get("environment.portlet.server.name");
+    String domain = "kunpo".equals(kunpo) ? PersonConstants.PERSON_SERVICE_DOMAIN_CUSTOMER
+        : PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER;
+    List<fi.koku.services.entity.person.v1.Person> persons = ps.getPersonsByPics(creators, domain, user, "KKS");
+    return persons;
   }
 
   public KKSCollection getKksCollection(String collectionId, UserInfo info) {
@@ -206,21 +236,35 @@ public class KksService {
       col.setMaster(isParent(info.getPic(), col.getCustomer()));
       col.setAuthorizedRegistrys(getAuthorizedRegistries(info.getPic()));
 
-      for (Entry e : col.getEntries().values()) {
+      List<String> creators = new ArrayList<String>();
 
-        if (e.getType().isMultiValue())
-          for (EntryValue v : e.getEntryValues()) {
-            UserInfo u = userInfo.getUserInfoByPic(e.getRecorder());
-            if (u != null) {
-              v.setModifierFullName(u.getFname() + " " + u.getSname());
-            }
-          }
-      }
+      setEntryModifiers(info, col, creators);
+
       return col;
     } catch (ServiceFault e) {
       LOG.error("Failed to get KKS collection " + collectionId, e);
     }
     return null;
+  }
+
+  private void setEntryModifiers(UserInfo info, KKSCollection col, List<String> creators) {
+    for (Entry e : col.getEntries().values()) {
+
+      if (e.getType().isMultiValue())
+        for (EntryValue v : e.getEntryValues()) {
+          creators.add(v.getModifier());
+        }
+    }
+
+    Map<String, String> personMap = getPersonsMap(info.getPic(), creators);
+
+    for (Entry e : col.getEntries().values()) {
+
+      if (e.getType().isMultiValue())
+        for (EntryValue v : e.getEntryValues()) {
+          e.setModifierFullName(personMap.get(v.getModifier()));
+        }
+    }
   }
 
   public boolean updateKksCollection(KKSCollection collection, String customer, String user) {
@@ -561,29 +605,45 @@ public class KksService {
     consent.setTargetPerson(customerId);
     consent.setTemplate(template);
 
-    List<String> guardians = getCustomerGuardians();
-
+    List<String> guardians = getCustomerGuardians(customerId, user);
     if (guardians == null) {
       return false;
     }
 
-    // TODO: change to contain id & name from organization?
     consent.getGivenTo().addAll(getOrganizationNames(user));
     consent.getConsentProviders().addAll(guardians);
     tivaService.createConsent(consent);
     return true;
   }
 
-  private List<String> getCustomerGuardians() {
+  private List<String> getCustomerGuardians(String customer, String user) {
+    List<String> names = new ArrayList<String>();
+    try {
+      FamilyService service = new FamilyService();
+      List<CustomerType> tmp = service.getPersonsParents(customer, user, "KKS");
+      for (CustomerType ct : tmp) {
+        names.add(ct.getHenkiloTunnus());
+      }
 
-    // TODO
-    return new ArrayList<String>();
+    } catch (Exception e) {
+      // ignore
+    }
+    return names;
   }
 
-  private List<String> getOrganizationNames(String user) {
+  private List<GivenTo> getOrganizationNames(String user) {
+    // TODO: take real auth service into use
+    AuthorizationInfoService uis = new AuthorizationInfoServiceDummyImpl();
+    List<OrgUnit> units = uis.getUsersOrgUnits("KKS", user);
 
-    // TODO
-    return new ArrayList<String>();
+    List<GivenTo> orgNames = new ArrayList<GivenTo>();
+
+    for (OrgUnit ou : units) {
+      GivenTo gt = new GivenTo();
+      gt.setPartyId(ou.getServiceArea());
+      gt.setPartyName(ou.getName());
+    }
+    return orgNames;
   }
 
   private KokuTivaToKksService getTivaService() {
