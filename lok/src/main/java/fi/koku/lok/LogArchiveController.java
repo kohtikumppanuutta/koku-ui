@@ -178,14 +178,7 @@ public class LogArchiveController {
 
     String archivedate = archiveSerializer.getAsText(logarchivedate);
     log.debug("logarchivedate: "+logarchivedate);
-    log.debug("archivedate: "+archivedate);
-    
-    if(archivedate == null){
-      log.debug("archivedate on null!");
-      //TODO: PITÄÄ LISÄTÄ KÄYTTÄJÄLLE ILMOITUS RUUDULLE VÄÄRÄSTÄ SYÖTTEESTÄ!
-    } else{
-      log.debug("saatiin jsp-sivulta archive end date: " + logarchivedate.getEndDate());
-    }
+    log.debug("archivedate: "+archivedate);  
    
     response.setRenderParameter("visited", visited); 
     
@@ -219,7 +212,6 @@ public class LogArchiveController {
   
     // add a flag for allowing this user to see the operations on page search.jsp 
     if (AuthUtils.isOperationAllowed("AdminSystemLogFile", userRoles)) {
-      log.debug("lisätään allowedToView");
       model.addAttribute("allowedToView", true);
     }
     
@@ -236,7 +228,6 @@ public class LogArchiveController {
      
       model.addAttribute("error", error); // TODO: voisi olla virhekoodi tms.
       log.debug("logarchivedate: "+logarchivedate.getEndDate());
-      log.debug("sivulle archive");
       
       return "archive";
     }
@@ -271,7 +262,7 @@ public class LogArchiveController {
         // call to log database
         AuditInfoType audit = new AuditInfoType();
         audit.setComponent(LogConstants.COMPONENT_LOK); 
-        audit.setUserId(userPic);  // FIXME
+        audit.setUserId(userPic);  
 
         log.debug("log archive action phase: starting archiving");
 
@@ -292,9 +283,8 @@ public class LogArchiveController {
  catch (ServiceFault e) {
    log.debug("fault: "+e.getFaultInfo().getCode());
  
- // if(e.getFaultInfo().getCode()==LogConstants.LOG_UNKNOWN_ERROR){
-     response.setRenderParameter("error", "koku.lok.archive.error.unknown"); //TODO: mikä olisi tämä yleinen virhe???
-     log.debug("tuntematon virhe startArchivessa");
+   response.setRenderParameter("error", "koku.lok.error.archive");  
+   log.debug("startArchivessa virhe: "+e.getMessage());
   // }
    
  }
