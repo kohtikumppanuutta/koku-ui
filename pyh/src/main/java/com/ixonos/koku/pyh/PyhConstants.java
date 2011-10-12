@@ -22,6 +22,9 @@ public class PyhConstants {
   final public static String COMMUNITY_SERVICE_USER_ID = "marko";
   final public static String COMMUNITY_SERVICE_PASSWORD = "marko";
   
+  final public static String LOK_SERVICE_USER_ID = "marko";
+  final public static String LOK_SERVICE_PASSWORD = "marko";
+  
   final public static String COMMUNITY_TYPE_GUARDIAN_COMMUNITY = "guardian_community";
   final public static String COMMUNITY_TYPE_FAMILY = "family_community";
   

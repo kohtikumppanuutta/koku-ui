@@ -1068,13 +1068,14 @@ public class PyhDemoService {
           
           String messageText = "";
           if (twoParentsInFamily) {
+            // TODO: miten tämä teksti muotoillaan?
             messageText = "Uusi perheyhteyspyyntö: käyttäjä " + senderName + 
             " on lisäämässä sinua perheyhteisönsä jäseneksi, mutta et voi hyväksyä pyyntöä, koska perheessänne on jo kaksi vanhempaa. " +
             "Voit hylätä pyynnön tai poistaa toisen vanhemman perheyhteisöstäsi, minkä jälkeen voit hyväksyä pyynnön.";
           }
           else {
-            messageText = "Uusi perheyhteyspyyntö: käyttäjä " + senderName + " haluaa lisätä " + targetName + 
-              " perheyhteisönsä jäseneksi. " + "Hyväksymällä pyynnön lisääminen tapahtuu automaattisesti.";
+            messageText = "Saapunut perheyhteyspyyntö: " + senderName + " haluaa lisätä perheyhteisön jäseneksi: " + targetName + ".\n" +
+              "Pyynnön hyväksymällä tietojen lisääminen tapahtuu automaattisesti tämän verkkopalvelun tietoihin.";
           }
           
           Message message = new Message(messageId, senderPic, messageText, twoParentsInFamily);
@@ -1136,7 +1137,7 @@ public class PyhDemoService {
           targetName = "käyttäjä " + memberToAddPic;
         }
         
-        String messageText = "Lähettämäsi perheyhteyspyyntö: lisää " + targetName + " perheyhteisöösi odottaa hyväksyntää.";
+        String messageText = "Lisäys perheyhteystietoihisi: " + targetName + " (odottaa vastaanottajan hyväksyntää)";
         
         Message message = new Message(messageId, senderPic, messageText, false);
         requestMessages.add(message);
