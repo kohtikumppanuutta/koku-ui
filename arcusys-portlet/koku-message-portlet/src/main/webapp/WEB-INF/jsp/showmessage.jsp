@@ -45,7 +45,10 @@ String sender = message.getSender();
 String recipients = message.getRecipients();
 String subject = message.getSubject();
 String content = htmlToCode(srcContent);
-Boolean isHtml = srcContent.startsWith("<html");
+Boolean isHtml = false;
+if (srcContent != null) {
+	isHtml = srcContent.startsWith("<html");	
+}
 
 %>
 <script type="text/javascript"> 
