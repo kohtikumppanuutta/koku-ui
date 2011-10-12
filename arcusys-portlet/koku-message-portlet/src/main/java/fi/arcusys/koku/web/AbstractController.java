@@ -25,7 +25,7 @@ public class AbstractController {
 		
 		LOG.debug("Currently used portal: " + request.getPortalContext().getPortalInfo());
 		String portalInfo = request.getPortalContext().getPortalInfo();
-		if (portalInfo.contains("EPP") || portalInfo.contains("Enterprise")) {
+		if (portalInfo.contains("EPP") || portalInfo.contains("GateIn")) {
 			return PortalRole.CITIZEN;
 		} else {
 			return PortalRole.EMPLOYEE;
