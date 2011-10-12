@@ -44,7 +44,10 @@ public class UserInfoPortletFilter implements RenderFilter, ActionFilter {
 
     // This just an example how to get information from portlet.xml
     String implClassName = filterConfig.getInitParameter("authImplClassName");
-    log.debug("Initializing portlet: authImplClassName=" + implClassName);
+    String portletStaticRole = filterConfig.getInitParameter("portletStaticRole");
+    
+    log.debug("Initializing portlet: authImplClassName=" + implClassName+
+        ", portletStaticRole="+portletStaticRole);
 
     // Load configured class
     try {

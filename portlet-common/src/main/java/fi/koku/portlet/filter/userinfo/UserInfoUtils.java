@@ -4,6 +4,7 @@
  */
 package fi.koku.portlet.filter.userinfo;
 
+import javax.portlet.PortletRequest;
 import javax.portlet.PortletSession;
 import fi.koku.portlet.filter.userinfo.UserInfo;
 
@@ -15,6 +16,24 @@ public class UserInfoUtils {
 
   //Singleton
   private UserInfoUtils() {}
+
+  /**
+   * Get user's PIC from request
+   * 
+   * @param session, is user's portletrequest object
+   * @return PIC (HETU in this case) or empty string ("") if not found.
+   */
+  public static String getPicFromSession(PortletRequest pReq) {
+    String ret = "";
+    PortletSession p = pReq.getPortletSession();
+    if(p!=null){
+      UserInfo info = UserInfoUtils.getUserInfoFromSession(p);
+      if (info != null) {
+        return info.getPic();
+      }
+    }
+    return ret;
+  }
   
   /**
    * Get user's PIC from session
