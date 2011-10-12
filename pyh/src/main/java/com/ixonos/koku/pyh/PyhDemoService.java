@@ -574,7 +574,8 @@ public class PyhDemoService {
    * Creates a recipient list for confirmation request message for adding persons as family members.
    * Then the message sending method is called or if there are no recipients then persons are added immediately.
    */
-  public void addPersonsAsFamilyMembers(HashMap<String, String> personMap, String userPic, String communityId, PortletSession session) throws FamilyNotFoundException {
+  public void addPersonsAsFamilyMembers(HashMap<String, String> personMap, String userPic, String communityId) 
+    throws FamilyNotFoundException, GuardianForChildNotFoundException {
     
     // personMap parameter contains (personPIC, role) pairs
     
@@ -609,7 +610,7 @@ public class PyhDemoService {
         sendParentAdditionMessage(communityId, memberToAddPic, userPic, communityRole);
       } else if (CommunityRole.CHILD.equals(communityRole) && recipients.size() == 0) {
         // we don't have guardian information for the child so we can't send the request
-        session.setAttribute("childsGuardianshipInformationNotFound", new Boolean(true));
+        //session.setAttribute("childsGuardianshipInformationNotFound", new Boolean(true));
         
         String messageSubject = "KoKu: puutteelliset tiedot järjestelmässä";
         String messageText = "Järjestelmästä ei löydy lapsen huoltajatietoja. Lapsen HETU: " + memberToAddPic;
@@ -622,8 +623,10 @@ public class PyhDemoService {
         try {
           this.mailSender.send(mailMessage);
         } catch (MailException me) {
-          log.error("PyhDemoService.addPersonsAsFamilyMembers: sending message to KoKu support failed!", me);
+          log.error("PyhDemoService.addPersonsAsFamilyMembers: sending mail to KoKu support failed!", me);
         }
+        
+        throw new GuardianForChildNotFoundException("Guardian for child (pic: " + memberToAddPic + ") not found!");
         
       } else if (recipients.size() == 0) {
         insertInto(userPic, memberToAddPic, communityRole);

@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletRequest;
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 
@@ -17,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
@@ -49,7 +49,7 @@ public class EditFamilyInformationController {
   private PyhDemoService pyhDemoService;
 
   @RenderMapping(params = "action=editFamilyInformation")
-  public String render(Model model, PortletSession session) {
+  public String render(RenderRequest request, Model model, PortletSession session) {
     String userPic = "";
     
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
@@ -60,9 +60,6 @@ public class EditFamilyInformationController {
       log.error("ERROR: UserInfo returns no PIC!");
     }
     
-    // clear search results
-    session.setAttribute("searchedUsers", null);
-    
     Person user = pyhDemoService.getUser(userPic);
     DependantsAndFamily daf = pyhDemoService.getDependantsAndFamily(userPic);
     model.addAttribute("user", user);
@@ -72,14 +69,10 @@ public class EditFamilyInformationController {
     model.addAttribute("messages", pyhDemoService.getSentMessages(user));
     model.addAttribute("searchedUsers", null);
     
+    Boolean childsGuardianshipInformationNotFound = new Boolean(request.getParameter("childsGuardianshipInformationNotFound"));
+    
     // if child's guardianship information is not found show a notification in JSP
-    Boolean childsGuardianshipInformationNotFound = (Boolean)session.getAttribute("childsGuardianshipInformationNotFound");
-    if (childsGuardianshipInformationNotFound != null) {
-      model.addAttribute("childsGuardianshipInformationNotFound", childsGuardianshipInformationNotFound.booleanValue());
-    } else {
-      model.addAttribute("childsGuardianshipInformationNotFound", false);
-    }
-    session.setAttribute("childsGuardianshipInformationNotFound", new Boolean(false));
+    model.addAttribute("childsGuardianshipInformationNotFound", childsGuardianshipInformationNotFound.booleanValue());
     
     Family family = daf.getFamily();
     String communityId;
@@ -110,8 +103,6 @@ public class EditFamilyInformationController {
     
     String surname = request.getParameter("surname");
     String pic = request.getParameter("pic");
-    log.info("EditFamilyInformationController.renderWithSearchResults: calling pyhDemoService.searchUsers() with parameters:");
-    log.info("surname = " + surname + ", pic = " + pic);
     List<Person> searchedUsers = pyhDemoService.searchUsers(surname, pic, userPic);
     
     Person user = pyhDemoService.getUser(userPic);
@@ -246,14 +237,19 @@ public class EditFamilyInformationController {
         personMap.put(personPic, personRole);
       }
     }
-
+    
+    boolean childsGuardianshipInformationNotFound = false;
     try {
-      pyhDemoService.addPersonsAsFamilyMembers(personMap, userPic, communityId, session);
+      pyhDemoService.addPersonsAsFamilyMembers(personMap, userPic, communityId);
     } catch (FamilyNotFoundException fnfe) {
       log.error("EditFamilyInformationController.addUsersToFamily() caught FamilyNotFoundException!");
       log.error(fnfe.getMessage());
+    } catch (GuardianForChildNotFoundException gnfe) {
+      log.error("EditFamilyInformationController.addUsersToFamily() caught GuardianForChildNotFoundException!", gnfe);
+      childsGuardianshipInformationNotFound = true;
     }
     
+    response.setRenderParameter("childsGuardianshipInformationNotFound", new Boolean(childsGuardianshipInformationNotFound).toString());
     response.setRenderParameter("action", "editFamilyInformation");
   }
 
