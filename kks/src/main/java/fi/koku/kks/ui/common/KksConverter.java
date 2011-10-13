@@ -27,7 +27,7 @@ import fi.koku.services.entity.kks.v1.KksTagType;
  * @author Ixonos / tuomape
  * 
  */
-public class KksConverter {
+public final class KksConverter {
 
   private KksService kksService;
 
@@ -89,6 +89,20 @@ public class KksConverter {
 
     tmp.setModified(cal);
 
+    KksEntriesType entriesType = toEntriesWsType(collection, customer, empty, user, cal);
+
+    Calendar c = new GregorianCalendar();
+    c.setTime(collection.getCreationTime());
+    tmp.setCreated(c);
+    tmp.setKksEntries(entriesType);
+    tmp.setNewVersion(createVersion);
+    tmp.setVersion(new BigInteger("" + collection.getVersion()));
+    tmp.setVersioned(collection.getNextVersion() != null);
+    return tmp;
+  }
+
+  private KksEntriesType toEntriesWsType(KKSCollection collection, String customer, boolean empty, String user,
+      Calendar cal) {
     KksEntriesType entriesType = new KksEntriesType();
 
     if (!empty) {
@@ -101,24 +115,7 @@ public class KksConverter {
         kksEntryType.setModified(cal);
         kksEntryType.setVersion(new BigInteger(entry.getVersion()));
 
-        EntryValuesType values = new EntryValuesType();
-        for (EntryValue ev : entry.getEntryValues()) {
-          KksEntryValueType value = new KksEntryValueType();
-          value.setId(ev.getId());
-
-          if (DataType.MULTI_SELECT.toString().equals(entry.getType().getDataType())) {
-            value.setValue(ev.getValuesAsText());
-          } else {
-            value.setValue(ev.getValue());
-          }
-
-          if (!entry.getType().isMultiValue()) {
-            // multivalue updates have own modifier handling
-            value.setModified(cal);
-            value.setModifier(user);
-          }
-          values.getEntryValue().add(value);
-        }
+        EntryValuesType values = toValuesWsType(user, cal, entry);
 
         kksEntryType.setEntryValues(values);
 
@@ -133,15 +130,29 @@ public class KksConverter {
         entriesType.getEntries().add(kksEntryType);
       }
     }
+    return entriesType;
+  }
 
-    Calendar c = new GregorianCalendar();
-    c.setTime(collection.getCreationTime());
-    tmp.setCreated(c);
-    tmp.setKksEntries(entriesType);
-    tmp.setNewVersion(createVersion);
-    tmp.setVersion(new BigInteger("" + collection.getVersion()));
-    tmp.setVersioned(collection.getNextVersion() != null);
-    return tmp;
+  private EntryValuesType toValuesWsType(String user, Calendar cal, Entry entry) {
+    EntryValuesType values = new EntryValuesType();
+    for (EntryValue ev : entry.getEntryValues()) {
+      KksEntryValueType value = new KksEntryValueType();
+      value.setId(ev.getId());
+
+      if (DataType.MULTI_SELECT.toString().equals(entry.getType().getDataType())) {
+        value.setValue(ev.getValuesAsText());
+      } else {
+        value.setValue(ev.getValue());
+      }
+
+      if (!entry.getType().isMultiValue()) {
+        // multivalue updates have own modifier handling
+        value.setModified(cal);
+        value.setModifier(user);
+      }
+      values.getEntryValue().add(value);
+    }
+    return values;
   }
 
   public CollectionState fromWsType(String status) {

@@ -39,24 +39,6 @@ public class KKSCollection {
   private boolean consentRequested;
   private String userConsentStatus;
 
-  public KKSCollection() {
-    authorizedRegistrys = new HashMap<String, Registry>();
-    entries = new LinkedHashMap<String, Entry>();
-    authorizedRegistrys = new HashMap<String, Registry>();
-    consentRequested = false;
-    userConsentStatus = "";
-  }
-
-  public KKSCollection(String id, KKSCollection previous, boolean clear, Date creationTime, CollectionState state,
-      int version) {
-    this(id, previous.getName(), previous.getDescription(), state, creationTime, version, previous.getCollectionClass());
-    prevVersion = previous.getId();
-    buildFromExisting = true;
-    authorizedRegistrys = new HashMap<String, Registry>();
-    consentRequested = false;
-    userConsentStatus = "";
-  }
-
   public KKSCollection(String id, String name, String description, CollectionState state, Date creationTime,
       int version, KksCollectionClassType type) {
     super();

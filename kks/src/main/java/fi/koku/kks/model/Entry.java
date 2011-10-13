@@ -6,7 +6,6 @@ import java.util.List;
 
 import fi.koku.services.entity.kks.v1.KksEntryClassType;
 import fi.koku.services.entity.kks.v1.KksTagType;
-import fi.koku.services.entity.kks.v1.KksTagsType;
 
 /**
  * Holds single entry
@@ -22,7 +21,6 @@ public class Entry {
   private String modifierFullName;
   private String version;
   private KksEntryClassType type;
-  private List<KksTagType> tags;
   private List<EntryValue> entryValues;
 
   public Entry(String id, Date creation, String version, String recorder, KksEntryClassType type) {
@@ -32,7 +30,6 @@ public class Entry {
     this.version = version;
     this.type = type;
     this.recorder = recorder;
-    this.tags = new ArrayList<KksTagType>();
     this.entryValues = new ArrayList<EntryValue>();
   }
 
@@ -43,7 +40,6 @@ public class Entry {
     this.version = version;
     this.type = type;
     this.recorder = recorder;
-    this.tags = new ArrayList<KksTagType>();
     this.entryValues = new ArrayList<EntryValue>();
   }
 
@@ -69,18 +65,6 @@ public class Entry {
 
   public void setType(KksEntryClassType type) {
     this.type = type;
-  }
-
-  public List<KksTagType> getClassifications() {
-
-    List<KksTagType> tmp = new ArrayList<KksTagType>(tags);
-    KksTagsType tags = getType().getKksTags();
-    tmp.addAll(tags.getKksTag());
-    return tmp;
-  }
-
-  public void setClassifications(List<KksTagType> classifications) {
-    this.tags = classifications;
   }
 
   public String getRecorder() {

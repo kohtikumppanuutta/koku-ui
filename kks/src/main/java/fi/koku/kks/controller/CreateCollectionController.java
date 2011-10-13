@@ -72,8 +72,7 @@ public class CreateCollectionController {
 
       Creatable a = Creatable.create(creation.getField());
       String name = "".equals(creation.getName()) ? a.getName() : creation.getName();
-      String collection = kksService.createKksCollection(name, a.getId(), child.getPic(),
-          Utils.getPicFromSession(session));
+      kksService.createKksCollection(name, a.getId(), child.getPic(), Utils.getPicFromSession(session));
 
       creation.setField("");
       creation.setName("");

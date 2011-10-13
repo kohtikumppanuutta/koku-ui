@@ -4,31 +4,29 @@ import fi.koku.settings.KoKuPropertiesUtil;
 
 public final class Constants {
 
-  private static final String LINE_BREAK = "</br>";
-
   private Constants() {
 
   }
 
-  final public static String ENDPOINT = KoKuPropertiesUtil.get("kks.service.endpointaddress");
-  final public static String CUSTOMER_ENDPOINT = KoKuPropertiesUtil.get("customer.service.endpointaddress");
-  final public static String COMMUNITY_ENDPOINT = KoKuPropertiesUtil.get("community.service.endpointaddress");
-  final public static String TIVA_ENDPOINT = KoKuPropertiesUtil.get("tiva-kks.service.endpointaddress");
+  public final static String ENDPOINT = KoKuPropertiesUtil.get("kks.service.endpointaddress");
+  public final static String CUSTOMER_ENDPOINT = KoKuPropertiesUtil.get("customer.service.endpointaddress");
+  public final static String COMMUNITY_ENDPOINT = KoKuPropertiesUtil.get("community.service.endpointaddress");
+  public final static String TIVA_ENDPOINT = KoKuPropertiesUtil.get("tiva-kks.service.endpointaddress");
 
-  final public static String CUSTOMER_SERVICE_USER_ID = "marko";
-  final public static String CUSTOMER_SERVICE_PASSWORD = "marko";
+  public final static String CUSTOMER_SERVICE_USER_ID = KoKuPropertiesUtil.get("kks.customer.service.user.id");
+  public final static String CUSTOMER_SERVICE_PASSWORD = KoKuPropertiesUtil.get("kks.customer.service.password");
 
-  final public static String COMMUNITY_SERVICE_USER_ID = "marko";
-  final public static String COMMUNITY_SERVICE_PASSWORD = "marko";
+  public final static String COMMUNITY_SERVICE_USER_ID = KoKuPropertiesUtil.get("kks.community.service.user.id");
+  public final static String COMMUNITY_SERVICE_PASSWORD = KoKuPropertiesUtil.get("kks.community.service.password");
 
-  final public static String KKS_SERVICE_USER_ID = "marko";
-  final public static String KKS_SERVICE_PASSWORD = "marko";
+  public final static String KKS_SERVICE_USER_ID = "marko";
+  public final static String KKS_SERVICE_PASSWORD = "marko";
 
-  final public static String COMMUNITY_TYPE_GUARDIAN_COMMUNITY = "guardian_community";
+  public final static String COMMUNITY_TYPE_GUARDIAN_COMMUNITY = "guardian_community";
 
-  final public static String ROLE_DEPENDANT = "dependant";
-  final public static String ROLE_GUARDIAN = "guardian";
+  public final static String ROLE_DEPENDANT = "dependant";
+  public final static String ROLE_GUARDIAN = "guardian";
 
-  final public static String COMPONENT_KKS = "KKS";
+  public final static String COMPONENT_KKS = "KKS";
 
 }

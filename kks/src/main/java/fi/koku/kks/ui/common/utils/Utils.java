@@ -10,7 +10,7 @@ import fi.koku.portlet.filter.userinfo.UserInfo;
  * @author Ixonos / tuomape
  * 
  */
-public class Utils {
+public final class Utils {
 
   private Utils() {
 

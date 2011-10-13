@@ -7,19 +7,14 @@ import javax.xml.ws.BindingProvider;
 
 import fi.koku.services.entity.tiva.v1.KokuTivaToKksService;
 import fi.koku.services.entity.tiva.v1.KokuTivaToKksService_Service;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 public class ConsentServiceFactory {
 
-  private String uid;
-  private String pwd;
-  private String endpointBaseUrl;
-  private String implVersion = "0.1-SNAPSHOT";
   private final URL wsdlLocation = getClass().getClassLoader().getResource("wsdl/communityService.wsdl");
 
-  public ConsentServiceFactory(String uid, String pwd, String endpointBaseUrl) {
-    this.uid = uid;
-    this.pwd = pwd;
-    this.endpointBaseUrl = endpointBaseUrl;
+  public ConsentServiceFactory() {
+
   }
 
   public KokuTivaToKksService getService() {
@@ -28,13 +23,10 @@ public class ConsentServiceFactory {
         "http://services.koku.fi/entity/tiva/v1", "KokuTivaToKksService"));
 
     KokuTivaToKksService port = ft.getKokuTivaToKksServicePort();
-    String epAddr = endpointBaseUrl + "arcusys-koku-" + implVersion + "-tiva-model-" + implVersion
-        + "/KokuTivaToKksServiceImpl";
+    String epAddr = KoKuPropertiesUtil.get("kks.tiva.service.full.endpointaddress");
 
     ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, epAddr);
-    ((BindingProvider) port).getRequestContext().put(BindingProvider.USERNAME_PROPERTY, uid);
-    ((BindingProvider) port).getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, pwd);
+
     return port;
   }
-
 }

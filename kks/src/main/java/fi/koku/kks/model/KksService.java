@@ -76,11 +76,17 @@ public class KksService {
   private Map<String, KksCollectionClassType> collectionClasses;
   private KksConverter converter;
   private Map<String, List<ConsentRequest>> consents;
+  private KksServicePortType kksService;
+  private CommunityServicePortType communityService;
+  private CustomerServicePortType customerService;
 
   public KksService() {
     entryClasses = new HashMap<String, KksEntryClassType>();
     collectionClasses = new HashMap<String, KksCollectionClassType>();
     converter = new KksConverter(this);
+    kksService = getKksService();
+    communityService = getCommunityService();
+    customerService = getCustomerService();
     initConsentReq();
   }
 
@@ -166,7 +172,6 @@ public class KksService {
       KksCollectionsCriteriaType criteria = new KksCollectionsCriteriaType();
       criteria.setPic(pic);
       criteria.setKksScope("minimum");
-      KksServicePortType kksService = getKksService();
       KksType kks = kksService.opGetKks(criteria, getKksAuditInfo(user));
       List<KksCollectionType> collections = kks.getKksCollections().getKksCollection();
 
@@ -206,9 +211,10 @@ public class KksService {
     List<fi.koku.services.entity.person.v1.Person> persons = getPersonsFromService(user, creators);
 
     Map<String, String> personMap = new HashMap<String, String>();
-
-    for (fi.koku.services.entity.person.v1.Person p : persons) {
-      personMap.put(p.getPic(), p.getFname() + " " + p.getSname());
+    if (persons != null) {
+      for (fi.koku.services.entity.person.v1.Person p : persons) {
+        personMap.put(p.getPic(), p.getFname() + " " + p.getSname());
+      }
     }
     return personMap;
   }
@@ -218,8 +224,7 @@ public class KksService {
     String kunpo = KoKuPropertiesUtil.get("environment.portlet.server.name");
     String domain = "kunpo".equals(kunpo) ? PersonConstants.PERSON_SERVICE_DOMAIN_CUSTOMER
         : PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER;
-    List<fi.koku.services.entity.person.v1.Person> persons = ps.getPersonsByPics(creators, domain, user, "KKS");
-    return persons;
+    return ps.getPersonsByPics(creators, domain, user, "KKS");
   }
 
   public KKSCollection getKksCollection(String collectionId, UserInfo info) {
@@ -229,7 +234,6 @@ public class KksService {
     }
 
     try {
-      KksServicePortType kksService = getKksService();
       KksCollectionType kks = kksService.opGetKksCollection(collectionId, getKksAuditInfo(info.getPic()));
 
       KKSCollection col = converter.fromWsType(kks, info.getPic());
@@ -250,20 +254,22 @@ public class KksService {
   private void setEntryModifiers(UserInfo info, KKSCollection col, List<String> creators) {
     for (Entry e : col.getEntries().values()) {
 
-      if (e.getType().isMultiValue())
+      if (e.getType().isMultiValue()) {
         for (EntryValue v : e.getEntryValues()) {
           creators.add(v.getModifier());
         }
+      }
     }
 
     Map<String, String> personMap = getPersonsMap(info.getPic(), creators);
 
     for (Entry e : col.getEntries().values()) {
 
-      if (e.getType().isMultiValue())
+      if (e.getType().isMultiValue()) {
         for (EntryValue v : e.getEntryValues()) {
           e.setModifierFullName(personMap.get(v.getModifier()));
         }
+      }
     }
   }
 
@@ -273,7 +279,6 @@ public class KksService {
       return false;
     }
     try {
-      KksServicePortType kksService = getKksService();
       collection.setCreator(user);
       kksService.opUpdateKksCollection(converter.toWsType(collection, customer, user), getKksAuditInfo(user));
     } catch (ServiceFault e) {
@@ -285,7 +290,6 @@ public class KksService {
 
   public boolean updateKksCollectionStatus(String customer, String collectionId, String status, String user) {
     try {
-      KksServicePortType kksService = getKksService();
       KksCollectionStateCriteriaType state = new KksCollectionStateCriteriaType();
       state.setCollectionId(collectionId);
       state.setState(status);
@@ -304,7 +308,6 @@ public class KksService {
       kksCollectionCreationCriteria.setPic(customer);
       kksCollectionCreationCriteria.setCollectionTypeId(type);
       kksCollectionCreationCriteria.setKksScope("new");
-      KksServicePortType kksService = getKksService();
       return kksService.opAddKksCollection(kksCollectionCreationCriteria, getKksAuditInfo(user)).getId();
     } catch (ServiceFault e) {
       LOG.error("Failed to create KKS collection " + name, e);
@@ -324,7 +327,6 @@ public class KksService {
       } else {
         kksCollectionCreationCriteria.setKksScope("version");
       }
-      KksServicePortType kksService = getKksService();
       return kksService.opAddKksCollection(kksCollectionCreationCriteria, getKksAuditInfo(user)).getId();
     } catch (ServiceFault e) {
       LOG.error("Failed to create KKS collection version " + name + " type: " + type, e);
@@ -341,7 +343,6 @@ public class KksService {
       KksTagNamesType names = new KksTagNamesType();
       names.getKksTagName().addAll(tagNames);
       kksQueryCriteria.setKksTagNames(names);
-      KksServicePortType kksService = getKksService();
       KksCollectionsType collections = kksService.opQueryKks(kksQueryCriteria, getKksAuditInfo(user));
 
       for (KksCollectionType type : collections.getKksCollection()) {
@@ -403,7 +404,6 @@ public class KksService {
       Calendar c = new GregorianCalendar();
       c.setTime(new Date());
       criteria.setModified(c);
-      KksServicePortType kksService = getKksService();
       return kksService.opAddEntry(criteria, getKksAuditInfo(user)).getId();
     } catch (ServiceFault e) {
       LOG.error("Failed to add KKS entry " + entryId, e);
@@ -411,16 +411,17 @@ public class KksService {
     return null;
   }
 
-  public boolean removeKksEntry(String customer, String entryId, String valueId, String value, String user) {
+  public boolean removeKksEntry(String collection, String customer, String entryId, String valueId, String value,
+      String user) {
     try {
       KksEntryCriteriaType criteria = new KksEntryCriteriaType();
       criteria.setEntryId(entryId);
       criteria.setPic(customer);
+      criteria.setCollectionId(collection);
       KksEntryValueType evt = new KksEntryValueType();
       evt.setId(valueId);
       evt.setValue(value);
       criteria.setValue(evt);
-      KksServicePortType kksService = getKksService();
       kksService.opDeleteEntry(criteria, getKksAuditInfo(user));
     } catch (ServiceFault e) {
       LOG.error("Failed to remove KKS entry " + entryId, e);
@@ -431,7 +432,6 @@ public class KksService {
 
   private void collectMetadata(String user) {
     try {
-      KksServicePortType kksService = getKksService();
       List<KksCollectionClassType> classes = kksService.opGetKksCollectionClasses("all", getKksAuditInfo(user))
           .getKksCollectionClass();
 
@@ -472,7 +472,7 @@ public class KksService {
     CommunitiesType communitiesType = null;
 
     try {
-      communitiesType = getCommunityService().opQueryCommunities(communityQueryCriteria, getCommynityAuditInfo(pic));
+      communitiesType = communityService.opQueryCommunities(communityQueryCriteria, getCommynityAuditInfo(pic));
     } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
       LOG.error("Failed to get communities", fault);
     }
@@ -498,7 +498,7 @@ public class KksService {
         PicsType pt = new PicsType();
         pt.getPic().addAll(pics);
         criteria.setPics(pt);
-        CustomersType customers = getCustomerService().opQueryCustomers(criteria, getCustomerAuditInfo(pic));
+        CustomersType customers = customerService.opQueryCustomers(criteria, getCustomerAuditInfo(pic));
         for (CustomerType customer : customers.getCustomer()) {
           childs.add(Person.fromCustomerType(customer));
         }
@@ -523,7 +523,7 @@ public class KksService {
   public List<Person> searchPerson(Person target, String user) {
     List<Person> list = new ArrayList<Person>();
     try {
-      CustomerType t = getCustomerService().opGetCustomer(target.getPic().trim(), getCustomerAuditInfo(user));
+      CustomerType t = customerService.opGetCustomer(target.getPic().trim(), getCustomerAuditInfo(user));
       if (t != null) {
         Person p = Person.fromCustomerType(t);
         list.add(p);
@@ -536,7 +536,7 @@ public class KksService {
 
   public Person searchCustomer(String socialSecurityNumber, String user) {
     try {
-      CustomerType t = getCustomerService().opGetCustomer(socialSecurityNumber.trim(), getCustomerAuditInfo(user));
+      CustomerType t = customerService.opGetCustomer(socialSecurityNumber.trim(), getCustomerAuditInfo(user));
       if (t != null) {
         return Person.fromCustomerType(t);
       }
@@ -647,7 +647,7 @@ public class KksService {
   }
 
   private KokuTivaToKksService getTivaService() {
-    ConsentServiceFactory csf = new ConsentServiceFactory("", "", Constants.TIVA_ENDPOINT);
+    ConsentServiceFactory csf = new ConsentServiceFactory();
     return csf.getService();
   }
 

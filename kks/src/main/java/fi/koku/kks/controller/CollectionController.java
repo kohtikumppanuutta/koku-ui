@@ -103,10 +103,7 @@ public class CollectionController {
   @ModelAttribute("entry")
   public KKSCollection getCommandObject(PortletSession session, @RequestParam(value = "collection") String collection,
       @RequestParam(value = "pic") String pic) {
-
-    KKSCollection k = kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
-
-    return k;
+    return kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
   }
 
   @ModelAttribute("multi")
@@ -134,7 +131,7 @@ public class CollectionController {
       @RequestParam(value = "collection") String collection, @RequestParam(value = "entryId") String entry,
       @RequestParam(value = "valueId") String valueId, ActionResponse response, SessionStatus sessionStatus) {
     LOG.info("remove multivalue");
-    kksService.removeKksEntry(child.getPic(), entry, valueId, "", Utils.getPicFromSession(session));
+    kksService.removeKksEntry(collection, child.getPic(), entry, valueId, "", Utils.getPicFromSession(session));
     response.setRenderParameter("action", "showCollection");
     response.setRenderParameter("pic", child.getPic());
     response.setRenderParameter("collection", collection);
@@ -168,7 +165,7 @@ public class CollectionController {
     model.addAttribute("collection", kok);
     model.addAttribute("type", t);
     model.addAttribute("valueId", valueId);
-    EntryValue e = new EntryValue();
+
     if (StringUtils.isNotEmpty(entry)) {
       Entry ent = kok.getEntry(entry);
       EntryValue val = ent.getEntryValue(valueId);
