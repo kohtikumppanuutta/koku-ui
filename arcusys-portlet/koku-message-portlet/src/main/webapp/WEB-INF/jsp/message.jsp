@@ -21,19 +21,19 @@
 <portlet:resourceURL var="cancelURL" id="cancelAppointment">
 </portlet:resourceURL>
 
-<portlet:renderURL var="messageURL" windowState="<%= WindowState.MAXIMIZED.toString() %>" >
+<portlet:renderURL var="messageURL" windowState="<%= WindowState.NORMAL.toString() %>" >
 	<portlet:param name="myaction" value="showMessage" />
 </portlet:renderURL>
 
-<portlet:renderURL var="requestURL" windowState="<%= WindowState.MAXIMIZED.toString() %>" >
+<portlet:renderURL var="requestURL" windowState="<%= WindowState.NORMAL.toString() %>" >
 	<portlet:param name="myaction" value="showRequest" />
 </portlet:renderURL>
 
-<portlet:renderURL var="appointmentURL" windowState="<%= WindowState.MAXIMIZED.toString() %>" >
+<portlet:renderURL var="appointmentURL" windowState="<%= WindowState.NORMAL.toString() %>" >
 	<portlet:param name="myaction" value="showAppointment" />
 </portlet:renderURL>
 
-<portlet:renderURL var="consentURL" windowState="<%= WindowState.MAXIMIZED.toString() %>" >
+<portlet:renderURL var="consentURL" windowState="<%= WindowState.NORMAL.toString() %>" >
 	<portlet:param name="myaction" value="showConsent" />
 </portlet:renderURL>
 
