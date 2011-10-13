@@ -103,6 +103,10 @@ function getCandidateKeywords(keyValue) {
 					for(var i=0; i < consentTemplates.length; i++) {
 						suggestions[i] = consentTemplates[i]['templateName'];
 					}
+				} else if (suggestType == 'KindergartenName') {
+					for(var i=0; i < consentTemplates.length; i++) {
+						suggestions[i] = consentTemplates[i]['kindergartenName'];
+					}
 				}
 				
 				if (suggestions.length > 0) {

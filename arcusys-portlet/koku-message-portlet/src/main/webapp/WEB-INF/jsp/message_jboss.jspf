@@ -97,3 +97,15 @@
 		window.location = url;
 	}
 	
+	function showApplicationKindergarten(index) {
+		var applicationId = pageObj.tasks[index]['applicationId'];	
+			var url= "<%= applicationKindergartenURL %>";
+			url += "&applicationId=" + applicationId
+						+ "&currentPage=" + pageObj.currentPage
+						+ "&taskType=" + pageObj.taskType
+						+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
+						+ "&orderType=" + pageObj.orderType;						
+			window.location = url;
+	}
+	
+	

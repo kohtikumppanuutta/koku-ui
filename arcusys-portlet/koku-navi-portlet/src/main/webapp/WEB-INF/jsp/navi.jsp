@@ -227,13 +227,13 @@
 		<li><a href="javascript:void(0)" >Etusivu</a></li>
 		<!-- For citizen in Gatein portal-->
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
-		<li id="kks"><a href="/portal/private/classic/KKS">Sopimukset ja suunnitelmat</a>
-		<li id="pyh"><a href="/portal/private/classic/PYH">Omat tiedot</a></li>
+		<li id="kks"><a href="<%= defaultPath %>/koku/KKS">Sopimukset ja suunnitelmat</a>
+		<li id="pyh"><a href="<%= defaultPath %>/koku/PYH">Omat tiedot</a></li>
 		</c:if>
 		<!-- For employee in Jboss portal -->
 		<c:if test="${fn:contains(naviURL, '/default/')}">
-		<li id="kks"><a href="/portal/auth/portal/default/KKS">Sopimukset ja suunnitelmat</a>
-		<li id="lok"><a href="/portal/auth/portal/default/LOK">Lokihallinta</a></li>
+		<li id="kks"><a href="<%= defaultPath %>/koku/KKS">Sopimukset ja suunnitelmat</a>
+		<li id="lok"><a href="<%= defaultPath %>/koku/LOK">Lokihallinta</a></li>
 		</c:if>
 		
 		<li><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')" >Viestit</a>
@@ -361,19 +361,24 @@
 		</li>
 		</c:if>	
 		<!--  show only citizens -->
-		<c:if test="${fn:contains(naviURL, '/classic/')}">
 		<li><a href="#">Asiointipalvelut</a>
 			<ul class="child">
 				<li><a href="#">Palveluhakemukset</a>
 					<ul class="child">
-						<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Päivähoitohakemus</a></li>				
+						<c:if test="${fn:contains(naviURL, '/classic/')}">
+						<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Päivähoitohakemus</a></li>
+						</c:if>	
+						<c:if test="${fn:contains(naviURL, '/default/')}">
+						<li id="<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE%>')">Päivähoitohakemukset</a></li>
+						</c:if>	
 					</ul>
 				</li>
+				<c:if test="${fn:contains(naviURL, '/classic/')}">				
 				<li><a href="#">Voimassaolevat palvelut</a></li>
 				<li><a href="#">Ajanvaraustiedot</a></li>
+				</c:if>	
 			</ul>
 		</li>
-		</c:if>	
 		<li><a href="#">Ohjeet</a></li>
 	</ul>
 </div>

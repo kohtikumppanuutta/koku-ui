@@ -45,6 +45,11 @@
 	<portlet:param name="myaction" value="showTipy" />
 </portlet:renderURL>
 
+<portlet:renderURL var="applicationKindergartenURL" windowState="<%= WindowState.NORMAL.toString() %>" >
+	<portlet:param name="myaction" value="showApplicationKindergarten" />
+</portlet:renderURL>
+
+
 
 <!-- Not in use currently, but reserved for future use -->
 <portlet:renderURL var="intalioFormURL" windowState="<%= WindowState.NORMAL.toString() %>" >
@@ -212,12 +217,14 @@
 		var taskHtml = "";
 		if (pageObj.taskType.indexOf('req_') == 0) { // for request
 			taskHtml += createRequestsTable(tasks);
-		} else if(pageObj.taskType.indexOf('app') == 0) { // for appointment
+		} else if(pageObj.taskType.indexOf('app_') == 0) { // for appointment
 			taskHtml += createAppoitmentsTable(tasks);
-		} else if(pageObj.taskType.indexOf('cst') == 0) { // for consent
+		} else if(pageObj.taskType.indexOf('cst_') == 0) { // for consent
 			taskHtml += createConsentsTable(tasks);
-		} else if (pageObj.taskType.indexOf('info_req') == 0) { // for infoRequests (tietopyyntö)
+		} else if (pageObj.taskType.indexOf('info_req_') == 0) { // for infoRequests (tietopyyntö)
 			taskHtml += createInfoRequestsTable(tasks);		
+		} else if (pageObj.taskType.indexOf('application_') == 0) { // for applications (hakemukset)
+			taskHtml += createApplicationsTable(tasks);		
 		} else {											// for message
 			taskHtml += createMessagesTable(tasks);
 		}
@@ -282,6 +289,38 @@
 		taskHtml += '</table>';
 
 		return taskHtml;
+	}
+	
+	/**
+	 * Create application
+	 */ 
+	function createApplicationsTable(tasks) {
+		suggestType = '<%= Constants.SUGGESTION_APPLICATION_KINDERGARTEN %>';
+		if (tasks == undefined || tasks == null || tasks.length == 0) {
+			return showErrorMsg('<spring:message code="application.kindergarten.noResults"/>');
+		}
+		
+		var columnNames = ["<spring:message code="message.choose"/>",
+		                   "<spring:message code="application.kindergarten.name"/>",
+		                   "<spring:message code="application.kindergarten.childname"/>",
+		                   "<spring:message code="application.kindergarten.guardianName"/>",
+		                   "<spring:message code="application.kindergarten.applicantAccepted"/>",
+		                   "<spring:message code="application.kindergarten.kindergarteAcceppted"/>",
+		                   "<spring:message code="application.kindergarten.createdAt"/>",
+		                   "<spring:message code="application.kindergarten.decision"/>",
+		                   "<spring:message code="application.kindergarten.needForCareDate"/>"
+		                  ];
+		
+		var columnIds = ["kindergartenName",
+		                 "applicantName",
+		                 "applicantGuardianName",
+		                 "applicantAccepted",
+		                 "placeAccepted",
+		                 "createdAt",
+		                 "answeredAt",
+		                 "inEffectAt"
+		                ];
+		return createTable("showApplicationKindergarten", "browseKindergartenApplications", columnNames, columnIds, tasks);
 	}
 	
 	/**
@@ -677,6 +716,10 @@
 	function showErrorMsgYouDontHaveAnyTipys() {
 		return "<div class='errorMsg noConsents'><spring:message code="tipy.errorMsg.noData"/></div>";
 	}
+	
+	function showErrorMsg(msg) {
+		return "<div class='errorMsg noConsents'>"+msg+"</div>";
+	}
 
 	
 	/**
@@ -1026,6 +1069,7 @@
 				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>') > -1
 				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT %>') > -1
 				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE %>') > -1
+				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE %>') > -1
 				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="message.search"/>"  onclick="showSearchUI()" /></li>';
 		}
@@ -1264,8 +1308,11 @@
 		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS %>') {
 			jQuery('#warrants-search-citizens').show();
 			jQuery('#message-search').hide();
-		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>') {
-			jQuery('#warrants-search-warrants').show();
+		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS %>') {
+			jQuery('#warrants-search-citizens').show();
+			jQuery('#message-search').hide();
+		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE %>') {
+			jQuery('#applicationKindergartenBrowse').show();
 			jQuery('#message-search').hide();
 		} else if (pageObj.taskType === '<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>' 
 				|| pageObj.taskType === '<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT %>'
@@ -1410,6 +1457,10 @@
 		return false;	
 	}
 	
+	function searchKindergartenApplications() {
+		// TODO: Not implemented yet
+	}
+	
  	/**
  	 * Reset the search result and clear the keyword
  	 */
@@ -1443,6 +1494,7 @@
 		</table>
 	</div>
 	<div id="task-manager-search" class="task-manager-operation-part">
+	
 		<div id="message-search" class="basic-search" style="display:none;">
 			<form name="searchForm" onsubmit="searchTasks(); return false;">		
 				<span class="text-bold" ><spring:message code="message.searchKeyword" /></span>
@@ -1457,6 +1509,7 @@
 				</span>	
 			</form>
 		</div>
+		
 		<div id="consent-search" class="basic-search" style="display:none; position:relative;">
 			<form name="searchForm" onsubmit="searchConsents(); return false;">		
 				<span class="text-bold" ><spring:message code="consent.recipients" /></span>
@@ -1534,6 +1587,43 @@
 				</p>
 			</form>
 		</div>
+		
+		<!-- HAK-2 Selaa päiväkotihakemuksia -->
+		<div id="applicationKindergartenBrowse" class="basic-search" style="display:none; position:relative;">
+			<form name="searchForm" onsubmit="searchKindergartenApplications(); return false;">		
+							
+				<p class="searchMisc kindergartenSearch">
+					<span class="text-bold searchTitle"><spring:message code="application.kindergarten.search.kindergarten" /></span>
+					<input type="text" name="applicationKindergartenName" id="applicationKindergartenName" style="width:160px;"  autocomplete="off" onkeydown="beKeyDown(event)" onkeyup="beKeyUp(event)" onclick="createSuggestDiv('applicationKindergartenBrowse', 'applicationKindergartenName')" />					
+				</p>
+
+				<p class="searchMisc kindergartenSelections">					
+					<span class="text-bold searchTitle"><spring:message code="application.kindergarten.search.guardianAccpeted" /></span>
+				  	<select class="yesNoSelect" name="applicationKindergartendGuardianAccepted" id="applicationKindergartendGuardianAccepted">
+				  	  <option selected="selected"></option>
+					  <option value="true">Kyllä</option>
+					  <option value="false">Ei</option>
+					</select>
+					<span class="text-bold searchTitle"><spring:message code="application.kindergarten.search.placeAccepted" /></span>
+					<select class="yesNoSelect" name="applicationKindergartendPlaceCancelled" id="applicationKindergartendPlaceCancelled" >
+					  <option selected="selected"></option>
+					  <option value="true">Kyllä</option>
+					  <option value="false">Ei</option>
+					</select>					
+					<span class="text-bold searchTitle"><spring:message code="application.kindergarten.search.guardianAcceptedHighestIncome" /></span>
+					<select class="yesNoSelect" name="applicationKindergartendHighestIncome" id="applicationKindergartendHighestIncome">
+					  <option selected="selected"></option>
+					  <option value="true">Kyllä</option>
+					  <option value="false">Ei</option>
+					</select>				
+				</p>
+				<p class="searchMisc searchButtonArea">
+					<input type="submit" value="<spring:message code="message.search"/>" />
+					<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
+				</p>
+			</form>
+		</div>
+		
 		
 	</div>
 	<div id="task-manager-operation" class="task-manager-operation-part">

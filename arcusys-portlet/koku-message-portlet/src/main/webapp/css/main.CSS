@@ -415,3 +415,21 @@ abbr.valueWithDesc:hover {
     text-transform: uppercase;
 }
 
+table.task-manager-table tr {
+	cursor: pointer;
+}
+
+table.task-manager-table tr.trheader {
+	cursor: default;
+}
+
+#applicationKindergartenBrowse span.searchTitle {
+	width: 140px;
+}
+#applicationKindergartenBrowse select.yesNoSelect {
+	width: 90px;
+}
+
+#applicationKindergartenBrowse .kindergartenSelections {
+	padding-top: 20px;
+}

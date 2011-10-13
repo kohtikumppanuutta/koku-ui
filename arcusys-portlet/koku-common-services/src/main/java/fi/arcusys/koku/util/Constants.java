@@ -19,7 +19,10 @@ public class Constants {
 	public static final int PAGE_NUMBER 									= 10; // number of tasks in one page
 	
 	public static final String INTALIO_GROUP_PREFIX							= "koku/";
-	                                                                    
+	
+	public static final String PATH_MAIN									= "/Message";
+	
+	
 	/* ModelMap attribute key */                                        
 	public static final String RESPONSE										= "response";
 	                                                                    
@@ -37,6 +40,7 @@ public class Constants {
 	public static final String ATTR_APPOIMENT_ID							= "appointmentId";
 	public static final String ATTR_CONSENT_ID								= "consentId";
 	public static final String ATTR_AUTHORIZATION_ID						= "authorizationId";
+	public static final String ATTR_APPLICATION_ID							= "applicationId";
 	public static final String ATTR_MY_ACTION								= "myaction";
 	public static final String ATTR_TARGET_PERSON							= "targetPerson";
 	public static final String ATTR_PORTAL_INFO								= "portalInfo";
@@ -51,6 +55,7 @@ public class Constants {
 	public static final String MY_ACTION_SHOW_CONSENT 						= "showConsent";
 	public static final String MY_ACTION_SHOW_WARRANT						= "showWarrant";
 	public static final String MY_ACTION_SHOW_TIPY							= "showTipy";
+	public static final String MY_ACTION_SHOW_APPLICATION_KINDERGARTEN		= "showApplicationKindergarten";
 	public static final String MY_ACTION_SHOW_NAVI							= "showNavi";
 	public static final String MY_ACTION_TASKFORM	 						= "taskform";
 	public static final String MY_ACTION_SHOW_REQUEST_RESPONSE				= "showResponse";
@@ -77,6 +82,7 @@ public class Constants {
 	public static final String TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED		= "info_req_browse_replied";			// Tietopyynnöt - Virkailija: Selaa vastattuja tietopyyntöjä
 	public static final String TASK_TYPE_INFO_REQUEST_BROWSE_SENT			= "info_req_browse_sent";				// Tietopyynnöt - Virkailija: Selaa lähetettyjä tietopyyntöjä
 	public static final String TASK_TYPE_INFO_REQUEST_BROWSE				= "info_req_browse";					// Tietopyynnöt - ADMIN: Selaa tietopyyntöjä
+	public static final String TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE	= "application_kindergarten_browse";	// Asiointipalvelut - Selaa hakemuksia (päivähoito) 
                                                                         	
 	                                                                    	
 	/* ATTR_PORTAL_INFO possible values */                              	
@@ -102,6 +108,7 @@ public class Constants {
 	public static final String VIEW_SHOW_EMPLOYEE_APPOINTMENT				= "showemployeeappointment";
 	public static final String VIEW_SHOW_CITIZEN_APPOINTMENT				= "showcitizenappointment";
 	public static final String VIEW_MESSAGE									= "message";
+	public static final String VIEW_SHOW_APPLICATION_KINDERGARTEN			= "showkindergarten";
 	
 	/* JSON keys */
 	public static final String JSON_TOTAL_ITEMS 							= "totalItems";
@@ -144,5 +151,6 @@ public class Constants {
 	public static final String SUGGESTION_CONSENT							= "ConsentTemplateSuggestion";
 	public static final String SUGGESTION_WARRANT							= "WarrantTemplateSuggestion";
 	public static final String SUGGESTION_BROWSE_ALL_CONSENTS				= "BrowseAllConsents";	
+	public static final String SUGGESTION_APPLICATION_KINDERGARTEN			= "KindergartenName";
 	
 }

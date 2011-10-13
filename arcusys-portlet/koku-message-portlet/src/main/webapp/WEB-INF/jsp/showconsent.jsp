@@ -60,7 +60,7 @@ function formatUrl(url) {
 	<span class="text-bold"><spring:message code="consent.recipients"/>:</span> <c:out value="${consent.recipients}" /><br />
 	
 	<span class="modifyConsentLink">
-		<a href="<%= defaultPath %>/Message/NewConsent?FormID=<c:out value="${consent.consentId}"/>"><spring:message code="consent.modifyConsentLink"/></a>
+		<a href="<%= defaultPath %><%= Constants.PATH_MAIN %>/NewConsent?FormID=<c:out value="${consent.consentId}"/>"><spring:message code="consent.modifyConsentLink"/></a>
 	</span><br />
 	
     <h3><spring:message code="consent.actionRequest"/></h3>

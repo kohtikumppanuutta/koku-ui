@@ -26,6 +26,7 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import fi.arcusys.koku.av.AvCitizenServiceHandle;
 import fi.arcusys.koku.av.AvEmployeeServiceHandle;
+import fi.arcusys.koku.hak.model.HakServiceHandle;
 import fi.arcusys.koku.kv.message.MessageHandle;
 import fi.arcusys.koku.kv.request.citizen.CitizenRequestHandle;
 import fi.arcusys.koku.kv.request.employee.EmployeeRequestHandle;
@@ -280,7 +281,10 @@ public class AjaxController extends AbstractController {
 		} else if (suggestionType.equals(SUGGESTION_WARRANT)) {
 			KokuEmployeeWarrantHandle handle = new KokuEmployeeWarrantHandle();
 			resultList = handle.searchWarrantTemplates(keyword, MAX_SUGGESTION_RESULTS);
-		}
+		} else if (suggestionType.equals(SUGGESTION_APPLICATION_KINDERGARTEN)) {
+			HakServiceHandle handle = new HakServiceHandle();
+			resultList = handle.searchKindergartenByName(keyword, MAX_SUGGESTION_RESULTS);
+		} 
 		
 		JSONObject jsonModel = new JSONObject();
 		jsonModel.put(JSON_RESULT, resultList);
@@ -316,7 +320,11 @@ public class AjaxController extends AbstractController {
 			int max =  page*numPerPage; // max amount of tasks
 			Object tasks = Collections.EMPTY_LIST; // Returned tasks
 			
-			if (taskType.equals(TASK_TYPE_REQUEST_VALID_EMPLOYEE)) { // for request (Pyynnöt) - employee Avoimet
+			if (taskType.equals(TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE)) { // Asiointipalvelut - Selaa hakemuksia (päivähoito) - employee
+				HakServiceHandle reqHandle = new HakServiceHandle();
+				tasks = reqHandle.getApplicants(userUid, keyword, first, max);
+				totalTasksNum = reqHandle.getTotalRequestedApplicants(userUid, keyword);
+			} else if (taskType.equals(TASK_TYPE_REQUEST_VALID_EMPLOYEE)) { // for request (Pyynnöt) - employee Avoimet
 				EmployeeRequestHandle reqHandle = new EmployeeRequestHandle();
 				tasks = reqHandle.getRequests(userUid, "valid", "", first, max);
 				totalTasksNum = reqHandle.getTotalRequestsNum(userUid, "valid");
@@ -704,6 +712,51 @@ public class AjaxController extends AbstractController {
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_TIPY);
 		renderUrlObj.setParameter( ATTR_AUTHORIZATION_ID, requestId);
+		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
+		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
+		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
+		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);	
+		
+		try {
+			renderUrlObj.setWindowState(WindowState.NORMAL);
+		} catch (WindowStateException e) {
+			LOG.error("Create consent render url failed");
+		}
+		String renderUrlString = renderUrlObj.toString();
+		
+		JSONObject jsonModel = new JSONObject();
+		jsonModel.put(JSON_RENDER_URL, renderUrlString);
+		modelmap.addAttribute(RESPONSE, jsonModel);
+		
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
+	
+	/**
+	 * Creates info (tietopyyntö) render url mainly for gatein portal, and keeps the page
+	 * parameters such as page id, task type, keyword
+	 * 
+	 * @param authorizationId authorization id
+	 * @param currentPage current page
+	 * @param taskType request task type
+	 * @param keyword keyword
+	 * @param orderType order type
+	 * @param modelmap ModelMap
+	 * @param request PortletRequest
+	 * @param response ResourceResponse
+	 * @return Consent render url in Json format
+	 */
+	@ResourceMapping(value = "createTipyRenderUrl")
+	public String createApplicationKindergartenRenderUrl(
+			@RequestParam(value = "applicationId") String applicationId,
+			@RequestParam(value = "currentPage") String currentPage,
+			@RequestParam(value = "taskType") String taskType,
+			@RequestParam(value = "keyword") String keyword,
+			@RequestParam(value = "orderType") String orderType,
+			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
+
+		PortletURL renderUrlObj = response.createRenderURL();
+		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_APPLICATION_KINDERGARTEN);
+		renderUrlObj.setParameter( ATTR_APPLICATION_ID, applicationId);
 		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
 		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
 		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);

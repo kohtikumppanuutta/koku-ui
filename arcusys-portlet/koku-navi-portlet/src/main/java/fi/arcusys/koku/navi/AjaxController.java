@@ -1,6 +1,22 @@
 package fi.arcusys.koku.navi;
 
-import static fi.arcusys.koku.util.Constants.*;
+import static fi.arcusys.koku.util.Constants.ATTR_MY_ACTION;
+import static fi.arcusys.koku.util.Constants.ATTR_NAVI_TYPE;
+import static fi.arcusys.koku.util.Constants.ATTR_PORTAL_ROLE;
+import static fi.arcusys.koku.util.Constants.ATTR_TOKEN;
+import static fi.arcusys.koku.util.Constants.INTALIO_GROUP_PREFIX;
+import static fi.arcusys.koku.util.Constants.JSON_APPOINTMENT_TOTAL;
+import static fi.arcusys.koku.util.Constants.JSON_ARCHIVE_INBOX;
+import static fi.arcusys.koku.util.Constants.JSON_CONSENTS_TOTAL;
+import static fi.arcusys.koku.util.Constants.JSON_INBOX;
+import static fi.arcusys.koku.util.Constants.JSON_LOGIN_STATUS;
+import static fi.arcusys.koku.util.Constants.JSON_RENDER_URL;
+import static fi.arcusys.koku.util.Constants.JSON_REQUESTS_TOTAL;
+import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_NAVI;
+import static fi.arcusys.koku.util.Constants.RESPONSE;
+import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN;
+import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_INVALID;
+import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_VALID;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
@@ -24,7 +40,6 @@ import fi.arcusys.koku.kv.model.KokuFolderType;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.users.UserIdResolver;
 import fi.arcusys.koku.util.PortalRole;
-import fi.arcusys.koku.util.TaskUtil;
 
 /**
  * Handles ajax request and return the response with json string
@@ -61,12 +76,15 @@ public class AjaxController extends AbstractController {
 		}
 		
 		PortletSession session = request.getPortletSession();
+		
+		// Resolve user Intalio token (if not already done)
 		String token = (String) session.getAttribute(ATTR_TOKEN);
 		if ((token == null || token.isEmpty()) && userId != null) {
-			token = resolveIntalioToken(session, userId);
+			token = resolveIntalioToken(session, username);
 			session.setAttribute(ATTR_TOKEN, token);
 		}
 		
+		// Resolve portalRole (Employee or Citizen portal)
 		String portal = (String) session.getAttribute(ATTR_PORTAL_ROLE);
 		PortalRole portalRole = null;
 		if (portal == null || portal.isEmpty()) {
@@ -76,7 +94,7 @@ public class AjaxController extends AbstractController {
 			portalRole = PortalRole.fromValue(portal);		
 		}
 		
-		JSONObject jsonModel = getJsonModel(userId, token, portalRole);
+		JSONObject jsonModel = getJsonModel(username, userId, token, portalRole);
 		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
@@ -93,7 +111,7 @@ public class AjaxController extends AbstractController {
 	 * @param userId user that message belong to
 	 * @return Json object contains result
 	 */
-	public JSONObject getJsonModel(String userId, String token, PortalRole role) {
+	public JSONObject getJsonModel(String username, String userId, String token, PortalRole role) {
 		JSONObject jsonModel = new JSONObject();
 		if (userId == null) {
 			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_INVALID);
@@ -150,8 +168,8 @@ public class AjaxController extends AbstractController {
 	 * @param userId
 	 * @return number or requests
 	 */
-	private int getTotalRequests(String userId, String token) {
-		TaskHandle handle = new TaskHandle(token, userId);
+	private int getTotalRequests(String username, String token) {
+		TaskHandle handle = new TaskHandle(token, username);
 		return handle.getRequestsTasksTotalNumber();
 	}
 	
