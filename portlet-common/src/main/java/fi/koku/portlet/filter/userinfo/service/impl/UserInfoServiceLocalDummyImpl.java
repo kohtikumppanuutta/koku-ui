@@ -17,7 +17,8 @@ public class UserInfoServiceLocalDummyImpl implements UserInfoService {
   private Map<String, UserInfo> uidMap = new HashMap<String, UserInfo>();
   private Map<String, UserInfo> picMap = new HashMap<String, UserInfo>();
 
-  public UserInfoServiceLocalDummyImpl() {
+  @Deprecated
+  private UserInfoServiceLocalDummyImpl() {
     UserInfo[] users = new UserInfo[] {
         //OLD USERS
         new UserInfo("isa", "111111-1111", "Isa", "Iisakkila"),
