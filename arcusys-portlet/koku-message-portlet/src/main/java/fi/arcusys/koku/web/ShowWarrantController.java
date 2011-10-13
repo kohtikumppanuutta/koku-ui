@@ -18,7 +18,6 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.arcusys.koku.tiva.warrant.citizens.KokuCitizenWarrantHandle;
 import fi.arcusys.koku.tiva.warrant.employee.KokuEmployeeWarrantHandle;
-import fi.arcusys.koku.tiva.warrant.employeewarrantservice.KokuLooraValtakirjaService_Service;
 import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationSummary;
 import fi.arcusys.koku.users.UserIdResolver;
 
@@ -99,7 +98,7 @@ public class ShowWarrantController extends AbstractController {
 			try {
 				warrant = handle.getAuthorizationDetails(Integer.valueOf(authorizationId));					
 			} catch (NumberFormatException nfe) {
-				// Silently catch exception
+				LOG.error("AuthorizationID is not valid! Username: " + username + " UserId: " + userId + " AuthorizationId: "+ authorizationId);
 			}
 		}
 		return warrant;

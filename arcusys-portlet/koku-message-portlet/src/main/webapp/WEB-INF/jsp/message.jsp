@@ -579,17 +579,12 @@
 			if (tasks[i].status != 'REVOKED') {
  				var url = "<%= defaultPath %>/Message/ValtakirjaEditConsent?FormID="+ tasks[i].authorizationId; 
 				tasks[i]["editLink"] = "<a onclick='event.cancelBubble=true' class='editConsentLink' href="+url+" ><spring:message code="consent.edit"/></a>"; 
-// 				tasks[i]["editLink"] = "<span class='editConsentLink' onclick='event.cancelBubble=true; openValtakirjaEditConsent("+tasks[i].authorizationId+")'><spring:message code="consent.edit"/></span>";
 			} else {
 				tasks[i]["editLink"] = "";
 			}
 		}
 	}
 	
-	function  openValtakirjaEditConsent(id) {
-		var url = "<%= defaultPath %>/Message/ValtakirjaEditConsent?FormID="+ id;
-		document.location.href = url;		
-	}
 	
 	function flattenTasksContent(tasks) {
 		for (var i = 0; i < tasks.length; i++)  {			

@@ -44,6 +44,7 @@ String srcContent = message.getContent();
 String sender = message.getSender();
 String recipients = message.getRecipients();
 String subject = message.getSubject();
+String type = message.getMessageType();
 String content = htmlToCode(srcContent);
 Boolean isHtml = false;
 if (srcContent != null) {
@@ -62,6 +63,7 @@ window.onload = function() {
 	message.subject = '<%= subject %>';
 	message.content = '<%= content %>';
 	message.isHtmlContent = '<%= isHtml %>';
+	message.type = '<%= type %>';
 	
 
 	if (message.isHtmlContent !== 'true') {

@@ -169,6 +169,7 @@ public class MessageHandle extends AbstractHandle {
 		message.SetRecipients(formatRecipients(msg.getRecipients()));
 		message.setSubject(msg.getSubject());
 		message.setContent(msg.getContent());
+		message.setMessageType(msg.getMessageType().toString());
 		message.setCreationDate(MessageUtil.formatTaskDate(msg.getCreationDate()));
 		message.setMessageStatus(localizeMsgStatus(msg.getMessageStatus()));	
 		return message;
