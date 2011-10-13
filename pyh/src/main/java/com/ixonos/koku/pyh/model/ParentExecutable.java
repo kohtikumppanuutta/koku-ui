@@ -4,7 +4,7 @@ import com.ixonos.koku.pyh.PyhDemoService;
 import com.ixonos.koku.pyh.util.CommunityRole;
 
 public class ParentExecutable implements Executable {
-
+/*
   private String userPic;
   private String targetPic;
   private PyhDemoService service;
@@ -17,10 +17,10 @@ public class ParentExecutable implements Executable {
     this.service = service;
     this.role = role;
   }
-  
+*/
   @Override
   public void execute() {
-    service.insertParentInto(userPic, targetPic, role);
+//    service.insertParentInto(userPic, targetPic, role);
   }
 
 }

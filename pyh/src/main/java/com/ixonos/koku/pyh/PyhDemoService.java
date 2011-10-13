@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.portlet.PortletSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
-import org.springframework.web.portlet.util.PortletUtils;
 
 import com.ixonos.koku.pyh.model.Dependant;
 import com.ixonos.koku.pyh.model.DependantsAndFamily;
@@ -70,6 +67,7 @@ public class PyhDemoService {
     
     CommunityServiceFactory communityServiceFactory = new CommunityServiceFactory(PyhConstants.COMMUNITY_SERVICE_USER_ID, PyhConstants.COMMUNITY_SERVICE_PASSWORD, PyhConstants.COMMUNITY_SERVICE_ENDPOINT);
     communityService = communityServiceFactory.getCommunityService();
+  
   }
   
   /**
@@ -496,6 +494,7 @@ public class PyhDemoService {
         
         try {
           communityService.opUpdateCommunity(family.getCommunity(), communityAuditInfoType);
+          Log.getInstance().update(userPic, "", "pyh.family.community", "Adding dependant " + dependantPic + " into family");
         } catch (ServiceFault fault) {
           log.error("PyhDemoService.insertDependantToFamily: opUpdateCommunity raised a ServiceFault", fault);
         }
@@ -550,6 +549,7 @@ public class PyhDemoService {
             members.remove(member);
             try {
               communityService.opUpdateCommunity(community, communityAuditInfoType);
+              Log.getInstance().update(userPic, "", "pyh.family.community", "Removing family member " + familyMemberPic + " from family");
             } catch (ServiceFault fault) {
               log.error("PyhDemoService.removeFamilyMember: opUpdateCommunity raised a ServiceFault", fault);
             }
@@ -610,7 +610,6 @@ public class PyhDemoService {
         sendParentAdditionMessage(communityId, memberToAddPic, userPic, communityRole);
       } else if (CommunityRole.CHILD.equals(communityRole) && recipients.size() == 0) {
         // we don't have guardian information for the child so we can't send the request
-        //session.setAttribute("childsGuardianshipInformationNotFound", new Boolean(true));
         
         String messageSubject = "KoKu: puutteelliset tiedot järjestelmässä";
         String messageText = "Järjestelmästä ei löydy lapsen huoltajatietoja. Lapsen HETU: " + memberToAddPic;
@@ -625,6 +624,8 @@ public class PyhDemoService {
         } catch (MailException me) {
           log.error("PyhDemoService.addPersonsAsFamilyMembers: sending mail to KoKu support failed!", me);
         }
+        
+        Log.getInstance().send(userPic, "", "pyh.membership.request", "Cannot send approval request because guardian for child " + memberToAddPic + " is not found");
         
         throw new GuardianForChildNotFoundException("Guardian for child (pic: " + memberToAddPic + ") not found!");
         
@@ -680,6 +681,7 @@ public class PyhDemoService {
     
     try {
       communityService.opAddMembershipRequest(membershipRequest, communityAuditInfoType);
+      Log.getInstance().send(requesterPic, "", "pyh.membership.request", "Sending membership request to add person " + memberToAddPic + " into family");
     } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
       log.error("PyhDemoService.sendParentAdditionMessage: opAddMembershipRequest raised a ServiceFault", fault);
     }
@@ -740,6 +742,7 @@ public class PyhDemoService {
     
     try {
       communityService.opAddMembershipRequest(membershipRequest, communityAuditInfoType);
+      Log.getInstance().send(requesterPic, "", "pyh.membership.request", "Sending membership request to add person " + memberToAddPic + " into family");
     } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
       log.error("PyhDemoService.sendFamilyAdditionMessage: opAddMembershipRequest raised a ServiceFault", fault);
     }
@@ -749,7 +752,7 @@ public class PyhDemoService {
   /**
    * Inserts a new member into a family community.
    */
-  public void insertInto(String toFamilyPic, String personPic, CommunityRole role) {
+  public void insertInto(String toFamilyPic, String memberToAddPic, CommunityRole role) {
     Family family = null;
     
     try {
@@ -765,7 +768,7 @@ public class PyhDemoService {
     }
     
     if (family != null) {
-      family.addFamilyMember(personPic, role.getRoleID());
+      family.addFamilyMember(memberToAddPic, role.getRoleID());
       
       fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
       communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
@@ -773,6 +776,7 @@ public class PyhDemoService {
       
       try {
         communityService.opUpdateCommunity(family.getCommunity(), communityAuditInfoType);
+        Log.getInstance().update(toFamilyPic, "", "pyh.family.community", "Adding person " + memberToAddPic + " into family");
       } catch (ServiceFault fault) {
         log.error("PyhDemoService.insertInto: opUpdateCommunity raised a ServiceFault", fault);
       }
@@ -793,6 +797,7 @@ public class PyhDemoService {
   /**
    * Inserts a parent (from other family) into a family and then combines the two families.
    */
+  /*
   public void insertParentInto(String toFamilyPic, String personPic, CommunityRole role) {
     Family family = null;
     Family combine = null;
@@ -852,6 +857,7 @@ public class PyhDemoService {
       removeFamily(combine, toFamilyPic); // toFamilyPic is current user's pic
     }
   }
+  */
   
   public String addFamily(String userPic) {
     if (debug) {
@@ -877,6 +883,7 @@ public class PyhDemoService {
     String communityId = null;
     try {
       communityId = communityService.opAddCommunity(community, communityAuditInfoType);
+      Log.getInstance().update(userPic, "", "pyh.family.community", "Adding family for user " + userPic);
     } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
       log.error("PyhDemoService.addFamily: opAddCommunity raised a ServiceFault", fault);
     }
@@ -894,6 +901,7 @@ public class PyhDemoService {
     
     try {
       communityService.opDeleteCommunity(family.getCommunityId(), communityAuditInfoType);
+      Log.getInstance().remove(userPic, "", "pyh.family.community", "Removing user's " + userPic + " family");
     } catch (ServiceFault fault) {
       log.error("PyhDemoService.removeFamily: opDeleteCommunity raised a ServiceFault", fault);
     }
@@ -1041,26 +1049,18 @@ public class PyhDemoService {
           
           if (requestSender != null) {
             senderName = requestSender.getFullName();
-          } else {
-            senderName = senderPic;
+          }
+          
+          if (targetPerson != null) {
+            targetName = targetPerson.getFullName();
           }
           
           boolean twoParentsInFamily;
           if (memberToAddPic.equals(user.getPic())) {
-            // if the target person is current user
-            targetName = "sinut";
-            
             // twoParentsInFamily is set if there are two (or more; this is theoretical, 
             // shouldn't be possible) parents in the family
             twoParentsInFamily = isParentsSet(user.getPic());
-            
           } else {
-            if (targetPerson != null) {
-              targetName = "käyttäjän " + targetPerson.getFullName();
-            } else {
-              targetName = "käyttäjän " + memberToAddPic;
-            }
-            
             // here it does not matter whether there are two parents in the family or not
             // so twoParentsInFamily can be set to false
             twoParentsInFamily = false;
@@ -1068,8 +1068,7 @@ public class PyhDemoService {
           
           String messageText = "";
           if (twoParentsInFamily) {
-            // TODO: miten tämä teksti muotoillaan?
-            messageText = "Uusi perheyhteyspyyntö: käyttäjä " + senderName + 
+            messageText = "Uusi perheyhteyspyyntö: " + senderName + 
             " on lisäämässä sinua perheyhteisönsä jäseneksi, mutta et voi hyväksyä pyyntöä, koska perheessänne on jo kaksi vanhempaa. " +
             "Voit hylätä pyynnön tai poistaa toisen vanhemman perheyhteisöstäsi, minkä jälkeen voit hyväksyä pyynnön.";
           }
@@ -1171,6 +1170,7 @@ public class PyhDemoService {
     
     try {
       communityService.opUpdateMembershipApproval(membershipApproval, communityAuditInfoType);
+      Log.getInstance().update(approverPic, "", "pyh.membership.approval", "Membership approval status for user " + approverPic + " was set to '" + status + "'");
     } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
       log.error("PyhDemoService.acceptMembershipRequest: opUpdateMembershipApproval raised a ServiceFault", fault);
     }

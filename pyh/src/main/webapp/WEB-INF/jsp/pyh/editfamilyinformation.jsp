@@ -63,7 +63,7 @@
                                         <portlet:param name="action" value="removeDependant" />
                                         <portlet:param name="familyMemberPic" value="${child.pic}" />
                                     </portlet:actionURL>
-                                    <a href="${removeFamilyMember}" onclick="return doRemoveFamilyMemberConfirmation()"><spring:message code="ui.pyh.remove.family" /></a> </span> 
+                                    <a href="${removeFamilyMember}" onclick="return doRemoveDependantConfirmation()"><spring:message code="ui.pyh.remove.family" /></a> </span> 
                                 </c:when>
                                 <c:otherwise>
                                     <portlet:actionURL var="addDependantAsFamilyMember">
@@ -71,7 +71,7 @@
                                             value="addDependantAsFamilyMember" />
                                         <portlet:param name="dependantPic" value="${child.pic}" />
                                     </portlet:actionURL>
-                                    <a href="${addDependantAsFamilyMember}" onclick="return doAddFamilyMemberConfirmation()"><spring:message code="ui.pyh.add.into.family" /></a>
+                                    <a href="${addDependantAsFamilyMember}" onclick="return doAddDependantConfirmation()"><spring:message code="ui.pyh.add.into.family" /></a>
                                 </c:otherwise>
                             </c:choose> </span> </span>
                 </td>
@@ -83,14 +83,15 @@
                 <td>${familyMember.fullName} </td>
                 <td>${familyMember.pic} </td>
                 <td><spring:message code="${familyMember.role.bundleId}"/></td>
-                <td><span class="pyh-linkki">
+                <td>
+                	<span class="pyh-linkki">
                     <portlet:actionURL var="removeFamilyMember">
-                    <portlet:param name="action" value="removeFamilyMember" />
-                    <portlet:param name="familyMemberPic" value="${familyMember.pic}" />
-                </portlet:actionURL>
-                        <a
-                        href="${removeFamilyMember}"><spring:message code="ui.pyh.remove.family" /></a>
-                    </span></td>
+	                    <portlet:param name="action" value="removeFamilyMember" />
+	                    <portlet:param name="familyMemberPic" value="${familyMember.pic}" />
+                	</portlet:actionURL>
+                	<a href="${removeFamilyMember}" onclick="return doRemoveFamilyMemberConfirmation()"><spring:message code="ui.pyh.remove.family" /></a>
+                    </span>
+               	</td>
             </tr>
             </c:forEach>
         </table>
@@ -238,12 +239,16 @@
 		$('#addUsersToFamilyForm').submit();
 	}
 	
-	function doAddFamilyMemberConfirmation() {
+	function doAddDependantConfirmation() {
 		return confirm("<spring:message code="ui.pyh.add.dependant.family.member.question"/>");
 	}
 	
-	function doRemoveFamilyMemberConfirmation() {
+	function doRemoveDependantConfirmation() {
 		return confirm("<spring:message code="ui.pyh.remove.dependant.family.member.question"/>");
+	}
+	
+	function doRemoveFamilyMemberConfirmation() {
+		return confirm("<spring:message code="ui.pyh.remove.family.member.question"/>");
 	}
 	
 </script>
