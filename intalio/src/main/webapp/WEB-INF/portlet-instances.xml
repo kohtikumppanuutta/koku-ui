@@ -223,7 +223,7 @@
          </security-constraint>
       </instance>
    </deployment>
-   
+      
    <deployment>
       <instance>
          <instance-id>ApTietopyyntöKirjaaSuostumus</instance-id>
@@ -240,6 +240,37 @@
 			<preference>
 				<name>showOnlyFormByDescription</name>
 				<value>TIVA - Kirjaa Suostumus</value>
+			</preference>
+			<preference>
+				<name>useTaskId</name>
+				<value>false</value>
+			</preference>
+         </preferences>
+         <security-constraint>
+            <policy-permission>
+               <action-name>view</action-name>
+               <unchecked/>
+            </policy-permission>
+         </security-constraint>
+      </instance>
+   </deployment>   
+   
+    <deployment>
+      <instance>
+         <instance-id>ApPaivahoitohakemuksenVahvistus</instance-id>
+         <portlet-ref>palvelut-portlet</portlet-ref>
+         <preferences>
+            <preference>
+				<name>showOnlyChecked</name>
+				<value>true</value>
+			</preference>
+			<preference>
+				<name>showOnlyForm</name>
+				<value>0</value>
+			</preference>
+			<preference>
+				<name>showOnlyFormByDescription</name>
+				<value>Päivähoitohakemuksen vahvistuspyyntö</value>
 			</preference>
 			<preference>
 				<name>useTaskId</name>
