@@ -8,7 +8,7 @@
 	<portlet:param name="action" value="searchChild" />
 </portlet:actionURL>
 
-<c:set var="ammattilainen" value="${true}" scope="session" />
+<c:set var="municipal_employee" value="${true}" scope="session" />
 
 <div class="koku-kks"> 
 <div  class="portlet-section-body">
@@ -39,10 +39,10 @@
 			</div>
 			<span class="kks-left"> <input type="submit" class="portlet-form-button" value="<spring:message code="ui.kks.search.info"/>" ></span>
 
-			<div class="kks-reset-floating" />
+			<div class="kks-reset-floating"></div>
 		</form:form>
 		</div>
-</br>
+		<br></br>
 		<div class="kks-collection">
 			<c:if test="${not empty childs}">
 				<c:forEach var="child" items="${childs}">
@@ -65,7 +65,7 @@
 
 
 	<div class="kks-spacer">
-		</br>
+		<br></br>
 	</div>
 </div>
 </div>

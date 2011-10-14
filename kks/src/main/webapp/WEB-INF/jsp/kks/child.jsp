@@ -1,26 +1,12 @@
 <%@ include file="imports.jsp" %>
 
-
 <fmt:setBundle basename="com.ixonos.eservices.koku.bundle.KokuBundle" />
 
-<script type="text/javascript">
-	function insertSelection() {
-		var str = document.getElementById("kks.select").value;
-
-		if (str == "") {
-			document.getElementById("kks.name").value = "";
-		} else {
-			document.getElementById("kks.name").value = str.split("#", 10)[2];
-		}
-	}
-</script>
-
-
 <portlet:renderURL var="homeUrl">
-	<c:if test="${ not sessionScope.ammattilainen }">
+	<c:if test="${ not sessionScope.municipal_employee }">
 		<portlet:param name="action" value="showChildrens" />
 	</c:if>
-	<c:if test="${ sessionScope.ammattilainen }">
+	<c:if test="${ sessionScope.municipal_employee }">
 		<portlet:param name="action" value="showEmployee" />
 		<portlet:param name="childs" value="${child.pic}" />
 	</c:if>
@@ -70,7 +56,7 @@
 				<th><spring:message code="ui.kks.last.entry" />
 				</th>
 
-				<c:if test="${ sessionScope.ammattilainen }">
+				<c:if test="${ sessionScope.municipal_employee }">
 					<th><spring:message code="ui.kks.entry.state" />
 					</th>
 					<th><spring:message code="ui.kks.consents" />
@@ -82,7 +68,7 @@
 				<c:forEach var="collection" items="${collections}">
 
 					<c:if
-						test="${ sessionScope.ammattilainen || not collection.versioned }">
+						test="${ sessionScope.municipal_employee || not collection.versioned }">
 						<tr>
 							<td><span class="collection"> <a
 									href="
@@ -93,10 +79,10 @@
 						</portlet:renderURL>">
 										<strong><c:out value="${ collection.name }"/></strong> </a> </span></td>
 							<td><c:out value="${collection.modifierFullName}"/> <fmt:formatDate
-									pattern="HH:mm:ss dd.MM.yyyy" value="${collection.creationTime}" />
+									pattern="dd.MM.yyyy" value="${collection.creationTime}" />
 							</td>
 
-							<c:if test="${ sessionScope.ammattilainen }">
+							<c:if test="${ sessionScope.municipal_employee }">
 								<td><c:choose>
 										<c:when test="${collection.state.active}">
 											<spring:message code="ui.kks.active" />
@@ -195,7 +181,7 @@
                         </portlet:actionURL>">
 					<spring:message code="ui.kks.support.needs" /> </a> </div> 
 
-			<c:if test="${ sessionScope.ammattilainen }">
+			<c:if test="${ sessionScope.municipal_employee }">
 
 				<span class="kks-link"> <a
 					href="
@@ -230,7 +216,7 @@
 		<div class="activate.collection">
 
 			<div class="collection">
-				<c:if test="${ sessionScope.ammattilainen }">
+				<c:if test="${ sessionScope.municipal_employee }">
 					<a class="create"> <spring:message code="ui.kks.new.contract" /><span
 						class="kks-close"><spring:message code="ui.kks.hide" /> </span> </a>
 					<div class="kks-fields" style="display: none;">
@@ -285,6 +271,7 @@
 </div>
 </div>
 
+
 <script type="text/javascript"
 	src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
 <script type="text/javascript"
@@ -297,4 +284,14 @@
 		});
 
 	});
+	
+	function insertSelection() {
+		var str = document.getElementById("kks.select").value;
+
+		if (str == "") {
+			document.getElementById("kks.name").value = "";
+		} else {
+			document.getElementById("kks.name").value = str.split("#", 10)[2];
+		}
+	}
 </script>

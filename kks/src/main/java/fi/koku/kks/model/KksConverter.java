@@ -1,4 +1,4 @@
-package fi.koku.kks.ui.common;
+package fi.koku.kks.model;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -7,11 +7,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import fi.koku.kks.model.CollectionState;
-import fi.koku.kks.model.Entry;
-import fi.koku.kks.model.EntryValue;
-import fi.koku.kks.model.KKSCollection;
-import fi.koku.kks.model.KksService;
+import fi.koku.kks.ui.common.DataType;
+import fi.koku.kks.ui.common.State;
 import fi.koku.services.entity.kks.v1.EntryValuesType;
 import fi.koku.services.entity.kks.v1.KksCollectionType;
 import fi.koku.services.entity.kks.v1.KksEntriesType;

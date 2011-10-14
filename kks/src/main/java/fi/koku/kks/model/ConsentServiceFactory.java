@@ -1,4 +1,4 @@
-package fi.koku.kks.ui.common.utils;
+package fi.koku.kks.model;
 
 import java.net.URL;
 
@@ -9,9 +9,15 @@ import fi.koku.services.entity.tiva.v1.KokuTivaToKksService;
 import fi.koku.services.entity.tiva.v1.KokuTivaToKksService_Service;
 import fi.koku.settings.KoKuPropertiesUtil;
 
+/**
+ * Factory for accessing consents
+ * 
+ * @author Ixonos / tuomape
+ * 
+ */
 public class ConsentServiceFactory {
 
-  private final URL wsdlLocation = getClass().getClassLoader().getResource("wsdl/communityService.wsdl");
+  private final URL wsdlLocation = getClass().getClassLoader().getResource("wsdl/tivaService.wsdl");
 
   public ConsentServiceFactory() {
 

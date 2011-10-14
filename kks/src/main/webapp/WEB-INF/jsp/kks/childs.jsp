@@ -4,7 +4,7 @@
 	<portlet:param name="action" value="choose" />
 </portlet:renderURL>
 
-<c:set var="ammattilainen" value="${false}" scope="session"/>  
+<c:set var="municipal_employee" value="${false}" scope="session"/>  
 
 <div class="koku-kks"> 
 <div class="portlet-section-body">
@@ -24,18 +24,20 @@
 		<c:if test="${not empty childs}">
 			<c:forEach var="child" items="${childs}">
 				<span class="kks-link">
-					<a
-						href="
+					<a href="
 						<portlet:actionURL>
 							<portlet:param name="action" value="toChildInfo" />
 							<portlet:param name="pic" value="${child.pic}" />
 						</portlet:actionURL>">
-						 <c:out value="${child.lastName}"/>, <c:out value="${child.firstName}"/> </strong> </a>  <c:out value="${child.pic}"/>
-				</span></br>
+						 <c:out value="${child.lastName}"/>, <c:out value="${child.firstName}"/></a>  <c:out value="${child.pic}"/>
+				</span>
+				<br></br>
 			</c:forEach>
 		</c:if>
 	</div>
-	<div class="kks-spacer"></br></div>
+	<div class="kks-spacer">
+		<br></br>
+	</div>
 
 </div>
 </div>

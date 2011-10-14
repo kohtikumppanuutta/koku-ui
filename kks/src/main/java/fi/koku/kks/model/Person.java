@@ -14,14 +14,11 @@ public class Person {
   private String secondName;
   private String lastName;
   private String pic;
-  private String customerId;
-  private KKS kks;
 
   public Person() {
     this.firstName = "";
     this.secondName = "";
     this.lastName = "";
-    this.kks = new KKS();
   }
 
   public Person(String first, String second, String last, String pic) {
@@ -29,15 +26,6 @@ public class Person {
     this.secondName = second;
     this.lastName = last;
     this.pic = pic;
-    this.kks = new KKS();
-  }
-
-  public String getCustomerId() {
-    return customerId;
-  }
-
-  public void setCustomerId(String customerId) {
-    this.customerId = customerId;
   }
 
   public String getFirstName() {
@@ -76,14 +64,6 @@ public class Person {
     return getPic();
   }
 
-  public KKS getKks() {
-    return kks;
-  }
-
-  public void setKks(KKS kks) {
-    this.kks = kks;
-  }
-
   public String getName() {
     return secondName + " " + lastName;
   }
@@ -94,7 +74,6 @@ public class Person {
     p.setSecondName(c.getEtunimetNimi());
     p.setLastName(c.getSukuNimi());
     p.setPic(c.getHenkiloTunnus());
-    p.setCustomerId(c.getId());
     return p;
   }
 }

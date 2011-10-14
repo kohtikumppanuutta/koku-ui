@@ -13,9 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import fi.koku.kks.ui.common.KksConverter;
 import fi.koku.kks.ui.common.utils.CollectionComparator;
-import fi.koku.kks.ui.common.utils.ConsentServiceFactory;
 import fi.koku.kks.ui.common.utils.Constants;
 import fi.koku.portlet.filter.userinfo.UserInfo;
 import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
@@ -75,7 +73,6 @@ public class KksService {
   private Map<String, KksEntryClassType> entryClasses;
   private Map<String, KksCollectionClassType> collectionClasses;
   private KksConverter converter;
-  private Map<String, List<ConsentRequest>> consents;
   private KksServicePortType kksService;
   private CommunityServicePortType communityService;
   private CustomerServicePortType customerService;
@@ -87,14 +84,6 @@ public class KksService {
     kksService = getKksService();
     communityService = getCommunityService();
     customerService = getCustomerService();
-    initConsentReq();
-  }
-
-  private void initConsentReq() {
-
-    if (consents == null) {
-      consents = new HashMap<String, List<ConsentRequest>>();
-    }
   }
 
   public fi.koku.services.entity.customer.v1.AuditInfoType getCustomerAuditInfo(String user) {
@@ -523,18 +512,16 @@ public class KksService {
     return false;
   }
 
-  public List<Person> searchPerson(Person target, String user) {
-    List<Person> list = new ArrayList<Person>();
+  public Person searchPerson(Person target, String user) {
     try {
       CustomerType t = customerService.opGetCustomer(target.getPic().trim(), getCustomerAuditInfo(user));
       if (t != null) {
-        Person p = Person.fromCustomerType(t);
-        list.add(p);
+        return Person.fromCustomerType(t);
       }
     } catch (fi.koku.services.entity.customer.v1.ServiceFault e) {
       LOG.error("Failed to fetch customer details", e);
     }
-    return list;
+    return null;
   }
 
   public Person searchCustomer(String socialSecurityNumber, String user) {
@@ -561,24 +548,6 @@ public class KksService {
     }
 
     return creatables;
-  }
-
-  public Map<String, ConsentRequest> getConsentRequests(String customerId) {
-
-    initConsentReq();
-
-    if (!consents.containsKey(customerId)) {
-      return new HashMap<String, ConsentRequest>();
-    }
-
-    List<ConsentRequest> tmp = consents.get(customerId);
-
-    Map<String, ConsentRequest> res = new HashMap<String, ConsentRequest>();
-
-    for (ConsentRequest r : tmp) {
-      res.put(r.getConsentType(), r);
-    }
-    return res;
   }
 
   /**
@@ -640,7 +609,6 @@ public class KksService {
   }
 
   private List<GivenTo> getOrganizationNames(String user) {
-    // TODO: take real auth service into use
     AuthorizationInfoService uis = new AuthorizationInfoServiceDummyImpl();
     List<OrgUnit> units = uis.getUsersOrgUnits("KKS", user);
 

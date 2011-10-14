@@ -58,9 +58,17 @@ public class MunicipalEmployeeController {
   public void fecthChild(PortletSession session, @ModelAttribute(value = "child") Person child,
       BindingResult bindingResult, ActionResponse response, SessionStatus sessionStatus) {
     LOG.info("search child");
-    response.setRenderParameter("action", "showEmployee");
-    response.setRenderParameter("childs", toPicArray(kksService.searchPerson(child, Utils.getPicFromSession(session))));
-    response.setRenderParameter("search", "true");
+
+    Person p = kksService.searchPerson(child, Utils.getPicFromSession(session));
+
+    if (p != null) {
+      response.setRenderParameter("action", "showChild");
+      response.setRenderParameter("pic", p.getPic());
+    } else {
+      response.setRenderParameter("action", "showEmployee");
+      response.setRenderParameter("childs", new String[] { "" });
+      response.setRenderParameter("search", "true");
+    }
     sessionStatus.setComplete();
   }
 
@@ -68,21 +76,6 @@ public class MunicipalEmployeeController {
   public Person getCommandObject() {
     LOG.debug("get entry command object");
     return new Person();
-  }
-
-  private String[] toPicArray(List<Person> childs) {
-    String[] tmp = null;
-
-    if (childs.isEmpty()) {
-      tmp = new String[] { "" };
-    } else {
-      tmp = new String[childs.size()];
-    }
-
-    for (int i = 0; i < childs.size(); i++) {
-      tmp[i] = childs.get(i).getPic();
-    }
-    return tmp;
   }
 
   private List<Person> toChilds(String[] childIds, String user) {

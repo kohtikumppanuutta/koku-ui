@@ -28,7 +28,7 @@ public class MainController {
   @RenderMapping
   public String render(PortletSession session, RenderRequest req, Model model) {
 
-    String kunpo = KoKuPropertiesUtil.get("environment.portlet.server.name");
+    String kunpo = KoKuPropertiesUtil.get("environment.name");
     if ("kunpo".equalsIgnoreCase(kunpo)) {
       model.addAttribute("childs", getChilds(session));
       return "childs";

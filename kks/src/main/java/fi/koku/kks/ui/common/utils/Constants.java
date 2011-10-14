@@ -2,6 +2,12 @@ package fi.koku.kks.ui.common.utils;
 
 import fi.koku.settings.KoKuPropertiesUtil;
 
+/**
+ * Constants for KKS
+ * 
+ * @author Ixonos / tuomape
+ * 
+ */
 public final class Constants {
 
   private Constants() {

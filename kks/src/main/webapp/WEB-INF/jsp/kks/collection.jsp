@@ -64,7 +64,7 @@
 			     </spring:bind>
 				</spring:hasBindErrors>
 			</div>
-                <c:if test="${ sessionScope.ammattilainen && !collection.versioned }">
+                <c:if test="${ sessionScope.municipal_employee && !collection.versioned }">
                     <a class="create"> <spring:message code="ui.kks.new.version" /><span
                         class="kks-close"><spring:message code="ui.kks.hide" /> </span> </a>
                     <div class="kks-fields" style="display: none;">
@@ -121,8 +121,8 @@
                 <strong><spring:message code="ui.kks.prev.version" />
             </strong> </a>
         </c:if> <c:if test="${not empty collection.nextVersion }">
-            <c:if test="${ not empty collection.prevVersion }">
-            </br>
+            <c:if test="${ not empty collection.prevVersion }"><br></br>            
+    		
             </c:if>
             <a
                 href="
@@ -294,10 +294,6 @@
             </form:form>
 
         </c:if>
-
-
-
-
     </div>
 </div>
 <br />

@@ -24,7 +24,7 @@ public class EditController {
   public String render(RenderRequest req, @RequestParam(value = "message", required = false) String message, Model model) {
 
     if (message != null) {
-      model.addAttribute("message", "Malli resetoitu");
+      model.addAttribute("message", "metadata resetted");
     }
     return "edit";
   }

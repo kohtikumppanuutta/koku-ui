@@ -1,9 +1,6 @@
 <%@ include file="imports.jsp" %>
 
-
-
 <fmt:setBundle basename="com.ixonos.eservices.koku.bundle.KokuBundle" />
-
 
 <portlet:defineObjects />
 
@@ -15,7 +12,7 @@
 <div class="koku-kks"> 
 <div class="portlet-section-body">
 
-
+<!-- Example page what kind of pegasos integration might be -->
     
 <div class="kks-home">
     <div class="kks-right">

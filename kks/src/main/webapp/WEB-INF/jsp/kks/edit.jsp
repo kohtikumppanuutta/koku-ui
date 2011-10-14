@@ -9,9 +9,10 @@
 <div class="koku-kks"> 
 <div  class="portlet-section-body">
 
-        <div id="kks-entry.tyypit" class="portlet-section-text">
+<!-- Edit mode page for clearing KKS metadata without server reboot -->
+        <div class="portlet-section-text">
             <form:form name="reset" method="post" action="${resetURL}">
-                <input class="portlet-form-button" type="submit" value="Resetoi malli" />
+                <input class="portlet-form-button" type="submit" value="Resetoi metadata" />
             </form:form>
         </div>
         <div class="kks-read-only-text">

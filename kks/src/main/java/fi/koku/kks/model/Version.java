@@ -4,6 +4,12 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+/**
+ * Class for holding information for collection versioning
+ * 
+ * @author Ixonos / tuomape
+ * 
+ */
 public class Version implements Validator {
 
   private String name;
