@@ -534,6 +534,11 @@ public class PyhDemoService {
       log.error("PyhDemoService.removeFamilyMember: opGetCommunity raised a ServiceFault", fault);
     }
     
+    // TODO: tässä pitää tarkistaa että esim. lapsi poistetaan vain kirjautuneen käyttäjän perheestä.
+    // nyt lapsi poistuu molemmista perheistä jos kuuluu kahteen perheeseen.
+    
+    // TODO 2: käyttäjän perhe pitää poistaa, jos jäljelle jää perheenjäsenen poistamisen jälkeen vain vanhempi.
+    
     if (communitiesType != null) {
       List<CommunityType> communityType = communitiesType.getCommunity();
       Iterator<CommunityType> ci = communityType.iterator();

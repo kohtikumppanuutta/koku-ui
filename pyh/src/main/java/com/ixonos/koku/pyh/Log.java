@@ -57,11 +57,6 @@ public class Log {
   }
   
   private fi.koku.services.utility.log.v1.AuditInfoType getLogAuditInfo(String userId) {
-//    AuditInfoType auditInfoType = new AuditInfoType();
-//    auditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
-//    auditInfoType.setUserId(userId);
-//    return auditInfoType;
-    
     fi.koku.services.utility.log.v1.AuditInfoType logAuditInfoType = new fi.koku.services.utility.log.v1.AuditInfoType();
     logAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
     logAuditInfoType.setUserId(userId);
@@ -79,9 +74,7 @@ public class Log {
       logEntryType.setDataItemType(dataType);
       logEntryType.setMessage(message);
       logEntryType.setOperation(operation);
-      Calendar calendar = new GregorianCalendar();
-      calendar.setTime(new Date());
-      logEntryType.setTimestamp(calendar);
+      logEntryType.setTimestamp(Calendar.getInstance());
       logEntryType.setUserPic(userId);
       
       LogEntriesType entries = new LogEntriesType();
