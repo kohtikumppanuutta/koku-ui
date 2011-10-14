@@ -350,7 +350,7 @@
 				<li id="informationbox"><a href="<%= defaultPath %>/Message/InformationBox">Saapuneet</a></li>
 				<li>Lähetetyt
 					<ul class="child">
-						<li id="info_request_open"><a href="<%= defaultPath %>/Message/Ilmoitukset">Avoimet</a></li>
+						<%-- <li id="info_request_open"><a href="<%= defaultPath %>/Message/Ilmoitukset">Avoimet</a></li> --%>
 						<%-- <li id="sendconsent"><a href="<%= defaultPath %>/Message/Ilmoitukset">Valmiit</a></li> --%>
 						<li id="<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED%>')">Lähetetyt</a></li>
 						<li id="<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT%>')">Vastatut</a></li>
@@ -360,14 +360,16 @@
 			</ul>
 		</li>
 		</c:if>	
-		<!--  show only citizens -->
+		
 		<li><a href="#">Asiointipalvelut</a>
 			<ul class="child">
 				<li><a href="#">Palveluhakemukset</a>
 					<ul class="child">
+						<!--  show only citizens -->
 						<c:if test="${fn:contains(naviURL, '/classic/')}">
 						<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Päivähoitohakemus</a></li>
 						</c:if>	
+						<!--  show only employees -->						
 						<c:if test="${fn:contains(naviURL, '/default/')}">
 						<li id="<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE%>')">Päivähoitohakemukset</a></li>
 						</c:if>	
