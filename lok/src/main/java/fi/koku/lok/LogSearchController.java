@@ -33,6 +33,9 @@ import fi.koku.services.entity.authorizationinfo.util.AuthUtils;
 import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
 import fi.koku.services.entity.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
 import fi.koku.services.entity.authorizationinfo.v1.model.Role;
+import fi.koku.services.entity.person.v1.Person;
+import fi.koku.services.entity.person.v1.PersonConstants;
+import fi.koku.services.entity.person.v1.PersonService;
 import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;
 import fi.koku.services.utility.log.v1.LogEntryType;
@@ -40,6 +43,7 @@ import fi.koku.services.utility.log.v1.LogQueryCriteriaType;
 import fi.koku.services.utility.log.v1.LogServiceFactory;
 import fi.koku.services.utility.log.v1.LogServicePortType;
 import fi.koku.services.utility.log.v1.ServiceFault;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
  * Controller for log search (LOK). This implements LOK-3 (Etsi lokitieto).
@@ -54,6 +58,7 @@ public class LogSearchController {
   private static final Logger log = LoggerFactory.getLogger(LogSearchController.class);
 
   private AuthorizationInfoService authorizationInfoService;
+  private PersonService personService;
   
   // Use log service
   private LogServicePortType logService;
@@ -70,6 +75,7 @@ public class LogSearchController {
     logService = logServiceFactory.getLogService();
     
     authorizationInfoService = new AuthorizationInfoServiceDummyImpl();
+    personService = new PersonService();
   }
 
   // customize form data binding
@@ -123,7 +129,13 @@ public class LogSearchController {
           
           try{
             // get the entries from the database
-            model.addAttribute("entries", getLogEntries(criteria, userPic));
+            List<LogEntry> entries = getLogEntries(criteria, userPic);
+            
+            // The user's name (not pic as in the database) should be shown, 
+            // so change pics to names
+            changePicsToNames(entries, userPic);
+            
+            model.addAttribute("entries", entries);
          
           }catch(ServiceFault fault){
             model.addAttribute("error", "koku.lok.error.log");
@@ -244,35 +256,37 @@ public class LogSearchController {
     return entryList;
   }
 
-  /*
-   * Mock method that creates some random lines of log.
+  
+  /**
+   * Helper method that changes the pic value in every entry
+   * to the user's name, read from PersonService.
+   * @param entries
+   * @return
    */
-  private List<LogEntry> getDemoLogEntries(LogSearchCriteria searchCriteria) {
-    List<LogEntry> r = null;
-
-    log.debug("getDemoLogEntries");
-
-    // TEMPORARY solution:
-    // show the results only if something has been written in the pic field
-    if (searchCriteria.getPic() != null && searchCriteria.getPic().length() > 0) {
-
-      /*
-       * TODO: time stamp name of the user type of entry (? tapahtumatyyppi)
-       * information that has been viewed or edited (käsitelty tieto
-       * tapahtumakuvauksesta ja kohteesta) kutsuva palvelu
-       */
-
-      // TEMPORARY SOLUTION:
-      // Create 5 lines of demo log entries
-      LogDemoFactory factory = new LogDemoFactory();
-      r = new ArrayList<LogEntry>();
-
-      for (int i = 0; i < 5; i++) {
-        r.add(factory.createLogEntry(i, LogDemoFactory.BASIC_LOG));
+  public void changePicsToNames(List<LogEntry> entries, String portletUserPic){
+    String pic = null;
+    List<String> picList = new ArrayList<String>();
+    List<Person> list = null;
+    Person person = null;
+    
+    Iterator iter = entries.iterator();
+    while(iter.hasNext()){
+      LogEntry entry = (LogEntry)iter.next();
+      pic = entry.getUser();
+      picList.add(pic);
+      log.debug("call to PersonService with pic "+pic);
+      //TODO: olisiko mitään hyötyä ottaa talteen jo löytyneitä pic-nimi-pareja???
+      list = personService.getPersonsByPics(picList, PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER,
+          portletUserPic, LogConstants.COMPONENT_LOK);
+      if(list==null || list.isEmpty()){
+        throw new RuntimeException("No name found in personservice for pic "+pic);
+      }else{
+        person = list.get(0);
+        log.debug("got person "+person.getFname()+" "+person.getSname());
+        entry.setUser(person.getFname()+" "+person.getSname());
       }
-
     }
-    return r;
+   
   }
 
   /**

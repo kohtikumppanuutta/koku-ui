@@ -161,6 +161,7 @@ This should be changed! --%>
 		</c:if>
 		<br /> <br />
 		<p>
+		 <div class="error">
 					<c:if test="${not empty error2}">
 						<spring:message code="${error2}" />
 						<br>
@@ -171,9 +172,9 @@ This should be changed! --%>
 						<br>
 					</c:if>
 					
-					<c:if test="${not empty error1}">
-					
+					<c:if test="${not empty error1}">	
 						<spring:message code="${error1}" />
+						</div>	
 					</c:if>
 					
 				</p>

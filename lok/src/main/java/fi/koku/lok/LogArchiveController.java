@@ -281,8 +281,9 @@ public class LogArchiveController {
       
     }// TODO: lisää tähän catch sitä varten, että tulee virheet 2.1 tai 2.2
  catch (ServiceFault e) {
-   log.debug("fault: "+e.getFaultInfo().getCode());
+   log.error("startArchive fault: "+e.getFaultInfo().getCode());
  
+   // Show the same error to the user no matter what the cause is  
    response.setRenderParameter("error", "koku.lok.error.archive");  
    log.debug("startArchivessa virhe: "+e.getMessage());
   // }
