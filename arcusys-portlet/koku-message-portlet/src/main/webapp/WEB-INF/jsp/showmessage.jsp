@@ -39,46 +39,46 @@ public String htmlToCode(String s)
 %>
 
 <%
-Message message = (Message) request.getAttribute("message");
-String srcContent = message.getContent();
-String sender = message.getSender();
-String recipients = message.getRecipients();
-String subject = message.getSubject();
-String type = message.getMessageType();
-String content = htmlToCode(srcContent);
-Boolean isHtml = false;
-if (srcContent != null) {
-	isHtml = srcContent.startsWith("<html");	
-}
+	Message message = (Message) request.getAttribute("message");
+	String srcContent = message.getContent();
+	String sender = message.getSender();
+	String recipients = message.getRecipients();
+	String subject = message.getSubject();
+	String type = message.getMessageType();
+	String content = htmlToCode(srcContent);
+	Boolean isHtml = false;
+	if (srcContent != null) {
+		isHtml = srcContent.startsWith("<html");	
+	}
 
 %>
 <script type="text/javascript"> 
-
-
-window.onload = function() {
 	
+	window.onload = function() {
+		var content = '<%= content %>';
+		content = content.replace(/&rsquo;/g, "'");
+		jQuery('#messageContent').html(content);
+	}
 	
-	jQuery('#messageContent').html('<%= content %>');
-}
-/**
- * Returns to the main portlet page
- */
-function returnMainPage() {
-	var url = "<%= homeURL %>";
-	url = formatUrl(url);
-	window.location = url;
-}
-
-/* Formats url mainly for gatein epp*/
-function formatUrl(url) {
-	var newUrl;
-	newUrl = url.replace(/&quot;/g,'"');
-	newUrl = newUrl.replace(/&amp;/g,"&");
-	newUrl = newUrl.replace(/&lt;/g,"<");
-	newUrl =  newUrl.replace(/&gt;/g,">");
+	/**
+	 * Returns to the main portlet page
+	 */
+	function returnMainPage() {
+		var url = "<%= homeURL %>";
+		url = formatUrl(url);
+		window.location = url;
+	}
 	
-	return newUrl;
-}
+	/* Formats url mainly for gatein epp*/
+	function formatUrl(url) {
+		var newUrl;
+		newUrl = url.replace(/&quot;/g,'"');
+		newUrl = newUrl.replace(/&amp;/g,"&");
+		newUrl = newUrl.replace(/&lt;/g,"<");
+		newUrl =  newUrl.replace(/&gt;/g,">");
+		
+		return newUrl;
+	}
 
 </script>
 <div id="task-manager-wrap" class="single">	
