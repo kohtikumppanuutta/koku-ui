@@ -26,6 +26,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import com.ixonos.koku.pyh.model.Dependant;
 import com.ixonos.koku.pyh.model.DependantsAndFamily;
 import com.ixonos.koku.pyh.model.Family;
+import com.ixonos.koku.pyh.model.FamilyIdAndFamilyMembers;
 import com.ixonos.koku.pyh.model.Person;
 import com.ixonos.koku.pyh.util.CommunityRole;
 
@@ -62,9 +63,11 @@ public class EditFamilyInformationController {
     
     Person user = pyhDemoService.getUser(userPic);
     DependantsAndFamily daf = pyhDemoService.getDependantsAndFamily(userPic);
+    FamilyIdAndFamilyMembers fidm = pyhDemoService.getOtherFamilyMembers(userPic);
+    
     model.addAttribute("user", user);
     model.addAttribute("dependants", daf.getDependants());
-    model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers(userPic));
+    model.addAttribute("otherFamilyMembers", fidm.getFamilyMembers());
     model.addAttribute("parentsFull", pyhDemoService.isParentsSet(userPic));
     model.addAttribute("messages", pyhDemoService.getSentMessages(user));
     model.addAttribute("searchedUsers", null);
@@ -107,10 +110,12 @@ public class EditFamilyInformationController {
     
     Person user = pyhDemoService.getUser(userPic);
     DependantsAndFamily daf = pyhDemoService.getDependantsAndFamily(userPic);
+    FamilyIdAndFamilyMembers fidm = pyhDemoService.getOtherFamilyMembers(userPic);
+    
     request.setAttribute("search", true);
     model.addAttribute("user", user);
     model.addAttribute("dependants", daf.getDependants());
-    model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers(userPic));
+    model.addAttribute("otherFamilyMembers", fidm.getFamilyMembers());
     model.addAttribute("parentsFull", pyhDemoService.isParentsSet(userPic));
     model.addAttribute("messages", pyhDemoService.getSentMessages(user));
     model.addAttribute("searchedUsers", searchedUsers);

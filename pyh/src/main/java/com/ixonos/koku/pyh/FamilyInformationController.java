@@ -1,5 +1,7 @@
 package com.ixonos.koku.pyh;
 
+import java.util.List;
+
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import com.ixonos.koku.pyh.model.DependantsAndFamily;
+import com.ixonos.koku.pyh.model.FamilyIdAndFamilyMembers;
+import com.ixonos.koku.pyh.model.FamilyMember;
 import com.ixonos.koku.pyh.model.Person;
 
 import fi.koku.portlet.filter.userinfo.UserInfo;
@@ -44,9 +48,12 @@ public class FamilyInformationController {
     
     Person user = pyhDemoService.getUser(userPic);
     DependantsAndFamily daf = pyhDemoService.getDependantsAndFamily(userPic);
+    FamilyIdAndFamilyMembers fidm = pyhDemoService.getOtherFamilyMembers(userPic);
+    
     model.addAttribute("user", user);
     model.addAttribute("dependants", daf.getDependants());
-    model.addAttribute("otherFamilyMembers", pyhDemoService.getOtherFamilyMembers(userPic));
+    model.addAttribute("otherFamilyMembers", fidm.getFamilyMembers());
+    model.addAttribute("currentFamilyId", fidm.getFamilyId());
     model.addAttribute("messages", pyhDemoService.getMessagesFor(user));
     model.addAttribute("sentMessages", pyhDemoService.getSentMessages(user));
     

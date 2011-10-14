@@ -30,14 +30,16 @@ public class MessageController {
    * Call service to accept a request.
    */
   @ActionMapping(params = "action=acceptMessage")
-  public void accept(@RequestParam String userPic, @RequestParam String messageId, ActionResponse response) {
+  public void accept(@RequestParam String userPic, @RequestParam String messageId, @RequestParam String currentFamilyId, @RequestParam boolean removeCurrentFamily, ActionResponse response) {
     if (debug) {
       log.info("calling MessageController.accept() with parameters:");
       log.info("userPic: " + userPic);
       log.info("messageId: " + messageId);
     }
     
-    pyhDemoService.acceptOrRejectMembershipRequest(messageId, userPic /*approver*/, "approved");
+    String familyId = removeCurrentFamily ? currentFamilyId : null;
+    
+    pyhDemoService.acceptOrRejectMembershipRequest(messageId, userPic /*approver*/, "approved", familyId);
     response.setRenderParameter("action", "");
   }
 
@@ -52,7 +54,7 @@ public class MessageController {
       log.info("messageId: " + messageId);
     }
     
-    pyhDemoService.acceptOrRejectMembershipRequest(messageId, userPic /*approver*/, "rejected");
+    pyhDemoService.acceptOrRejectMembershipRequest(messageId, userPic /*approver*/, "rejected", null);
     response.setRenderParameter("action", "");
   }
 

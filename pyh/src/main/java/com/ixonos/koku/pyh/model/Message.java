@@ -18,8 +18,9 @@ public class Message {
   private String from;
   private String text;
   private boolean twoParentsInFamily;
+  private String memberToAddPic;
 
-  public Message(String id, String fromUserPic, String text, boolean twoParentsInFamily) {
+  public Message(String id, String fromUserPic, String memberToAddPic, String text, boolean twoParentsInFamily) {
     if (debug) {
       log.info("Message.constructor: creating a Message with parameters:");
       log.info("id: " + id);
@@ -31,6 +32,7 @@ public class Message {
     this.from = fromUserPic;
     this.text = text;
     this.twoParentsInFamily = twoParentsInFamily;
+    this.memberToAddPic = memberToAddPic;
   }
 
   public String getId() {
@@ -59,6 +61,10 @@ public class Message {
   
   public boolean getTwoParentsInFamily() {
     return twoParentsInFamily;
+  }
+  
+  public String getMemberToAddPic() {
+    return memberToAddPic;
   }
   
 }

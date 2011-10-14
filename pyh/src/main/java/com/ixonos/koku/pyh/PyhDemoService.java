@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.ixonos.koku.pyh.model.Dependant;
 import com.ixonos.koku.pyh.model.DependantsAndFamily;
 import com.ixonos.koku.pyh.model.Family;
+import com.ixonos.koku.pyh.model.FamilyIdAndFamilyMembers;
 import com.ixonos.koku.pyh.model.FamilyMember;
 import com.ixonos.koku.pyh.model.Message;
 import com.ixonos.koku.pyh.model.Person;
@@ -170,7 +171,7 @@ public class PyhDemoService {
       log.error(fnfe.getMessage());
     } catch (TooManyFamiliesException tmfe) {
       userFamily = null;
-      log.error("getDependantsAndFamily(): caught TooManyFamiliesException: cannot set Dependant.memberOfUserFamily because userFamily is null!");
+      log.error("getDependantsAndFamily(): caught TooManyFamiliesException: cannot set Dependant.memberOfUserFamily because userFamily is null!", tmfe);
       log.error(tmfe.getMessage());
     }
     
@@ -211,7 +212,8 @@ public class PyhDemoService {
   /**
    * Returns all other members of the user's family except dependants.
    */
-  public List<FamilyMember> getOtherFamilyMembers(String userPic) {
+  //public List<FamilyMember> getOtherFamilyMembers(String userPic) {
+  public FamilyIdAndFamilyMembers getOtherFamilyMembers(String userPic) {
     List<Dependant> dependants = getDependantsAndFamily(userPic).getDependants();
     Set<String> dependantPics = new HashSet<String>();
     Iterator<Dependant> di = dependants.iterator();
@@ -245,12 +247,17 @@ public class PyhDemoService {
       log.error("PyhDemoService.getOtherFamilyMembers: opQueryCommunities raised a ServiceFault", fault);
     }
     
+    String familyId = "";
+    
     if (communitiesType != null) {
       List<CommunityType> communities = communitiesType.getCommunity();
       Iterator<CommunityType> ci = communities.iterator();
       
+      log.info("PyhDemoService.getOtherFamilyMembers: opQueryCommunities returned " + communities.size() + " communities");
+      
       while (ci.hasNext()) {
         CommunityType community = ci.next();
+        familyId = community.getId(); // communityService.opQueryCommunities should return only one community
         MembersType membersType = community.getMembers();
         List<MemberType> members = membersType.getMember();
         Iterator<MemberType> mi = members.iterator();
@@ -284,7 +291,14 @@ public class PyhDemoService {
       log.info("--");
     }
     
-    return otherFamilyMembers;
+    //return otherFamilyMembers;
+    
+    log.info("PyhDemoService.getOtherFamilyMembers: familyId = " + familyId);
+    
+    FamilyIdAndFamilyMembers fidm = new FamilyIdAndFamilyMembers();
+    fidm.setFamilyMembers(otherFamilyMembers);
+    fidm.setFamilyId(familyId);
+    return fidm;
   }
   
   /**
@@ -778,7 +792,7 @@ public class PyhDemoService {
     try {
       family = getFamily(toFamilyPic);
     } catch (TooManyFamiliesException tme) {
-      log.error("PyhDemoService.insertInto: getFamily(toFamilyPic) threw a TooManyFamiliesException!");
+      log.error("PyhDemoService.insertInto: getFamily(toFamilyPic) threw a TooManyFamiliesException!", tme);
       log.error(tme.getMessage());
       return;
     } catch (FamilyNotFoundException fnfe) {
@@ -1014,7 +1028,7 @@ public class PyhDemoService {
    */
   private Set<String> getFamilyMemberPics(String userPic) {
     Set<String> familyMemberPics = new HashSet<String>();
-    List<FamilyMember> familyMembers = getOtherFamilyMembers(userPic);
+    List<FamilyMember> familyMembers = getOtherFamilyMembers(userPic).getFamilyMembers();
     Iterator<FamilyMember> fmi = familyMembers.iterator();
     while (fmi.hasNext()) {
       familyMemberPics.add(fmi.next().getPic());
@@ -1112,7 +1126,7 @@ public class PyhDemoService {
               "Pyynnön hyväksymällä tietojen lisääminen tapahtuu automaattisesti tämän verkkopalvelun tietoihin.";
           }
           
-          Message message = new Message(messageId, senderPic, messageText, twoParentsInFamily);
+          Message message = new Message(messageId, senderPic, memberToAddPic, messageText, twoParentsInFamily);
           requestMessages.add(message);
         }
       }
@@ -1173,7 +1187,7 @@ public class PyhDemoService {
         
         String messageText = "Lisäys perheyhteystietoihisi: " + targetName + " (odottaa vastaanottajan hyväksyntää)";
         
-        Message message = new Message(messageId, senderPic, messageText, false);
+        Message message = new Message(messageId, senderPic, "" /*memberToAddPic*/, messageText, false);
         requestMessages.add(message);
       }
     }
@@ -1186,7 +1200,7 @@ public class PyhDemoService {
    * changing the request status.
    * 
    */
-  public void acceptOrRejectMembershipRequest(String membershipRequestId, String approverPic, String status) {
+  public void acceptOrRejectMembershipRequest(String membershipRequestId, String approverPic, String status, String familyId) {
     if (debug) {
       log.info("calling PyhDemoService.acceptOrRejectMembershipRequest with parameters:");
       log.info("membershipRequestId: " + membershipRequestId);
@@ -1206,6 +1220,20 @@ public class PyhDemoService {
     try {
       communityService.opUpdateMembershipApproval(membershipApproval, communityAuditInfoType);
       Log.getInstance().update(approverPic, "", "pyh.membership.approval", "Membership approval status for user " + approverPic + " was set to '" + status + "'");
+      
+      if (familyId != null) {
+        communityService.opDeleteCommunity(familyId, communityAuditInfoType);
+        Log.getInstance().update(approverPic, "", "pyh.family.community", "Removing family " + familyId);
+        
+        if (debug) {
+          log.info("acceptOrRejectMembershipRequest: calling opDeleteCommunity with familyId = " + familyId);
+        }
+      } else {
+        if (debug) {
+          log.info("acceptOrRejectMembershipRequest: familyId == null");
+        }
+      }
+      
     } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
       log.error("PyhDemoService.acceptMembershipRequest: opUpdateMembershipApproval raised a ServiceFault", fault);
     }
