@@ -55,6 +55,9 @@ public class ChildController {
       @RequestParam(value = "error", required = false) String error, RenderResponse response, Model model) {
     LOG.info("show child");
 
+    if (StringUtils.isEmpty(child.getFirstName())) {
+      child = getChild(session, child.getPic());
+    }
     String pic = Utils.getPicFromSession(session);
     model.addAttribute("child", child);
     model.addAttribute("collections", kksService.getKksCollections(child.getPic(), pic));
