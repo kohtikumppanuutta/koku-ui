@@ -345,6 +345,7 @@ public class PyhDemoService {
     }
     
     Set<String> depPics = getDependantPics(currentUserPic);
+    Set<String> familyMemberPics = getFamilyMemberPics(currentUserPic);
     
     List<Person> searchedUsers = new ArrayList<Person>();
     
@@ -355,8 +356,8 @@ public class PyhDemoService {
         CustomerType customer = ci.next();
         // filter out user and his/hers dependants from search results
         // surname given as search parameter must match the customer's surname (searching by PIC alone is forbidden)
-        if (!depPics.contains(customer.getHenkiloTunnus()) && !currentUserPic.equals(customer.getHenkiloTunnus()) && 
-            surname.equalsIgnoreCase(customer.getSukuNimi())) {
+        if (!depPics.contains(customer.getHenkiloTunnus()) && !familyMemberPics.contains(customer.getHenkiloTunnus()) &&
+            !currentUserPic.equals(customer.getHenkiloTunnus()) && surname.equalsIgnoreCase(customer.getSukuNimi())) {
           searchedUsers.add(new Person(customer));
         }
       }
@@ -993,6 +994,8 @@ public class PyhDemoService {
     return null;
   }
   
+  
+  
   /**
    * Returns user's dependants' PICs.
    */
@@ -1004,6 +1007,19 @@ public class PyhDemoService {
       dependantPics.add(di.next().getPic());
     }
     return dependantPics;
+  }
+  
+  /**
+   * Returns user's family members' PICs.
+   */
+  private Set<String> getFamilyMemberPics(String userPic) {
+    Set<String> familyMemberPics = new HashSet<String>();
+    List<FamilyMember> familyMembers = getOtherFamilyMembers(userPic);
+    Iterator<FamilyMember> fmi = familyMembers.iterator();
+    while (fmi.hasNext()) {
+      familyMemberPics.add(fmi.next().getPic());
+    }
+    return familyMemberPics;
   }
   
   /**
