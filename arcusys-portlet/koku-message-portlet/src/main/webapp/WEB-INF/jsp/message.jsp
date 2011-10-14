@@ -407,30 +407,58 @@
 	 * Create appointments table in Html
 	 */
 	function createAppoitmentsTable(tasks) {
-		var taskHtml = "";
-		var formLink = "";
 		
-		taskHtml = '<table class="task-manager-table">'
-				+ '<tr class="task-manager-table trheader">'
-				+ '<td class="choose"><spring:message code="message.choose" /></td>'
-				+ '<td>' + '<spring:message code="message.from" />' + '</td>'
-				+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
-				+ '<td><spring:message code="message.description" /></td>'
-				+ '<td><spring:message code="message.status" /></td>'
-				+ '</tr>';
-				 
-		for ( var i = 0; i < tasks.length; i++) {
+		
+		if (pageObj.taskType == "<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN%>") {
+			var taskHtml = "";
+			var formLink = "";
 			
-			taskHtml += generateRowTr(i);			
-			taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
-					 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + tasks[i]["sender"] + '</td>'
-					 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
-					 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + tasks[i]["description"] + '</td>'
-					 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + tasks[i]["status"] + '</td>'
-					 + '</tr>';
+			taskHtml = '<table class="task-manager-table">'
+					+ '<tr class="task-manager-table trheader">'
+					+ '<td>' + '<spring:message code="message.from" />' + '</td>'
+					+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
+					+ '<td><spring:message code="message.description" /></td>'
+					+ '<td><spring:message code="message.status" /></td>'
+					+ '</tr>';
+					 
+			for ( var i = 0; i < tasks.length; i++) {
+				
+				taskHtml += generateRowTr(i);			
+				taskHtml += '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + tasks[i]["sender"] + '</td>'
+						 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
+						 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + tasks[i]["description"] + '</td>'
+						 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + tasks[i]["status"] + '</td>'
+						 + '</tr>';
+			}	
+			taskHtml += '</table>';
+			
+		} else {
+			
+			var taskHtml = "";
+			var formLink = "";
+			
+			taskHtml = '<table class="task-manager-table">'
+					+ '<tr class="task-manager-table trheader">'
+					+ '<td class="choose"><spring:message code="message.choose" /></td>'
+					+ '<td>' + '<spring:message code="message.from" />' + '</td>'
+					+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
+					+ '<td><spring:message code="message.description" /></td>'
+					+ '<td><spring:message code="message.status" /></td>'
+					+ '</tr>';
+					 
+			for ( var i = 0; i < tasks.length; i++) {
+				
+				taskHtml += generateRowTr(i);			
+				taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
+						 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + tasks[i]["sender"] + '</td>'
+						 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
+						 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + tasks[i]["description"] + '</td>'
+						 + '<td class="messageItem" onclick="showAppointment(\''+ i + '\')" >' + tasks[i]["status"] + '</td>'
+						 + '</tr>';
+			}
+	
+			taskHtml += '</table>';
 		}
-
-		taskHtml += '</table>';
 
 		return taskHtml;
 	}
