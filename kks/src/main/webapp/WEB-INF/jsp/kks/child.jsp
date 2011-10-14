@@ -52,7 +52,8 @@
 		<spring:message code="ui.kks.title" />
 	</h1>
 
-	<div class="error-bindings">
+	<div class="kks-error-bindings">    		
+    	<c:if test="${not empty error}"><div class="error"><spring:message code="${error}"></spring:message> </div></c:if>
 		<spring:hasBindErrors name="creation">
 	     <spring:bind path="creation.*">
 	       <c:forEach var="error" items="${status.errorMessages}">
@@ -161,7 +162,7 @@
                             <portlet:param name="action" value="searchEntries" />
                             <portlet:param name="pic" value="${child.pic}" />
                             <portlet:param name="classification" value="terveydentila" />
-                            <portlet:param name="description" value="Terveydentila" />
+                            <portlet:param name="description" value="ui.kks.terveydentila.query" />
                         </portlet:actionURL>">
                     <spring:message code="ui.kks.healthcare" />  </a> </div>
                     
@@ -171,7 +172,7 @@
                             <portlet:param name="action" value="searchEntries" />
                             <portlet:param name="pic" value="${child.pic}" />
                             <portlet:param name="classification" value="mittaus" />
-                            <portlet:param name="description" value="Mittaukset" />
+                            <portlet:param name="description" value="ui.kks.mittaukset.query" />
                         </portlet:actionURL>">
 					<spring:message code="ui.kks.measurement" /> </a> </div>
 			 <div
@@ -181,7 +182,7 @@
                             <portlet:param name="action" value="searchEntries" />
                             <portlet:param name="pic" value="${child.pic}" />
                             <portlet:param name="classification" value="koti" />
-                            <portlet:param name="description" value="Kasvatusta ohjaavat tiedot" />
+                            <portlet:param name="description" value="ui.kks.kasvatusta.ohjaavat.tiedot.query" />
                         </portlet:actionURL>">
 					<spring:message code="ui.kks.child.rase" /> </a> </div>
 			<div class="kks-link"> <a
@@ -190,7 +191,7 @@
                             <portlet:param name="action" value="searchEntries" />
                             <portlet:param name="pic" value="${child.pic}" />
                             <portlet:param name="classification" value="tuen_tarve, huolenaiheet" />
-                            <portlet:param name="description" value="Tuen tarve" />
+                            <portlet:param name="description" value="ui.kks.tuen.tarve.query" />
                         </portlet:actionURL>">
 					<spring:message code="ui.kks.support.needs" /> </a> </div> 
 
@@ -202,7 +203,7 @@
                             <portlet:param name="action" value="searchEntries" />
                             <portlet:param name="pic" value="${child.pic}" />
                             <portlet:param name="classification" value="palaute" />
-                            <portlet:param name="description" value="Palautteet" />
+                            <portlet:param name="description" value="ui.kks.palautteet.query" />
                         </portlet:actionURL>">
 						<spring:message code="ui.kks.feedback" />  </a> </span>
 				<br />
@@ -214,7 +215,7 @@
                             <portlet:param name="action" value="searchEntries" />
                             <portlet:param name="pic" value="${child.pic}" />
                             <portlet:param name="classification" value="toive" />
-                            <portlet:param name="description" value="Toiveet" />
+                            <portlet:param name="description" value="ui.kks.toiveet.query" />
                         </portlet:actionURL>">
 						<spring:message code="ui.kks.wishes" />  </a> </span>
 				<br />

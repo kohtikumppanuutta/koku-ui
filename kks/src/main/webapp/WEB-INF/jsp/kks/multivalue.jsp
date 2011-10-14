@@ -33,6 +33,7 @@
     <portlet:param name="pic" value="${child.pic}" />
     <portlet:param name="collection" value="${collection.id}" />
     <portlet:param name="valueId" value="${valueId}" />
+    <portlet:param name="value" value="${value}" />
     
     <c:if test="${ not empty entry }">
        <portlet:param name="entryId" value="${entry.id}" />
@@ -57,7 +58,6 @@
 
 <h1 class="portlet-section-header"><c:out value="${child.name}"/> <c:out value="${collection.name}"/></h1>
 
-
 	<div class="kks-entry">
 
 		<form:form name="addMultivalue" commandName="value"
@@ -74,7 +74,7 @@
 				</c:if>
 				
 				<div class="portlet-form-field">
-                	<form:textarea maxlength="2000" path="value" id="value" class="portlet-form-input-field" title="${type.description }" name="value"/>
+                	<form:textarea maxlength="2000" path="value" class="portlet-form-input-field" title="${type.description }" />
             	</div>
 
 			<span class="kks-right"> 			

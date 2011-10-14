@@ -49,11 +49,18 @@ public class CreateCollectionController {
       String collection = kksService.createKksCollectionVersion(version.getName(), id, child.getPic(),
           version.isClear(), Utils.getPicFromSession(session));
 
-      version.setClear(false);
-      response.setRenderParameter("action", "showCollection");
-      response.setRenderParameter("pic", child.getPic());
-      response.setRenderParameter("collection", collection);
-      sessionStatus.setComplete();
+      if (collection == null) {
+        result.reject("collection.create.failed");
+        response.setRenderParameter("action", "showCollection");
+        response.setRenderParameter("pic", child.getPic());
+        response.setRenderParameter("collection", id);
+      } else {
+        version.setClear(false);
+        response.setRenderParameter("action", "showCollection");
+        response.setRenderParameter("pic", child.getPic());
+        response.setRenderParameter("collection", id);
+        sessionStatus.setComplete();
+      }
     } else {
       response.setRenderParameter("action", "showCollection");
       response.setRenderParameter("pic", child.getPic());
@@ -72,18 +79,24 @@ public class CreateCollectionController {
 
       Creatable a = Creatable.create(creation.getField());
       String name = "".equals(creation.getName()) ? a.getName() : creation.getName();
-      kksService.createKksCollection(name, a.getId(), child.getPic(), Utils.getPicFromSession(session));
+      String id = kksService.createKksCollection(name, a.getId(), child.getPic(), Utils.getPicFromSession(session));
+
+      if (id == null) {
+        bindingResult.reject("collection.create.failed");
+      }
 
       creation.setField("");
       creation.setName("");
       response.setRenderParameter("action", "showChild");
       response.setRenderParameter("pic", child.getPic());
-      sessionStatus.setComplete();
+
+      if (id != null) {
+        sessionStatus.setComplete();
+      }
     } else {
       response.setRenderParameter("action", "showChild");
       response.setRenderParameter("pic", child.getPic());
     }
-
   }
 
   @ModelAttribute("child")
@@ -96,10 +109,14 @@ public class CreateCollectionController {
   public void activate(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "collection") String collection, ActionResponse response, SessionStatus sessionStatus) {
 
-    kksService.updateKksCollectionStatus(child.getPic(), collection, State.ACTIVE.toString(),
+    boolean success = kksService.updateKksCollectionStatus(child.getPic(), collection, State.ACTIVE.toString(),
         Utils.getPicFromSession(session));
     response.setRenderParameter("action", "showChild");
     response.setRenderParameter("pic", child.getPic());
+
+    if (!success) {
+      response.setRenderParameter("error", "collection.status.update.failed");
+    }
     sessionStatus.setComplete();
   }
 
@@ -107,11 +124,15 @@ public class CreateCollectionController {
   public void lock(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "collection") String collection, ActionResponse response, SessionStatus sessionStatus) {
 
-    kksService.updateKksCollectionStatus(child.getPic(), collection, State.LOCKED.toString(),
+    boolean success = kksService.updateKksCollectionStatus(child.getPic(), collection, State.LOCKED.toString(),
         Utils.getPicFromSession(session));
 
     response.setRenderParameter("action", "showChild");
     response.setRenderParameter("pic", child.getPic());
+
+    if (!success) {
+      response.setRenderParameter("error", "collection.status.update.failed");
+    }
     sessionStatus.setComplete();
   }
 }

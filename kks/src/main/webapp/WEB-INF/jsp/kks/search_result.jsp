@@ -18,7 +18,7 @@
 		<div class="kks-reset-floating"></div>
 
 
-	<h1 class="portlet-section-header"><c:out value="${child.name}"/> <c:out value="${description}"/></h1>
+	<h1 class="portlet-section-header"><c:out value="${child.name}"/> <spring:message code="${description}"/> </h1>
 
 </br>
 

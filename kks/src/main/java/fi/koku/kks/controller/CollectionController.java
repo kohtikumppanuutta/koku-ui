@@ -46,7 +46,8 @@ public class CollectionController {
 
   @RenderMapping(params = "action=showCollection")
   public String show(PortletSession session, @ModelAttribute(value = "child") Person child,
-      @RequestParam(value = "collection") String collection, RenderResponse response, Model model) {
+      @RequestParam(value = "collection") String collection,
+      @RequestParam(value = "error", required = false) String error, RenderResponse response, Model model) {
     LOG.info("show collection");
 
     KKSCollection c = kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
@@ -64,6 +65,9 @@ public class CollectionController {
       model.addAttribute("version", v);
     }
 
+    if (StringUtils.isNotEmpty(error)) {
+      model.addAttribute("error", error);
+    }
     return "collection";
   }
 
@@ -80,24 +84,32 @@ public class CollectionController {
       SessionStatus sessionStatus) {
     LOG.info("save collection");
 
-    kksService.updateKksCollection(entry, child.getPic(), Utils.getPicFromSession(session));
+    boolean success = kksService.updateKksCollection(entry, child.getPic(), Utils.getPicFromSession(session));
 
-    if (StringUtils.isNotBlank(type)) {
-
-      response.setRenderParameter("action", "showMultivalue");
+    if (!success) {
+      bindingResult.reject("collection.update.failed");
+      response.setRenderParameter("action", "showCollection");
       response.setRenderParameter("pic", child.getPic());
       response.setRenderParameter("collection", entry.getId());
-      response.setRenderParameter("entryType", type);
-      response.setRenderParameter("valueId", valueId == null ? "" : valueId);
-
-      if (multiValueId != null && !"".equals(multiValueId)) {
-        response.setRenderParameter("entryId", multiValueId);
-      }
     } else {
-      response.setRenderParameter("action", "showChild");
-      response.setRenderParameter("pic", child.getPic());
+
+      if (StringUtils.isNotBlank(type)) {
+
+        response.setRenderParameter("action", "showMultivalue");
+        response.setRenderParameter("pic", child.getPic());
+        response.setRenderParameter("collection", entry.getId());
+        response.setRenderParameter("entryType", type);
+        response.setRenderParameter("valueId", valueId == null ? "" : valueId);
+
+        if (multiValueId != null && !"".equals(multiValueId)) {
+          response.setRenderParameter("entryId", multiValueId);
+        }
+      } else {
+        response.setRenderParameter("action", "showChild");
+        response.setRenderParameter("pic", child.getPic());
+      }
+      sessionStatus.setComplete();
     }
-    sessionStatus.setComplete();
   }
 
   @ModelAttribute("entry")
@@ -114,24 +126,37 @@ public class CollectionController {
   @ActionMapping(params = "action=addMultivalue")
   public void saveMultivalue(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "entryType") String entryType, @RequestParam(value = "collection") String collection,
-      @RequestParam(value = "entryId", required = false) String entry, @RequestParam(value = "value") String value,
-      @RequestParam(value = "valueId") String valueId, ActionResponse response, SessionStatus sessionStatus) {
+      @RequestParam(value = "entryId", required = false) String entry, @RequestParam(value = "valueId") String valueId,
+      EntryValue value, BindingResult bindingResult, ActionResponse response, SessionStatus sessionStatus) {
     LOG.info("save multivalue");
 
-    kksService.addKksEntry(collection, child.getPic(), entry, entryType, valueId, value,
+    String id = kksService.addKksEntry(collection, child.getPic(), entry, entryType, valueId, value.getValue(),
         Utils.getPicFromSession(session));
+
+    if (id == null) {
+      response.setRenderParameter("error", "collection.entry.update.failed");
+    }
+
     response.setRenderParameter("action", "showCollection");
     response.setRenderParameter("pic", child.getPic());
     response.setRenderParameter("collection", collection);
+
     sessionStatus.setComplete();
   }
 
   @ActionMapping(params = "action=removeMultivalue")
   public void removeMultiValue(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "collection") String collection, @RequestParam(value = "entryId") String entry,
-      @RequestParam(value = "valueId") String valueId, ActionResponse response, SessionStatus sessionStatus) {
+      @RequestParam(value = "valueId") String valueId, EntryValue value, BindingResult bindingResult,
+      ActionResponse response, SessionStatus sessionStatus) {
     LOG.info("remove multivalue");
-    kksService.removeKksEntry(collection, child.getPic(), entry, valueId, "", Utils.getPicFromSession(session));
+    boolean success = kksService.removeKksEntry(collection, child.getPic(), entry, valueId, "",
+        Utils.getPicFromSession(session));
+
+    if (!success) {
+      response.setRenderParameter("error", "collection.entry.delete.failed");
+    }
+
     response.setRenderParameter("action", "showCollection");
     response.setRenderParameter("pic", child.getPic());
     response.setRenderParameter("collection", collection);
@@ -183,6 +208,7 @@ public class CollectionController {
       EntryValue val = new EntryValue();
       val.setValue("");
       model.addAttribute("value", val);
+
     }
 
     return "multivalue";

@@ -4,6 +4,7 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletSession;
 import javax.portlet.RenderResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +51,8 @@ public class ChildController {
   }
 
   @RenderMapping(params = "action=showChild")
-  public String show(PortletSession session, @ModelAttribute(value = "child") Person child, RenderResponse response,
-      Model model) {
+  public String show(PortletSession session, @ModelAttribute(value = "child") Person child,
+      @RequestParam(value = "error", required = false) String error, RenderResponse response, Model model) {
     LOG.info("show child");
 
     String pic = Utils.getPicFromSession(session);
@@ -64,6 +65,10 @@ public class ChildController {
       model.addAttribute("creation", new Creation());
     }
 
+    if (StringUtils.isNotEmpty(error)) {
+      model.addAttribute("error", error);
+    }
+
     return "child";
   }
 
@@ -73,10 +78,14 @@ public class ChildController {
       SessionStatus sessionStatus) {
     LOG.debug("sendConsentRequest");
 
-    kksService.sendConsentRequest(consent, child.getPic(), Utils.getPicFromSession(session));
+    boolean success = kksService.sendConsentRequest(consent, child.getPic(), Utils.getPicFromSession(session));
 
     response.setRenderParameter("action", "showChild");
     response.setRenderParameter("pic", child.getPic());
+
+    if (!success) {
+      response.setRenderParameter("error", "collection.consent.request.failed");
+    }
     sessionStatus.setComplete();
   }
 

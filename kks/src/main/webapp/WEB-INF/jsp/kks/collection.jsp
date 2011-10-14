@@ -38,9 +38,26 @@
 
     <div class="kks-left">
     <div class="kks-collection">
-    		<div class="error-bindings">
+    		<div class="kks-error-bindings">    	
+    		
+    			<c:if test="${not empty error}"><div class="error"><spring:message code="${error}"></spring:message> </div></c:if>
+    				
 				<spring:hasBindErrors name="version">
 			     <spring:bind path="version.*">
+			       <c:forEach var="error" items="${status.errorMessages}">
+			         <div class="error"><c:out value="${error}"/></div>
+			       </c:forEach>
+			     </spring:bind>
+				</spring:hasBindErrors>
+				<spring:hasBindErrors name="entry">
+			     <spring:bind path="entry.*">
+			       <c:forEach var="error" items="${status.errorMessages}">
+			         <div class="error"><c:out value="${error}"/></div>
+			       </c:forEach>
+			     </spring:bind>
+				</spring:hasBindErrors>
+								<spring:hasBindErrors name="value">
+			     <spring:bind path="value.*">
 			       <c:forEach var="error" items="${status.errorMessages}">
 			         <div class="error"><c:out value="${error}"/></div>
 			       </c:forEach>

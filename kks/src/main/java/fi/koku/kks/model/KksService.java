@@ -297,6 +297,7 @@ public class KksService {
       kksService.opUpdateKksCollectionStatus(state, getKksAuditInfo(user));
     } catch (ServiceFault e) {
       LOG.error("Failed to update KKS collection status " + collectionId + " : " + status, e);
+      return false;
     }
     return true;
   }
@@ -327,6 +328,7 @@ public class KksService {
       } else {
         kksCollectionCreationCriteria.setKksScope("version");
       }
+
       return kksService.opAddKksCollection(kksCollectionCreationCriteria, getKksAuditInfo(user)).getId();
     } catch (ServiceFault e) {
       LOG.error("Failed to create KKS collection version " + name + " type: " + type, e);
@@ -404,6 +406,7 @@ public class KksService {
       Calendar c = new GregorianCalendar();
       c.setTime(new Date());
       criteria.setModified(c);
+
       return kksService.opAddEntry(criteria, getKksAuditInfo(user)).getId();
     } catch (ServiceFault e) {
       LOG.error("Failed to add KKS entry " + entryId, e);
@@ -591,28 +594,33 @@ public class KksService {
    */
   public boolean sendConsentRequest(String consentType, String customerId, String user) {
 
-    KokuTivaToKksService tivaService = getTivaService();
+    try {
+      KokuTivaToKksService tivaService = getTivaService();
 
-    List<ConsentTemplate> templates = tivaService.queryConsentTemplates(consentType, 1);
+      List<ConsentTemplate> templates = tivaService.queryConsentTemplates(consentType, 1);
 
-    if (templates.size() == 0) {
+      if (templates.size() == 0) {
+        return false;
+      }
+
+      ConsentTemplate template = templates.get(0);
+
+      Consent consent = new Consent();
+      consent.setTargetPerson(customerId);
+      consent.setTemplate(template);
+
+      List<String> guardians = getCustomerGuardians(customerId, user);
+      if (guardians == null) {
+        return false;
+      }
+
+      consent.getGivenTo().addAll(getOrganizationNames(user));
+      consent.getConsentProviders().addAll(guardians);
+      tivaService.createConsent(consent);
+    } catch (Exception e) {
+      LOG.error("Cannot use TIVA service", e);
       return false;
     }
-
-    ConsentTemplate template = templates.get(0);
-
-    Consent consent = new Consent();
-    consent.setTargetPerson(customerId);
-    consent.setTemplate(template);
-
-    List<String> guardians = getCustomerGuardians(customerId, user);
-    if (guardians == null) {
-      return false;
-    }
-
-    consent.getGivenTo().addAll(getOrganizationNames(user));
-    consent.getConsentProviders().addAll(guardians);
-    tivaService.createConsent(consent);
     return true;
   }
 
