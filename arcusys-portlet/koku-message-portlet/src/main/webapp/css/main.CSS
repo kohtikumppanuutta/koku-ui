@@ -2,13 +2,13 @@
  * css file for task manager portlet
  * @Author: JinhuaChen
  */
-
 #task-manager-wrap {
 	margin: 5px;
 	position: relative;
-	color:#666666;
+	color: #666666;
 }
-#task-manager-wrap.single{
+
+#task-manager-wrap.single {
 	background-color: #FFFFFF;
 }
 
@@ -38,12 +38,17 @@
 	cursor: pointer;
 }
 
-.task-bg-normal {background-color: #a64a1d;}
+.task-bg-normal {
+	background-color: #a64a1d;
+}
 
-.task-bg-focus {background-color: #aaaaaa;}
+.task-bg-focus {
+	background-color: #aaaaaa;
+}
 
-* html div#task-manager-tasklist { 
-   height: expression( this.scrollHeight < 361 ? "360px" : "auto" ); /* sets min-height for IE */
+* html div#task-manager-tasklist {
+	height: expression(this.scrollHeight <   361 ?   "360px" :   "auto");
+	/* sets min-height for IE */
 }
 
 #task-manager-tasklist {
@@ -87,13 +92,13 @@
 
 /* to solve the text overflow in table */
 .task-manager-table td strong {
-	display:block;
-	width:100%;
+	display: block;
+	width: 100%;
 	overflow: hidden;
 }
 
 .task-manager-table td.left {
-	text-align:left;
+	text-align: left;
 }
 
 .task-manager-table td.choose {
@@ -103,19 +108,20 @@
 .task-manager-table td.from {
 	width: 120px;
 }
+
 .from {
-	display:inline-block;
+	display: inline-block;
 	width: 150px;
-	overflow:hidden;
-}
-.task-manager-table td.date {
-	text-align:right;
+	overflow: hidden;
 }
 
+.task-manager-table td.date {
+	text-align: right;
+}
 
 /* main table header cells */
 .task-manager-table .trheader {
-	font-weight:bold;
+	font-weight: bold;
 	vertical-align: top;
 	border-bottom: 1px solid #EFEFEF;
 }
@@ -130,18 +136,38 @@
 	color: #0089C1;
 }
 
-.messageItem {
-	/* cursor: pointer; */ 
+.messageItem { /* cursor: pointer; */
 	cursor: normal;
 }
 /* main table row color */
-.task-manager-table tr.new {font-weight:bold;}
-.task-manager-table tr.oddRow {background-color: #FFFFFF; /* for odd row */}
-.task-manager-table tr.evenRow {background-color: #EFEFEF; /* #E7F5E7 for even row */}
-.task-manager-table tr.focusRow {background-color: #D8D8A8; /* for the current row */	}
-.task-manager-table tr.clickRow {background-color: #ECC57A; /* for the current row */}
-.oddRow {background-color: #FFFFFF; /* for odd row */}
-.evenRow {background-color: #EFEFEF; /* #E7F5E7 for even row */}
+.task-manager-table tr.new {
+	font-weight: bold;
+}
+
+.task-manager-table tr.oddRow {
+	background-color: #FFFFFF; /* for odd row */
+}
+
+.task-manager-table tr.evenRow {
+	background-color: #EFEFEF; /* #E7F5E7 for even row */
+}
+
+.task-manager-table tr.focusRow {
+	background-color: #D8D8A8; /* for the current row */
+}
+
+.task-manager-table tr.clickRow {
+	background-color: #ECC57A; /* for the current row */
+}
+
+.oddRow {
+	background-color: #FFFFFF; /* for odd row */
+}
+
+.evenRow {
+	background-color: #EFEFEF; /* #E7F5E7 for even row */
+}
+
 .task-config-table {
 	color: inherit; /* text color */
 	font-family: Verdana; /* font name */
@@ -162,17 +188,18 @@
 }
 
 #task-manager-search {
-	display:none;
+	display: none;
 }
 
 #task-manager-search .message-keyword {
-	font-weight:bold;
+	font-weight: bold;
 }
 
 .advanced-search {
-	display:none;
+	display: none;
 }
-.search-table { 
+
+.search-table {
 	width: 100%; /* table width */
 	color: inherit; /* text color */
 	font-family: Verdana; /* font name */
@@ -189,11 +216,17 @@
 	word-break: break-all;
 	overflow: hidden;
 }
-.search-td-1 { width: 100px;}
-.search-td-2 { width: auto;}
+
+.search-td-1 {
+	width: 100px;
+}
+
+.search-td-2 {
+	width: auto;
+}
 
 #task-manager-operation {
-	overflow:auto;
+	overflow: auto;
 }
 
 .task-manager-operation-part {
@@ -205,10 +238,12 @@
 	background: #bbbbbb url('../images/bg.gif');
 }
 
-#task-manager-operation-page {float:left;}
+#task-manager-operation-page {
+	float: left;
+}
 
 #task-manager-operation-loading {
-	float:right; 
+	float: right;
 	padding: 5px 8px 5px 25px;
 	background: url('../images/load.gif') no-repeat 5px 5px;
 }
@@ -225,16 +260,17 @@
 	padding: 5px;
 }
 
-#task-manager-operation ul li img{
+#task-manager-operation ul li img {
 	cursor: pointer;
-	vertical-align:middle;
+	vertical-align: middle;
 }
-#task-manager-operation ul li a:hover{
+
+#task-manager-operation ul li a:hover {
 	background-color: #aaaaaa;
 }
 
 .task-error-message {
-	padding:5px;
+	padding: 5px;
 	background-color: #FFB6C1;
 	border: 1px solid #FF3333; /* table background color */
 }
@@ -249,20 +285,19 @@
 
 .request-table {
 	width: 100%; /* table width */
-	border:0;
-	border-width: 1px; 
-	border-color:#C3C3C3;
+	border: 0;
+	border-width: 1px;
+	border-color: #C3C3C3;
 	border-style: solid;
 	border-collapse: collapse;
-	
 }
 
 .request-table td.head {
 	background-color: #D1EEEE;
-	border:0;
+	border: 0;
 	vertical-align: top;
 	text-align: left;
-	font-weight: bold;	
+	font-weight: bold;
 }
 
 .request-table td {
@@ -274,39 +309,38 @@
 	overflow: hidden;
 }
 
-.item_normal 
-{ 
-  width:160px;
-  background-color:#ffffff;
-  overflow:hidden;
-  padding-left: 2px;
-  padding-right: 2px;
-} 
-.itemBg 
-{ 
-  cursor:default;
-  background-color:#ffffff;
-  width:160px;
-  padding-left: 2px;
-  padding-right: 2px;
-} 
-.item_high 
-{ 
-  background-color:#326BC5;
-  cursor:default;
-  width:160px;
-  color:white;
-  padding-left: 2px;
-  padding-right: 2px;
-} 
-.item_button 
-{ 
-  text-align:right;
-  background-color:#ffffff;
-  width:160px;
-  cursor:pointer;
-  padding-left: 2px;
-  padding-right: 2px;
+.item_normal {
+	width: 160px;
+	background-color: #ffffff;
+	overflow: hidden;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.itemBg {
+	cursor: default;
+	background-color: #ffffff;
+	width: 160px;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.item_high {
+	background-color: #326BC5;
+	cursor: default;
+	width: 160px;
+	color: white;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.item_button {
+	text-align: right;
+	background-color: #ffffff;
+	width: 160px;
+	cursor: pointer;
+	padding-left: 2px;
+	padding-right: 2px;
 }
 
 .errorMsg.noConsents {
@@ -329,90 +363,84 @@ abbr.valueWithDesc:hover {
 }
 
 .personLink:hover {
-	text-decoration:underline;	
+	text-decoration: underline;
 }
 
-
 /* TIVA-18: Tietopyyntöjen selaus */
-.basic-search p.searchTimeRange,
-.basic-search p.searchMisc {
+.basic-search p.searchTimeRange,.basic-search p.searchMisc {
 	padding-top: 0px;
 	padding-bottom: 5px;
 	margin: 0;
-	
 }
 
 .basic-search p span.searchTitle {
 	display: inline-table;
-    padding-left: 5px;
-    width: 100px;
+	padding-left: 5px;
+	width: 100px;
 }
 
 .basic-search p.searchTimeRange input.searchTime {
-	width: 90px;	
+	width: 90px;
 }
 
-
 .basic-search p.searchButtonArea {
-	text-align: right;	
+	text-align: right;
 	padding-top: 7px;
 }
 
-
-
 /* ShowMessages css */
-
 #normalMessage {
 	padding-left: 10px;
 	padding-bottom: 20px;
 }
 
-#messageStructure  {
-
+#messageStructure {
+	
 }
 
 .notificationMessageHeader {
 	background-color: #25AAE1;
-    color: #FFFFFF;
-    font-size: 16px;
-    font-weight: normal;
-    margin: 12px 0;
-    padding: 8px 15px;
-    text-transform: uppercase;
+	color: #FFFFFF;
+	font-size: 16px;
+	font-weight: normal;
+	margin: 12px 0;
+	padding: 8px 15px;
+	text-transform: uppercase;
 }
 
 .notificationMessageContent {
 	padding-left: 15px;
 }
 
-#messageSenderHeader  {
+#messageSenderHeader {
+	
 }
 
-#messageRecipientsHeader  {
-
+#messageRecipientsHeader {
+	
 }
 
-#messageSubject  {
-
+#messageSubject {
+	
 }
 
-#messageSender  {
-
+#messageSender {
+	
 }
 
-#messageRecipients  {
-
+#messageRecipients {
+	
 }
 
-#messageBody  {
-
+#messageBody {
+	
 }
 
 #messageHeader {
 	font-size: 24px;
-    font-weight: normal;
-    margin: 12px 0;	
-    text-transform: uppercase;
+	font-weight: normal;
+	margin: 12px 0;
+	text-transform: uppercase;
 }
 
 table.task-manager-table tr {
@@ -426,6 +454,7 @@ table.task-manager-table tr.trheader {
 #applicationKindergartenBrowse span.searchTitle {
 	width: 100px;
 }
+
 #applicationKindergartenBrowse select.yesNoSelect {
 	width: 90px;
 }
@@ -433,3 +462,94 @@ table.task-manager-table tr.trheader {
 #applicationKindergartenBrowse .kindergartenSelections {
 	padding-top: 20px;
 }
+
+/** 
+ * KV message styles
+ */
+#messageContent .kokoelmavalinta {
+	
+}
+
+#messageContent .tagit a {
+	color: #666666;
+}
+
+#messageContent .tagit a:hover {
+	color: #444444;
+}
+
+#messageContent h1 {
+	margin: 12px 0;
+	font-weight: normal;
+	font-size: 24px;
+	border: 0;
+}
+
+#messageContent .main p {
+	padding-left: 15px;
+}
+
+#messageContent {
+	margin-left: 10px;
+	margin-right: 10px;	
+}
+
+#messageContent h2 {
+	background-color: #25AAE1;
+	color: #FFFFFF;
+	font-size: 16px;
+	font-weight: normal;
+	margin: 12px 0;
+	padding: 8px 15px;
+	text-transform: uppercase;
+}
+
+#messageContent h3 {
+	padding: 0;
+	margin: 10px 0;
+	font-weight: normal;
+	font-size: 13px;
+}
+
+#messageContent .innerContent h4 {
+	font-size: 13px;
+	font-weight: normal;
+	margin: 0;
+	padding-left: 15px;
+}
+
+#messageContent .viestintiedot {
+	color: #666666;
+}
+
+#messageContent input.person {
+	margin-bottom: 2px;
+	width: 300px
+}
+
+#messageContent .viestintiedot .add {
+	height: 280px;
+	width: 712px;
+}
+
+#messageContent .viesti span {
+	color: #666666;
+}
+
+#messageContent .takaisin {
+	display: inline;
+	float: right;
+	font-size: 11px;
+	text-transform: none;
+}
+
+#messageContent .viestintiedot .pyynto {
+	height: 80px;
+	width: 99%;
+}
+
+#messageContent h3.kks {
+	border-top: 1px solid #cccccc;
+	padding-top: 10px;
+}
+
