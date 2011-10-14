@@ -534,9 +534,6 @@ public class PyhDemoService {
       log.error("PyhDemoService.removeFamilyMember: opGetCommunity raised a ServiceFault", fault);
     }
     
-    // TODO: tässä pitää tarkistaa että esim. lapsi poistetaan vain kirjautuneen käyttäjän perheestä.
-    // nyt lapsi poistuu molemmista perheistä jos kuuluu kahteen perheeseen.
-    
     // TODO 2: käyttäjän perhe pitää poistaa, jos jäljelle jää perheenjäsenen poistamisen jälkeen vain vanhempi.
     
     if (communitiesType != null) {
@@ -550,7 +547,7 @@ public class PyhDemoService {
         Iterator<MemberType> mi = members.iterator();
         while (mi.hasNext()) {
           MemberType member = mi.next();
-          if (member.getPic().equals(familyMemberPic)) {
+          if (member.getPic().equals(familyMemberPic) && isMemberOfCommunity(userPic, members)) {
             members.remove(member);
             try {
               communityService.opUpdateCommunity(community, communityAuditInfoType);
@@ -573,6 +570,23 @@ public class PyhDemoService {
         }
       }
     }
+  }
+  
+  /**
+   * Returns true if person is member of a community. Otherwise returns false.
+   * 
+   * personPic - PIC of the person
+   * members - list of members of the community
+   */
+  private boolean isMemberOfCommunity(String personPic, List<MemberType> members) {
+    Iterator<MemberType> mi = members.iterator();
+    while (mi.hasNext()) {
+      MemberType member = mi.next();
+      if (personPic.equals(member.getPic())) {
+        return true;
+      }
+    }
+    return false;
   }
   
   /**
