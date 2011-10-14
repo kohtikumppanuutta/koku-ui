@@ -91,6 +91,8 @@
 			jQuery("#app_new").css("font-weight", "bold");			
 		} else if(currentPage == 'NewKindergarten') {
 			jQuery("#kid_new").css("font-weight", "bold");			
+		} else if(currentPage == 'ConfirmApplications') {
+			jQuery("#applicationsConfirm").css("font-weight", "bold");			
 		} else if(currentPage == 'NewConsent') {
 			jQuery("#cst_new").css("font-weight", "bold");			
 		} else if(currentPage == 'FillConsent') {
@@ -368,6 +370,7 @@
 						<!--  show only citizens -->
 						<c:if test="${fn:contains(naviURL, '/classic/')}">
 						<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Päivähoitohakemus</a></li>
+						<li id="applicationsConfirm"><a href="<%= defaultPath %>/Message/ConfirmApplications">Hakemusten vahvistuspyynnöt</a></li>
 						</c:if>	
 						<!--  show only employees -->						
 						<c:if test="${fn:contains(naviURL, '/default/')}">
