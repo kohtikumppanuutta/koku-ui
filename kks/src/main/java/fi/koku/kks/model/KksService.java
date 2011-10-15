@@ -6,8 +6,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -228,11 +230,7 @@ public class KksService {
       KKSCollection col = converter.fromWsType(kks, info.getPic());
       col.setMaster(isParent(info.getPic(), col.getCustomer()));
       col.setAuthorizedRegistrys(getAuthorizedRegistries(info.getPic()));
-
-      List<String> creators = new ArrayList<String>();
-
-      setEntryModifiers(info, col, creators);
-
+      setEntryModifiers(info, col);
       return col;
     } catch (ServiceFault e) {
       LOG.error("Failed to get KKS collection " + collectionId, e);
@@ -240,7 +238,8 @@ public class KksService {
     return null;
   }
 
-  private void setEntryModifiers(UserInfo info, KKSCollection col, List<String> creators) {
+  private void setEntryModifiers(UserInfo info, KKSCollection col) {
+    Set<String> creators = new HashSet<String>();
     for (Entry e : col.getEntries().values()) {
 
       if (e.getType().isMultiValue()) {
@@ -250,13 +249,13 @@ public class KksService {
       }
     }
 
-    Map<String, String> personMap = getPersonsMap(info.getPic(), creators);
+    Map<String, String> personMap = getPersonsMap(info.getPic(), new ArrayList<String>(creators));
 
     for (Entry e : col.getEntries().values()) {
 
       if (e.getType().isMultiValue()) {
         for (EntryValue v : e.getEntryValues()) {
-          e.setModifierFullName(personMap.get(v.getModifier()));
+          v.setModifierFullName(personMap.get(v.getModifier()));
         }
       }
     }

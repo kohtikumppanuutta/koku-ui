@@ -25,8 +25,11 @@ import fi.koku.kks.model.KKSCollection;
 import fi.koku.kks.model.KksService;
 import fi.koku.kks.model.Person;
 import fi.koku.kks.model.Version;
+import fi.koku.kks.ui.common.Accountable;
 import fi.koku.kks.ui.common.utils.Utils;
+import fi.koku.services.entity.kks.v1.KksCollectionClassType;
 import fi.koku.services.entity.kks.v1.KksEntryClassType;
+import fi.koku.services.entity.kks.v1.KksGroupType;
 
 /**
  * Controller for managing collection showing and value setting
@@ -52,13 +55,14 @@ public class CollectionController {
 
     KKSCollection c = kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
     boolean parent = kksService.isParent(Utils.getPicFromSession(session), child.getPic());
+    boolean canSave = !parent || hasParentGroups(c.getCollectionClass());
     model.addAttribute("child", child);
     model.addAttribute("collection", c);
     model.addAttribute("authorized", kksService.getAuthorizedRegistries(Utils.getPicFromSession(session)));
     model.addAttribute("master", parent);
     model.addAttribute("parent", parent);
     model.addAttribute("empty_collection", c == null || c.getEntries() == null || c.getEntries().size() == 0);
-
+    model.addAttribute("can_save", canSave);
     if (!model.containsAttribute("version")) {
       Version v = new Version();
       v.setName(c == null ? "" : c.getName());
@@ -69,6 +73,21 @@ public class CollectionController {
       model.addAttribute("error", error);
     }
     return "collection";
+  }
+
+  private boolean hasParentGroups(KksCollectionClassType metadata) {
+    for (KksGroupType group : metadata.getKksGroups().getKksGroup()) {
+      if (group.getAccountable().equals(Accountable.GUARDIAN.getName())) {
+        return true;
+      }
+
+      for (KksGroupType subGroup : group.getSubGroups().getKksGroup()) {
+        if (subGroup.getAccountable().equals(Accountable.GUARDIAN.getName())) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   @ModelAttribute("child")

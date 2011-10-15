@@ -285,7 +285,7 @@
                 </c:forEach>
 
                 <div class="kks-right">
-                <c:if test="${ collection.state.active }">
+                <c:if test="${ not empty_collection && can_save && collection.state.active }">
                     <input type="submit" class="portlet-form-button"
                         value="<spring:message code="ui.kks.save"/>" >
                 </c:if>
