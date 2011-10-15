@@ -595,7 +595,9 @@ public class KksService {
   private List<String> getCustomerGuardians(String customer, String user) {
     List<String> names = new ArrayList<String>();
     try {
-      FamilyService service = new FamilyService();
+      FamilyService service = FamilyService.getInstance(Constants.CUSTOMER_SERVICE_USER_ID,
+          Constants.CUSTOMER_SERVICE_PASSWORD, Constants.COMMUNITY_SERVICE_USER_ID,
+          Constants.COMMUNITY_SERVICE_PASSWORD);
       List<CustomerType> tmp = service.getPersonsParents(customer, user, "KKS");
       for (CustomerType ct : tmp) {
         names.add(ct.getHenkiloTunnus());
