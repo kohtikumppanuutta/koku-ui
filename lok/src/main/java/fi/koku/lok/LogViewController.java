@@ -30,6 +30,7 @@ import fi.koku.services.entity.authorizationinfo.util.AuthUtils;
 import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
 import fi.koku.services.entity.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
 import fi.koku.services.entity.authorizationinfo.v1.model.Role;
+import fi.koku.services.entity.person.v1.PersonService;
 import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;
 import fi.koku.services.utility.log.v1.LogEntryType;
@@ -52,6 +53,7 @@ public class LogViewController {
 
   // Use log service
   private LogServicePortType logService;
+  private PersonService personService;
   
   private AuthorizationInfoService authorizationInfoService;
   
@@ -68,6 +70,7 @@ public class LogViewController {
     log.debug("Got logService!");
     
     authorizationInfoService = new AuthorizationInfoServiceDummyImpl();
+    personService = new PersonService();
   }
   // customize form data binding
   @InitBinder
@@ -122,7 +125,14 @@ public class LogViewController {
 
         try{
           // make the query to the admin log
-          model.addAttribute("entries", getAdminLogEntries(criteria, userPic));
+          List<AdminLogEntry> entries = getAdminLogEntries(criteria, userPic);
+          // The user's name (not pic as in the database) should be shown, 
+          // so change pics to names
+          lu.changePicsToNamesAdmin(entries, userPic, personService);
+          
+          model.addAttribute("entries", entries);
+          
+         
         }catch(ServiceFault fault){
           model.addAttribute("error", "koku.lok.error.viewlog");
         }

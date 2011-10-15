@@ -24,7 +24,7 @@ public class AdminLogEntry {
 
 
   public Date getTimestamp() {
-    logger.debug("portlet get timestamp: "+timestamp);
+ //   logger.debug("portlet get timestamp: "+timestamp);
     return timestamp;
   }
 
@@ -38,7 +38,7 @@ public class AdminLogEntry {
 
   // format for timestamp: yyyy-mm-dd
   public void setTimestamp(Date timestamp) {
-    logger.debug("portlet set timestamp: "+timestamp);
+   // logger.debug("portlet set timestamp: "+timestamp);
     this.timestamp = timestamp;
   }
 

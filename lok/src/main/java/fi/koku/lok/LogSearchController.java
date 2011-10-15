@@ -33,8 +33,6 @@ import fi.koku.services.entity.authorizationinfo.util.AuthUtils;
 import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
 import fi.koku.services.entity.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
 import fi.koku.services.entity.authorizationinfo.v1.model.Role;
-import fi.koku.services.entity.person.v1.Person;
-import fi.koku.services.entity.person.v1.PersonConstants;
 import fi.koku.services.entity.person.v1.PersonService;
 import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;
@@ -43,7 +41,6 @@ import fi.koku.services.utility.log.v1.LogQueryCriteriaType;
 import fi.koku.services.utility.log.v1.LogServiceFactory;
 import fi.koku.services.utility.log.v1.LogServicePortType;
 import fi.koku.services.utility.log.v1.ServiceFault;
-import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
  * Controller for log search (LOK). This implements LOK-3 (Etsi lokitieto).
@@ -102,10 +99,8 @@ public class LogSearchController {
       
     List<Role> userRoles = authorizationInfoService.getUsersRoles(LogConstants.COMPONENT_LOK, userPic);
     
-    log.debug("render searchLog");
     // add a flag for allowing this user to see the operations on page search.jsp 
     if (AuthUtils.isOperationAllowed("AdminSystemLogFile", userRoles)) {
-      log.debug("lisätään allowedToView");
       model.addAttribute("allowedToView", true);
     }
     
@@ -133,7 +128,7 @@ public class LogSearchController {
             
             // The user's name (not pic as in the database) should be shown, 
             // so change pics to names
-            changePicsToNames(entries, userPic);
+            lu.changePicsToNames(entries, userPic, personService);
             
             model.addAttribute("entries", entries);
          
@@ -219,7 +214,6 @@ public class LogSearchController {
         LogEntry logEntry = new LogEntry();
         LogEntryType logEntryType = (LogEntryType) i.next();
 
-        log.debug(logEntryType.getTimestamp() + "\n");
         // put values that were read from the database in logEntry for showing
         // them to the user
 
@@ -241,54 +235,12 @@ public class LogSearchController {
         entryList.add(logEntry);
       }
 
-    // TODO: Parempi virheenkäsittely
-/*    catch (ServiceFault e) {
-      // TODO Auto-generated catch block
-      // e.printStackTrace();
-      e.getFaultInfo().getCode();
-      // }catch(javax.xml.ws.soap.SoapFaultException ee){
-    }
-     catch (Exception ee) {
-      log.error("jokin virhe servicesta");
-    }
-*/
   
     return entryList;
   }
 
   
-  /**
-   * Helper method that changes the pic value in every entry
-   * to the user's name, read from PersonService.
-   * @param entries
-   * @return
-   */
-  public void changePicsToNames(List<LogEntry> entries, String portletUserPic){
-    String pic = null;
-    List<String> picList = new ArrayList<String>();
-    List<Person> list = null;
-    Person person = null;
-    
-    Iterator iter = entries.iterator();
-    while(iter.hasNext()){
-      LogEntry entry = (LogEntry)iter.next();
-      pic = entry.getUser();
-      picList.add(pic);
-      log.debug("call to PersonService with pic "+pic);
-      //TODO: olisiko mitään hyötyä ottaa talteen jo löytyneitä pic-nimi-pareja???
-      list = personService.getPersonsByPics(picList, PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER,
-          portletUserPic, LogConstants.COMPONENT_LOK);
-      if(list==null || list.isEmpty()){
-        throw new RuntimeException("No name found in personservice for pic "+pic);
-      }else{
-        person = list.get(0);
-        log.debug("got person "+person.getFname()+" "+person.getSname());
-        entry.setUser(person.getFname()+" "+person.getSname());
-      }
-    }
-   
-  }
-
+ 
   /**
    * Helper class for serializing and deserializing LogSearchCriteria objects as
    * text.
