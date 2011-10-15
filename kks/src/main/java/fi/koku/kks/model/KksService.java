@@ -595,7 +595,7 @@ public class KksService {
   private List<String> getCustomerGuardians(String customer, String user) {
     List<String> names = new ArrayList<String>();
     try {
-      FamilyService service = FamilyService.getInstance(Constants.CUSTOMER_SERVICE_USER_ID,
+      FamilyService service = new FamilyService(Constants.CUSTOMER_SERVICE_USER_ID,
           Constants.CUSTOMER_SERVICE_PASSWORD, Constants.COMMUNITY_SERVICE_USER_ID,
           Constants.COMMUNITY_SERVICE_PASSWORD);
       List<CustomerType> tmp = service.getPersonsParents(customer, user, "KKS");
