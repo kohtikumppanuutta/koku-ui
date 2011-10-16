@@ -16,11 +16,11 @@ the code can depend on servlet and portlet apis as well as koku service-api but 
 
 	<dependencies>
 
-		<dependency>
-			<groupId>kohti-kumppanuutta</groupId>
-			<artifactId>kahvaservice-api</artifactId>
-			<version>0.0.3</version>
-		</dependency>
+	<dependency>
+	    <groupId>kohti-kumppanuutta</groupId>
+	    <artifactId>personservice-api</artifactId>
+	    <version>0.0.2</version>
+	</dependency>
 
 	</dependencies>
 

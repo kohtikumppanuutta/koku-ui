@@ -36,29 +36,24 @@ public class UserInfoPortletFilter implements RenderFilter, ActionFilter {
   private UserInfoService userInfoService = null;
 
   /**
-   * Initialize portlet filter. portlet.xml:init-param named authImplClassName
-   * will be instantiated in this method. This impl class is responsible for
-   * getting userData with portalUserId.
+   * Initialize portlet filter. 
    */
   public void init(FilterConfig filterConfig) {
 
-    // This just an example how to get information from portlet.xml
-    String implClassName = filterConfig.getInitParameter("authImplClassName");
-    String portletStaticRole = filterConfig.getInitParameter("portletStaticRole");
     
-    log.debug("Initializing portlet: authImplClassName=" + implClassName+
-        ", portletStaticRole="+portletStaticRole);
+    log.debug("Initializing portlet: authImplClassName=" + UserInfoConstants.AUTH_IMPL_CLASS_NAME);
 
+    
     // Load configured class
     try {
-      userInfoService = (UserInfoService) this.getClass().getClassLoader().loadClass(implClassName).newInstance();
+      userInfoService = (UserInfoService) this.getClass().getClassLoader().loadClass(UserInfoConstants.AUTH_IMPL_CLASS_NAME).newInstance();
 
     } catch (InstantiationException e) {
-      log.error("Failed to Instantiate classname=" + implClassName, e);
+      log.error("Failed to Instantiate classname=" +  UserInfoConstants.AUTH_IMPL_CLASS_NAME, e);
     } catch (IllegalAccessException e) {
-      log.error("Failed to Instantiate. Illegal Access on classname=" + implClassName, e);
+      log.error("Failed to Instantiate. Illegal Access on classname=" +  UserInfoConstants.AUTH_IMPL_CLASS_NAME, e);
     } catch (ClassNotFoundException e) {
-      log.error("Class not found. Classname=" + implClassName, e);
+      log.error("Class not found. Classname=" +  UserInfoConstants.AUTH_IMPL_CLASS_NAME, e);
     }
 
   }
