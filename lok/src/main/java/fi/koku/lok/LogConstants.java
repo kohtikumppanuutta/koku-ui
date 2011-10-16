@@ -43,7 +43,7 @@ public class LogConstants {
   public static Role ROLE_LOK_LOG_ADMIN = new Role("ROLE_LOK_LOG_ADMIN");
   
   // tämä rivi on kopioitu servicesta
-  public static final int LOG_NOTHING_TO_ARCHIVE = 2200;
+ // public static final int LOG_NOTHING_TO_ARCHIVE = 2200;
   public static final int LOG_UNKNOWN_ERROR = 1000;
   
   private LogConstants() {
