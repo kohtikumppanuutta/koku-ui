@@ -104,16 +104,21 @@ public class LogSearchController {
       model.addAttribute("allowedToView", true);
     }
     
+	if(visited == null){
+	   
     // these are runtime constants, not given by the user!
     String startDateStr = lu.getDateString(1);
     String endDateStr = lu.getDateString(0);
     model.addAttribute("startDate", startDateStr);
     model.addAttribute("endDate", endDateStr);
     log.debug("startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
-
+    }
+    
     if (criteria != null) {
       if (visited != null) { // page has been visited
-        
+        //add to model the changed values
+        model.addAttribute("logSearchCriteria", criteriaSerializer.getAsText(criteria));
+   
         // Check that the input parameters are not null and in the correct format
         String[] errors = lu.checkInputParameters(criteria, LogConstants.LOG_NORMAL);
         model.addAttribute("error0", errors[0]);
@@ -141,7 +146,8 @@ public class LogSearchController {
           model.addAttribute("searchParams", criteria);
           model.addAttribute("visited", "---");
         }
-      }
+      } 
+	
 
       if (StringUtils.isNotBlank(criteria.getPic())) {
         model.addAttribute("logSearchCriteria", criteria);

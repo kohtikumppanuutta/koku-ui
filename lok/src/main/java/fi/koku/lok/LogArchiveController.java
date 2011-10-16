@@ -47,24 +47,23 @@ public class LogArchiveController {
 
   private static final Logger log = LoggerFactory.getLogger(LogArchiveController.class);
 
-// Use log service
+  // Use log service
   private LogServicePortType logService;
-  
+
   private AuthorizationInfoService authorizationInfoService;
-  
+
   private ArchiveSerializer archiveSerializer = new ArchiveSerializer();
   SimpleDateFormat dateFormat = new SimpleDateFormat(LogConstants.DATE_FORMAT);
   LogUtils lu = new LogUtils();
-  
-  public LogArchiveController(){
-    LogServiceFactory logServiceFactory = new LogServiceFactory(
-        LogConstants.LOG_SERVICE_USER_ID, LogConstants.LOG_SERVICE_PASSWORD,
-        LogConstants.LOG_SERVICE_ENDPOINT);
-    logService = logServiceFactory.getLogService();  
-    
+
+  public LogArchiveController() {
+    LogServiceFactory logServiceFactory = new LogServiceFactory(LogConstants.LOG_SERVICE_USER_ID,
+        LogConstants.LOG_SERVICE_PASSWORD, LogConstants.LOG_SERVICE_ENDPOINT);
+    logService = logServiceFactory.getLogService();
+
     authorizationInfoService = new AuthorizationInfoServiceDummyImpl();
   }
-  
+
   // customize form data binding
   @InitBinder
   public void initBinder(WebDataBinder binder) {
@@ -78,231 +77,224 @@ public class LogArchiveController {
   public LogArchiveDate getCommandObject() {
     return new LogArchiveDate();
   }
- 
+
   // portlet render phase
   @RenderMapping(params = "action=archiveLog")
-  public String render(PortletSession session, RenderRequest req, @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
-      @RequestParam(value = "visited", required = false) String visited, 
+  public String render(PortletSession session, RenderRequest req,
+      @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
+      @RequestParam(value = "visited", required = false) String visited,
       @RequestParam(value = "error", required = false) String error,
-      @RequestParam(value = "change", required = false) String change,  
-      RenderResponse res, Model model) {
- 
+      @RequestParam(value = "change", required = false) String change, RenderResponse res, Model model) {
+
     // get user pic and role
     String userPic = LogUtils.getPicFromSession(session);
-      
+
     List<Role> userRoles = authorizationInfoService.getUsersRoles(LogConstants.COMPONENT_LOK, userPic);
-    
+
     log.debug("render searchLog");
-    // add a flag for allowing this user to see the operations on page search.jsp 
+    // add a flag for allowing this user to see the operations on page
+    // search.jsp
     if (AuthUtils.isOperationAllowed("AdminSystemLogFile", userRoles)) {
       model.addAttribute("allowedToView", true);
     }
-    
-    if(change != null){
+
+    if (change != null) {
       log.debug("Painettiin nappia Vaihda päivämäärää");
     }
-    try{
-      
-      //TODO: tähän tulee: jos !error
-      if(error==null){
-        log.debug("logarchivedate: "+logarchivedate.getEndDate());
+    try {
 
-        if (visited != null || change != null ) { // page has been visited
+      if (error == null) {
+        log.debug("logarchivedate: " + logarchivedate.getEndDate());
 
-          log.debug("visited tai change");
+        if (visited != null || change != null) { // page has been visited
 
           String archiveDateStr = dateFormat.format(logarchivedate.getEndDate());
 
-          // this is needed so that the date can be easily formatted to YYYY-MM-dd format on the jsp
+          // this is needed so that the date can be easily formatted to
+          // YYYY-MM-dd format on the jsp
           model.addAttribute("archiveDateDate", logarchivedate.getEndDate());
           model.addAttribute("logArchiveDate", logarchivedate);
 
-          if(change!=null){
+          if (change != null) {
             model.addAttribute("visited", null);
-          }else{
+          } else {
             model.addAttribute("visited", "---");
           }
-          model.addAttribute("endDate", archiveDateStr);  
+          model.addAttribute("endDate", archiveDateStr);
           log.debug("modeliin lisätty endDate= " + archiveDateStr);
 
-        } else{
+        } else {
           log.debug("visited == null");
 
-          String defaultDateStr = lu.getDateString(2); // default is two years ago TODO: make static
-          model.addAttribute("endDate", defaultDateStr);  
-          log.debug("modeliin lisätty endDate = " + defaultDateStr);
+          String defaultDateStr = lu.getDateString(2); // default is two years
+                                                       // ago TODO: make static
           model.addAttribute("endDate", defaultDateStr);
-
+        
           Calendar time = Calendar.getInstance();
-          time.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR) - 2); // default is  two years ago
-          //TODO: tai ei tehdä parsintaa webbisivulla vaan tässä??
+          // default is two years ago
+          time.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR) - 2); 
+        
           model.addAttribute("archiveDateDate", time.getTime());
 
-          log.debug("modeliin lisätty archiveDate=" + defaultDateStr);
-
         }
-      }else{ //Jos on error
-        log.debug("logarchivedate == null");
-        // set the default archive date
-        String defaultDateStr = lu.getDateString(2); // default is two years ago TODO: make static
-        model.addAttribute("endDate", defaultDateStr);  
-       
-        log.debug("modeliin lisätty endDate = " + defaultDateStr);
+      } else { // Some error
+        if (logarchivedate != null) {
+          model.addAttribute("logArchiveDate", logarchivedate);
+        } else {
+          log.debug("logarchivedate == null");
+          // set the default archive date 2 years ago
+          String defaultDateStr = lu.getDateString(2); 
+          model.addAttribute("endDate", defaultDateStr);
+        }
       }
-      log.debug("error = "+error);
+      log.debug("error = " + error);
 
-      if(error != null ){
-        model.addAttribute("error", error); 
-      }
+      model.addAttribute("error", error);
 
-    }catch(KoKuFaultException e){
+    } catch (KoKuFaultException e) {
       log.error(e.getMessage(), e);
-      //TODO: Lisää virheidenkäsittely
+      // TODO: Lisää virheidenkäsittely
       // käyttäjälle näytetään virheviesti "koku.lok.archive.parsing.error"
 
     }
-  
+
+   
     return "archive";
   }
 
-
   // portlet action phase
   @ActionMapping(params = "action=archiveLog")
-  public void doArchive(@ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate, 
-      BindingResult result,
-      @RequestParam(value = "visited") String visited, 
-      @RequestParam(value = "change", required = false) String change, 
+  public void doArchive(@ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate, BindingResult result,
+      @RequestParam(value = "visited") String visited, @RequestParam(value = "change", required = false) String change,
       ActionResponse response) {
 
-    log.debug("action archiveLog, visited: "+visited);
+    log.debug("action archiveLog, visited: " + visited);
 
     String archivedate = archiveSerializer.getAsText(logarchivedate);
-    log.debug("logarchivedate: "+logarchivedate);
-    log.debug("archivedate: "+archivedate);  
-   
-    response.setRenderParameter("visited", visited); 
-    
-    if(change!=null){
+    log.debug("logarchivedate: " + logarchivedate);
+    log.debug("archivedate: " + archivedate);
+
+    response.setRenderParameter("visited", visited);
+
+    if (change != null) {
       response.setRenderParameter("change", change);
     }
-  
-    if(logarchivedate==null || logarchivedate.getEndDate()==null){   
+
+    if (logarchivedate == null || logarchivedate.getEndDate() == null) {
       response.setRenderParameter("error", "koku.lok.archive.parsing.error");
     }
     // Check that archiving date is earlier than today
-    else if(!lu.isBeforeToday(logarchivedate.getEndDate())){
+    else if (!lu.isBeforeToday(logarchivedate.getEndDate())) {
       response.setRenderParameter("error", "koku.lok.archive.error.wrongDate");
     }
     response.setRenderParameter("endDate", archiveSerializer.getAsText(logarchivedate));
     response.setRenderParameter("action", "archiveLog");
   }
 
-//portlet render phase
+  // portlet render phase
   @RenderMapping(params = "action=startArchiveLog")
-  public String renderStart(PortletSession session, RenderRequest req, 
+  public String renderStart(PortletSession session, RenderRequest req,
       @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
-      @RequestParam(value = "error", required = false) String error,
-      RenderResponse res, Model model) {
+      @RequestParam(value = "error", required = false) String error, RenderResponse res, Model model) {
 
     // get user pic and role
     String userPic = LogUtils.getPicFromSession(session);
-      
+
     List<Role> userRoles = authorizationInfoService.getUsersRoles(LogConstants.COMPONENT_LOK, userPic);
-    
-  
-    // add a flag for allowing this user to see the operations on page search.jsp 
+
+    // add a flag for allowing this user to see the operations on page
+    // search.jsp
     if (AuthUtils.isOperationAllowed("AdminSystemLogFile", userRoles)) {
       model.addAttribute("allowedToView", true);
     }
-    
+
     log.debug("startArchiveLog render phase: archiving started");
-    
+
     if (logarchivedate != null) {
       log.debug("archive end date: " + logarchivedate.getEndDate());
-    } else{
+    } else {
       log.debug("action: logarchivedate == null!");
     }
-    
-    log.debug("error = "+error);
-    if(error != null){  
-     
+
+    log.debug("error = " + error);
+    if (error != null) {
+
       model.addAttribute("error", error); // TODO: voisi olla virhekoodi tms.
-      log.debug("logarchivedate: "+logarchivedate.getEndDate());
-      
+      log.debug("logarchivedate: " + logarchivedate.getEndDate());
+
       return "archive";
     }
     log.debug("sivulle archive2");
-    
+
     return "archive2";
   }
 
   @ActionMapping(params = "action=startArchiveLog")
-  public void startArchive(PortletSession session, @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate,
-      BindingResult result, 
+  public void startArchive(PortletSession session,
+      @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate, BindingResult result,
       ActionResponse response) {
-    
+
     log.debug("painettiin nappia Käynnistä arkistointi");
     log.debug("action startArchiveLog");
-    
-    log.debug("logarchivedate: "+logarchivedate);
-    if(logarchivedate != null) {
+
+    log.debug("logarchivedate: " + logarchivedate);
+    if (logarchivedate != null) {
       log.debug(logarchivedate.getEndDate().toString());
     }
-	
-    try{
+
+    try {
       LogArchivalParametersType archiveParametersType = new LogArchivalParametersType();
-      
-      if(logarchivedate != null && logarchivedate.getEndDate() != null){
-        
+
+      if (logarchivedate != null && logarchivedate.getEndDate() != null) {
+
         archiveParametersType.setEndDate(lu.dateToCalendar(logarchivedate.getEndDate()));
 
         // get user pic and role
         String userPic = LogUtils.getPicFromSession(session);
-        
+
         // call to log database
         AuditInfoType audit = new AuditInfoType();
-        audit.setComponent(LogConstants.COMPONENT_LOK); 
-        audit.setUserId(userPic);  
+        audit.setComponent(LogConstants.COMPONENT_LOK);
+        audit.setUserId(userPic);
 
         log.debug("log archive action phase: starting archiving");
 
         // call to log archive service
         ArchivalResultsType archiveCount = logService.opArchiveLog(archiveParametersType, audit);
-        
-        if(archiveCount.getLogEntryCount() == 0){
-          response.setRenderParameter("error", "koku.lok.archive.nothing.to.archive"); 
+
+        if (archiveCount.getLogEntryCount() == 0) {
+          response.setRenderParameter("error", "koku.lok.archive.nothing.to.archive");
           log.debug("ei arkistoitavaa");
-        }else{
-          log.debug("arkistoitiin "+archiveCount.getLogEntryCount()+ " entrya");
+        } else {
+          log.debug("arkistoitiin " + archiveCount.getLogEntryCount() + " entrya");
         }
-      }else{
+      } else {
         response.setRenderParameter("error", "arkistointipvm puuttuu");
       }
-      
+
     }// TODO: lisää tähän catch sitä varten, että tulee virheet 2.1 tai 2.2
- catch (ServiceFault e) {
-   log.error("startArchive fault: "+e.getFaultInfo().getCode());
- 
-   // Show the same error to the user no matter what the cause is  
-   response.setRenderParameter("error", "koku.lok.error.archive");  
-   log.debug("startArchivessa virhe: "+e.getMessage());
-  // }
-   
- }
- 
-   response.setRenderParameter("endDate", archiveSerializer.getAsText(logarchivedate));
-   response.setRenderParameter("action", "startArchiveLog");
+    catch (ServiceFault e) {
+      log.error("startArchive fault: " + e.getFaultInfo().getCode());
+
+      // Show the same error to the user no matter what the cause is
+      response.setRenderParameter("error", "koku.lok.error.archive");
+      log.debug("startArchivessa virhe: " + e.getMessage());
+      // }
+
+    }
+
+    response.setRenderParameter("endDate", archiveSerializer.getAsText(logarchivedate));
+    response.setRenderParameter("action", "startArchiveLog");
 
   }
 
-  
   private static class ArchiveSerializer {
 
     private SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
 
     /**
-     * Method formats the given Date into a String.
-     * If the input is null or cannot be formatted, the method returns a null value.
+     * Method formats the given Date into a String. If the input is null or
+     * cannot be formatted, the method returns a null value.
      */
     public String getAsText(LogArchiveDate logarchivedate) {
       String date = null;
@@ -316,39 +308,28 @@ public class LogArchiveController {
 
     /**
      * Method for parsing the date parameter.
+     * 
      * @param text
      * @return
      */
-   /*
-    public LogArchiveDate getFromRenderParameter(String text) {
-
-      Date d1 = null;
-      try {
-        if (StringUtils.isNotEmpty(text)) {
-          d1 = df.parse(text);
-        }
-      } catch (ParseException e) {
-        throw new IllegalArgumentException("error parsing date string", e);
-      }
-
-      return new LogArchiveDate(d1);
-    }
-
-    // TODO: tarvitaanko tätä?
-    public LogArchiveDate getFromRenderParameter(String[] text) {
-
-      Date d1 = null;
-      try {
-        if (ArrayUtils.isNotEmpty(text) && StringUtils.isNotEmpty(text[0])) {
-          d1 = df.parse(text[0]);
-        }
-      } catch (ParseException e) {
-        throw new IllegalArgumentException("error parsing date string", e);
-      }
-
-      return new LogArchiveDate(d1);
-    }
+    /*
+     * public LogArchiveDate getFromRenderParameter(String text) {
+     * 
+     * Date d1 = null; try { if (StringUtils.isNotEmpty(text)) { d1 =
+     * df.parse(text); } } catch (ParseException e) { throw new
+     * IllegalArgumentException("error parsing date string", e); }
+     * 
+     * return new LogArchiveDate(d1); }
+     * 
+     * // TODO: tarvitaanko tätä? public LogArchiveDate
+     * getFromRenderParameter(String[] text) {
+     * 
+     * Date d1 = null; try { if (ArrayUtils.isNotEmpty(text) &&
+     * StringUtils.isNotEmpty(text[0])) { d1 = df.parse(text[0]); } } catch
+     * (ParseException e) { throw new
+     * IllegalArgumentException("error parsing date string", e); }
+     * 
+     * return new LogArchiveDate(d1); } }
+     */
   }
-  */
-}
 }

@@ -70,10 +70,11 @@ public class LogUtils {
     log.debug("hakuparametrit: " + criteria.getConcept() + "," + criteria.getFrom() + "," + criteria.getTo());
 
     if (criteria.getFrom() == null) {
-      log.debug("from on null");
+      log.debug("from is null");
       error[0] = "koku.lok.search.null.from";
     }
     if (criteria.getTo() == null) {
+      log.debug("to is null");
       error[1] = "koku.lok.search.null.to";
     }
 
