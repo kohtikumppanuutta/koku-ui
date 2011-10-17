@@ -52,7 +52,8 @@ public class ChildController {
 
   @RenderMapping(params = "action=showChild")
   public String show(PortletSession session, @ModelAttribute(value = "child") Person child,
-      @RequestParam(value = "error", required = false) String error, RenderResponse response, Model model) {
+      @RequestParam(value = "error", required = false) String error,
+      @RequestParam(value = "message", required = false) String message, RenderResponse response, Model model) {
     LOG.info("show child");
 
     if (StringUtils.isEmpty(child.getFirstName())) {
@@ -72,6 +73,10 @@ public class ChildController {
       model.addAttribute("error", error);
     }
 
+    if (StringUtils.isNotEmpty(message)) {
+      model.addAttribute("message", message);
+    }
+
     return "child";
   }
 
@@ -88,6 +93,8 @@ public class ChildController {
 
     if (!success) {
       response.setRenderParameter("error", "collection.consent.request.failed");
+    } else {
+      response.setRenderParameter("message", "collection.consent.request.success");
     }
     sessionStatus.setComplete();
   }

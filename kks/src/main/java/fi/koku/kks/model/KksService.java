@@ -78,6 +78,9 @@ public class KksService {
   private KksServicePortType kksService;
   private CommunityServicePortType communityService;
   private CustomerServicePortType customerService;
+  private FamilyService familyService;
+  private KokuTivaToKksService tivaService;
+  private AuthorizationInfoService authorizationService;
 
   public KksService() {
     entryClasses = new HashMap<String, KksEntryClassType>();
@@ -86,6 +89,9 @@ public class KksService {
     kksService = getKksService();
     communityService = getCommunityService();
     customerService = getCustomerService();
+    familyService = getFamilyService();
+    authorizationService = getAuthorizationService();
+    tivaService = getTivaService();
   }
 
   public fi.koku.services.entity.customer.v1.AuditInfoType getCustomerAuditInfo(String user) {
@@ -110,9 +116,8 @@ public class KksService {
   }
 
   public Map<String, Registry> getAuthorizedRegistries(String user) {
-    AuthorizationInfoService uis = new AuthorizationInfoServiceDummyImpl();
     Map<String, Registry> tmp = new HashMap<String, Registry>();
-    List<Registry> register = uis.getUsersAuthorizedRegistries(user);
+    List<Registry> register = authorizationService.getUsersAuthorizedRegistries(user);
     for (Registry r : register) {
       tmp.put(r.getId(), r);
     }
@@ -563,22 +568,22 @@ public class KksService {
   public boolean sendConsentRequest(String consentType, String customerId, String user) {
 
     try {
-      KokuTivaToKksService tivaService = getTivaService();
-
       List<ConsentTemplate> templates = tivaService.queryConsentTemplates(consentType, 1);
 
       if (templates.size() == 0) {
+        LOG.error("No TIVA templates found for constentType " + consentType);
         return false;
       }
 
-      ConsentTemplate template = templates.get(0);
+      ConsentTemplate consentTemplate = templates.get(0);
 
       Consent consent = new Consent();
       consent.setTargetPerson(customerId);
-      consent.setTemplate(template);
-
+      consent.setTemplate(consentTemplate);
+      consent.setConsentRequestor(user);
       List<String> guardians = getCustomerGuardians(customerId, user);
       if (guardians == null) {
+        LOG.info("No guardians found for customer");
         return false;
       }
 
@@ -595,16 +600,12 @@ public class KksService {
   private List<String> getCustomerGuardians(String customer, String user) {
     List<String> names = new ArrayList<String>();
     try {
-      FamilyService service = new FamilyService(Constants.CUSTOMER_SERVICE_USER_ID,
-          Constants.CUSTOMER_SERVICE_PASSWORD, Constants.COMMUNITY_SERVICE_USER_ID,
-          Constants.COMMUNITY_SERVICE_PASSWORD);
-      List<CustomerType> tmp = service.getPersonsParents(customer, user, "KKS");
+      List<CustomerType> tmp = familyService.getPersonsParents(customer, user, "KKS");
       for (CustomerType ct : tmp) {
         names.add(ct.getHenkiloTunnus());
       }
-
     } catch (Exception e) {
-      // ignore
+      LOG.error("Failed to use familyservice", e);
     }
     return names;
   }
@@ -619,6 +620,7 @@ public class KksService {
       GivenTo gt = new GivenTo();
       gt.setPartyId(ou.getServiceArea());
       gt.setPartyName(ou.getName());
+      orgNames.add(gt);
     }
     return orgNames;
   }
@@ -628,4 +630,14 @@ public class KksService {
     return csf.getService();
   }
 
+  private AuthorizationInfoService getAuthorizationService() {
+    AuthorizationInfoService uis = new AuthorizationInfoServiceDummyImpl();
+    return uis;
+  }
+
+  private FamilyService getFamilyService() {
+    FamilyService service = new FamilyService(Constants.CUSTOMER_SERVICE_USER_ID, Constants.CUSTOMER_SERVICE_PASSWORD,
+        Constants.COMMUNITY_SERVICE_USER_ID, Constants.COMMUNITY_SERVICE_PASSWORD);
+    return service;
+  }
 }

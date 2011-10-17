@@ -48,6 +48,10 @@
 	     </spring:bind>
 		</spring:hasBindErrors>
 	</div>
+	<c:if test="${not empty message}">
+		<div class="kks-read-only-text"><spring:message code="${message}"></spring:message> 
+		</div>
+	</c:if>
 	<div class="kks-table">	
 
 		<table class="portlet-table-body" width="100%" border="0">
