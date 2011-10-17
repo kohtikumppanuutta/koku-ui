@@ -122,8 +122,9 @@ public class LogViewController {
         String[] errors = lu.checkInputParameters(criteria, LogConstants.LOG_ADMIN);
         model.addAttribute("error0", errors[0]);
         model.addAttribute("error1", errors[1]);
-
-        if (errors[0] == null && errors[1] == null) {
+        model.addAttribute("error3", errors[3]);
+        
+        if (errors[0] == null && errors[1] == null && errors[3] == null) {
 
           try {
             // make the query to the admin log

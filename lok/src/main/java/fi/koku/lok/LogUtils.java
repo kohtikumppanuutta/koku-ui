@@ -58,14 +58,14 @@ public class LogUtils {
   /**
    * Helper method that checks if the query parameters given by the user are
    * null. If parsing of the dates has not succeeded, the parsing method returns
-   * null.
+   * null. The method also checks that the given start date is not after the end date.
    * 
    * @param criteria
    * @param logtype
-   * @return
+   * @return error string array
    */
   public String[] checkInputParameters(LogSearchCriteria criteria, String logtype) {
-    String[] error = new String[3];
+    String[] error = new String[4];
 
     log.debug("hakuparametrit: " + criteria.getConcept() + "," + criteria.getFrom() + "," + criteria.getTo());
 
@@ -84,6 +84,16 @@ public class LogUtils {
       }
     }
 
+    // check that start date is before end date
+    if(criteria.getFrom()!=null && criteria.getTo()!=null){
+      Calendar from = dateToCalendar(criteria.getFrom());
+      Calendar to = dateToCalendar(criteria.getTo());
+      
+      if(to.before(from)){
+        error[3] = "koku.lok.error.start.after.end";
+      }
+    }
+    
     return error;
   }
 

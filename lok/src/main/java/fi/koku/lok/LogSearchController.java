@@ -124,8 +124,9 @@ public class LogSearchController {
         model.addAttribute("error0", errors[0]);
         model.addAttribute("error1", errors[1]);
         model.addAttribute("error2", errors[2]);
+        model.addAttribute("error3", errors[3]);
  
-        if(errors[0] == null && errors[1] == null && errors[2] == null){
+        if(errors[0] == null && errors[1] == null && errors[2] == null && errors[3] == null){
           
           try{
             // get the entries from the database

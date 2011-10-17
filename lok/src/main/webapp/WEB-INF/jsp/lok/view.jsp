@@ -128,6 +128,7 @@
 
 				<br />
 				<p>
+				 <div class="error">
 					<c:if test="${not empty error0}">
 						<spring:message code="${error0}" />
 						<br>
@@ -135,8 +136,13 @@
 
 					<c:if test="${not empty error1}">
 						<spring:message code="${error1}" />
+						<br>
 					</c:if>
-					
+					<c:if test="${not empty error3}">
+						<spring:message code="${error3}" />
+						<br>
+					</c:if>
+				</div>	
 					</c:otherwise>
 					</c:choose>
 			</c:when>

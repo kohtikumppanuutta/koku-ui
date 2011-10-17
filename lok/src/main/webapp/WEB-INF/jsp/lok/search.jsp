@@ -174,9 +174,13 @@ This should be changed! --%>
 					
 					<c:if test="${not empty error1}">	
 						<spring:message code="${error1}" />
-						</div>	
+						<br>
 					</c:if>
-					
+					<c:if test="${not empty error3}">	
+						<spring:message code="${error3}" />
+						<br>	
+					</c:if>
+		</div>	
 				</p>
 				</c:otherwise>
 	</c:choose>
