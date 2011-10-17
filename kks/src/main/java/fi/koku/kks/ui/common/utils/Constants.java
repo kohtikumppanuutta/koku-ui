@@ -18,7 +18,7 @@ public final class Constants {
   public static final String CUSTOMER_ENDPOINT = KoKuPropertiesUtil.get("customer.service.endpointaddress");
   public static final String COMMUNITY_ENDPOINT = KoKuPropertiesUtil.get("community.service.endpointaddress");
   public static final String TIVA_ENDPOINT = KoKuPropertiesUtil.get("tiva-kks.service.endpointaddress");
-  public static final String AUTH_ENDPOINT = KoKuPropertiesUtil.get("kks.authentication.service.endpointaddress");
+  public static final String AUTH_ENDPOINT = KoKuPropertiesUtil.get("authentication.service.endpointaddress");
 
   public static final String CUSTOMER_SERVICE_USER_ID = KoKuPropertiesUtil.get("kks.customer.service.user.id");
   public static final String CUSTOMER_SERVICE_PASSWORD = KoKuPropertiesUtil.get("kks.customer.service.password");

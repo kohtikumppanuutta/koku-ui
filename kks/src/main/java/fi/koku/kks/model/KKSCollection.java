@@ -7,8 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import fi.koku.services.entity.authorizationinfo.v1.model.Registry;
 import fi.koku.services.entity.kks.v1.KksCollectionClassType;
+import fi.koku.services.utility.authorizationinfo.v1.model.Registry;
 
 /**
  * Single collection

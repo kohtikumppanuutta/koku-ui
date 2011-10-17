@@ -1,10 +1,8 @@
 package fi.koku.kks.model;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,10 +17,6 @@ import fi.koku.calendar.CalendarUtil;
 import fi.koku.kks.ui.common.utils.CollectionComparator;
 import fi.koku.kks.ui.common.utils.Constants;
 import fi.koku.portlet.filter.userinfo.UserInfo;
-import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
-import fi.koku.services.entity.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
-import fi.koku.services.entity.authorizationinfo.v1.model.OrgUnit;
-import fi.koku.services.entity.authorizationinfo.v1.model.Registry;
 import fi.koku.services.entity.community.v1.CommunitiesType;
 import fi.koku.services.entity.community.v1.CommunityQueryCriteriaType;
 import fi.koku.services.entity.community.v1.CommunityServiceFactory;
@@ -60,6 +54,10 @@ import fi.koku.services.entity.tiva.v1.Consent;
 import fi.koku.services.entity.tiva.v1.ConsentTemplate;
 import fi.koku.services.entity.tiva.v1.GivenTo;
 import fi.koku.services.entity.tiva.v1.KokuTivaToKksService;
+import fi.koku.services.utility.authorizationinfo.v1.AuthorizationInfoService;
+import fi.koku.services.utility.authorizationinfo.v1.AuthorizationInfoServiceFactory;
+import fi.koku.services.utility.authorizationinfo.v1.model.OrgUnit;
+import fi.koku.services.utility.authorizationinfo.v1.model.Registry;
 import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
@@ -397,10 +395,7 @@ public class KksService {
       criteria.setCollectionId(collectionId);
       criteria.setCreator(user);
       criteria.setEntryClassId(entryClassId);
-      Calendar c = new GregorianCalendar();
-      c.setTime(new Date());
-      criteria.setModified(CalendarUtil.getXmlDateTime(c.getTime()));
-
+      criteria.setModified(CalendarUtil.getXmlDate(new Date()));
       return kksService.opAddEntry(criteria, getKksAuditInfo(user)).getId();
     } catch (ServiceFault e) {
       LOG.error("Failed to add KKS entry " + entryId, e);
@@ -612,14 +607,13 @@ public class KksService {
   }
 
   private List<GivenTo> getOrganizationNames(String user) {
-    AuthorizationInfoService uis = new AuthorizationInfoServiceDummyImpl();
-    List<OrgUnit> units = uis.getUsersOrgUnits("KKS", user);
+    List<OrgUnit> units = authorizationService.getUsersOrgUnits("KKS", user);
 
     List<GivenTo> orgNames = new ArrayList<GivenTo>();
 
     for (OrgUnit ou : units) {
       GivenTo gt = new GivenTo();
-      gt.setPartyId(ou.getServiceArea());
+      gt.setPartyId(ou.getId());
       gt.setPartyName(ou.getName());
       orgNames.add(gt);
     }
@@ -632,8 +626,10 @@ public class KksService {
   }
 
   private AuthorizationInfoService getAuthorizationService() {
-    AuthorizationInfoService uis = new AuthorizationInfoServiceDummyImpl();
-    return uis;
+    AuthorizationInfoServiceFactory f = new AuthorizationInfoServiceFactory(Constants.AUTH_SERVICE_USER_ID,
+        Constants.AUTH_SERVICE_PASSWORD, Constants.AUTH_ENDPOINT);
+    AuthorizationInfoService s = f.getAuthorizationInfoService();
+    return s;
   }
 
   private FamilyService getFamilyService() {
