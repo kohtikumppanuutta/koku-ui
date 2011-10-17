@@ -59,7 +59,7 @@ public class PyhDemoService {
   @Autowired
   private SimpleMailMessage templateMessage;
   
-  private boolean debug = true;
+  private boolean debug = false;
   
   public PyhDemoService() {
     
@@ -239,7 +239,7 @@ public class PyhDemoService {
     customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
     customerAuditInfoType.setUserId(userPic);
     
-    log.debug("userPIC="+userPic+", component="+PyhConstants.COMPONENT_PYH);
+    //log.debug("userPIC="+userPic+", component="+PyhConstants.COMPONENT_PYH);
     
     try {
       communitiesType = communityService.opQueryCommunities(communityQueryCriteria, communityAuditInfoType);
@@ -253,7 +253,7 @@ public class PyhDemoService {
       List<CommunityType> communities = communitiesType.getCommunity();
       Iterator<CommunityType> ci = communities.iterator();
       
-      log.info("PyhDemoService.getOtherFamilyMembers: opQueryCommunities returned " + communities.size() + " communities");
+      //log.info("PyhDemoService.getOtherFamilyMembers: opQueryCommunities returned " + communities.size() + " communities");
       
       while (ci.hasNext()) {
         CommunityType community = ci.next();
@@ -268,7 +268,7 @@ public class PyhDemoService {
             
             try {
               // FIXME: call to getCustomer outside the loop
-              log.info("getOtherFamilyMembers(): fetching user: " + member.getPic());
+              //log.info("getOtherFamilyMembers(): fetching user: " + member.getPic());
               customer = customerService.opGetCustomer(member.getPic(), customerAuditInfoType);
             } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
               log.error("PyhDemoService.getOtherFamilyMembers: opGetCustomer raised a ServiceFault", fault);
@@ -293,7 +293,7 @@ public class PyhDemoService {
     
     //return otherFamilyMembers;
     
-    log.info("PyhDemoService.getOtherFamilyMembers: familyId = " + familyId);
+    //log.info("PyhDemoService.getOtherFamilyMembers: familyId = " + familyId);
     
     FamilyIdAndFamilyMembers fidm = new FamilyIdAndFamilyMembers();
     fidm.setFamilyMembers(otherFamilyMembers);
@@ -548,8 +548,6 @@ public class PyhDemoService {
     } catch (ServiceFault fault) {
       log.error("PyhDemoService.removeFamilyMember: opGetCommunity raised a ServiceFault", fault);
     }
-    
-    // TODO 2: käyttäjän perhe pitää poistaa, jos jäljelle jää perheenjäsenen poistamisen jälkeen vain vanhempi.
     
     if (communitiesType != null) {
       List<CommunityType> communityType = communitiesType.getCommunity();
@@ -1225,13 +1223,6 @@ public class PyhDemoService {
         communityService.opDeleteCommunity(familyId, communityAuditInfoType);
         Log.getInstance().update(approverPic, "", "pyh.family.community", "Removing family " + familyId);
         
-        if (debug) {
-          log.info("acceptOrRejectMembershipRequest: calling opDeleteCommunity with familyId = " + familyId);
-        }
-      } else {
-        if (debug) {
-          log.info("acceptOrRejectMembershipRequest: familyId == null");
-        }
       }
       
     } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {

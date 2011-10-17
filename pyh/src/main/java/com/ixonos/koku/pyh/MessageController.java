@@ -24,7 +24,7 @@ public class MessageController {
   @Qualifier(value = "pyhDemoService")
   private PyhDemoService pyhDemoService;
   
-  private boolean debug = true;
+  private boolean debug = false;
   
   /**
    * Call service to accept a request.

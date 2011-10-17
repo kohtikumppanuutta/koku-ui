@@ -39,7 +39,7 @@ public class FamilyInformationController {
     UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
     if (userInfo != null) {
       userPic = userInfo.getPic();
-      log.info("Got PIC from session. userPic = " + userPic);
+      //log.info("Got PIC from session. userPic = " + userPic);
       
     } else {
       // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?

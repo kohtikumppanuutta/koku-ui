@@ -85,7 +85,7 @@ public class EditFamilyInformationController {
       communityId = pyhDemoService.addFamily(userPic); // create a family community for user if does not exist
     }
     
-    log.info("EditFamilyInformationController.render: put communityId in session: " + communityId);
+    //log.info("EditFamilyInformationController.render: put communityId in session: " + communityId);
     session.setAttribute("familyCommunityId", communityId);
     
     return "editfamilyinformation";
@@ -212,7 +212,7 @@ public class EditFamilyInformationController {
     
     // TODO: test if this works; get community id (family community where to add users)
     String communityId = (String) session.getAttribute("familyCommunityId");
-    log.info("EditFamilyInformationController.addUsersToFamily: get communityId from session: '" + communityId + "'");
+    //log.info("EditFamilyInformationController.addUsersToFamily: get communityId from session: '" + communityId + "'");
     
     HashMap<String, String> parameterMap = new HashMap<String, String>();
     HashMap<String, String> personMap = new HashMap<String, String>();

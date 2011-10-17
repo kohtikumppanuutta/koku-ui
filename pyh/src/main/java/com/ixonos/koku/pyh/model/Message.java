@@ -12,7 +12,7 @@ public class Message {
 
   private static Logger log = LoggerFactory.getLogger(Message.class);
   
-  boolean debug = true;
+  boolean debug = false;
   
   private String id;
   private String from;
