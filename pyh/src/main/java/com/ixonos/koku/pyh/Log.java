@@ -1,8 +1,6 @@
 package com.ixonos.koku.pyh;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +11,6 @@ import fi.koku.services.utility.log.v1.LogEntryType;
 import fi.koku.services.utility.log.v1.LogServiceFactory;
 import fi.koku.services.utility.log.v1.LogServicePortType;
 import fi.koku.services.utility.log.v1.ServiceFault;
-import fi.koku.settings.KoKuPropertiesUtil;
 
 public class Log {
 

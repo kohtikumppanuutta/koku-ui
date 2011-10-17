@@ -4,9 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0"
     xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
     
-
-
-   <portlet>
+    <portlet>
       <portlet-name>pyh</portlet-name>
       <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
       <supports>
@@ -19,43 +17,17 @@
           <title>pyh-portlet</title>
       </portlet-info>
 
-      <!-- <supported-public-render-parameter>viesti-id</supported-public-render-parameter>  -->
-
    </portlet>
    
-    
-    <!-- THIS IS EXTERNAL PORTLET FILTER FROM KOKU-UI/COMMON/userinfo-portlet-filter -project -->
     <filter>
 		<filter-name>userInfoFilter</filter-name>
 		<filter-class>fi.koku.portlet.filter.userinfo.UserInfoPortletFilter</filter-class>
 		<lifecycle>RENDER_PHASE</lifecycle>
 		<lifecycle>ACTION_PHASE</lifecycle>
-		<init-param>
-			<name>authImplClassName</name>
-			<value>fi.koku.portlet.filter.userinfo.service.impl.UserInfoServiceLocalDummyImpl</value>
-		</init-param>
 	</filter>
 	<filter-mapping>
 		<filter-name>userInfoFilter</filter-name>
 		<portlet-name>pyh</portlet-name>
 	</filter-mapping>
-   
-   
-   <!--  <public-render-parameter>
-     <identifier>viesti-id</identifier>
-     <qname xmlns:kk="http://kohtikumppanuutta.fi/prp">kk:viesti</qname>
-   </public-render-parameter>
-   
-   <filter>
-     <filter-name>MyFilter</filter-name>
-     <filter-class>fi.koku.pyh.ui.demo.MyFilter</filter-class>
-     <lifecycle>ACTION_PHASE</lifecycle>
-     <lifecycle>RENDER_PHASE</lifecycle>
-   </filter>
-   
-   <filter-mapping>
-     <filter-name>MyFilter</filter-name>
-     <portlet-name>pyh</portlet-name>
-   </filter-mapping>-->
-   
+    
 </portlet-app>
