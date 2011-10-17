@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import fi.koku.calendar.CalendarUtil;
 import fi.koku.kks.ui.common.DataType;
 import fi.koku.kks.ui.common.State;
 import fi.koku.services.entity.kks.v1.EntryValuesType;
@@ -35,7 +36,7 @@ public final class KksConverter {
   public KKSCollection fromWsType(KksCollectionType collection, String user) {
 
     KKSCollection tmp = new KKSCollection(collection.getId(), collection.getName(), collection.getDescription(),
-        fromWsType(collection.getStatus()), collection.getCreated().getTime(), collection.getVersion().intValue(),
+        fromWsType(collection.getStatus()), CalendarUtil.getDate(collection.getCreated()), collection.getVersion().intValue(),
         kksService.getCollectionClassType(collection.getCollectionClassId(), user));
 
     tmp.setModifier(collection.getCreator());
@@ -84,13 +85,13 @@ public final class KksConverter {
     Calendar cal = new GregorianCalendar();
     cal.setTime(new Date());
 
-    tmp.setModified(cal);
+    tmp.setModified(CalendarUtil.getXmlDateTime(cal.getTime()));
 
     KksEntriesType entriesType = toEntriesWsType(collection, customer, empty, user, cal);
 
     Calendar c = new GregorianCalendar();
     c.setTime(collection.getCreationTime());
-    tmp.setCreated(c);
+    tmp.setCreated(CalendarUtil.getXmlDateTime(c.getTime()));
     tmp.setKksEntries(entriesType);
     tmp.setNewVersion(createVersion);
     tmp.setVersion(new BigInteger("" + collection.getVersion()));
@@ -109,7 +110,7 @@ public final class KksConverter {
         kksEntryType.setCreator(entry.getRecorder());
         kksEntryType.setCustomerId(customer);
         kksEntryType.setEntryClassId(entry.getType().getId());
-        kksEntryType.setModified(cal);
+        kksEntryType.setModified(CalendarUtil.getXmlDateTime(cal.getTime()));
         kksEntryType.setVersion(new BigInteger(entry.getVersion()));
 
         EntryValuesType values = toValuesWsType(user, cal, entry);
@@ -144,7 +145,7 @@ public final class KksConverter {
 
       if (!entry.getType().isMultiValue()) {
         // multivalue updates have own modifier handling
-        value.setModified(cal);
+        value.setModified(CalendarUtil.getXmlDateTime(cal.getTime()));
         value.setModifier(user);
       }
       values.getEntryValue().add(value);
@@ -168,13 +169,13 @@ public final class KksConverter {
     String valId = val == null ? "" : val.getId();
     String value = val == null ? "" : val.getValue();
 
-    Entry e = new Entry(entry.getId(), entry.getModified().getTime(), entry.getVersion().toString(),
+    Entry e = new Entry(entry.getId(), CalendarUtil.getDate(entry.getModified()), entry.getVersion().toString(),
         entry.getCreator(), metaEntry);
 
     EntryValue entryValue = new EntryValue();
     entryValue.setId(valId);
     entryValue.setValue(value);
-    entryValue.setModified(val.getModified().getTime());
+    entryValue.setModified(CalendarUtil.getDate(val.getModified()));
     entryValue.setModifier(val.getModifier());
 
     if (metaEntry.getDataType().equals(DataType.MULTI_SELECT.toString())) {
@@ -194,7 +195,7 @@ public final class KksConverter {
 
   public Entry fromWsType(KksEntryType entry, List<KksEntryValueType> values, KksEntryClassType metaEntry) {
 
-    Entry e = new Entry(entry.getId(), entry.getModified().getTime(), entry.getVersion().toString(),
+    Entry e = new Entry(entry.getId(), CalendarUtil.getDate(entry.getModified()), entry.getVersion().toString(),
         entry.getCreator(), metaEntry);
 
     for (KksEntryValueType kev : values) {
@@ -215,7 +216,7 @@ public final class KksConverter {
       if (kev.getModified() == null) {
         entryValue.setModified(new Date());
       } else {
-        entryValue.setModified(kev.getModified().getTime());
+        entryValue.setModified(CalendarUtil.getDate(kev.getModified()));
       }
       entryValue.setModifier(kev.getModifier());
       e.addEntryValue(entryValue);

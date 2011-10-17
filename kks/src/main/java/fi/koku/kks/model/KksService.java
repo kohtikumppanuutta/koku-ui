@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import fi.koku.calendar.CalendarUtil;
 import fi.koku.kks.ui.common.utils.CollectionComparator;
 import fi.koku.kks.ui.common.utils.Constants;
 import fi.koku.portlet.filter.userinfo.UserInfo;
@@ -398,7 +399,7 @@ public class KksService {
       criteria.setEntryClassId(entryClassId);
       Calendar c = new GregorianCalendar();
       c.setTime(new Date());
-      criteria.setModified(c);
+      criteria.setModified(CalendarUtil.getXmlDateTime(c.getTime()));
 
       return kksService.opAddEntry(criteria, getKksAuditInfo(user)).getId();
     } catch (ServiceFault e) {
