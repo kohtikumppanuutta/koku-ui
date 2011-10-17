@@ -26,13 +26,15 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.KoKuFaultException;
 import fi.koku.calendar.CalendarUtil;
-import fi.koku.services.entity.authorizationinfo.util.AuthUtils;
-import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
-import fi.koku.services.entity.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
-import fi.koku.services.entity.authorizationinfo.v1.model.Role;
+import fi.koku.services.utility.authorizationinfo.util.AuthUtils;
+import fi.koku.services.utility.authorizationinfo.v1.AuthorizationInfoService;
+import fi.koku.services.utility.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
+import fi.koku.services.utility.authorizationinfo.v1.model.Role;
 import fi.koku.services.utility.log.v1.ArchivalResultsType;
 import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogArchivalParametersType;
+import fi.koku.services.utility.log.v1.LogEntriesType;
+import fi.koku.services.utility.log.v1.LogEntryType;
 import fi.koku.services.utility.log.v1.LogServiceFactory;
 import fi.koku.services.utility.log.v1.LogServicePortType;
 import fi.koku.services.utility.log.v1.ServiceFault;
@@ -243,20 +245,21 @@ public class LogArchiveController {
       log.debug(logarchivedate.getEndDate().toString());
     }
 
+    // get user pic and role
+    String userPic = LogUtils.getPicFromSession(session);
+
+    // call to log database
+    AuditInfoType audit = new AuditInfoType();
+    audit.setComponent(LogConstants.COMPONENT_LOK);
+    audit.setUserId(userPic);
+    
     try {
       LogArchivalParametersType archiveParametersType = new LogArchivalParametersType();
 
       if (logarchivedate != null && logarchivedate.getEndDate() != null) {
 
         archiveParametersType.setEndDate(CalendarUtil.getXmlDate(logarchivedate.getEndDate()));
-
-        // get user pic and role
-        String userPic = LogUtils.getPicFromSession(session);
-
-        // call to log database
-        AuditInfoType audit = new AuditInfoType();
-        audit.setComponent(LogConstants.COMPONENT_LOK);
-        audit.setUserId(userPic);
+       
 
         log.debug("log archive action phase: starting archiving");
 
@@ -273,22 +276,48 @@ public class LogArchiveController {
         response.setRenderParameter("error", "arkistointipvm puuttuu");
       }
 
-    }// TODO: lisää tähän catch sitä varten, että tulee virheet 2.1 tai 2.2
+    }
     catch (ServiceFault e) {
       log.error("startArchive fault: " + e.getFaultInfo().getCode());
 
       // Show the same error to the user no matter what the cause is
       response.setRenderParameter("error", "koku.lok.error.archive");
       log.debug("startArchivessa virhe: " + e.getMessage());
-      // }
-
+      
+      // write to admin log about the error
+      log.info("Write to admin log about the error in archiving");
+      writeErrorToAdminLog(audit);  
     }
-
+// If archive succeeds but write to admin log does not succeed, transaction is rolled back!
+    
     response.setRenderParameter("endDate", archiveSerializer.getAsText(logarchivedate));
     response.setRenderParameter("action", "startArchiveLog");
 
   }
+  
+  private void writeErrorToAdminLog(AuditInfoType audit){
+    AdminLogEntry adminLogEntry = new AdminLogEntry();
+    adminLogEntry.setTimestamp(Calendar.getInstance().getTime());
+    adminLogEntry.setUser(audit.getUserId());
+    adminLogEntry.setOperation("archive");
+    adminLogEntry.setMessage("error in archiving");
+    
 
+    LogEntriesType logEntriesType = new LogEntriesType();
+    LogEntryType logEntryType = lu.toWsFromAdminType(adminLogEntry);
+    
+    logEntriesType.getLogEntry().add(logEntryType);
+    
+    try{
+      //write to admin log
+     
+      logService.opLog(logEntriesType, audit);
+    }catch(ServiceFault f){
+      log.error("Error writing to admin log.");
+      
+    }
+  }
+    
   private static class ArchiveSerializer {
 
     private SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);

@@ -27,10 +27,10 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.calendar.CalendarUtil;
-import fi.koku.services.entity.authorizationinfo.util.AuthUtils;
-import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
-import fi.koku.services.entity.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
-import fi.koku.services.entity.authorizationinfo.v1.model.Role;
+import fi.koku.services.utility.authorizationinfo.util.AuthUtils;
+import fi.koku.services.utility.authorizationinfo.v1.AuthorizationInfoService;
+import fi.koku.services.utility.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
+import fi.koku.services.utility.authorizationinfo.v1.model.Role;
 import fi.koku.services.entity.person.v1.PersonService;
 import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;

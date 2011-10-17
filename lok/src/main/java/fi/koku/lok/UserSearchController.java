@@ -18,10 +18,10 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.lok.model.User;
-import fi.koku.services.entity.authorizationinfo.util.AuthUtils;
-import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
-import fi.koku.services.entity.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
-import fi.koku.services.entity.authorizationinfo.v1.model.Role;
+import fi.koku.services.utility.authorizationinfo.util.AuthUtils;
+import fi.koku.services.utility.authorizationinfo.v1.AuthorizationInfoService;
+import fi.koku.services.utility.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
+import fi.koku.services.utility.authorizationinfo.v1.model.Role;
 import fi.koku.services.entity.customer.v1.CustomerServiceFactory;
 import fi.koku.services.entity.customer.v1.CustomerServicePortType;
 import fi.koku.services.entity.customer.v1.CustomerType;

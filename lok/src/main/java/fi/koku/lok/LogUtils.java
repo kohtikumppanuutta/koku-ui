@@ -1,5 +1,6 @@
 package fi.koku.lok;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,10 +13,12 @@ import javax.portlet.PortletSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fi.koku.calendar.CalendarUtil;
 import fi.koku.portlet.filter.userinfo.UserInfo;
 import fi.koku.services.entity.person.v1.Person;
 import fi.koku.services.entity.person.v1.PersonConstants;
 import fi.koku.services.entity.person.v1.PersonService;
+import fi.koku.services.utility.log.v1.LogEntryType;
 
 public class LogUtils {
 
@@ -23,10 +26,9 @@ public class LogUtils {
   private static final Logger log = LoggerFactory.getLogger(LogUtils.class);
 
   private Calendar dateToCalendar(Date d) {
-    log.debug("dateToCalendar date = " + d.getTime());
     Calendar cal = Calendar.getInstance();
     cal.setTime(d);
-    log.debug("cal = " + cal.getTime());
+  
     return cal;
   }
 
@@ -38,15 +40,13 @@ public class LogUtils {
     today.set(Calendar.MINUTE, 0);
     today.set(Calendar.SECOND, 0);
     today.set(Calendar.MILLISECOND, 0);
-    log.debug("after set today: " + today.getTime());
 
     Calendar newDate = dateToCalendar(date);
-    log.debug("newdate: " + newDate.getTime());
+   
     newDate.set(Calendar.HOUR_OF_DAY, 0);
     newDate.set(Calendar.MINUTE, 0);
     newDate.set(Calendar.SECOND, 0);
     newDate.set(Calendar.MILLISECOND, 0);
-    log.debug("after set new date: " + newDate.getTime());
 
     if (newDate.before(today)) {
       return true;
@@ -67,7 +67,7 @@ public class LogUtils {
   public String[] checkInputParameters(LogSearchCriteria criteria, String logtype) {
     String[] error = new String[4];
 
-    log.debug("hakuparametrit: " + criteria.getConcept() + "," + criteria.getFrom() + "," + criteria.getTo());
+    log.debug("search parameters: " + criteria.getConcept() + "," + criteria.getFrom() + "," + criteria.getTo());
 
     if (criteria.getFrom() == null) {
       log.debug("from is null");
@@ -97,6 +97,20 @@ public class LogUtils {
     return error;
   }
 
+  public LogEntryType toWsFromAdminType(AdminLogEntry entry) {
+    
+    LogEntryType entryType = new LogEntryType();
+    entryType.setCustomerPic(entry.getCustomer());
+    entryType.setUserPic(entry.getUser());
+    entryType.setOperation(entry.getOperation());
+    entryType.setMessage(entry.getMessage());
+    entryType.setTimestamp(CalendarUtil.getXmlDateTime(entry.getTimestamp()));
+ 
+    // AdminLogEntry will be written to admin log, set the log type here
+    entryType.setClientSystemId(LogConstants.LOG_WRITER_LOG);
+    return entryType;
+  }
+  
   /**
    * The method returns a date X years from today.
    * 

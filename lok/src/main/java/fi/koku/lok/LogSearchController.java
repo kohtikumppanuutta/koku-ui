@@ -30,10 +30,10 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.calendar.CalendarUtil;
-import fi.koku.services.entity.authorizationinfo.util.AuthUtils;
-import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
-import fi.koku.services.entity.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
-import fi.koku.services.entity.authorizationinfo.v1.model.Role;
+import fi.koku.services.utility.authorizationinfo.util.AuthUtils;
+import fi.koku.services.utility.authorizationinfo.v1.AuthorizationInfoService;
+import fi.koku.services.utility.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
+import fi.koku.services.utility.authorizationinfo.v1.model.Role;
 import fi.koku.services.entity.person.v1.PersonService;
 import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;
@@ -184,7 +184,7 @@ public class LogSearchController {
   private List<LogEntry> getLogEntries(LogSearchCriteria searchCriteria, String userPic) throws ServiceFault{
     List<LogEntry> entryList = new ArrayList<LogEntry>();
 
-  //  try {
+
       LogQueryCriteriaType criteriatype = new LogQueryCriteriaType();
 
       // set the criteria

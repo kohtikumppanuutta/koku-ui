@@ -22,7 +22,7 @@
     <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>portlet-common</artifactId>
-      <version>0.0.12</version>
+      <version>0.0.15</version>
     </dependency>
     
     <dependency>
@@ -35,12 +35,12 @@
     <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>authorizationinfoservice-api</artifactId>
-      <version>0.0.6</version>
+      <version>0.0.7</version>
     </dependency>
     <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>personservice-api</artifactId>
-      <version>0.0.3</version>
+      <version>0.0.6</version>
     </dependency>
   </dependencies>
 
