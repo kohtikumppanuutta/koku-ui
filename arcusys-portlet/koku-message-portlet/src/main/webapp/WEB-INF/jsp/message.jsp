@@ -673,6 +673,7 @@
 		                   "<spring:message code="consent.templateName"/>",
 		                   "<spring:message code="consent.status"/>",
 		                   "<spring:message code="consent.approvalStatus"/>",
+		                   "<spring:message code="consent.anotherPermitter"/>",
 		                   "<spring:message code="consent.createType"/>",
 		                   "<spring:message code="consent.givenDate"/>",
 		                   "<spring:message code="consent.validDate"/>"
@@ -682,10 +683,22 @@
 		                 "templateName",
 		                 "status",
 		                 "approvalStatus",
+		                 "anotherPermitter",
 		                 "createType",
 		                 "assignedDate",
 		                 "validDate"];
+		checkIfConsentHaveAnotherPermitter(tasks);
 		return createTable("showConsent", "createBrowseEmployeeOwnConsents", columnNames, columnIds, tasks);
+	}
+	
+	function checkIfConsentHaveAnotherPermitter(tasks) {
+		for (var i = 0; i < tasks.length; i++)  {
+			if (tasks[i]["anotherPermitterUid"] !== undefined || tasks[i]["anotherPermitterUid"] !== null) {
+				tasks[i]["anotherPermitter"] = 'Kyllä'; 				
+			} else {
+				tasks[i]["anotherPermitter"] = 'Ei';
+			}
+		}
 	}
 	
 	
