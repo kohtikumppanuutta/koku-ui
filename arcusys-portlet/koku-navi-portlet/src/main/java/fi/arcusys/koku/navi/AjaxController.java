@@ -169,8 +169,12 @@ public class AjaxController extends AbstractController {
 	 * @return number or requests
 	 */
 	private int getTotalRequests(String username, String token) {
-		TaskHandle handle = new TaskHandle(token, username);
-		return handle.getRequestsTasksTotalNumber();
+		if (username != null || !username.isEmpty() || token != null || !token.isEmpty()) {
+			TaskHandle handle = new TaskHandle(token, username);
+			return handle.getRequestsTasksTotalNumber();			
+		} else {
+			return 0;
+		}
 	}
 	
 	/**
