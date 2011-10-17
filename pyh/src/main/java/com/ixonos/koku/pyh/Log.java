@@ -7,6 +7,7 @@ import java.util.GregorianCalendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fi.koku.calendar.CalendarUtil;
 import fi.koku.services.utility.log.v1.LogEntriesType;
 import fi.koku.services.utility.log.v1.LogEntryType;
 import fi.koku.services.utility.log.v1.LogServiceFactory;
@@ -74,7 +75,7 @@ public class Log {
       logEntryType.setDataItemType(dataType);
       logEntryType.setMessage(message);
       logEntryType.setOperation(operation);
-      logEntryType.setTimestamp(Calendar.getInstance());
+      logEntryType.setTimestamp(CalendarUtil.getXmlDateTime(new Date()));
       logEntryType.setUserPic(userId);
       
       LogEntriesType entries = new LogEntriesType();
