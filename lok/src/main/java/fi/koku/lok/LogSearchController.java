@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.koku.calendar.CalendarUtil;
 import fi.koku.services.entity.authorizationinfo.util.AuthUtils;
 import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
 import fi.koku.services.entity.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
@@ -190,13 +191,9 @@ public class LogSearchController {
       criteriatype.setCustomerPic(searchCriteria.getPic());
    
       // The from and to fields are not allowed to be null
-      Calendar start = lu.dateToCalendar(searchCriteria.getFrom());
-      Calendar end = lu.dateToCalendar(searchCriteria.getTo());
-
-      log.debug("parsitut päivämäärät: " + start + "\n" + end + "\n");
       // these have been null-checked earlier
-      criteriatype.setStartTime(start);
-      criteriatype.setEndTime(end);
+      criteriatype.setStartTime(CalendarUtil.getXmlDateTime(searchCriteria.getFrom()));
+      criteriatype.setEndTime(CalendarUtil.getXmlDateTime(searchCriteria.getTo()));
 
       // data item type: kks.vasu, kks.4v, family/community info, consent, ...
       criteriatype.setDataItemType(searchCriteria.getConcept());
@@ -236,7 +233,7 @@ public class LogSearchController {
         logEntry.setLogId(logEntryType.getDataItemId());
         // other info about the log entry
         logEntry.setMessage(logEntryType.getMessage());
-        logEntry.setTimestamp(logEntryType.getTimestamp().getTime());
+        logEntry.setTimestamp(CalendarUtil.getDate(logEntryType.getTimestamp()));
         logEntry.setUser(logEntryType.getUserPic());
 
         entryList.add(logEntry);

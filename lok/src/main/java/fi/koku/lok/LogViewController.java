@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.koku.calendar.CalendarUtil;
 import fi.koku.services.entity.authorizationinfo.util.AuthUtils;
 import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
 import fi.koku.services.entity.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
@@ -219,23 +220,10 @@ public class LogViewController {
     LogQueryCriteriaType criteriatype = new LogQueryCriteriaType();
 
     // the user does not have to give the dates so these might be null
-    Calendar start = Calendar.getInstance();
-    if (criteria.getFrom() == null) {
-      start = null;
-    } else {
-      start.setTime(criteria.getFrom());
-    }
-    Calendar end = Calendar.getInstance();
-    if (criteria.getTo() == null) {
-      end = null;
-    } else {
-      end.setTime(criteria.getTo());
-    }
-
     // assume that also null arguments are ok!! TODO: ota huomioon
     // kantakyselyissä Vai onko pakolliset?
-    criteriatype.setStartTime(start);
-    criteriatype.setEndTime(end);
+    criteriatype.setStartTime(CalendarUtil.getXmlDateTime(criteria.getFrom()));
+    criteriatype.setEndTime(CalendarUtil.getXmlDateTime(criteria.getTo()));
     criteriatype.setLogType(LogConstants.LOG_ADMIN);
 
     // Set the user information
@@ -260,11 +248,11 @@ public class LogViewController {
         AdminLogEntry logEntry = new AdminLogEntry();
         LogEntryType logEntryType = (LogEntryType) i.next();
 
-        log.debug("got from service timestamp: " + logEntryType.getTimestamp().get(Calendar.HOUR_OF_DAY) + ":"
-            + logEntryType.getTimestamp().get(Calendar.MINUTE) + ":" + logEntryType.getTimestamp().get(Calendar.SECOND));
+        //log.debug("got from service timestamp: " + logEntryType.getTimestamp().get(Calendar.HOUR_OF_DAY) + ":"
+        //    + logEntryType.getTimestamp().get(Calendar.MINUTE) + ":" + logEntryType.getTimestamp().get(Calendar.SECOND));
         // put values that were read from the database in logEntry for showing
         // them to the user
-        logEntry.setTimestamp(logEntryType.getTimestamp().getTime());
+        logEntry.setTimestamp(CalendarUtil.getDate(logEntryType.getTimestamp()));
         logEntry.setUser(logEntryType.getUserPic());
         logEntry.setOperation(logEntryType.getOperation()); // read, write, ..
 

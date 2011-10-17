@@ -25,6 +25,7 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.KoKuFaultException;
+import fi.koku.calendar.CalendarUtil;
 import fi.koku.services.entity.authorizationinfo.util.AuthUtils;
 import fi.koku.services.entity.authorizationinfo.v1.AuthorizationInfoService;
 import fi.koku.services.entity.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
@@ -247,7 +248,7 @@ public class LogArchiveController {
 
       if (logarchivedate != null && logarchivedate.getEndDate() != null) {
 
-        archiveParametersType.setEndDate(lu.dateToCalendar(logarchivedate.getEndDate()));
+        archiveParametersType.setEndDate(CalendarUtil.getXmlDate(logarchivedate.getEndDate()));
 
         // get user pic and role
         String userPic = LogUtils.getPicFromSession(session);

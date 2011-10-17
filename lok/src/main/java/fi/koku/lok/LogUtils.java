@@ -22,7 +22,7 @@ public class LogUtils {
   SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
   private static final Logger log = LoggerFactory.getLogger(LogUtils.class);
 
-  public Calendar dateToCalendar(Date d) {
+  private Calendar dateToCalendar(Date d) {
     log.debug("dateToCalendar date = " + d.getTime());
     Calendar cal = Calendar.getInstance();
     cal.setTime(d);
