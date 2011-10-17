@@ -49,10 +49,6 @@ public class Person {
     return customer.getSyntymaPvm().toString();
   }
   
-  public Calendar getBirthdaycalendar() {
-    return customer.getSyntymaPvm();
-  }
-  
   public String getEcontactinfo() {
     String electronicContactInfo = "";
     ElectronicContactInfosType contactInfoType = customer.getElectronicContactInfos();
