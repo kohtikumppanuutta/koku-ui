@@ -164,7 +164,7 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 		kokuSummary.setRecieverName(userService.getKunpoNameByUserUid(kokuSummary.getReceiverUid()));
 		kokuSummary.setSenderName(userService.getKunpoNameByUserUid(kokuSummary.getSenderUid()));
 		kokuSummary.setLocalizedStatus(getLocalizedAuthStatus(kokuSummary.getStatus()));
-		kokuSummary.setTargetPersonName(userService.getUserUidByKunpoName(kokuSummary.getTargetPersonUid()));
+		kokuSummary.setTargetPersonName(userService.getKunpoNameByUserUid(kokuSummary.getTargetPersonUid()));
 	}
 
 	public List<KokuValtakirjapohja> searchAuthorizationTemplates(String searchString, int limit) {

@@ -58,9 +58,9 @@ public class KokuCitizenWarrantHandle extends AbstractWarrantHandle {
 			summary.setLocalizedType(getLocalizedWarrantCreateType(summary.getType()));
 		}
 		if (summary.getSenderUid() != null && summary.getReceiverUid() != null) {
-			summary.setSenderName(userService.getUserUidByKunpoName(summary.getSenderUid()));
-			summary.setRecieverName(userService.getUserUidByKunpoName(summary.getReceiverUid()));
-			summary.setTargetPersonName(userService.getUserUidByKunpoName(summary.getTargetPersonUid()));
+			summary.setSenderName(userService.getKunpoNameByUserUid(summary.getSenderUid()));
+			summary.setRecieverName(userService.getKunpoNameByUserUid(summary.getReceiverUid()));
+			summary.setTargetPersonName(userService.getKunpoNameByUserUid(summary.getTargetPersonUid()));
 		}
 		return summary;
 	}
