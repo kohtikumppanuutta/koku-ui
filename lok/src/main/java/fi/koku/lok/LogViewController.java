@@ -64,12 +64,9 @@ public class LogViewController {
   LogUtils lu = new LogUtils();
 
   public LogViewController() {
-    LogServiceFactory logServiceFactory = new LogServiceFactory(LogConstants.LOG_SERVICE_USER_ID,
-        LogConstants.LOG_SERVICE_PASSWORD, LogConstants.LOG_SERVICE_ENDPOINT);
-    logService = logServiceFactory.getLogService();
-    log.debug("Got logService!");
-
-    authorizationInfoService = new AuthorizationInfoServiceDummyImpl();
+    ServiceFactory f = new ServiceFactory();
+    logService = f.getLogservice();
+    authorizationInfoService = f.getAuthorizationInfoService();
     personService = new PersonService();
   }
 

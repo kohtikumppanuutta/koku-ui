@@ -23,18 +23,14 @@
 		<filter-name>userInfoFilter</filter-name>
 		<filter-class>fi.koku.portlet.filter.userinfo.UserInfoPortletFilter</filter-class>
 		<lifecycle>RENDER_PHASE</lifecycle>
-<!-- 		<init-param>
-			<name>authImplClassName</name>
-			<value>fi.koku.portlet.filter.userinfo.service.impl.UserInfoServiceLocalDummyImpl</value>
-		</init-param>
-     -->
+        <lifecycle>ACTION_PHASE</lifecycle>
 	</filter>
 	<filter-mapping>
 		<filter-name>userInfoFilter</filter-name>
 		<portlet-name>lok</portlet-name>
 	</filter-mapping>
 
-
+  
   <container-runtime-option>
     <name>javax.portlet.renderHeaders</name>
     <value>true</value>

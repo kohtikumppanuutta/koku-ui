@@ -50,13 +50,9 @@ public class UserSearchController {
   private AuthorizationInfoService authorizationInfoService;
   
   public UserSearchController() {
-    CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory(
-        LogConstants.CUSTOMER_SERVICE_USER_ID, 
-		LogConstants.CUSTOMER_SERVICE_PASSWORD,
-        LogConstants.CUSTOMER_SERVICE_ENDPOINT);
-    customerService = customerServiceFactory.getCustomerService();
-    
-    authorizationInfoService = new AuthorizationInfoServiceDummyImpl();
+    ServiceFactory f = new ServiceFactory();
+    authorizationInfoService = f.getAuthorizationInfoService();
+    customerService = f.getCustomerService();
   }
  
  
