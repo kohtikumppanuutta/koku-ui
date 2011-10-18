@@ -58,7 +58,6 @@ import fi.koku.services.utility.authorizationinfo.v1.AuthorizationInfoService;
 import fi.koku.services.utility.authorizationinfo.v1.AuthorizationInfoServiceFactory;
 import fi.koku.services.utility.authorizationinfo.v1.model.OrgUnit;
 import fi.koku.services.utility.authorizationinfo.v1.model.Registry;
-import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
  * Service demoa varten
@@ -80,6 +79,7 @@ public class KksService {
   private FamilyService familyService;
   private KokuTivaToKksService tivaService;
   private AuthorizationInfoService authorizationService;
+  private PersonService personService;
 
   public KksService() {
     entryClasses = new HashMap<String, KksEntryClassType>();
@@ -91,6 +91,7 @@ public class KksService {
     familyService = getFamilyService();
     authorizationService = getAuthorizationService();
     tivaService = getTivaService();
+    personService = new PersonService();
   }
 
   public fi.koku.services.entity.customer.v1.AuditInfoType getCustomerAuditInfo(String user) {
@@ -117,8 +118,11 @@ public class KksService {
   public Map<String, Registry> getAuthorizedRegistries(String user) {
     Map<String, Registry> tmp = new HashMap<String, Registry>();
     List<Registry> register = authorizationService.getUsersAuthorizedRegistries(user);
-    for (Registry r : register) {
-      tmp.put(r.getId(), r);
+
+    if (register != null) {
+      for (Registry r : register) {
+        tmp.put(r.getId(), r);
+      }
     }
     return tmp;
   }
@@ -215,11 +219,9 @@ public class KksService {
   }
 
   private List<fi.koku.services.entity.person.v1.Person> getPersonsFromService(String user, List<String> creators) {
-    PersonService ps = new PersonService();
-    String kunpo = KoKuPropertiesUtil.get("environment.portlet.server.name");
-    String domain = "kunpo".equals(kunpo) ? PersonConstants.PERSON_SERVICE_DOMAIN_CUSTOMER
-        : PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER;
-    return ps.getPersonsByPics(creators, domain, user, "KKS");
+    // currently only domain officer can give comments ad create collections
+    String domain = PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER;
+    return personService.getPersonsByPics(creators, domain, user, "KKS");
   }
 
   public KKSCollection getKksCollection(String collectionId, UserInfo info) {
@@ -611,11 +613,13 @@ public class KksService {
 
     List<GivenTo> orgNames = new ArrayList<GivenTo>();
 
-    for (OrgUnit ou : units) {
-      GivenTo gt = new GivenTo();
-      gt.setPartyId(ou.getId());
-      gt.setPartyName(ou.getName());
-      orgNames.add(gt);
+    if (units != null) {
+      for (OrgUnit ou : units) {
+        GivenTo gt = new GivenTo();
+        gt.setPartyId(ou.getId());
+        gt.setPartyName(ou.getName());
+        orgNames.add(gt);
+      }
     }
     return orgNames;
   }

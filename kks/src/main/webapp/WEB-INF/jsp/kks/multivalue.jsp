@@ -70,16 +70,16 @@
 				
 				</span>
 				<c:if test="${ not empty entry }">
-				    <span class="kks-right"> <a href="${removeMultivalue}"><spring:message code="ui.kks.remove" /> </a> </span>
+				    <span style="padding-left: 5px"> <a href="${removeMultivalue}">(<spring:message code="ui.kks.remove" />)</a> </span>
 				</c:if>
 				
 				<div class="portlet-form-field">
                 	<form:textarea maxlength="2000" path="value" class="portlet-form-input-field" title="${type.description }" />
             	</div>
 
-			<span class="kks-right"> 			
+			<span > 			
 			 <input type="submit" class="portlet-form-button"
-				value="<spring:message code="ui.kks.contract.save"/>"> <span class="kks-right" style="padding-left: 5px">
+				value="<spring:message code="ui.kks.contract.save"/>"> <span style="padding-left: 5px">
 					<a href="${homeUrl}"><spring:message code="ui.kks.cancel" /> </a>  </span> 
 			</span>
 

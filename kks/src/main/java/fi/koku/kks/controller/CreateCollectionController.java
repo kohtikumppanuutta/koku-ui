@@ -58,7 +58,7 @@ public class CreateCollectionController {
         version.setClear(false);
         response.setRenderParameter("action", "showCollection");
         response.setRenderParameter("pic", child.getPic());
-        response.setRenderParameter("collection", id);
+        response.setRenderParameter("collection", collection);
         sessionStatus.setComplete();
       }
     } else {

@@ -145,8 +145,9 @@ public class CollectionController {
   @ActionMapping(params = "action=addMultivalue")
   public void saveMultivalue(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "entryType") String entryType, @RequestParam(value = "collection") String collection,
-      @RequestParam(value = "entryId", required = false) String entry, @RequestParam(value = "valueId") String valueId,
-      EntryValue value, BindingResult bindingResult, ActionResponse response, SessionStatus sessionStatus) {
+      @RequestParam(value = "entryId", required = false) String entry,
+      @RequestParam(value = "valueId", required = false) String valueId, EntryValue value, BindingResult bindingResult,
+      ActionResponse response, SessionStatus sessionStatus) {
     LOG.info("save multivalue");
 
     String id = kksService.addKksEntry(collection, child.getPic(), entry, entryType, valueId, value.getValue(),
