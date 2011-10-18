@@ -12,10 +12,29 @@
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
+			<portlet-mode>edit</portlet-mode>			
 		</supports>
 		<resource-bundle>messages</resource-bundle>
 		<portlet-info>
 			<title>Message Navigation Portlet</title>
 		</portlet-info>
+		<portlet-preferences>
+				<preference>
+				<name>relativeAdresses</name>
+				<value>true</value>
+			</preference>
+            <preference>
+				<name>kssPath</name>
+				<value>/pyh</value>
+			</preference>
+			<preference>
+				<name>lokPath</name>
+				<value>/lok</value>
+			</preference>	
+			<preference>
+				<name>pyhPath</name>
+				<value>/pyh</value>
+			</preference>			
+		</portlet-preferences>		
 	</portlet>
 </portlet-app>

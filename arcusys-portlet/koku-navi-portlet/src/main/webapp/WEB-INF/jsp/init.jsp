@@ -6,3 +6,14 @@
 <%@ page import="fi.arcusys.koku.util.Constants" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %> 
 <portlet:defineObjects />
+
+
+<%
+
+	PortletPreferences preferences = renderRequest.getPreferences();
+	String useRelativePath = preferences.getValue(Constants.PREF_NAVI_RELATIVE_PATH, "false");
+	String kksPref = preferences.getValue(Constants.PREF_NAVI_KKS, "Unknown");
+	String lokPref = preferences.getValue(Constants.PREF_NAVI_LOK, "Unknown");
+	String pyhPref = preferences.getValue(Constants.PREF_NAVI_PYH, "Unknown");
+
+%>

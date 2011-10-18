@@ -225,17 +225,25 @@
 	</a>
 	<ul class="main">
 		
+<%
+	if (useRelativePath.equals(Boolean.TRUE.toString())) {
+		kksPref = defaultPath + kksPref;
+		lokPref = defaultPath + lokPref;
+		pyhPref = defaultPath + pyhPref;
+	}
+%>		
+		
 		<!--  VIESTIT -->
 		<li><a href="javascript:void(0)" >Etusivu</a></li>
 		<!-- For citizen in Gatein portal-->
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
-		<li id="kks"><a href="<%= defaultPath %>/KKS">Sopimukset ja suunnitelmat</a>
-		<li id="pyh"><a href="<%= defaultPath %>/PYH">Omat tiedot</a></li>
+		<li id="kks"><a href="<%= kksPref %>">Sopimukset ja suunnitelmat</a>
+		<li id="pyh"><a href="<%= pyhPref %>">Omat tiedot</a></li>
 		</c:if>
 		<!-- For employee in Jboss portal -->
 		<c:if test="${fn:contains(naviURL, '/default/')}">
-		<li id="kks"><a href="<%= defaultPath %>/KKS">Sopimukset ja suunnitelmat</a>
-		<li id="lok"><a href="<%= defaultPath %>/LOK">Lokihallinta</a></li>
+		<li id="kks"><a href="<%= kksPref %>">Sopimukset ja suunnitelmat</a>
+		<li id="lok"><a href="<%= lokPref %>">Lokihallinta</a></li>
 		</c:if>
 		
 		<li><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')" >Viestit</a>

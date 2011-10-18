@@ -75,3 +75,18 @@ li {
 
 /* used for Gatein mode selection View/Edit mode */
 .UIPopupCategory {z-index:2;}
+
+
+.naviEditValue {
+	padding-top: 3px;	
+}
+
+.naviEditValue textarea {
+	font-size: 12px;
+	width: 190px;	
+}
+
+.naviEditSubmit {
+	padding-top: 5px;
+	padding-bottom: 5px;	
+}
