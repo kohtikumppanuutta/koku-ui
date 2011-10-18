@@ -230,7 +230,7 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	private void localizeDetails(KokuInformationRequestDetail kokuSummary) {
 		localizeSummary(kokuSummary);
 		if (kokuSummary.getTargetPersonUid() != null) {
-			kokuSummary.setTargetPersonName(userService.getKunpoNameByUserUid(kokuSummary.getTargetPersonUid()));
+			kokuSummary.setTargetPersonName(userService.getLooraNameByUserUid(kokuSummary.getTargetPersonUid()));
 		}
 	}
 	
@@ -239,8 +239,8 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 			kokuSummary.setLocalizedStatus(getLocalizedInformationRequestSummary(kokuSummary.getStatus()));
 		}
 		if (kokuSummary.getSenderUid() != null && kokuSummary.getReceiverUid() != null) {
-			kokuSummary.setSenderName(userService.getKunpoNameByUserUid(kokuSummary.getSenderUid()));
-			kokuSummary.setRecieverName(userService.getKunpoNameByUserUid(kokuSummary.getReceiverUid()));
+			kokuSummary.setSenderName(userService.getLooraNameByUserUid(kokuSummary.getSenderUid()));
+			kokuSummary.setRecieverName(userService.getLooraNameByUserUid(kokuSummary.getReceiverUid()));
 		}
 	}
 	
