@@ -89,8 +89,6 @@ public class LogViewController {
   public String render(PortletSession session, RenderRequest req,
       @RequestParam(value = "visited", required = false) String visited,
       @ModelAttribute(value = "logSearchCriteria") LogSearchCriteria criteria,
-      //@RequestParam(value = "originalFrom", required = false) String origFrom,
-      //@RequestParam(value = "originalTo", required = false) String origTo, 
       RenderResponse res, Model model) {
 
     // get user pic and role
@@ -137,33 +135,14 @@ public class LogViewController {
             model.addAttribute("error", "koku.lok.error.viewlog");
           }
           model.addAttribute("searchParams", criteria);
-          log.debug("criteria: " + criteria.getFrom() + ", " + criteria.getTo());
+        
           model.addAttribute("visited", "---");
           model.addAttribute("logSearchCriteria", criteria);
-        } /*else {
-          // if a field could not have been formatted to a date, put here the
-          // original string
-          // to show the user
-
-  //        log.debug("origFrom: " + origFrom + ", from: " + criteria.getFrom());
-   //       log.debug("origTo: " + origTo + ", to: " + criteria.getTo());
-
- /*         if (criteria.getFrom() == null) {
-            model.addAttribute("startDate", origFrom);
-          } else {
-            model.addAttribute("startDate", criteria.getFrom());
-          }
-          if (criteria.getTo() == null) {
-            model.addAttribute("endDate", origTo);
-          } else {
-            model.addAttribute("endDate", criteria.getTo());
-          }
-        }*/
-        // model.addAttribute("logSearchCriteria", criteria);
+        } 
       }
 
     } else {
-      log.debug("criteria: null");
+      log.info("criteria: null");
     }
 
     return "view";
@@ -182,18 +161,9 @@ public class LogViewController {
 
    
     // If something goes wrong in serializing the criteria, the portlet must not
-    // die
-    // and the portlet must not query the log service
+    // die and the portlet must not query the log service
     try {
- /*     // save the from and to fields to show the user in case they cannot be
-      // formatted
-      if (criteria.getFrom() != null) {
-        response.setRenderParameter("originalFrom", criteria.getFrom().toString());
-      }
-      if (criteria.getTo() != null) {
-        response.setRenderParameter("originalTo", criteria.getTo().toString());
-      }
-   */
+ 
       response.setRenderParameter("logSearchCriteria", criteriaSerializer.getAsText(criteria));
 
     } catch (IllegalArgumentException e) {
@@ -212,13 +182,9 @@ public class LogViewController {
   private List<AdminLogEntry> getAdminLogEntries(LogSearchCriteria criteria, String userPic) throws ServiceFault {
     List<AdminLogEntry> entryList = new ArrayList<AdminLogEntry>();
 
-    // try {
-
     LogQueryCriteriaType criteriatype = new LogQueryCriteriaType();
 
-    // the user does not have to give the dates so these might be null
-    // assume that also null arguments are ok!! TODO: ota huomioon
-    // kantakyselyissä Vai onko pakolliset?
+    // Starttime and endtime cannot be null. Null check has been done earlier.
     criteriatype.setStartTime(CalendarUtil.getXmlDateTime(criteria.getFrom()));
     criteriatype.setEndTime(CalendarUtil.getXmlDateTime(criteria.getTo()));
     criteriatype.setLogType(LogConstants.LOG_ADMIN);
@@ -228,25 +194,19 @@ public class LogViewController {
     audit.setComponent(LogConstants.COMPONENT_LOK);
     audit.setUserId(userPic);
 
-    log.debug("criteriatype start: " + criteriatype.getStartTime() + "\n end: " + criteriatype.getEndTime());
-    if (criteriatype.getStartTime() == null || criteriatype.getEndTime() == null) {
-      log.debug("null-arvoja kriteriassa");
-    } else {
-
+ 
+    if (criteriatype.getStartTime() != null && criteriatype.getEndTime() != null) {
+    
       // call to lok service
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
 
       // get the log entries list from the database
       List<LogEntryType> entryTypeList = entriestype.getLogEntry();
 
-      log.debug("entryTypeList size: " + entryTypeList.size());
-
       for (Iterator<?> i = entryTypeList.iterator(); i.hasNext();) {
         AdminLogEntry logEntry = new AdminLogEntry();
         LogEntryType logEntryType = (LogEntryType) i.next();
 
-        //log.debug("got from service timestamp: " + logEntryType.getTimestamp().get(Calendar.HOUR_OF_DAY) + ":"
-        //    + logEntryType.getTimestamp().get(Calendar.MINUTE) + ":" + logEntryType.getTimestamp().get(Calendar.SECOND));
         // put values that were read from the database in logEntry for showing
         // them to the user
         logEntry.setTimestamp(CalendarUtil.getDate(logEntryType.getTimestamp()));
@@ -262,15 +222,8 @@ public class LogViewController {
 
         entryList.add(logEntry);
       }
-
-      // TODO: Parempi virheenkäsittely
-
     }
-    // } // TODO: Parempi virheenkäsittely
-    /*
-     * catch (ServiceFault e) { // TODO Auto-generated catch block
-     * e.printStackTrace(); }
-     */
+  
     return entryList;
   }
 
@@ -289,14 +242,5 @@ public class LogViewController {
       return text;
     }
 
-    /*
-     * public String[] getAsText(LogSearchCriteria c) { SimpleDateFormat df =
-     * new SimpleDateFormat(LogConstants.DATE_FORMAT); //
-     * log.debug(c.getFrom()+", "+df.format(c.getFrom())); String[] text = new
-     * String[] { c.getFrom() != null ? df.format(c.getFrom()) : "", c.getTo()
-     * != null ? df.format(c.getTo()) : "" };
-     * 
-     * return text; }
-     */
   }
 }

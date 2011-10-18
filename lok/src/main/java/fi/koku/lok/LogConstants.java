@@ -5,8 +5,6 @@ import java.util.Locale;
 import fi.koku.services.utility.authorizationinfo.v1.model.Role;
 import fi.koku.settings.KoKuPropertiesUtil;
 
-
-
 /**
  * Log constants.
  * 

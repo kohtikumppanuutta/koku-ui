@@ -1,6 +1,5 @@
 package fi.koku.lok;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,6 +19,12 @@ import fi.koku.services.entity.person.v1.PersonConstants;
 import fi.koku.services.entity.person.v1.PersonService;
 import fi.koku.services.utility.log.v1.LogEntryType;
 
+/**
+ * Helper class for LOK portlet controllers.
+ * 
+ * @author makinsu
+ *
+ */
 public class LogUtils {
 
   SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
@@ -35,7 +40,6 @@ public class LogUtils {
   public boolean isBeforeToday(Date date) {
 
     Calendar today = Calendar.getInstance();
-    log.debug("today: " + today.getTime());
     today.set(Calendar.HOUR_OF_DAY, 0);
     today.set(Calendar.MINUTE, 0);
     today.set(Calendar.SECOND, 0);
@@ -66,15 +70,11 @@ public class LogUtils {
    */
   public String[] checkInputParameters(LogSearchCriteria criteria, String logtype) {
     String[] error = new String[4];
-
-    log.debug("search parameters: " + criteria.getConcept() + "," + criteria.getFrom() + "," + criteria.getTo());
-
+    
     if (criteria.getFrom() == null) {
-      log.debug("from is null");
       error[0] = "koku.lok.search.null.from";
     }
     if (criteria.getTo() == null) {
-      log.debug("to is null");
       error[1] = "koku.lok.search.null.to";
     }
 
@@ -134,8 +134,6 @@ public class LogUtils {
 
     String dateStr = df.format(date);
 
-    log.debug("getDate: " + dateStr);
-
     return dateStr;
   }
 
@@ -193,10 +191,11 @@ public class LogUtils {
       picList.add(pic);
       log.debug("call to PersonService with pic " + pic);
       try {
+        // call the Person service
         list = personService.getPersonsByPics(picList, PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER, portletUserPic,
             LogConstants.COMPONENT_LOK);
       } catch (Exception e) {
-        log.debug("personservice threw an exception " + e.getMessage());
+        log.error("Person service threw an exception " + e.getMessage());
       }
 
       if (list == null || list.isEmpty() || list.get(0).getFname() == null) {
@@ -204,15 +203,13 @@ public class LogUtils {
         // no name was found so keep the original pic in the entry!
       } else {
         person = list.get(0);
-        log.debug("got person " + person.getFname() + " " + person.getSname());
         entry.setUser(person.getFname() + " " + person.getSname());
       }
     }
-
   }
 
   /**
-   * Helper method that changes the pic value in every entry to the user's name,
+   * Helper method that changes the pic value in every admin entry to the user's name,
    * read from PersonService.
    * 
    * @param entries
@@ -229,18 +226,23 @@ public class LogUtils {
       List<String> picList = new ArrayList<String>();
       pic = entry.getUser();
       picList.add(pic);
-      log.debug("call to PersonService with pic " + pic);
-      list = personService.getPersonsByPics(picList, PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER, portletUserPic,
+    
+      try{
+        // call the Person service
+        list = personService.getPersonsByPics(picList, PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER, portletUserPic,
           LogConstants.COMPONENT_LOK);
-      if (list == null || list.isEmpty() || list.get(0).getFname() == null ) {
+      }catch(Exception e){
+        log.error("Person service threw an exception " + e.getMessage());
+      }
+      
+        if (list == null || list.isEmpty() || list.get(0).getFname() == null ) {
         log.info("No name found in personservice for pic " + pic);
         // keep the original pic in the entry!
       } else {
         person = list.get(0);
-        log.debug("got person " + person.getFname() + " " + person.getSname());
         entry.setUser(person.getFname() + " " + person.getSname());
       }
     }
-
   }
+  
 }

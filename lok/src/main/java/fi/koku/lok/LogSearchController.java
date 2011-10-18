@@ -101,14 +101,13 @@ public class LogSearchController {
       model.addAttribute("allowedToView", true);
     }
     
-	if(visited == null){
-	   
-    // these are runtime constants, not given by the user!
-    String startDateStr = lu.getDateString(1);
-    String endDateStr = lu.getDateString(0);
-    model.addAttribute("startDate", startDateStr);
-    model.addAttribute("endDate", endDateStr);
-    log.debug("startDateStr = " + startDateStr + ", endDateStr = " + endDateStr);
+    if(visited == null){ // fill in the default values when the page is visited first time
+
+      // these are runtime constants, not given by the user!
+      String startDateStr = lu.getDateString(1);
+      String endDateStr = lu.getDateString(0);
+      model.addAttribute("startDate", startDateStr);
+      model.addAttribute("endDate", endDateStr);
     }
     
     if (criteria != null) {
@@ -137,15 +136,15 @@ public class LogSearchController {
          
           }catch(ServiceFault fault){
             model.addAttribute("error", "koku.lok.error.log");
+            log.info("virhe tapatumalokista haussa: "+fault.getFaultInfo().getCode());
           }catch(Exception e){
-            log.debug("Other exception: "+e.getMessage());
+            log.error("Other exception: "+e.getMessage());
           }
           
           model.addAttribute("searchParams", criteria);
           model.addAttribute("visited", "---");
         }
       } 
-	
 
       if (StringUtils.isNotBlank(criteria.getPic())) {
         model.addAttribute("logSearchCriteria", criteria);
@@ -172,7 +171,7 @@ public class LogSearchController {
   }
 
   /**
-   * Method for reading log entries
+   * Method for reading log entries from the Lok service
    * 
    * @param searchCriteria
    * @return
@@ -180,14 +179,13 @@ public class LogSearchController {
   private List<LogEntry> getLogEntries(LogSearchCriteria searchCriteria, String userPic) throws ServiceFault{
     List<LogEntry> entryList = new ArrayList<LogEntry>();
 
-
       LogQueryCriteriaType criteriatype = new LogQueryCriteriaType();
 
       // set the criteria
       criteriatype.setCustomerPic(searchCriteria.getPic());
    
-      // The from and to fields are not allowed to be null
-      // these have been null-checked earlier
+      // The From and To fields are not allowed to be null.
+      // These have been null-checked earlier.
       criteriatype.setStartTime(CalendarUtil.getXmlDateTime(searchCriteria.getFrom()));
       criteriatype.setEndTime(CalendarUtil.getXmlDateTime(searchCriteria.getTo()));
 
@@ -203,18 +201,15 @@ public class LogSearchController {
       
       // call to log service
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
-
     
       // the log entries list from the database
       List<LogEntryType> entryTypeList = entriestype.getLogEntry();
-
-      log.debug("entrytype list size: " + entryTypeList.size());
 
       for (Iterator<?> i = entryTypeList.iterator(); i.hasNext();) {
         LogEntry logEntry = new LogEntry();
         LogEntryType logEntryType = (LogEntryType) i.next();
 
-        // put values that were read from the database in logEntry for showing
+        // put the values that were read from the database in logEntry for showing
         // them to the user
 
         // kks, pyh, kunpo, ..
@@ -234,7 +229,6 @@ public class LogSearchController {
 
         entryList.add(logEntry);
       }
-
   
     return entryList;
   }
@@ -263,38 +257,6 @@ public class LogSearchController {
             c.getTo() != null ? df.format(c.getTo()) : "" };
       }
       return text;
-    }
-
-    // TODO: Is pic or some other parameter required for criteria?? Add error
-    // handling!
-    public LogSearchCriteria getFromRenderParameter(String[] text) {
-      SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
-      String pic = null, concept = null;
-      Date d1 = null, d2 = null;
-      try {
-        if (ArrayUtils.isNotEmpty(text)) {
-          if (StringUtils.isNotBlank(text[0])) {
-            pic = text[0]; // TODO: Add here some validation!!!
-          }
-
-          if (StringUtils.isNotBlank(text[1])) {
-            concept = text[1]; // TODO: What kind of input is accepted here?
-          }
-
-          if (StringUtils.isNotBlank(text[2])) {
-            d1 = df.parse(text[2]);
-          }
-
-          if (StringUtils.isNotBlank(text[3])) {
-            d2 = df.parse(text[3]);
-          }
-        }
-
-      } catch (ParseException e) {
-        throw new IllegalArgumentException("error parsing date string", e);
-      }
-
-      return new LogSearchCriteria(pic, concept, d1, d2);
     }
   }
 

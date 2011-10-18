@@ -1,10 +1,8 @@
 package fi.koku.lok;
 
 import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * 
@@ -32,13 +30,11 @@ public class LogEntry {
   }
 
   public Date getTimestamp() {
-  //  logger.debug("portlet get timestamp: "+timestamp);
     return timestamp;
   }
 
   // format for timestamp: yyyy-mm-dd
   public void setTimestamp(Date timestamp) {
-  //  logger.debug("portlet set timestamp: "+timestamp);
     this.timestamp = timestamp;
   }
 

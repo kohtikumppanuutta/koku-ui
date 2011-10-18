@@ -48,7 +48,6 @@ public class LogArchiveController {
 
   private static final Logger log = LoggerFactory.getLogger(LogArchiveController.class);
 
-  // Use log service
   private LogServicePortType logService;
 
   private AuthorizationInfoService authorizationInfoService;
@@ -90,20 +89,15 @@ public class LogArchiveController {
 
     List<Role> userRoles = authorizationInfoService.getUsersRoles(LogConstants.COMPONENT_LOK, userPic);
 
-    log.debug("render searchLog");
     // add a flag for allowing this user to see the operations on page
     // search.jsp
     if (AuthUtils.isOperationAllowed("AdminSystemLogFile", userRoles)) {
       model.addAttribute("allowedToView", true);
     }
 
-    if (change != null) {
-      log.debug("Painettiin nappia Vaihda päivämäärää");
-    }
     try {
 
       if (error == null) {
-        log.debug("logarchivedate: " + logarchivedate.getEndDate());
 
         if (visited != null || change != null) { // page has been visited
 
@@ -120,13 +114,11 @@ public class LogArchiveController {
             model.addAttribute("visited", "---");
           }
           model.addAttribute("endDate", archiveDateStr);
-          log.debug("modeliin lisätty endDate= " + archiveDateStr);
 
         } else {
-          log.debug("visited == null");
 
-          String defaultDateStr = lu.getDateString(2); // default is two years
-                                                       // ago TODO: make static
+          // default is two years ago
+          String defaultDateStr = lu.getDateString(2); 
           model.addAttribute("endDate", defaultDateStr);
         
           Calendar time = Calendar.getInstance();
@@ -140,7 +132,6 @@ public class LogArchiveController {
         if (logarchivedate != null) {
           model.addAttribute("logArchiveDate", logarchivedate);
         } else {
-          log.debug("logarchivedate == null");
           // set the default archive date 2 years ago
           String defaultDateStr = lu.getDateString(2); 
           model.addAttribute("endDate", defaultDateStr);
@@ -152,11 +143,7 @@ public class LogArchiveController {
 
     } catch (KoKuFaultException e) {
       log.error(e.getMessage(), e);
-      // TODO: Lisää virheidenkäsittely
-      // käyttäjälle näytetään virheviesti "koku.lok.archive.parsing.error"
-
     }
-
    
     return "archive";
   }
