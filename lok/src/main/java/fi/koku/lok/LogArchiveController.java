@@ -60,11 +60,9 @@ public class LogArchiveController {
   LogUtils lu = new LogUtils();
 
   public LogArchiveController() {
-    LogServiceFactory logServiceFactory = new LogServiceFactory(LogConstants.LOG_SERVICE_USER_ID,
-        LogConstants.LOG_SERVICE_PASSWORD, LogConstants.LOG_SERVICE_ENDPOINT);
-    logService = logServiceFactory.getLogService();
-
-    authorizationInfoService = new AuthorizationInfoServiceDummyImpl();
+    ServiceFactory f = new ServiceFactory();
+    logService = f.getLogservice();
+    authorizationInfoService = f.getAuthorizationInfoService();
   }
 
   // customize form data binding
