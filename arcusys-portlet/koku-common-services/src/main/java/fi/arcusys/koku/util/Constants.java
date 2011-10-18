@@ -92,6 +92,7 @@ public class Constants {
 	                                                                    	
 	/* Views */	                                                        	
 	public static final String VIEW_CONFIG									= "config";
+	public static final String VIEW_NAVI_CONFIG								= "naviconfig";
 	/* TaskManagerPortlet Views */                                          
 	public static final String VIEW_TASK_MANAGER						    = "taskmanager";	
 	public static final String VIEW_POPUP_FORM								= "popupform";
@@ -135,6 +136,12 @@ public class Constants {
 	public static final String PREF_OPEN_FORM 								= "openForm";
 	public static final String PREF_DEFAULT_TASK_TYPE 						= "defaultTaskType";
 	public static final String PREF_EDITABLE 								= "editable";
+	
+	public static final String PREF_NAVI_RELATIVE_PATH						= "naviRelativePath";
+	public static final String PREF_NAVI_KKS								= "preferencesPathKks";
+	public static final String PREF_NAVI_LOK								= "preferencesPathLok";
+	public static final String PREF_NAVI_PYH								= "preferencesPathPyh";
+	
 	                                                            	
 	/* PortletPreferences keys: MessagePortlet */               	
 	public static final String PREF_MESSAGE_TYPE 							= "messageType";
