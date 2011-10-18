@@ -30,6 +30,10 @@ public class LogConstants {
   public static final String LOG_SERVICE_USER_ID = KoKuPropertiesUtil.get("lok.service.user.id");
   public static final String LOG_SERVICE_PASSWORD = KoKuPropertiesUtil.get("lok.service.password");
   
+  public static final String AUTHORIZATION_INFO_SERVICE_ENDPOINT = "authorizationinfo.service.endpointaddress";
+  public static final String AUTHORIZATION_INFO_SERVICE_USER_ID = "lok.authorizationinfo.service.user.id";
+  public static final String AUTHORIZATION_INFO_SERVICE_PASSWORD = "lok.authorizationinfo.service.password";
+  
   public static Role ROLE_LOK_ADMIN = new Role("ROLE_LOK_ADMIN");
   public static Role ROLE_LOK_LOG_ADMIN = new Role("ROLE_LOK_LOG_ADMIN");
   
