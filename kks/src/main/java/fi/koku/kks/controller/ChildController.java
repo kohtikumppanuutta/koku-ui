@@ -54,7 +54,7 @@ public class ChildController {
   public String show(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "error", required = false) String error,
       @RequestParam(value = "message", required = false) String message, RenderResponse response, Model model) {
-    LOG.info("show child");
+    LOG.debug("show child");
 
     if (StringUtils.isEmpty(child.getFirstName())) {
       child = getChild(session, child.getPic());
@@ -101,7 +101,7 @@ public class ChildController {
 
   @RenderMapping(params = "action=showPegasos")
   public String showPegasos(@ModelAttribute(value = "child") Person child, RenderResponse response, Model model) {
-    LOG.info("show child");
+    LOG.debug("show child");
     model.addAttribute("child", child);
     return "pegasos";
   }

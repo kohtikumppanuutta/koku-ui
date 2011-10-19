@@ -45,7 +45,7 @@ public class MunicipalEmployeeController {
   public String show(PortletSession session, RenderResponse response,
       @RequestParam(value = "childs", required = false) String[] childs,
       @RequestParam(value = "search", required = false) String search, Model model) {
-    LOG.info("show employee");
+    LOG.debug("show employee");
     model.addAttribute("childs", toChilds(childs, Utils.getPicFromSession(session)));
 
     if (search != null) {

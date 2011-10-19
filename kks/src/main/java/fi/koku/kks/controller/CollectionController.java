@@ -51,7 +51,7 @@ public class CollectionController {
   public String show(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "collection") String collection,
       @RequestParam(value = "error", required = false) String error, RenderResponse response, Model model) {
-    LOG.info("show collection");
+    LOG.debug("show collection");
 
     KKSCollection c = kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
     boolean parent = kksService.isParent(Utils.getPicFromSession(session), child.getPic());
@@ -101,7 +101,7 @@ public class CollectionController {
       @RequestParam(required = false) String multiValueId, @RequestParam(required = false) String type,
       @RequestParam(value = "valueId", required = false) String valueId, ActionResponse response,
       SessionStatus sessionStatus) {
-    LOG.info("save collection");
+    LOG.debug("save collection");
 
     boolean success = kksService.updateKksCollection(entry, child.getPic(), Utils.getPicFromSession(session));
 
@@ -148,7 +148,7 @@ public class CollectionController {
       @RequestParam(value = "entryId", required = false) String entry,
       @RequestParam(value = "valueId", required = false) String valueId, EntryValue value, BindingResult bindingResult,
       ActionResponse response, SessionStatus sessionStatus) {
-    LOG.info("save multivalue");
+    LOG.debug("save multivalue");
 
     String id = kksService.addKksEntry(collection, child.getPic(), entry, entryType, valueId, value.getValue(),
         Utils.getPicFromSession(session));
@@ -169,7 +169,7 @@ public class CollectionController {
       @RequestParam(value = "collection") String collection, @RequestParam(value = "entryId") String entry,
       @RequestParam(value = "valueId") String valueId, EntryValue value, BindingResult bindingResult,
       ActionResponse response, SessionStatus sessionStatus) {
-    LOG.info("remove multivalue");
+    LOG.debug("remove multivalue");
     boolean success = kksService.removeKksEntry(collection, child.getPic(), entry, valueId, "",
         Utils.getPicFromSession(session));
 
@@ -186,7 +186,7 @@ public class CollectionController {
   @ActionMapping(params = "action=cancelMultivalue")
   public void cancelMultiValue(@ModelAttribute(value = "child") Person child,
       @RequestParam(value = "collection") String collection, ActionResponse response, SessionStatus sessionStatus) {
-    LOG.info("cancel multivalue");
+    LOG.debug("cancel multivalue");
 
     response.setRenderParameter("action", "showCollection");
     response.setRenderParameter("pic", child.getPic());

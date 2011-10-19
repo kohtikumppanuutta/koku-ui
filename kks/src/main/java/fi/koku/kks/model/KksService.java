@@ -58,9 +58,10 @@ import fi.koku.services.utility.authorizationinfo.v1.AuthorizationInfoService;
 import fi.koku.services.utility.authorizationinfo.v1.AuthorizationInfoServiceFactory;
 import fi.koku.services.utility.authorizationinfo.v1.model.OrgUnit;
 import fi.koku.services.utility.authorizationinfo.v1.model.Registry;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
- * Service demoa varten
+ * Handles the services that are needed for KKS
  * 
  * @author tuomape
  * 
@@ -566,6 +567,7 @@ public class KksService {
   public boolean sendConsentRequest(String consentType, String customerId, String user) {
 
     try {
+
       List<ConsentTemplate> templates = tivaService.queryConsentTemplates(consentType, 1);
 
       if (templates.size() == 0) {
@@ -585,7 +587,7 @@ public class KksService {
         return false;
       }
 
-      consent.getGivenTo().addAll(getOrganizationNames(user));
+      consent.getGivenTo().addAll(getConsentOrganizations(user, consentType));
       consent.getConsentProviders().addAll(guardians);
       tivaService.createConsent(consent);
     } catch (Exception e) {
@@ -608,16 +610,17 @@ public class KksService {
     return names;
   }
 
-  private List<GivenTo> getOrganizationNames(String user) {
-    List<OrgUnit> units = authorizationService.getUsersOrgUnits("KKS", user);
-
+  private List<GivenTo> getConsentOrganizations(String user, String concentType ) {
+    String consentOrganizations =  KoKuPropertiesUtil.get(concentType);
     List<GivenTo> orgNames = new ArrayList<GivenTo>();
-
-    if (units != null) {
-      for (OrgUnit ou : units) {
+    
+    if (consentOrganizations != null ) {
+      String orgs[] = consentOrganizations.split(";");  
+      for (String line : orgs ) {
+        String tmp[] = line.split(",");
         GivenTo gt = new GivenTo();
-        gt.setPartyId(ou.getId());
-        gt.setPartyName(ou.getName());
+        gt.setPartyId(tmp[0]);
+        gt.setPartyName(tmp[1]);
         orgNames.add(gt);
       }
     }

@@ -44,7 +44,7 @@ public class EntrySearchController {
   public String showResults(PortletSession session, @ModelAttribute(value = "child") Person child,
       @RequestParam(value = "description") String description,
       @RequestParam(value = "classification") String classification, RenderResponse response, Model model) {
-    LOG.info("show search result");
+    LOG.debug("show search result");
     String tmp[] = classification.replaceAll(" ", "").split(",");
     List<String> names = Arrays.asList(tmp);
     List<KKSCollection> collections = kksService.searchKksCollections(names, child.getPic(),
@@ -62,7 +62,7 @@ public class EntrySearchController {
   public void search(@ModelAttribute(value = "child") Person child,
       @RequestParam(value = "classification") String classification,
       @RequestParam(value = "description") String description, ActionResponse response, SessionStatus sessionStatus) {
-    LOG.info("search entries");
+    LOG.debug("search entries");
 
     response.setRenderParameter("action", "showSearchResult");
     response.setRenderParameter("pic", child.getPic());

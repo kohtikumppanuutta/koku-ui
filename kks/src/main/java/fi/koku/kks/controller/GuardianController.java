@@ -36,14 +36,14 @@ public class GuardianController {
 
   @RenderMapping(params = "action=showChildrens")
   public String showChilds(PortletSession session, RenderResponse response, Model model) {
-    LOG.info("showChildrens");
+    LOG.debug("showChildrens");
     model.addAttribute("childs", getChilds(session));
     return "childs";
   }
 
   @ModelAttribute("childs")
   public List<Person> getChilds(PortletSession session) {
-    LOG.info("getchilds");
+    LOG.debug("getchilds");
     return kksService.searchChilds(Utils.getPicFromSession(session));
   }
 
