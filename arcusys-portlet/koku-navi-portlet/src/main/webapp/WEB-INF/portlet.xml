@@ -23,18 +23,18 @@
 				<name>naviRelativePath</name>
 				<value>true</value>
 			</preference>
-            <preference>
-				<name>preferencesPathKks</name>
-				<value>/pyh</value>
-			</preference>
-			<preference>
-				<name>preferencesPathLok</name>
-				<value>/lok</value>
-			</preference>	
-			<preference>
-				<name>preferencesPathPyh</name>
-				<value>/pyh</value>
-			</preference>			
+	          <preference>
+					<name>preferencesPathKks</name>
+					<value>/KKS</value>
+				</preference>
+				<preference>
+					<name>preferencesPathLok</name>
+					<value>/LOK</value>
+				</preference>	
+				<preference>
+					<name>preferencesPathPyh</name>
+					<value>/PYH</value>
+				</preference>	
 		</portlet-preferences>		
 	</portlet>
 </portlet-app>

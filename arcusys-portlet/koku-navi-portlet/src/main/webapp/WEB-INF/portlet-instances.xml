@@ -11,15 +11,15 @@
 			</preference>
             <preference>
 				<name>preferencesPathKks</name>
-				<value>/pyh</value>
+				<value>/KKS</value>
 			</preference>
 			<preference>
 				<name>preferencesPathLok</name>
-				<value>/lok</value>
+				<value>/LOK</value>
 			</preference>	
 			<preference>
 				<name>preferencesPathPyh</name>
-				<value>/pyh</value>
+				<value>/PYH</value>
 			</preference>
 		</preferences>
       </instance>
