@@ -49,6 +49,11 @@
 <!--     	<property name="targetPath" value="http://intalio.intra.arcusys.fi:8080/gi" />    	 -->
     	<property name="targetPath" value="http://localhost:8080/gi" />
 			<property name="storeCookies" value="true" />
+	    <property name = "ignorePaths">
+	       <list>
+	           <value>/palvelut-portlet/ajaxforms/WsProxyServlet2</value>
+	       </list>
+	    </property>
     	<property name="replaceMap">
 			<map>
 			  <entry>

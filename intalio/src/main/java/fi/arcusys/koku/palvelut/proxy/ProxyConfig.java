@@ -2,8 +2,10 @@ package fi.arcusys.koku.palvelut.proxy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
@@ -28,6 +30,8 @@ public class ProxyConfig {
 	private List<String> filterContentTypes = new ArrayList<String>();
 	private Map<String, String> guessContentTypes = new HashMap<String, String>();
 	
+	private Set<String> ignorePaths = new HashSet<String>();
+	
 	private ProxyConfig() {
 	}
 	
@@ -36,6 +40,21 @@ public class ProxyConfig {
 		return new ProxyConfig();
 	}
 	
+    /**
+     * @return the ignorePaths
+     */
+    public boolean isIgnored(final String path) {
+        return ignorePaths.contains(path);
+    }
+
+    /**
+     * @param ignorePaths the ignorePaths to set
+     */
+    public void setIgnorePaths(List<String> ignorePaths) {
+        this.ignorePaths.clear();
+        this.ignorePaths.addAll(ignorePaths);
+    }
+
     public String getProxyFilterPath() {
 		log.debug("getProxyFilterPath(): " + proxyFilterPath);
 		return proxyFilterPath;

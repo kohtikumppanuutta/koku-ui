@@ -67,9 +67,16 @@ public class ProxyFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if (!(request instanceof HttpServletRequest) || !(response instanceof HttpServletResponse))
             return;
+        
         HttpServletRequest  req = (HttpServletRequest)request;
         HttpServletResponse res = (HttpServletResponse)response;
         
+        if (_proxyConfig.isIgnored(req.getRequestURI())) {
+            log.debug("Skip url: " + req.getRequestURI());
+            chain.doFilter(req, res);
+            return;
+        }
+            
         log.debug("FILTERING..............");
         log.debug("Request URL: "+new String(req.getRequestURL())+ " ___ " + req.getQueryString());
         
