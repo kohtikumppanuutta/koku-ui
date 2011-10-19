@@ -7,7 +7,7 @@
 		<application-name>lok-portlet-0.0.1-SNAPSHOT</application-name>
 		<portlet-name>lok</portlet-name>
 		<skin-name>Default</skin-name>
-		<css-path>/css/lok.CSS</css-path>
+		<css-path>/css/lok.css</css-path>
 	</portlet-skin>
 
 </gatein-resources>

@@ -2,8 +2,18 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
   version="2.5">
-  <display-name>lok</display-name>
-  
+  <display-name>lok-portlet-0.0.1-SNAPSHOT</display-name>  
+       
+<filter>
+    <filter-name>ResourceRequestFilter</filter-name>
+    <filter-class>org.exoplatform.portal.application.ResourceRequestFilter</filter-class>
+</filter>
+
+<filter-mapping>
+    <filter-name>ResourceRequestFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping> 
+
   <servlet>
     <servlet-name>view-servlet</servlet-name>
     <servlet-class>org.springframework.web.servlet.ViewRendererServlet</servlet-class>
