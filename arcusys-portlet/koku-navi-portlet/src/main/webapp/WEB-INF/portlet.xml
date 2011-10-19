@@ -20,19 +20,19 @@
 		</portlet-info>
 		<portlet-preferences>
 				<preference>
-				<name>relativeAdresses</name>
+				<name>naviRelativePath</name>
 				<value>true</value>
 			</preference>
             <preference>
-				<name>kssPath</name>
+				<name>preferencesPathKks</name>
 				<value>/pyh</value>
 			</preference>
 			<preference>
-				<name>lokPath</name>
+				<name>preferencesPathLok</name>
 				<value>/lok</value>
 			</preference>	
 			<preference>
-				<name>pyhPath</name>
+				<name>preferencesPathPyh</name>
 				<value>/pyh</value>
 			</preference>			
 		</portlet-preferences>		

@@ -7,7 +7,7 @@
 <div>
 	<c:if test="${fn:contains(configActionURL, '/default/')}">
 		<div class="naviEditDoNotEditHere">
-					<spring:message code="config.doNotEditHere" />
+			<spring:message code="config.doNotEditHere" />	
 		</div>
 	</c:if>
 
