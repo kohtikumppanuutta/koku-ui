@@ -5,7 +5,7 @@
     <portlet>
         <portlet-name>KKS</portlet-name>
         <header-content>
-            <link type="text/css" rel="stylesheet" href="/css/kks.CSS" />
+            <link type="text/css" rel="stylesheet" href="/css/kks.css" />
         </header-content>
     </portlet>
 </portlet-app>
