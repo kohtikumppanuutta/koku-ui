@@ -2,7 +2,6 @@ package fi.koku.lok;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -27,16 +26,14 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.calendar.CalendarUtil;
+import fi.koku.services.entity.person.v1.PersonService;
 import fi.koku.services.utility.authorizationinfo.util.AuthUtils;
 import fi.koku.services.utility.authorizationinfo.v1.AuthorizationInfoService;
-import fi.koku.services.utility.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
 import fi.koku.services.utility.authorizationinfo.v1.model.Role;
-import fi.koku.services.entity.person.v1.PersonService;
 import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;
 import fi.koku.services.utility.log.v1.LogEntryType;
 import fi.koku.services.utility.log.v1.LogQueryCriteriaType;
-import fi.koku.services.utility.log.v1.LogServiceFactory;
 import fi.koku.services.utility.log.v1.LogServicePortType;
 import fi.koku.services.utility.log.v1.ServiceFault;
 
@@ -55,7 +52,6 @@ public class LogViewController {
   // Use log service
   private LogServicePortType logService;
   private PersonService personService;
-
   private AuthorizationInfoService authorizationInfoService;
 
   private CriteriaSerializer criteriaSerializer = new CriteriaSerializer();
@@ -134,8 +130,7 @@ public class LogViewController {
           } catch (ServiceFault fault) { // error contacting the Log Service
             model.addAttribute("error", "koku.lok.error.viewlog");
           }
-          model.addAttribute("searchParams", criteria);
-        
+          model.addAttribute("searchParams", criteria);        
           model.addAttribute("visited", "---");
           model.addAttribute("logSearchCriteria", criteria);
         } 
@@ -158,12 +153,11 @@ public class LogViewController {
     }
 
     log.debug("action criteria = " + criteria);
-
    
     // If something goes wrong in serializing the criteria, the portlet must not
     // die and the portlet must not query the log service
     try {
- 
+
       response.setRenderParameter("logSearchCriteria", criteriaSerializer.getAsText(criteria));
 
     } catch (IllegalArgumentException e) {
@@ -173,6 +167,7 @@ public class LogViewController {
     response.setRenderParameter("action", "viewLog");
   }
 
+  
   /**
    * Method for reading log entries in the 'log of logs'
    * 

@@ -19,11 +19,14 @@
 
 		<c:choose>
 			<c:when test="${not empty requestScope.showMenu}">
-	
-		<a href="${searchUserURL}"><spring:message code="koku.lok.search"/></a>
-		<p>
-		
-		<a href="${archiveURL}"><spring:message code="koku.lok.archive"/></a>	
+
+				<a href="${searchUserURL}"><spring:message
+						code="koku.lok.search" />
+				</a>
+				<p>
+
+					<a href="${archiveURL}"><spring:message code="koku.lok.archive" />
+					</a>
 			</c:when>
 
 			<c:when test="${not empty requestScope.redirectToSearch}">
@@ -32,12 +35,11 @@
 				</script>
 
 			</c:when>
-			<%-- 	<a href="${searchLogViewsURL}"><spring:message code="koku.lok.view"/></a>  --%>	
+
 			<c:otherwise>
-			<spring:message code="ui.lok.no.user.rights" />
+				<spring:message code="ui.lok.no.user.rights" />
 			</c:otherwise>
-		</c:choose>
-<p>
+		</c:choose><p>
 		
 	<div style="clear: both"></div>
 

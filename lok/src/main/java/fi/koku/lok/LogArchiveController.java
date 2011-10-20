@@ -137,7 +137,7 @@ public class LogArchiveController {
           model.addAttribute("endDate", defaultDateStr);
         }
       }
-      log.debug("error = " + error);
+      log.error("error = " + error);
 
       model.addAttribute("error", error);
 
@@ -153,12 +153,6 @@ public class LogArchiveController {
   public void doArchive(@ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate, BindingResult result,
       @RequestParam(value = "visited") String visited, @RequestParam(value = "change", required = false) String change,
       ActionResponse response) {
-
-    log.debug("action archiveLog, visited: " + visited);
-
-    String archivedate = archiveSerializer.getAsText(logarchivedate);
-    log.debug("logarchivedate: " + logarchivedate);
-    log.debug("archivedate: " + archivedate);
 
     response.setRenderParameter("visited", visited);
 
@@ -194,24 +188,17 @@ public class LogArchiveController {
       model.addAttribute("allowedToView", true);
     }
 
-    log.debug("startArchiveLog render phase: archiving started");
-
-    if (logarchivedate != null) {
-      log.debug("archive end date: " + logarchivedate.getEndDate());
-    } else {
-      log.debug("action: logarchivedate == null!");
-    }
-
-    log.debug("error = " + error);
+    log.info("started archiving");
+ 
     if (error != null) {
-
-      model.addAttribute("error", error); // TODO: voisi olla virhekoodi tms.
-      log.debug("logarchivedate: " + logarchivedate.getEndDate());
+      log.error("error = " + error);
+      model.addAttribute("error", error); 
 
       return "archive";
     }
-    log.debug("sivulle archive2");
-
+  
+    log.info("archiving succeeded");
+    
     return "archive2";
   }
 
@@ -219,14 +206,6 @@ public class LogArchiveController {
   public void startArchive(PortletSession session,
       @ModelAttribute(value = "logArchiveDate") LogArchiveDate logarchivedate, BindingResult result,
       ActionResponse response) {
-
-    log.debug("painettiin nappia Käynnistä arkistointi");
-    log.debug("action startArchiveLog");
-
-    log.debug("logarchivedate: " + logarchivedate);
-    if (logarchivedate != null) {
-      log.debug(logarchivedate.getEndDate().toString());
-    }
 
     // get user pic and role
     String userPic = LogUtils.getPicFromSession(session);
@@ -241,50 +220,49 @@ public class LogArchiveController {
 
       if (logarchivedate != null && logarchivedate.getEndDate() != null) {
 
-        archiveParametersType.setEndDate(CalendarUtil.getXmlDate(logarchivedate.getEndDate()));
-       
+        archiveParametersType.setEndDate(CalendarUtil.getXmlDate(logarchivedate.getEndDate()));  
 
-        log.debug("log archive action phase: starting archiving");
+        log.info("log archive action phase: starting archiving");
 
         // call to log archive service
         ArchivalResultsType archiveCount = logService.opArchiveLog(archiveParametersType, audit);
 
         if (archiveCount.getLogEntryCount() == 0) {
           response.setRenderParameter("error", "koku.lok.archive.nothing.to.archive");
-          log.debug("ei arkistoitavaa");
+          log.info("nothing to archive");
         } else {
-          log.debug("arkistoitiin " + archiveCount.getLogEntryCount() + " entrya");
+          log.info(archiveCount.getLogEntryCount() + " entries were archived");
         }
       } else {
         response.setRenderParameter("error", "arkistointipvm puuttuu");
       }
-
     }
     catch (ServiceFault e) {
       log.error("startArchive fault: " + e.getFaultInfo().getCode());
 
       // Show the same error to the user no matter what the cause is
       response.setRenderParameter("error", "koku.lok.error.archive");
-      log.debug("startArchivessa virhe: " + e.getMessage());
       
       // write to admin log about the error
       log.info("Write to admin log about the error in archiving");
       writeErrorToAdminLog(audit);  
     }
-// If archive succeeds but write to admin log does not succeed, transaction is rolled back!
+    // If archive succeeds but write to admin log does not succeed, the transaction is rolled back!
     
     response.setRenderParameter("endDate", archiveSerializer.getAsText(logarchivedate));
     response.setRenderParameter("action", "startArchiveLog");
-
   }
   
+  /**
+   * Helper method that writes an error entry in the admin log.
+   * @param audit
+   */
   private void writeErrorToAdminLog(AuditInfoType audit){
     AdminLogEntry adminLogEntry = new AdminLogEntry();
     adminLogEntry.setTimestamp(Calendar.getInstance().getTime());
     adminLogEntry.setUser(audit.getUserId());
     adminLogEntry.setOperation("archive");
-    adminLogEntry.setMessage("error in archiving");
-    
+    adminLogEntry.setMessage("error in archiving");    
 
     LogEntriesType logEntriesType = new LogEntriesType();
     LogEntryType logEntryType = lu.toWsFromAdminType(adminLogEntry);
@@ -293,14 +271,13 @@ public class LogArchiveController {
     
     try{
       //write to admin log
-     
       logService.opLog(logEntriesType, audit);
     }catch(ServiceFault f){
-      log.error("Error writing to admin log.");
-      
+      log.error("Error writing to admin log.");  
     }
   }
     
+  
   private static class ArchiveSerializer {
 
     private SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);

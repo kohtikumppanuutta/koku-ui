@@ -97,8 +97,7 @@
 					<c:if test="${not empty visited}">
 						<h2 class="portlet-section-subheader">
 							<spring:message code="koku.common.searchResults" />
-							<c:out value="${searchParams.pic}" />
-							,
+							<c:out value="${searchParams.pic}"/>,
 							<c:out value="${searchParams.concept}" />
 							<fmt:formatDate pattern="dd.MM.yyyy" value="${searchParams.from}" />
 							-

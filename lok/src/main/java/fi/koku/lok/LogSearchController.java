@@ -1,9 +1,7 @@
 package fi.koku.lok;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -13,7 +11,6 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,16 +27,14 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.calendar.CalendarUtil;
+import fi.koku.services.entity.person.v1.PersonService;
 import fi.koku.services.utility.authorizationinfo.util.AuthUtils;
 import fi.koku.services.utility.authorizationinfo.v1.AuthorizationInfoService;
-import fi.koku.services.utility.authorizationinfo.v1.impl.AuthorizationInfoServiceDummyImpl;
 import fi.koku.services.utility.authorizationinfo.v1.model.Role;
-import fi.koku.services.entity.person.v1.PersonService;
 import fi.koku.services.utility.log.v1.AuditInfoType;
 import fi.koku.services.utility.log.v1.LogEntriesType;
 import fi.koku.services.utility.log.v1.LogEntryType;
 import fi.koku.services.utility.log.v1.LogQueryCriteriaType;
-import fi.koku.services.utility.log.v1.LogServiceFactory;
 import fi.koku.services.utility.log.v1.LogServicePortType;
 import fi.koku.services.utility.log.v1.ServiceFault;
 
@@ -115,6 +110,7 @@ public class LogSearchController {
         //add to model the changed values
         model.addAttribute("logSearchCriteria", criteriaSerializer.getAsText(criteria));
    
+      
         // Check that the input parameters are not null and in the correct format
         String[] errors = lu.checkInputParameters(criteria, LogConstants.LOG_NORMAL);
         model.addAttribute("error0", errors[0]);
@@ -123,7 +119,7 @@ public class LogSearchController {
         model.addAttribute("error3", errors[3]);
  
         if(errors[0] == null && errors[1] == null && errors[2] == null && errors[3] == null){
-          
+         
           try{
             // get the entries from the database
             List<LogEntry> entries = getLogEntries(criteria, userPic);
@@ -136,7 +132,7 @@ public class LogSearchController {
          
           }catch(ServiceFault fault){
             model.addAttribute("error", "koku.lok.error.log");
-            log.info("virhe tapatumalokista haussa: "+fault.getFaultInfo().getCode());
+            log.info("error while searching log: "+fault.getFaultInfo().getCode());
           }catch(Exception e){
             log.error("Other exception: "+e.getMessage());
           }
@@ -251,7 +247,6 @@ public class LogSearchController {
 
       SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
 
-      log.debug("getAsText from: " + c.getFrom());
       if (c != null) {
         text = new String[] { c.getPic(), c.getConcept(), c.getFrom() != null ? df.format(c.getFrom()) : "",
             c.getTo() != null ? df.format(c.getTo()) : "" };

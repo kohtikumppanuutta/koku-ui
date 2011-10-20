@@ -24,17 +24,19 @@ import fi.koku.services.utility.authorizationinfo.v1.model.Role;
 @Controller(value = "logController")
 @RequestMapping(value = "VIEW")
 public class LogController {
-  private static final Logger log = LoggerFactory.getLogger(LogSearchController.class);
- 
+  private static final Logger log = LoggerFactory.getLogger(LogController.class);
+  
   private AuthorizationInfoService authorizationInfoService;
   
   public LogController() {
-    authorizationInfoService = new AuthorizationInfoServiceDummyImpl();
+    ServiceFactory f = new ServiceFactory();
+    authorizationInfoService = f.getAuthorizationInfoService();     
   }
  
   @RenderMapping(params = "action=home")
   public String renderHome(PortletSession session, Model model){
     
+  log.info("Lok portlet main menu");
   List<Role> userRoles = authorizationInfoService.getUsersRoles(LogConstants.COMPONENT_LOK, LogUtils.getPicFromSession(session));
     
     if (AuthUtils.isOperationAllowed("AdminSystemLogFile", userRoles)) {
@@ -59,6 +61,8 @@ public class LogController {
       model.addAttribute("showMenu", true);
     } else if (AuthUtils.isOperationAllowed("ViewAdminLogFile", userRoles)) {
       model.addAttribute("redirectToSearch", true);
+    } else{
+      log.debug("virhe!");
     }
     
     return "menu";

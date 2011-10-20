@@ -23,7 +23,7 @@ import fi.koku.services.utility.log.v1.LogEntryType;
  * Helper class for LOK portlet controllers.
  * 
  * @author makinsu
- *
+ * 
  */
 public class LogUtils {
 
@@ -33,7 +33,7 @@ public class LogUtils {
   private Calendar dateToCalendar(Date d) {
     Calendar cal = Calendar.getInstance();
     cal.setTime(d);
-  
+
     return cal;
   }
 
@@ -46,7 +46,7 @@ public class LogUtils {
     today.set(Calendar.MILLISECOND, 0);
 
     Calendar newDate = dateToCalendar(date);
-   
+
     newDate.set(Calendar.HOUR_OF_DAY, 0);
     newDate.set(Calendar.MINUTE, 0);
     newDate.set(Calendar.SECOND, 0);
@@ -62,7 +62,8 @@ public class LogUtils {
   /**
    * Helper method that checks if the query parameters given by the user are
    * null. If parsing of the dates has not succeeded, the parsing method returns
-   * null. The method also checks that the given start date is not after the end date.
+   * null. The method also checks that the given start date is not after the end
+   * date.
    * 
    * @param criteria
    * @param logtype
@@ -70,7 +71,7 @@ public class LogUtils {
    */
   public String[] checkInputParameters(LogSearchCriteria criteria, String logtype) {
     String[] error = new String[4];
-    
+
     if (criteria.getFrom() == null) {
       error[0] = "koku.lok.search.null.from";
     }
@@ -85,32 +86,32 @@ public class LogUtils {
     }
 
     // check that start date is before end date
-    if(criteria.getFrom()!=null && criteria.getTo()!=null){
+    if (criteria.getFrom() != null && criteria.getTo() != null) {
       Calendar from = dateToCalendar(criteria.getFrom());
       Calendar to = dateToCalendar(criteria.getTo());
-      
-      if(to.before(from)){
+
+      if (to.before(from)) {
         error[3] = "koku.lok.error.start.after.end";
       }
     }
-    
+
     return error;
   }
 
   public LogEntryType toWsFromAdminType(AdminLogEntry entry) {
-    
+
     LogEntryType entryType = new LogEntryType();
     entryType.setCustomerPic(entry.getCustomer());
     entryType.setUserPic(entry.getUser());
     entryType.setOperation(entry.getOperation());
     entryType.setMessage(entry.getMessage());
     entryType.setTimestamp(CalendarUtil.getXmlDateTime(entry.getTimestamp()));
- 
+
     // AdminLogEntry will be written to admin log, set the log type here
     entryType.setClientSystemId(LogConstants.LOG_WRITER_LOG);
     return entryType;
   }
-  
+
   /**
    * The method returns a date X years from today.
    * 
@@ -140,7 +141,7 @@ public class LogUtils {
   public static String getPicFromSession(PortletSession session) {
     UserInfo info = getUserInfoFromSession(session);
     if (info == null) {
-      log.debug("cannot get user info from session");
+      log.error("cannot get user info from session");
       return "";
     }
     if (info.getPic() == null) {
@@ -155,7 +156,7 @@ public class LogUtils {
   public static String getUsernameFromSession(PortletSession session) {
     UserInfo info = getUserInfoFromSession(session);
     if (info == null) {
-      log.debug("cannot get user info from session");
+      log.error("cannot get user info from session");
       return "";
     }
     if (info.getUid() == null) {
@@ -179,17 +180,26 @@ public class LogUtils {
    * @return
    */
   public void changePicsToNames(List<LogEntry> entries, String portletUserPic, PersonService personService) {
-    String pic = null;   
+    String pic = null;
     List<Person> list = null;
     Person person = null;
-
+    ArrayList<Person> localList = new ArrayList<Person>();
+    
     Iterator iter = entries.iterator();
     while (iter.hasNext()) {
       LogEntry entry = (LogEntry) iter.next();
-      pic = entry.getUser();
       List<String> picList = new ArrayList<String>();
+      pic = entry.getUser();
       picList.add(pic);
-      log.debug("call to PersonService with pic " + pic);
+      
+      // optimize: do not make extra calls to Person Service, if we already know
+      // the
+      // name representing the hetu
+      int nrOfPerson = searchLocalList(pic, localList);
+      if (nrOfPerson > -1) {
+        Person p = localList.get(nrOfPerson);
+        entry.setUser(p.getFname() + " " + p.getSname());
+      } else {
       try {
         // call the Person service
         list = personService.getPersonsByPics(picList, PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER, portletUserPic,
@@ -204,13 +214,15 @@ public class LogUtils {
       } else {
         person = list.get(0);
         entry.setUser(person.getFname() + " " + person.getSname());
+        localList.add(person); // add the person to the local list so it can be used in later searches
       }
+    }
     }
   }
 
   /**
-   * Helper method that changes the pic value in every admin entry to the user's name,
-   * read from PersonService.
+   * Helper method that changes the pic value in every admin entry to the user's
+   * name, read from PersonService.
    * 
    * @param entries
    * @return
@@ -219,6 +231,7 @@ public class LogUtils {
     String pic = null;
     List<Person> list = null;
     Person person = null;
+    ArrayList<Person> localList = new ArrayList<Person>();
 
     Iterator iter = entries.iterator();
     while (iter.hasNext()) {
@@ -226,23 +239,48 @@ public class LogUtils {
       List<String> picList = new ArrayList<String>();
       pic = entry.getUser();
       picList.add(pic);
-    
-      try{
-        // call the Person service
-        list = personService.getPersonsByPics(picList, PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER, portletUserPic,
-          LogConstants.COMPONENT_LOK);
-      }catch(Exception e){
-        log.error("Person service threw an exception " + e.getMessage());
-      }
-      
-        if (list == null || list.isEmpty() || list.get(0).getFname() == null ) {
-        log.info("No name found in personservice for pic " + pic);
-        // keep the original pic in the entry!
+     
+      // optimize: do not make extra calls to Person Service, if we already know
+      // the
+      // name representing the hetu
+      int nrOfPerson = searchLocalList(pic, localList);
+      if (nrOfPerson > -1) {
+        Person p = localList.get(nrOfPerson);
+        entry.setUser(p.getFname() + " " + p.getSname());
       } else {
-        person = list.get(0);
-        entry.setUser(person.getFname() + " " + person.getSname());
+        try {
+          // call the Person service
+          list = personService.getPersonsByPics(picList, PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER, portletUserPic,
+              LogConstants.COMPONENT_LOK);
+        } catch (Exception e) {
+          log.error("Person service threw an exception " + e.getMessage());
+        }
+
+        if (list == null || list.isEmpty() || list.get(0).getFname() == null) {
+          log.info("No name found in personservice for pic " + pic);
+          // keep the original pic in the entry!
+        } else {
+          person = list.get(0);
+          entry.setUser(person.getFname() + " " + person.getSname());
+          localList.add(person); // add the person to the local list so it can be used in later searches
+        }
       }
     }
   }
-  
+
+  /**
+   * Helper method to search a person from local list
+   */
+  private int searchLocalList(String pic, ArrayList<Person> list) {
+   
+    for (int i = 0; i < list.size(); i++) {
+      Person p = (Person) list.get(i);
+    
+      if (p.getPic()!=null && pic !=null && p.getPic().equalsIgnoreCase(pic)) {
+        return i;
+      }
+    }
+
+    return -1;
+  }
 }
