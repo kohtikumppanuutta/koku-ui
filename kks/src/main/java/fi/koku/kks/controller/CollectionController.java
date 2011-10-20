@@ -44,6 +44,7 @@ public class CollectionController {
   @Autowired
   @Qualifier("kksService")
   private KksService kksService;
+  private final static String VALID = "VALID";
 
   private static final Logger LOG = LoggerFactory.getLogger(CollectionController.class);
 
@@ -59,7 +60,7 @@ public class CollectionController {
     model.addAttribute("child", child);
     model.addAttribute("collection", c);
     model.addAttribute("authorized", kksService.getAuthorizedRegistries(Utils.getPicFromSession(session)));
-    model.addAttribute("master", parent);
+    model.addAttribute("master", parent || VALID.equals(c.getUserConsentStatus() ));
     model.addAttribute("parent", parent);
     model.addAttribute("empty_collection", c == null || c.getEntries() == null || c.getEntries().size() == 0);
     model.addAttribute("can_save", canSave);
