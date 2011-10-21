@@ -1,5 +1,8 @@
 package fi.koku.kks.controller;
 
+import java.util.Map;
+import java.util.Set;
+
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletSession;
 import javax.portlet.RenderResponse;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.koku.kks.model.CollectionForm;
 import fi.koku.kks.model.Entry;
 import fi.koku.kks.model.EntryValue;
 import fi.koku.kks.model.KKSCollection;
@@ -49,12 +53,15 @@ public class CollectionController {
   private static final Logger LOG = LoggerFactory.getLogger(CollectionController.class);
 
   @RenderMapping(params = "action=showCollection")
-  public String show(PortletSession session, @ModelAttribute(value = "child") Person child,
+  public String show(PortletSession session, @ModelAttribute(value = "child") Person child, @ModelAttribute(value = "collectionForm") CollectionForm collectionForm,
       @RequestParam(value = "collection") String collection,
       @RequestParam(value = "error", required = false) String error, RenderResponse response, Model model) {
     LOG.debug("show collection");
 
     KKSCollection c = kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
+    collectionForm.setEntries(c.getEntries());
+    session.setAttribute("kks.collection", c );
+    
     boolean parent = kksService.isParent(Utils.getPicFromSession(session), child.getPic());
     boolean canSave = !parent || hasParentGroups(c.getCollectionClass());
     model.addAttribute("child", child);
@@ -97,27 +104,28 @@ public class CollectionController {
   }
 
   @ActionMapping(params = "action=saveCollection")
-  public void save(PortletSession session, @ModelAttribute(value = "child") Person child,
-      @ModelAttribute(value = "entry") KKSCollection entry, BindingResult bindingResult,
+  public void save(PortletSession session, @ModelAttribute(value = "child") Person child, @ModelAttribute(value = "collectionForm") CollectionForm collectionForm, BindingResult bindingResult,
       @RequestParam(required = false) String multiValueId, @RequestParam(required = false) String type,
-      @RequestParam(value = "valueId", required = false) String valueId, ActionResponse response,
+      @RequestParam(value = "valueId", required = false) String valueId, Model model, ActionResponse response,
       SessionStatus sessionStatus) {
     LOG.debug("save collection");
 
-    boolean success = kksService.updateKksCollection(entry, child.getPic(), Utils.getPicFromSession(session));
+    KKSCollection collection = (KKSCollection) session.getAttribute("kks.collection");
+    collection.setEntries(collectionForm.getEntries());
+    boolean success = kksService.updateKksCollection(collection, child.getPic(), Utils.getPicFromSession(session));
 
     if (!success) {
       bindingResult.reject("collection.update.failed");
       response.setRenderParameter("action", "showCollection");
       response.setRenderParameter("pic", child.getPic());
-      response.setRenderParameter("collection", entry.getId());
+      response.setRenderParameter("collection", collection.getId());
     } else {
-
+      session.removeAttribute("kks.collection");
+      
       if (StringUtils.isNotBlank(type)) {
-
         response.setRenderParameter("action", "showMultivalue");
         response.setRenderParameter("pic", child.getPic());
-        response.setRenderParameter("collection", entry.getId());
+        response.setRenderParameter("collection", collection.getId());
         response.setRenderParameter("entryType", type);
         response.setRenderParameter("valueId", valueId == null ? "" : valueId);
 
@@ -132,10 +140,19 @@ public class CollectionController {
     }
   }
 
-  @ModelAttribute("entry")
-  public KKSCollection getCommandObject(PortletSession session, @RequestParam(value = "collection") String collection,
+  @ModelAttribute("collectionForm")
+  public CollectionForm getCommandObject(PortletSession session, @RequestParam(value = "collection") String collection,
       @RequestParam(value = "pic") String pic) {
-    return kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
+   // return kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
+
+    CollectionForm form = new CollectionForm();
+    
+    @SuppressWarnings("unchecked")
+    KKSCollection c = (KKSCollection)session.getAttribute("kks.collection");
+    if ( c != null ) {
+      form.setEntries(c.getEntries());
+    }
+    return form;
   }
 
   @ModelAttribute("multi")

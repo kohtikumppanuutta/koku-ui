@@ -142,7 +142,7 @@
 
         <c:if test="${not empty collection.collectionClass }">
 
-            <form:form class="form-wrapper" name="entryForm" commandName="entry" method="post"
+            <form:form class="form-wrapper" name="entryForm" commandName="collectionForm" method="post" 
                 action="${saveActionUrl}">
 
                 <c:forEach var="group" items="${collection.collectionClass.kksGroups.kksGroup }">
@@ -336,13 +336,13 @@ window.onload = function() {
 	});
 
        function addMultivalueIdToForm( multiId ) {
-           $('#entry')
+           $('#collectionForm')
            .append(
                    '<input name="multiValueId" type="hidden" value="' + multiId + '"/>');
        }
        
 	   function addValueIdToForm(valueId) {
-	        $('#entry')
+	        $('#collectionForm')
 	                .append(
 	                        '<input name="valueId" type="hidden" value="' + valueId + '"/>');
 
@@ -350,7 +350,7 @@ window.onload = function() {
 	   
        
 	   function addTypeToForm(type) {
-	        $('#entry')
+	        $('#collectionForm')
 	                .append(
 	                        '<input name="type" type="hidden" value="' + type + '"/>');
 
@@ -358,7 +358,7 @@ window.onload = function() {
 
 	    function doSubmitNewMulti( type ) {
 	        addTypeToForm(type);
-	        $('#entry').submit();
+	        $('#collectionForm').submit();
 
 	    }
 
@@ -366,7 +366,7 @@ window.onload = function() {
 	    	   	addValueIdToForm(valueId);
 	            addTypeToForm(type);
 	            addMultivalueIdToForm(multiId);
-	            $('#entry').submit();
+	            $('#collectionForm').submit();
 
 	        }
 </script>

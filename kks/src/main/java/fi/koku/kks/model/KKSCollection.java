@@ -39,6 +39,10 @@ public class KKSCollection {
   private boolean consentRequested;
   private String userConsentStatus;
 
+  public KKSCollection() {
+    entries = new LinkedHashMap<String, Entry>();
+    authorizedRegistrys = new HashMap<String, Registry>();
+  }
   public KKSCollection(String id, String name, String description, CollectionState state, Date creationTime,
       int version, KksCollectionClassType type) {
     super();
@@ -260,6 +264,10 @@ public class KKSCollection {
 
   public void setUserConsentStatus(String userConsentStatus) {
     this.userConsentStatus = userConsentStatus;
+  }
+  
+  public String toString() {
+    return getId() + " " + getName();
   }
 
 }
