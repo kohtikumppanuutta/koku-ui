@@ -18,7 +18,7 @@ public class VetumaUserInfo extends UserInfo {
   }
 
   @Override
-  boolean isStrongAuthenticationEnabled() {
+  public boolean isStrongAuthenticationEnabled() {
     return true;
   }
 

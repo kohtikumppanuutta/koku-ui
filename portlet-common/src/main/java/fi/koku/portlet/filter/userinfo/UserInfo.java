@@ -75,7 +75,7 @@ public abstract class UserInfo {
     return "UserInfo [pic=" + pic + ", uid=" + uid + ", fname=" + fname + ", sname=" + sname + ", email=" + email + "]";
   }
 
-  abstract boolean isStrongAuthenticationEnabled();
+  public abstract boolean isStrongAuthenticationEnabled();
   abstract void setStrongAuthentication(boolean strongAuthentication);
   public abstract boolean hasStrongAuthentication();
 

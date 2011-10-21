@@ -16,7 +16,7 @@ public class LooraUserInfo extends UserInfo {
   }
 
   @Override
-  boolean isStrongAuthenticationEnabled() {
+  public boolean isStrongAuthenticationEnabled() {
     return false;
   }
 
