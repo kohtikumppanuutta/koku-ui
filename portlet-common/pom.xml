@@ -10,7 +10,7 @@
 	<artifactId>portlet-common</artifactId>
 	<name>portlet-common</name>
 	<packaging>jar</packaging>
-    <version>0.0.15</version>
+    <version>0.0.16</version>
 	<description>code shared between koku portlet projects.
 the code can depend on servlet and portlet apis as well as koku service-api but not koku-portlets.</description>
 
@@ -22,6 +22,13 @@ the code can depend on servlet and portlet apis as well as koku service-api but 
 	    <version>0.0.7</version>
 	</dependency>
 
+		<dependency>
+			<groupId>kohti-kumppanuutta</groupId>
+			<artifactId>koku-vetuma-authlib</artifactId>
+			<version>0.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+		
 	</dependencies>
 
 

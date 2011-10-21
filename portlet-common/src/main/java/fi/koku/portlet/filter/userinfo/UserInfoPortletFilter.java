@@ -12,6 +12,7 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -23,7 +24,12 @@ import javax.portlet.filter.RenderFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ixonos.authentication.AuthenticationServiceClient;
+import com.ixonos.authentication.AuthenticationServiceClientImpl;
+import com.ixonos.authentication.VetumaUserInfo;
+
 import fi.koku.portlet.filter.userinfo.service.UserInfoService;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
  * @author mikkope
@@ -35,25 +41,46 @@ public class UserInfoPortletFilter implements RenderFilter, ActionFilter {
   private static final Logger log = LoggerFactory.getLogger(UserInfoPortletFilter.class);
   private UserInfoService userInfoService = null;
 
+  private AuthenticationServiceClient authServiceClient = null;
+
   /**
-   * Initialize portlet filter. 
+   * Initialize portlet filter.
    */
   public void init(FilterConfig filterConfig) {
 
-    
     log.debug("Initializing portlet: authImplClassName=" + UserInfoConstants.AUTH_IMPL_CLASS_NAME);
 
-    
     // Load configured class
     try {
-      userInfoService = (UserInfoService) this.getClass().getClassLoader().loadClass(UserInfoConstants.AUTH_IMPL_CLASS_NAME).newInstance();
+
+      userInfoService = (UserInfoService) this.getClass().getClassLoader()
+          .loadClass(UserInfoConstants.AUTH_IMPL_CLASS_NAME).newInstance();
+
+      String context = KoKuPropertiesUtil.get("environment.name");
+      
+      if ("kunpo".equals(context)) {
+        authServiceClient = AuthenticationServiceClientImpl.instance();
+      } else {
+        authServiceClient = new AuthenticationServiceClient() {
+        // Dummy implementation for Loora. Should never be used.
+          public boolean hasStrongAuthentication(PortletRequest request) {
+            return false;
+          }
+          public VetumaUserInfo getVetumaUserInfo(PortletRequest request) {
+            return null;
+          }
+          public String getAuthenticationURL(RenderResponse response, String id) {
+            return null;
+          }};
+          
+      }
 
     } catch (InstantiationException e) {
-      log.error("Failed to Instantiate classname=" +  UserInfoConstants.AUTH_IMPL_CLASS_NAME, e);
+      log.error("Failed to Instantiate classname=" + UserInfoConstants.AUTH_IMPL_CLASS_NAME, e);
     } catch (IllegalAccessException e) {
-      log.error("Failed to Instantiate. Illegal Access on classname=" +  UserInfoConstants.AUTH_IMPL_CLASS_NAME, e);
+      log.error("Failed to Instantiate. Illegal Access on classname=" + UserInfoConstants.AUTH_IMPL_CLASS_NAME, e);
     } catch (ClassNotFoundException e) {
-      log.error("Class not found. Classname=" +  UserInfoConstants.AUTH_IMPL_CLASS_NAME, e);
+      log.error("Class not found. Classname=" + UserInfoConstants.AUTH_IMPL_CLASS_NAME, e);
     }
 
   }
@@ -65,7 +92,7 @@ public class UserInfoPortletFilter implements RenderFilter, ActionFilter {
   public void doFilter(RenderRequest request, RenderResponse response, FilterChain filterChain) {
     log.debug("Entered UserInfo filter on renderPhase");
 
-    addUserInfoToSession(request);
+    addUserInfoToSession(request, response);
 
     // Allow filter chaining
     try {
@@ -87,8 +114,8 @@ public class UserInfoPortletFilter implements RenderFilter, ActionFilter {
       PortletException {
     log.debug("Entered UserInfo filter on actionPhase");
 
-    addUserInfoToSession(actReq);
-    
+    addUserInfoToSession(actReq, actRes);
+
     // Allow filter chaining
     try {
       filterChain.doFilter(actReq, actRes);
@@ -110,48 +137,109 @@ public class UserInfoPortletFilter implements RenderFilter, ActionFilter {
    * 
    * @param request
    */
-  private void addUserInfoToSession(PortletRequest request) {
-    // Get portal user id
-    String portalUserId = request.getRemoteUser();
-    log.debug("req.getRemoteUser=" + portalUserId);
+  private void addUserInfoToSession(PortletRequest request, PortletResponse response) {
+    
+    UserInfo userInfo = getUserInfo(request);
 
-    // Check if user is authenticated
-    if (portalUserId != null) {
-      PortletSession psession = request.getPortletSession();
+    if (userInfo == null) {
+      
+      if (log.isDebugEnabled()) {
+        log.debug("Couldn't fetch user info.");
+      }
+      
+      return;
+    }
+    
+    if (userInfo.isStrongAuthenticationEnabled() && !userInfo.hasStrongAuthentication()) {
+      
+      if (log.isDebugEnabled()) {
+        log.debug("User does not have strongly authenticated session.");
+      }      
+      
+      setStrongAuthentication(request, response, userInfo);
+    }
+    
+    request.getPortletSession().setAttribute(UserInfo.KEY_USER_INFO, userInfo);
+    
+  }
 
-      // Check if portlet-session exists already
-      if (psession != null) {
-        Object o = psession.getAttribute(UserInfo.KEY_USER_INFO);
+  private void setStrongAuthentication(PortletRequest request, PortletResponse response, UserInfo userInfo) {
 
-        // Check if UserInfo
-        if (o != null && o instanceof UserInfo) {
-          // Portal user has UserInfo object already in portletsession = OK
-          log.debug("psession.userInfo=" + (UserInfo) o);// #TODO# Consider
-                                                         // removing hetu from
-                                                         // log
-        } else {
+    if (authServiceClient.hasStrongAuthentication(request)) {
+      updateUserInfo(request, userInfo);
+    } else {
+      setAuthenticationURL(request, response, userInfo);
+    }
+  }
 
-          // UserInfo does not exist yet
+  private void setAuthenticationURL(PortletRequest request, PortletResponse response, UserInfo userInfo) {
+    
+    if (!(response instanceof RenderResponse)) {
+      log.warn("PortletResponse is not instance of RenderResponse. Could not create authentication url.");
+      return;
+    }
+    
+    if (request.getPortletSession().getAttribute(UserInfo.KEY_VETUMA_AUTHENTICATION_URL) == null) {
+      
+      String url = authServiceClient.getAuthenticationURL((RenderResponse) response, userInfo.getUid()); 
+      
+      request.getPortletSession().setAttribute(UserInfo.KEY_VETUMA_AUTHENTICATION_URL,
+          url, PortletSession.PORTLET_SCOPE);
+      
+      if (log.isDebugEnabled()) {
+        log.debug("Set authentication url to " + url);
+      }
+    }
+  }
 
-          // #TODO# Here we have to remember that Loora and Kunpo has different
-          // mechanisms after VETUMAIntegration. Now impl "Loora-case"
-          UserInfo userInfo = userInfoService.getUserInfoById(portalUserId);
-          if (userInfo != null) {
-            psession.setAttribute(UserInfo.KEY_USER_INFO, userInfo);
-            log.debug("Following UserInfo-object is added to portlet sesssion : " + userInfo);
-          } else {
-            log.debug("userInfo=null and therefore not added to portletsession");
-          }
+  private void updateUserInfo(PortletRequest request, UserInfo userInfo) {
 
-        }
-      } else {
-        log.debug("PortletSession=null : user probably has not logged in and this is probably the first request.");
+    VetumaUserInfo ticketString = authServiceClient.getVetumaUserInfo(request);
+
+    if (userInfo.getPic().equals(ticketString.getId())) {
+
+      userInfo.setStrongAuthentication(true);
+
+      if (log.isDebugEnabled()) {
+        log.debug("Strong authentication set for user " + userInfo);
       }
 
     } else {
-      // Not authenticated
-      log.debug("Portal remoteUser not found so User has probably not logged in!");
+      log.warn("Pic from UserInfoService does not match Vetuma's id.");
     }
+
+  }
+
+  private UserInfo getUserInfo(PortletRequest request) {
+  // Fetch userinfo from session or from remote service
+    
+    UserInfo ui = (UserInfo)request.getPortletSession(true).getAttribute(UserInfo.KEY_USER_INFO);
+    
+    if (ui == null) {
+      
+      String uid = request.getRemoteUser();
+      
+      if (uid != null) {
+
+        ui = userInfoService.getUserInfoById(uid);
+        
+        if (log.isDebugEnabled()) {
+          log.debug("Fetched userinfo " + ui + " from remote service.");
+        }
+
+      } else {
+
+        if (log.isDebugEnabled()) {
+          log.debug("Could not get remote user. User hasn't signed in.");
+        }
+      }
+    } else {
+      if (log.isDebugEnabled()) {
+        log.debug("Fetched userinfo " + ui + " from session.");
+      }
+    }
+    
+    return ui;
   }
 
   @Override

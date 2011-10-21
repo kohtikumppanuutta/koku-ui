@@ -8,8 +8,10 @@ package fi.koku.portlet.filter.userinfo;
  * @author mikkope
  *
  */
-public class UserInfo {
+public abstract class UserInfo {
+  
   public static final String KEY_USER_INFO = "fi.koku.userinfo";
+  public static final String KEY_VETUMA_AUTHENTICATION_URL = "fi.koku.vetuma_authentication_url";
   
   private String pic;
   private String uid;
@@ -72,5 +74,9 @@ public class UserInfo {
   public String toString() {
     return "UserInfo [pic=" + pic + ", uid=" + uid + ", fname=" + fname + ", sname=" + sname + ", email=" + email + "]";
   }
-  
+
+  abstract boolean isStrongAuthenticationEnabled();
+  abstract void setStrongAuthentication(boolean strongAuthentication);
+  public abstract boolean hasStrongAuthentication();
+
 }
