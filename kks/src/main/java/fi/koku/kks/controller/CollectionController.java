@@ -115,13 +115,11 @@ public class CollectionController {
     boolean success = kksService.updateKksCollection(collection, child.getPic(), Utils.getPicFromSession(session));
 
     if (!success) {
-      bindingResult.reject("collection.update.failed");
+      response.setRenderParameter("error", "collection.update.failed");
       response.setRenderParameter("action", "showCollection");
       response.setRenderParameter("pic", child.getPic());
       response.setRenderParameter("collection", collection.getId());
     } else {
-      session.removeAttribute("kks.collection");
-      
       if (StringUtils.isNotBlank(type)) {
         response.setRenderParameter("action", "showMultivalue");
         response.setRenderParameter("pic", child.getPic());
@@ -135,6 +133,7 @@ public class CollectionController {
       } else {
         response.setRenderParameter("action", "showChild");
         response.setRenderParameter("pic", child.getPic());
+        session.removeAttribute("kks.collection");
       }
       sessionStatus.setComplete();
     }
@@ -143,11 +142,8 @@ public class CollectionController {
   @ModelAttribute("collectionForm")
   public CollectionForm getCommandObject(PortletSession session, @RequestParam(value = "collection") String collection,
       @RequestParam(value = "pic") String pic) {
-   // return kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
 
     CollectionForm form = new CollectionForm();
-    
-    @SuppressWarnings("unchecked")
     KKSCollection c = (KKSCollection)session.getAttribute("kks.collection");
     if ( c != null ) {
       form.setEntries(c.getEntries());
@@ -218,19 +214,18 @@ public class CollectionController {
       @RequestParam(value = "entryType", required = false) String entryType,
       @RequestParam(value = "entryId", required = false) String entry,
       @RequestParam(value = "valueId", required = false) String valueId, RenderResponse response, Model model) {
-    LOG.info("show collection");
+    LOG.debug("show collection");
 
-    KKSCollection kok = kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
+    KKSCollection c = (KKSCollection)session.getAttribute("kks.collection");
 
     KksEntryClassType t = kksService.getEntryClassType(entryType, Utils.getPicFromSession(session));
-
     model.addAttribute("child", child);
-    model.addAttribute("collection", kok);
+    model.addAttribute("collection", c);
     model.addAttribute("type", t);
     model.addAttribute("valueId", valueId);
 
     if (StringUtils.isNotEmpty(entry)) {
-      Entry ent = kok.getEntry(entry);
+      Entry ent = c.getEntry(entry);
       EntryValue val = ent.getEntryValue(valueId);
 
       if (val == null) {

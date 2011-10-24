@@ -2,8 +2,13 @@ package fi.koku.kks.model;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
+/**
+ * Form class for editing collection entries
+ * 
+ * @author Ixonos / tuomape
+ *
+ */
 public class CollectionForm {
  
   private Map<String, Entry> entries;
