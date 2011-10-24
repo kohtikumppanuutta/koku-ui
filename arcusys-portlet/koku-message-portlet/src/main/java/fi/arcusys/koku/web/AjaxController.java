@@ -85,7 +85,7 @@ public class AjaxController extends AbstractController {
 			UserIdResolver resolver = new UserIdResolver();
 			userId = resolver.getUserId(username, getPortalRole(request));			
 		} catch (Exception e) {
-			LOG.error("Error while trying to resolve userId. See following error msg: ", e);
+			LOG.error("Error while trying to resolve userId. See following error msg: "+ e.getMessage());
 		}
 		JSONObject jsonModel = getJsonModel(taskType, page, keyword, field, orderType, userId);
 		modelmap.addAttribute(RESPONSE, jsonModel);

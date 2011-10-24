@@ -12,7 +12,8 @@
 
 <%
 	/* Parses the parent path url from the portlet renderURL */
-	
+	final String messagePage = "Message";
+	String serverURL = "";
 	String defaultPath = "";
 	String currentPage = "";
 	String actionParam = "";
@@ -20,8 +21,13 @@
 	int pos = naviURL.indexOf("default");
 	if (pos > -1) { // for Jboss portal
 // 		defaultPath = naviURL.substring(0, pos+7);
-		int currentPathPosition = naviURL.indexOf("Message");
-		defaultPath = naviURL.substring(0, currentPathPosition+7);
+		int currentPathPosition = naviURL.indexOf(messagePage);
+		if (currentPathPosition > -1) {
+			defaultPath = defaultPathPref;
+			System.out.println("ABSOLUTE: defaultPath: "+defaultPath);
+		} else {
+			defaultPath = naviURL.substring(0, currentPathPosition+7);			
+		}
 		int pos1 = naviURL.lastIndexOf("/");
 		actionParam = naviURL.substring(pos1);
 		String currentPath = naviURL.substring(0, pos1);
@@ -29,8 +35,13 @@
 		currentPage = currentPath.substring(pos2+1);
 	} else { // for Gatein portal
 		int pos1 = naviURL.indexOf("classic");
-		int currentPathPosition = naviURL.indexOf("Message");
-		defaultPath = naviURL.substring(0, currentPathPosition+7);
+		int currentPathPosition = naviURL.indexOf(messagePage);
+		if (currentPathPosition > -1) {
+			defaultPath = defaultPathPref;
+			System.out.println("ABSOLUTE: defaultPath: "+defaultPath);
+		} else {
+			defaultPath = naviURL.substring(0, currentPathPosition+7);			
+		}
 // 		defaultPath = naviURL.substring(0, pos1+7);
 		int pos2 = naviURL.indexOf("?");
 		String currentPath = naviURL.substring(0, pos2);
@@ -235,10 +246,14 @@
 	<ul class="main">
 		
 <%
+
+	String kksPath = kksPref; 
+	String lokPath = lokPref; 
+	String pyhPath = pyhPref;
 	if (useRelativePath.equals(Boolean.TRUE.toString())) {
-		kksPref = defaultPath + kksPref;
-		lokPref = defaultPath + lokPref;
-		pyhPref = defaultPath + pyhPref;
+		kksPath = defaultPath + kksPref;
+		lokPath = defaultPath + lokPref;
+		pyhPath = defaultPath + pyhPref;
 	}
 %>		
 		
@@ -246,13 +261,13 @@
 		<li><a href="javascript:void(0)" >Etusivu</a></li>
 		<!-- For citizen in Gatein portal-->
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
-		<li id="kks"><a href="<%= kksPref %>">Sopimukset ja suunnitelmat</a>
-		<li id="pyh"><a href="<%= pyhPref %>">Omat tiedot</a></li>
+		<li id="kks"><a href="<%= kksPath %>">Sopimukset ja suunnitelmat</a>
+		<li id="pyh"><a href="<%= pyhPath %>">Omat tiedot</a></li>
 		</c:if>
 		<!-- For employee in Jboss portal -->
 		<c:if test="${fn:contains(naviURL, '/default/')}">
-		<li id="kks"><a href="<%= kksPref %>">Sopimukset ja suunnitelmat</a>
-		<li id="lok"><a href="<%= lokPref %>">Lokihallinta</a></li>
+		<li id="kks"><a href="<%= kksPath %>">Sopimukset ja suunnitelmat</a>
+		<li id="lok"><a href="<%= lokPath %>">Lokihallinta</a></li>
 		</c:if>
 		
 		<li><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')" >Viestit</a>

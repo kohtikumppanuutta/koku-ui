@@ -33,8 +33,6 @@ public class MessageController {
 	@RenderMapping
 	public String showPageView(RenderRequest request, RenderResponse response,
 			ModelMap modelmap) {		
-		logger.info("show default page message");
-		
 		return VIEW_MESSAGE;
 	}
 

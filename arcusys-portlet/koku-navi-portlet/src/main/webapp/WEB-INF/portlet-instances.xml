@@ -9,6 +9,10 @@
 				<name>naviRelativePath</name>
 				<value>true</value>
 			</preference>
+			<preference>
+				<name>navigationDefaultPath</name>
+				<value>/portal/auth/portal/default/koku/Messages</value>
+			</preference>
             <preference>
 				<name>preferencesPathKks</name>
 				<value>/KKS</value>

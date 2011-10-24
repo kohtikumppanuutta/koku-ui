@@ -22,9 +22,7 @@ public class NaviController {
 	private Logger logger = Logger.getLogger(NaviController.class);
 	// maps the incoming portlet request to this method, returns the default page
 	@RenderMapping
-	public String home(RenderRequest request, RenderResponse response,
-			ModelMap modelmap) {
-		logger.info("show default navigation page");
+	public String home(RenderRequest request, RenderResponse response, ModelMap modelmap) {
 		return "navi";
 	}
 

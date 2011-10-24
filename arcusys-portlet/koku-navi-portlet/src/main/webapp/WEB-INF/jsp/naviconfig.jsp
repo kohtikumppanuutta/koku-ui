@@ -28,6 +28,14 @@
 			</div>
 			<div>
 				<div class="naviEditHeader">
+					<spring:message code="config.navigationDefaultPath" />
+				</div>				
+				<div class="naviEditValue">
+					<textarea rows="1" name="<%= Constants.PREF_NAVI_DEFAULT_PATH %>" id="<%= Constants.PREF_NAVI_DEFAULT_PATH %>"></textarea>
+				</div>
+			</div>
+			<div>
+				<div class="naviEditHeader">
 					<spring:message code="config.pyhPath" />
 				</div>				
 				<div class="naviEditValue">
@@ -65,4 +73,5 @@
 	jQuery('#<%= Constants.PREF_NAVI_KKS %>').val("<%= kksPref %>");
 	jQuery('#<%= Constants.PREF_NAVI_LOK %>').val("<%= lokPref %>");
 	jQuery('#<%= Constants.PREF_NAVI_PYH %>').val("<%= pyhPref %>");
+	jQuery('#<%= Constants.PREF_NAVI_DEFAULT_PATH %>').val("<%= defaultPathPref %>");
 </script>

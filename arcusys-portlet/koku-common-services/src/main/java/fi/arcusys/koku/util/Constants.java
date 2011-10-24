@@ -141,6 +141,7 @@ public class Constants {
 	public static final String PREF_NAVI_KKS								= "preferencesPathKks";
 	public static final String PREF_NAVI_LOK								= "preferencesPathLok";
 	public static final String PREF_NAVI_PYH								= "preferencesPathPyh";
+	public static final String PREF_NAVI_DEFAULT_PATH						= "navigationDefaultPath";
 	
 	                                                            	
 	/* PortletPreferences keys: MessagePortlet */               	

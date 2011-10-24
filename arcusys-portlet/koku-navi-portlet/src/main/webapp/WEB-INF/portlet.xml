@@ -23,17 +23,21 @@
 				<name>naviRelativePath</name>
 				<value>true</value>
 			</preference>
+			  <preference>
+					<name>navigationDefaultPath</name>
+					<value>/portal/private/classic/Message</value>
+				</preference>
 	          <preference>
 					<name>preferencesPathKks</name>
-					<value>/KKS</value>
+					<value>/portal/auth/portal/default/koku/KKS</value>
 				</preference>
 				<preference>
 					<name>preferencesPathLok</name>
-					<value>/LOK</value>
+					<value>/portal/auth/portal/default/koku/LOK</value>
 				</preference>	
 				<preference>
 					<name>preferencesPathPyh</name>
-					<value>/PYH</value>
+					<value>/portal/auth/portal/default/koku/PYH</value>
 				</preference>	
 		</portlet-preferences>		
 	</portlet>

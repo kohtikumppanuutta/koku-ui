@@ -13,18 +13,11 @@ import static fi.arcusys.koku.util.Constants.JSON_LOGIN_STATUS;
 import static fi.arcusys.koku.util.Constants.JSON_RENDER_URL;
 import static fi.arcusys.koku.util.Constants.JSON_REQUESTS_TOTAL;
 import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_NAVI;
-import static fi.arcusys.koku.util.Constants.PREF_NAVI_KKS;
-import static fi.arcusys.koku.util.Constants.PREF_NAVI_LOK;
-import static fi.arcusys.koku.util.Constants.PREF_NAVI_PYH;
-import static fi.arcusys.koku.util.Constants.PREF_NAVI_RELATIVE_PATH;
 import static fi.arcusys.koku.util.Constants.RESPONSE;
 import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN;
 import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_INVALID;
 import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_VALID;
 
-import java.util.Enumeration;
-
-import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletSession;
@@ -79,7 +72,7 @@ public class AjaxController extends AbstractController {
 			}
 		} catch (Exception e) {
 			//LOGGER.error(e.getMessage(), e);
-			LOGGER.error("Error while trying to resolve userId. See following error msg: ", e);
+			LOGGER.error("Error while trying to resolve userId. See following error msg: "+e.getMessage());
 		}
 		
 		PortletSession session = request.getPortletSession();
@@ -87,7 +80,11 @@ public class AjaxController extends AbstractController {
 		// Resolve user Intalio token (if not already done)
 		String token = (String) session.getAttribute(ATTR_TOKEN);
 		if ((token == null || token.isEmpty()) && userId != null) {
-			token = resolveIntalioToken(session, username);
+			try {
+				token = resolveIntalioToken(session, username);
+			} catch (Exception e) {
+				LOGGER.error("Couldn't resolve intalio token. Username: "+username+" ErrorMsg: "+e.getMessage());
+			}
 			session.setAttribute(ATTR_TOKEN, token);
 		}
 		
