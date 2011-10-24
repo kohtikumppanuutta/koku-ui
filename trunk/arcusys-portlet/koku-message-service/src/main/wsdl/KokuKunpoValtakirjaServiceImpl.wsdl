@@ -1,0 +1,252 @@
+<definitions name='KokuKunpoValtakirjaService' targetNamespace='http://soa.tiva.koku.arcusys.fi/' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://soa.tiva.koku.arcusys.fi/' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://soa.tiva.koku.arcusys.fi/' version='1.0' xmlns:tns='http://soa.tiva.koku.arcusys.fi/' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='getAuthorizationSummaryById' type='tns:getAuthorizationSummaryById'/>
+   <xs:element name='getAuthorizationSummaryByIdResponse' type='tns:getAuthorizationSummaryByIdResponse'/>
+   <xs:element name='getReceivedAuthorizations' type='tns:getReceivedAuthorizations'/>
+   <xs:element name='getReceivedAuthorizationsResponse' type='tns:getReceivedAuthorizationsResponse'/>
+   <xs:element name='getSentAuthorizations' type='tns:getSentAuthorizations'/>
+   <xs:element name='getSentAuthorizationsResponse' type='tns:getSentAuthorizationsResponse'/>
+   <xs:element name='getTotalReceivedAuthorizations' type='tns:getTotalReceivedAuthorizations'/>
+   <xs:element name='getTotalReceivedAuthorizationsResponse' type='tns:getTotalReceivedAuthorizationsResponse'/>
+   <xs:element name='getTotalSentAuthorizations' type='tns:getTotalSentAuthorizations'/>
+   <xs:element name='getTotalSentAuthorizationsResponse' type='tns:getTotalSentAuthorizationsResponse'/>
+   <xs:element name='revokeOwnAuthorization' type='tns:revokeOwnAuthorization'/>
+   <xs:element name='revokeOwnAuthorizationResponse' type='tns:revokeOwnAuthorizationResponse'/>
+   <xs:complexType name='getReceivedAuthorizations'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='user' type='xs:string'/>
+     <xs:element name='startNum' type='xs:int'/>
+     <xs:element name='maxNum' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getReceivedAuthorizationsResponse'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:authorizationShortSummary'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='authorizationShortSummary'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='authorizationId' type='xs:long'/>
+     <xs:element minOccurs='0' name='receiverUid' type='xs:string'/>
+     <xs:element minOccurs='0' name='senderUid' type='xs:string'/>
+     <xs:element minOccurs='0' name='status' type='tns:authorizationStatus'/>
+     <xs:element minOccurs='0' name='targetPersonUid' type='xs:string'/>
+     <xs:element minOccurs='0' name='template' type='tns:valtakirjapohja'/>
+     <xs:element minOccurs='0' name='validTill' type='xs:date'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='valtakirjapohja'>
+    <xs:sequence>
+     <xs:element name='templateId' type='xs:long'/>
+     <xs:element minOccurs='0' name='templateName' type='xs:string'/>
+     <xs:element minOccurs='0' name='description' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getSentAuthorizations'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='user' type='xs:string'/>
+     <xs:element name='startNum' type='xs:int'/>
+     <xs:element name='maxNum' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getSentAuthorizationsResponse'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:authorizationShortSummary'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getTotalSentAuthorizations'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='user' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getTotalSentAuthorizationsResponse'>
+    <xs:sequence>
+     <xs:element name='return' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getTotalReceivedAuthorizations'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='user' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getTotalReceivedAuthorizationsResponse'>
+    <xs:sequence>
+     <xs:element name='return' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getAuthorizationSummaryById'>
+    <xs:sequence>
+     <xs:element name='authorizationId' type='xs:long'/>
+     <xs:element minOccurs='0' name='user' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getAuthorizationSummaryByIdResponse'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='return' type='tns:authorizationSummary'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='authorizationSummary'>
+    <xs:complexContent>
+     <xs:extension base='tns:authorizationShortSummary'>
+      <xs:sequence>
+       <xs:element minOccurs='0' name='createdAt' type='xs:date'/>
+       <xs:element minOccurs='0' name='givenAt' type='xs:date'/>
+       <xs:element minOccurs='0' name='replyTill' type='xs:date'/>
+       <xs:element minOccurs='0' name='type' type='tns:authorizationCreateType'/>
+      </xs:sequence>
+     </xs:extension>
+    </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name='revokeOwnAuthorization'>
+    <xs:sequence>
+     <xs:element name='authorizationId' type='xs:long'/>
+     <xs:element minOccurs='0' name='user' type='xs:string'/>
+     <xs:element minOccurs='0' name='comment' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='revokeOwnAuthorizationResponse'>
+    <xs:sequence/>
+   </xs:complexType>
+   <xs:simpleType name='authorizationStatus'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='Open'/>
+     <xs:enumeration value='Valid'/>
+     <xs:enumeration value='Expired'/>
+     <xs:enumeration value='Revoked'/>
+     <xs:enumeration value='Declined'/>
+    </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name='authorizationCreateType'>
+    <xs:restriction base='xs:string'>
+     <xs:enumeration value='Electronic'/>
+     <xs:enumeration value='Non_Electronic'/>
+    </xs:restriction>
+   </xs:simpleType>
+  </xs:schema>
+ </types>
+ <message name='KokuKunpoValtakirjaService_revokeOwnAuthorizationResponse'>
+  <part element='tns:revokeOwnAuthorizationResponse' name='revokeOwnAuthorizationResponse'></part>
+ </message>
+ <message name='KokuKunpoValtakirjaService_getTotalSentAuthorizationsResponse'>
+  <part element='tns:getTotalSentAuthorizationsResponse' name='getTotalSentAuthorizationsResponse'></part>
+ </message>
+ <message name='KokuKunpoValtakirjaService_getSentAuthorizationsResponse'>
+  <part element='tns:getSentAuthorizationsResponse' name='getSentAuthorizationsResponse'></part>
+ </message>
+ <message name='KokuKunpoValtakirjaService_revokeOwnAuthorization'>
+  <part element='tns:revokeOwnAuthorization' name='revokeOwnAuthorization'></part>
+ </message>
+ <message name='KokuKunpoValtakirjaService_getTotalReceivedAuthorizations'>
+  <part element='tns:getTotalReceivedAuthorizations' name='getTotalReceivedAuthorizations'></part>
+ </message>
+ <message name='KokuKunpoValtakirjaService_getSentAuthorizations'>
+  <part element='tns:getSentAuthorizations' name='getSentAuthorizations'></part>
+ </message>
+ <message name='KokuKunpoValtakirjaService_getAuthorizationSummaryByIdResponse'>
+  <part element='tns:getAuthorizationSummaryByIdResponse' name='getAuthorizationSummaryByIdResponse'></part>
+ </message>
+ <message name='KokuKunpoValtakirjaService_getReceivedAuthorizations'>
+  <part element='tns:getReceivedAuthorizations' name='getReceivedAuthorizations'></part>
+ </message>
+ <message name='KokuKunpoValtakirjaService_getAuthorizationSummaryById'>
+  <part element='tns:getAuthorizationSummaryById' name='getAuthorizationSummaryById'></part>
+ </message>
+ <message name='KokuKunpoValtakirjaService_getTotalReceivedAuthorizationsResponse'>
+  <part element='tns:getTotalReceivedAuthorizationsResponse' name='getTotalReceivedAuthorizationsResponse'></part>
+ </message>
+ <message name='KokuKunpoValtakirjaService_getTotalSentAuthorizations'>
+  <part element='tns:getTotalSentAuthorizations' name='getTotalSentAuthorizations'></part>
+ </message>
+ <message name='KokuKunpoValtakirjaService_getReceivedAuthorizationsResponse'>
+  <part element='tns:getReceivedAuthorizationsResponse' name='getReceivedAuthorizationsResponse'></part>
+ </message>
+ <portType name='KokuKunpoValtakirjaService'>
+  <operation name='getAuthorizationSummaryById' parameterOrder='getAuthorizationSummaryById'>
+   <input message='tns:KokuKunpoValtakirjaService_getAuthorizationSummaryById'></input>
+   <output message='tns:KokuKunpoValtakirjaService_getAuthorizationSummaryByIdResponse'></output>
+  </operation>
+  <operation name='getReceivedAuthorizations' parameterOrder='getReceivedAuthorizations'>
+   <input message='tns:KokuKunpoValtakirjaService_getReceivedAuthorizations'></input>
+   <output message='tns:KokuKunpoValtakirjaService_getReceivedAuthorizationsResponse'></output>
+  </operation>
+  <operation name='getSentAuthorizations' parameterOrder='getSentAuthorizations'>
+   <input message='tns:KokuKunpoValtakirjaService_getSentAuthorizations'></input>
+   <output message='tns:KokuKunpoValtakirjaService_getSentAuthorizationsResponse'></output>
+  </operation>
+  <operation name='getTotalReceivedAuthorizations' parameterOrder='getTotalReceivedAuthorizations'>
+   <input message='tns:KokuKunpoValtakirjaService_getTotalReceivedAuthorizations'></input>
+   <output message='tns:KokuKunpoValtakirjaService_getTotalReceivedAuthorizationsResponse'></output>
+  </operation>
+  <operation name='getTotalSentAuthorizations' parameterOrder='getTotalSentAuthorizations'>
+   <input message='tns:KokuKunpoValtakirjaService_getTotalSentAuthorizations'></input>
+   <output message='tns:KokuKunpoValtakirjaService_getTotalSentAuthorizationsResponse'></output>
+  </operation>
+  <operation name='revokeOwnAuthorization' parameterOrder='revokeOwnAuthorization'>
+   <input message='tns:KokuKunpoValtakirjaService_revokeOwnAuthorization'></input>
+   <output message='tns:KokuKunpoValtakirjaService_revokeOwnAuthorizationResponse'></output>
+  </operation>
+ </portType>
+ <binding name='KokuKunpoValtakirjaServiceBinding' type='tns:KokuKunpoValtakirjaService'>
+  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='getAuthorizationSummaryById'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getReceivedAuthorizations'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getSentAuthorizations'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getTotalReceivedAuthorizations'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getTotalSentAuthorizations'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='revokeOwnAuthorization'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='KokuKunpoValtakirjaService'>
+  <port binding='tns:KokuKunpoValtakirjaServiceBinding' name='KokuKunpoValtakirjaServicePort'>
+   <soap:address location='http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuKunpoValtakirjaServiceImpl'/>
+  </port>
+ </service>
+</definitions>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployments>
+   <deployment>
+      <instance>
+         <instance-id>MessageServiceNewInstance</instance-id>
+         <portlet-ref>messageService</portlet-ref>
+      </instance>
+   </deployment>
+</deployments>

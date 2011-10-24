@@ -1,0 +1,506 @@
+<definitions name='UsersAndGroupsService' targetNamespace='http://soa.common.koku.arcusys.fi/' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://soa.common.koku.arcusys.fi/' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://soa.common.koku.arcusys.fi/' version='1.0' xmlns:tns='http://soa.common.koku.arcusys.fi/' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='getChildInfo' type='tns:getChildInfo'/>
+   <xs:element name='getChildInfoResponse' type='tns:getChildInfoResponse'/>
+   <xs:element name='getKunpoNameByUserUid' type='tns:getKunpoNameByUserUid'/>
+   <xs:element name='getKunpoNameByUserUidResponse' type='tns:getKunpoNameByUserUidResponse'/>
+   <xs:element name='getLooraNameByUserUid' type='tns:getLooraNameByUserUid'/>
+   <xs:element name='getLooraNameByUserUidResponse' type='tns:getLooraNameByUserUidResponse'/>
+
+   <xs:element name='getSsnByLdapName' type='tns:getSsnByLdapName'/>
+   <xs:element name='getSsnByLdapNameResponse' type='tns:getSsnByLdapNameResponse'/>
+   <xs:element name='getUserInfo' type='tns:getUserInfo'/>
+   <xs:element name='getUserInfoResponse' type='tns:getUserInfoResponse'/>
+   <xs:element name='getUserUid' type='tns:getUserUid'/>
+   <xs:element name='getUserUidByKunpoName' type='tns:getUserUidByKunpoName'/>
+   <xs:element name='getUserUidByKunpoNameResponse' type='tns:getUserUidByKunpoNameResponse'/>
+   <xs:element name='getUserUidByLooraName' type='tns:getUserUidByLooraName'/>
+   <xs:element name='getUserUidByLooraNameResponse' type='tns:getUserUidByLooraNameResponse'/>
+
+   <xs:element name='getUserUidResponse' type='tns:getUserUidResponse'/>
+   <xs:element name='getUsersByGroupUid' type='tns:getUsersByGroupUid'/>
+   <xs:element name='getUsersByGroupUidResponse' type='tns:getUsersByGroupUidResponse'/>
+   <xs:element name='getUsersChildren' type='tns:getUsersChildren'/>
+   <xs:element name='getUsersChildrenResponse' type='tns:getUsersChildrenResponse'/>
+   <xs:element name='searchChildren' type='tns:searchChildren'/>
+   <xs:element name='searchChildrenResponse' type='tns:searchChildrenResponse'/>
+   <xs:element name='searchGroups' type='tns:searchGroups'/>
+   <xs:element name='searchGroupsResponse' type='tns:searchGroupsResponse'/>
+
+   <xs:element name='searchUsers' type='tns:searchUsers'/>
+   <xs:element name='searchUsersResponse' type='tns:searchUsersResponse'/>
+   <xs:complexType name='getUserInfo'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='userUid' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getUserInfoResponse'>
+    <xs:sequence>
+
+     <xs:element minOccurs='0' name='user' type='tns:user'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='user'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='displayName' type='xs:string'/>
+     <xs:element minOccurs='0' name='email' type='xs:string'/>
+     <xs:element minOccurs='0' name='firstname' type='xs:string'/>
+     <xs:element minOccurs='0' name='lastname' type='xs:string'/>
+
+     <xs:element minOccurs='0' name='phoneNumber' type='xs:string'/>
+     <xs:element minOccurs='0' name='uid' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getSsnByLdapName'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='arg0' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+
+   <xs:complexType name='getSsnByLdapNameResponse'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='return' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getUserUidByKunpoName'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='kunpoUsername' type='xs:string'/>
+    </xs:sequence>
+
+   </xs:complexType>
+   <xs:complexType name='getUserUidByKunpoNameResponse'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='userUid' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getUserUidByLooraName'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='looraUsername' type='xs:string'/>
+
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getUserUidByLooraNameResponse'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='userUid' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getUsersChildren'>
+    <xs:sequence>
+
+     <xs:element minOccurs='0' name='userUid' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getUsersChildrenResponse'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='child' type='tns:childWithHetu'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='childWithHetu'>
+
+    <xs:complexContent>
+     <xs:extension base='tns:child'>
+      <xs:sequence>
+       <xs:element minOccurs='0' name='hetu' type='xs:string'/>
+      </xs:sequence>
+     </xs:extension>
+    </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name='child'>
+
+    <xs:complexContent>
+     <xs:extension base='tns:user'>
+      <xs:sequence>
+       <xs:element maxOccurs='unbounded' minOccurs='0' name='parents' nillable='true' type='tns:user'/>
+      </xs:sequence>
+     </xs:extension>
+    </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name='getKunpoNameByUserUid'>
+
+    <xs:sequence>
+     <xs:element minOccurs='0' name='userUid' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getKunpoNameByUserUidResponse'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='kunpoUsername' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+
+   <xs:complexType name='getLooraNameByUserUid'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='userUid' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getLooraNameByUserUidResponse'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='looraUsername' type='xs:string'/>
+    </xs:sequence>
+
+   </xs:complexType>
+   <xs:complexType name='searchUsers'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='searchString' type='xs:string'/>
+     <xs:element name='limit' type='xs:int'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='searchUsersResponse'>
+    <xs:sequence>
+
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='user' type='tns:user'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getUserUid'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='ssn' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getUserUidResponse'>
+
+    <xs:sequence>
+     <xs:element minOccurs='0' name='return' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='searchGroups'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='searchString' type='xs:string'/>
+     <xs:element name='limit' type='xs:int'/>
+    </xs:sequence>
+
+   </xs:complexType>
+   <xs:complexType name='searchGroupsResponse'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='group' type='tns:group'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='group'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='groupName' type='xs:string'/>
+
+     <xs:element minOccurs='0' name='groupUid' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getUsersByGroupUid'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='groupUid' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getUsersByGroupUidResponse'>
+
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='user' type='tns:user'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='searchChildren'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='searchString' type='xs:string'/>
+     <xs:element name='limit' type='xs:int'/>
+    </xs:sequence>
+
+   </xs:complexType>
+   <xs:complexType name='searchChildrenResponse'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='child' type='tns:child'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getChildInfo'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='childUid' type='xs:string'/>
+
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='getChildInfoResponse'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='child' type='tns:child'/>
+    </xs:sequence>
+   </xs:complexType>
+  </xs:schema>
+ </types>
+
+ <message name='UsersAndGroupsService_getKunpoNameByUserUid'>
+  <part element='tns:getKunpoNameByUserUid' name='getKunpoNameByUserUid'></part>
+ </message>
+ <message name='UsersAndGroupsService_getUsersChildren'>
+  <part element='tns:getUsersChildren' name='getUsersChildren'></part>
+ </message>
+ <message name='UsersAndGroupsService_searchChildren'>
+  <part element='tns:searchChildren' name='searchChildren'></part>
+ </message>
+
+ <message name='UsersAndGroupsService_getUserInfo'>
+  <part element='tns:getUserInfo' name='getUserInfo'></part>
+ </message>
+ <message name='UsersAndGroupsService_getLooraNameByUserUidResponse'>
+  <part element='tns:getLooraNameByUserUidResponse' name='getLooraNameByUserUidResponse'></part>
+ </message>
+ <message name='UsersAndGroupsService_searchUsers'>
+  <part element='tns:searchUsers' name='searchUsers'></part>
+ </message>
+
+ <message name='UsersAndGroupsService_searchGroupsResponse'>
+  <part element='tns:searchGroupsResponse' name='searchGroupsResponse'></part>
+ </message>
+ <message name='UsersAndGroupsService_searchChildrenResponse'>
+  <part element='tns:searchChildrenResponse' name='searchChildrenResponse'></part>
+ </message>
+ <message name='UsersAndGroupsService_getUserUidByKunpoName'>
+  <part element='tns:getUserUidByKunpoName' name='getUserUidByKunpoName'></part>
+ </message>
+
+ <message name='UsersAndGroupsService_getUserUid'>
+  <part element='tns:getUserUid' name='getUserUid'></part>
+ </message>
+ <message name='UsersAndGroupsService_getUserUidByLooraNameResponse'>
+  <part element='tns:getUserUidByLooraNameResponse' name='getUserUidByLooraNameResponse'></part>
+ </message>
+ <message name='UsersAndGroupsService_getUsersByGroupUid'>
+  <part element='tns:getUsersByGroupUid' name='getUsersByGroupUid'></part>
+ </message>
+
+ <message name='UsersAndGroupsService_getKunpoNameByUserUidResponse'>
+  <part element='tns:getKunpoNameByUserUidResponse' name='getKunpoNameByUserUidResponse'></part>
+ </message>
+ <message name='UsersAndGroupsService_getLooraNameByUserUid'>
+  <part element='tns:getLooraNameByUserUid' name='getLooraNameByUserUid'></part>
+ </message>
+ <message name='UsersAndGroupsService_getUsersChildrenResponse'>
+  <part element='tns:getUsersChildrenResponse' name='getUsersChildrenResponse'></part>
+ </message>
+
+ <message name='UsersAndGroupsService_getUserUidByLooraName'>
+  <part element='tns:getUserUidByLooraName' name='getUserUidByLooraName'></part>
+ </message>
+ <message name='UsersAndGroupsService_getUserUidByKunpoNameResponse'>
+  <part element='tns:getUserUidByKunpoNameResponse' name='getUserUidByKunpoNameResponse'></part>
+ </message>
+ <message name='UsersAndGroupsService_getSsnByLdapNameResponse'>
+  <part element='tns:getSsnByLdapNameResponse' name='getSsnByLdapNameResponse'></part>
+ </message>
+
+ <message name='UsersAndGroupsService_getChildInfo'>
+  <part element='tns:getChildInfo' name='getChildInfo'></part>
+ </message>
+ <message name='UsersAndGroupsService_getSsnByLdapName'>
+  <part element='tns:getSsnByLdapName' name='getSsnByLdapName'></part>
+ </message>
+ <message name='UsersAndGroupsService_getUserUidResponse'>
+  <part element='tns:getUserUidResponse' name='getUserUidResponse'></part>
+ </message>
+
+ <message name='UsersAndGroupsService_searchUsersResponse'>
+  <part element='tns:searchUsersResponse' name='searchUsersResponse'></part>
+ </message>
+ <message name='UsersAndGroupsService_getUserInfoResponse'>
+  <part element='tns:getUserInfoResponse' name='getUserInfoResponse'></part>
+ </message>
+ <message name='UsersAndGroupsService_getUsersByGroupUidResponse'>
+  <part element='tns:getUsersByGroupUidResponse' name='getUsersByGroupUidResponse'></part>
+ </message>
+
+ <message name='UsersAndGroupsService_getChildInfoResponse'>
+  <part element='tns:getChildInfoResponse' name='getChildInfoResponse'></part>
+ </message>
+ <message name='UsersAndGroupsService_searchGroups'>
+  <part element='tns:searchGroups' name='searchGroups'></part>
+ </message>
+ <portType name='UsersAndGroupsService'>
+  <operation name='getChildInfo' parameterOrder='getChildInfo'>
+   <input message='tns:UsersAndGroupsService_getChildInfo'></input>
+
+   <output message='tns:UsersAndGroupsService_getChildInfoResponse'></output>
+  </operation>
+  <operation name='getKunpoNameByUserUid' parameterOrder='getKunpoNameByUserUid'>
+   <input message='tns:UsersAndGroupsService_getKunpoNameByUserUid'></input>
+   <output message='tns:UsersAndGroupsService_getKunpoNameByUserUidResponse'></output>
+  </operation>
+  <operation name='getLooraNameByUserUid' parameterOrder='getLooraNameByUserUid'>
+   <input message='tns:UsersAndGroupsService_getLooraNameByUserUid'></input>
+   <output message='tns:UsersAndGroupsService_getLooraNameByUserUidResponse'></output>
+
+  </operation>
+  <operation name='getSsnByLdapName' parameterOrder='getSsnByLdapName'>
+   <input message='tns:UsersAndGroupsService_getSsnByLdapName'></input>
+   <output message='tns:UsersAndGroupsService_getSsnByLdapNameResponse'></output>
+  </operation>
+  <operation name='getUserInfo' parameterOrder='getUserInfo'>
+   <input message='tns:UsersAndGroupsService_getUserInfo'></input>
+   <output message='tns:UsersAndGroupsService_getUserInfoResponse'></output>
+  </operation>
+
+  <operation name='getUserUid' parameterOrder='getUserUid'>
+   <input message='tns:UsersAndGroupsService_getUserUid'></input>
+   <output message='tns:UsersAndGroupsService_getUserUidResponse'></output>
+  </operation>
+  <operation name='getUserUidByKunpoName' parameterOrder='getUserUidByKunpoName'>
+   <input message='tns:UsersAndGroupsService_getUserUidByKunpoName'></input>
+   <output message='tns:UsersAndGroupsService_getUserUidByKunpoNameResponse'></output>
+  </operation>
+  <operation name='getUserUidByLooraName' parameterOrder='getUserUidByLooraName'>
+
+   <input message='tns:UsersAndGroupsService_getUserUidByLooraName'></input>
+   <output message='tns:UsersAndGroupsService_getUserUidByLooraNameResponse'></output>
+  </operation>
+  <operation name='getUsersByGroupUid' parameterOrder='getUsersByGroupUid'>
+   <input message='tns:UsersAndGroupsService_getUsersByGroupUid'></input>
+   <output message='tns:UsersAndGroupsService_getUsersByGroupUidResponse'></output>
+  </operation>
+  <operation name='getUsersChildren' parameterOrder='getUsersChildren'>
+   <input message='tns:UsersAndGroupsService_getUsersChildren'></input>
+
+   <output message='tns:UsersAndGroupsService_getUsersChildrenResponse'></output>
+  </operation>
+  <operation name='searchChildren' parameterOrder='searchChildren'>
+   <input message='tns:UsersAndGroupsService_searchChildren'></input>
+   <output message='tns:UsersAndGroupsService_searchChildrenResponse'></output>
+  </operation>
+  <operation name='searchGroups' parameterOrder='searchGroups'>
+   <input message='tns:UsersAndGroupsService_searchGroups'></input>
+   <output message='tns:UsersAndGroupsService_searchGroupsResponse'></output>
+
+  </operation>
+  <operation name='searchUsers' parameterOrder='searchUsers'>
+   <input message='tns:UsersAndGroupsService_searchUsers'></input>
+   <output message='tns:UsersAndGroupsService_searchUsersResponse'></output>
+  </operation>
+ </portType>
+ <binding name='UsersAndGroupsServiceBinding' type='tns:UsersAndGroupsService'>
+  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='getChildInfo'>
+
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getKunpoNameByUserUid'>
+
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getLooraNameByUserUid'>
+
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getSsnByLdapName'>
+
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getUserInfo'>
+
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getUserUid'>
+
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getUserUidByKunpoName'>
+
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getUserUidByLooraName'>
+
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getUsersByGroupUid'>
+
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='getUsersChildren'>
+
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='searchChildren'>
+
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='searchGroups'>
+
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='searchUsers'>
+
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+ </binding>
+
+ <service name='UsersAndGroupsService'>
+  <port binding='tns:UsersAndGroupsServiceBinding' name='UsersAndGroupsServicePort'>
+   <soap:address location='http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-arcusys-common-0.1-SNAPSHOT/UsersAndGroupsServiceImpl'/>
+  </port>
+ </service>
+</definitions>

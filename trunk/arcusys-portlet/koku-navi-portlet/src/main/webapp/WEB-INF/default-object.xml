@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployments>
+   <deployment>
+      <parent-ref>default</parent-ref>
+      <if-exists>keep</if-exists>
+      <page>
+         <page-name>Message</page-name>
+         <properties>
+                <!-- Set the layout for the default portal -->
+                <property>
+                    <name>layout.id</name>
+                    <value>naviLayout-2Columns</value>
+                </property>
+                <!-- Set the theme for the default portal -->
+                <property>
+                    <name>theme.id</name>
+                    <value>naviTheme</value>
+                </property>
+                <!-- Set the default render set name -->
+                <property>
+                    <name>theme.renderSetId</name>
+                    <value>naviRenderer</value>
+                </property>
+            </properties>
+         <window>
+            <window-name>MessageNavigationWindow</window-name>
+            <instance-ref>MessageNavigationInstance</instance-ref>
+            <region>left</region>
+            <height>0</height>
+         </window>
+         <window>
+            <window-name>MessageServiceNewWindow</window-name>
+            <instance-ref>MessageServiceNewInstance</instance-ref>
+            <region>right</region>
+            <height>0</height>
+         </window>
+      </page>
+   </deployment>
+</deployments>

@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>koku-ui</artifactId>
+    <groupId>kohti-kumppanuutta</groupId>
+    <version>0.0.1</version>
+  </parent>
+  <artifactId>pyh-portlet</artifactId>
+  <packaging>war</packaging>
+  <name>pyh-portlet</name>
+  <version>0.0.1-SNAPSHOT</version>
+
+  <dependencies>
+  
+    <!--  
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+  	<artifactId>exo.portal.webui.portal</artifactId>
+  	<version>3.1.0-GA</version>
+  	<scope>provided</scope>
+    </dependency>
+    -->  
+  
+    <dependency>
+      <groupId>kohti-kumppanuutta</groupId>
+      <artifactId>customerservice-api</artifactId>
+      <version>0.0.15</version>
+    </dependency>     
+  
+    <dependency>
+      <groupId>kohti-kumppanuutta</groupId>
+      <artifactId>portlet-common</artifactId>
+      <version>0.0.15</version>
+	</dependency>
+    
+    <dependency>
+      <groupId>kohti-kumppanuutta</groupId>
+      <artifactId>lokservice-api</artifactId>
+      <version>0.0.17</version>
+    </dependency>
+    
+  </dependencies>
+
+</project>

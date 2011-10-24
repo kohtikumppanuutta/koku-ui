@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployments>
+   <deployment>
+      <instance>
+         <instance-id>MessageNavigationInstance</instance-id>
+         <portlet-ref>messageNavigation</portlet-ref>
+         <preferences>
+         	<preference>
+				<name>naviRelativePath</name>
+				<value>true</value>
+			</preference>
+            <preference>
+				<name>preferencesPathKks</name>
+				<value>/KKS</value>
+			</preference>
+			<preference>
+				<name>preferencesPathLok</name>
+				<value>/LOK</value>
+			</preference>	
+			<preference>
+				<name>preferencesPathPyh</name>
+				<value>/PYH</value>
+			</preference>
+		</preferences>
+      </instance>
+   </deployment>
+</deployments>

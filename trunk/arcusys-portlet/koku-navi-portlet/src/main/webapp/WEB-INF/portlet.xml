@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
+
+	<portlet>
+		<description>Portlet providing message navigation</description>
+		<portlet-name>messageNavigation</portlet-name>
+		<display-name>Message Navigation Portlet</display-name>
+		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>edit</portlet-mode>		
+		</supports>
+		<resource-bundle>messages</resource-bundle>
+		<portlet-info>
+			<title>Message Navigation Portlet</title>
+		</portlet-info>
+		<portlet-preferences>
+				<preference>
+				<name>naviRelativePath</name>
+				<value>true</value>
+			</preference>
+	          <preference>
+					<name>preferencesPathKks</name>
+					<value>/KKS</value>
+				</preference>
+				<preference>
+					<name>preferencesPathLok</name>
+					<value>/LOK</value>
+				</preference>	
+				<preference>
+					<name>preferencesPathPyh</name>
+					<value>/PYH</value>
+				</preference>	
+		</portlet-preferences>		
+	</portlet>
+</portlet-app>

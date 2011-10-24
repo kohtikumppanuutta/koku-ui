@@ -1,0 +1,33 @@
+
+LOK
+===
+Lokiin tallennetaan lokitapahtumasta seuraavat tiedot:
+- tapahtuma-aika: esim. 2011-06-27 10:29:30
+- kutsuva komponentti/palvelu/järjestelmä: esim. kks, asukastietopalvelu, effica, ...
+- käyttäjä: Maija Mallikas (hetu tai sisäinen tunniste)
+- kohdehlö.: Matti Meikäläinen (hetu tai sisäinen tunniste)
+- kohdekäsite: kks-kokoelma
+- operaatio (tapahtumatyyppi): lue tiedot
+- kohdekäsiteinstanssi: Matin 4-v tarkastuksen tiedot (tunniste)
+- vanha arvo
+- uusi arvo
+- viesti: mahdollinen lokikirjauksen tarkentava tieto
+
+
+LOK-3
+- kts. käyttötapausten kuvaus
+- hakuehdot
+  * henkilön tunniste (esim. HETU)
+  * hakukohde (käsite, esim. kehitystieto)
+  * tarkasteluväli (lähtöhetki, loppuhetki)
+- tuloslistauksessa esiintyvät tiedot
+  * käytetyt hakuehdot
+  * tapahtuma-aika
+  * kutsuva palvelu
+  * käyttäjän/käsittelijän nimi
+  * tapahtumatyyppi (esim. operaatio, hae kokoelma tmv.)
+  * käsitelty tieto (kohdekäsite ja/tai kohdekäsiteinstanssi)
+
+LOK-2
+
+LOK-4
