@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployments>
+   <deployment>
+      <instance>
+         <instance-id>KokuRedirectionInstance</instance-id>
+         <portlet-ref>redirectionPortlet</portlet-ref>
+      </instance>
+   </deployment>
+</deployments>
