@@ -57,7 +57,7 @@ public class MigrationUtil {
 	
 	public static String getServiceURL(PortletRequest request) {
 //		String serviceURL = PrefsPropsUtil.getString(PortalUtil.getCompanyId(request), "cas.service.url");
-		return "http://localhost:8080/cas";
+		return "http://trelx28b:8080/cas";
 	}
 
 	public static String getUserPassword(PortletRequest request) {

@@ -163,27 +163,11 @@
 			jQuery('#<portlet:namespace />xforms_iframe').attr('src', newUrl);
 		}else {
 			jQuery('#<portlet:namespace />xforms_iframe').attr('src', "${formholder.url}");
-		} 
+		}
 		
 		 /* Make sure that IFrame height is correct. We do not want to 
 		  *	see any extra scrollbars. */
 		resizeIFrame(iFrameId, minHeight);
-	 
-	 
-	 <%-- Temporary solution 
-		var formUrl = "${formholder.url}";
-		if(koku_currentUrl.indexOf("FormID=") > 0) {
-			var temp = koku_currentUrl.split("FormID=");
-			var formId = temp[1];
-			formUrl = formUrl.replace('/palvelut-portlet/ajaxforms','http://intalio.intra.arcusys.fi:8080/gi');
-			formUrl = formUrl.replace('%2Fpalvelut-portlet%2Fajaxforms%2F','%2Fgi%2F');
-			jQuery('#<portlet:namespace />xforms_iframe').attr('src', formUrl + "&FormID=" + formId);
-		}else {
-			formUrl = formUrl.replace('/palvelut-portlet/ajaxforms','http://intalio.intra.arcusys.fi:8080/gi');
-			formUrl = formUrl.replace('%2Fpalvelut-portlet%2Fajaxforms%2F','%2Fgi%2F');
-			jQuery('#<portlet:namespace />xforms_iframe').attr('src', formUrl);
-		}		
-	--%>
 	}
 
         function scrollToTop() {

@@ -500,7 +500,7 @@
 
  <service name='UsersAndGroupsService'>
   <port binding='tns:UsersAndGroupsServiceBinding' name='UsersAndGroupsServicePort'>
-   <soap:address location='http://127.0.0.1:8180/arcusys-koku-0.1-SNAPSHOT-arcusys-common-0.1-SNAPSHOT/UsersAndGroupsServiceImpl'/>
+   <soap:address location='http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-arcusys-common-0.1-SNAPSHOT/UsersAndGroupsServiceImpl'/>
   </port>
  </service>
 </definitions>

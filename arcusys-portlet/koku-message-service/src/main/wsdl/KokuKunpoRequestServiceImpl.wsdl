@@ -241,7 +241,7 @@
  </binding>
  <service name='KokuKunpoRequestService'>
   <port binding='tns:KokuKunpoRequestServiceBinding' name='KokuKunpoRequestServicePort'>
-   <soap:address location='http://127.0.0.1:8180/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuKunpoRequestServiceImpl'/>
+   <soap:address location='http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuKunpoRequestServiceImpl'/>
   </port>
  </service>
 </definitions>

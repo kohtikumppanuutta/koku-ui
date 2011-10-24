@@ -12,7 +12,7 @@ import org.springframework.ws.transport.WebServiceMessageSender;
 
 /**
  * Sample class for KokuAppointmentProcessingServiceImpl <br/>
- * http://gatein.intra.arcusys.fi:8080/kv-model-0.1-SNAPSHOT/KokuAppointmentProcessingServiceImpl
+ * http://trelx51x:8080/kv-model-0.1-SNAPSHOT/KokuAppointmentProcessingServiceImpl
  * 
  * @author Toni Turunen
  *

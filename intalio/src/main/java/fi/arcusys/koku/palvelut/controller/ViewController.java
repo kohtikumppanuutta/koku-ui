@@ -61,13 +61,13 @@ public class ViewController extends FormHolderController {
 	public static final String ROOT_CATEGORY_LIST_MODEL_NAME 			= "rootCategories";
 	
 
-	private static final String APPOINTMENT_PROCESS_SERVICE				= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuAppointmentProcessingServiceImpl";
-	private static final String APPOINTMENT_SERVICE_CITIZEN				= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuKunpoAppointmentServiceImpl";
-	private static final String APPOINTMENT_SERVICE_EMPLOYEE			= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuLooraAppointmentServiceImpl";
-	private static final String REQUEST_SERVICE		 					= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuRequestServiceImpl";
-	private static final String MESSAGE_SERVICE							= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuMessageServiceImpl";	
-	private static final String TIVA_CITIZEN_SERVICE					= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuLooraSuostumusServiceImpl";
-	private static final String TIVA_EMPLOYEE_SERVICE					= "http://gatein.intra.arcusys.fi:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuKunpoSuostumusServiceImpl";
+	private static final String APPOINTMENT_PROCESS_SERVICE				= "http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuAppointmentProcessingServiceImpl";
+	private static final String APPOINTMENT_SERVICE_CITIZEN				= "http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuKunpoAppointmentServiceImpl";
+	private static final String APPOINTMENT_SERVICE_EMPLOYEE			= "http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuLooraAppointmentServiceImpl";
+	private static final String REQUEST_SERVICE		 					= "http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuRequestServiceImpl";
+	private static final String MESSAGE_SERVICE							= "http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuMessageServiceImpl";	
+	private static final String TIVA_CITIZEN_SERVICE					= "http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuLooraSuostumusServiceImpl";
+	private static final String TIVA_EMPLOYEE_SERVICE					= "http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuKunpoSuostumusServiceImpl";
 
 
 	@Autowired

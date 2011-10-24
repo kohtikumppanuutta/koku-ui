@@ -13,7 +13,7 @@
 	<import resource="config.xml"/>
 	
 <!-- 	<bean id="webServiceClient" class="WebServiceClient"> -->
-<!--         <property name="defaultUri" value="http://gatein.intra.arcusys.fi:8080/kv-model-0.1-SNAPSHOT/KokuAppointmentProcessingServiceImpl"/> -->
+<!--         <property name="defaultUri" value="http://trelx51x:8080/kv-model-0.1-SNAPSHOT/KokuAppointmentProcessingServiceImpl"/> -->
 <!--     </bean> -->
 	
 	

@@ -53,7 +53,7 @@
 	</bean>
 
     <bean id="veeraServicesFacade" class="fi.arcusys.koku.palvelut.services.VeeraServicesFacadeImpl" init-method="init" lazy-init="true">
-<!--         <property name="wsdlLocation" value="http://gatein.intra.arcusys.fi:8080/palvelut-web-service-0.1-SNAPSHOT/VeeraServicesSessionBean?wsdl"/> -->
-       <property name="wsdlLocation" value="http://127.0.0.1:8180/palvelut-web-service-0.1-SNAPSHOT/VeeraServicesSessionBean?wsdl"/>
+<!--         <property name="wsdlLocation" value="http://trelx51x:8080/palvelut-web-service-0.1-SNAPSHOT/VeeraServicesSessionBean?wsdl"/> -->
+       <property name="wsdlLocation" value="http://trelx51x:8080/palvelut-web-service-0.1-SNAPSHOT/VeeraServicesSessionBean?wsdl"/>
     </bean>
 </beans>
