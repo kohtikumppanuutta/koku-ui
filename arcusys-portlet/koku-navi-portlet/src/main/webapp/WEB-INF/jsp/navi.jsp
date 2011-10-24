@@ -12,26 +12,35 @@
 
 <%
 	/* Parses the parent path url from the portlet renderURL */
+	
 	String defaultPath = "";
 	String currentPage = "";
 	String actionParam = "";
 	
 	int pos = naviURL.indexOf("default");
 	if (pos > -1) { // for Jboss portal
-		defaultPath = naviURL.substring(0, pos+7);
+// 		defaultPath = naviURL.substring(0, pos+7);
+		int currentPathPosition = naviURL.indexOf("Message");
+		defaultPath = naviURL.substring(0, currentPathPosition+7);
 		int pos1 = naviURL.lastIndexOf("/");
 		actionParam = naviURL.substring(pos1);
 		String currentPath = naviURL.substring(0, pos1);
 		int pos2 = currentPath.lastIndexOf("/");
-		currentPage = currentPath.substring(pos2+1);		
+		currentPage = currentPath.substring(pos2+1);
 	} else { // for Gatein portal
 		int pos1 = naviURL.indexOf("classic");
-		defaultPath = naviURL.substring(0, pos1+7);
+		int currentPathPosition = naviURL.indexOf("Message");
+		defaultPath = naviURL.substring(0, currentPathPosition+7);
+// 		defaultPath = naviURL.substring(0, pos1+7);
 		int pos2 = naviURL.indexOf("?");
 		String currentPath = naviURL.substring(0, pos2);
 		int pos3 = currentPath.lastIndexOf("/");
 		currentPage = currentPath.substring(pos3+1);
 	}
+	
+	System.out.println("------------------------------------------------------------------------------------------------------");
+	System.out.println("defaultPath: '"+defaultPath+"' currentPage: '"+currentPage+"' actionParam: '"+actionParam+"' \n NaviURL: '"+naviURL+"'");
+	System.out.println("------------------------------------------------------------------------------------------------------");
 			
 %>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/jquery-1.5.2.min.js"></script>
@@ -191,7 +200,7 @@
 	<%  //for jboss portal
 	if(defaultPath.contains("default")) { %>
 	function navigateToPage(naviType) {		
-		var url = "<%= defaultPath %>" + "/Message" + "<%= actionParam %>" + '&naviType=' + naviType;	
+		var url = "<%= defaultPath %>" + "" + "<%= actionParam %>" + '&naviType=' + naviType;	
 		window.location = url;
 	}
 	<%}else{ // for gatein portal %>
@@ -204,7 +213,7 @@
 			var json = obj.response;
 			var renderUrl = json["renderUrl"];
 			var temp = renderUrl.split("?");
-			var naviUrl = "<%= defaultPath %>" + "/Message?" + temp[1] + "&NAVI_TYPE=" + naviType;
+			var naviUrl = "<%= defaultPath %>" + "?" + temp[1] + "&NAVI_TYPE=" + naviType;
 			window.location = naviUrl;
 		});		
 	}
@@ -250,7 +259,7 @@
 			<ul class="child">
 					<!-- Show "New message" only for employee in Jboss portal -->
 				<c:if test="${fn:contains(naviURL, '/default/')}">
-				<li id="msg_new"><a href="<%= defaultPath %>/Message/NewMessage">Uusi viesti</a> </li>
+				<li id="msg_new"><a href="<%= defaultPath %>/NewMessage">Uusi viesti</a> </li>
 				</c:if>
 				<li id="msg_inbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')">Saapuneet</a><span id="inbox_num" class="message_num"></span></li>
 				<li id="msg_outbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_outbox')">Lähetetyt</a></li>
@@ -268,7 +277,7 @@
 		<c:if test="${fn:contains(naviURL, '/classic/')}">
 		<li><a href="#">Pyynnöt</a>
 			<ul class="child">
-				<li id="req_valid_request"><a href="<%= defaultPath %>/Message/ValidRequest">Saapuneet</a><span id="requests_num" class="message_num"></span></li>
+				<li id="req_valid_request"><a href="<%= defaultPath %>/ValidRequest">Saapuneet</a><span id="requests_num" class="message_num"></span></li>
 				<li id="<%=Constants.TASK_TYPE_REQUEST_REPLIED %>"><a href="javascript:void(0)" onclick="navigateToPage('<%=Constants.TASK_TYPE_REQUEST_REPLIED %>')">Vastatut</a></li>
 				<li id="<%=Constants.TASK_TYPE_REQUEST_OLD %>"><a href="javascript:void(0)" onclick="navigateToPage('<%=Constants.TASK_TYPE_REQUEST_OLD %>')">Vanhat</a></li>
 			</ul>
@@ -278,8 +287,8 @@
 		<c:if test="${fn:contains(naviURL, '/default/')}">
 		<li><a href="#">Pyynnöt</a>
 			<ul class="child">
-				<li id="req_new"><a href="<%= defaultPath %>/Message/NewRequest">Uusi pyyntö</a></li>
-				<li id="luopohja"><a href="<%= defaultPath %>/Message/LuoPohja">Luo uusi pohja</a></li>
+				<li id="req_new"><a href="<%= defaultPath %>/NewRequest">Uusi pyyntö</a></li>
+				<li id="luopohja"><a href="<%= defaultPath %>/LuoPohja">Luo uusi pohja</a></li>
 				<li>Lähetetyt
 					<ul class="child">
 						<li id="<%=Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>"><a href="javascript:void(0)" onclick="navigateToPage('<%=Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>')">Avoimet</a></li>
@@ -305,7 +314,7 @@
 		<c:if test="${fn:contains(naviURL, '/default/')}">
 		<li><a href="#">Tapaamiset</a>
 			<ul class="child">
-				<li id="app_new"><a href="<%= defaultPath %>/Message/NewAppointment">Uusi tapaaminen</a></li>
+				<li id="app_new"><a href="<%= defaultPath %>/NewAppointment">Uusi tapaaminen</a></li>
 				<li id="app_inbox_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_inbox_employee')">Avoimet</a></li>
 				<li id="app_response_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_response_employee')">Valmiit</a></li>
 			</ul></li>
@@ -324,12 +333,12 @@
 				
 			<li><a href="#">Valtakirjat</a>
 				<ul class="child">
-					<li id="valtakirjaconsent"><a href="<%= defaultPath %>/Message/ValtakirjaConsent">Anna valtakirja</a></li>
+					<li id="valtakirjaconsent"><a href="<%= defaultPath %>/ValtakirjaConsent">Anna valtakirja</a></li>
 					<li id="<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED%>')">Vastaanotetut</a></li>
 					<li><a href="#">Omat valtakirjat</a>
 						<ul class="child">
 							<li id="<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT%>')">Valtuuttajana</a></li>
-							<li id="selaaOmiaValtakirjoja"><a href="<%= defaultPath %>/Message/SelaaValtakirjoja">Valtuutettuna</a></li>
+							<li id="selaaOmiaValtakirjoja"><a href="<%= defaultPath %>/SelaaValtakirjoja">Valtuutettuna</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -339,15 +348,15 @@
 		<c:if test="${fn:contains(naviURL, '/default/')}">
 		<li><a href="#">Suostumukset</a>
 			<ul class="child">
-				<li id="cst_new"><a href="<%= defaultPath %>/Message/NewConsent">Uusi suostumuspohja</a></li>
-				<li id="sendconsent"><a href="<%= defaultPath %>/Message/SendConsent">Uusi suostumuspyyntö</a></li>
-				<li id="fillconsent"><a href="<%= defaultPath %>/Message/FillConsent">Kirjaa asiakkaan suostumus</a></li>				
+				<li id="cst_new"><a href="<%= defaultPath %>/NewConsent">Uusi suostumuspohja</a></li>
+				<li id="sendconsent"><a href="<%= defaultPath %>/SendConsent">Uusi suostumuspyyntö</a></li>
+				<li id="fillconsent"><a href="<%= defaultPath %>/FillConsent">Kirjaa asiakkaan suostumus</a></li>				
 				<li id="<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>')">Lähetetyt suostumuspyynnöt</a></li>
 			</ul>
 		</li>
 		<li><a href="#">Valtakirjat</a>
 			<ul class="child">
-				<%-- <li id="valtakirjaconsent"><a href="<%= defaultPath %>/Message/ValtakirjaConsent">Asiakkaan valtakirjat </a></li>  --%>
+				<%-- <li id="valtakirjaconsent"><a href="<%= defaultPath %>/ValtakirjaConsent">Asiakkaan valtakirjat </a></li>  --%>
 				<li id="<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>')">Asiakkaan valtakirjat </a></li> 
 				<li id="<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS%>')">Asian valtakirjat</a></li>
 			</ul>
@@ -356,12 +365,12 @@
 		<!--  TIETOPYYNNÖT -->
 		<li><a href="javascript:void(0)">Tietopyynnöt</a>
 			<ul class="child">
-				<li id="newinformation"><a href="<%= defaultPath %>/Message/NewInformation">Uusi tietopyyntö</a></li>
-				<li id="informationbox"><a href="<%= defaultPath %>/Message/InformationBox">Saapuneet</a></li>
+				<li id="newinformation"><a href="<%= defaultPath %>/NewInformation">Uusi tietopyyntö</a></li>
+				<li id="informationbox"><a href="<%= defaultPath %>/InformationBox">Saapuneet</a></li>
 				<li>Lähetetyt
 					<ul class="child">
-						<%-- <li id="info_request_open"><a href="<%= defaultPath %>/Message/Ilmoitukset">Avoimet</a></li> --%>
-						<%-- <li id="sendconsent"><a href="<%= defaultPath %>/Message/Ilmoitukset">Valmiit</a></li> --%>
+						<%-- <li id="info_request_open"><a href="<%= defaultPath %>/Ilmoitukset">Avoimet</a></li> --%>
+						<%-- <li id="sendconsent"><a href="<%= defaultPath %>/Ilmoitukset">Valmiit</a></li> --%>
 						<li id="<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED%>')">Lähetetyt</a></li>
 						<li id="<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT%>')">Vastatut</a></li>
 					</ul>
@@ -377,8 +386,8 @@
 					<ul class="child">
 						<!--  show only citizens -->
 						<c:if test="${fn:contains(naviURL, '/classic/')}">
-						<li id="kid_new"><a href="<%= defaultPath %>/Message/NewKindergarten">Päivähoitohakemus</a></li>
-						<li id="applicationsConfirm"><a href="<%= defaultPath %>/Message/ConfirmApplications">Hakemusten vahvistuspyynnöt</a></li>
+						<li id="kid_new"><a href="<%= defaultPath %>/NewKindergarten">Päivähoitohakemus</a></li>
+						<li id="applicationsConfirm"><a href="<%= defaultPath %>/ConfirmApplications">Hakemusten vahvistuspyynnöt</a></li>
 						</c:if>	
 						<!--  show only employees -->						
 						<c:if test="${fn:contains(naviURL, '/default/')}">

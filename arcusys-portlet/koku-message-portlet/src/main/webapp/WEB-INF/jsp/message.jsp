@@ -85,10 +85,12 @@
 
 	int pos = ajaxURL.indexOf("default");
 	if(pos > -1) { // for Jboss portal
-		defaultPath = ajaxURL.substring(0, pos+7);		
+		int currentPathPosition = ajaxURL.indexOf("Message");
+		defaultPath = ajaxURL.substring(0, currentPathPosition+7);
 	}else { // for Gatein portal
 		int pos1 = ajaxURL.indexOf("classic");
-		defaultPath = ajaxURL.substring(0, pos1+7);
+		int currentPathPosition = ajaxURL.indexOf("Message");
+		defaultPath = ajaxURL.substring(0, currentPathPosition+7);
 	}
 %>
 
@@ -644,7 +646,7 @@
 	function createEditConsentColumn(tasks) {
 		for (var i = 0; i < tasks.length; i++)  {
 			if (tasks[i].status != 'REVOKED') {
- 				var url = "<%= defaultPath %>/Message/ValtakirjaEditConsent?FormID="+ tasks[i].authorizationId; 
+ 				var url = "<%= defaultPath %>/ValtakirjaEditConsent?FormID="+ tasks[i].authorizationId; 
 				tasks[i]["editLink"] = "<a onclick='event.cancelBubble=true' class='editConsentLink' href="+url+" ><spring:message code="consent.edit"/></a>"; 
 			} else {
 				tasks[i]["editLink"] = "";

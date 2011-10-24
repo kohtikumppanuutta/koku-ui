@@ -16,10 +16,15 @@ String defaultPath = "";
 
 int pos = ajaxURL.indexOf("default");
 if(pos > -1) { // for Jboss portal
-	defaultPath = ajaxURL.substring(0, pos+7);		
+	defaultPath = ajaxURL.substring(0, pos+7);
+	int currentPathPosition = ajaxURL.indexOf("Message");
+	defaultPath = ajaxURL.substring(0, currentPathPosition+7);
+
 }else { // for Gatein portal
 	int pos1 = ajaxURL.indexOf("classic");
 	defaultPath = ajaxURL.substring(0, pos1+7);
+	int currentPathPosition = ajaxURL.indexOf("Message");
+	defaultPath = ajaxURL.substring(0, currentPathPosition+7);
 }
 %>
 
@@ -56,7 +61,7 @@ function formatUrl(url) {
 		<span class="text-bold"><spring:message code="application.kindergarten.decision" />:</span> <c:out value="${application.answeredAt}" /><br />
 		<span class="text-bold"><spring:message code="application.kindergarten.needForCareDate"/>:</span> <c:out value="${application.inEffectAt}" /><br />	
 		<span class="modifyConsentLink">
-		<a href="<%= defaultPath %>/Message/EditKindergarten?FormID=<c:out value="${application.applicationId}"/>"><spring:message code="application.kindergarten.details.sendConfirmation"/></a>
+		<a href="<%= defaultPath %>/EditKindergarten?FormID=<c:out value="${application.applicationId}"/>"><spring:message code="application.kindergarten.details.sendConfirmation"/></a>
 	</span><br />
 	
 	</div>

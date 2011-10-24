@@ -14,10 +14,16 @@
 
 	int pos = ajaxURL.indexOf("default");
 	if(pos > -1) { // for Jboss portal
-		defaultPath = ajaxURL.substring(0, pos+7);		
+		defaultPath = ajaxURL.substring(0, pos+7);
+		int currentPathPosition = ajaxURL.indexOf("Message");
+		defaultPath = ajaxURL.substring(0, currentPathPosition+7);
+
 	}else { // for Gatein portal
 		int pos1 = ajaxURL.indexOf("classic");
 		defaultPath = ajaxURL.substring(0, pos1+7);
+		int currentPathPosition = ajaxURL.indexOf("Message");
+		defaultPath = ajaxURL.substring(0, currentPathPosition+7);
+
 	}
 %>
 
@@ -60,7 +66,7 @@ function formatUrl(url) {
 	<span class="text-bold"><spring:message code="consent.recipients"/>:</span> <c:out value="${consent.recipients}" /><br />
 	
 	<span class="modifyConsentLink">
-		<a href="<%= defaultPath %><%= Constants.PATH_MAIN %>/NewConsent?FormID=<c:out value="${consent.consentId}"/>"><spring:message code="consent.modifyConsentLink"/></a>
+		<a href="<%= defaultPath %>/NewConsent?FormID=<c:out value="${consent.consentId}"/>"><spring:message code="consent.modifyConsentLink"/></a>
 	</span><br />
 	
     <h3><spring:message code="consent.actionRequest"/></h3>
