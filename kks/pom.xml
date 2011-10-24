@@ -15,13 +15,13 @@
       <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>customerservice-api</artifactId>
-      <version>0.0.14</version>
+      <version>0.0.15</version>
     </dependency>     
    
 	<dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>kksservice-api</artifactId>
-      <version>0.2.4</version>
+      <version>0.2.5</version>
     </dependency>
     
 	<dependency>  
