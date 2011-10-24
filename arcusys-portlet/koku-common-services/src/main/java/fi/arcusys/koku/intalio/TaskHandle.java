@@ -29,6 +29,11 @@ public class TaskHandle {
 	
 	// TODO: We probably need some sort filter here?
 	public static final String TASKMGR_REQUESTS_FILTER = "";
+	
+	private static final String LOCAL_AJAXFORMS_WEB_APP_URL_PART = "/palvelut-portlet/ajaxforms/";
+	private static final String ADDRESS_REGEX = "http://.+/gi/";
+
+	
 	private static final Logger logger = Logger.getLogger(TaskHandle.class);
 	
 	private String message;
@@ -154,8 +159,6 @@ public class TaskHandle {
 		String taskType = "";
         Object[] params = null;
         String type = task.getTaskType().toString();
-        final String REMOTE_AJAXFORMS_WEB_APP_URL_PART = "http://localhost:8080/gi/";
-    	final String LOCAL_AJAXFORMS_WEB_APP_URL_PART = "/palvelut-portlet/ajaxforms/";
 		
 		if (type.equals("ACTIVITY")) { // tasks	
 			taskType = TaskUtil.TASK_TYPE;			
@@ -167,7 +170,7 @@ public class TaskHandle {
 			taskType = TaskUtil.TASK_TYPE;
 		}
 		String url = task.getFormUrl().toString();
-		url = url.replace(REMOTE_AJAXFORMS_WEB_APP_URL_PART, LOCAL_AJAXFORMS_WEB_APP_URL_PART);
+		url = url.replaceFirst(ADDRESS_REGEX, LOCAL_AJAXFORMS_WEB_APP_URL_PART);
 		
 		try {
 			params = new Object[] { url, task.getTaskId(), taskType, URLEncoder.encode(url, "UTF-8"), participantToken,
@@ -176,7 +179,6 @@ public class TaskHandle {
 			logger.error("Unsupported Encoding Exception");
 		}
 		link =  MessageFormat.format("{0}?id={1}&type={2}&url={3}&token={4}&user={5}&claimTaskOnOpen={6}", params);
-
 		return link;
 	}
 
