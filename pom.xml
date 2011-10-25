@@ -13,7 +13,7 @@
 			<servlet.version>2.5</servlet.version>
 			<servlet.jsp.version>2.1</servlet.jsp.version>
 			<jstl.version>1.2</jstl.version>
-			<jrebel.plugin.version>1.0.7</jrebel.plugin.version>
+			<jrebel.plugin.version>1.0.8</jrebel.plugin.version>
 			<maven.compiler.plugin.version>2.3.2</maven.compiler.plugin.version>
 			<commons.lang.version>2.6</commons.lang.version>
 			<koku-common.version>0.0.8</koku-common.version>
@@ -24,6 +24,30 @@
 		</properties>
 	<build>
 		<plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-enforcer-plugin</artifactId>
+              <version>1.0.1</version>
+              <executions>
+                <execution>
+                  <id>enforce-versions</id>
+                  <goals>
+                    <goal>enforce</goal>
+                  </goals>
+                  <configuration>
+                   <rules>
+                    <requireMavenVersion><version>3.0</version></requireMavenVersion>
+<!-- 
+                    <requireProperty>
+                      <property>koku.build.version</property>
+                    </requireProperty>
+ -->
+                   </rules>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+
 			<plugin>
 				<inherited>true</inherited>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -51,6 +75,26 @@
 			    </execution>
 			  </executions>
 			</plugin>
+      
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-war-plugin</artifactId>
+              <version>2.1.1</version>
+                <configuration>
+                   <archive>
+                    <index>true</index>
+                    <manifest>
+                      <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                    </manifest>
+                    <manifestEntries>
+                      <Build-Version>${koku.build.version}</Build-Version>
+                      <Build-Platform>${os.name} ${os.version}</Build-Platform>
+                      <Build-Time>${maven.build.timestamp}</Build-Time>
+                    </manifestEntries>
+                  </archive>
+                </configuration>
+            </plugin>
+      
 		</plugins>
 		<pluginManagement>
 		  <plugins>
