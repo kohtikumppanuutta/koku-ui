@@ -15,7 +15,7 @@
       <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>customerservice-api</artifactId>
-      <version>0.0.15</version>
+      <version>0.0.16</version>
     </dependency>     
    
 	<dependency>
@@ -27,7 +27,7 @@
 	<dependency>  
 	    <groupId>kohti-kumppanuutta</groupId>  
 	    <artifactId>portlet-common</artifactId>  
-	    <version>0.0.15</version>  
+	    <version>0.0.17</version>  
 	</dependency> 
 
 	<dependency>  
@@ -39,7 +39,7 @@
 	<dependency>  
     <groupId>kohti-kumppanuutta</groupId>  
 	    <artifactId>familyservice-api</artifactId>  
-	    <version>0.0.6</version>  
+	    <version>0.0.7</version>  
 	</dependency> 
 	
 	<dependency>  
@@ -51,7 +51,7 @@
 	<dependency>  
    	<groupId>kohti-kumppanuutta</groupId>  
 	    <artifactId>personservice-api</artifactId>  
-	    <version>0.0.8</version>  
+	    <version>0.0.9</version>  
 	</dependency> 
       
  </dependencies>
