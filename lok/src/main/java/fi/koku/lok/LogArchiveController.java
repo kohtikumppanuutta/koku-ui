@@ -53,8 +53,8 @@ public class LogArchiveController {
   private AuthorizationInfoService authorizationInfoService;
 
   private ArchiveSerializer archiveSerializer = new ArchiveSerializer();
-  SimpleDateFormat dateFormat = new SimpleDateFormat(LogConstants.DATE_FORMAT);
-  LogUtils lu = new LogUtils();
+  private SimpleDateFormat dateFormat = new SimpleDateFormat(LogConstants.DATE_FORMAT);
+  private LogUtils lu = new LogUtils();
 
   public LogArchiveController() {
     ServiceFactory f = new ServiceFactory();

@@ -57,8 +57,8 @@ public class LogSearchController {
   private LogServicePortType logService;
 
   private CriteriaSerializer criteriaSerializer = new CriteriaSerializer();
-  SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
-  LogUtils lu = new LogUtils();
+  private SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
+  private LogUtils lu = new LogUtils();
 
   public LogSearchController() {
     ServiceFactory f = new ServiceFactory();

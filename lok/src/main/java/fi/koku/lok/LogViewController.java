@@ -57,7 +57,7 @@ public class LogViewController {
   private CriteriaSerializer criteriaSerializer = new CriteriaSerializer();
   private SimpleDateFormat dateFormat = new SimpleDateFormat(LogConstants.DATE_FORMAT);
 
-  LogUtils lu = new LogUtils();
+  private LogUtils lu = new LogUtils();
 
   public LogViewController() {
     ServiceFactory f = new ServiceFactory();

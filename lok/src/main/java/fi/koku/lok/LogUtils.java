@@ -27,7 +27,7 @@ import fi.koku.services.utility.log.v1.LogEntryType;
  */
 public class LogUtils {
 
-  SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
+  private SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
   private static final Logger log = LoggerFactory.getLogger(LogUtils.class);
 
   private Calendar dateToCalendar(Date d) {

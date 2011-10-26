@@ -86,8 +86,7 @@
 							<c:if test="${not empty visited}">
 								<h2 class="portlet-section-subheader">
 									<spring:message code="koku.common.searchResults" />
-									<c:out value="${searchParams.pic}" />
-									,
+									<c:out value="${searchParams.pic}" />,
 									<c:out value="${searchParams.concept}" />
 									<fmt:formatDate pattern="dd.MM.yyyy"
 										value="${searchParams.from}" />
@@ -143,21 +142,21 @@ This should be changed! --%>
 								<div class="error">
 									<spring:message code="${error2}" />
 								</div>
-								<br>
+								
 							</c:if>
 
 							<c:if test="${not empty error0}">
 								<div class="error">
 									<spring:message code="${error0}" />
 								</div>
-								<br>
+								
 							</c:if>
 
 							<c:if test="${not empty error1}">
 								<div class="error">
 									<spring:message code="${error1}" />
 								</div>
-								<br>
+								
 							</c:if>
 
 							<c:if test="${not empty error3}">
