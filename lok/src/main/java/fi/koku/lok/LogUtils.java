@@ -182,44 +182,38 @@ public class LogUtils {
   public void changePicsToNames(List<LogEntry> entries, String portletUserPic, PersonService personService) {
     String pic = null;
     List<Person> list = null;
-    Person person = null;
-    ArrayList<Person> localList = new ArrayList<Person>();
-    
+    List<String> picList = new ArrayList<String>();
+
+    // collect all different pics found in entries in a local list
     Iterator iter = entries.iterator();
     while (iter.hasNext()) {
       LogEntry entry = (LogEntry) iter.next();
-      List<String> picList = new ArrayList<String>();
       pic = entry.getUser();
-      picList.add(pic);
-      
-      // optimize: do not make extra calls to Person Service, if we already know
-      // the
-      // name representing the hetu
-      int nrOfPerson = searchLocalList(pic, localList);
-      if (nrOfPerson > -1) {
-        Person p = localList.get(nrOfPerson);
-        entry.setUser(p.getFname() + " " + p.getSname());
-      } else {
-      try {
-        // call the Person service
-        list = personService.getPersonsByPics(picList, PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER, portletUserPic,
-            LogConstants.COMPONENT_LOK);
-      } catch (Exception e) {
-        log.error("Person service threw an exception " + e.getMessage());
-      }
-
-      if (list == null || list.isEmpty() || list.get(0).getFname() == null) {
-        log.info("No name found in personservice for pic " + pic);
-        // no name was found so keep the original pic in the entry!
-      } else {
-        person = list.get(0);
-        entry.setUser(person.getFname() + " " + person.getSname());
-        localList.add(person); // add the person to the local list so it can be used in later searches
+      if (!picList.contains(pic)) {
+        picList.add(pic);
       }
     }
-    }
-  }
 
+    try {
+      log.info("call the Person service");
+      // call the Person service to get the persons
+      list = personService.getPersonsByPics(picList, PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER, portletUserPic,
+          LogConstants.COMPONENT_LOK);
+    } catch (Exception e) {
+      log.error("Person service threw an exception " + e.getMessage());
+    }
+
+    // Replace the pics in entries with the names we got from Person service
+    Iterator<LogEntry> it = entries.iterator();
+    while (it.hasNext()) {
+      LogEntry entry = (LogEntry) it.next();
+      String userpic = entry.getUser();
+
+      changeEntry(entry, picList, list, userpic);
+    }
+  } 
+  
+  
   /**
    * Helper method that changes the pic value in every admin entry to the user's
    * name, read from PersonService.
@@ -230,57 +224,85 @@ public class LogUtils {
   public void changePicsToNamesAdmin(List<AdminLogEntry> entries, String portletUserPic, PersonService personService) {
     String pic = null;
     List<Person> list = null;
-    Person person = null;
-    ArrayList<Person> localList = new ArrayList<Person>();
+    List<String> picList = new ArrayList<String>();
 
+    // collect all different pics found in entries in a local list
     Iterator iter = entries.iterator();
     while (iter.hasNext()) {
       AdminLogEntry entry = (AdminLogEntry) iter.next();
-      List<String> picList = new ArrayList<String>();
       pic = entry.getUser();
-      picList.add(pic);
+      if (!picList.contains(pic)) {
+        picList.add(pic);
+      }
+    } 
      
-      // optimize: do not make extra calls to Person Service, if we already know
-      // the
-      // name representing the hetu
-      int nrOfPerson = searchLocalList(pic, localList);
-      if (nrOfPerson > -1) {
-        Person p = localList.get(nrOfPerson);
-        entry.setUser(p.getFname() + " " + p.getSname());
-      } else {
-        try {
-          // call the Person service
-          list = personService.getPersonsByPics(picList, PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER, portletUserPic,
-              LogConstants.COMPONENT_LOK);
-        } catch (Exception e) {
-          log.error("Person service threw an exception " + e.getMessage());
-        }
+    try {
+      log.info("call the Person service");
+      // call the Person service to get the persons
+      list = personService.getPersonsByPics(picList, PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER, portletUserPic,
+          LogConstants.COMPONENT_LOK);
+    } catch (Exception e) {
+      log.error("Person service threw an exception " + e.getMessage());
+    }
 
-        if (list == null || list.isEmpty() || list.get(0).getFname() == null) {
-          log.info("No name found in personservice for pic " + pic);
-          // keep the original pic in the entry!
-        } else {
-          person = list.get(0);
-          entry.setUser(person.getFname() + " " + person.getSname());
-          localList.add(person); // add the person to the local list so it can be used in later searches
-        }
+    // Replace the pics in entries with the names we got from Person service
+    Iterator<AdminLogEntry> it = entries.iterator();
+    while (it.hasNext()) {
+      AdminLogEntry entry = (AdminLogEntry) it.next();
+      String userpic = entry.getUser();
+
+      changeAdminEntry(entry, picList, list, userpic);   
       }
     }
-  }
-
+  
+ 
   /**
-   * Helper method to search a person from local list
+   * Helper method for replacing the pic in the entry with the name we got from
+   * the Person service
+   * 
+   * @param entries
+   * @param picList
+   * @param list
    */
-  private int searchLocalList(String pic, ArrayList<Person> list) {
-   
-    for (int i = 0; i < list.size(); i++) {
-      Person p = (Person) list.get(i);
-    
-      if (p.getPic()!=null && pic !=null && p.getPic().equalsIgnoreCase(pic)) {
-        return i;
-      }
-    }
-
-    return -1;
+  private void changeAdminEntry(AdminLogEntry entry, List<String> picList, List<Person> list, String userpic){
+   Person person = null;  
+ 
+   for (int i = 0; i < picList.size(); i++) {
+     if(picList.get(i).equalsIgnoreCase(userpic)){
+       person = list.get(i);
+       if(person==null || person.getFname()==null || person.getSname()==null){
+         log.info("No name found in personservice for pic " + userpic);
+         // no name was found so keep the original pic in the entry!
+       } else{
+         entry.setUser(person.getFname() + " "+person.getSname());
+       }
+     }
+   }
   }
+  
+  /**
+   * Helper method for replacing the pic in the entry with the name we got from
+   * the Person service
+   * 
+   * @param entries
+   * @param picList
+   * @param list
+   */
+  private void changeEntry(LogEntry entry, List<String> picList, List<Person> list, String userpic){
+   Person person = null;  
+ 
+   for (int i = 0; i < picList.size(); i++) {
+     if(picList.get(i).equalsIgnoreCase(userpic)){
+       person = list.get(i);
+       if(person==null || person.getFname()==null || person.getSname()==null){
+         log.info("No name found in personservice for pic " + userpic);
+         // no name was found so keep the original pic in the entry!
+       } else{
+         entry.setUser(person.getFname() + " "+person.getSname());
+       }
+     }
+   }
+  }
+  
+ 
 }

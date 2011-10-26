@@ -43,3 +43,15 @@
 .koku-lok .portlet-table-body a {
     font-size:13px; 
 }
+.koku-lok .form-field-label{	
+    margin: 8px 0 2px;
+    width: 300px;
+    font-weight: bold;
+    line-height: 18px;
+    text-align: left;
+    vertical-align: top;
+    white-space:normal;
+}
+.koku-lok .form-static-parameter{
+	font-size:20px;
+}

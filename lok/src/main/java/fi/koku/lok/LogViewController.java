@@ -157,11 +157,9 @@ public class LogViewController {
     // If something goes wrong in serializing the criteria, the portlet must not
     // die and the portlet must not query the log service
     try {
-
       response.setRenderParameter("logSearchCriteria", criteriaSerializer.getAsText(criteria));
-
     } catch (IllegalArgumentException e) {
-      log.error("illegal argument");
+      log.error(e.getMessage());
     }
 
     response.setRenderParameter("action", "viewLog");
@@ -222,6 +220,7 @@ public class LogViewController {
     return entryList;
   }
 
+  
   private static class CriteriaSerializer {
 
     public String[] getAsText(LogSearchCriteria c) {
@@ -229,9 +228,8 @@ public class LogViewController {
 
       SimpleDateFormat df = new SimpleDateFormat(LogConstants.DATE_FORMAT);
 
-      log.debug("getAsText from: " + c.getFrom());
       if (c != null) {
-        text = new String[] { c.getPic(), c.getConcept(), c.getFrom() != null ? df.format(c.getFrom()) : "",
+        text = new String[] { c.getFrom() != null ? df.format(c.getFrom()) : "",
             c.getTo() != null ? df.format(c.getTo()) : "" };
       }
       return text;
