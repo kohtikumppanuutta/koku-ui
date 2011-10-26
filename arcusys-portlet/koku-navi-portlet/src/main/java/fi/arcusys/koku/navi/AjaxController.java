@@ -119,13 +119,18 @@ public class AjaxController extends AbstractController {
 		if (userId == null) {
 			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_INVALID);
 		} else {
+			
 			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_VALID);			
 			jsonModel.put(JSON_INBOX, String.valueOf(getNewMessageNum(userId, KokuFolderType.INBOX)));			
 			jsonModel.put(JSON_ARCHIVE_INBOX, String.valueOf(getNewMessageNum(userId, KokuFolderType.ARCHIVE_INBOX)));
 			if (role.equals(PortalRole.CITIZEN)) {				
 				jsonModel.put(JSON_CONSENTS_TOTAL, String.valueOf(getTotalAssignedConsents(userId)));
 				jsonModel.put(JSON_APPOINTMENT_TOTAL, String.valueOf(getTotalAssignedAppointments(userId)));
-				jsonModel.put(JSON_REQUESTS_TOTAL, String.valueOf(getTotalRequests(userId, token)));
+				try {
+					jsonModel.put(JSON_REQUESTS_TOTAL, String.valueOf(getTotalRequests(userId, token)));
+				} catch (Exception e) {
+					LOGGER.error("Coulnd't get TotalRequests (Valtakirja yht.). See following errorMsg: "+e.getMessage());
+				}
 			}
 		}
 		return jsonModel;

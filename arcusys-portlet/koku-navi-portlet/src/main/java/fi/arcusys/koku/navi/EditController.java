@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 
 @Controller("naviEditController")
 @RequestMapping(value = "EDIT")
-public class EditController {
+public class EditController extends AbstractController {
 	
 	private Logger LOG = Logger.getLogger(EditController.class);
 	
