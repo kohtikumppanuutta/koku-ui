@@ -18,6 +18,8 @@ import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN
 import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_INVALID;
 import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_VALID;
 
+import java.io.IOException;
+
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletSession;
@@ -71,8 +73,7 @@ public class AjaxController extends AbstractController {
 				userId = resolver.getUserId(username, getPortalRole(request));			
 			}
 		} catch (Exception e) {
-			//LOGGER.error(e.getMessage(), e);
-			LOGGER.error("Error while trying to resolve userId. See following error msg: "+e.getMessage());
+			LOGGER.error("Error while trying to resolve userId. Usually WSDL location is wrong or server down. See following error msg: "+e.getMessage());
 		}
 		
 		PortletSession session = request.getPortletSession();

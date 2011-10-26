@@ -23,6 +23,10 @@
 				<name>naviRelativePath</name>
 				<value>true</value>
 			</preference>
+				<preference>
+					<name>kokuPortalMode</name>
+					<value>KUNPO</value>
+				</preference>
 			  <preference>
 					<name>navigationDefaultPath</name>
 					<value>/portal/private/classic/Message</value>

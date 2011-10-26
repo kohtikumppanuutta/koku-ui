@@ -5,25 +5,29 @@
          <instance-id>MessageNavigationInstance</instance-id>
          <portlet-ref>messageNavigation</portlet-ref>
          <preferences>
+        	<preference>
+				<name>kokuPortalMode</name>
+				<value>LOORA</value>
+			</preference>
          	<preference>
 				<name>naviRelativePath</name>
-				<value>true</value>
+				<value>false</value>
 			</preference>
 			<preference>
 				<name>navigationDefaultPath</name>
-				<value>/portal/auth/portal/default/koku/Messages</value>
+				<value>/portal/auth/portal/default/koku/Message</value>
 			</preference>
             <preference>
 				<name>preferencesPathKks</name>
-				<value>/KKS</value>
+				<value>/portal/auth/portal/default/kokuKKS</value>
 			</preference>
 			<preference>
 				<name>preferencesPathLok</name>
-				<value>/LOK</value>
+				<value>/portal/auth/portal/default/koku/LOK</value>
 			</preference>	
 			<preference>
 				<name>preferencesPathPyh</name>
-				<value>/PYH</value>
+				<value>/portal/auth/portal/default/kokuPYH</value>
 			</preference>
 		</preferences>
       </instance>

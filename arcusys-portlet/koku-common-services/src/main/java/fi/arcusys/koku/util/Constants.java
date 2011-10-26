@@ -86,9 +86,9 @@ public class Constants {
                                                                         	
 	                                                                    	
 	/* ATTR_PORTAL_INFO possible values */                              	
-	public static final String PORTAL_LIFERAY								= "liferay";
-	public static final String PORTAL_JBOSS									= "jboss";
-	public static final String PORTAL_GATEIN								= "gatein";
+	public static final String PORTAL_LIFERAY								= "Liferay";
+	public static final String PORTAL_JBOSS									= "JBoss";
+	public static final String PORTAL_GATEIN								= "GateIn";
 	                                                                    	
 	/* Views */	                                                        	
 	public static final String VIEW_CONFIG									= "config";
@@ -137,15 +137,17 @@ public class Constants {
 	public static final String PREF_DEFAULT_TASK_TYPE 						= "defaultTaskType";
 	public static final String PREF_EDITABLE 								= "editable";
 	
+	/* PortletPreferences keys: Navigation */
 	public static final String PREF_NAVI_RELATIVE_PATH						= "naviRelativePath";
 	public static final String PREF_NAVI_KKS								= "preferencesPathKks";
 	public static final String PREF_NAVI_LOK								= "preferencesPathLok";
 	public static final String PREF_NAVI_PYH								= "preferencesPathPyh";
 	public static final String PREF_NAVI_DEFAULT_PATH						= "navigationDefaultPath";
-	
-	                                                            	
+	public static final String PREF_NAVI_PORTAL								= "kokuPortalMode";
+				                                                            	
 	/* PortletPreferences keys: MessagePortlet */               	
 	public static final String PREF_MESSAGE_TYPE 							= "messageType";
+	
                                                             	
 	/* ? (Should be JSON values?) */                                                	
 	public static final String TOKEN_STATUS_VALID							= "VALID";

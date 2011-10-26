@@ -12,46 +12,30 @@
 
 <%
 	/* Parses the parent path url from the portlet renderURL */
-	final String messagePage = "Message";
-	String serverURL = "";
-	String defaultPath = "";
+	final String defaultPath = defaultPathPref;
 	String currentPage = "";
-	String actionParam = "";
+	String actionParam = "";	
 	
-	int pos = naviURL.indexOf("default");
-	if (pos > -1) { // for Jboss portal
-// 		defaultPath = naviURL.substring(0, pos+7);
-		int currentPathPosition = naviURL.indexOf(messagePage);
-		if (currentPathPosition > -1) {
-			defaultPath = defaultPathPref;
-			System.out.println("ABSOLUTE: defaultPath: "+defaultPath);
-		} else {
-			defaultPath = naviURL.substring(0, currentPathPosition+7);			
-		}
+	if (portalInfo.startsWith(Constants.PORTAL_GATEIN)) {
+		int pos2 = naviURL.indexOf("?");
+		String currentPath = naviURL.substring(0, pos2);
+		int pos3 = currentPath.lastIndexOf("/");
+		currentPage = currentPath.substring(pos3+1);
+	} else if (portalInfo.startsWith(Constants.PORTAL_JBOSS)) {
 		int pos1 = naviURL.lastIndexOf("/");
 		actionParam = naviURL.substring(pos1);
 		String currentPath = naviURL.substring(0, pos1);
 		int pos2 = currentPath.lastIndexOf("/");
 		currentPage = currentPath.substring(pos2+1);
-	} else { // for Gatein portal
-		int pos1 = naviURL.indexOf("classic");
-		int currentPathPosition = naviURL.indexOf(messagePage);
-		if (currentPathPosition > -1) {
-			defaultPath = defaultPathPref;
-			System.out.println("ABSOLUTE: defaultPath: "+defaultPath);
-		} else {
-			defaultPath = naviURL.substring(0, currentPathPosition+7);			
-		}
-// 		defaultPath = naviURL.substring(0, pos1+7);
-		int pos2 = naviURL.indexOf("?");
-		String currentPath = naviURL.substring(0, pos2);
-		int pos3 = currentPath.lastIndexOf("/");
-		currentPage = currentPath.substring(pos3+1);
+	} else {
+		// TODO: You should not end here! Show error message!
 	}
 	
-	System.out.println("------------------------------------------------------------------------------------------------------");
-	System.out.println("defaultPath: '"+defaultPath+"' currentPage: '"+currentPage+"' actionParam: '"+actionParam+"' \n NaviURL: '"+naviURL+"'");
-	System.out.println("------------------------------------------------------------------------------------------------------");
+// 	System.out.println("------------------------------------------------------------------------------------------------------");
+// 	System.out.println("defaultPath: '"+defaultPath+"' currentPage: '"+currentPage+"' actionParam: '"+actionParam+"' \n NaviURL: '"+naviURL+"'");
+// 	System.out.println("NAVI MODE: "+naviPortalMode);
+// 	System.out.println("portalInfo: "+portalInfo);
+// 	System.out.println("------------------------------------------------------------------------------------------------------");
 			
 %>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/jquery-1.5.2.min.js"></script>
@@ -211,7 +195,7 @@
 	<%  //for jboss portal
 	if(defaultPath.contains("default")) { %>
 	function navigateToPage(naviType) {		
-		var url = "<%= defaultPath %>" + "" + "<%= actionParam %>" + '&naviType=' + naviType;	
+		var url = "<%= defaultPath %><%= actionParam %>" + '&naviType=' + naviType;	
 		window.location = url;
 	}
 	<%}else{ // for gatein portal %>
@@ -246,26 +230,25 @@
 	<ul class="main">
 		
 <%
-
 	String kksPath = kksPref; 
 	String lokPath = lokPref; 
 	String pyhPath = pyhPref;
-	if (useRelativePath.equals(Boolean.TRUE.toString())) {
-		kksPath = defaultPath + kksPref;
-		lokPath = defaultPath + lokPref;
-		pyhPath = defaultPath + pyhPref;
-	}
+// 	if (useRelativePath.equals(Boolean.TRUE.toString())) {
+// 		kksPath = defaultPath + kksPref;
+// 		lokPath = defaultPath + lokPref;
+// 		pyhPath = defaultPath + pyhPref;
+// 	}
 %>		
 		
 		<!--  VIESTIT -->
 		<li><a href="javascript:void(0)" >Etusivu</a></li>
 		<!-- For citizen in Gatein portal-->
-		<c:if test="${fn:contains(naviURL, '/classic/')}">
+		<c:if test="${fn:contains(naviPortalMode, 'KUNPO')}">
 		<li id="kks"><a href="<%= kksPath %>">Sopimukset ja suunnitelmat</a>
 		<li id="pyh"><a href="<%= pyhPath %>">Omat tiedot</a></li>
 		</c:if>
-		<!-- For employee in Jboss portal -->
-		<c:if test="${fn:contains(naviURL, '/default/')}">
+		<c:if test="${fn:contains(naviPortalMode, 'LOORA')}">
+<%-- 		<c:if test="${fn:contains(naviURL, '/default/')}"> --%>
 		<li id="kks"><a href="<%= kksPath %>">Sopimukset ja suunnitelmat</a>
 		<li id="lok"><a href="<%= lokPath %>">Lokihallinta</a></li>
 		</c:if>
@@ -273,7 +256,7 @@
 		<li><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')" >Viestit</a>
 			<ul class="child">
 					<!-- Show "New message" only for employee in Jboss portal -->
-				<c:if test="${fn:contains(naviURL, '/default/')}">
+				<c:if test="${fn:contains(naviPortalMode, 'LOORA')}">
 				<li id="msg_new"><a href="<%= defaultPath %>/NewMessage">Uusi viesti</a> </li>
 				</c:if>
 				<li id="msg_inbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')">Saapuneet</a><span id="inbox_num" class="message_num"></span></li>
@@ -289,7 +272,7 @@
 			
 		<!--  PYYNNÖT -->
 		<!-- For citizen in Gatein portal-->
-		<c:if test="${fn:contains(naviURL, '/classic/')}">
+		<c:if test="${fn:contains(naviPortalMode, 'KUNPO')}">
 		<li><a href="#">Pyynnöt</a>
 			<ul class="child">
 				<li id="req_valid_request"><a href="<%= defaultPath %>/ValidRequest">Saapuneet</a><span id="requests_num" class="message_num"></span></li>
@@ -299,7 +282,7 @@
 		</li>
 		</c:if>
 		<!-- For employee in Jboss portal -->
-		<c:if test="${fn:contains(naviURL, '/default/')}">
+		<c:if test="${fn:contains(naviPortalMode, 'LOORA')}">
 		<li><a href="#">Pyynnöt</a>
 			<ul class="child">
 				<li id="req_new"><a href="<%= defaultPath %>/NewRequest">Uusi pyyntö</a></li>
@@ -316,7 +299,7 @@
 		
 		<!-- TAPAAMISET -->
 		<!-- For citizen in Gatein portal-->
-		<c:if test="${fn:contains(naviURL, '/classic/')}">
+		<c:if test="${fn:contains(naviPortalMode, 'KUNPO')}">
 		<li><a href="#">Tapaamiset</a>
 			<ul class="child">
 				<li id="<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN%>')">Vastausta odottavat</a><span id="appointments_num" class="message_num"></span></li>
@@ -326,7 +309,7 @@
 		</li>
 		</c:if>
 		<!-- For employee in Jboss portal-->
-		<c:if test="${fn:contains(naviURL, '/default/')}">
+		<c:if test="${fn:contains(naviPortalMode, 'LOORA')}">
 		<li><a href="#">Tapaamiset</a>
 			<ul class="child">
 				<li id="app_new"><a href="<%= defaultPath %>/NewAppointment">Uusi tapaaminen</a></li>
@@ -337,7 +320,7 @@
 		
 		<!--  SUOSTUMUKSET -->
 		<!-- For citizen in Gatein portal-->
-		<c:if test="${fn:contains(naviURL, '/classic/')}">
+		<c:if test="${fn:contains(naviPortalMode, 'KUNPO')}">
 			<li><a href="#">Suostumukset</a>
 				<ul class="child">
 					<li id="<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>')">Saapuneet</a><span id="consents_num" class="message_num"></span></li>
@@ -360,7 +343,7 @@
 			</li>
 		</c:if>
 		<!-- For employee in Jboss portal-->
-		<c:if test="${fn:contains(naviURL, '/default/')}">
+		<c:if test="${fn:contains(naviPortalMode, 'LOORA')}">
 		<li><a href="#">Suostumukset</a>
 			<ul class="child">
 				<li id="cst_new"><a href="<%= defaultPath %>/NewConsent">Uusi suostumuspohja</a></li>
@@ -400,20 +383,20 @@
 				<li><a href="#">Palveluhakemukset</a>
 					<ul class="child">
 						<!--  show only citizens -->
-						<c:if test="${fn:contains(naviURL, '/classic/')}">
+						<c:if test="${fn:contains(naviPortalMode, 'KUNPO')}">
 						<li id="kid_new"><a href="<%= defaultPath %>/NewKindergarten">Päivähoitohakemus</a></li>
 						<li id="applicationsConfirm"><a href="<%= defaultPath %>/ConfirmApplications">Hakemusten vahvistuspyynnöt</a></li>
 						</c:if>	
 						<!--  show only employees -->						
-						<c:if test="${fn:contains(naviURL, '/default/')}">
+						<c:if test="${fn:contains(naviPortalMode, 'LOORA')}">
 						<li id="<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE%>')">Päivähoitohakemukset</a></li>
 						</c:if>	
 					</ul>
 				</li>
-				<c:if test="${fn:contains(naviURL, '/classic/')}">				
+				<c:if test="${fn:contains(naviPortalMode, 'KUNPO')}">
 				<li><a href="#">Voimassaolevat palvelut</a></li>
 				<li><a href="#">Ajanvaraustiedot</a></li>
-				</c:if>	
+				</c:if>
 			</ul>
 		</li>
 		<li><a href="#">Ohjeet</a></li>

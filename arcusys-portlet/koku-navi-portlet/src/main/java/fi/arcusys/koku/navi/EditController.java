@@ -40,19 +40,23 @@ public class EditController extends AbstractController {
     		String lokPref = request.getParameter(PREF_NAVI_LOK);
     		String pyhPref = request.getParameter(PREF_NAVI_PYH);
     		String defaultPathPref = request.getParameter(PREF_NAVI_DEFAULT_PATH);
+    		String naviPortalMode = request.getParameter(PREF_NAVI_PORTAL);
     		pref.setValue(PREF_NAVI_RELATIVE_PATH, useRelativePath);
     		pref.setValue(PREF_NAVI_KKS, kksPref);
     		pref.setValue(PREF_NAVI_LOK, lokPref);
     		pref.setValue(PREF_NAVI_PYH, pyhPref);
     		pref.setValue(PREF_NAVI_DEFAULT_PATH, defaultPathPref);
+    		pref.setValue(PREF_NAVI_PORTAL, naviPortalMode);
     		pref.store();
-    		LOG.info("KokuNavigationPortlet - User '" + request.getUserPrincipal().getName() + "' saved new settings - RelativePathMode: '"+useRelativePath+"' Lok path: '"+lokPref+"' Pyh path: '"+pyhPref+"' Kks path: '"+kksPref+"'");    		
+    		LOG.info("KokuNavigationPortlet - User '" + request.getUserPrincipal().getName() 
+    				+ "' saved new settings - RelativePathMode: '" + useRelativePath + "' Lok path: '"
+    				+ lokPref + "' Pyh path: '" + pyhPref + "' Kks path: '" + kksPref + "' "
+    				+" PortalMode: '" + naviPortalMode + "' MessagePortlet default path: '" + defaultPathPref + "'" );    		
     		
     		response.setPortletMode(PortletMode.VIEW);
-            response.setWindowState(WindowState.NORMAL);
- 
+            response.setWindowState(WindowState.NORMAL); 
         } catch (Exception e) { 
-        	LOG.error("Configuration edit mode failed with exception");
+        	LOG.error("Configuration edit mode failed with exception. ErrorMsg: "+ e.getMessage());
         }         
 	}	
 
