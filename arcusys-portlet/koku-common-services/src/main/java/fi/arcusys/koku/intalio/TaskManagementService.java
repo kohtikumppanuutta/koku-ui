@@ -54,7 +54,7 @@ public class TaskManagementService {
 			logger.error("Trying to get intalio token failed.\n" +
 					"Hints for fixing problem:\n" +
 					"1. Check that that WSDL(s) location is correct \n" +
-					"2. Check that intalio server is online", e);	
+					"2. Check that intalio server is online\n"+ e.getMessage());	
 		}				
 		return participantToken;
 	}
