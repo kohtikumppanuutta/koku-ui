@@ -15,12 +15,19 @@
 		<h1 class="portlet-section-header"><spring:message code="ui.kks.title"/></h1>
 		<spring:message code="ui.kks.kuvaus"/>
 		
-		<h3 class="portlet-section-subheader">
-		   <spring:message code="ui.kks.choose.child"/>
-		 </h3>
+		<c:if test="${not empty childs}">
+			<h3 class="portlet-section-subheader">
+			   <spring:message code="ui.kks.choose.child"/>
+			 </h3>
+		 </c:if>
+		<c:if test="${empty childs}">
+			<br></br>
+			<span class="kks-read-only-text"><strong><spring:message code="ui.kks.no.dependants"/></strong></span>
+		 </c:if>
 	</div>
 
 	<div class="kks-collection">
+	    
 		<c:if test="${not empty childs}">
 			<c:forEach var="child" items="${childs}">
 				<span class="kks-link">
