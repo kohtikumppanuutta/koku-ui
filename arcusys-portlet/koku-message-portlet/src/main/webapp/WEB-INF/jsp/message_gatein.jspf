@@ -66,10 +66,10 @@
 				window.location = renderUrl;
 			});
 		} else if(pageObj.taskType == "app_inbox_employee") {
-			url = "<%= defaultPath %>" + "/Message/NewAppointment" + "?FormID=" + appointmentId;
+			url = "<%= defaultPath %>" + "/NewAppointment" + "?FormID=" + appointmentId;
 			window.location = url;
 		} else if(pageObj.taskType == "app_inbox_citizen") {
-			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;	
+			url = "<%= defaultPath %>" + "/OpenAppointment" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;	
 			window.location = url;
 		}
 	}
@@ -82,7 +82,7 @@
 		var consentId = task['consentId'];
 		
 		if (pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS%>" && task['approvalStatus'] == 'Hyväksytty' && task['status'] != 'Mitätöity') { // edit mode
-			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;	
+			url = "<%= defaultPath %>" + "/NewConsent" + "?FormID=" + consentId;	
 			window.location = url;
 		} else if(pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS%>"
 					||pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD%>" 
@@ -98,11 +98,11 @@
 				window.location = renderUrl;
 			});
 		} else if(pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>") {
-			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;
+			url = "<%= defaultPath %>" + "/NewConsent" + "?FormID=" + consentId;
 			window.location = url;
 				
 		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>") {
-			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;
+			url = "<%= defaultPath %>" + "/NewConsent" + "?FormID=" + consentId;
 			window.location = url;			
 		}
 	}

@@ -39,9 +39,9 @@
 					+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
 					+ "&orderType=" + pageObj.orderType;
 		}else if(pageObj.taskType == "app_inbox_employee"){
-			url = "<%= defaultPath %>" + "/Message/NewAppointment" + "?FormID=" + appointmentId;			
+			url = "<%= defaultPath %>" + "/NewAppointment" + "?FormID=" + appointmentId;			
 		}else if(pageObj.taskType == "app_inbox_citizen") {
-			url = "<%= defaultPath %>" + "/Message/OpenAppointment" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;				
+			url = "<%= defaultPath %>" + "/OpenAppointment" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;				
 		}		
 		window.location = url;				
 	}
@@ -59,9 +59,9 @@
 					+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
 					+ "&orderType=" + pageObj.orderType;
 		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>") {
-			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;
+			url = "<%= defaultPath %>" + "/NewConsent" + "?FormID=" + consentId;
 		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>") {
-			url = "<%= defaultPath %>" + "/Message/NewConsent" + "?FormID=" + consentId;			
+			url = "<%= defaultPath %>" + "/NewConsent" + "?FormID=" + consentId;			
 			<%--  			
 			url = "<%= intalioFormURL %>";
 			url += "&consentId=" + consentId
