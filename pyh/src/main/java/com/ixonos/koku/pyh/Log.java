@@ -83,5 +83,4 @@ public class Log {
       logger.error("LOK service failed to log operation " + operation + " for data type " + dataType, fault);
     }
   }
-  
 }
