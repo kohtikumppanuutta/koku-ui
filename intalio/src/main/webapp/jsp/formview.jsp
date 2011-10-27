@@ -6,8 +6,6 @@
 <%-- Load jQuery --%>
 <%-- This just temporary fix, because jQuery should be made available from theme or by portal not in portlet. --%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.5.2.min.js"></script>
-<%-- jQuery iframe autoheight plugin --%>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.iframe-auto-height.plugin.1.5.0.min.js"></script>
 <script type="text/javascript">
 
 	var timerOn = 0;
