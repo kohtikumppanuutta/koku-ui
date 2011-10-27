@@ -102,6 +102,10 @@ public class PyhDemoService {
   public List<Person> getPersons(List<String> pics, String currentUserPic) {
     ArrayList<Person> persons = new ArrayList<Person>();
     
+    if (pics == null || pics.size() == 0) {
+      return persons;
+    }
+    
     fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
     customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
     customerAuditInfoType.setUserId(currentUserPic);
@@ -321,25 +325,27 @@ public class PyhDemoService {
         }
       }
       
-      CustomersType customersType = null;
-      try {
-        CustomerQueryCriteriaType customerCriteria = new CustomerQueryCriteriaType();
-        PicsType picsType = new PicsType();
-        picsType.getPic().addAll(otherFamilyMemberPics);
-        customerCriteria.setPics(picsType);
-        customerCriteria.setSelection("basic");
-        customersType = customerService.opQueryCustomers(customerCriteria, customerAuditInfoType);
-      } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
-        log.error("PyhDemoService.getOtherFamilyMembers: opQueryCustomers raised a ServiceFault", fault);
-      }
-      
-      if (customersType != null) {
-        Iterator<CustomerType> customerIterator = customersType.getCustomer().iterator();
-        Iterator<String> roleIterator = otherFamilyMemberRoles.iterator();
-        while (customerIterator.hasNext()) {
-          CustomerType customer = customerIterator.next();
-          String role = roleIterator.next();
-          otherFamilyMembers.add(new FamilyMember(customer, CommunityRole.createFromRoleID(role)));
+      if (otherFamilyMemberPics.size() > 0) {
+        CustomersType customersType = null;
+        try {
+          CustomerQueryCriteriaType customerCriteria = new CustomerQueryCriteriaType();
+          PicsType picsType = new PicsType();
+          picsType.getPic().addAll(otherFamilyMemberPics);
+          customerCriteria.setPics(picsType);
+          customerCriteria.setSelection("basic");
+          customersType = customerService.opQueryCustomers(customerCriteria, customerAuditInfoType);
+        } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
+          log.error("PyhDemoService.getOtherFamilyMembers: opQueryCustomers raised a ServiceFault", fault);
+        }
+        
+        if (customersType != null) {
+          Iterator<CustomerType> customerIterator = customersType.getCustomer().iterator();
+          Iterator<String> roleIterator = otherFamilyMemberRoles.iterator();
+          while (customerIterator.hasNext()) {
+            CustomerType customer = customerIterator.next();
+            String role = roleIterator.next();
+            otherFamilyMembers.add(new FamilyMember(customer, CommunityRole.createFromRoleID(role)));
+          }
         }
       }
     }
