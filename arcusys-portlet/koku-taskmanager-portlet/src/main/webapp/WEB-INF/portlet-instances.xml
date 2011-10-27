@@ -1,0 +1,80 @@
+<?xml version="1.0" standalone="yes"?>
+<!DOCTYPE deployments PUBLIC
+   "-//JBoss Portal//DTD Portlet Instances 2.6//EN"
+   "http://www.jboss.org/portal/dtd/portlet-instances_2_6.dtd">
+<deployments>
+
+	<!--  For LOORA -->
+	
+   <deployment>
+      <instance>
+         <instance-id>TaskMgrTietopyyntoSaapuneet</instance-id>
+         <portlet-ref>taskManager</portlet-ref>
+         <preferences>         
+         	<preference>
+				<name>taskFilter</name>
+				<value></value>
+			</preference>			
+			<preference>
+				<name>notifFilter</name>
+				<value></value>
+			</preference>
+           <preference>
+				<name>refreshDuration</name>
+				<value>60</value>
+			</preference>
+			<preference>
+				<name>defaultTaskType</name>
+				<value>notification</value>
+			</preference>
+			<preference>
+				<name>openForm</name>
+				<value>1</value>
+			</preference>
+		</preferences>
+         <security-constraint>
+            <policy-permission>
+               <action-name>view</action-name>
+               <unchecked/>
+            </policy-permission>
+         </security-constraint>
+      </instance>
+   </deployment>
+   
+   <deployment>
+      <instance>
+         <instance-id>TaskMgrTietopyyntoAvoimet</instance-id>
+         <portlet-ref>taskManager</portlet-ref>
+         <preferences>
+         
+          	<preference>
+				<name>taskFilter</name>
+				<value></value>
+			</preference>			
+			<preference>
+				<name>notifFilter</name>
+				<value></value>
+			</preference>
+           <preference>
+				<name>refreshDuration</name>
+				<value>60</value>
+			</preference>
+			<preference>
+				<name>defaultTaskType</name>
+				<value>notification</value>
+			</preference>
+			<preference>
+				<name>openForm</name>
+				<value>1</value>
+			</preference>
+		</preferences>
+         <security-constraint>
+            <policy-permission>
+               <action-name>view</action-name>
+               <unchecked/>
+            </policy-permission>
+         </security-constraint>
+      </instance>
+   </deployment>
+      
+</deployments>

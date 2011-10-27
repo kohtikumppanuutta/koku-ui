@@ -7,7 +7,7 @@
 	<portlet>
 		<description>Portlet providing task management services</description>
 		<portlet-name>taskManager</portlet-name>
-		<display-name>Task Manager Portlet</display-name>
+		<display-name>koku-taskmanager-portlet</display-name>
 		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
 		<supports>
 			<mime-type>text/html</mime-type>

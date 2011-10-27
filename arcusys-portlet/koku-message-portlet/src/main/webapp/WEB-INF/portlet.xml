@@ -5,9 +5,9 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
 
 	<portlet>
-		<description>Portlet providing message services</description>
-		<portlet-name>kokuMessageService</portlet-name>
-		<display-name>kokuMessageService</display-name>
+		<description>Message Portlet</description>
+		<portlet-name>koku-message-portlet</portlet-name>
+		<display-name>koku-message-portlet</display-name>
 		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -16,7 +16,7 @@
 		</supports>		
 		<resource-bundle>messages</resource-bundle>
 		<portlet-info>
-			<title>Message Service Portlet</title>
+			<title>Message Portlet</title>
 		</portlet-info>	
 	</portlet>
 </portlet-app>

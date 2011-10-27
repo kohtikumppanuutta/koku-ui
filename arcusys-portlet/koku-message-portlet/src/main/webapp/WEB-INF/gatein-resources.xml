@@ -5,15 +5,15 @@
     xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_0">
 	
 	<portlet-skin>
-		<application-name>koku-message-new-portlet</application-name>
-		<portlet-name>kokuMessageService</portlet-name>
+		<application-name>koku-message-portlet</application-name>
+		<portlet-name>koku-message-portlet</portlet-name>
 		<skin-name>SimpleSkin</skin-name>
 		<css-path>/css/main.CSS</css-path>
 	</portlet-skin>
 	
 	<portlet-skin>
-		<application-name>koku-message-new-portlet</application-name>
-		<portlet-name>kokuMessageService</portlet-name>
+		<application-name>koku-message-portlet</application-name>
+		<portlet-name>koku-message-portlet</portlet-name>
 		<skin-name>Default</skin-name>
 		<css-path>/css/main.CSS</css-path>
 	</portlet-skin>
@@ -22,6 +22,31 @@
 		<param>
 			<js-module>jQuery</js-module>
 			<js-path>/js/jquery-1.5.2.min.js</js-path>
+			<js-priority>10</js-priority>
+		</param>
+		<param>
+			<js-module>main</js-module>
+			<js-path>/js/main.js</js-path>
+			<js-priority>10</js-priority>
+		</param>
+		<param>
+			<js-module>jquery.datepick-fi</js-module>
+			<js-path>/js/jquery.datepick-fi.js</js-path>
+			<js-priority>10</js-priority>
+		</param>
+		<param>
+			<js-module>jquery.datepick</js-module>
+			<js-path>/js/jquery.datepick.js</js-path>
+			<js-priority>10</js-priority>
+		</param>
+		<param>
+			<js-module>jquery.datepick</js-module>
+			<js-path>/js/jquery.datepick.js</js-path>
+			<js-priority>10</js-priority>
+		</param>
+		<param>
+			<js-module>jquery.jgrowl</js-module>
+			<js-path>/js/jquery.jgrowl_minimized.js</js-path>
 			<js-priority>10</js-priority>
 		</param>
 	</javascript>

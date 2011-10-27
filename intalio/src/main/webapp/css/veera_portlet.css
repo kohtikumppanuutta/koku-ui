@@ -1,3 +1,5 @@
+@import url('Pager.css');
+
 #portlet-wrapper-palvelut_WAR_palvelutportlet .portlet-content-container{
   padding:0px 10px 35px;
 }
