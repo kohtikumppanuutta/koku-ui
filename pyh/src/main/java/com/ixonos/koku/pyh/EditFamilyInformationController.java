@@ -62,6 +62,9 @@ public class EditFamilyInformationController {
     }
     
     Person user = pyhDemoService.getUser(userPic);
+    
+    // TODO: hae perhe ja huoltajuusyhteisöt vain kertaalleen
+    
     DependantsAndFamily daf = pyhDemoService.getDependantsAndFamily(userPic);
     FamilyIdAndFamilyMembers fidm = pyhDemoService.getOtherFamilyMembers(userPic);
     

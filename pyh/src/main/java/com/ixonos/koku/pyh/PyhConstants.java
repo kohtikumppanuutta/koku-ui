@@ -26,13 +26,20 @@ public class PyhConstants {
   final public static String LOK_SERVICE_USER_ID = KoKuPropertiesUtil.get("pyh.lok.service.user.id");
   final public static String LOK_SERVICE_PASSWORD = KoKuPropertiesUtil.get("pyh.lok.service.password");
   
-  final public static String COMMUNITY_TYPE_GUARDIAN_COMMUNITY = "guardian_community";
-  final public static String COMMUNITY_TYPE_FAMILY = "family_community";
-  
-  final public static String ROLE_DEPENDANT = "dependant";
-  final public static String ROLE_GUARDIAN = "guardian";
-  final public static String ROLE_PARENT = "parent";
-  
   final public static String COMPONENT_PYH = "PYH";
   
+  
+  // TODO: remove these and use from communityservice-api
+  //
+  final public static String COMMUNITY_TYPE_GUARDIAN_COMMUNITY = "guardian_community";
+  final public static String COMMUNITY_TYPE_FAMILY = "family_community";
+  final public static String COMMUNITY_ROLE_DEPENDANT = "dependant";
+  final public static String COMMUNITY_ROLE_GUARDIAN = "guardian";
+  final public static String COMMUNITY_ROLE_PARENT = "parent";
+  final public static String COMMUNITY_ROLE_FATHER = "father";
+  final public static String COMMUNITY_ROLE_MOTHER = "mother";
+  final public static String COMMUNITY_ROLE_CHILD = "child";
+  final public static String MEMBERSHIP_REQUEST_STATUS_NEW = "new";
+  final public static String MEMBERSHIP_REQUEST_STATUS_APPROVED = "approved";
+  final public static String MEMBERSHIP_REQUEST_STATUS_REJECTED = "rejected";
 }

@@ -77,6 +77,9 @@ public class PyhDemoService {
   public Person getPerson(String pic) {
     CustomerType customer = null;
     
+    // TODO: check if user's pic is needed as parameter;
+    // if not, this method should be always called with current user's pic as a parameter
+    
     fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
     customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
     customerAuditInfoType.setUserId(pic);
@@ -94,6 +97,36 @@ public class PyhDemoService {
     }
     
     return new Person(customer);
+  }
+  
+  public List<Person> getPersons(List<String> pics, String currentUserPic) {
+    ArrayList<Person> persons = new ArrayList<Person>();
+    
+    fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
+    customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
+    customerAuditInfoType.setUserId(currentUserPic);
+    
+    CustomersType customersType = null;
+    try {
+      PicsType picsType = new PicsType();
+      picsType.getPic().addAll(pics);
+      CustomerQueryCriteriaType customerQueryCriteria = new CustomerQueryCriteriaType();
+      customerQueryCriteria.setPics(picsType);
+      customersType = customerService.opQueryCustomers(customerQueryCriteria, customerAuditInfoType);
+    } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
+      log.error("PyhDemoService.getUser: opGetCustomer raised a ServiceFault", fault);
+      return persons;
+    }
+    
+    if (customersType != null) {
+      List<CustomerType> customers = customersType.getCustomer();
+      Iterator<CustomerType> ci = customers.iterator();
+      while (ci.hasNext()) {
+        persons.add(new Person(ci.next()));
+      }
+    }
+    
+    return persons;
   }
   
   /**
@@ -135,6 +168,8 @@ public class PyhDemoService {
       log.error("PyhDemoService.getDependantsAndFamily: opQueryCommunities raised a ServiceFault", fault);
     }
     
+    ArrayList<String> depPics = new ArrayList<String>();
+    
     if (communitiesType != null) {
       List<CommunityType> communities = communitiesType.getCommunity();
       Iterator<CommunityType> ci = communities.iterator();
@@ -146,17 +181,29 @@ public class PyhDemoService {
         Iterator<MemberType> mi = members.iterator();
         while (mi.hasNext()) {
           MemberType member = mi.next();
-          if (member.getRole().equals(PyhConstants.ROLE_DEPENDANT)) {
-            try {
-              // FIXME: call to opGetCustomer must be placed outside the loop
-              CustomerType customer = customerService.opGetCustomer(member.getPic(), customerAuditInfoType);
-              dependants.add(new Dependant(customer));
-            }
-            catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
-              log.error("PyhDemoService.getDependantsAndFamily: opGetCustomer raised an ServiceFault", fault);
-            }
+          if (member.getRole().equals(PyhConstants.COMMUNITY_ROLE_DEPENDANT)) {
+            depPics.add(member.getPic());
           }
         }
+      }
+    }
+    
+    PicsType picsType = new PicsType();
+    picsType.getPic().addAll(depPics);
+    CustomerQueryCriteriaType customerQueryCriteriaType = new CustomerQueryCriteriaType();
+    customerQueryCriteriaType.setPics(picsType);
+    CustomersType customersType = null;
+    try {
+      customersType = customerService.opQueryCustomers(customerQueryCriteriaType, customerAuditInfoType);
+    } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
+      log.error("PyhDemoService.getDependantsAndFamily: opGetCustomer raised an ServiceFault", fault);
+    }
+    if (customersType != null) {
+      List<CustomerType> customers = customersType.getCustomer();
+      Iterator<CustomerType> ci = customers.iterator();
+      while (ci.hasNext()) {
+        CustomerType customer = ci.next();
+        dependants.add(new Dependant(customer));
       }
     }
     
@@ -255,6 +302,9 @@ public class PyhDemoService {
       
       //log.info("PyhDemoService.getOtherFamilyMembers: opQueryCommunities returned " + communities.size() + " communities");
       
+      List<String> otherFamilyMemberPics = new ArrayList<String>();
+      List<String> otherFamilyMemberRoles = new ArrayList<String>();
+      
       while (ci.hasNext()) {
         CommunityType community = ci.next();
         familyId = community.getId(); // communityService.opQueryCommunities should return only one community
@@ -264,20 +314,32 @@ public class PyhDemoService {
         while (mi.hasNext()) {
           MemberType member = mi.next();
           if (!dependantPics.contains(member.getPic()) && !userPic.equals(member.getPic())) {
-            CustomerType customer = null;
             
-            try {
-              // FIXME: call to getCustomer outside the loop
-              //log.info("getOtherFamilyMembers(): fetching user: " + member.getPic());
-              customer = customerService.opGetCustomer(member.getPic(), customerAuditInfoType);
-            } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
-              log.error("PyhDemoService.getOtherFamilyMembers: opGetCustomer raised a ServiceFault", fault);
-            }
-            
-            if (customer != null) {
-              otherFamilyMembers.add(new FamilyMember(customer, CommunityRole.createFromRoleID(member.getRole())));
-            }
+            otherFamilyMemberPics.add(member.getPic());
+            otherFamilyMemberRoles.add(member.getRole());
           }
+        }
+      }
+      
+      CustomersType customersType = null;
+      try {
+        CustomerQueryCriteriaType customerCriteria = new CustomerQueryCriteriaType();
+        PicsType picsType = new PicsType();
+        picsType.getPic().addAll(otherFamilyMemberPics);
+        customerCriteria.setPics(picsType);
+        customerCriteria.setSelection("basic");
+        customersType = customerService.opQueryCustomers(customerCriteria, customerAuditInfoType);
+      } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
+        log.error("PyhDemoService.getOtherFamilyMembers: opQueryCustomers raised a ServiceFault", fault);
+      }
+      
+      if (customersType != null) {
+        Iterator<CustomerType> customerIterator = customersType.getCustomer().iterator();
+        Iterator<String> roleIterator = otherFamilyMemberRoles.iterator();
+        while (customerIterator.hasNext()) {
+          CustomerType customer = customerIterator.next();
+          String role = roleIterator.next();
+          otherFamilyMembers.add(new FamilyMember(customer, CommunityRole.createFromRoleID(role)));
         }
       }
     }
@@ -290,10 +352,6 @@ public class PyhDemoService {
       }
       log.info("--");
     }
-    
-    //return otherFamilyMembers;
-    
-    //log.info("PyhDemoService.getOtherFamilyMembers: familyId = " + familyId);
     
     FamilyIdAndFamilyMembers fidm = new FamilyIdAndFamilyMembers();
     fidm.setFamilyMembers(otherFamilyMembers);
@@ -427,7 +485,7 @@ public class PyhDemoService {
           Iterator<MemberType> mi = members.iterator();
           while (mi.hasNext()) {
             MemberType member = mi.next();
-            if (member.getRole().equals(PyhConstants.ROLE_GUARDIAN)) {
+            if (member.getRole().equals(PyhConstants.COMMUNITY_ROLE_GUARDIAN)) {
               recipientPics.add(member.getPic());
             }
           }
@@ -563,6 +621,8 @@ public class PyhDemoService {
           if (member.getPic().equals(familyMemberPic) && isMemberOfCommunity(userPic, members)) {
             members.remove(member);
             try {
+              
+              // TODO: place outside the loop
               communityService.opUpdateCommunity(community, communityAuditInfoType);
               Log.getInstance().update(userPic, "", "pyh.family.community", "Removing family member " + familyMemberPic + " from family");
             } catch (ServiceFault fault) {
@@ -632,7 +692,6 @@ public class PyhDemoService {
       String memberToAddPic = si.next();
       String role = personMap.get(memberToAddPic);
       
-      Person person = getPerson(memberToAddPic);
       CommunityRole communityRole = CommunityRole.create(role);
       
       List<String> recipients = generateRecipients(memberToAddPic, user, communityRole, userPic/*current user's pic*/);
@@ -643,6 +702,7 @@ public class PyhDemoService {
       } else if (CommunityRole.CHILD.equals(communityRole) && recipients.size() == 0) {
         // we don't have guardian information for the child so we can't send the request
         
+        // TODO: nämä tekstit Language-ext.properties
         String messageSubject = "KoKu: puutteelliset tiedot järjestelmässä";
         String messageText = "Järjestelmästä ei löydy lapsen huoltajatietoja. Lapsen HETU: " + memberToAddPic;
         
@@ -903,7 +963,7 @@ public class PyhDemoService {
     
     MemberType member = new MemberType();
     member.setPic(userPic);
-    member.setRole(PyhConstants.ROLE_PARENT);
+    member.setRole(PyhConstants.COMMUNITY_ROLE_PARENT);
     
     MembersType members = new MembersType();
     members.getMember().add(member);
@@ -926,6 +986,7 @@ public class PyhDemoService {
   /**
    * Removes a family community.
    */
+  /*
   private void removeFamily(Family family, String userPic) {
     fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
     communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
@@ -943,6 +1004,7 @@ public class PyhDemoService {
     }
     
   }
+  */
   
   /**
    * Returns a family by person's PIC.
@@ -1065,32 +1127,61 @@ public class PyhDemoService {
     }
     
     if (membershipRequestsType != null) {
+      List<String> memberToAddPics = new ArrayList<String>();
+      List<String> messageIds = new ArrayList<String>();
+      List<String> senderPics = new ArrayList<String>();
+      List<String> userApprovalStatusList = new ArrayList<String>();
+      
       List<MembershipRequestType> membershipRequests = membershipRequestsType.getMembershipRequest();
       Iterator<MembershipRequestType> mrti = membershipRequests.iterator();
+      // iterate through membership requests
       while (mrti.hasNext()) {
         MembershipRequestType membershipRequest = mrti.next();
-        
-        String messageId = membershipRequest.getId();
-        String memberToAddPic = membershipRequest.getMemberPic();
-        String senderPic = membershipRequest.getRequesterPic();
+        memberToAddPics.add(membershipRequest.getMemberPic());
+        messageIds.add(membershipRequest.getId());
+        senderPics.add(membershipRequest.getRequesterPic());
         
         MembershipApprovalsType membershipApprovalsType = membershipRequest.getApprovals();
         List<MembershipApprovalType> approvals = membershipApprovalsType.getApproval();
         Iterator<MembershipApprovalType> ait = approvals.iterator();
-        String userApprovalStatus = "";
         while (ait.hasNext()) {
           MembershipApprovalType approval = ait.next();
           String approverPic = approval.getApproverPic();
+          
+          // there should be match because MembershipRequestQueryCriteriaType.approverPic was set to user's pic
           if (approverPic.equals(user.getPic())) {
-            userApprovalStatus = approval.getStatus();
+            userApprovalStatusList.add(approval.getStatus());
             break;
           }
         }
+      }
+      
+      // reason for two loops is that the WS services are called only once (for better performance)
+      
+      List<Person> requestSenders = getPersons(senderPics, user.getPic());
+      List<Person> targetPersons = getPersons(memberToAddPics, user.getPic());
+      Iterator<Person> requestSenderIterator = requestSenders.iterator();
+      Iterator<Person> targetPersonIterator = targetPersons.iterator();
+      
+      Iterator<String> messageIdIterator = messageIds.iterator();
+      Iterator<String> memberToAddIterator = memberToAddPics.iterator();
+      Iterator<String> messageSenderIterator = senderPics.iterator();
+      Iterator<String> approvalStatusIterator = userApprovalStatusList.iterator();
+      
+      boolean userFamilyHasTwoParents = isParentsSet(user.getPic());
+      
+      while (messageIdIterator.hasNext()) {
+        String messageId = messageIdIterator.next();
+        String memberToAddPic = memberToAddIterator.next();
+        String senderPic = messageSenderIterator.next();
+        String userApprovalStatus = approvalStatusIterator.next();
         
-        if (userApprovalStatus.equals("new")) {
-          // TODO: etäkutsut pitää poistaa silmukasta
-          Person requestSender = getPerson(senderPic);
-          Person targetPerson = getPerson(memberToAddPic);
+        // TODO: customerservice-api projektiin CommunityServiceConstants, jossa vakiona "new" ja muut vastaavat
+        // TODO: vastaavasti CustomerServiceConstants-luokka
+        if ("new".equals(userApprovalStatus)) {
+          
+          Person requestSender = requestSenderIterator.next();
+          Person targetPerson = targetPersonIterator.next();
           String senderName = "";
           String targetName = "";
           
@@ -1102,15 +1193,11 @@ public class PyhDemoService {
             targetName = targetPerson.getFullName();
           }
           
-          boolean twoParentsInFamily;
+          boolean twoParentsInFamily = false;
           if (memberToAddPic.equals(user.getPic())) {
             // twoParentsInFamily is set if there are two (or more; this is theoretical, 
             // shouldn't be possible) parents in the family
-            twoParentsInFamily = isParentsSet(user.getPic());
-          } else {
-            // here it does not matter whether there are two parents in the family or not
-            // so twoParentsInFamily can be set to false
-            twoParentsInFamily = false;
+            twoParentsInFamily = userFamilyHasTwoParents;
           }
           
           String messageText = "";
@@ -1164,27 +1251,35 @@ public class PyhDemoService {
     }
     
     if (membershipRequestsType != null) {
+      ArrayList<String> memberToAddPics = new ArrayList<String>();
+      ArrayList<String> messageIds = new ArrayList<String>();
+      ArrayList<String> senderPics = new ArrayList<String>();
+      
       List<MembershipRequestType> membershipRequests = membershipRequestsType.getMembershipRequest();
       Iterator<MembershipRequestType> mrti = membershipRequests.iterator();
+      MembershipRequestType membershipRequest = null;
       while (mrti.hasNext()) {
-        MembershipRequestType membershipRequest = mrti.next();
+        membershipRequest = mrti.next();
+        memberToAddPics.add(membershipRequest.getMemberPic());
+        messageIds.add(membershipRequest.getId());
+        senderPics.add(membershipRequest.getRequesterPic());
+      }
+      
+      List<Person> membersToAdd = getPersons(memberToAddPics, user.getPic());
+      Iterator<Person> pi = membersToAdd.iterator();
+      Iterator<String> messageIdIt = messageIds.iterator();
+      Iterator<String> senderPicIt = senderPics.iterator();
+      
+      String targetPersonName = "";
+      String messageId = "";
+      String senderPic = "";
+      while (pi.hasNext()) {
+        Person targetPerson = pi.next();
+        targetPersonName = targetPerson.getFullName();
+        messageId = messageIdIt.next();
+        senderPic = senderPicIt.next();
         
-        String messageId = membershipRequest.getId();
-        String memberToAddPic = membershipRequest.getMemberPic();
-        String senderPic = membershipRequest.getRequesterPic();
-        
-        // TODO: etäkutsu pitää poistaa silmukasta
-        Person targetPerson = getPerson(memberToAddPic);
-        String targetName = "";
-        
-        if (targetPerson != null) {
-          targetName = "käyttäjä " + targetPerson.getFullName();
-        } else {
-          targetName = "käyttäjä " + memberToAddPic;
-        }
-        
-        String messageText = "Lisäys perheyhteystietoihisi: " + targetName + " (odottaa vastaanottajan hyväksyntää)";
-        
+        String messageText = "Lisäys perheyhteystietoihisi: " + targetPersonName + " (odottaa vastaanottajan hyväksyntää)";
         Message message = new Message(messageId, senderPic, "" /*memberToAddPic*/, messageText, false);
         requestMessages.add(message);
       }

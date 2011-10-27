@@ -2,7 +2,7 @@ package com.ixonos.koku.pyh.model;
 
 import com.ixonos.koku.pyh.PyhDemoService;
 import com.ixonos.koku.pyh.util.CommunityRole;
-
+/*
 public class DependantExecutable implements Executable {
 
   private String userPic;
@@ -17,10 +17,11 @@ public class DependantExecutable implements Executable {
     this.service = service;
     this.role = role;
   }
-  
+
   @Override
   public void execute() {
     service.insertDependantToFamily(userPic, targetPic, role);
   }
 
 }
+*/

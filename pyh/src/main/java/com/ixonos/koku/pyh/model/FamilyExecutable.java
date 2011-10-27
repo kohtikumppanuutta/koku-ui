@@ -2,7 +2,7 @@ package com.ixonos.koku.pyh.model;
 
 import com.ixonos.koku.pyh.PyhDemoService;
 import com.ixonos.koku.pyh.util.CommunityRole;
-
+/*
 public class FamilyExecutable implements Executable {
 
   private String userPic;
@@ -24,3 +24,4 @@ public class FamilyExecutable implements Executable {
   }
 
 }
+*/
