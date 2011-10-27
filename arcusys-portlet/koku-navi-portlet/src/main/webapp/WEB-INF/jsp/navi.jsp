@@ -241,7 +241,7 @@
 %>		
 		
 		<!--  VIESTIT -->
-		<li><a href="javascript:void(0)" >Etusivu</a></li>
+		<li><a href="<%= frontPagePath %>" >Etusivu</a></li>
 		<!-- For citizen in Gatein portal-->
 		<c:if test="${fn:contains(naviPortalMode, 'KUNPO')}">
 		<li id="kks"><a href="<%= kksPath %>">Sopimukset ja suunnitelmat</a>

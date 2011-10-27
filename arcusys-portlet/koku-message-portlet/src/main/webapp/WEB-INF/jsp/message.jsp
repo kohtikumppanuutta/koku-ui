@@ -81,17 +81,9 @@
 <%
 	/* Parses the parent path url from the portlet ajaxURL */
 	
-	String defaultPath = "";
-
-	int pos = ajaxURL.indexOf("default");
-	if(pos > -1) { // for Jboss portal
-		int currentPathPosition = ajaxURL.indexOf("Message");
-		defaultPath = ajaxURL.substring(0, currentPathPosition+7);
-	}else { // for Gatein portal
-		int pos1 = ajaxURL.indexOf("classic");
-		int currentPathPosition = ajaxURL.indexOf("Message");
-		defaultPath = ajaxURL.substring(0, currentPathPosition+7);
-	}
+// 	final int currentPathPosition = ajaxURL.indexOf("Message");
+// 	final String defaultPath = ajaxURL.substring(0, currentPathPosition+7);
+	final String defaultPath = portletPath;
 %>
 
 <script type="text/javascript">
@@ -332,7 +324,7 @@
 		
 		var taskHtml = "";
 		var formLink = "";
-		if (pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE %>") {
+		if (pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE %>" || pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>") {
 			
 			
 			taskHtml = '<table class="task-manager-table">'
@@ -855,13 +847,16 @@
 			return subject;
 	}
 
-	<% if(defaultPath.contains("default")) { 	
+	<% if(portalInfo.startsWith(Constants.PORTAL_JBOSS)) { 	
 		// for jboss %>
 		<%@ include file="message_jboss.jspf" %> 
-	<% } else { 
+	<% } else if (portalInfo.startsWith(Constants.PORTAL_GATEIN)){ 
 		// for gatein %>	
 		<%@ include file="message_gatein.jspf" %> 
-   <%}%>
+   <%} else {
+   		// TODO: Error!
+   	 }
+   %>
 		
 	/*
 	function formKeywords(keywordArray) {

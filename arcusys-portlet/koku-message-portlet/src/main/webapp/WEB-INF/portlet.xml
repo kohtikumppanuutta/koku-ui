@@ -18,5 +18,14 @@
 		<portlet-info>
 			<title>Message Portlet</title>
 		</portlet-info>	
+		<portlet-preferences>
+			<preference>
+				<name>portletPath</name>
+				<value>/portal/private/classic/Message</value>
+			</preference>
+		</portlet-preferences>
+		
+		
+		
 	</portlet>
 </portlet-app>

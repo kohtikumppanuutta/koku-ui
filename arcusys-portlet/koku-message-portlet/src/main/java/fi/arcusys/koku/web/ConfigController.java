@@ -40,10 +40,11 @@ public class ConfigController {
             PortletPreferences pref = request.getPreferences();       
     		String refreshDuration = request.getParameter(PREF_REFRESH_DURATION);
     		String messageType = request.getParameter(PREF_MESSAGE_TYPE);
-    		System.out.println("refresh: " + refreshDuration
-    				+ "messageType: " + messageType);
+    		String portletPath = request.getParameter(PREF_MESSAGE_PORTLET_PATH);
+    		logger.info("User '"+request.getRemoteUser() + "' saved settings: refresh: " + refreshDuration + " messageType: " + messageType + " PortletPath: '"+portletPath+"'");
     		pref.setValue(PREF_REFRESH_DURATION, refreshDuration);
     		pref.setValue(PREF_MESSAGE_TYPE, messageType);
+    		pref.setValue(PREF_MESSAGE_PORTLET_PATH, portletPath);    		
     		pref.store();
     		
     		response.setPortletMode(PortletMode.VIEW);

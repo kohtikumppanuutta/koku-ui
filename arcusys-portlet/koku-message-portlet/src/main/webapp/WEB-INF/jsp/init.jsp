@@ -9,9 +9,11 @@
 <portlet:defineObjects />
 
 <%
-PortletPreferences preferences = renderRequest.getPreferences();
 
-String refreshDuration = preferences.getValue(Constants.PREF_REFRESH_DURATION, "30");
-String messageType = preferences.getValue(Constants.PREF_MESSAGE_TYPE, "2");
+final PortletPreferences preferences = renderRequest.getPreferences();
+final String refreshDuration = preferences.getValue(Constants.PREF_REFRESH_DURATION, "30");
+final String messageType = preferences.getValue(Constants.PREF_MESSAGE_TYPE, "2");
+final String portletPath = preferences.getValue(Constants.PREF_MESSAGE_PORTLET_PATH, "/portal/private/classic/Message");
+final String portalInfo = renderRequest.getPortalContext().getPortalInfo();
 
 %>

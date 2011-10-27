@@ -130,6 +130,9 @@ public class KokuRequest {
 		this.unrespondedList = unrespondedList;
 	}
 	public List<KokuQuestion> getQuestions() {
+		if (questions == null) {
+			questions = new ArrayList<KokuQuestion>();
+		}
 		return questions;
 	}
 	public void setQuestions(List<KokuQuestion> questions) {

@@ -1,5 +1,17 @@
 package fi.arcusys.koku.palvelut.controller;
 
+import static fi.arcusys.koku.palvelut.util.Constants.APPOINTMENT_SERVICE_CITIZEN_NAME;
+import static fi.arcusys.koku.palvelut.util.Constants.APPOINTMENT_SERVICE_EMPLOYEE_NAME;
+import static fi.arcusys.koku.palvelut.util.Constants.ATTR_PREFERENCES;
+import static fi.arcusys.koku.palvelut.util.Constants.MESSAGE_SERVICE_NAME;
+import static fi.arcusys.koku.palvelut.util.Constants.REQUEST_SERVICE_NAME;
+import static fi.arcusys.koku.palvelut.util.Constants.SHOW_ONLY_CHECKED;
+import static fi.arcusys.koku.palvelut.util.Constants.SHOW_ONLY_FORM_BY_DESCRIPTION;
+import static fi.arcusys.koku.palvelut.util.Constants.SHOW_ONLY_FORM_BY_ID;
+import static fi.arcusys.koku.palvelut.util.Constants.SHOW_TASKS_BY_ID;
+import static fi.arcusys.koku.palvelut.util.Constants.TIVA_CITIZEN_SERVICE_NAME;
+import static fi.arcusys.koku.palvelut.util.Constants.TIVA_EMPLOYEE_SERVICE_NAME;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,7 +31,6 @@ import javax.xml.stream.XMLStreamException;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
-import org.apache.openjpa.lib.log.Log;
 import org.intalio.tempo.workflow.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,7 +56,6 @@ import fi.arcusys.koku.palvelut.util.OperationsValidatorImpl;
 import fi.arcusys.koku.palvelut.util.TaskUtil;
 import fi.arcusys.koku.palvelut.util.TokenUtil;
 import fi.arcusys.koku.palvelut.util.XmlProxy;
-import static fi.arcusys.koku.palvelut.util.Constants.*;
 
 
 @Controller("viewController")

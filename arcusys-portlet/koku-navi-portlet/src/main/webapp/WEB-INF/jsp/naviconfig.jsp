@@ -38,6 +38,14 @@
 <!-- 				</div> -->
 				<div>
 					<div class="naviEditHeader">
+						<spring:message code="config.frontpagePath" />
+					</div>			
+					<div class="naviEditValue">
+						<textarea rows="1" name="<%= Constants.PREF_NAVI_FRONTPAGE %>" id="<%= Constants.PREF_NAVI_FRONTPAGE %>"></textarea>				
+					</div>
+				</div>
+				<div>
+					<div class="naviEditHeader">
 						<spring:message code="config.navigationDefaultPath" />
 					</div>				
 					<div class="naviEditValue">
@@ -87,4 +95,5 @@
 	jQuery('#<%= Constants.PREF_NAVI_PYH %>').val("<%= pyhPref %>");
 	jQuery('#<%= Constants.PREF_NAVI_DEFAULT_PATH %>').val("<%= defaultPathPref %>");
 	jQuery('#<%= Constants.PREF_NAVI_PORTAL %>').val("<%= naviPortalMode %>");
+	jQuery('#<%= Constants.PREF_NAVI_FRONTPAGE %>').val("<%= frontPagePath %>");
 </script>

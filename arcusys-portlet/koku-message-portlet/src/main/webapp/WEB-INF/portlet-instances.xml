@@ -3,7 +3,13 @@
    <deployment>
       <instance>
          <instance-id>MessagePortletInstance</instance-id>
-         <portlet-ref>koku-message-portlet</portlet-ref>
+         <portlet-ref>koku-message-portlet</portlet-ref>         
+         <portlet-preferences>
+			<preference>
+				<name>portletPath</name>
+				<value>/portal/private/classic/Message</value>
+			</preference>
+		</portlet-preferences>
       </instance>
    </deployment>
 </deployments>

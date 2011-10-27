@@ -29,6 +29,10 @@
 				<name>preferencesPathPyh</name>
 				<value>/portal/auth/portal/default/kokuPYH</value>
 			</preference>
+			<preference>
+				<name>frontPagePath</name>
+				<value>/portal/auth/portal/default/koku/</value>
+			</preference>	
 		</preferences>
       </instance>
    </deployment>

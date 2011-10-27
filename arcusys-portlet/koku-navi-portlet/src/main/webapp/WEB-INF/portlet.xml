@@ -42,6 +42,10 @@
 				<preference>
 					<name>preferencesPathPyh</name>
 					<value>/portal/auth/portal/default/koku/PYH</value>
+				</preference>
+				<preference>
+					<name>frontPagePath</name>
+					<value>/portal/auth/portal/default/koku/</value>
 				</preference>	
 		</portlet-preferences>		
 	</portlet>

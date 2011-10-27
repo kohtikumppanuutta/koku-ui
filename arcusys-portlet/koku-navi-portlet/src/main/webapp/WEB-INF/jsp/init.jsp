@@ -17,7 +17,7 @@
 	final String pyhPref = preferences.getValue(Constants.PREF_NAVI_PYH, "/PYH");
 	final String naviPortalMode = preferences.getValue(Constants.PREF_NAVI_PORTAL, PortalNavigationMode.KUNPO.toString());
 	final String defaultPathPref = preferences.getValue(Constants.PREF_NAVI_DEFAULT_PATH, "/portal/auth/portal/default/koku/Message");
-	
+	final String frontPagePath = preferences.getValue(Constants.PREF_NAVI_FRONTPAGE, "/portal/auth/portal/default/koku/");
 	request.setAttribute("naviPortalMode", naviPortalMode);	
 	final String portalInfo = renderRequest.getPortalContext().getPortalInfo();
 %>

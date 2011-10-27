@@ -144,9 +144,11 @@ public class Constants {
 	public static final String PREF_NAVI_PYH								= "preferencesPathPyh";
 	public static final String PREF_NAVI_DEFAULT_PATH						= "navigationDefaultPath";
 	public static final String PREF_NAVI_PORTAL								= "kokuPortalMode";
+	public static final String PREF_NAVI_FRONTPAGE							= "frontPagePath";
 				                                                            	
 	/* PortletPreferences keys: MessagePortlet */               	
 	public static final String PREF_MESSAGE_TYPE 							= "messageType";
+	public static final String PREF_MESSAGE_PORTLET_PATH					= "portletPath";
 	
                                                             	
 	/* ? (Should be JSON values?) */                                                	

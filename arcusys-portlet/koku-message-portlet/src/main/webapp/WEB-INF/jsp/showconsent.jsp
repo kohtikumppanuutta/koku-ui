@@ -10,21 +10,10 @@
 <%
 	/* Parses the parent path url from the portlet ajaxURL */
 	
-	String defaultPath = "";
+// 	final int currentPathPosition = ajaxURL.indexOf("Message");
+// 	final String defaultPath = ajaxURL.substring(0, currentPathPosition+7);
+	final String defaultPath = portletPath;
 
-	int pos = ajaxURL.indexOf("default");
-	if(pos > -1) { // for Jboss portal
-		defaultPath = ajaxURL.substring(0, pos+7);
-		int currentPathPosition = ajaxURL.indexOf("Message");
-		defaultPath = ajaxURL.substring(0, currentPathPosition+7);
-
-	}else { // for Gatein portal
-		int pos1 = ajaxURL.indexOf("classic");
-		defaultPath = ajaxURL.substring(0, pos1+7);
-		int currentPathPosition = ajaxURL.indexOf("Message");
-		defaultPath = ajaxURL.substring(0, currentPathPosition+7);
-
-	}
 %>
 
 <script type="text/javascript"> 
