@@ -5,7 +5,7 @@
 	<portlet>
 		<portlet-name>koku-message-portlet</portlet-name>
 		<header-content>
-			<link type="text/css" rel="stylesheet" href="/css/main.CSS" />
+			<link type="text/css" rel="stylesheet" href="/css/main.css" />
 			<link type="text/css" rel="stylesheet" href="/css/jquery.datepick.css" />
 			<link type="text/css" rel="stylesheet" href="/css/jquery.jgrowl.css" />			
 				

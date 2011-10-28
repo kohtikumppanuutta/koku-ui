@@ -21,11 +21,8 @@
 		<portlet-preferences>
 			<preference>
 				<name>portletPath</name>
-				<value>/portal/private/classic/Message</value>
+				<value>/tre/public/asiointi/koku/Message</value>
 			</preference>
-		</portlet-preferences>
-		
-		
-		
+		</portlet-preferences>		
 	</portlet>
 </portlet-app>

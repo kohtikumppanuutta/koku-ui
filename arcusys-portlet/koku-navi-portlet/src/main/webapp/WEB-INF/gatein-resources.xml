@@ -8,14 +8,14 @@
 		<application-name>koku-navi-portlet</application-name>
 		<portlet-name>koku-navi-portlet</portlet-name>
 		<skin-name>SimpleSkin</skin-name>
-		<css-path>/css/main.CSS</css-path>
+		<css-path>/css/main.css</css-path>
 	</portlet-skin>
 	
 	<portlet-skin>
 		<application-name>koku-navi-portlet</application-name>
 		<portlet-name>koku-navi-portlet</portlet-name>
 		<skin-name>Default</skin-name>
-		<css-path>/css/main.CSS</css-path>
+		<css-path>/css/main.css</css-path>
 	</portlet-skin>
 	
 	<javascript>
