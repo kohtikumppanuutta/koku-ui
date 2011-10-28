@@ -6,7 +6,7 @@
 
 	<portlet>
 		<description>Portlet providing message navigation</description>
-		<portlet-name>messageNavigation</portlet-name>
+		<portlet-name>koku-navi-portlet</portlet-name>
 		<display-name>koku-navi-portlet</display-name>
 		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
 		<supports>
@@ -29,23 +29,23 @@
 				</preference>
 			  <preference>
 					<name>navigationDefaultPath</name>
-					<value>/portal/private/classic/Message</value>
+					<value>/tre/public/asiointi/koku/Message</value>
 				</preference>
 	          <preference>
 					<name>preferencesPathKks</name>
-					<value>/portal/auth/portal/default/koku/KKS</value>
+					<value>/tre/public/asiointi/koku/kks</value>
 				</preference>
 				<preference>
 					<name>preferencesPathLok</name>
-					<value>/portal/auth/portal/default/koku/LOK</value>
+					<value>/tre/public/asiointi/koku/lok</value>
 				</preference>	
 				<preference>
 					<name>preferencesPathPyh</name>
-					<value>/portal/auth/portal/default/koku/PYH</value>
+					<value>/tre/public/asiointi/koku/pyh</value>
 				</preference>
 				<preference>
 					<name>frontPagePath</name>
-					<value>/portal/auth/portal/default/koku/</value>
+					<value>/tre/public/asiointi/koku/Messages/</value>
 				</preference>	
 		</portlet-preferences>		
 	</portlet>

@@ -3,7 +3,7 @@
 
 <portlet-app>
 	<portlet>
-		<portlet-name>messageNavigation</portlet-name>
+		<portlet-name>koku-navi-portlet</portlet-name>
 		<header-content>
 			<link type="text/css" rel="stylesheet" href="/css/main.CSS" />
 			<script type="text/javascript" src="/js/jquery-1.5.2.min.js" />

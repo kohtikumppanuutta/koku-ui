@@ -3,7 +3,7 @@
    <deployment>
       <instance>
          <instance-id>MessageNavigationInstance</instance-id>
-         <portlet-ref>messageNavigation</portlet-ref>
+         <portlet-ref>koku-navi-portlet</portlet-ref>
          <preferences>
         	<preference>
 				<name>kokuPortalMode</name>
