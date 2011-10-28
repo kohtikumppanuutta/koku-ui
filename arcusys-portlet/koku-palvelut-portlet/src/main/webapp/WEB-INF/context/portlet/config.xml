@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	<!-- Configuration options -->
+	
+    <bean id="configuration" class="fi.arcusys.koku.palvelut.bean.Configuration" factory-method="getInstance">
+    	<!-- Production env configuration   -->
+<!--     	<property name="tokenServiceEndpoint" value="http://intalio.intra.arcusys.fi:8080/axis2/services/TokenService" /> -->
+<!--     	<property name="taskManagerServiceEndpoint" value="http://intalio.intra.arcusys.fi:8080/axis2/services/TaskManagementServices" /> -->
+    	<property name="tokenServiceEndpoint" value="http://trelx28b:8080/axis2/services/TokenService" />
+    	<property name="taskManagerServiceEndpoint" value="http://trelx28b:8080/axis2/services/TaskManagementServices" />
+
+  
+    	<!-- Test env configuration
+    	<property name="tokenServiceEndpoint" value="http://localhost3:8080/axis2/services/TokenService" />
+    	<property name="taskManagerServiceEndpoint" value="http://localhost3:8080/axis2/services/TaskManagementServices" /> -->
+	</bean>
+	
+	<!-- Proxy configuration -->
+  <bean id="xformsProxyConfiguration" class="fi.arcusys.koku.palvelut.proxy.ProxyConfig" factory-method="getInstance">
+    	<property name="proxyFilterPath" value="/palvelut-portlet/xforms" />
+    	<property name="targetPath" value="http://trelx28b:8080/xFormsManager" />
+    	<property name="replaceMap">
+			<map>
+			  <entry>
+			    <key><value>([\"|'|\\(])/xFormsManager/</value></key>
+			    <value>$1/palvelut-portlet/xforms/</value>
+			  </entry>
+			  <entry>
+			    <key><value>http://([^/]*?)/xFormsManager/</value></key>
+			    <value>/palvelut-portlet/xforms/</value>
+			  </entry>
+			</map>
+    	</property>
+    	<property name="filterContentTypes">
+    		<list>
+    			<value>text/html</value>
+    			<value>text/css</value>
+    		</list>
+    	</property>
+	</bean>
+	
+	<bean id="ajaxformsProxyConfiguration" class="fi.arcusys.koku.palvelut.proxy.ProxyConfig" factory-method="getInstance">
+    	<property name="proxyFilterPath" value="/palvelut-portlet/ajaxforms" />
+<!--     	<property name="targetPath" value="http://intalio.intra.arcusys.fi:8080/gi" />    	 -->
+    	<property name="targetPath" value="http://trelx28b:8080/gi" />
+			<property name="storeCookies" value="true" />
+	    <property name = "ignorePaths">
+	       <list>
+	           <value>/palvelut-portlet/ajaxforms/WsProxyServlet2</value>
+	       </list>
+	    </property>
+    	<property name="replaceMap">
+			<map>
+			  <entry>
+			    <key><value>([\"|'|\\(])/gi/</value></key>
+			    <value>$1/palvelut-portlet/ajaxforms/</value>
+			  </entry>
+			  <entry>
+			    <key><value>http://([^/]*?)/gi/</value></key>
+			    <value>/palvelut-portlet/ajaxforms/</value>
+			  </entry>
+				<entry>
+			    <key><value>/ui-fw/script/empty.jsp</value></key>
+			    <value>/palvelut-portlet/html/empty.html</value>
+			  </entry>
+			</map>
+    	</property>
+    	<property name="filterContentTypes">
+    		<list>
+    			<value>text/html</value>
+    			<value>text/css</value>
+					<value>text/javascript</value>
+					<value>text/xml</value>
+    		</list>
+    	</property>
+			<property name="guessContentTypes">
+    		<map>
+					<entry>
+						<key><value>.html</value></key>
+						<value>text/html</value>
+					</entry>
+					<entry>
+						<key><value>.js</value></key>
+						<value>text/javascript</value>
+					</entry>
+					<entry>
+						<key><value>.css</value></key>
+						<value>text/css</value>
+					</entry>
+					<entry>
+						<key><value>.xml</value></key>
+						<value>text/xml</value>
+					</entry>
+    		</map>
+    	</property>
+	</bean>
+	
+</beans>

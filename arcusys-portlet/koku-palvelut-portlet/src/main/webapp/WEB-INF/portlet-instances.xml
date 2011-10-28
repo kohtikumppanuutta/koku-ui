@@ -1,0 +1,296 @@
+<?xml version="1.0" standalone="yes"?>
+<!DOCTYPE deployments PUBLIC
+   "-//JBoss Portal//DTD Portlet Instances 2.6//EN"
+   "http://www.jboss.org/portal/dtd/portlet-instances_2_6.dtd">
+<deployments>
+
+	
+<!-- Citizen & employee -->
+   <deployment>
+      <instance>
+         <instance-id>ApViestitUusiViesti</instance-id>
+         <portlet-ref>palvelut-portlet</portlet-ref>
+         <preferences>
+            <preference>
+				<name>showOnlyChecked</name>
+				<value>true</value>
+			</preference>
+			<preference>
+				<name>showOnlyForm</name>
+				<value>0</value>
+			</preference>	
+			<preference>
+				<name>showOnlyFormByDescription</name>
+				<value>Uusi käyttäjäviesti</value>
+			</preference>
+			<preference>
+				<name>useTaskId</name>
+				<value>false</value>
+			</preference>
+		</preferences>
+         <security-constraint>
+            <policy-permission>
+               <action-name>view</action-name>
+               <unchecked/>
+            </policy-permission>
+         </security-constraint>
+      </instance>
+   </deployment>
+   
+   <!-- START: Employee -->
+   <deployment>
+      <instance>
+         <instance-id>ApPyynnotUusiPyynto</instance-id>
+         <portlet-ref>palvelut-portlet</portlet-ref>
+         <preferences>
+            <preference>
+				<name>showOnlyChecked</name>
+				<value>true</value>
+			</preference>
+			<preference>
+				<name>showOnlyForm</name>
+				<value>0</value>
+			</preference>
+			<preference>
+				<name>showOnlyFormByDescription</name>
+				<value>Uusi pyyntö</value>
+			</preference>
+			<preference>
+				<name>useTaskId</name>
+				<value>false</value>
+			</preference>
+         </preferences>
+         <security-constraint>
+            <policy-permission>
+               <action-name>view</action-name>
+               <unchecked/>
+            </policy-permission>
+         </security-constraint>
+      </instance>
+   </deployment>
+   
+    <deployment>
+      <instance>
+         <instance-id>ApPyynnotLuoUusiPohja</instance-id>
+         <portlet-ref>palvelut-portlet</portlet-ref>
+         <preferences>
+            <preference>
+				<name>showOnlyChecked</name>
+				<value>true</value>
+			</preference>
+			<preference>
+				<name>showOnlyForm</name>
+				<value>0</value>
+			</preference>
+			<preference>
+				<name>showOnlyFormByDescription</name>
+				<value>Kyselypohjan luominen</value>
+			</preference>
+			<preference>
+				<name>useTaskId</name>
+				<value>false</value>
+			</preference>
+         </preferences>
+         <security-constraint>
+            <policy-permission>
+               <action-name>view</action-name>
+               <unchecked/>
+            </policy-permission>
+         </security-constraint>
+      </instance>
+   </deployment>
+   
+   <deployment>
+      <instance>
+         <instance-id>ApTapaamisetLuoUusiTapaaminen</instance-id>
+         <portlet-ref>palvelut-portlet</portlet-ref>
+         <preferences>
+            <preference>
+				<name>showOnlyChecked</name>
+				<value>true</value>
+			</preference>
+			<preference>
+				<name>showOnlyForm</name>
+				<value>0</value>
+			</preference>
+			<preference>
+				<name>showOnlyFormByDescription</name>
+				<value>Ajanvaraus - Virkailija</value>
+			</preference>
+			<preference>
+				<name>useTaskId</name>
+				<value>false</value>
+			</preference>
+         </preferences>
+         <security-constraint>
+            <policy-permission>
+               <action-name>view</action-name>
+               <unchecked/>
+            </policy-permission>
+         </security-constraint>
+      </instance>
+   </deployment>
+   
+    <deployment>
+      <instance>
+         <instance-id>ApSuostumuksetLuoUusiSuostumispohja</instance-id>
+         <portlet-ref>palvelut-portlet</portlet-ref>
+         <preferences>
+            <preference>
+				<name>showOnlyChecked</name>
+				<value>true</value>
+			</preference>
+			<preference>
+				<name>showOnlyForm</name>
+				<value>de870d63-3073-48f5-bb84-703420db350d</value>
+			</preference>
+			<preference>
+				<name>showOnlyFormByDescription</name>
+				<value>TIVA Suostumus - Uusi Suostumuspohja</value>
+			</preference>
+			<preference>
+				<name>useTaskId</name>
+				<value>false</value>
+			</preference>
+         </preferences>
+         <security-constraint>
+            <policy-permission>
+               <action-name>view</action-name>
+               <unchecked/>
+            </policy-permission>
+         </security-constraint>
+      </instance>
+   </deployment>
+   
+   <deployment>
+      <instance>
+         <instance-id>ApSuostumuksetLuoUusiSuostumisPyyntö</instance-id>
+         <portlet-ref>palvelut-portlet</portlet-ref>
+         <preferences>
+            <preference>
+				<name>showOnlyChecked</name>
+				<value>true</value>
+			</preference>
+			<preference>
+				<name>showOnlyForm</name>
+				<value>ed58a6bd-7f26-464b-88b4-17f1963aaeb6</value>
+			</preference>
+			<preference>
+				<name>showOnlyFormByDescription</name>
+				<value>TIVA Suostumus - Uusi Suostumuspyyntö</value>
+			</preference>
+			<preference>
+				<name>useTaskId</name>
+				<value>false</value>
+			</preference>
+         </preferences>
+         <security-constraint>
+            <policy-permission>
+               <action-name>view</action-name>
+               <unchecked/>
+            </policy-permission>
+         </security-constraint>
+      </instance>
+   </deployment>
+   
+     <deployment>
+      <instance>
+         <instance-id>ApTietopyyntöUusiTietopyynto</instance-id>
+         <portlet-ref>palvelut-portlet</portlet-ref>
+         <preferences>
+            <preference>
+				<name>showOnlyChecked</name>
+				<value>true</value>
+			</preference>
+			<preference>
+				<name>showOnlyForm</name>
+				<value>3a8011d7-25f5-47f1-8f70-25fc2f92b802</value>
+			</preference>
+			<preference>
+				<name>showOnlyFormByDescription</name>
+				<value>Uusi tietopyyntö</value>
+			</preference>
+			<preference>
+				<name>useTaskId</name>
+				<value>false</value>
+			</preference>
+         </preferences>
+         <security-constraint>
+            <policy-permission>
+               <action-name>view</action-name>
+               <unchecked/>
+            </policy-permission>
+         </security-constraint>
+      </instance>
+   </deployment>
+      
+   <deployment>
+      <instance>
+         <instance-id>ApTietopyyntöKirjaaSuostumus</instance-id>
+         <portlet-ref>palvelut-portlet</portlet-ref>
+         <preferences>
+            <preference>
+				<name>showOnlyChecked</name>
+				<value>true</value>
+			</preference>
+			<preference>
+				<name>showOnlyForm</name>
+				<value>0</value>
+			</preference>
+			<preference>
+				<name>showOnlyFormByDescription</name>
+				<value>TIVA - Kirjaa Suostumus</value>
+			</preference>
+			<preference>
+				<name>useTaskId</name>
+				<value>false</value>
+			</preference>
+         </preferences>
+         <security-constraint>
+            <policy-permission>
+               <action-name>view</action-name>
+               <unchecked/>
+            </policy-permission>
+         </security-constraint>
+      </instance>
+   </deployment>   
+   
+    <deployment>
+      <instance>
+         <instance-id>ApPaivahoitohakemuksenVahvistus</instance-id>
+         <portlet-ref>palvelut-portlet</portlet-ref>
+         <preferences>
+            <preference>
+				<name>showOnlyChecked</name>
+				<value>true</value>
+			</preference>
+			<preference>
+				<name>showOnlyForm</name>
+				<value>0</value>
+			</preference>
+			<preference>
+				<name>showOnlyFormByDescription</name>
+				<value>Päivähoitohakemuksen vahvistuspyyntö</value>
+			</preference>
+			<preference>
+				<name>useTaskId</name>
+				<value>false</value>
+			</preference>
+         </preferences>
+         <security-constraint>
+            <policy-permission>
+               <action-name>view</action-name>
+               <unchecked/>
+            </policy-permission>
+         </security-constraint>
+      </instance>
+   </deployment>   
+   
+   <!-- END: Employee -->
+   
+   <!-- START: Citizen -->
+   
+   
+   <!-- END: Citizen -->
+   
+</deployments>
