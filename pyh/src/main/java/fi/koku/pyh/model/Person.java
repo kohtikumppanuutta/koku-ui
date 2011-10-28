@@ -10,19 +10,7 @@ import fi.koku.services.entity.customer.v1.ElectronicContactInfosType;
 
 public class Person {
 
-//  private String firstname;
-//  private String middlename;
-//  private String surname;
-//  private String ssn;
-//  private Calendar birthdayCal;
-//  private String birthdate; // e.g. "13-05-2000"
-//  private String birthday; // e.g. "13"
-//  private String birthmonth; // e.g. "05"
-//  private String birthyear; // e.g. "2000"
-//  private String email; // TODO: replace with eContactInfo
-//  private String eContactInfo;
   private boolean requestPending;
-  
   private CustomerType customer;
   
   public Person(CustomerType customer) {

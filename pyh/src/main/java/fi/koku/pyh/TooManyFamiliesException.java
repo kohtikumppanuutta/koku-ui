@@ -5,5 +5,4 @@ public class TooManyFamiliesException extends Exception {
   public TooManyFamiliesException(String message) {
     super(message);
   }
-
 }

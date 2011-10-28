@@ -17,9 +17,9 @@ import fi.koku.portlet.filter.userinfo.UserInfo;
 @Controller(value = "messageController")
 @RequestMapping(value = "VIEW")
 public class MessageController {
-
+  
   private static Logger log = LoggerFactory.getLogger(MessageController.class);
-
+  
   @Autowired
   @Qualifier(value = "pyhDemoService")
   private PyhDemoService pyhDemoService;

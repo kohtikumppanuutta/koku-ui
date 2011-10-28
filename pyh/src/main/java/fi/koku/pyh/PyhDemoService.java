@@ -15,7 +15,6 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
-
 import fi.koku.pyh.model.Dependant;
 import fi.koku.pyh.model.DependantsAndFamily;
 import fi.koku.pyh.model.Family;
@@ -26,6 +25,7 @@ import fi.koku.pyh.model.Person;
 import fi.koku.pyh.util.CommunityRole;
 import fi.koku.services.entity.community.v1.CommunitiesType;
 import fi.koku.services.entity.community.v1.CommunityQueryCriteriaType;
+import fi.koku.services.entity.community.v1.CommunityServiceConstants;
 import fi.koku.services.entity.community.v1.CommunityServiceFactory;
 import fi.koku.services.entity.community.v1.CommunityServicePortType;
 import fi.koku.services.entity.community.v1.CommunityType;
@@ -150,7 +150,7 @@ public class PyhDemoService {
   public DependantsAndFamily getDependantsAndFamily(String userPic) {
     List<Dependant> dependants = new ArrayList<Dependant>();
     CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
-    communityQueryCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_GUARDIAN_COMMUNITY);
+    communityQueryCriteria.setCommunityType(CommunityServiceConstants.COMMUNITY_TYPE_GUARDIAN_COMMUNITY);
     
     MemberPicsType memberPics = new MemberPicsType();
     memberPics.getMemberPic().add(userPic);
@@ -185,7 +185,7 @@ public class PyhDemoService {
         Iterator<MemberType> mi = members.iterator();
         while (mi.hasNext()) {
           MemberType member = mi.next();
-          if (member.getRole().equals(PyhConstants.COMMUNITY_ROLE_DEPENDANT)) {
+          if (member.getRole().equals(CommunityServiceConstants.COMMUNITY_ROLE_DEPENDANT)) {
             depPics.add(member.getPic());
           }
         }
@@ -263,7 +263,6 @@ public class PyhDemoService {
   /**
    * Returns all other members of the user's family except dependants.
    */
-  //public List<FamilyMember> getOtherFamilyMembers(String userPic) {
   public FamilyIdAndFamilyMembers getOtherFamilyMembers(String userPic) {
     List<Dependant> dependants = getDependantsAndFamily(userPic).getDependants();
     Set<String> dependantPics = new HashSet<String>();
@@ -274,7 +273,7 @@ public class PyhDemoService {
     
     List<FamilyMember> otherFamilyMembers = new ArrayList<FamilyMember>();
     CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
-    communityQueryCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_FAMILY);
+    communityQueryCriteria.setCommunityType(CommunityServiceConstants.COMMUNITY_TYPE_FAMILY);
     
     MemberPicsType memberPics = new MemberPicsType();
     memberPics.getMemberPic().add(userPic);
@@ -290,8 +289,6 @@ public class PyhDemoService {
     customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
     customerAuditInfoType.setUserId(userPic);
     
-    //log.debug("userPIC="+userPic+", component="+PyhConstants.COMPONENT_PYH);
-    
     try {
       communitiesType = communityService.opQueryCommunities(communityQueryCriteria, communityAuditInfoType);
     } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
@@ -303,8 +300,6 @@ public class PyhDemoService {
     if (communitiesType != null) {
       List<CommunityType> communities = communitiesType.getCommunity();
       Iterator<CommunityType> ci = communities.iterator();
-      
-      //log.info("PyhDemoService.getOtherFamilyMembers: opQueryCommunities returned " + communities.size() + " communities");
       
       List<String> otherFamilyMemberPics = new ArrayList<String>();
       List<String> otherFamilyMemberRoles = new ArrayList<String>();
@@ -408,8 +403,6 @@ public class PyhDemoService {
     PicsType pics = new PicsType();
     pics.getPic().add(customerPic);
     customerCriteria.setPics(pics);
-    
-    //customerCriteria.setSelection("full"); // FIXME: tätä käytetään vain silloin kun tarvitaan käyttäjän kaikki tiedot
     CustomersType customersType = null;
     
     fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
@@ -462,7 +455,7 @@ public class PyhDemoService {
     
     if (CommunityRole.CHILD.equals(role)) {
       CommunityQueryCriteriaType communityCriteria = new CommunityQueryCriteriaType();
-      communityCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_GUARDIAN_COMMUNITY);
+      communityCriteria.setCommunityType(CommunityServiceConstants.COMMUNITY_TYPE_GUARDIAN_COMMUNITY);
       
       MemberPicsType memberPics = new MemberPicsType();
       memberPics.getMemberPic().add(memberToAddPic);
@@ -491,7 +484,7 @@ public class PyhDemoService {
           Iterator<MemberType> mi = members.iterator();
           while (mi.hasNext()) {
             MemberType member = mi.next();
-            if (member.getRole().equals(PyhConstants.COMMUNITY_ROLE_GUARDIAN)) {
+            if (member.getRole().equals(CommunityServiceConstants.COMMUNITY_ROLE_GUARDIAN)) {
               recipientPics.add(member.getPic());
             }
           }
@@ -587,7 +580,6 @@ public class PyhDemoService {
             log.info("member pic: " + m.getPic());
           }
         }
-        
       }
   }
   
@@ -596,7 +588,7 @@ public class PyhDemoService {
    */
   public void removeFamilyMember(String familyMemberPic, String userPic) {
     CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
-    communityQueryCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_FAMILY);
+    communityQueryCriteria.setCommunityType(CommunityServiceConstants.COMMUNITY_TYPE_FAMILY);
     
     MemberPicsType memberPics = new MemberPicsType();
     memberPics.getMemberPic().add(familyMemberPic);
@@ -751,12 +743,11 @@ public class PyhDemoService {
     
     fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
     communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
-    communityAuditInfoType.setUserId(requesterPic); // requesterPic on kirjautunut käyttäjä
+    communityAuditInfoType.setUserId(requesterPic); // requesterPic is PIC of current user
     
-    // lisätään henkilöt joilta vaaditaan pyynnön hyväksyntä
     MembershipApprovalType membershipApproval = new MembershipApprovalType();
-    membershipApproval.setApproverPic(memberToAddPic); // lisättävän henkilön täytyy hyväksyä pyyntö
-    membershipApproval.setStatus("new");
+    membershipApproval.setApproverPic(memberToAddPic);
+    membershipApproval.setStatus(CommunityServiceConstants.MEMBERSHIP_REQUEST_STATUS_NEW);
     
     MembershipApprovalsType membershipApprovalsType = new MembershipApprovalsType();
     membershipApprovalsType.getApproval().add(membershipApproval);
@@ -783,7 +774,6 @@ public class PyhDemoService {
     } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
       log.error("PyhDemoService.sendParentAdditionMessage: opAddMembershipRequest raised a ServiceFault", fault);
     }
-    
   }
   
   /**
@@ -844,7 +834,6 @@ public class PyhDemoService {
     } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
       log.error("PyhDemoService.sendFamilyAdditionMessage: opAddMembershipRequest raised a ServiceFault", fault);
     }
-    
   }
   
   /**
@@ -888,74 +877,8 @@ public class PyhDemoService {
           log.info("member pic: " + m.getPic());
         }
       }
-      
     }
   }
-  
-  /**
-   * Inserts a parent (from other family) into a family and then combines the two families.
-   */
-  /*
-  public void insertParentInto(String toFamilyPic, String personPic, CommunityRole role) {
-    Family family = null;
-    Family combine = null;
-    
-    try {
-      family = getFamily(toFamilyPic);
-    } catch (TooManyFamiliesException tme) {
-      log.error("PyhDemoService.insertParentInto: getFamily(toFamilyPic) threw a TooManyFamiliesException!");
-      log.error("Cannot combine families: " + tme.getMessage());
-      return;
-    } catch (FamilyNotFoundException fnfe) {
-      log.error("PyhDemoService.insertParentInto: getFamily(toFamilyPic) threw a FamilyNotFoundException!");
-      log.error("Cannot combine families: " + fnfe.getMessage());
-      return;
-    }
-    
-    try {
-      combine = getFamily(personPic);
-    } catch (TooManyFamiliesException tme) {
-      log.error("PyhDemoService.insertParentInto: getFamily(personPic) threw a TooManyFamiliesException!");
-      log.error(tme.getMessage());
-    } catch (FamilyNotFoundException fnfe) {
-      log.error("PyhDemoService.insertParentInto: getFamily(personPic) threw a FamilyNotFoundException!");
-      log.error(fnfe.getMessage());
-    }
-    
-    if (combine != null) {
-      family.combineFamily(combine);
-    }
-    
-    if (family != null) {
-      family.addFamilyMember(personPic, role.getRoleID());
-      
-      fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
-      communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
-      communityAuditInfoType.setUserId(toFamilyPic); // toFamilyPic is current user's pic
-      
-      try {
-        communityService.opUpdateCommunity(family.getCommunity(), communityAuditInfoType);
-      } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
-        log.error("PyhDemoService.insertParentInto: opUpdateCommunity raised a ServiceFault", fault);
-      }
-      
-      if (debug) {
-        log.info("insertParentInto(): family members after combining families:");
-        List<MemberType> members = family.getAllMembers();
-        Iterator<MemberType> mit = members.iterator();
-        while (mit.hasNext()) {
-          MemberType m = mit.next();
-          log.info("member pic: " + m.getPic());
-        }
-      }
-      
-    }
-    
-    if (combine != null) {
-      removeFamily(combine, toFamilyPic); // toFamilyPic is current user's pic
-    }
-  }
-  */
   
   public String addFamily(String userPic) {
     if (debug) {
@@ -969,14 +892,14 @@ public class PyhDemoService {
     
     MemberType member = new MemberType();
     member.setPic(userPic);
-    member.setRole(PyhConstants.COMMUNITY_ROLE_PARENT);
+    member.setRole(CommunityServiceConstants.COMMUNITY_ROLE_PARENT);
     
     MembersType members = new MembersType();
     members.getMember().add(member);
     
     CommunityType community = new CommunityType();
     community.setMembers(members);
-    community.setType(PyhConstants.COMMUNITY_TYPE_FAMILY);
+    community.setType(CommunityServiceConstants.COMMUNITY_TYPE_FAMILY);
     
     String communityId = null;
     try {
@@ -985,32 +908,8 @@ public class PyhDemoService {
     } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
       log.error("PyhDemoService.addFamily: opAddCommunity raised a ServiceFault", fault);
     }
-    
     return communityId;
   }
-  
-  /**
-   * Removes a family community.
-   */
-  /*
-  private void removeFamily(Family family, String userPic) {
-    fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
-    communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
-    communityAuditInfoType.setUserId(userPic);
-    
-    try {
-      communityService.opDeleteCommunity(family.getCommunityId(), communityAuditInfoType);
-      Log.getInstance().remove(userPic, "", "pyh.family.community", "Removing user's " + userPic + " family");
-    } catch (ServiceFault fault) {
-      log.error("PyhDemoService.removeFamily: opDeleteCommunity raised a ServiceFault", fault);
-    }
-    
-    if (debug) {
-      log.info("removeFamily(): removing family with communityID " + family.getCommunityId());
-    }
-    
-  }
-  */
   
   /**
    * Returns a family by person's PIC.
@@ -1023,7 +922,7 @@ public class PyhDemoService {
   private Family getFamily(String pic) throws TooManyFamiliesException, FamilyNotFoundException {
     List<Family> families = new ArrayList<Family>();
     CommunityQueryCriteriaType communityCriteria = new CommunityQueryCriteriaType();
-    communityCriteria.setCommunityType(PyhConstants.COMMUNITY_TYPE_FAMILY);
+    communityCriteria.setCommunityType(CommunityServiceConstants.COMMUNITY_TYPE_FAMILY);
     
     MemberPicsType memberPics = new MemberPicsType();
     memberPics.getMemberPic().add(pic);
@@ -1062,7 +961,6 @@ public class PyhDemoService {
         if (debug) {
           log.info("getFamily(): returning family with community ID " + family.getCommunityId());
         }
-        
         return family;
       }
     }
@@ -1070,11 +968,8 @@ public class PyhDemoService {
     if (debug) {
       log.info("getFamily(): returning null!");
     }
-    
     return null;
   }
-  
-  
   
   /**
    * Returns user's dependants' PICs.
@@ -1182,9 +1077,7 @@ public class PyhDemoService {
         String senderPic = messageSenderIterator.next();
         String userApprovalStatus = approvalStatusIterator.next();
         
-        // TODO: customerservice-api projektiin CommunityServiceConstants, jossa vakiona "new" ja muut vastaavat
-        // TODO: vastaavasti CustomerServiceConstants-luokka
-        if ("new".equals(userApprovalStatus)) {
+        if (CommunityServiceConstants.MEMBERSHIP_REQUEST_STATUS_NEW.equals(userApprovalStatus)) {
           
           Person requestSender = requestSenderIterator.next();
           Person targetPerson = targetPersonIterator.next();
@@ -1222,7 +1115,6 @@ public class PyhDemoService {
         }
       }
     }
-    
     return requestMessages;
   }
   

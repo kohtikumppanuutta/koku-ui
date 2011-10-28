@@ -18,5 +18,4 @@ public class Dependant extends Person {
   public void setMemberOfUserFamily(boolean isMember) {
     this.memberOfUserFamily = isMember;
   }
-  
 }

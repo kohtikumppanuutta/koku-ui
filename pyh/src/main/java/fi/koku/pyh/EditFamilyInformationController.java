@@ -57,8 +57,7 @@ public class EditFamilyInformationController {
     if (userInfo != null) {
       userPic = userInfo.getPic();
     } else {
-      // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
-      log.error("ERROR: UserInfo returns no PIC!");
+      log.error("ERROR: UserInfo returns no PIC! Cannot authenticate user.");
     }
     
     Person user = pyhDemoService.getUser(userPic);
@@ -87,8 +86,6 @@ public class EditFamilyInformationController {
     } else {
       communityId = pyhDemoService.addFamily(userPic); // create a family community for user if does not exist
     }
-    
-    //log.info("EditFamilyInformationController.render: put communityId in session: " + communityId);
     session.setAttribute("familyCommunityId", communityId);
     
     return "editfamilyinformation";
@@ -103,8 +100,7 @@ public class EditFamilyInformationController {
     if (userInfo != null) {
       userPic = userInfo.getPic();
     } else {
-      // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
-      log.error("ERROR: UserInfo returns no PIC!");
+      log.error("ERROR: UserInfo returns no PIC! Cannot authenticate user.");
     }
     
     String surname = request.getParameter("surname");
@@ -134,8 +130,7 @@ public class EditFamilyInformationController {
     if (userInfo != null) {
       userPic = userInfo.getPic();
     } else {
-      // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
-      log.error("ERROR: UserInfo returns no PIC!");
+      log.error("ERROR: UserInfo returns no PIC! Cannot authenticate user.");
     }
     
     pyhDemoService.insertDependantToFamily(userPic, dependantPic, CommunityRole.CHILD);
@@ -150,8 +145,7 @@ public class EditFamilyInformationController {
     if (userInfo != null) {
       userPic = userInfo.getPic();
     } else {
-      // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
-      log.error("ERROR: UserInfo returns no PIC!");
+      log.error("ERROR: UserInfo returns no PIC! Cannot authenticate user.");
     }
     
     pyhDemoService.removeFamilyMember(familyMemberPic, userPic);
@@ -166,8 +160,7 @@ public class EditFamilyInformationController {
     if (userInfo != null) {
       userPic = userInfo.getPic();
     } else {
-      // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
-      log.error("ERROR: UserInfo returns no PIC!");
+      log.error("ERROR: UserInfo returns no PIC! Cannot authenticate user.");
     }
     
     for (Dependant d : pyhDemoService.getDependantsAndFamily(userPic).getDependants()) {
@@ -187,8 +180,7 @@ public class EditFamilyInformationController {
     if (userInfo != null) {
       userPic = userInfo.getPic();
     } else {
-      // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
-      log.error("ERROR: UserInfo returns no PIC!");
+      log.error("ERROR: UserInfo returns no PIC! Cannot authenticate user.");
     }
     
     String surname = request.getParameter("searchSurname");
@@ -209,13 +201,10 @@ public class EditFamilyInformationController {
     if (userInfo != null) {
       userPic = userInfo.getPic();
     } else {
-      // TODO: mitä tehdään kun käyttäjää ei voida tunnistaa?
-      log.error("ERROR: UserInfo returns no PIC!");
+      log.error("ERROR: UserInfo returns no PIC! Cannot authenticate user.");
     }
     
-    // TODO: test if this works; get community id (family community where to add users)
     String communityId = (String) session.getAttribute("familyCommunityId");
-    //log.info("EditFamilyInformationController.addUsersToFamily: get communityId from session: '" + communityId + "'");
     
     HashMap<String, String> parameterMap = new HashMap<String, String>();
     HashMap<String, String> personMap = new HashMap<String, String>();

@@ -16,18 +16,10 @@ import fi.koku.services.entity.community.v1.MembersType;
 public class Family {
 
   private static Logger log = LoggerFactory.getLogger(Family.class);
-  
-//  private Map<String, FamilyMember> otherFamilyMembers;
-//  private Map<String, FamilyMember> childs;
-//  private Map<String, FamilyMember> parents;
-  
+
   private CommunityType community;
   
   public Family() {
-    // family is separated by roles (for ease of queries)
-//    otherFamilyMembers = new LinkedHashMap<String, FamilyMember>();
-//    childs = new LinkedHashMap<String, FamilyMember>();
-//    parents = new LinkedHashMap<String, FamilyMember>();
   }
   
   /**
@@ -82,34 +74,6 @@ public class Family {
     members.add(newMember);
   }
   
-//  public FamilyMember getChild(String familyMemberSSN) {
-//    return childs.get(familyMemberSSN);
-//  }
-
-//  public FamilyMember getFamilyMember(String familyMemberSSN) {
-//
-//    if (childs.containsKey(familyMemberSSN)) {
-//      return childs.get(familyMemberSSN);
-//    }
-//
-//    if (parents.containsKey(familyMemberSSN)) {
-//      return parents.get(familyMemberSSN);
-//    }
-//    return otherFamilyMembers.get(familyMemberSSN);
-//  }
-
-//  public List<FamilyMember> getOtherFamilyMembers() {
-//    return new ArrayList<FamilyMember>(otherFamilyMembers.values());
-//  }
-
-//  public boolean isFamilyMember(String personSSN) {
-//    return parents.containsKey(personSSN) || childs.containsKey(personSSN) || otherFamilyMembers.containsKey(personSSN);
-//  }
-
-//  public List<FamilyMember> getChilds() {
-//    return new ArrayList<FamilyMember>(childs.values());
-//  }
-
   public List<MemberType> getParents() {
     List<MemberType> parents = new ArrayList<MemberType>();
     MembersType membersType = community.getMembers();
