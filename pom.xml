@@ -36,7 +36,7 @@
                   </goals>
                   <configuration>
                    <rules>
-                    <requireMavenVersion><version>3.0</version></requireMavenVersion>
+                    <requireMavenVersion><version>2.0</version></requireMavenVersion>
 <!-- 
                     <requireProperty>
                       <property>koku.build.version</property>
@@ -130,10 +130,10 @@
 		<module>kks</module>
 		<module>pyh</module>
 		<module>lok</module>
-		<module>intalio</module>
-		<!-- module>common</module -->
 		<module>arcusys-portlet</module>
 		<module>portlet-common</module>
+		<!-- module>intalio</module -->
+		<!-- module>common</module -->
 	</modules>
 	<dependencies>
 

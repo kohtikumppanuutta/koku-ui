@@ -25,6 +25,7 @@
 		<module>koku-common-services</module>
 		<module>koku-intalio-services</module>
 		<module>koku-taskmanager-portlet</module>
+		<module>koku-palvelut-portlet</module>
   </modules>
 
 	<build>
