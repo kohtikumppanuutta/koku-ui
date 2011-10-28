@@ -38,12 +38,9 @@
 					<ul>
 						<%-- TODO: POISTA NÄMÄ? Ja samalla kaikki viitteet tältä sivulta arkistointiin --%>
 						<li class="portlet-menu-item-selected"><spring:message
-								code="koku.lok.menu.item.search" />
-						</li>
+								code="koku.lok.menu.item.search" /></li>
 						<li class="portlet-menu-item"><a href="${archiveURL}"><spring:message
-									code="koku.lok.menu.item.archive" />
-						</a>
-						</li>
+									code="koku.lok.menu.item.archive" /> </a></li>
 					</ul>
 				</div>
 
@@ -66,17 +63,16 @@
 							<table class="portlet-table-body" width="100%" border="0">
 
 								<tr class="portlet-table-body th">
-									<th><spring:message code="ui.lok.table.name" /></th>
-									<th><spring:message code="koku.common.pic" /></th>
+									<th><spring:message code="ui.lok.table.name" />
+									</th>
+									<th><spring:message code="koku.common.pic" />
+									</th>
 									<th></th>
 								</tr>
 								<tr>
 									<td><a href="${showLogSearchFormURL}"><c:out
-												value="${foundName}" />
-									</a>
-									</td>
-									<td><c:out value="${foundPic}" />
-									</td>
+												value="${foundName}" /> </a></td>
+									<td><c:out value="${foundPic}" /></td>
 								</tr>
 							</table>
 
@@ -85,11 +81,12 @@
 						</c:when>
 						<c:otherwise>
 							<c:if test="${search}">
-								<div class="error">
+								<c:if test="${not empty error}">
+									<div class="error">
+										<spring:message code="${error}" />
+									</div>
 									<p>
-										<spring:message code="ui.lok.no.user.results" />
-									</p>
-								</div>
+								</c:if>
 							</c:if>
 						</c:otherwise>
 					</c:choose>
@@ -99,7 +96,6 @@
 				<spring:message code="ui.lok.no.user.rights" />
 			</c:otherwise>
 		</c:choose>
-
 	</div>
 
 	<script type="text/javascript"

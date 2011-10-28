@@ -238,7 +238,7 @@ public class LogArchiveController {
       }
     }
     catch (ServiceFault e) {
-      log.error("startArchive fault: " + e.getFaultInfo().getCode());
+      log.error("startArchive fault: " + e.getFaultInfo().getCode() + e.getMessage());
 
       // Show the same error to the user no matter what the cause is
       response.setRenderParameter("error", "koku.lok.error.archive");

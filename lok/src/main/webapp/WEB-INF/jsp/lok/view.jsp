@@ -110,22 +110,22 @@
 									<div class="error">
 									<spring:message code="${error0}" />
 									</div>
-									<br>
+									
 								</c:if>
 
 								<c:if test="${not empty error1}">
 									<div class="error">
 									<spring:message code="${error1}" />
 									</div>
-									<br>
+									
 								</c:if>
 								<c:if test="${not empty error3}">
 									<div class="error">
 									<spring:message code="${error3}" />
 									</div>
-									<br>
+								
 								</c:if>
-							</div>
+							<br>
 						</c:otherwise>
 					</c:choose>
 			</c:when>

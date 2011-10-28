@@ -44,7 +44,7 @@
     font-size:13px; 
 }
 .koku-lok .form-field-label{	
-    margin: 8px 0 2px;
+    margin: 8px 0 2px 3px;
     width: 300px;
     font-weight: bold;
     line-height: 18px;
@@ -53,5 +53,7 @@
     white-space:normal;
 }
 .koku-lok .form-static-parameter{
-	font-size:20px;
+	font-size:13px;
+	vertical-align: top;
+	margin: 0 3px;
 }

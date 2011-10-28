@@ -37,8 +37,15 @@ public class LogUtils {
     return cal;
   }
 
+  /**
+   * Helper method that checks if a given date is before today.
+   * @param date
+   * @return
+   */
   public boolean isBeforeToday(Date date) {
 
+    boolean isBefore = false;
+    
     Calendar today = Calendar.getInstance();
     today.set(Calendar.HOUR_OF_DAY, 0);
     today.set(Calendar.MINUTE, 0);
@@ -53,10 +60,10 @@ public class LogUtils {
     newDate.set(Calendar.MILLISECOND, 0);
 
     if (newDate.before(today)) {
-      return true;
-    } else {
-      return false;
-    }
+      isBefore = true;
+    } 
+    
+    return isBefore;
   }
 
   /**
