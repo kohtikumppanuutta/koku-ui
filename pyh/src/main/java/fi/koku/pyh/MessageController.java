@@ -24,18 +24,14 @@ public class MessageController {
   @Qualifier(value = "pyhDemoService")
   private PyhDemoService pyhDemoService;
   
-  private boolean debug = false;
-  
   /**
    * Call service to accept a request.
    */
   @ActionMapping(params = "action=acceptMessage")
   public void accept(@RequestParam String userPic, @RequestParam String messageId, @RequestParam String currentFamilyId, @RequestParam boolean removeCurrentFamily, ActionResponse response) {
-    if (debug) {
-      log.info("calling MessageController.accept() with parameters:");
-      log.info("userPic: " + userPic);
-      log.info("messageId: " + messageId);
-    }
+    log.debug("calling MessageController.accept() with parameters:");
+    log.debug("userPic: " + userPic);
+    log.debug("messageId: " + messageId);
     
     String familyId = removeCurrentFamily ? currentFamilyId : null;
     
@@ -48,11 +44,9 @@ public class MessageController {
    */
   @ActionMapping(params = "action=rejectMessage")
   public void reject(@RequestParam String userPic, @RequestParam String messageId, ActionResponse response) {
-    if (debug) {
-      log.info("calling MessageController.reject() with parameters:");
-      log.info("userPic: " + userPic);
-      log.info("messageId: " + messageId);
-    }
+    log.debug("calling MessageController.reject() with parameters:");
+    log.debug("userPic: " + userPic);
+    log.debug("messageId: " + messageId);
     
     pyhDemoService.acceptOrRejectMembershipRequest(messageId, userPic /*approver*/, "rejected", null);
     response.setRenderParameter("action", "");

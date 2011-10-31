@@ -43,6 +43,15 @@ public class FamilyInformationController {
       log.error("ERROR: UserInfo returns no PIC! Cannot authenticate user.");
     }
     
+    // vetuma test -->
+//    if (userInfo.isStrongAuthenticationEnabled() && !userInfo.hasStrongAuthentication()) {
+//      String authURL = (String)request.getPortletSession().getAttribute(UserInfo.KEY_VETUMA_AUTHENTICATION_URL);
+//      model.addAttribute("authURL", authURL);
+//    }
+//    model.addAttribute("hasStrongAuthentication", userInfo.hasStrongAuthentication());
+//    model.addAttribute("isStrongAuthenticationEnabled", userInfo.isStrongAuthenticationEnabled());
+    // <-- vetuma test
+    
     Person user = pyhDemoService.getUser(userPic);
     DependantsAndFamily daf = pyhDemoService.getDependantsAndFamily(userPic);
     FamilyIdAndFamilyMembers fidm = pyhDemoService.getOtherFamilyMembers(userPic);

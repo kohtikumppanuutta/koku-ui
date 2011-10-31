@@ -12,8 +12,6 @@ public class Message {
 
   private static Logger log = LoggerFactory.getLogger(Message.class);
   
-  boolean debug = false;
-  
   private String id;
   private String from;
   private String text;
@@ -21,12 +19,10 @@ public class Message {
   private String memberToAddPic;
 
   public Message(String id, String fromUserPic, String memberToAddPic, String text, boolean twoParentsInFamily) {
-    if (debug) {
-      log.info("Message.constructor: creating a Message with parameters:");
-      log.info("id: " + id);
-      log.info("fromUserPic: " + fromUserPic);
-      log.info("text: " + text);
-    }
+    log.debug("Message.constructor: creating a Message with parameters:");
+    log.debug("id: " + id);
+    log.debug("fromUserPic: " + fromUserPic);
+    log.debug("text: " + text);
     
     this.id = id;
     this.from = fromUserPic;

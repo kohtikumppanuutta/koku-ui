@@ -59,8 +59,6 @@ public class PyhDemoService {
   @Autowired
   private SimpleMailMessage templateMessage;
   
-  private boolean debug = false;
-  
   public PyhDemoService() {
     
     CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory(PyhConstants.CUSTOMER_SERVICE_USER_ID, PyhConstants.CUSTOMER_SERVICE_PASSWORD, PyhConstants.CUSTOMER_SERVICE_ENDPOINT);
@@ -91,10 +89,9 @@ public class PyhDemoService {
       return null;
     }
     
-    if (debug) {
-      log.info("getPerson(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
-      log.info("--");
-    }
+    log.debug("getPerson(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
+    log.debug("--");
+    
     
     return new Person(customer);
   }
@@ -137,9 +134,7 @@ public class PyhDemoService {
    * Returns the current user.
    */
   public Person getUser(String userPic) {
-    if (debug) {
-      log.info("getUser(): calling getPerson() with pic " + userPic);
-    }
+    log.debug("getUser(): calling getPerson() with pic " + userPic);
     
     return getPerson(userPic);
   }
@@ -248,13 +243,13 @@ public class PyhDemoService {
     
     dependantsAndFamily.setDependants(dependants);
     
-    if (debug) {
+    if (log.isDebugEnabled()) {
       Iterator<Dependant> it = dependants.iterator();
-      log.info("getDependantsAndFamily(), returning dependants:");
+      log.debug("getDependantsAndFamily(), returning dependants:");
       while (it.hasNext()) {
-        log.info("dep pic: " + it.next().getPic());
+        log.debug("dep pic: " + it.next().getPic());
       }
-      log.info("--");
+      log.debug("--");
     }
     
     return dependantsAndFamily;
@@ -345,13 +340,13 @@ public class PyhDemoService {
       }
     }
     
-    if (debug) {
+    if (log.isDebugEnabled()) {
       Iterator<FamilyMember> it = otherFamilyMembers.iterator();
-      log.info("getOtherFamilyMembers(), returning members:");
+      log.debug("getOtherFamilyMembers(), returning members:");
       while (it.hasNext()) {
-        log.info("member pic: " + it.next().getPic());
+        log.debug("member pic: " + it.next().getPic());
       }
-      log.info("--");
+      log.debug("--");
     }
     
     FamilyIdAndFamilyMembers fidm = new FamilyIdAndFamilyMembers();
@@ -377,16 +372,12 @@ public class PyhDemoService {
     }
     
     if (family != null) {
-      if (debug) {
-        log.info("isParentsSet(): returning " + family.isParentsSet());
-      }
+      log.debug("isParentsSet(): returning " + family.isParentsSet());
       
       return family.isParentsSet();
     }
     
-    if (debug) {
-      log.info("isParentsSet(): family == null, returning false");
-    }
+    log.debug("isParentsSet(): family == null, returning false");
     
     return false;
   }
@@ -434,12 +425,12 @@ public class PyhDemoService {
       }
     }
     
-    if (debug) {
-      log.info("searchUsers(): searchedUsers contains:");
+    if (log.isDebugEnabled()) {
+      log.debug("searchUsers(): searchedUsers contains:");
       Iterator<Person> pi = searchedUsers.iterator();
       while (pi.hasNext()) {
         Person p = pi.next();
-        log.info("person pic: " + p.getPic());
+        log.debug("person pic: " + p.getPic());
       }
     }
     
@@ -528,11 +519,11 @@ public class PyhDemoService {
       }
     }
     
-    if (debug) {
-      log.info("generateRecipients(): returning pics:");
+    if (log.isDebugEnabled()) {
+      log.debug("generateRecipients(): returning pics:");
       Iterator<String> rpi = recipientPics.iterator();
       while (rpi.hasNext()) {
-        log.info("recipient pic: " + rpi.next());
+        log.debug("recipient pic: " + rpi.next());
       }
     }
     
@@ -571,13 +562,13 @@ public class PyhDemoService {
           log.error("PyhDemoService.insertDependantToFamily: opUpdateCommunity raised a ServiceFault", fault);
         }
         
-        if (debug) {
-          log.info("insertDependantToFamily(): family members after insert:");
+        if (log.isDebugEnabled()) {
+          log.debug("insertDependantToFamily(): family members after insert:");
           List<MemberType> members = family.getAllMembers();
           Iterator<MemberType> mi = members.iterator();
           while (mi.hasNext()) {
             MemberType m = mi.next();
-            log.info("member pic: " + m.getPic());
+            log.debug("member pic: " + m.getPic());
           }
         }
       }
@@ -627,12 +618,12 @@ public class PyhDemoService {
               log.error("PyhDemoService.removeFamilyMember: opUpdateCommunity raised a ServiceFault", fault);
             }
             
-            if (debug) {
-              log.info("removeFamilyMember(): members after removing:");
+            if (log.isDebugEnabled()) {
+              log.debug("removeFamilyMember(): members after removing:");
               Iterator<MemberType> mit = members.iterator();
               while (mit.hasNext()) {
                 MemberType m = mit.next();
-                log.info("member pic: " + m.getPic());
+                log.debug("member pic: " + m.getPic());
               }
             }
             
@@ -669,13 +660,13 @@ public class PyhDemoService {
     
     // personMap parameter contains (personPIC, role) pairs
     
-    if (debug) {
-      log.info("addPersonsAsFamilyMembers(): adding persons:");
+    if (log.isDebugEnabled()) {
+      log.debug("addPersonsAsFamilyMembers(): adding persons:");
       Set<String> set = personMap.keySet();
       Iterator<String> it = set.iterator();
       while (it.hasNext()) {
         String personPic = it.next();
-        log.info("person pic: " + personPic);
+        log.debug("person pic: " + personPic);
       }
     }
     
@@ -732,14 +723,11 @@ public class PyhDemoService {
    * 
    */
   private void sendParentAdditionMessage(String communityId, String memberToAddPic, String requesterPic, CommunityRole role) {
-    if (debug) {
-      log.info("calling sendParentAdditionMessage()");
-      
-      log.info("communityId: " + communityId);
-      log.info("memberToAddPic: " + memberToAddPic);
-      log.info("requesterPic: " + requesterPic);
-      log.info("role: " + role.getRoleID());
-    }
+    log.debug("calling sendParentAdditionMessage()");
+    log.debug("communityId: " + communityId);
+    log.debug("memberToAddPic: " + memberToAddPic);
+    log.debug("requesterPic: " + requesterPic);
+    log.debug("role: " + role.getRoleID());
     
     fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
     communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
@@ -752,12 +740,12 @@ public class PyhDemoService {
     MembershipApprovalsType membershipApprovalsType = new MembershipApprovalsType();
     membershipApprovalsType.getApproval().add(membershipApproval);
     
-    if (debug) {
-      log.info("listing approvals:");
+    if (log.isDebugEnabled()) {
+      log.debug("listing approvals:");
       Iterator<MembershipApprovalType> mi = membershipApprovalsType.getApproval().iterator();
       while (mi.hasNext()) {
         MembershipApprovalType approval = mi.next();
-        log.info("approval: " + approval.getApproverPic() + ", " + approval.getStatus());
+        log.debug("approval: " + approval.getApproverPic() + ", " + approval.getStatus());
       }
     }
     
@@ -780,19 +768,18 @@ public class PyhDemoService {
    * Sends a new membership request for adding a member (not parent) into a family.
    */
   private void sendFamilyAdditionMessage(String communityId, List<String> recipients, String requesterPic, String memberToAddPic, CommunityRole role) {
-    if (debug) {
-      log.info("calling sendFamilyAdditionMessage()");
-      
-      log.info("communityId: " + communityId);
-      log.info("recipients:");
+    if (log.isDebugEnabled()) {
+      log.debug("calling sendFamilyAdditionMessage()");
+      log.debug("communityId: " + communityId);
+      log.debug("recipients:");
       Iterator<String> ri = recipients.iterator();
       while (ri.hasNext()) {
         String recipientPic = ri.next();
-        log.info("recipient pic: " + recipientPic);
+        log.debug("recipient pic: " + recipientPic);
       }
-      log.info("requesterPic: " + requesterPic);
-      log.info("memberToAddPic: " + memberToAddPic);
-      log.info("role: " + role.getRoleID());
+      log.debug("requesterPic: " + requesterPic);
+      log.debug("memberToAddPic: " + memberToAddPic);
+      log.debug("role: " + role.getRoleID());
     }
     
     fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
@@ -812,12 +799,12 @@ public class PyhDemoService {
       membershipApprovalsType.getApproval().add(membershipApproval);
     }
     
-    if (debug) {
-      log.info("listing approvals:");
+    if (log.isDebugEnabled()) {
+      log.debug("listing approvals:");
       Iterator<MembershipApprovalType> mi = membershipApprovalsType.getApproval().iterator();
       while (mi.hasNext()) {
         MembershipApprovalType approval = mi.next();
-        log.info("approval: " + approval.getApproverPic() + ", " + approval.getStatus());
+        log.debug("approval: " + approval.getApproverPic() + ", " + approval.getStatus());
       }
     }
     
@@ -868,23 +855,21 @@ public class PyhDemoService {
         log.error("PyhDemoService.insertInto: opUpdateCommunity raised a ServiceFault", fault);
       }
       
-      if (debug) {
-        log.info("insertInto(): members after insert:");
+      if (log.isDebugEnabled()) {
+        log.debug("insertInto(): members after insert:");
         List<MemberType> members = family.getAllMembers();
         Iterator<MemberType> mti = members.iterator();
         while (mti.hasNext()) {
           MemberType m = mti.next();
-          log.info("member pic: " + m.getPic());
+          log.debug("member pic: " + m.getPic());
         }
       }
     }
   }
   
   public String addFamily(String userPic) {
-    if (debug) {
-      log.info("calling addFamily() with parameter:");
-      log.info("userPic: " + userPic);
-    }
+    log.debug("calling addFamily() with parameter:");
+    log.debug("userPic: " + userPic);
     
     fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
     communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
@@ -958,16 +943,14 @@ public class PyhDemoService {
       } else if (families.size() > 0) {
         Family family = families.get(0);
         
-        if (debug) {
-          log.info("getFamily(): returning family with community ID " + family.getCommunityId());
-        }
+        log.debug("getFamily(): returning family with community ID " + family.getCommunityId());
+        
         return family;
       }
     }
     
-    if (debug) {
-      log.info("getFamily(): returning null!");
-    }
+    log.debug("getFamily(): returning null!");
+    
     return null;
   }
   
@@ -1009,9 +992,7 @@ public class PyhDemoService {
       return requestMessages;
     }
     
-    if (debug) {
-      log.info("calling getMessagesFor() with pic = " + user.getPic());
-    }
+    log.debug("calling getMessagesFor() with pic = " + user.getPic());
     
     fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
     communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
@@ -1130,9 +1111,7 @@ public class PyhDemoService {
       return requestMessages;
     }
     
-    if (debug) {
-      log.info("calling getSentMessages() with pic = " + user.getPic());
-    }
+    log.debug("calling getSentMessages() with pic = " + user.getPic());
     
     fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
     communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
@@ -1192,12 +1171,10 @@ public class PyhDemoService {
    * 
    */
   public void acceptOrRejectMembershipRequest(String membershipRequestId, String approverPic, String status, String familyId) {
-    if (debug) {
-      log.info("calling PyhDemoService.acceptOrRejectMembershipRequest with parameters:");
-      log.info("membershipRequestId: " + membershipRequestId);
-      log.info("approverPic: " + approverPic);
-      log.info("status: " + status);
-    }
+    log.debug("calling PyhDemoService.acceptOrRejectMembershipRequest with parameters:");
+    log.debug("membershipRequestId: " + membershipRequestId);
+    log.debug("approverPic: " + approverPic);
+    log.debug("status: " + status);
     
     MembershipApprovalType membershipApproval = new MembershipApprovalType();
     membershipApproval.setApproverPic(approverPic);

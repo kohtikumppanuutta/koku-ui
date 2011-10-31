@@ -16,6 +16,14 @@
   <span class="pyh-right"> <a href="${editFamilyInformation}"> <spring:message code="ui.pyh.modify.info" /> </a> </span>
 </div>
 
+<%-- testing vetuma authentication URL
+<div>
+<c:if test="${!hasStrongAuthentication && isStrongAuthenticationEnabled}">
+	<a href="${authURL}">Tunnistaudu Vetumassa</a>
+</c:if>
+</div>
+ --%>
+
 <div class="pyh-reset-floating"></div>
 
 	<h1 class="portlet-section-header">
