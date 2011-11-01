@@ -139,8 +139,9 @@ public class LogViewController {
 
             model.addAttribute("entries", entries);
 
-          } catch (ServiceFault fault) { // error contacting the Log Service
+          } catch (ServiceFault fault) { 
             model.addAttribute("error", "koku.lok.error.viewlog");
+            log.info("error while searching admin log: "+fault.getFaultInfo().getCode());
           }
           model.addAttribute("searchParams", criteria);        
           model.addAttribute("visited", "---");

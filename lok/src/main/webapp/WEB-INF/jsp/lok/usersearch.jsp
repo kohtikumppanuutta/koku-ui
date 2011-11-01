@@ -45,7 +45,7 @@
 				</div>
 
 				<div class="portlet-form-field-label">
-					<spring:message code="ui.lok.search.user" />
+					<spring:message code="koku.lok.search.user" />
 				</div>
 
 				<form name="searchUserParams" method="post"
@@ -54,7 +54,7 @@
 							code="koku.common.pic" />: </span> <span
 						class="portlet-form-input-field"> <input type="text"
 						name="pic" /> </span> <input class="portlet-form-button" type="submit"
-						value="<spring:message code="ui.lok.seek"/>" />
+						value="<spring:message code="koku.lok.seek"/>" />
 				</form>
 
 				<p>
@@ -63,7 +63,7 @@
 							<table class="portlet-table-body" width="100%" border="0">
 
 								<tr class="portlet-table-body th">
-									<th><spring:message code="ui.lok.table.name" />
+									<th><spring:message code="koku.lok.table.name" />
 									</th>
 									<th><spring:message code="koku.common.pic" />
 									</th>
@@ -93,7 +93,7 @@
 			</c:when>
 
 			<c:otherwise>
-				<spring:message code="ui.lok.no.user.rights" />
+				<spring:message code="koku.lok.no.user.rights" />
 			</c:otherwise>
 		</c:choose>
 	</div>

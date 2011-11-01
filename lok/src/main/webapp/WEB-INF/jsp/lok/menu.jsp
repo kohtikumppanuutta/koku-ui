@@ -37,7 +37,7 @@
 			</c:when>
 
 			<c:otherwise>
-				<spring:message code="ui.lok.no.user.rights" />
+				<spring:message code="koku.lok.no.user.rights" />
 			</c:otherwise>
 		</c:choose><p>
 		

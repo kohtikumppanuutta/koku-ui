@@ -168,7 +168,7 @@ public class LogArchiveController {
     }
 
     if (logarchivedate == null || logarchivedate.getEndDate() == null) {
-      response.setRenderParameter("error", "koku.lok.archive.parsing.error");
+      response.setRenderParameter("error", "koku.lok.archive.error.parsing");
     }
     // Check that archiving date is earlier than today
     else if (!lu.isBeforeToday(logarchivedate.getEndDate())) {

@@ -38,7 +38,7 @@
 				</div>
 
 				<div class="portlet-form-field-label">
-					<spring:message code="koku.lok.search.parameters" />
+					<spring:message code="koku.lok.search.header" />
 					<p>
 				</div>
 
@@ -107,19 +107,19 @@ This should be changed! --%>
 										<!-- TODO: Should the header titles be changed?  -->
 
 										<th width=20% scope="col"><b><spring:message
-													code="ui.lok.time" /> </b>
+													code="koku.lok.time" /> </b>
 										</th>
 										<th width=20% scope="col"><b><spring:message
-													code="ui.lok.end.user" /> </b>
+													code="koku.lok.end.user" /> </b>
 										</th>
 										<th width=10% scope="col"><b><spring:message
-													code="ui.lok.operation" /> </b>
+													code="koku.lok.operation" /> </b>
 										</th>
 										<th width=40% scope="col"><b><spring:message
-													code="ui.lok.data.item.type" /> </b>
+													code="koku.lok.data.item.type" /> </b>
 										</th>
 										<th width=10% scope="col"><b><spring:message
-													code="ui.lok.service" /> </b>
+													code="koku.lok.service" /> </b>
 										</th>
 									</tr>
 									<c:forEach var="e" items="${entries}">
@@ -184,7 +184,7 @@ This should be changed! --%>
 
 
 			<c:otherwise>
-				<spring:message code="ui.lok.no.user.rights" />
+				<spring:message code="koku.lok.no.user.rights" />
 			</c:otherwise>
 		</c:choose>
 	</div>

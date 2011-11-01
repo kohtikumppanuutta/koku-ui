@@ -105,21 +105,20 @@ public class UserSearchController {
     if (AuthUtils.isOperationAllowed("AdminSystemLogFile", userRoles)) {
       model.addAttribute("allowedToView", true);
     }
-//   response.setRenderParameter("error", "koku.lok.error.archive");
-    // koku.log.error.customer
+
     try {
       customer = findUser(pic, userPic);
     } catch (ServiceFault fault) {
       if(fault.getMessage().equalsIgnoreCase("Customer not found.")){
-        model.addAttribute("error", "ui.lok.no.user.results");
+        model.addAttribute("error", "koku.lok.no.user.results");
       }else{
-        model.addAttribute("error", "koku.log.error.customer");
+        model.addAttribute("error", "koku.lok.error.customer");
       }
       log.error("servicefault");
       log.error(fault.getMessage());
     } catch (SOAPFaultException e) {
       log.error("SOAPFaultException: " + e.getMessage());
-      model.addAttribute("error", "koku.log.error.customer");
+      model.addAttribute("error", "koku.lok.error.customer");
     }
 
     if (customer != null) {

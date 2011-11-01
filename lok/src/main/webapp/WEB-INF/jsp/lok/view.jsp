@@ -65,13 +65,13 @@
 								This should be changed! --%>
 
 									<th width=15% scope="col"><b><spring:message
-												code="ui.lok.timestamp" /> </b></th>
+												code="koku.lok.timestamp" /> </b></th>
 									<th width=15% scope="col"><b><spring:message
-												code="ui.lok.koku.user" /> </b></th>
+												code="koku.lok.koku.user" /> </b></th>
 									<th width=15% scope="col"><b><spring:message
-												code="ui.lok.operation" /> </b></th>
+												code="koku.lok.operation" /> </b></th>
 									<th width=55% scope="col"><b><spring:message
-												code="ui.lok.data.item.type" /> </b></th>
+												code="koku.lok.data.item.type" /> </b></th>
 								</tr>
 
 								<c:forEach var="e" items="${entries}">
@@ -139,7 +139,7 @@
 
 
 			<c:otherwise>
-				<spring:message code="ui.lok.no.user.rights" />
+				<spring:message code="koku.lok.no.user.rights" />
 			</c:otherwise>
 		</c:choose>
 	</div>
