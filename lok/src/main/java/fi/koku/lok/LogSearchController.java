@@ -115,8 +115,7 @@ public class LogSearchController {
     if (criteria != null) {
       if (visited != null) { // page has been visited
         //add to model the changed values
-        model.addAttribute("logSearchCriteria", criteriaSerializer.getAsText(criteria));
-   
+        model.addAttribute("logSearchCriteria", criteriaSerializer.getAsText(criteria));  
       
         // Check that the input parameters are not null and in the correct format
         String[] errors = lu.checkInputParameters(criteria, LogConstants.LOG_NORMAL);
@@ -130,7 +129,11 @@ public class LogSearchController {
           try{
             // get the entries from the database
             List<LogEntry> entries = getLogEntries(criteria, userPic);
-            
+ 
+            if(entries.size() > LogConstants.QUERY_RESULT_LIMIT){
+              model.addAttribute("limit", "koku.lok.query.limit.reached");
+            }
+
             // The user's name (not pic as in the database) should be shown, 
             // so change pics to names
             lu.changePicsToNames(entries, userPic, personService);

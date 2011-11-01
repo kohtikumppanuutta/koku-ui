@@ -39,6 +39,13 @@
 							value="<spring:message code="koku.lok.search"/>">
 					</form:form>
 
+					<c:if test="${not empty limit}">
+						<br>
+						<div class="error">
+							<spring:message code="${limit}" />
+						</div>
+					</c:if>
+
 					<%-- th { text-align: center; font-weight: bold } --%>
 					<c:if test="${not empty entries}">
 						<c:if test="${not empty visited}">

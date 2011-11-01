@@ -128,6 +128,11 @@ public class LogViewController {
           try {
             // make the query to the admin log
             List<AdminLogEntry> entries = getAdminLogEntries(criteria, userPic);
+            
+            if(entries.size() > LogConstants.QUERY_RESULT_LIMIT){
+              model.addAttribute("limit", "koku.lok.query.limit.reached");
+            }
+            
             // The user's name (not pic as in the database) should be shown,
             // so change pics to names
             lu.changePicsToNamesAdmin(entries, userPic, personService);
