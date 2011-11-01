@@ -7,8 +7,14 @@
  */
 package fi.koku.pyh.model;
 
-
 import fi.koku.services.entity.customer.v1.CustomerType;
+
+/**
+ * Class for wrapping fi.koku.services.entity.customer.v1.CustomerType. This is used for members of a family community.
+ * 
+ * @author hurulmi
+ *
+ */
 
 public class FamilyMember extends Person {
 

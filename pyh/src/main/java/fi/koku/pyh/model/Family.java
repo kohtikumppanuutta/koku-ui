@@ -18,6 +18,13 @@ import fi.koku.services.entity.community.v1.CommunityType;
 import fi.koku.services.entity.community.v1.MemberType;
 import fi.koku.services.entity.community.v1.MembersType;
 
+/**
+ * Class for wrapping fi.koku.services.entity.community.v1.CommunityType. This is used for family communities.
+ * 
+ * @author hurulmi
+ *
+ */
+
 public class Family {
 
   private static Logger log = LoggerFactory.getLogger(Family.class);

@@ -7,6 +7,13 @@
  */
 package fi.koku.pyh.model;
 
+/**
+ * Enum class for member roles in family community or guardian community.
+ * 
+ * @author hurulmi
+ *
+ */
+
 public enum CommunityRole {
   
   FATHER("ui.pyh.father", "father"), MOTHER("ui.pyh.mother", "mother"), FAMILY_MEMBER("ui.pyh.family", "family"), 

@@ -19,6 +19,13 @@ import fi.koku.services.utility.log.v1.LogServiceFactory;
 import fi.koku.services.utility.log.v1.LogServicePortType;
 import fi.koku.services.utility.log.v1.ServiceFault;
 
+/**
+ * This class provides logging services for using the LOK component of KoKu.
+ * 
+ * @author hurulmi
+ *
+ */
+
 public class Log {
 
   private static final Logger logger = LoggerFactory.getLogger(Log.class);

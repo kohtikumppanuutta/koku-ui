@@ -9,6 +9,13 @@ package fi.koku.pyh.model;
 
 import fi.koku.services.entity.customer.v1.CustomerType;
 
+/**
+ * Class for wrapping fi.koku.services.entity.customer.v1.CustomerType. This is used for dependants of a guardian community.
+ * 
+ * @author hurulmi
+ *
+ */
+
 public class Dependant extends Person {
   
   private boolean memberOfUserFamily;

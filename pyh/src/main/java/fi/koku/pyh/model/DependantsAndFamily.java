@@ -16,6 +16,7 @@ import java.util.List;
  * @author hurulmi
  *
  */
+
 public class DependantsAndFamily {
   
   private Family family;

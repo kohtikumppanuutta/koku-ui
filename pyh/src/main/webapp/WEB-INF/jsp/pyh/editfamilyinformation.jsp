@@ -210,6 +210,7 @@
 </div>
 </div>
 
+<%-- script source URLs will be localized later --%>
 <script type="text/javascript"
 	src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
 <script type="text/javascript"

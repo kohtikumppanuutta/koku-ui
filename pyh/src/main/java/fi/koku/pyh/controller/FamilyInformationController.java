@@ -25,6 +25,13 @@ import fi.koku.pyh.model.Person;
 import fi.koku.pyh.ui.common.PyhConstants;
 import fi.koku.pyh.ui.common.PyhDemoService;
 
+/**
+ * Controller for user's family information view.
+ * 
+ * @author hurulmi
+ *
+ */
+
 @Controller(value = "familyInformationController")
 @RequestMapping(value = "VIEW")
 public class FamilyInformationController {
@@ -38,15 +45,6 @@ public class FamilyInformationController {
   @RenderMapping
   public String render(Model model, RenderRequest request) {
     String userPic = UserInfoUtils.getPicFromSession(request);
-    
-    // vetuma test -->
-//    if (userInfo.isStrongAuthenticationEnabled() && !userInfo.hasStrongAuthentication()) {
-//      String authURL = (String)request.getPortletSession().getAttribute(UserInfo.KEY_VETUMA_AUTHENTICATION_URL);
-//      model.addAttribute("authURL", authURL);
-//    }
-//    model.addAttribute("hasStrongAuthentication", userInfo.hasStrongAuthentication());
-//    model.addAttribute("isStrongAuthenticationEnabled", userInfo.isStrongAuthenticationEnabled());
-    // <-- vetuma test
     
     Person user = pyhDemoService.getUser(userPic);
     DependantsAndFamily daf = pyhDemoService.getDependantsAndFamily(userPic);

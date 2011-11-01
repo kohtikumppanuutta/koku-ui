@@ -41,7 +41,7 @@ import fi.koku.pyh.ui.common.GuardianForChildNotFoundException;
 import fi.koku.pyh.ui.common.PyhDemoService;
 
 /**
- * Controller for editing user's family information.
+ * Controller for user's family information editing view.
  * 
  * @author hurulmi
  * 
@@ -74,7 +74,6 @@ public class EditFamilyInformationController {
     model.addAttribute("messages", pyhDemoService.getSentMessages(user));
     model.addAttribute("searchedUsers", null);
     
-    //Boolean childsGuardianshipInformationNotFound = new Boolean(request.getParameter("childsGuardianshipInformationNotFound"));
     Boolean childsGuardianshipInformationNotFound = Boolean.valueOf(request.getParameter("childsGuardianshipInformationNotFound"));
     
     // if child's guardianship information is not found show a notification in JSP
@@ -148,8 +147,6 @@ public class EditFamilyInformationController {
   
   @ActionMapping(params = "action=searchUsers")
   public void searchUsers(ActionRequest request, ActionResponse response) {
-    //String userPic = UserInfoUtils.getPicFromSession(request);
-    
     String surname = request.getParameter("searchSurname");
     String pic = request.getParameter("searchPic");
     
@@ -208,7 +205,6 @@ public class EditFamilyInformationController {
       childsGuardianshipInformationNotFound = true;
     }
     
-    //response.setRenderParameter("childsGuardianshipInformationNotFound", new Boolean(childsGuardianshipInformationNotFound).toString());
     response.setRenderParameter("childsGuardianshipInformationNotFound", String.valueOf(childsGuardianshipInformationNotFound));
     response.setRenderParameter("action", "editFamilyInformation");
   }

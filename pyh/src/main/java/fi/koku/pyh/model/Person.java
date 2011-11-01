@@ -14,6 +14,14 @@ import fi.koku.services.entity.customer.v1.CustomerType;
 import fi.koku.services.entity.customer.v1.ElectronicContactInfoType;
 import fi.koku.services.entity.customer.v1.ElectronicContactInfosType;
 
+/**
+ * Super class for Dependant and FamilyMember. This class wraps fi.koku.services.entity.customer.v1.CustomerType.
+ * This class is used for members of any kind of community.
+ * 
+ * @author hurulmi
+ *
+ */
+
 public class Person {
 
   private boolean requestPending;

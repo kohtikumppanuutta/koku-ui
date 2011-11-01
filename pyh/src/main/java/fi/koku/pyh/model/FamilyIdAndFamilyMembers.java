@@ -9,6 +9,14 @@ package fi.koku.pyh.model;
 
 import java.util.List;
 
+/**
+ * Wrapper class for wrapping family id and family members. 
+ * This is used as a helper object to minimize remote service calls.
+ * 
+ * @author hurulmi
+ *
+ */
+
 public class FamilyIdAndFamilyMembers {
 
     private String familyId;

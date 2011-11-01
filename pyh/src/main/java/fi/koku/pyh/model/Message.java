@@ -10,6 +10,13 @@ package fi.koku.pyh.model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Class for membership request messages.
+ * 
+ * @author hurulmi
+ *
+ */
+
 public class Message {
 
   private static Logger log = LoggerFactory.getLogger(Message.class);

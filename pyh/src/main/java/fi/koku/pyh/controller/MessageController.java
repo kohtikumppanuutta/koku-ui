@@ -20,6 +20,13 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 
 import fi.koku.pyh.ui.common.PyhDemoService;
 
+/**
+ * Controller for handling acceptance or rejection of membership request messages.
+ * 
+ * @author hurulmi
+ *
+ */
+
 @Controller(value = "messageController")
 @RequestMapping(value = "VIEW")
 public class MessageController {
