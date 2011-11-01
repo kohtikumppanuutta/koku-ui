@@ -5,7 +5,7 @@
  * If not, please contact the copyright holder (http://www.ixonos.com/).
  * 
  */
-package fi.koku.pyh;
+package fi.koku.pyh.ui.common;
 
 import fi.koku.settings.KoKuPropertiesUtil;
 

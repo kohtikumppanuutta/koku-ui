@@ -8,8 +8,6 @@
 package fi.koku.pyh.model;
 
 
-import fi.koku.pyh.util.CommunityRole;
-import fi.koku.services.entity.community.v1.MemberType;
 import fi.koku.services.entity.customer.v1.CustomerType;
 
 public class FamilyMember extends Person {

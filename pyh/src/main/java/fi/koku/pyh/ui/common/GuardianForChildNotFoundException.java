@@ -5,11 +5,12 @@
  * If not, please contact the copyright holder (http://www.ixonos.com/).
  * 
  */
-package fi.koku.pyh;
+package fi.koku.pyh.ui.common;
 
-public class TooManyFamiliesException extends Exception {
+public class GuardianForChildNotFoundException extends Exception {
   
-  public TooManyFamiliesException(String message) {
+  public GuardianForChildNotFoundException(String message) {
     super(message);
   }
+  
 }

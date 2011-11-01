@@ -5,9 +5,8 @@
  * If not, please contact the copyright holder (http://www.ixonos.com/).
  * 
  */
-package fi.koku.pyh;
+package fi.koku.pyh.controller;
 
-import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 
 import org.slf4j.Logger;
@@ -19,11 +18,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-import fi.koku.portlet.filter.userinfo.UserInfo;
 import fi.koku.portlet.filter.userinfo.UserInfoUtils;
 import fi.koku.pyh.model.DependantsAndFamily;
 import fi.koku.pyh.model.FamilyIdAndFamilyMembers;
 import fi.koku.pyh.model.Person;
+import fi.koku.pyh.ui.common.PyhConstants;
+import fi.koku.pyh.ui.common.PyhDemoService;
 
 @Controller(value = "familyInformationController")
 @RequestMapping(value = "VIEW")

@@ -5,10 +5,9 @@
  * If not, please contact the copyright holder (http://www.ixonos.com/).
  * 
  */
-package fi.koku.pyh;
+package fi.koku.pyh.controller;
 
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 
-import fi.koku.portlet.filter.userinfo.UserInfo;
+import fi.koku.pyh.ui.common.PyhDemoService;
 
 @Controller(value = "messageController")
 @RequestMapping(value = "VIEW")

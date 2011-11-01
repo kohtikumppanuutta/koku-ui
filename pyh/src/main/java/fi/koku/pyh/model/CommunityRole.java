@@ -5,7 +5,7 @@
  * If not, please contact the copyright holder (http://www.ixonos.com/).
  * 
  */
-package fi.koku.pyh.util;
+package fi.koku.pyh.model;
 
 public enum CommunityRole {
   

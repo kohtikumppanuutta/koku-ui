@@ -5,7 +5,7 @@
  * If not, please contact the copyright holder (http://www.ixonos.com/).
  * 
  */
-package fi.koku.pyh;
+package fi.koku.pyh.ui.common;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +22,7 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import fi.koku.pyh.model.CommunityRole;
 import fi.koku.pyh.model.Dependant;
 import fi.koku.pyh.model.DependantsAndFamily;
 import fi.koku.pyh.model.Family;
@@ -29,7 +30,6 @@ import fi.koku.pyh.model.FamilyIdAndFamilyMembers;
 import fi.koku.pyh.model.FamilyMember;
 import fi.koku.pyh.model.Message;
 import fi.koku.pyh.model.Person;
-import fi.koku.pyh.util.CommunityRole;
 import fi.koku.services.entity.community.v1.CommunitiesType;
 import fi.koku.services.entity.community.v1.CommunityQueryCriteriaType;
 import fi.koku.services.entity.community.v1.CommunityServiceConstants;

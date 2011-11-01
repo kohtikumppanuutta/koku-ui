@@ -1,11 +1,11 @@
 <%@ include file="imports.jsp" %>
 
-<c:set var="CHILD" value="<%=fi.koku.pyh.util.CommunityRole.CHILD%>" />
-<c:set var="PARENT" value="<%=fi.koku.pyh.util.CommunityRole.PARENT%>" />
-<c:set var="MEMBER"	value="<%=fi.koku.pyh.util.CommunityRole.FAMILY_MEMBER%>" />
-<c:set var="DEPENDANT" value="<%=fi.koku.pyh.util.CommunityRole.DEPENDANT%>" />
-<c:set var="FATHER" value="<%=fi.koku.pyh.util.CommunityRole.FATHER%>" />
-<c:set var="MOTHER" value="<%=fi.koku.pyh.util.CommunityRole.MOTHER%>" />
+<c:set var="CHILD" value="<%=fi.koku.pyh.model.CommunityRole.CHILD%>" />
+<c:set var="PARENT" value="<%=fi.koku.pyh.model.CommunityRole.PARENT%>" />
+<c:set var="MEMBER"	value="<%=fi.koku.pyh.model.CommunityRole.FAMILY_MEMBER%>" />
+<c:set var="DEPENDANT" value="<%=fi.koku.pyh.model.CommunityRole.DEPENDANT%>" />
+<c:set var="FATHER" value="<%=fi.koku.pyh.model.CommunityRole.FATHER%>" />
+<c:set var="MOTHER" value="<%=fi.koku.pyh.model.CommunityRole.MOTHER%>" />
 
 <portlet:defineObjects />
 
