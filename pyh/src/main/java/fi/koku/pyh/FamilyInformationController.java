@@ -7,8 +7,6 @@
  */
 package fi.koku.pyh;
 
-import java.util.List;
-
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 
@@ -21,11 +19,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
-
 import fi.koku.portlet.filter.userinfo.UserInfo;
+import fi.koku.portlet.filter.userinfo.UserInfoUtils;
 import fi.koku.pyh.model.DependantsAndFamily;
 import fi.koku.pyh.model.FamilyIdAndFamilyMembers;
-import fi.koku.pyh.model.FamilyMember;
 import fi.koku.pyh.model.Person;
 
 @Controller(value = "familyInformationController")
@@ -39,16 +36,8 @@ public class FamilyInformationController {
   private PyhDemoService pyhDemoService;
 
   @RenderMapping
-  public String render(PortletSession session, Model model, RenderRequest request) {
-    
-    String userPic = "";
-    
-    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
-    if (userInfo != null) {
-      userPic = userInfo.getPic();
-    } else {
-      log.error("ERROR: UserInfo returns no PIC! Cannot authenticate user.");
-    }
+  public String render(Model model, RenderRequest request) {
+    String userPic = UserInfoUtils.getPicFromSession(request);
     
     // vetuma test -->
 //    if (userInfo.isStrongAuthenticationEnabled() && !userInfo.hasStrongAuthentication()) {

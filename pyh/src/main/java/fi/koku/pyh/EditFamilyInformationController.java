@@ -32,6 +32,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 
 import fi.koku.portlet.filter.userinfo.UserInfo;
+import fi.koku.portlet.filter.userinfo.UserInfoUtils;
 import fi.koku.pyh.model.Dependant;
 import fi.koku.pyh.model.DependantsAndFamily;
 import fi.koku.pyh.model.Family;
@@ -58,19 +59,11 @@ public class EditFamilyInformationController {
 
   @RenderMapping(params = "action=editFamilyInformation")
   public String render(RenderRequest request, Model model, PortletSession session) {
-    String userPic = "";
-    
-    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
-    if (userInfo != null) {
-      userPic = userInfo.getPic();
-    } else {
-      log.error("ERROR: UserInfo returns no PIC! Cannot authenticate user.");
-    }
-    
-    Person user = pyhDemoService.getUser(userPic);
+    String userPic = UserInfoUtils.getPicFromSession(request);
     
     // TODO: hae perhe ja huoltajuusyhteisöt vain kertaalleen
     
+    Person user = pyhDemoService.getUser(userPic);
     DependantsAndFamily daf = pyhDemoService.getDependantsAndFamily(userPic);
     FamilyIdAndFamilyMembers fidm = pyhDemoService.getOtherFamilyMembers(userPic);
     
@@ -81,7 +74,8 @@ public class EditFamilyInformationController {
     model.addAttribute("messages", pyhDemoService.getSentMessages(user));
     model.addAttribute("searchedUsers", null);
     
-    Boolean childsGuardianshipInformationNotFound = new Boolean(request.getParameter("childsGuardianshipInformationNotFound"));
+    //Boolean childsGuardianshipInformationNotFound = new Boolean(request.getParameter("childsGuardianshipInformationNotFound"));
+    Boolean childsGuardianshipInformationNotFound = Boolean.valueOf(request.getParameter("childsGuardianshipInformationNotFound"));
     
     // if child's guardianship information is not found show a notification in JSP
     model.addAttribute("childsGuardianshipInformationNotFound", childsGuardianshipInformationNotFound.booleanValue());
@@ -89,9 +83,10 @@ public class EditFamilyInformationController {
     Family family = daf.getFamily();
     String communityId;
     if (family != null) {
-       communityId = family.getCommunityId();
+      communityId = family.getCommunityId();
     } else {
-      communityId = pyhDemoService.addFamily(userPic); // create a family community for user if does not exist
+      // create a family community for user if does not exist
+      communityId = pyhDemoService.addFamily(userPic);
     }
     session.setAttribute("familyCommunityId", communityId);
     
@@ -100,15 +95,8 @@ public class EditFamilyInformationController {
   
   // this render method does not clear the search results
   @RenderMapping(params = "action=editFamilyInformationWithSearchResults")
-  public String renderWithSearchResults(RenderRequest request, Model model, PortletSession session) {
-    String userPic = "";
-    
-    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
-    if (userInfo != null) {
-      userPic = userInfo.getPic();
-    } else {
-      log.error("ERROR: UserInfo returns no PIC! Cannot authenticate user.");
-    }
+  public String renderWithSearchResults(RenderRequest request, Model model) {
+    String userPic = UserInfoUtils.getPicFromSession(request);
     
     String surname = request.getParameter("surname");
     String pic = request.getParameter("pic");
@@ -130,45 +118,24 @@ public class EditFamilyInformationController {
   }
   
   @ActionMapping(params = "action=addDependantAsFamilyMember")
-  public void addDependantAsFamilyMember(@RequestParam String dependantPic, ActionResponse response, PortletSession session) {
-    String userPic = "";
-    
-    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
-    if (userInfo != null) {
-      userPic = userInfo.getPic();
-    } else {
-      log.error("ERROR: UserInfo returns no PIC! Cannot authenticate user.");
-    }
+  public void addDependantAsFamilyMember(RenderRequest request, @RequestParam String dependantPic, ActionResponse response) {
+    String userPic = UserInfoUtils.getPicFromSession(request);
     
     pyhDemoService.insertDependantToFamily(userPic, dependantPic, CommunityRole.CHILD);
     response.setRenderParameter("action", "editFamilyInformation");
   }
 
   @ActionMapping(params = "action=removeFamilyMember")
-  public void removeFamilyMember(@RequestParam String familyMemberPic, ActionResponse response, PortletSession session) {
-    String userPic = "";
-    
-    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
-    if (userInfo != null) {
-      userPic = userInfo.getPic();
-    } else {
-      log.error("ERROR: UserInfo returns no PIC! Cannot authenticate user.");
-    }
+  public void removeFamilyMember(RenderRequest request, @RequestParam String familyMemberPic, ActionResponse response) {
+    String userPic = UserInfoUtils.getPicFromSession(request);
     
     pyhDemoService.removeFamilyMember(familyMemberPic, userPic);
     response.setRenderParameter("action", "editFamilyInformation");
   }
 
   @ActionMapping(params = "action=removeDependant")
-  public void removeDependant(@RequestParam String familyMemberPic, ActionResponse response, PortletSession session) {
-    String userPic = "";
-    
-    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
-    if (userInfo != null) {
-      userPic = userInfo.getPic();
-    } else {
-      log.error("ERROR: UserInfo returns no PIC! Cannot authenticate user.");
-    }
+  public void removeDependant(RenderRequest request, @RequestParam String familyMemberPic, ActionResponse response) {
+    String userPic = UserInfoUtils.getPicFromSession(request);
     
     for (Dependant d : pyhDemoService.getDependantsAndFamily(userPic).getDependants()) {
       if (d.getPic().equals(familyMemberPic)) {
@@ -180,15 +147,8 @@ public class EditFamilyInformationController {
   }
   
   @ActionMapping(params = "action=searchUsers")
-  public void searchUsers(ActionRequest request, ActionResponse response, PortletSession session) {
-    String userPic = "";
-    
-    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
-    if (userInfo != null) {
-      userPic = userInfo.getPic();
-    } else {
-      log.error("ERROR: UserInfo returns no PIC! Cannot authenticate user.");
-    }
+  public void searchUsers(ActionRequest request, ActionResponse response) {
+    //String userPic = UserInfoUtils.getPicFromSession(request);
     
     String surname = request.getParameter("searchSurname");
     String pic = request.getParameter("searchPic");
@@ -202,14 +162,7 @@ public class EditFamilyInformationController {
 
   @ActionMapping(params = "action=addUsersToFamily")
   public void addUsersToFamily(ActionRequest request, ActionResponse response, PortletSession session) {
-    String userPic = "";
-    
-    UserInfo userInfo = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
-    if (userInfo != null) {
-      userPic = userInfo.getPic();
-    } else {
-      log.error("ERROR: UserInfo returns no PIC! Cannot authenticate user.");
-    }
+    String userPic = UserInfoUtils.getPicFromSession(request);
     
     String communityId = (String) session.getAttribute("familyCommunityId");
     
@@ -246,14 +199,17 @@ public class EditFamilyInformationController {
     try {
       pyhDemoService.addPersonsAsFamilyMembers(personMap, userPic, communityId);
     } catch (FamilyNotFoundException fnfe) {
-      log.error("EditFamilyInformationController.addUsersToFamily() caught FamilyNotFoundException!");
-      log.error(fnfe.getMessage());
+      log.error("EditFamilyInformationController.addUsersToFamily() caught FamilyNotFoundException!", fnfe);
+      // show general error page
+      throw new RuntimeException(fnfe);
     } catch (GuardianForChildNotFoundException gnfe) {
       log.error("EditFamilyInformationController.addUsersToFamily() caught GuardianForChildNotFoundException!", gnfe);
+      // show error message in JSP view
       childsGuardianshipInformationNotFound = true;
     }
     
-    response.setRenderParameter("childsGuardianshipInformationNotFound", new Boolean(childsGuardianshipInformationNotFound).toString());
+    //response.setRenderParameter("childsGuardianshipInformationNotFound", new Boolean(childsGuardianshipInformationNotFound).toString());
+    response.setRenderParameter("childsGuardianshipInformationNotFound", String.valueOf(childsGuardianshipInformationNotFound));
     response.setRenderParameter("action", "editFamilyInformation");
   }
 

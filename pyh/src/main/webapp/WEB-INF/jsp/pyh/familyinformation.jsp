@@ -3,7 +3,7 @@
 
 <portlet:defineObjects />
 
-<c:set var="dp" value="<%=fi.koku.pyh.util.CommunityRole.DEPENDANT%>" />
+<c:set var="DEPENDANT" value="<%=fi.koku.pyh.util.CommunityRole.DEPENDANT%>" />
 
 <portlet:renderURL var="editFamilyInformation">
 	<portlet:param name="action" value="editFamilyInformation" />
@@ -11,6 +11,14 @@
 
 <div class="koku-pyh">
 <div class="portlet-section-body">
+
+<c:choose>
+<c:when test="${empty user}">
+
+<spring:message code="ui.pyh.no.person.info" />
+
+</c:when>
+<c:otherwise>
 
 <div class="pyh-temp">
   <span class="pyh-right"> <a href="${editFamilyInformation}"> <spring:message code="ui.pyh.modify.info" /> </a> </span>
@@ -50,7 +58,7 @@
             <tr>
                 <td> ${child.fullName} </td>
                 <td> ${child.pic} </td>
-                <td><spring:message code="${dp.bundleId}"/><c:if test="${child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.added.into.family" /></c:if><c:if test="${!child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.not.added.into.family" /></c:if></td>
+                <td><spring:message code="${DEPENDANT.bundleId}"/><c:if test="${child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.added.into.family" /></c:if><c:if test="${!child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.not.added.into.family" /></c:if></td>
             </tr>
             </c:forEach>
             
@@ -133,6 +141,9 @@
             
         </c:forEach>
     </c:if>
+
+</c:otherwise>
+</c:choose>
 
 <div class="pyh-reset-floating"></div>
 </br>

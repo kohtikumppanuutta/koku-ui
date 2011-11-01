@@ -43,6 +43,7 @@ public class MessageController {
     String familyId = removeCurrentFamily ? currentFamilyId : null;
     
     pyhDemoService.acceptOrRejectMembershipRequest(messageId, userPic /*approver*/, "approved", familyId);
+    // go to familyinformation.jsp
     response.setRenderParameter("action", "");
   }
 
@@ -56,6 +57,7 @@ public class MessageController {
     log.debug("messageId: " + messageId);
     
     pyhDemoService.acceptOrRejectMembershipRequest(messageId, userPic /*approver*/, "rejected", null);
+    // go to familyinformation.jsp
     response.setRenderParameter("action", "");
   }
 

@@ -59,7 +59,7 @@
 		                        
                                 <c:when test="${child.memberOfUserFamily}">
                                    <span class="pyh-link"> 
-                                         <portlet:actionURL var="removeFamilyMember">
+                                        <portlet:actionURL var="removeFamilyMember">
                                         <portlet:param name="action" value="removeDependant" />
                                         <portlet:param name="familyMemberPic" value="${child.pic}" />
                                     </portlet:actionURL>
@@ -148,7 +148,7 @@
 					<th width="10%"> <%-- <spring:message code="ui.pyh.table.add" /> --%> </th>
 					<th width="26%"><spring:message code="ui.pyh.table.role" /></th>
 				</tr>
-
+				
 				<c:set var="userVar" value="1" />
 				<c:forEach var="user" items="${searchedUsers}">
 
