@@ -34,8 +34,7 @@
     <div class="kks-reset-floating"></div>
 <div >
 	<h1 class="portlet-section-header">
-		<c:out value="${child.name}"/>
-		<spring:message code="ui.kks.title" />
+		<c:out value="${child.name}"/><c:out value=" "/><spring:message code="ui.kks.title" />
 	</h1>
 
 	<div class="kks-error-bindings">    		
@@ -82,7 +81,7 @@
 							<portlet:param name="collection" value="${collection.id}" />
 						</portlet:renderURL>">
 										<strong><c:out value="${ collection.name }"/></strong> </a> </span></td>
-							<td><c:out value="${collection.modifierFullName}"/> <fmt:formatDate
+							<td><c:out value="${collection.modifierFullName}"/><c:out value=" "/><fmt:formatDate
 									pattern="dd.MM.yyyy" value="${collection.creationTime}" />
 							</td>
 
@@ -229,8 +228,6 @@
 							method="post" action="${creationActionUrl}">
    
 								<div class="portlet-form-field-label"><spring:message code="ui.kks.contract.type" />
-								
-								<form:errors path="field" />
 								</div>
 
     
@@ -251,7 +248,7 @@
 										</c:forEach>
 									</form:select> </span>
 								<div class="portlet-form-field-label"><spring:message code="ui.kks.contract.name" />
-								<form:errors path="name" /></div>
+								</div>
 								<span class="portlet-form-field"><form:input maxlength="250" id="kks.name" path="name" size="70" />
 								</span>
 							

@@ -101,7 +101,7 @@
 
 <div class="kks-left">
 <h1 class="portlet-section-header">
-    <c:out value="${child.name}"/> <c:out value="${collection.name}"/> 
+    <c:out value="${child.name}"/><c:out value=" "/><c:out value="${collection.name}"/> 
     <c:if test="${not collection.state.active}">
         (<spring:message code="ui.kks.locked" />)
     </c:if>
@@ -195,7 +195,7 @@
                                                   <c:forEach var="multivalue" items='${ collection.entries[type.id].entryValues }'>
                                                       
                                                       <div class="kks-comment">
-                                                       <span class="kks-entry-value"><c:out value="${multivalue.value}"/>
+                                                       <p class="kks-entry-value">${multivalue.value}</p>
                                                        
                                                        <c:if test="${not block_guardian}">
 	                                                       <span class="kks-right">
@@ -268,7 +268,7 @@
 	                                                        <span class="kks-read-only-text"><c:out value="${multivalue.value}"/><c:out value="(${multivalue.modifierFullName}"/> <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${multivalue.modified}"/>)</span>                                                       
 	                                                    </c:forEach>
 	                                                </c:if> <c:if test="${ not type.multiValue }">
-	                                                    <span class="kks-read-only-text"><c:out value="${collection.entries[type.id].firstValue.value}"></c:out> </span>
+	                                                    <p class="kks-read-only-text"><c:out value="${collection.entries[type.id].firstValue.value}"></c:out> </p>
 	                                              </c:if> 
                                             </c:otherwise>
                                         </c:choose>

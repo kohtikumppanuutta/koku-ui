@@ -56,7 +56,7 @@
 </div>
 
 
-<h1 class="portlet-section-header"><c:out value="${child.name}"/> <c:out value="${collection.name}"/></h1>
+<h1 class="portlet-section-header"><c:out value="${child.name}"/><c:out value=" "/><c:out value="${collection.name}"/></h1>
 
 	<div class="kks-entry">
 

@@ -590,7 +590,7 @@ public class KksService {
       consent.setConsentRequestor(user);
       List<String> guardians = getCustomerGuardians(customerId, user);
       if (guardians == null) {
-        LOG.info("No guardians found for customer");
+        LOG.error("No guardians found for customer");
         return false;
       }
 
