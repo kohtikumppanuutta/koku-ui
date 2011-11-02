@@ -1,3 +1,9 @@
+<%--
+	The main view in PYH. Page shows user's family information.
+	
+	author: Mikko Hurula
+--%>
+
 <%@page import="fi.koku.pyh.model.CommunityRole"%>
 <%@ include file="imports.jsp" %>
 

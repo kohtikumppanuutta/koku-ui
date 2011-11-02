@@ -161,29 +161,43 @@ public class EditFamilyInformationController {
   public void addUsersToFamily(ActionRequest request, ActionResponse response, PortletSession session) {
     String userPic = UserInfoUtils.getPicFromSession(request);
     
-    String familyCommunityId = "";
-    
-    HashMap<String, String> parameterMap = new HashMap<String, String>();
+    //HashMap<String, String> parameterMap = new HashMap<String, String>();
     HashMap<String, String> personMap = new HashMap<String, String>();
-    String personPic = "";
-    String personRole = "";
-
+    
+    /*
     for (Enumeration<String> e = request.getParameterNames(); e.hasMoreElements();) {
       String param = e.nextElement();
       String paramValue = request.getParameter(param);
       log.info("param name: " + param + ", param value: " + paramValue);
-      if (param.startsWith("userPic") || param.startsWith("userRole")) {
-        parameterMap.put(param, paramValue);
-      } else if (param.equalsIgnoreCase("familyCommunityId")) {
+      //if (param.startsWith("userPic") || param.startsWith("userRole")) {
+      if ("userPic".equalsIgnoreCase(param)) {
+        personPic = paramValue;
+      } else if ("userRole".equalsIgnoreCase(param)) {
+        personRole = paramValue;
+      } else if ("familyCommunityId".equalsIgnoreCase(param)) {
         familyCommunityId = paramValue;
       }
     }
+    */
     
+    String familyCommunityId = request.getParameter("familyCommunityId");
+    String personPic = request.getParameter("userPic");
+    String personRole = request.getParameter("userRole");
+    
+    log.info("ADDING PERSON: ");
+    log.info("familyCommunityId: " + familyCommunityId);
+    log.info("personPic: " + personPic);
+    log.info("personRole: " + personRole);
+    
+    personMap.put(personPic, personRole);
+    
+    /*
     Set<String> keys = parameterMap.keySet();
     Iterator<String> si = keys.iterator();
     while (si.hasNext()) {
       String key = si.next();
-      if (key.startsWith("userPic")) {
+      //if (key.startsWith("userPic")) {
+      if ("userPic".equalsIgnoreCase(key)) {
         String[] tokens = key.split("_");
         // index is the number after '_' in parameter name, e.g. userPic_1
         // (index is 1)
@@ -194,6 +208,7 @@ public class EditFamilyInformationController {
         personMap.put(personPic, personRole);
       }
     }
+    */
     
     boolean childsGuardianshipInformationNotFound = false;
     try {
