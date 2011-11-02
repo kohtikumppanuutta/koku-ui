@@ -32,9 +32,9 @@
 
 	<c:if test="${not empty user}">
 		<div class="name">
-			${user.firstname} ${user.surname} <br />
+			<c:out value="${user.firstname} ${user.surname}"/> <br />
 		</div>
-        <div class="email"><spring:message code="ui.pyh.econtactinfo" />  ${user.econtactinfo}</div>
+        <div class="email"><spring:message code="ui.pyh.econtactinfo" /> <c:out value="${user.econtactinfo}"/> </div>
 		<br />
 	</c:if>
 	
@@ -50,8 +50,8 @@
             
             <c:forEach var="child" items="${dependants}">
             <tr>
-                <td> ${child.fullName} </td>
-                <td> ${child.pic} </td>
+                <td> <c:out value="${child.fullName}"/> </td>
+                <td> <c:out value="${child.pic}"/> </td>
                 <td><spring:message code="${DEPENDANT.bundleId}"/><c:if test="${child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.added.into.family" /></c:if><c:if test="${!child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.not.added.into.family" /></c:if></td>
                 <td> 
                 <span class="actions">
@@ -80,8 +80,8 @@
             
             <c:forEach var="familyMember" items="${otherFamilyMembers}">
                 <tr>
-                <td>${familyMember.fullName} </td>
-                <td>${familyMember.pic} </td>
+                <td> <c:out value="${familyMember.fullName}"/> </td>
+                <td> <c:out value="${familyMember.pic}"/> </td>
                 <td><spring:message code="${familyMember.role.bundleId}"/></td>
                 <td>
                 	<span class="pyh-linkki">
@@ -108,7 +108,7 @@
         <c:forEach var="message" items="${messages}">            
             
             <div class="pyh-message">
-                ${message.text}  <%-- <spring:message code="ui.pyh.waiting.approval" /> --%>
+                <c:out value="${message.text}"/>
             </div>
             
         </c:forEach>
@@ -153,9 +153,10 @@
 				<c:forEach var="user" items="${searchedUsers}">
 
 					<tr>
-						<td>${user.firstname} ${user.surname}</td>
-						<td>${user.pic} <input id="user_pic_${userVar}"
-							name="userPic_${userVar}" type="hidden" value="${user.pic}" />
+						<td> <c:out value="${user.firstname} ${user.surname}"/> </td>
+						<td> 
+							<c:out value="${user.pic}"/> 
+							<input id="user_pic_${userVar}" name="userPic_${userVar}" type="hidden" value="${user.pic}" />
 						</td>
 
 						<td>
@@ -166,14 +167,13 @@
 						</td>
 
 						<td><select id="user_role_${userVar}" class="syntmaika">
-								<option value="${ MEMBER }"><spring:message code="${MEMBER.bundleId}"/></option>
-								<%-- <option value="${ DEPENDANT }"><spring:message code="${DEPENDANT.bundleId}"/></option> --%>
-								<option value="${ CHILD }"><spring:message code="${CHILD.bundleId }"/></option>
+								<option value="${MEMBER}"><spring:message code="${MEMBER.bundleId}"/></option>
+								<option value="${CHILD}"><spring:message code="${CHILD.bundleId}"/></option>
 								
-								<c:if test="${ not parentsFull }">
-								<option value="${ FATHER }"><spring:message code="${FATHER.bundleId}"/></option>
-								<option value="${ MOTHER }"><spring:message code="${MOTHER.bundleId}"/></option>
-								    <option value="${ PARENT }"><spring:message code="${PARENT.bundleId}"/></option>
+								<c:if test="${not parentsFull}">
+								<option value="${FATHER}"><spring:message code="${FATHER.bundleId}"/></option>
+								<option value="${MOTHER}"><spring:message code="${MOTHER.bundleId}"/></option>
+								    <option value="${PARENT}"><spring:message code="${PARENT.bundleId}"/></option>
 								    
 								</c:if>
 						</select></td>
@@ -187,14 +187,15 @@
 
 
 
-			<form:form name="addUsersToFamily" method="post"
-				action="${addUsersToFamily}" id="addUsersToFamilyForm">
-
+			<form:form name="addUsersToFamily" method="post" action="${addUsersToFamily}" id="addUsersToFamilyForm">
+				<input name="familyCommunityId" type="hidden" value="${familyCommunityId}"/>
+				
 				<%-- user information is added to this form dynamically with jQuery before submitting the form --%>
 
 				<input class="portlet-form-button" type="button"
 					value="<spring:message code="ui.pyh.save" />" class="tallenna" onclick="doSubmitForm()" />
 			</form:form>
+			
 		</c:when>
 		<c:otherwise>
 			<c:if test="${search}">
@@ -220,9 +221,7 @@
 	function addUserToForm(user) {
 		$('#addUsersToFamilyForm').append($('#user_pic_' + user));
 		var userRole = $('#user_role_' + user + ' option:selected').val();
-		$('#addUsersToFamilyForm')
-				.append(
-						'<input name="userRole_' + user + '" type="hidden" value="' + userRole + '"/>');
+		$('#addUsersToFamilyForm').append('<input name="userRole_' + user + '" type="hidden" value="' + userRole + '"/>');
 	}
 
 	function doSubmitForm() {

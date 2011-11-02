@@ -53,5 +53,4 @@ public enum CommunityRole {
   public String getRoleID() {
     return roleID;
   }
-  
 }

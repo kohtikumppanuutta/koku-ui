@@ -24,14 +24,6 @@
   <span class="pyh-right"> <a href="${editFamilyInformation}"> <spring:message code="ui.pyh.modify.info" /> </a> </span>
 </div>
 
-<%-- testing vetuma authentication URL
-<div>
-<c:if test="${!hasStrongAuthentication && isStrongAuthenticationEnabled}">
-	<a href="${authURL}">Tunnistaudu Vetumassa</a>
-</c:if>
-</div>
- --%>
-
 <div class="pyh-reset-floating"></div>
 
 	<h1 class="portlet-section-header">
@@ -39,8 +31,8 @@
 	</h1>
 
 	<c:if test="${not empty user}">
-		<div class="name">${user.firstnames} ${user.surname} </div>
-		<div class="email"><spring:message code="ui.pyh.econtactinfo" /> ${user.econtactinfo}</div>
+		<div class="name"><c:out value="${user.firstnames} ${user.surname}"/></div>
+		<div class="email"><spring:message code="ui.pyh.econtactinfo"/> <c:out value="${user.econtactinfo}"/></div>
 	</c:if>
 
 </br>
@@ -56,16 +48,16 @@
             
             <c:forEach var="child" items="${dependants}">
             <tr>
-                <td> ${child.fullName} </td>
-                <td> ${child.pic} </td>
+                <td> <c:out value="${child.fullName}"/> </td>
+                <td> <c:out value="${child.pic}"/> </td>
                 <td><spring:message code="${DEPENDANT.bundleId}"/><c:if test="${child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.added.into.family" /></c:if><c:if test="${!child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.not.added.into.family" /></c:if></td>
             </tr>
             </c:forEach>
             
             <c:forEach var="familyMember" items="${otherFamilyMembers}">
-             <tr>
-                <td>${familyMember.fullName} </td>
-                <td>${familyMember.pic} </td>
+            <tr>
+                <td> <c:out value="${familyMember.fullName}"/> </td>
+                <td> <c:out value="${familyMember.pic}"/> </td>
                 <td><spring:message code="${familyMember.role.bundleId}"/></td>
             </tr>
             </c:forEach>
@@ -81,7 +73,7 @@
             
             
             <div class="sentMessage">
-                ${sentMessage.text} 
+                <c:out value="${sentMessage.text}"/> 
             </div>
             
         </c:forEach>
@@ -93,7 +85,7 @@
         </h3>
         <c:forEach var="message" items="${messages}">
             <div class="message">
-                <strong> ${message.text} </strong>
+                <strong> <c:out value="${message.text}"/> </strong>
                 
                 <span class="pyh-right"> 
 
@@ -133,7 +125,7 @@
             <span class="pyh-mail">
             <form:form name="accept" method="post" action="${accept}">
                 
-                <a href="mailto:${supportEmailAddress}?subject=<spring:message code="ui.pyh.inappropriate.request.email.subject" />:${ message.id }"><spring:message code="ui.pyh.report.inappropriate.request" /></a> 
+                <a href="mailto:${supportEmailAddress}?subject=<spring:message code="ui.pyh.inappropriate.request.email.subject" />:${message.id}"><spring:message code="ui.pyh.report.inappropriate.request" /></a> 
                 </form:form>
                 </span>
                 </div>

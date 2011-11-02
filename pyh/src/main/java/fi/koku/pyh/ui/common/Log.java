@@ -95,6 +95,7 @@ public class Log {
       
     } catch (ServiceFault fault) {
       logger.error("LOK service failed to log operation " + operation + " for data type " + dataType, fault);
+      throw new RuntimeException(fault);
     }
   }
 }

@@ -58,7 +58,7 @@ public class EditFamilyInformationController {
   private PyhDemoService pyhDemoService;
 
   @RenderMapping(params = "action=editFamilyInformation")
-  public String render(RenderRequest request, Model model, PortletSession session) {
+  public String render(RenderRequest request, Model model) {
     String userPic = UserInfoUtils.getPicFromSession(request);
     
     // TODO: hae perhe ja huoltajuusyhteisöt vain kertaalleen
@@ -79,15 +79,10 @@ public class EditFamilyInformationController {
     // if child's guardianship information is not found show a notification in JSP
     model.addAttribute("childsGuardianshipInformationNotFound", childsGuardianshipInformationNotFound.booleanValue());
     
-    Family family = daf.getFamily();
-    String communityId;
-    if (family != null) {
-      communityId = family.getCommunityId();
-    } else {
-      // create a family community for user if does not exist
-      communityId = pyhDemoService.addFamily(userPic);
+    // create user family community if does not exist
+    if (daf.getFamily() == null) {
+      pyhDemoService.addFamily(userPic);
     }
-    session.setAttribute("familyCommunityId", communityId);
     
     return "editfamilyinformation";
   }
@@ -113,11 +108,16 @@ public class EditFamilyInformationController {
     model.addAttribute("messages", pyhDemoService.getSentMessages(user));
     model.addAttribute("searchedUsers", searchedUsers);
     
+    // user family shouldn't be null because it was created in the other render method already
+    Family family = daf.getFamily();
+    String familyCommunityId = family.getCommunityId();
+    model.addAttribute("familyCommunityId", familyCommunityId);
+    
     return "editfamilyinformation";
   }
   
   @ActionMapping(params = "action=addDependantAsFamilyMember")
-  public void addDependantAsFamilyMember(RenderRequest request, @RequestParam String dependantPic, ActionResponse response) {
+  public void addDependantAsFamilyMember(ActionRequest request, @RequestParam String dependantPic, ActionResponse response) {
     String userPic = UserInfoUtils.getPicFromSession(request);
     
     pyhDemoService.insertDependantToFamily(userPic, dependantPic, CommunityRole.CHILD);
@@ -125,7 +125,7 @@ public class EditFamilyInformationController {
   }
 
   @ActionMapping(params = "action=removeFamilyMember")
-  public void removeFamilyMember(RenderRequest request, @RequestParam String familyMemberPic, ActionResponse response) {
+  public void removeFamilyMember(ActionRequest request, @RequestParam String familyMemberPic, ActionResponse response) {
     String userPic = UserInfoUtils.getPicFromSession(request);
     
     pyhDemoService.removeFamilyMember(familyMemberPic, userPic);
@@ -133,7 +133,7 @@ public class EditFamilyInformationController {
   }
 
   @ActionMapping(params = "action=removeDependant")
-  public void removeDependant(RenderRequest request, @RequestParam String familyMemberPic, ActionResponse response) {
+  public void removeDependant(ActionRequest request, @RequestParam String familyMemberPic, ActionResponse response) {
     String userPic = UserInfoUtils.getPicFromSession(request);
     
     for (Dependant d : pyhDemoService.getDependantsAndFamily(userPic).getDependants()) {
@@ -161,7 +161,7 @@ public class EditFamilyInformationController {
   public void addUsersToFamily(ActionRequest request, ActionResponse response, PortletSession session) {
     String userPic = UserInfoUtils.getPicFromSession(request);
     
-    String communityId = (String) session.getAttribute("familyCommunityId");
+    String familyCommunityId = "";
     
     HashMap<String, String> parameterMap = new HashMap<String, String>();
     HashMap<String, String> personMap = new HashMap<String, String>();
@@ -171,11 +171,14 @@ public class EditFamilyInformationController {
     for (Enumeration<String> e = request.getParameterNames(); e.hasMoreElements();) {
       String param = e.nextElement();
       String paramValue = request.getParameter(param);
+      log.info("param name: " + param + ", param value: " + paramValue);
       if (param.startsWith("userPic") || param.startsWith("userRole")) {
         parameterMap.put(param, paramValue);
+      } else if (param.equalsIgnoreCase("familyCommunityId")) {
+        familyCommunityId = paramValue;
       }
     }
-
+    
     Set<String> keys = parameterMap.keySet();
     Iterator<String> si = keys.iterator();
     while (si.hasNext()) {
@@ -194,7 +197,7 @@ public class EditFamilyInformationController {
     
     boolean childsGuardianshipInformationNotFound = false;
     try {
-      pyhDemoService.addPersonsAsFamilyMembers(personMap, userPic, communityId);
+      pyhDemoService.addPersonsAsFamilyMembers(personMap, userPic, familyCommunityId);
     } catch (FamilyNotFoundException fnfe) {
       log.error("EditFamilyInformationController.addUsersToFamily() caught FamilyNotFoundException!", fnfe);
       // show general error page

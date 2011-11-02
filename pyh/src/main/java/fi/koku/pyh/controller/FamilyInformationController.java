@@ -56,10 +56,8 @@ public class FamilyInformationController {
     model.addAttribute("currentFamilyId", fidm.getFamilyId());
     model.addAttribute("messages", pyhDemoService.getMessagesFor(user));
     model.addAttribute("sentMessages", pyhDemoService.getSentMessages(user));
-    
     model.addAttribute("supportEmailAddress", PyhConstants.KOKU_SUPPORT_EMAIL_ADDRESS);
     
     return "familyinformation";
   }
-  
 }

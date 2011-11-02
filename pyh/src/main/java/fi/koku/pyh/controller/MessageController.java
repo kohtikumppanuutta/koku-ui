@@ -8,7 +8,6 @@
 package fi.koku.pyh.controller;
 
 import javax.portlet.ActionResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
-
 import fi.koku.pyh.ui.common.PyhDemoService;
 
 /**
@@ -48,7 +46,8 @@ public class MessageController {
     
     String familyId = removeCurrentFamily ? currentFamilyId : null;
     
-    pyhDemoService.acceptOrRejectMembershipRequest(messageId, userPic /*approver*/, "approved", familyId);
+    // userPic is the person approving the request
+    pyhDemoService.acceptOrRejectMembershipRequest(messageId, userPic, "approved", familyId);
     // go to familyinformation.jsp
     response.setRenderParameter("action", "");
   }
@@ -62,9 +61,9 @@ public class MessageController {
     log.debug("userPic: " + userPic);
     log.debug("messageId: " + messageId);
     
-    pyhDemoService.acceptOrRejectMembershipRequest(messageId, userPic /*approver*/, "rejected", null);
+    // userPic is the person approving the request
+    pyhDemoService.acceptOrRejectMembershipRequest(messageId, userPic, "rejected", null);
     // go to familyinformation.jsp
     response.setRenderParameter("action", "");
   }
-
 }
