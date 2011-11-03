@@ -4,12 +4,12 @@
 	author: Mikko Hurula
 --%>
 
-<%@page import="fi.koku.pyh.model.CommunityRole"%>
+<%@page import="fi.koku.services.entity.customerservice.model.CommunityRole"%>
 <%@ include file="imports.jsp" %>
 
 <portlet:defineObjects />
 
-<c:set var="DEPENDANT" value="<%=fi.koku.pyh.model.CommunityRole.DEPENDANT%>" />
+<c:set var="DEPENDANT" value="<%=fi.koku.services.entity.customerservice.model.CommunityRole.DEPENDANT%>" />
 
 <portlet:renderURL var="editFamilyInformation">
 	<portlet:param name="action" value="editFamilyInformation" />

@@ -17,9 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.portlet.filter.userinfo.UserInfoUtils;
-import fi.koku.services.entity.customerservice.model.DependantsAndFamily;
-import fi.koku.services.entity.customerservice.model.FamilyIdAndFamilyMembers;
-import fi.koku.services.entity.customerservice.model.Person;
 import fi.koku.pyh.ui.common.PyhConstants;
 import fi.koku.services.entity.community.v1.CommunityServiceFactory;
 import fi.koku.services.entity.community.v1.CommunityServicePortType;
@@ -28,6 +25,10 @@ import fi.koku.services.entity.customer.v1.CustomerServicePortType;
 import fi.koku.services.entity.customer.v1.CustomerType;
 import fi.koku.services.entity.customerservice.helper.FamilyHelper;
 import fi.koku.services.entity.customerservice.helper.MessageHelper;
+import fi.koku.services.entity.customerservice.model.DependantsAndFamily;
+import fi.koku.services.entity.customerservice.model.FamilyIdAndFamilyMembers;
+import fi.koku.services.entity.customerservice.model.Person;
+
 
 /**
  * Controller for user's family information view.
