@@ -19,7 +19,7 @@ import fi.arcusys.koku.users.KokuUserService;
  */
 public class CitizenRequestHandle extends AbstractHandle {
 	
-	private static Logger LOG = Logger.getLogger(CitizenRequestHandle.class);
+	private final static Logger LOG = Logger.getLogger(CitizenRequestHandle.class);
 	
 	private CitizenRequestService rs;
 	private final KokuUserService userService;	

@@ -13,7 +13,7 @@ import fi.arcusys.koku.users.KokuUserService;
 
 public class KokuCitizenWarrantHandle extends AbstractWarrantHandle {
 
-	private Logger LOG = Logger.getLogger(KokuCitizenWarrantHandle.class);
+	private final static Logger LOG = Logger.getLogger(KokuCitizenWarrantHandle.class);
 
 	private final KokuCitizenWarrantService service;	
 	private final KokuUserService userService;	

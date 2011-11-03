@@ -17,8 +17,8 @@ import fi.koku.settings.KoKuPropertiesUtil;
 
 public class KokuEmployeeTietopyyntoService {
 		
-	private static final Logger LOG = Logger.getLogger(KokuEmployeeTietopyyntoService.class);		
-	public static final URL TIETOPYYNTO_SERVICE_WSDL_LOCATION;
+	private final static Logger LOG = Logger.getLogger(KokuEmployeeTietopyyntoService.class);		
+	public final static URL TIETOPYYNTO_SERVICE_WSDL_LOCATION;
 	
 	static {
 		try {

@@ -29,7 +29,7 @@ import fi.arcusys.koku.util.MessageUtil;
  */
 public class MessageHandle extends AbstractHandle {
 	
-	private Logger LOG = Logger.getLogger(MessageHandle.class);
+	private static final Logger LOG = Logger.getLogger(MessageHandle.class);
 	
 	MessageService ms;
 	

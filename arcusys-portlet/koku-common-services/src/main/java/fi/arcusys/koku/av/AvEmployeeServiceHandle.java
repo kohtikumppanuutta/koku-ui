@@ -34,7 +34,7 @@ import fi.arcusys.koku.util.MessageUtil;
  */
 public class AvEmployeeServiceHandle extends AbstractHandle {
 	
-	private Logger LOG = Logger.getLogger(AvEmployeeServiceHandle.class);
+	private static final Logger LOG = Logger.getLogger(AvEmployeeServiceHandle.class);
 	
 	private AvEmployeeService aes;
 	
