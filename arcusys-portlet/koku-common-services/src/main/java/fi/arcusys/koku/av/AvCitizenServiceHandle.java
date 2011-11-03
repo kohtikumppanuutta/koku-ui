@@ -25,7 +25,7 @@ import fi.arcusys.koku.util.MessageUtil;
  */
 public class AvCitizenServiceHandle extends AbstractHandle {
 	
-	private Logger LOG = Logger.getLogger(AvCitizenServiceHandle.class);
+	private static final Logger LOG = Logger.getLogger(AvCitizenServiceHandle.class);
 		
 	private AvCitizenService acs;
 	private String loginUserId;
