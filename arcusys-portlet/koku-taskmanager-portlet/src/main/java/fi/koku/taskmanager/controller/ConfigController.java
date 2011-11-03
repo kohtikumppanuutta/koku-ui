@@ -28,7 +28,6 @@ public class ConfigController {
 	private static final Logger LOG = Logger.getLogger(ConfigController.class);
 	@RenderMapping
 	public String showConfig(RenderRequest request, RenderResponse response, ModelMap modelmap) {	
-		
 		return VIEW_CONFIG;
 	}
 	
@@ -37,12 +36,12 @@ public class ConfigController {
 		 
         try { 
             PortletPreferences pref = request.getPreferences();       
-            String taskFilter = request.getParameter(PREF_TASK_FILTER);
-    		String notifFilter = request.getParameter(PREF_NOTIFICATION_FILTER);
-    		String refreshDuration = request.getParameter(PREF_REFRESH_DURATION);
-    		String openForm = request.getParameter(PREF_OPEN_FORM);
-    		String defaultTaskType = request.getParameter(PREF_DEFAULT_TASK_TYPE);
-    		String editable = request.getParameter(PREF_EDITABLE);
+            final String taskFilter = request.getParameter(PREF_TASK_FILTER);
+            final String notifFilter = request.getParameter(PREF_NOTIFICATION_FILTER);
+            final String refreshDuration = request.getParameter(PREF_REFRESH_DURATION);
+            final String openForm = request.getParameter(PREF_OPEN_FORM);
+            final String defaultTaskType = request.getParameter(PREF_DEFAULT_TASK_TYPE);
+            final String editable = request.getParameter(PREF_EDITABLE);
     		pref.setValue(PREF_TASK_FILTER, taskFilter);
     		pref.setValue(PREF_NOTIFICATION_FILTER, notifFilter);
     		pref.setValue(PREF_REFRESH_DURATION, refreshDuration);
@@ -51,11 +50,14 @@ public class ConfigController {
     		pref.setValue(PREF_EDITABLE, editable);
     		pref.store();
     		
+    		LOG.info("TaskManager - User '"+request.getRemoteUser()+"' saved new settings. TaskFilter: '"
+    				+taskFilter+"' NotificationFilter: '"+notifFilter+"' RefreshDuration: '"
+    				+refreshDuration+"' OpenForm: '"+openForm+"' DefaultTaskType: '"+defaultTaskType+"'");
+    		
     		response.setPortletMode(PortletMode.VIEW);
             response.setWindowState(WindowState.NORMAL);
- 
         } catch (Exception e) { 
-        	LOG.error("Configure exception");
+        	LOG.error("Configuration exception", e);
         }        
         
 	}	

@@ -12,10 +12,10 @@ import org.springframework.web.servlet.view.AbstractCachingViewResolver;
 public class AjaxViewResolver extends AbstractCachingViewResolver  {  
     
     public static final String AJAX_PREFIX = "ajax_";   
-    private View ajaxView = new AjaxView ();  
+    private View ajaxView = new AjaxView (); 
   
     @Override  
-    protected View loadView(String viewName, Locale locale) throws Exception {  
+    protected View loadView(String viewName, Locale locale) throws Exception {
         View view = null;  
         if (viewName.startsWith(AJAX_PREFIX)) {  
             view = ajaxView;  

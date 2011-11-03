@@ -22,7 +22,6 @@ public class FormController {
 	
 	@RenderMapping(params = "myaction=taskform")
 	public String showForm(RenderResponse response) {
-		
 		return VIEW_TASK_FORM;
 	}
 		
@@ -38,8 +37,6 @@ public class FormController {
 		request.getPortletSession().setAttribute(ATTR_TASK_TYPE, taskType, PortletSession.APPLICATION_SCOPE);
 		request.getPortletSession().setAttribute(ATTR_KEYWORD, keyword, PortletSession.APPLICATION_SCOPE);
 		request.getPortletSession().setAttribute(ATTR_ORDER_TYPE, orderType, PortletSession.APPLICATION_SCOPE);
-			
 		return tasklink;
 	}
-
 }
