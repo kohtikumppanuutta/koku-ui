@@ -8,15 +8,15 @@ public class KokuValtakirjapohja {
     
     
 	public KokuValtakirjapohja(fi.arcusys.koku.tiva.warrant.employeewarrantservice.Valtakirjapohja template) {
-		setTemplateId(template.getTemplateId());
-		setTemplateName(template.getTemplateName());
-		setDescription(template.getDescription());
+		templateId = template.getTemplateId();
+		templateName = template.getTemplateName();
+		description = template.getDescription();
 	}
 	
 	public KokuValtakirjapohja(fi.arcusys.koku.tiva.warrant.citizenwarrantservice.Valtakirjapohja template) {
-		setTemplateId(template.getTemplateId());
-		setTemplateName(template.getTemplateName());
-		setDescription(template.getDescription());
+		templateId = template.getTemplateId();
+		templateName = template.getTemplateName();
+		description = template.getDescription();
 	}
 	
 	public long getTemplateId() {

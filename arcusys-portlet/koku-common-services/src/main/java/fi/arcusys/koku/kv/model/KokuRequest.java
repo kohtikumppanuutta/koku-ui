@@ -30,19 +30,19 @@ public class KokuRequest {
 	}
 	
 	public KokuRequest(fi.arcusys.koku.kv.requestservice.RequestSummary reqSum) {
-		setRequestId(reqSum.getRequestId());
-		setSender(reqSum.getSender());
-		setSubject(reqSum.getSubject());
-		setRespondedAmount(reqSum.getRespondedAmount());
-		setMissedAmount(reqSum.getMissedAmout());
-		setCreationDate(MessageUtil.formatTaskDate(reqSum.getCreationDate()));
-		setEndDate(MessageUtil.formatTaskDate(reqSum.getEndDate()));
+		requestId = reqSum.getRequestId();
+		sender = reqSum.getSender();
+		subject = reqSum.getSubject();
+		respondedAmount = reqSum.getRespondedAmount();
+		missedAmount = reqSum.getMissedAmout();
+		creationDate = MessageUtil.formatTaskDate(reqSum.getCreationDate());
+		endDate = MessageUtil.formatTaskDate(reqSum.getEndDate());
 	}
 
 	public KokuRequest(fi.arcusys.koku.kv.requestservice.Request req) {
 		this((fi.arcusys.koku.kv.requestservice.RequestSummary) req);
-		setContent(req.getContent());
-		setUnrespondedList(req.getNotResponded());
+		content = req.getContent();
+		unrespondedList = req.getNotResponded();
 		
 		if (req.getResponses() != null) {
 			for (fi.arcusys.koku.kv.requestservice.Response response : req.getResponses()) {
@@ -111,31 +111,31 @@ public class KokuRequest {
 	public void setRequestType(String requestType) {
 		this.requestType = requestType;
 	}
-	public List<KokuResponse> getRespondedList() {
+	public final List<KokuResponse> getRespondedList() {
 		if (respondedList== null) {
 			respondedList = new ArrayList<KokuResponse>();
 		}
 		return respondedList;
 	}
-	public void setRespondedList(List<KokuResponse> respondedList) {
+	public final void setRespondedList(List<KokuResponse> respondedList) {
 		this.respondedList = respondedList;
 	}
-	public List<String> getUnrespondedList() {
+	public final List<String> getUnrespondedList() {
 		if (respondedList == null) {
 			respondedList = new ArrayList<KokuResponse>();
 		}
 		return unrespondedList;
 	}
-	public void setUnrespondedList(List<String> unrespondedList) {
+	public final void setUnrespondedList(List<String> unrespondedList) {
 		this.unrespondedList = unrespondedList;
 	}
-	public List<KokuQuestion> getQuestions() {
+	public final List<KokuQuestion> getQuestions() {
 		if (questions == null) {
 			questions = new ArrayList<KokuQuestion>();
 		}
 		return questions;
 	}
-	public void setQuestions(List<KokuQuestion> questions) {
+	public final void setQuestions(List<KokuQuestion> questions) {
 		this.questions = questions;
 	}
 	

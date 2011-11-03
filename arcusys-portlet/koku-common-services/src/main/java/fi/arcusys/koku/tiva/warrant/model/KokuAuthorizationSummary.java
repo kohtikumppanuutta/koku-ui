@@ -23,68 +23,68 @@ public class KokuAuthorizationSummary {
     private String localizedType;
         
 	public KokuAuthorizationSummary(fi.arcusys.koku.tiva.warrant.citizenwarrantservice.AuthorizationShortSummary authShortSummary) {
-		setAuthorizationId(authShortSummary.getAuthorizationId());
-		setReceiverUid(authShortSummary.getReceiverUid());
-		setSenderUid(authShortSummary.getSenderUid());
+		authorizationId = authShortSummary.getAuthorizationId();
+		receiverUid = authShortSummary.getReceiverUid();
+		senderUid = authShortSummary.getSenderUid();
 		setStatusAsString(authShortSummary.getStatus().toString());
-		setTargetPersonUid(authShortSummary.getTargetPersonUid());
+		targetPersonUid = authShortSummary.getTargetPersonUid();
 		setTemplateCitizen(authShortSummary.getTemplate());
 		if (authShortSummary.getValidTill() != null) {
-			setValidTill(MessageUtil.formatTaskDateByDay(authShortSummary.getValidTill()));
+			validTill = MessageUtil.formatTaskDateByDay(authShortSummary.getValidTill());
 		}
 	}
 	
 	public KokuAuthorizationSummary(fi.arcusys.koku.tiva.warrant.citizenwarrantservice.AuthorizationSummary authSummary) {
 		this((fi.arcusys.koku.tiva.warrant.citizenwarrantservice.AuthorizationShortSummary) authSummary);
-		setCreatedAt((MessageUtil.formatTaskDateByDay(authSummary.getCreatedAt())));
-		setReplyTill((MessageUtil.formatTaskDateByDay(authSummary.getReplyTill())));
-		setGivenAt(MessageUtil.formatTaskDateByDay(authSummary.getGivenAt()));
-		setCreatedAt(MessageUtil.formatTaskDateByDay(authSummary.getCreatedAt()));
-		setValidTill(MessageUtil.formatTaskDateByDay(authSummary.getValidTill()));
-		setReceiverUid(authSummary.getReceiverUid());
-		setSenderUid(authSummary.getSenderUid());
+		createdAt = MessageUtil.formatTaskDateByDay(authSummary.getCreatedAt());
+		replyTill = MessageUtil.formatTaskDateByDay(authSummary.getReplyTill());		
+		givenAt = MessageUtil.formatTaskDateByDay(authSummary.getGivenAt());
+		createdAt = MessageUtil.formatTaskDateByDay(authSummary.getCreatedAt());
+		validTill = MessageUtil.formatTaskDateByDay(authSummary.getValidTill());
+		receiverUid = authSummary.getReceiverUid();
+		senderUid = authSummary.getSenderUid();
 		setStatusAsString(authSummary.getStatus().toString());
 		setTypeAsString(authSummary.getType().toString());
 	}
 
 	public KokuAuthorizationSummary(fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationShortSummary authShortSummary) {
-		setAuthorizationId(authShortSummary.getAuthorizationId());
-		setReceiverUid(authShortSummary.getReceiverUid());
-		setSenderUid(authShortSummary.getSenderUid());
+		authorizationId = authShortSummary.getAuthorizationId();
+		receiverUid = authShortSummary.getReceiverUid();
+		senderUid = authShortSummary.getSenderUid();
 		setStatusAsString(authShortSummary.getStatus().toString());
-		setTargetPersonUid(authShortSummary.getTargetPersonUid());
+		targetPersonUid = authShortSummary.getTargetPersonUid();
 		setTemplateEmployee(authShortSummary.getTemplate());
 		if (authShortSummary.getValidTill() != null) {
-			setValidTill(MessageUtil.formatTaskDateByDay(authShortSummary.getValidTill()));			
+			validTill = MessageUtil.formatTaskDateByDay(authShortSummary.getValidTill());
 		}
 	}
 	
 	public KokuAuthorizationSummary(fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationSummary authSummary) {
 		this((fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationShortSummary) authSummary);
-		setCreatedAt((MessageUtil.formatTaskDateByDay(authSummary.getCreatedAt())));
-		setReplyTill((MessageUtil.formatTaskDateByDay(authSummary.getReplyTill())));		
-		setGivenAt(MessageUtil.formatTaskDateByDay(authSummary.getGivenAt()));
-		setCreatedAt(MessageUtil.formatTaskDateByDay(authSummary.getCreatedAt()));
-		setValidTill(MessageUtil.formatTaskDateByDay(authSummary.getValidTill()));
-		setReceiverUid(authSummary.getReceiverUid());
-		setSenderUid(authSummary.getSenderUid());
+		createdAt = MessageUtil.formatTaskDateByDay(authSummary.getCreatedAt());
+		replyTill = MessageUtil.formatTaskDateByDay(authSummary.getReplyTill());		
+		givenAt = MessageUtil.formatTaskDateByDay(authSummary.getGivenAt());
+		createdAt = MessageUtil.formatTaskDateByDay(authSummary.getCreatedAt());
+		validTill = MessageUtil.formatTaskDateByDay(authSummary.getValidTill());
+		receiverUid = authSummary.getReceiverUid();
+		senderUid = authSummary.getSenderUid();
 		setStatusAsString(authSummary.getStatus().toString());
 		setTypeAsString(authSummary.getType().toString());
 	}
 	
-	private void setStatusAsString(String status) {
+	private final void setStatusAsString(String status) {
 		setStatus(KokuAuthorizationStatus.valueOf(status));
 	}
 	
-	private void setTypeAsString(String type) {
+	private final void setTypeAsString(String type) {
 		setType(KokuAuthorizationCreateType.valueOf(type));
 	}	
 
-	private void setTemplateEmployee(fi.arcusys.koku.tiva.warrant.employeewarrantservice.Valtakirjapohja template) {
+	private final void setTemplateEmployee(fi.arcusys.koku.tiva.warrant.employeewarrantservice.Valtakirjapohja template) {
 		setTemplate(new KokuValtakirjapohja(template));
 	}
 
-	private void setTemplateCitizen(fi.arcusys.koku.tiva.warrant.citizenwarrantservice.Valtakirjapohja template) {
+	private final void setTemplateCitizen(fi.arcusys.koku.tiva.warrant.citizenwarrantservice.Valtakirjapohja template) {
 		setTemplate(new KokuValtakirjapohja(template));		
 	}
 	
