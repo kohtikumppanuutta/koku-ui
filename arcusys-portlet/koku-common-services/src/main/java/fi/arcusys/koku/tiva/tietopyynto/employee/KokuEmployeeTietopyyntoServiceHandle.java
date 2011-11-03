@@ -19,24 +19,24 @@ import fi.arcusys.koku.util.MessageUtil;
 
 public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHandle {
 	
-	private Logger LOG = Logger.getLogger(KokuEmployeeTietopyyntoServiceHandle.class);
+	private final static Logger LOG = Logger.getLogger(KokuEmployeeTietopyyntoServiceHandle.class);
 
 	private final KokuEmployeeTietopyyntoService service;	
 	private final KokuUserService userService;	
 	
 	/* SearchMap key values */
-	private final int MAP_INIT_SIZE					= 7;
-	private final String CREATED_FROM 				= "createdFrom";
-	private final String CREATED_TO 				= "createdTo";
-	private final String REPLIED_FROM 				= "repliedFrom";
-	private final String REPLIED_TO 				= "repliedTo";
-	private final String SENDER_UID 				= "senderUid";
-	private final String RECIEVER_UID 				= "recieverUid";	
-	private final String TARGET_PERSON_UID 			= "targetPersonUid";
-	private final String INFORMATION				= "searchFromTietosisalto";
-	private final String FREE_TEXT_SEARCH			= "freeTextSearch";
+	private final static int MAP_INIT_SIZE					= 7;
+	private final static String CREATED_FROM 				= "createdFrom";
+	private final static String CREATED_TO 					= "createdTo";
+	private final static String REPLIED_FROM 				= "repliedFrom";
+	private final static String REPLIED_TO 					= "repliedTo";
+	private final static String SENDER_UID 					= "senderUid";
+	private final static String RECIEVER_UID 				= "recieverUid";	
+	private final static String TARGET_PERSON_UID 			= "targetPersonUid";
+	private final static String INFORMATION					= "searchFromTietosisalto";
+	private final static String FREE_TEXT_SEARCH			= "freeTextSearch";
 		
-	private final String REGEX_DATE					= "\\.";
+	private final static String REGEX_DATE					= "\\.";
 	
 	/**
 	 * Constructor and initialization
