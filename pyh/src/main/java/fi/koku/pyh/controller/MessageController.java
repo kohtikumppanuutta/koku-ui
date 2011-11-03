@@ -61,14 +61,14 @@ public class MessageController {
       communityService.opUpdateMembershipApproval(membershipApproval, communityAuditInfoType);
       Log.getInstance().update(userPic, "", "pyh.membership.approval", "Membership approval status for user " + userPic + " was set to '" + CommunityServiceConstants.MEMBERSHIP_REQUEST_STATUS_APPROVED + "'");
       
-      if (familyId != null) {
+      if (familyId != null && !"".equals(familyId)) {
         communityService.opDeleteCommunity(familyId, communityAuditInfoType);
         Log.getInstance().update(userPic, "", "pyh.family.community", "Removing family " + familyId);
       }
     } catch (ServiceFault fault) {
       log.error("PyhDemoService.acceptMembershipRequest: opUpdateMembershipApproval raised a ServiceFault", fault);
     }
-
+    
     // go to familyinformation.jsp
     response.setRenderParameter("action", "");
   }

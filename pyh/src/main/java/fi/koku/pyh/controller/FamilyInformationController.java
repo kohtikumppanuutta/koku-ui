@@ -23,6 +23,7 @@ import fi.koku.services.entity.community.v1.CommunityServicePortType;
 import fi.koku.services.entity.customer.v1.CustomerServiceFactory;
 import fi.koku.services.entity.customer.v1.CustomerServicePortType;
 import fi.koku.services.entity.customer.v1.CustomerType;
+import fi.koku.services.entity.customer.v1.ServiceFault;
 import fi.koku.services.entity.customerservice.helper.FamilyHelper;
 import fi.koku.services.entity.customerservice.helper.MessageHelper;
 import fi.koku.services.entity.customerservice.model.DependantsAndFamily;
@@ -61,9 +62,10 @@ public class FamilyInformationController {
   
   /**
    * View family information.
+   * @throws fi.koku.services.entity.customer.v1.ServiceFault 
    */
   @RenderMapping
-  public String render(Model model, RenderRequest request) {
+  public String render(Model model, RenderRequest request) throws fi.koku.services.entity.customer.v1.ServiceFault {
     String userPic = UserInfoUtils.getPicFromSession(request);
     
     CustomerType customer;
@@ -71,12 +73,7 @@ public class FamilyInformationController {
     customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
     customerAuditInfoType.setUserId(userPic);
     
-    try {
-      customer = customerService.opGetCustomer(userPic, customerAuditInfoType);
-    } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
-      log.error("FamilyInformationController.render: opGetCustomer raised a ServiceFault", fault);
-      return null;
-    }
+    customer = customerService.opGetCustomer(userPic, customerAuditInfoType);
     
     log.debug("FamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
     log.debug("--");

@@ -112,7 +112,6 @@ public class EditFamilyInformationController {
     }
     
     log.debug("EditFamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
-    log.debug("--");
     Person user = new Person(customer);
     
     DependantsAndFamily daf = familyHelper.getDependantsAndFamily(userPic);
@@ -224,7 +223,7 @@ public class EditFamilyInformationController {
   }
   
   @ActionMapping(params = "action=addUsersToFamily")
-  public void addUsersToFamily(ActionRequest request, ActionResponse response, PortletSession session) {
+  public void addUsersToFamily(ActionRequest request, ActionResponse response, PortletSession session) throws FamilyNotFoundException {
     String userPic = UserInfoUtils.getPicFromSession(request);
     
     HashMap<String, String> personMap = new HashMap<String, String>();
@@ -233,19 +232,11 @@ public class EditFamilyInformationController {
     String personPicFromJsp = request.getParameter("userPic");
     String personRoleFromJsp = request.getParameter("userRole");
     
-    // TODO: remove
-    log.info("ADDING PERSON: ");
-    log.info("familyCommunityId: " + familyCommunityId);
-    log.info("personPic: " + personPicFromJsp);
-    log.info("personRole: " + personRoleFromJsp);
-    
     personMap.put(personPicFromJsp, personRoleFromJsp);
     
     boolean childsGuardianshipInformationNotFound = false;
     try {
       
-      
-      //pyhDemoService.addPersonsAsFamilyMembers(personMap, userPic, familyCommunityId);
       if (log.isDebugEnabled()) {
         log.debug("addPersonsAsFamilyMembers(): adding persons:");
         Set<String> set = personMap.keySet();
@@ -321,10 +312,6 @@ public class EditFamilyInformationController {
         }
       }
       
-    } catch (FamilyNotFoundException fnfe) {
-      log.error("EditFamilyInformationController.addUsersToFamily() caught FamilyNotFoundException!", fnfe);
-      // show general error page
-      throw new RuntimeException(fnfe);
     } catch (GuardianForChildNotFoundException gnfe) {
       log.error("EditFamilyInformationController.addUsersToFamily() caught GuardianForChildNotFoundException!", gnfe);
       // show error message in JSP view
