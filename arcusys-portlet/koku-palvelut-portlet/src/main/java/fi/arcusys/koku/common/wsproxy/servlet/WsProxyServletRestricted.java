@@ -28,7 +28,7 @@ import org.apache.axis2.client.ServiceClient;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import fi.arcusys.koku.util.KokuWebServices;
+import fi.arcusys.koku.util.KokuWebServicesJS;
 import fi.koku.settings.KoKuPropertiesUtil;
 
 public class WsProxyServletRestricted extends HttpServlet implements Servlet {
@@ -38,7 +38,7 @@ public class WsProxyServletRestricted extends HttpServlet implements Servlet {
 	private static final Log LOG = LogFactory.getLog(WsProxyServletRestricted.class);
 
     static {    	
-    	for (KokuWebServices key : KokuWebServices.values()) {
+    	for (KokuWebServicesJS key : KokuWebServicesJS.values()) {
     		String value = KoKuPropertiesUtil.get(key.value());
     		if (value == null) {
     			throw new ExceptionInInitializerError("Coulnd't find property '"+ key.value()+"'");
