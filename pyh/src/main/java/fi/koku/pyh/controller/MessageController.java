@@ -10,13 +10,18 @@ package fi.koku.pyh.controller;
 import javax.portlet.ActionResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
-import fi.koku.pyh.ui.common.PyhDemoService;
+
+import fi.koku.pyh.ui.common.Log;
+import fi.koku.pyh.ui.common.PyhConstants;
+import fi.koku.services.entity.community.v1.AuditInfoType;
+import fi.koku.services.entity.community.v1.CommunityServiceConstants;
+import fi.koku.services.entity.community.v1.CommunityServiceFactory;
+import fi.koku.services.entity.community.v1.CommunityServicePortType;
+import fi.koku.services.entity.community.v1.MembershipApprovalType;
 
 /**
  * Controller for handling acceptance or rejection of membership request messages.
@@ -24,30 +29,47 @@ import fi.koku.pyh.ui.common.PyhDemoService;
  * @author hurulmi
  *
  */
-
 @Controller(value = "messageController")
 @RequestMapping(value = "VIEW")
 public class MessageController {
   
   private static Logger log = LoggerFactory.getLogger(MessageController.class);
   
-  @Autowired
-  @Qualifier(value = "pyhDemoService")
-  private PyhDemoService pyhDemoService;
+  private CommunityServicePortType communityService;  
+  
+  public MessageController() {
+    CommunityServiceFactory communityServiceFactory = new CommunityServiceFactory(PyhConstants.COMMUNITY_SERVICE_USER_ID, PyhConstants.COMMUNITY_SERVICE_PASSWORD, PyhConstants.COMMUNITY_SERVICE_ENDPOINT);
+    communityService = communityServiceFactory.getCommunityService();    
+  }
   
   /**
    * Call service to accept a request.
    */
   @ActionMapping(params = "action=acceptMessage")
-  public void accept(@RequestParam String userPic, @RequestParam String messageId, @RequestParam String currentFamilyId, @RequestParam boolean removeCurrentFamily, ActionResponse response) {
-    log.debug("calling MessageController.accept() with parameters:");
-    log.debug("userPic: " + userPic);
-    log.debug("messageId: " + messageId);
-    
+  public void accept(@RequestParam String userPic, @RequestParam String messageId, @RequestParam String currentFamilyId, @RequestParam boolean removeCurrentFamily, ActionResponse response) {    
     String familyId = removeCurrentFamily ? currentFamilyId : null;
     
+    MembershipApprovalType membershipApproval = new MembershipApprovalType();
     // userPic is the person approving the request
-    pyhDemoService.acceptOrRejectMembershipRequest(messageId, userPic, "approved", familyId);
+    membershipApproval.setApproverPic(userPic);
+    membershipApproval.setMembershipRequestId(messageId);
+    membershipApproval.setStatus(CommunityServiceConstants.MEMBERSHIP_REQUEST_STATUS_APPROVED);
+        
+    AuditInfoType communityAuditInfoType = CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic);
+    
+    try {
+      communityService.opUpdateMembershipApproval(membershipApproval, communityAuditInfoType);
+      Log.getInstance().update(userPic, "", "pyh.membership.approval", "Membership approval status for user " + userPic + " was set to '" + CommunityServiceConstants.MEMBERSHIP_REQUEST_STATUS_APPROVED + "'");
+      
+      if (familyId != null) {
+        communityService.opDeleteCommunity(familyId, communityAuditInfoType);
+        Log.getInstance().update(userPic, "", "pyh.family.community", "Removing family " + familyId);
+      }
+    } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
+      // TODO: error handling
+      log.error("PyhDemoService.acceptMembershipRequest: opUpdateMembershipApproval raised a ServiceFault", fault);
+    }
+
     // go to familyinformation.jsp
     response.setRenderParameter("action", "");
   }
@@ -57,12 +79,28 @@ public class MessageController {
    */
   @ActionMapping(params = "action=rejectMessage")
   public void reject(@RequestParam String userPic, @RequestParam String messageId, ActionResponse response) {
-    log.debug("calling MessageController.reject() with parameters:");
-    log.debug("userPic: " + userPic);
-    log.debug("messageId: " + messageId);
-    
+    MembershipApprovalType membershipApproval = new MembershipApprovalType();
     // userPic is the person approving the request
-    pyhDemoService.acceptOrRejectMembershipRequest(messageId, userPic, "rejected", null);
+    membershipApproval.setApproverPic(userPic);
+    membershipApproval.setMembershipRequestId(messageId);
+    membershipApproval.setStatus(CommunityServiceConstants.MEMBERSHIP_REQUEST_STATUS_REJECTED);
+    
+    try {
+      communityService.opUpdateMembershipApproval(membershipApproval, CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
+      Log.getInstance().update(userPic, "", "pyh.membership.approval", "Membership approval status for user " + userPic + " was set to '" + CommunityServiceConstants.MEMBERSHIP_REQUEST_STATUS_REJECTED + "'");
+      
+      // TODO: check this, seems familyId was always null when this code were in the PyhDemoService
+//      if (familyId != null) {
+//        communityService.opDeleteCommunity(familyId, communityAuditInfoType);
+//        Log.getInstance().update(userPic, "", "pyh.family.community", "Removing family " + familyId);
+//        
+//      }
+      
+    } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
+      // TODO: error handling
+      log.error("PyhDemoService.acceptMembershipRequest: opUpdateMembershipApproval raised a ServiceFault", fault);
+    }    
+    
     // go to familyinformation.jsp
     response.setRenderParameter("action", "");
   }
