@@ -2,7 +2,7 @@ package fi.arcusys.koku.util;
 
 public enum KokuWebServicesJS {
 	
-	APPOINTMENT_PROCESSING_SERVICE("KokuAppointMentProcessingService"),	
+	APPOINTMENT_PROCESSING_SERVICE("KokuAppointmentProcessingService"),	
 	SUOSTUMUS_PROCESSING_SERVICE("KokuSuostumusProcessingService"),
 	VALTAKIRJA_PROCESSING_SERVICE("KokuValtakirjaProcessingService"),
 	TIETOPYYNTO_PROCESSING_SERVICE("KokuTietopyyntoProcessingService"),
