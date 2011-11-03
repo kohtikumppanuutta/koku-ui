@@ -94,7 +94,8 @@ public class EditFamilyInformationController {
   }
   
   @RenderMapping(params = "action=editFamilyInformation")
-  public String render(RenderRequest request, Model model) {
+  public String render(RenderRequest request, Model model) throws fi.koku.services.entity.customer.v1.ServiceFault,
+    fi.koku.services.entity.community.v1.ServiceFault {
     String userPic = UserInfoUtils.getPicFromSession(request);
     
     // TODO: hae perhe ja huoltajuusyhteisöt vain kertaalleen
@@ -104,12 +105,7 @@ public class EditFamilyInformationController {
     customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
     customerAuditInfoType.setUserId(userPic);
     
-    try {
-      customer = customerService.opGetCustomer(userPic, customerAuditInfoType);
-    } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
-      log.error("EditFamilyInformationController.render: opGetCustomer raised a ServiceFault", fault);
-      return null;
-    }
+    customer = customerService.opGetCustomer(userPic, customerAuditInfoType);
     
     log.debug("EditFamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
     Person user = new Person(customer);
@@ -139,7 +135,7 @@ public class EditFamilyInformationController {
   
   // this render method does not clear the search results
   @RenderMapping(params = "action=editFamilyInformationWithSearchResults")
-  public String renderWithSearchResults(RenderRequest request, Model model) {
+  public String renderWithSearchResults(RenderRequest request, Model model) throws fi.koku.services.entity.customer.v1.ServiceFault {
     String userPic = UserInfoUtils.getPicFromSession(request);
     
     String surname = request.getParameter("surname");
@@ -151,12 +147,7 @@ public class EditFamilyInformationController {
     customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
     customerAuditInfoType.setUserId(userPic);
     
-    try {
-      customer = customerService.opGetCustomer(userPic, customerAuditInfoType);
-    } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
-      log.error("EditFamilyInformationController.render: opGetCustomer raised a ServiceFault", fault);
-      return null;
-    }
+    customer = customerService.opGetCustomer(userPic, customerAuditInfoType);
     
     log.debug("EditFamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
     log.debug("--");
@@ -182,7 +173,8 @@ public class EditFamilyInformationController {
   }
   
   @ActionMapping(params = "action=addDependantAsFamilyMember")
-  public void addDependantAsFamilyMember(ActionRequest request, @RequestParam String dependantPic, ActionResponse response) {
+  public void addDependantAsFamilyMember(ActionRequest request, @RequestParam String dependantPic, ActionResponse response) 
+    throws TooManyFamiliesException, FamilyNotFoundException, fi.koku.services.entity.community.v1.ServiceFault {
     String userPic = UserInfoUtils.getPicFromSession(request);
     
     insertDependantToFamily(userPic, dependantPic, CommunityRole.CHILD);
@@ -190,15 +182,17 @@ public class EditFamilyInformationController {
   }
 
   @ActionMapping(params = "action=removeFamilyMember")
-  public void removeFamilyMember(ActionRequest request, @RequestParam String familyMemberPic, ActionResponse response) {
+  public void removeFamilyMember(ActionRequest request, @RequestParam String familyMemberPic, ActionResponse response)
+    throws fi.koku.services.entity.community.v1.ServiceFault {
     String userPic = UserInfoUtils.getPicFromSession(request);
     
     removeFamilyMember(familyMemberPic, userPic);
     response.setRenderParameter("action", "editFamilyInformation");
   }
-
+  
   @ActionMapping(params = "action=removeDependant")
-  public void removeDependant(ActionRequest request, @RequestParam String familyMemberPic, ActionResponse response) {
+  public void removeDependant(ActionRequest request, @RequestParam String familyMemberPic, ActionResponse response)
+    throws fi.koku.services.entity.community.v1.ServiceFault {
     String userPic = UserInfoUtils.getPicFromSession(request);
     
     for (Dependant d : familyHelper.getDependantsAndFamily(userPic).getDependants()) {
@@ -223,7 +217,8 @@ public class EditFamilyInformationController {
   }
   
   @ActionMapping(params = "action=addUsersToFamily")
-  public void addUsersToFamily(ActionRequest request, ActionResponse response, PortletSession session) throws FamilyNotFoundException {
+  public void addUsersToFamily(ActionRequest request, ActionResponse response, PortletSession session) throws FamilyNotFoundException,
+    TooManyFamiliesException, fi.koku.services.entity.customer.v1.ServiceFault, fi.koku.services.entity.community.v1.ServiceFault {
     String userPic = UserInfoUtils.getPicFromSession(request);
     
     HashMap<String, String> personMap = new HashMap<String, String>();
@@ -261,12 +256,7 @@ public class EditFamilyInformationController {
       customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
       customerAuditInfoType.setUserId(userPic);
       
-      try {
-        customer = customerService.opGetCustomer(userPic, customerAuditInfoType);
-      } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
-        log.error("EditFamilyInformationController.render: opGetCustomer raised a ServiceFault", fault);
-        throw new RuntimeException(fault);
-      }
+      customer = customerService.opGetCustomer(userPic, customerAuditInfoType);
       Person user = new Person(customer);
       // <--
       
@@ -295,6 +285,9 @@ public class EditFamilyInformationController {
           mailMessage.setTo(PyhConstants.KOKU_SUPPORT_EMAIL_ADDRESS);
           mailMessage.setSubject(messageSubject);
           mailMessage.setText(messageText);
+          
+          // TODO: miten tässä jos syntyy MailException mutta halutaan heittää myös GuardianForChildNotFoundException?
+          
           try {
             this.mailSender.send(mailMessage);
           } catch (MailException me) {
@@ -302,7 +295,6 @@ public class EditFamilyInformationController {
           }
           
           Log.getInstance().send(userPic, "", "pyh.membership.request", "Cannot send approval request because guardian for child " + memberToAddPic + " is not found");
-          
           throw new GuardianForChildNotFoundException("Guardian for child (pic: " + memberToAddPic + ") not found!");
           
         } else if (recipients.size() == 0) {
@@ -313,7 +305,8 @@ public class EditFamilyInformationController {
       }
       
     } catch (GuardianForChildNotFoundException gnfe) {
-      log.error("EditFamilyInformationController.addUsersToFamily() caught GuardianForChildNotFoundException!", gnfe);
+      log.error("EditFamilyInformationController.addUsersToFamily() caught GuardianForChildNotFoundException: cannot send membership " +
+      		"request because guardian for the child was not found. The child was not added into the family.");
       // show error message in JSP view
       childsGuardianshipInformationNotFound = true;
     }
@@ -328,7 +321,8 @@ public class EditFamilyInformationController {
    * Selects persons (PICs) to whom send the confirmation message for a operation, for example adding a dependant 
    * into a family.
    */
-  private List<String> generateRecipients(String memberToAddPic, Person user, CommunityRole role, String currentUserPic) {
+  private List<String> generateRecipients(String memberToAddPic, Person user, CommunityRole role, String currentUserPic) 
+    throws fi.koku.services.entity.community.v1.ServiceFault, TooManyFamiliesException, FamilyNotFoundException {
     List<String> recipientPics = new ArrayList<String>();
     
     if (CommunityRole.CHILD.equals(role)) {
@@ -345,12 +339,7 @@ public class EditFamilyInformationController {
       communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
       communityAuditInfoType.setUserId(currentUserPic);
       
-      try {
-        communitiesType = communityService.opQueryCommunities(communityCriteria, communityAuditInfoType);
-      }
-      catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
-        log.error("PyhDemoService.generateRecipients: opQueryCommunities raised a ServiceFault", fault);
-      }
+      communitiesType = communityService.opQueryCommunities(communityCriteria, communityAuditInfoType);
       
       if (communitiesType != null) {
         List<CommunityType> communities = communitiesType.getCommunity();
@@ -371,30 +360,18 @@ public class EditFamilyInformationController {
     } else {
       
       MemberType familyMember = null;
-      
-      try {
-        familyMember = familyHelper.getFamily(currentUserPic).getOtherParent(user.getPic());
-      } catch (TooManyFamiliesException tme) {
-        log.error("PyhDemoService.generateRecipients(): getFamily(userPic) threw a TooManyFamiliesException!", tme);
-        log.error(tme.getMessage());
-      } catch (FamilyNotFoundException fnfe) {
-        log.error("PyhDemoService.generateRecipients(): getFamily(userPic) threw a FamilyNotFoundException!");
-        log.error(fnfe.getMessage());
-      }
+      familyMember = familyHelper.getFamily(currentUserPic).getOtherParent(user.getPic());
       
       if (familyMember != null) {
         recipientPics.add(familyMember.getPic());
       }
-      Family family = null;
       
+      Family family = null;
       try {
         family = familyHelper.getFamily(memberToAddPic);
-      } catch (TooManyFamiliesException tme) {
-        log.error("PyhDemoService.generateRecipients(): getFamily(targetPic) threw a TooManyFamiliesException!", tme);
-        log.error(tme.getMessage());
       } catch (FamilyNotFoundException fnfe) {
-        log.error("PyhDemoService.generateRecipients(): getFamily(targetPic) threw a FamilyNotFoundException!");
-        log.error(fnfe.getMessage());
+        // person to be added as family member has no family,
+        // continue normally
       }
       
       if (family != null) {
@@ -420,20 +397,10 @@ public class EditFamilyInformationController {
   /**
    * Inserts a new member into a family community.
    */
-  private void insertInto(String toFamilyPic, String memberToAddPic, CommunityRole role) {
+  private void insertInto(String toFamilyPic, String memberToAddPic, CommunityRole role) throws TooManyFamiliesException, 
+    FamilyNotFoundException, fi.koku.services.entity.community.v1.ServiceFault {
     Family family = null;
-    
-    try {
-      family = familyHelper.getFamily(toFamilyPic);
-    } catch (TooManyFamiliesException tme) {
-      log.error("PyhDemoService.insertInto: getFamily(toFamilyPic) threw a TooManyFamiliesException!", tme);
-      log.error(tme.getMessage());
-      return;
-    } catch (FamilyNotFoundException fnfe) {
-      log.error("PyhDemoService.insertInto: getFamily(toFamilyPic) threw a FamilyNotFoundException!");
-      log.error(fnfe.getMessage());
-      return;
-    }
+    family = familyHelper.getFamily(toFamilyPic);
     
     if (family != null) {
       family.addFamilyMember(memberToAddPic, role.getRoleID());
@@ -442,12 +409,8 @@ public class EditFamilyInformationController {
       communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
       communityAuditInfoType.setUserId(toFamilyPic); // toFamilyPic is current user's pic
       
-      try {
-        communityService.opUpdateCommunity(family.getCommunity(), communityAuditInfoType);
-        Log.getInstance().update(toFamilyPic, "", "pyh.family.community", "Adding person " + memberToAddPic + " into family");
-      } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
-        log.error("PyhDemoService.insertInto: opUpdateCommunity raised a ServiceFault", fault);
-      }
+      communityService.opUpdateCommunity(family.getCommunity(), communityAuditInfoType);
+      Log.getInstance().update(toFamilyPic, "", "pyh.family.community", "Adding person " + memberToAddPic + " into family");
       
       if (log.isDebugEnabled()) {
         log.debug("insertInto(): members after insert:");
@@ -461,7 +424,7 @@ public class EditFamilyInformationController {
     }
   }
   
-  public String addFamily(String userPic) {
+  public String addFamily(String userPic) throws fi.koku.services.entity.community.v1.ServiceFault {
     log.debug("calling addFamily() with parameter:");
     log.debug("userPic: " + userPic);
     
@@ -481,32 +444,20 @@ public class EditFamilyInformationController {
     community.setType(CommunityServiceConstants.COMMUNITY_TYPE_FAMILY);
     
     String communityId = null;
-    try {
-      communityId = communityService.opAddCommunity(community, communityAuditInfoType);
-      Log.getInstance().update(userPic, "", "pyh.family.community", "Adding family for user " + userPic);
-    } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
-      log.error("PyhDemoService.addFamily: opAddCommunity raised a ServiceFault", fault);
-    }
+    communityId = communityService.opAddCommunity(community, communityAuditInfoType);
+    Log.getInstance().update(userPic, "", "pyh.family.community", "Adding family for user " + userPic);
+    
     return communityId;
   }
   
   /**
    * Inserts a dependant into a family.
    */
-  public void insertDependantToFamily(String userPic, String dependantPic, CommunityRole role) {
-    Family family = null;
+  public void insertDependantToFamily(String userPic, String dependantPic, CommunityRole role) throws TooManyFamiliesException, 
+    FamilyNotFoundException, fi.koku.services.entity.community.v1.ServiceFault {
     
-    try {
-      family = familyHelper.getFamily(userPic);
-    } catch (TooManyFamiliesException tme) {
-      log.error("PyhDemoService.insertDependantToFamily: getFamily(userPic) threw a TooManyFamiliesException!", tme);
-      log.error(tme.getMessage());
-      return;
-    } catch (FamilyNotFoundException fnfe) {
-      log.error("PyhDemoService.insertDependantToFamily: getFamily(userPic) threw a FamilyNotFoundException!");
-      log.error(fnfe.getMessage());
-      return;
-    }
+    Family family = null;
+    family = familyHelper.getFamily(userPic);
     
     if (family != null) {
       family.addFamilyMember(dependantPic, role.getRoleID());
@@ -515,12 +466,8 @@ public class EditFamilyInformationController {
       communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
       communityAuditInfoType.setUserId(userPic);
       
-      try {
-        communityService.opUpdateCommunity(family.getCommunity(), communityAuditInfoType);
-        Log.getInstance().update(userPic, "", "pyh.family.community", "Adding dependant " + dependantPic + " into family");
-      } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
-        log.error("PyhDemoService.insertDependantToFamily: opUpdateCommunity raised a ServiceFault", fault);
-      }
+      communityService.opUpdateCommunity(family.getCommunity(), communityAuditInfoType);
+      Log.getInstance().update(userPic, "", "pyh.family.community", "Adding dependant " + dependantPic + " into family");
       
       if (log.isDebugEnabled()) {
         log.debug("insertDependantToFamily(): family members after insert:");
@@ -537,7 +484,7 @@ public class EditFamilyInformationController {
   /**
    * Removes a family member from a family community.
    */
-  public void removeFamilyMember(String familyMemberPic, String userPic) {
+  public void removeFamilyMember(String familyMemberPic, String userPic) throws fi.koku.services.entity.community.v1.ServiceFault {
     CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
     communityQueryCriteria.setCommunityType(CommunityServiceConstants.COMMUNITY_TYPE_FAMILY);
     
@@ -550,11 +497,7 @@ public class EditFamilyInformationController {
     communityAuditInfoType.setUserId(userPic);
     CommunitiesType communitiesType = null;
     
-    try {
-      communitiesType = communityService.opQueryCommunities(communityQueryCriteria, communityAuditInfoType);
-    } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
-      log.error("PyhDemoService.removeFamilyMember: opGetCommunity raised a ServiceFault", fault);
-    }
+    communitiesType = communityService.opQueryCommunities(communityQueryCriteria, communityAuditInfoType);
     
     if (communitiesType != null) {
       List<CommunityType> communityType = communitiesType.getCommunity();
@@ -569,14 +512,10 @@ public class EditFamilyInformationController {
           MemberType member = mi.next();
           if (member.getPic().equals(familyMemberPic) && isMemberOfCommunity(userPic, members)) {
             members.remove(member);
-            try {
-              
-              // TODO: place outside the loop
-              communityService.opUpdateCommunity(community, communityAuditInfoType);
-              Log.getInstance().update(userPic, "", "pyh.family.community", "Removing family member " + familyMemberPic + " from family");
-            } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
-              log.error("PyhDemoService.removeFamilyMember: opUpdateCommunity raised a ServiceFault", fault);
-            }
+            
+            // TODO: place outside the loop
+            communityService.opUpdateCommunity(community, communityAuditInfoType);
+            Log.getInstance().update(userPic, "", "pyh.family.community", "Removing family member " + familyMemberPic + " from family");
             
             if (log.isDebugEnabled()) {
               log.debug("removeFamilyMember(): members after removing:");
