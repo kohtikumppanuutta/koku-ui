@@ -24,6 +24,9 @@ import fi.koku.pyh.model.FamilyIdAndFamilyMembers;
 import fi.koku.pyh.model.Person;
 import fi.koku.pyh.ui.common.PyhConstants;
 import fi.koku.pyh.ui.common.PyhDemoService;
+import fi.koku.services.entity.customer.v1.CustomerServiceFactory;
+import fi.koku.services.entity.customer.v1.CustomerServicePortType;
+import fi.koku.services.entity.customer.v1.CustomerType;
 
 /**
  * Controller for user's family information view.
@@ -41,12 +44,34 @@ public class FamilyInformationController {
   @Autowired
   @Qualifier(value = "pyhDemoService")
   private PyhDemoService pyhDemoService;
-
+  
+  private CustomerServicePortType customerService;
+  
+  public FamilyInformationController() {
+    CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory(PyhConstants.CUSTOMER_SERVICE_USER_ID, PyhConstants.CUSTOMER_SERVICE_PASSWORD, PyhConstants.CUSTOMER_SERVICE_ENDPOINT);
+    customerService = customerServiceFactory.getCustomerService();
+  }
+  
   @RenderMapping
   public String render(Model model, RenderRequest request) {
     String userPic = UserInfoUtils.getPicFromSession(request);
     
-    Person user = pyhDemoService.getUser(userPic);
+    CustomerType customer;
+    fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
+    customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
+    customerAuditInfoType.setUserId(userPic);
+    
+    try {
+      customer = customerService.opGetCustomer(userPic, customerAuditInfoType);
+    } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
+      log.error("FamilyInformationController.render: opGetCustomer raised a ServiceFault", fault);
+      return null;
+    }
+    
+    log.debug("FamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
+    log.debug("--");
+    Person user = new Person(customer);
+    
     DependantsAndFamily daf = pyhDemoService.getDependantsAndFamily(userPic);
     FamilyIdAndFamilyMembers fidm = pyhDemoService.getOtherFamilyMembers(userPic);
     

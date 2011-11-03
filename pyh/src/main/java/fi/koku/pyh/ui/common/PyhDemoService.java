@@ -140,11 +140,11 @@ public class PyhDemoService {
   /**
    * Returns the current user.
    */
-  public Person getUser(String userPic) {
-    log.debug("getUser(): calling getPerson() with pic " + userPic);
-    
-    return getPerson(userPic);
-  }
+//  public Person getUser(String userPic) {
+//    log.debug("getUser(): calling getPerson() with pic " + userPic);
+//    
+//    return getPerson(userPic);
+//  }
   
   /**
    * Returns user's dependants.
