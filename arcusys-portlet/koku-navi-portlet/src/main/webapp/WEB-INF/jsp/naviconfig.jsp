@@ -14,17 +14,17 @@
 	<% } else if (portalInfo.startsWith(Constants.PORTAL_GATEIN)) { %>
 		<form name="configForm" action="${configActionURL}" method="post" >
 			<div>
-				<div>
-					<div class="naviEditHeader">
-						<spring:message code="config.navigationPortletMode" />
-					</div>
-					<div class="naviEditValue">
-						<select name="<%= Constants.PREF_NAVI_PORTAL %>" id="<%= Constants.PREF_NAVI_PORTAL %>">
-							<option value="<%= PortalNavigationMode.LOORA.toString() %>"><spring:message code="config.navigationPortletMode.loora" /></option>
-							<option value="<%= PortalNavigationMode.KUNPO.toString() %>"><spring:message code="config.navigationPortletMode.kunpo" /></option>
-						</select>
-					</div>
-				</div>
+<!-- 				<div> -->
+<!-- 					<div class="naviEditHeader"> -->
+<%-- 						<spring:message code="config.navigationPortletMode" /> --%>
+<!-- 					</div> -->
+<!-- 					<div class="naviEditValue"> -->
+<%-- 						<select name="<%= Constants.PREF_NAVI_PORTAL %>" id="<%= Constants.PREF_NAVI_PORTAL %>"> --%>
+<%-- 							<option value="<%= PortalNavigationMode.LOORA.toString() %>"><spring:message code="config.navigationPortletMode.loora" /></option> --%>
+<%-- 							<option value="<%= PortalNavigationMode.KUNPO.toString() %>"><spring:message code="config.navigationPortletMode.kunpo" /></option> --%>
+<!-- 						</select> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
 <!-- 				<div> -->
 <!-- 					<div class="naviEditHeader"> -->
 <%-- 						<spring:message code="config.useRelativePath" /> --%>
@@ -94,6 +94,6 @@
 	jQuery('#<%= Constants.PREF_NAVI_LOK %>').val("<%= lokPref %>");
 	jQuery('#<%= Constants.PREF_NAVI_PYH %>').val("<%= pyhPref %>");
 	jQuery('#<%= Constants.PREF_NAVI_DEFAULT_PATH %>').val("<%= defaultPathPref %>");
-	jQuery('#<%= Constants.PREF_NAVI_PORTAL %>').val("<%= naviPortalMode %>");
+<%-- 	jQuery('#<%= Constants.PREF_NAVI_PORTAL %>').val("<%= naviPortalMode %>"); --%>
 	jQuery('#<%= Constants.PREF_NAVI_FRONTPAGE %>').val("<%= frontPagePath %>");
 </script>
