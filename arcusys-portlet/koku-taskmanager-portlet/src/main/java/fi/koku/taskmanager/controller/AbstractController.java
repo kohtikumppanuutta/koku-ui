@@ -8,8 +8,7 @@ import fi.arcusys.koku.util.PortalRole;
 
 public class AbstractController {
 	
-	private Logger LOG = Logger.getLogger(AbstractController.class);
-
+	private static final Logger LOG = Logger.getLogger(AbstractController.class);
 	
 	/**
 	 * Resolves which portalRole portal has

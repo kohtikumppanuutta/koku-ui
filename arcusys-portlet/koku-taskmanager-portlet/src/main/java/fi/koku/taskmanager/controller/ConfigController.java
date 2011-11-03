@@ -25,7 +25,7 @@ import static fi.arcusys.koku.util.Constants.*;
 @RequestMapping(value = "EDIT")
 public class ConfigController {
 
-	private Logger logger = Logger.getLogger(ConfigController.class);
+	private static final Logger LOG = Logger.getLogger(ConfigController.class);
 	@RenderMapping
 	public String showConfig(RenderRequest request, RenderResponse response, ModelMap modelmap) {	
 		
@@ -55,7 +55,7 @@ public class ConfigController {
             response.setWindowState(WindowState.NORMAL);
  
         } catch (Exception e) { 
-        	logger.error("Configure exception");
+        	LOG.error("Configure exception");
         }        
         
 	}	

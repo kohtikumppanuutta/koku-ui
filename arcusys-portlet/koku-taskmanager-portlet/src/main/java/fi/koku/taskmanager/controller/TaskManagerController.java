@@ -24,7 +24,7 @@ import static fi.arcusys.koku.util.Constants.*;
 @RequestMapping(value = "VIEW")
 public class TaskManagerController {
 
-	Logger LOG = Logger.getLogger(TaskManagerController.class);
+	private static final Logger LOG = Logger.getLogger(TaskManagerController.class);
 
 	/**
 	 * Handles the portlet request to show default page

@@ -34,7 +34,7 @@ import fi.arcusys.koku.util.TaskUtil;
 @RequestMapping(value = "VIEW")
 public class AjaxController extends AbstractController {
 	
-	private static Logger LOG = Logger.getLogger(AjaxController.class);
+	private static final Logger LOG = Logger.getLogger(AjaxController.class);
 
 	/**
 	 * Shows ajax for retrieving intalio tasks
