@@ -176,65 +176,89 @@ public class KokuInformationRequestDetail extends KokuInformationRequestSummary 
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		KokuInformationRequestDetail other = (KokuInformationRequestDetail) obj;
-		if (accessType != other.accessType)
+		if (accessType != other.accessType) {
 			return false;
+		}
 		if (additionalInfo == null) {
-			if (other.additionalInfo != null)
+			if (other.additionalInfo != null) {
 				return false;
-		} else if (!additionalInfo.equals(other.additionalInfo))
+			}
+		} else if (!additionalInfo.equals(other.additionalInfo)) {
 			return false;
+		}
 		if (additionalReplyInfo == null) {
-			if (other.additionalReplyInfo != null)
+			if (other.additionalReplyInfo != null) {
 				return false;
-		} else if (!additionalReplyInfo.equals(other.additionalReplyInfo))
+			}
+		} else if (!additionalReplyInfo.equals(other.additionalReplyInfo)) {
 			return false;
+		}
 		if (attachmentURL == null) {
-			if (other.attachmentURL != null)
+			if (other.attachmentURL != null) {
 				return false;
-		} else if (!attachmentURL.equals(other.attachmentURL))
+			}
+		} else if (!attachmentURL.equals(other.attachmentURL)) {
 			return false;
+		}
 		if (categories == null) {
-			if (other.categories != null)
+			if (other.categories != null) {
 				return false;
-		} else if (!categories.equals(other.categories))
+			}
+		} else if (!categories.equals(other.categories)) {
 			return false;
+		}
 		if (createdDate == null) {
-			if (other.createdDate != null)
+			if (other.createdDate != null) {
 				return false;
-		} else if (!createdDate.equals(other.createdDate))
+			}
+		} else if (!createdDate.equals(other.createdDate)) {
 			return false;
+		}
 		if (description == null) {
-			if (other.description != null)
+			if (other.description != null) {
 				return false;
-		} else if (!description.equals(other.description))
+			}
+		} else if (!description.equals(other.description)) {
 			return false;
+		}
 		if (informationDetails == null) {
-			if (other.informationDetails != null)
+			if (other.informationDetails != null) {
 				return false;
-		} else if (!informationDetails.equals(other.informationDetails))
+			}
+		} else if (!informationDetails.equals(other.informationDetails)) {
 			return false;
+		}
 		if (legislationInfo == null) {
-			if (other.legislationInfo != null)
+			if (other.legislationInfo != null) {
 				return false;
-		} else if (!legislationInfo.equals(other.legislationInfo))
+			}
+		} else if (!legislationInfo.equals(other.legislationInfo)) {
 			return false;
+		}
 		if (replyDescription == null) {
-			if (other.replyDescription != null)
+			if (other.replyDescription != null) {
 				return false;
-		} else if (!replyDescription.equals(other.replyDescription))
+			}
+		} else if (!replyDescription.equals(other.replyDescription)) {
 			return false;
+		}
 		if (requestPurpose == null) {
-			if (other.requestPurpose != null)
+			if (other.requestPurpose != null) {
 				return false;
-		} else if (!requestPurpose.equals(other.requestPurpose))
+			}
+		} else if (!requestPurpose.equals(other.requestPurpose)) {
 			return false;
+		}
 		return true;
 	}
 	

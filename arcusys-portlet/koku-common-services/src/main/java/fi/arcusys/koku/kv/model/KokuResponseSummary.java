@@ -69,33 +69,43 @@ public class KokuResponseSummary {
 	}
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		KokuResponseSummary other = (KokuResponseSummary) obj;
 		if (replierName == null) {
 			if (other.replierName != null)
 				return false;
-		} else if (!replierName.equals(other.replierName))
+		} else if (!replierName.equals(other.replierName)) {
 			return false;
+		}
 		if (replierUid == null) {
-			if (other.replierUid != null)
+			if (other.replierUid != null) {
 				return false;
-		} else if (!replierUid.equals(other.replierUid))
+			}
+		} else if (!replierUid.equals(other.replierUid)) {
 			return false;
+		}
 		if (request == null) {
-			if (other.request != null)
+			if (other.request != null) {
 				return false;
-		} else if (!request.equals(other.request))
+			}
+		} else if (!request.equals(other.request)) {
 			return false;
+		}
 		if (responseId == null) {
-			if (other.responseId != null)
+			if (other.responseId != null) {
 				return false;
-		} else if (!responseId.equals(other.responseId))
+			}
+		} else if (!responseId.equals(other.responseId)) {
 			return false;
+		}
 		return true;
 	}
 

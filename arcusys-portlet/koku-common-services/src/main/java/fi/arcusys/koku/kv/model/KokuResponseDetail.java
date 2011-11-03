@@ -103,23 +103,30 @@ public class KokuResponseDetail extends KokuResponseSummary {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!super.equals(obj))
+		}
+		if (!super.equals(obj)) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		KokuResponseDetail other = (KokuResponseDetail) obj;
 		if (answers == null) {
-			if (other.answers != null)
+			if (other.answers != null) {
 				return false;
-		} else if (!answers.equals(other.answers))
+			}
+		} else if (!answers.equals(other.answers)) {
 			return false;
+		}
 		if (questions == null) {
-			if (other.questions != null)
+			if (other.questions != null) {
 				return false;
-		} else if (!questions.equals(other.questions))
+			}
+		} else if (!questions.equals(other.questions)) {
 			return false;
+		}
 		return true;
 	}
 

@@ -110,43 +110,58 @@ public class KokuUser {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		KokuUser other = (KokuUser) obj;
 		if (displayname == null) {
-			if (other.displayname != null)
+			if (other.displayname != null) {
 				return false;
-		} else if (!displayname.equals(other.displayname))
+			}
+		} else if (!displayname.equals(other.displayname)) {
 			return false;
+		}
 		if (email == null) {
-			if (other.email != null)
+			if (other.email != null) {
 				return false;
-		} else if (!email.equals(other.email))
+			}
+		} else if (!email.equals(other.email)) {
 			return false;
+		}
 		if (firstname == null) {
-			if (other.firstname != null)
+			if (other.firstname != null) {
 				return false;
-		} else if (!firstname.equals(other.firstname))
+			}
+		} else if (!firstname.equals(other.firstname)) {
 			return false;
+		}
 		if (lastname == null) {
-			if (other.lastname != null)
+			if (other.lastname != null) {
 				return false;
-		} else if (!lastname.equals(other.lastname))
+			}
+		} else if (!lastname.equals(other.lastname)) {
 			return false;
+		}
 		if (phoneNumber == null) {
-			if (other.phoneNumber != null)
+			if (other.phoneNumber != null) {
 				return false;
-		} else if (!phoneNumber.equals(other.phoneNumber))
+			}
+		} else if (!phoneNumber.equals(other.phoneNumber)) {
 			return false;
+		}
 		if (uid == null) {
-			if (other.uid != null)
+			if (other.uid != null) {
 				return false;
-		} else if (!uid.equals(other.uid))
+			}
+		} else if (!uid.equals(other.uid)) {
 			return false;
+		}
 		return true;
 	}
 	

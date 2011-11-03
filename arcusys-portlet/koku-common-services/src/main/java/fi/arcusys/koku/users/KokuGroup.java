@@ -44,23 +44,30 @@ public class KokuGroup {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;		
+		}
 		KokuGroup other = (KokuGroup) obj;
 		if (groupName == null) {
-			if (other.groupName != null)
+			if (other.groupName != null) {
 				return false;
-		} else if (!groupName.equals(other.groupName))
+			}
+		} else if (!groupName.equals(other.groupName)) {
 			return false;
+		}
 		if (groupUid == null) {
-			if (other.groupUid != null)
+			if (other.groupUid != null) {
 				return false;
-		} else if (!groupUid.equals(other.groupUid))
+			}
+		} else if (!groupUid.equals(other.groupUid)) {
 			return false;
+		}
 		return true;
 	}
 	

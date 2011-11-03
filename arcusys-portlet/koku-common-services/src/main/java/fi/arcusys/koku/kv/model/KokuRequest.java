@@ -177,64 +177,79 @@ public class KokuRequest {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj){
 			return true;
-		if (obj == null)
+		}
+		if (obj == null){
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		KokuRequest other = (KokuRequest) obj;
 		if (content == null) {
 			if (other.content != null)
 				return false;
-		} else if (!content.equals(other.content))
+		} else if (!content.equals(other.content)) {
 			return false;
+		}
 		if (creationDate == null) {
 			if (other.creationDate != null)
 				return false;
-		} else if (!creationDate.equals(other.creationDate))
+		} else if (!creationDate.equals(other.creationDate)) {
 			return false;
+		}
 		if (endDate == null) {
 			if (other.endDate != null)
 				return false;
-		} else if (!endDate.equals(other.endDate))
+		} else if (!endDate.equals(other.endDate)) {
 			return false;
-		if (missedAmount != other.missedAmount)
+		}
+		if (missedAmount != other.missedAmount) {
 			return false;
+		}
 		if (questions == null) {
 			if (other.questions != null)
 				return false;
-		} else if (!questions.equals(other.questions))
+		} else if (!questions.equals(other.questions)) {
 			return false;
-		if (requestId != other.requestId)
+		}
+		if (requestId != other.requestId) {
 			return false;
+		}
 		if (requestType == null) {
 			if (other.requestType != null)
 				return false;
-		} else if (!requestType.equals(other.requestType))
+		} else if (!requestType.equals(other.requestType)) {
 			return false;
-		if (respondedAmount != other.respondedAmount)
+		}
+		if (respondedAmount != other.respondedAmount) {
 			return false;
+		}
 		if (respondedList == null) {
 			if (other.respondedList != null)
 				return false;
-		} else if (!respondedList.equals(other.respondedList))
+		} else if (!respondedList.equals(other.respondedList)) {
 			return false;
+		}
 		if (sender == null) {
 			if (other.sender != null)
 				return false;
-		} else if (!sender.equals(other.sender))
+		} else if (!sender.equals(other.sender)) {
 			return false;
+		}
 		if (subject == null) {
 			if (other.subject != null)
 				return false;
-		} else if (!subject.equals(other.subject))
+		} else if (!subject.equals(other.subject)) {
 			return false;
+		}
 		if (unrespondedList == null) {
 			if (other.unrespondedList != null)
 				return false;
-		} else if (!unrespondedList.equals(other.unrespondedList))
+		} else if (!unrespondedList.equals(other.unrespondedList)) {
 			return false;
+		}
 		return true;
 	}
 

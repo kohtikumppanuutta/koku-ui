@@ -63,25 +63,33 @@ public class KokuValtakirjapohja {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		KokuValtakirjapohja other = (KokuValtakirjapohja) obj;
 		if (description == null) {
-			if (other.description != null)
+			if (other.description != null) {
 				return false;
-		} else if (!description.equals(other.description))
+			}
+		} else if (!description.equals(other.description)) {
 			return false;
-		if (templateId != other.templateId)
+		}
+		if (templateId != other.templateId) {
 			return false;
+		}
 		if (templateName == null) {
-			if (other.templateName != null)
+			if (other.templateName != null) {
 				return false;
-		} else if (!templateName.equals(other.templateName))
+			}
+		} else if (!templateName.equals(other.templateName)) {
 			return false;
+		}
 		return true;
 	}
     

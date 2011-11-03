@@ -51,25 +51,31 @@ public class KokuAnswer {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		KokuAnswer other = (KokuAnswer) obj;
 		if (answer == null) {
 			if (other.answer != null)
 				return false;
-		} else if (!answer.equals(other.answer))
-			return false;
+		} else if (!answer.equals(other.answer)) {
+			return false;			
+		}
 		if (comment == null) {
 			if (other.comment != null)
 				return false;
-		} else if (!comment.equals(other.comment))
+		} else if (!comment.equals(other.comment)) {
 			return false;
-		if (questionNumber != other.questionNumber)
+		}
+		if (questionNumber != other.questionNumber) {
 			return false;
+		}
 		return true;
 	}
 }

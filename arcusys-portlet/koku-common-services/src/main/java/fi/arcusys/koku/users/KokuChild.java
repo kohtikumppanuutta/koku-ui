@@ -63,23 +63,30 @@ public class KokuChild extends KokuUser {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!super.equals(obj))
+		}
+		if (!super.equals(obj)) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		KokuChild other = (KokuChild) obj;
-		if (hetu == null) {
-			if (other.hetu != null)
-				return false;
-		} else if (!hetu.equals(other.hetu))
+		if (hetu == null) { 
+			if (other.hetu != null) {
+				return false;				
+			}
+		} else if (!hetu.equals(other.hetu)) {
 			return false;
-		if (parents == null) {
-			if (other.parents != null)
+		}
+		if (parents == null) { 
+			if (other.parents != null) {
 				return false;
-		} else if (!parents.equals(other.parents))
+			}
+		} else if (!parents.equals(other.parents)) {
 			return false;
+		}
 		return true;
 	}
     
