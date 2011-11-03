@@ -8,13 +8,27 @@ import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import fi.arcusys.koku.util.PropertiesUtil;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 public class Configuration {
 
+	private static Log LOG = LogFactory.getLog(Configuration.class);
+	private static final String TOKEN_SERVICE_ENDPOINT;
+	private static final String TASKMANAGER_SERVICE_ENDPOINT;
 	private static Configuration instance = new Configuration();
-
-	private String tokenServiceEndpoint;
-	private String taskManagerServiceEndpoint;
+	
+	static {		
+		TASKMANAGER_SERVICE_ENDPOINT = KoKuPropertiesUtil.get("palvelutPortlet.taskManagerServiceEndpoint");
+		TOKEN_SERVICE_ENDPOINT = KoKuPropertiesUtil.get("palvelutPortlet.tokenServiceEndpoint");
+		if (TASKMANAGER_SERVICE_ENDPOINT == null || TOKEN_SERVICE_ENDPOINT == null) {
+			throw new ExceptionInInitializerError("Coulnd't find properties 'TaskManagerService': "+TASKMANAGER_SERVICE_ENDPOINT+" or 'TokenService': "+TOKEN_SERVICE_ENDPOINT);
+		}		
+		LOG.info("TaskManagerServiceEndpoint: "+TASKMANAGER_SERVICE_ENDPOINT);
+		LOG.info("TokenServiceEndpoint: "+TOKEN_SERVICE_ENDPOINT);
+	}	
 
 	/*
 	 * private int _pagingLength; private int _refreshTime = 5; private int
@@ -59,19 +73,12 @@ public class Configuration {
 		return instance;
 	}
 
-	public String getTokenServiceEndpoint() {
-		return tokenServiceEndpoint;
+	public static final String getTokenServiceEndpoint() {
+		return TOKEN_SERVICE_ENDPOINT;
 	}
 
-	public void setTokenServiceEndpoint(String tokenServiceEndpoint) {
-		this.tokenServiceEndpoint = tokenServiceEndpoint;
+	public static final String getTaskmanagerServiceEndpoint() {
+		return TASKMANAGER_SERVICE_ENDPOINT;
 	}
-
-	public String getTaskManagerServiceEndpoint() {
-		return taskManagerServiceEndpoint;
-	}
-
-	public void setTaskManagerServiceEndpoint(String taskManagerServiceEndpoint) {
-		this.taskManagerServiceEndpoint = taskManagerServiceEndpoint;
-	}
+	
 }

@@ -68,19 +68,19 @@
     <servlet>
       <servlet-name>WsProxyServlet2</servlet-name>
       <servlet-class>fi.arcusys.koku.common.wsproxy.servlet.WsProxyServletRestricted</servlet-class>
-        <init-param>
-          <description>List of endpoints available for proxying.</description>
-          <param-name>endpoints</param-name>
-          <param-value>
-                http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuAppointmentProcessingServiceImpl,
-                http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-arcusys-common-0.1-SNAPSHOT/UsersAndGroupsServiceImpl,
-                http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuSuostumusProcessingServiceImpl,
-                http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuValtakirjaProcessingServiceImpl,
-                http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuTietopyyntoProcessingServiceImpl,
-                http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-hak-model-0.1-SNAPSHOT/KokuHakProcessingServiceImpl,
-                http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuRequestProcessingServiceImpl
-          </param-value>
-        </init-param>
+<!--         <init-param> -->
+<!--           <description>List of endpoints available for proxying.</description> -->
+<!--           <param-name>endpoints</param-name> -->
+<!--           <param-value> -->
+<!--                 http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuAppointmentProcessingServiceImpl, -->
+<!--                 http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-arcusys-common-0.1-SNAPSHOT/UsersAndGroupsServiceImpl, -->
+<!--                 http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuSuostumusProcessingServiceImpl, -->
+<!--                 http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuValtakirjaProcessingServiceImpl, -->
+<!--                 http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuTietopyyntoProcessingServiceImpl, -->
+<!--                 http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-hak-model-0.1-SNAPSHOT/KokuHakProcessingServiceImpl, -->
+<!--                 http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuRequestProcessingServiceImpl -->
+<!--           </param-value> -->
+<!--         </init-param> -->
      </servlet>
 
     <servlet-mapping>
@@ -89,15 +89,15 @@
     </servlet-mapping>
     
     <!-- This part is only for gatein skin, it must be quoted for jboss portal  -->
-	 <filter>
-		<filter-name>ResourceRequestFilter</filter-name>
-		<filter-class>org.exoplatform.portal.application.ResourceRequestFilter</filter-class>
-	</filter>
+<!-- 	 <filter> -->
+<!-- 		<filter-name>ResourceRequestFilter</filter-name> -->
+<!-- 		<filter-class>org.exoplatform.portal.application.ResourceRequestFilter</filter-class> -->
+<!-- 	</filter> -->
 
-	<filter-mapping>
-		<filter-name>ResourceRequestFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+<!-- 	<filter-mapping> -->
+<!-- 		<filter-name>ResourceRequestFilter</filter-name> -->
+<!-- 		<url-pattern>/*</url-pattern> -->
+<!-- 	</filter-mapping> -->
 	<!-- For gatein skin ends -->
     
 </web-app>

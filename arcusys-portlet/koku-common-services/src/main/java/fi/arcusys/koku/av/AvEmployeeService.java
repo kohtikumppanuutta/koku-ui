@@ -1,11 +1,16 @@
 package fi.arcusys.koku.av;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import fi.arcusys.koku.av.employeeservice.Appointment;
 import fi.arcusys.koku.av.employeeservice.AppointmentSummary;
 import fi.arcusys.koku.av.employeeservice.KokuLooraAppointmentService_Service;
+import fi.arcusys.koku.util.PropertiesUtil;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
  * Retrieves appointment data and related operations via web services
@@ -14,7 +19,19 @@ import fi.arcusys.koku.av.employeeservice.KokuLooraAppointmentService_Service;
  */
 public class AvEmployeeService {
 	
-	public final URL AV_EMPLOYEE_WSDL_LOCATION = getClass().getClassLoader().getResource("AvEmployeeService.wsdl");
+	private static final Logger LOG = Logger.getLogger(AvEmployeeService.class);	
+	public static final URL AV_EMPLOYEE_WSDL_LOCATION;
+	
+	static {
+		try {
+			LOG.info("AvEmployeeService WSDL location: " + KoKuPropertiesUtil.get("AvEmployeeService"));
+			AV_EMPLOYEE_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("AvEmployeeService"));
+		} catch (MalformedURLException e) {
+			LOG.error("Failed to create AvEmployeeService WSDL url! Given URL address is not valid!");
+			throw new ExceptionInInitializerError(e);
+		}
+	}
+	
 	private KokuLooraAppointmentService_Service as;
 	
 	/**

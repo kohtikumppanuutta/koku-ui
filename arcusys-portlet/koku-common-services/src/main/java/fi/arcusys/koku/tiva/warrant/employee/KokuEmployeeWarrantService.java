@@ -1,8 +1,11 @@
 
 package fi.arcusys.koku.tiva.warrant.employee;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationCriteria;
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationQuery;
@@ -10,11 +13,25 @@ import fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationShortSum
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationSummary;
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.KokuLooraValtakirjaService_Service;
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.Valtakirjapohja;
+import fi.arcusys.koku.util.PropertiesUtil;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 
-public class KokuEmployeeWarrantService {
+public class KokuEmployeeWarrantService {	
 	
-	public final URL WARRANT_SERVICE_WSDL_LOCATION = getClass().getClassLoader().getResource("KokuLooraValtakirjaServiceImpl.wsdl");
+	private static final Logger LOG = Logger.getLogger(KokuEmployeeWarrantService.class);		
+	public static final URL WARRANT_SERVICE_WSDL_LOCATION;
+	
+	static {
+		try {
+			LOG.info("KokuLooraValtakirjaService WSDL location: " + KoKuPropertiesUtil.get("KokuLooraValtakirjaService"));
+			WARRANT_SERVICE_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("KokuLooraValtakirjaService"));
+		} catch (MalformedURLException e) {
+			LOG.error("Failed to create KokuLooraValtakirjaService WSDL url! Given URL address is not valid!");
+			throw new ExceptionInInitializerError(e);
+		}
+	}
+	
 	private KokuLooraValtakirjaService_Service service;
 	
 	

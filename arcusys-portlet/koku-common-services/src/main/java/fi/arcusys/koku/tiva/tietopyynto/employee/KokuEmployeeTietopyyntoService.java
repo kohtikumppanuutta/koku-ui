@@ -1,17 +1,35 @@
 package fi.arcusys.koku.tiva.tietopyynto.employee;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import fi.arcusys.koku.tiva.tietopyynto.employee.InformationRequestCriteria;
 import fi.arcusys.koku.tiva.tietopyynto.employee.InformationRequestDetail;
 import fi.arcusys.koku.tiva.tietopyynto.employee.InformationRequestQuery;
 import fi.arcusys.koku.tiva.tietopyynto.employee.InformationRequestSummary;
 import fi.arcusys.koku.tiva.tietopyynto.employee.KokuLooraTietopyyntoService_Service;
+import fi.arcusys.koku.tiva.warrant.employee.KokuEmployeeWarrantService;
+import fi.arcusys.koku.util.PropertiesUtil;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 public class KokuEmployeeTietopyyntoService {
+		
+	private static final Logger LOG = Logger.getLogger(KokuEmployeeTietopyyntoService.class);		
+	public static final URL TIETOPYYNTO_SERVICE_WSDL_LOCATION;
 	
-	public final URL TIETOPYYNTO_SERVICE_WSDL_LOCATION = getClass().getClassLoader().getResource("KokuLooraTietopyyntoServiceImpl.wsdl");
+	static {
+		try {
+			LOG.info("KokuLooraTietopyyntoService WSDL location: " + KoKuPropertiesUtil.get("KokuLooraTietopyyntoService"));
+			TIETOPYYNTO_SERVICE_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("KokuLooraTietopyyntoService"));
+		} catch (MalformedURLException e) {
+			LOG.error("Failed to create KokuLooraTietopyyntoService WSDL url! Given URL address is not valid!");
+			throw new ExceptionInInitializerError(e);
+		}
+	}
+	
 	private KokuLooraTietopyyntoService_Service service;
 	
 	

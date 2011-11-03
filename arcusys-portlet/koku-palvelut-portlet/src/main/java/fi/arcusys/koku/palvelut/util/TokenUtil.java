@@ -69,8 +69,7 @@ public class TokenUtil {
 		LOG.debug("Getting participant token via TokenClient for user: "
 				+ userName);
 		String token = null;
-		TokenClient tokenClient = new TokenClient(Configuration.getInstance()
-				.getTokenServiceEndpoint());
+		TokenClient tokenClient = new TokenClient(Configuration.getTokenServiceEndpoint());
 		try {
 			token = tokenClient.authenticateUser(userName, password);
 		} catch (Exception e) {
@@ -84,8 +83,7 @@ public class TokenUtil {
 	 		LOG.debug("Getting participant token via TokenClient for ticket");
 		}
 		String token = null;
-		TokenClient tokenClient = new TokenClient(Configuration.getInstance()
-				.getTokenServiceEndpoint());
+		TokenClient tokenClient = new TokenClient(Configuration.getTokenServiceEndpoint());
 		try {
 			token = tokenClient.getTokenFromTicket(ticket, serviceURL);
 		} catch (Exception e) {

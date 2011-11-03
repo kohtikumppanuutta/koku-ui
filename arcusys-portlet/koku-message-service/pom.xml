@@ -58,7 +58,7 @@
 							<wsdlOptions>
 								<wsdlOption>
 									<wsdl>${basedir}/src/main/wsdl/KvMessageService.wsdl</wsdl>
-									<wsdlLocation>classpath:KvMessageService.wsdl</wsdlLocation>
+<!-- 									<wsdlLocation>classpath:KvMessageService.wsdl</wsdlLocation> -->
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-server</extraarg>
@@ -70,7 +70,7 @@
 								</wsdlOption>
 								<wsdlOption>
 									<wsdl>${basedir}/src/main/wsdl/KvRequestService.wsdl</wsdl>
-									<wsdlLocation>classpath:KvRequestService.wsdl</wsdlLocation>
+<!-- 									<wsdlLocation>classpath:KvRequestService.wsdl</wsdlLocation> -->
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-server</extraarg>
@@ -82,7 +82,7 @@
 								</wsdlOption>
 								<wsdlOption>
 									<wsdl>${basedir}/src/main/wsdl/KokuKunpoRequestServiceImpl.wsdl</wsdl>
-									<wsdlLocation>classpath:KokuKunpoRequestServiceImpl.wsdl</wsdlLocation>
+<!-- 									<wsdlLocation>classpath:KokuKunpoRequestServiceImpl.wsdl</wsdlLocation> -->
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-server</extraarg>
@@ -94,7 +94,7 @@
 								</wsdlOption>
 								<wsdlOption>
 									<wsdl>${basedir}/src/main/wsdl/AvCitizenService.wsdl</wsdl>
-									<wsdlLocation>classpath:AvCitizenService.wsdl</wsdlLocation>
+<!-- 									<wsdlLocation>classpath:AvCitizenService.wsdl</wsdlLocation> -->
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-server</extraarg>
@@ -106,7 +106,7 @@
 								</wsdlOption>
 								<wsdlOption>
 									<wsdl>${basedir}/src/main/wsdl/AvEmployeeService.wsdl</wsdl>
-									<wsdlLocation>classpath:AvEmployeeService.wsdl</wsdlLocation>
+<!-- 									<wsdlLocation>classpath:AvEmployeeService.wsdl</wsdlLocation> -->
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-server</extraarg>
@@ -118,7 +118,7 @@
 								</wsdlOption>
 								<wsdlOption>
 									<wsdl>${basedir}/src/main/wsdl/TivaCitizenService.wsdl</wsdl>
-									<wsdlLocation>classpath:TivaCitizenService.wsdl</wsdlLocation>
+<!-- 									<wsdlLocation>classpath:TivaCitizenService.wsdl</wsdlLocation> -->
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-server</extraarg>
@@ -130,7 +130,7 @@
 								</wsdlOption>
 								<wsdlOption>
 									<wsdl>${basedir}/src/main/wsdl/TivaEmployeeService.wsdl</wsdl>
-									<wsdlLocation>classpath:TivaEmployeeService.wsdl</wsdlLocation>
+<!-- 									<wsdlLocation>classpath:TivaEmployeeService.wsdl</wsdlLocation> -->
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-server</extraarg>
@@ -142,7 +142,7 @@
 								</wsdlOption>
 								<wsdlOption>
 									<wsdl>${basedir}/src/main/wsdl/UsersAndGroupsServiceImpl.wsdl</wsdl>
-									<wsdlLocation>classpath:UsersAndGroupsServiceImpl.wsdl</wsdlLocation>
+<!-- 									<wsdlLocation>classpath:UsersAndGroupsServiceImpl.wsdl</wsdlLocation> -->
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-server</extraarg>
@@ -154,7 +154,7 @@
 								</wsdlOption>
 								<wsdlOption>
 									<wsdl>${basedir}/src/main/wsdl/KokuKunpoValtakirjaServiceImpl.wsdl</wsdl>
-									<wsdlLocation>classpath:KokuKunpoValtakirjaServiceImpl.wsdl</wsdlLocation>
+<!-- 									<wsdlLocation>classpath:KokuKunpoValtakirjaServiceImpl.wsdl</wsdlLocation> -->
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-server</extraarg>
@@ -166,7 +166,7 @@
 								</wsdlOption>
 								<wsdlOption>
 									<wsdl>${basedir}/src/main/wsdl/KokuLooraValtakirjaServiceImpl.wsdl</wsdl>
-									<wsdlLocation>classpath:KokuLooraValtakirjaServiceImpl.wsdl</wsdlLocation>
+<!-- 									<wsdlLocation>classpath:KokuLooraValtakirjaServiceImpl.wsdl</wsdlLocation> -->
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-server</extraarg>
@@ -178,7 +178,7 @@
 								</wsdlOption>
 								<wsdlOption>
 									<wsdl>${basedir}/src/main/wsdl/KokuLooraTietopyyntoServiceImpl.wsdl</wsdl>
-									<wsdlLocation>classpath:KokuLooraTietopyyntoServiceImpl.wsdl</wsdlLocation>
+<!-- 									<wsdlLocation>classpath:KokuLooraTietopyyntoServiceImpl.wsdl</wsdlLocation> -->
 									<extraargs>
 										<extraarg>-client</extraarg>
 										<extraarg>-server</extraarg>

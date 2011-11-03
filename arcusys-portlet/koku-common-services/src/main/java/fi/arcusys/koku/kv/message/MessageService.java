@@ -1,7 +1,13 @@
 package fi.arcusys.koku.kv.message;
 
+import static fi.arcusys.koku.util.Constants.RESPONSE_FAIL;
+import static fi.arcusys.koku.util.Constants.RESPONSE_OK;
+
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import fi.arcusys.koku.kv.messageservice.Criteria;
 import fi.arcusys.koku.kv.messageservice.FolderType;
@@ -9,8 +15,8 @@ import fi.arcusys.koku.kv.messageservice.KokuMessageService_Service;
 import fi.arcusys.koku.kv.messageservice.MessageQuery;
 import fi.arcusys.koku.kv.messageservice.MessageStatus;
 import fi.arcusys.koku.kv.messageservice.MessageSummary;
-import fi.arcusys.koku.util.MessageUtil;
-import static fi.arcusys.koku.util.Constants.*;
+import fi.arcusys.koku.util.PropertiesUtil;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 
 /**
@@ -20,8 +26,21 @@ import static fi.arcusys.koku.util.Constants.*;
  */
 public class MessageService {
 	
-	private final URL MESSAGE_WSDL_LOCATION = getClass().getClassLoader().getResource("KvMessageService.wsdl");
+	private static final URL MESSAGE_WSDL_LOCATION;
 	private KokuMessageService_Service ms;
+	
+	private static final Logger LOG = Logger.getLogger(MessageService.class);		
+	
+	static {
+		try {
+			LOG.info("KvMessageservice WSDL location: "+ KoKuPropertiesUtil.get("KvMessageService"));
+			MESSAGE_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("KvMessageService"));
+		} catch (MalformedURLException e) {
+			LOG.error("Failed to create KvMessageservice WSDL url! Given URL address is not valid!");
+			throw new ExceptionInInitializerError(e);
+		}
+	}
+	
 	
 	/**
 	 * Constructor and initialization

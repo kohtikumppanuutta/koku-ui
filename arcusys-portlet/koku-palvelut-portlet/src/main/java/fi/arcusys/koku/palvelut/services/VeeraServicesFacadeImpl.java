@@ -9,27 +9,37 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import fi.arcusys.koku.palvelut.model.client.FormHolder;
 import fi.arcusys.koku.palvelut.model.client.VeeraCategoryImpl;
 import fi.arcusys.koku.palvelut.model.client.VeeraFormImpl;
 import fi.arcusys.koku.palvelut.ws.client.VeeraServicesFacadeWS;
 import fi.arcusys.koku.palvelut.ws.client.VeeraServicesWsClient;
+import fi.arcusys.koku.util.PropertiesUtil;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 public class VeeraServicesFacadeImpl implements VeeraServicesFacade {
-	private String wsdlLocation;
+	
+	private static final String VEERA_SERVICE_WSDL;
+	private static final Log LOG = LogFactory.getLog(VeeraServicesFacadeImpl.class);
+	
+	static {		
+		VEERA_SERVICE_WSDL = KoKuPropertiesUtil.get("palvelutPortlet.veeraServicesFacade");
+		if (VEERA_SERVICE_WSDL == null) {
+			throw new ExceptionInInitializerError("Coulnd't find properties 'veeraServicesFacade': "+VEERA_SERVICE_WSDL);
+		}
+		LOG.info("veeraServicesFacade WSDL location: "+VEERA_SERVICE_WSDL);
+	}
+	
 	private VeeraServicesWsClient servicesClient;
 
-	/**
-	 * @param wsdlLocation the wsdlLocation to set
-	 */
-	public void setWsdlLocation(String wsdlLocation) {
-		this.wsdlLocation = wsdlLocation;
-	}
 
 	public void init() {
 		try {
-			if (wsdlLocation != null) {
-				this.servicesClient = new VeeraServicesWsClient(new URL(wsdlLocation));
+			if (VEERA_SERVICE_WSDL != null) {
+				this.servicesClient = new VeeraServicesWsClient(new URL(VEERA_SERVICE_WSDL));
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();

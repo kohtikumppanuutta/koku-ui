@@ -175,7 +175,7 @@ public class ProxyFilter implements Filter {
      * @param req
      */
     private HttpURLConnection createServerConnection(HttpServletRequest req) throws IOException {
-			String urlStr = _proxyConfig.getTargetPath() +
+			String urlStr = _proxyConfig.getFullPath() +
 					req.getRequestURI().replaceFirst(_proxyConfig.getProxyFilterPath(), "") + 
 					(req.getQueryString() != null ? "?" + req.getQueryString() : "");
 			URL url = new URL(urlStr);

@@ -1,14 +1,18 @@
 package fi.arcusys.koku.users;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import fi.arcusys.koku.user.usersandgroupsservice.Child;
 import fi.arcusys.koku.user.usersandgroupsservice.ChildWithHetu;
 import fi.arcusys.koku.user.usersandgroupsservice.Group;
 import fi.arcusys.koku.user.usersandgroupsservice.User;
 import fi.arcusys.koku.user.usersandgroupsservice.UsersAndGroupsService_Service;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
  * Retrieves userId by given portal username
@@ -17,8 +21,19 @@ import fi.arcusys.koku.user.usersandgroupsservice.UsersAndGroupsService_Service;
  *
  */
 public class KokuUserService {
+	private static final Logger LOG = Logger.getLogger(KokuUserService.class);		
+	public static final URL USER_SERVICE_WSDL_LOCATION;
 	
-	public final URL USER_SERVICE_WSDL_LOCATION = getClass().getClassLoader().getResource("UsersAndGroupsServiceImpl.wsdl");
+	static {
+		try {
+			LOG.info("UsersAndGroupsService WSDL location: " + KoKuPropertiesUtil.get("UsersAndGroupsService"));
+			USER_SERVICE_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("UsersAndGroupsService"));
+		} catch (MalformedURLException e) {
+			LOG.error("Failed to create UsersAndGroupsService WSDL url! Given URL address is not valid!");
+			throw new ExceptionInInitializerError(e);
+		}
+	}
+
 	private UsersAndGroupsService_Service service;
 	
 	/**

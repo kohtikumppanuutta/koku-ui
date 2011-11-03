@@ -1,7 +1,10 @@
 package fi.arcusys.koku.tiva;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import fi.arcusys.koku.tiva.employeeservice.ConsentCriteria;
 import fi.arcusys.koku.tiva.employeeservice.ConsentQuery;
@@ -9,6 +12,9 @@ import fi.arcusys.koku.tiva.employeeservice.ConsentSummary;
 import fi.arcusys.koku.tiva.employeeservice.ConsentTO;
 import fi.arcusys.koku.tiva.employeeservice.KokuLooraSuostumusService_Service;
 import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
+import fi.arcusys.koku.users.KokuUserService;
+import fi.arcusys.koku.util.PropertiesUtil;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
  * Retrieves Tiva consent data and related operations via web services
@@ -16,8 +22,20 @@ import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
  * Aug 15, 2011
  */
 public class TivaEmployeeService {
+		
+	private static final Logger LOG = Logger.getLogger(TivaEmployeeService.class);		
+	public static final URL TIVA_EMPLOYEE_WSDL_LOCATION;
 	
-	public final URL TIVA_EMPLOYEE_WSDL_LOCATION = getClass().getClassLoader().getResource("TivaEmployeeService.wsdl");
+	static {
+		try {
+			LOG.info("TivaEmployeeService WSDL location: " + KoKuPropertiesUtil.get("TivaEmployeeService"));
+			TIVA_EMPLOYEE_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("TivaEmployeeService"));
+		} catch (MalformedURLException e) {
+			LOG.error("Failed to create TivaEmployeeService WSDL url! Given URL address is not valid!");
+			throw new ExceptionInInitializerError(e);
+		}
+	}
+		
 	private KokuLooraSuostumusService_Service kls;
 	
 	/**

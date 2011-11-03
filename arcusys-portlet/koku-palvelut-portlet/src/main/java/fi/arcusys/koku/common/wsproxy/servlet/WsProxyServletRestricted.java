@@ -25,12 +25,33 @@ import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import fi.arcusys.koku.util.KokuWebServices;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 public class WsProxyServletRestricted extends HttpServlet implements Servlet {
     private static final long serialVersionUID = 1L;
     
-    private Set<String> restrictedEndpoints = new HashSet<String>(); 
+    private static final Set<String> RESTRICTED_ENDPOINTS = new HashSet<String>(); 
+	private static final Log LOG = LogFactory.getLog(WsProxyServletRestricted.class);
 
+    static {    	
+    	for (KokuWebServices key : KokuWebServices.values()) {
+    		String value = KoKuPropertiesUtil.get(key.value());
+    		if (value == null) {
+    			throw new ExceptionInInitializerError("Coulnd't find property '"+ key.value()+"'");
+    		}
+    		if (value.endsWith("?wsdl")) {
+    			int end = value.indexOf("?wsdl");
+    			value = value.substring(0, end);
+    		} 
+    		RESTRICTED_ENDPOINTS.add(value);    			
+    		LOG.info("Added new endpoint to WsProxyServlet: "+value);
+    	}
+    }
+    
     /**
      * @param config
      * @throws ServletException
@@ -38,14 +59,15 @@ public class WsProxyServletRestricted extends HttpServlet implements Servlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        if (config.getInitParameter("endpoints") != null) {
-            for (final String parameter : config.getInitParameter("endpoints").split(",")) {
-                final String endpoint = parameter.trim();
-                if (!endpoint.isEmpty()) {
-                    restrictedEndpoints.add(endpoint);
-                }
-            }
-        }
+//        if (config.getInitParameter("endpoints") != null) {
+//            for (final String parameter : config.getInitParameter("endpoints").split(",")) {
+//                final String endpoint = parameter.trim();
+//                if (!endpoint.isEmpty()) {
+//                    restrictedEndpoints.add(endpoint);
+//                }
+//            }
+//        }
+        
     }
 
     protected void doPost(HttpServletRequest request,
@@ -63,7 +85,7 @@ public class WsProxyServletRestricted extends HttpServlet implements Servlet {
         }
         
         final String endpoint = request.getParameter("endpoint").trim();
-        if (!restrictedEndpoints.contains(endpoint)) {
+        if (!RESTRICTED_ENDPOINTS.contains(endpoint)) {
             return generateErrorResponse("Endpoint '" + endpoint + "' is not allowed for proxying.");
         }
 

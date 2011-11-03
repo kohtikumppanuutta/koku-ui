@@ -3,6 +3,7 @@ package fi.arcusys.koku.palvelut.util;
 import javax.portlet.ActionRequest;
 import javax.portlet.PortletRequest;
 import org.jasig.cas.client.validation.Assertion;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,6 +14,17 @@ import javax.servlet.http.HttpServletRequest;
  * Apr 15, 2011
  */
 public class MigrationUtil {
+	
+	private static final String SERVICE_URL;
+	
+	static {
+		String value = KoKuPropertiesUtil.get("palvelutPortlet.serviceUrl");
+		if (value == null) {
+			throw new ExceptionInInitializerError("palvelutPortlet.serviceUrl missing!");
+		}
+		SERVICE_URL = value;		
+	}
+	
 	public static long getCompanyId(PortletRequest request) {
 		//import com.liferay.portal.util.PortalUtil;
 //		long companyId = PortalUtil.getCompanyId(request);
@@ -57,7 +69,8 @@ public class MigrationUtil {
 	
 	public static String getServiceURL(PortletRequest request) {
 //		String serviceURL = PrefsPropsUtil.getString(PortalUtil.getCompanyId(request), "cas.service.url");
-		return "http://trelx28b:8080/cas";
+//		return "http://trelx28b:8080/cas";
+		return SERVICE_URL;
 	}
 
 	public static String getUserPassword(PortletRequest request) {

@@ -23,6 +23,8 @@ public class Constants {
 	public static final String PATH_MAIN									= "/Message";
 	
 	
+
+	
 	/* ModelMap attribute key */                                        
 	public static final String RESPONSE										= "response";
 	                                                                    

@@ -356,5 +356,13 @@
 		  <version>2.0.0-M1</version>
 		</dependency>
 		
+		<!-- Common services -->
+		 <dependency>
+           <groupId>fi.arcusys</groupId>
+           <artifactId>koku-common-services</artifactId>
+           <version>1.0</version>
+           <type>jar</type>
+        </dependency>
+		
 	</dependencies>
 </project>

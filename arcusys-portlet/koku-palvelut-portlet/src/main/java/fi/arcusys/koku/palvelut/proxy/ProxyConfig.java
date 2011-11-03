@@ -11,6 +11,8 @@ import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import fi.koku.settings.KoKuPropertiesUtil;
+
 /*
  * Configuration class for the proxy filter. Can be initialized for example as a Spring bean.
  * 
@@ -21,22 +23,30 @@ public class ProxyConfig {
 	// Singleton pattern removed by Tuomas.
 	//private static ProxyConfig instance = new ProxyConfig();
 	
-	private static final Log log = LogFactory.getLog(ProxyConfig.class);
+	private static final String PROXY_URL;
+	private static final Log LOG = LogFactory.getLog(ProxyConfig.class);
+	
+	static {		
+		PROXY_URL = KoKuPropertiesUtil.get("palvelutPortlet.proxyUrl");
+		if (PROXY_URL == null) {
+			throw new ExceptionInInitializerError("Coulnd't find properties 'palvelutPortlet.proxyUrl': "+PROXY_URL);
+		}
+		LOG.info("palvelutPortlet.proxyUrl: "+PROXY_URL);
+	}
 	
 	private String proxyFilterPath = "/veera/xforms";
-	private String targetPath = "http://intalio:8080/xFormsManager";
+	private String targetPath = "/xFormsManager";
 	private Map<Pattern, String> replaceMap = new HashMap<Pattern, String>();
 	private boolean storeCookies = false;
 	private List<String> filterContentTypes = new ArrayList<String>();
 	private Map<String, String> guessContentTypes = new HashMap<String, String>();
-	
 	private Set<String> ignorePaths = new HashSet<String>();
 	
 	private ProxyConfig() {
 	}
 	
 	public static ProxyConfig getInstance() {
-		log.debug("getInstance()");
+		LOG.debug("getInstance()");
 		return new ProxyConfig();
 	}
 	
@@ -56,27 +66,35 @@ public class ProxyConfig {
     }
 
     public String getProxyFilterPath() {
-		log.debug("getProxyFilterPath(): " + proxyFilterPath);
+		LOG.debug("getProxyFilterPath(): " + proxyFilterPath);
 		return proxyFilterPath;
 	}
 
 	public void setProxyFilterPath(String proxyFilterPath) {
-	  log.debug("setProxyFilterPath(): " + proxyFilterPath);
+	  LOG.debug("setProxyFilterPath(): " + proxyFilterPath);
 		this.proxyFilterPath = proxyFilterPath;
 	}
 
 	public String getTargetPath() {
-		log.debug("getTargetPath(): " + targetPath);
+		LOG.debug("getTargetPath(): " + targetPath);
 		return targetPath;
+	}
+	
+	public String getProxyUrl() {
+		return PROXY_URL;
+	}
+	
+	public String getFullPath() {
+		return PROXY_URL + targetPath;
 	}
 
 	public void setTargetPath(String targetPath) {
-		log.debug("setTargetPath(): " + targetPath);
+		LOG.debug("setTargetPath(): " + targetPath);
 		this.targetPath = targetPath;
 	}
 
 	public Map<Pattern, String> getReplaceMap() {
-		log.debug("getReplaceMap(): " + replaceMap);
+		LOG.debug("getReplaceMap(): " + replaceMap);
     return replaceMap;
   }
 
@@ -92,7 +110,7 @@ public class ProxyConfig {
         for (String matchRegEx: (String[]) replaceMap.keySet().toArray(new String[replaceMap.size()])) {
 						String targetRegEx = replaceMap.get(matchRegEx);
 						
-						log.debug("setReplaceMap(): " + matchRegEx + " -> " + targetRegEx);
+						LOG.debug("setReplaceMap(): " + matchRegEx + " -> " + targetRegEx);
 						
             Pattern pattern = Pattern.compile(matchRegEx);
             this.replaceMap.put(pattern, targetRegEx);
@@ -100,17 +118,17 @@ public class ProxyConfig {
 	}
 	
 	public boolean isStoreCookies() {
-		log.debug("isStoreCookies(): " + storeCookies);
+		LOG.debug("isStoreCookies(): " + storeCookies);
 		return storeCookies;
 	}
 
 	public void setStoreCookies(boolean storeCookies) {
-		log.debug("setStoreCookies(): " + storeCookies);
+		LOG.debug("setStoreCookies(): " + storeCookies);
 		this.storeCookies = storeCookies;
 	}
 
 	public List<String> getFilterContentTypes() {
-		log.debug("getFilterContentTypes(): " + filterContentTypes);
+		LOG.debug("getFilterContentTypes(): " + filterContentTypes);
 		return filterContentTypes;
 	}
 
@@ -121,12 +139,12 @@ public class ProxyConfig {
 	 *  @param filterContentTypes
 	 */
 	public void setFilterContentTypes(List<String> filterContentTypes) {
-		log.debug("setFilterContentTypes(): " + filterContentTypes);
+		LOG.debug("setFilterContentTypes(): " + filterContentTypes);
 		this.filterContentTypes = filterContentTypes;
 	}
 	
 	public Map<String, String> getGuessContentTypes() {
-		log.debug("getGuessContentTypes(): " + guessContentTypes);
+		LOG.debug("getGuessContentTypes(): " + guessContentTypes);
 		return guessContentTypes;
 	}
 
@@ -137,7 +155,7 @@ public class ProxyConfig {
 	 *  @param guessContentTypes
 	 */
 	public void setGuessContentTypes(Map<String, String> guessContentTypes) {
-		log.debug("setGuessContentTypes(): " + guessContentTypes);
+		LOG.debug("setGuessContentTypes(): " + guessContentTypes);
 		this.guessContentTypes = guessContentTypes;
 	}
 	

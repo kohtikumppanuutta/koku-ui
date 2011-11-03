@@ -29,7 +29,7 @@ public class TaskUtil {
 	public static List<Task> getTaskList(String token) {
 		LOG.debug("Getting task list via TaskManagerService for participant token: " + token);
 		List<Task> tasks = null;
-		ITaskManagementService tms = getTaskManager(Configuration.getInstance().getTaskManagerServiceEndpoint(), token);
+		ITaskManagementService tms = getTaskManager(Configuration.getTaskmanagerServiceEndpoint(), token);
 		try {
 			tasks = Arrays.asList(tms.getTaskList());
 		} catch (AuthException e) {
@@ -42,7 +42,7 @@ public class TaskUtil {
 	public static List<Task> getPIPATaskList(String token) {
 		LOG.debug("Getting PIPA task list via TaskManagerService for participant token: " + token);
 		List<Task> tasks = null;
-		ITaskManagementService tms = getTaskManager(Configuration.getInstance().getTaskManagerServiceEndpoint(), token);
+		ITaskManagementService tms = getTaskManager(Configuration.getTaskmanagerServiceEndpoint(), token);
 		try {
 			tasks = Arrays.asList(tms.getAvailableTasks("PIPATask",""));
 		} catch (AuthException e) {
@@ -54,7 +54,7 @@ public class TaskUtil {
 	public static Task getTask(String token, String taskId) {
 		LOG.debug("Getting task with id = " + taskId + " via TaskManagerService for participant token: " + token);
 		Task task = null;
-		ITaskManagementService tms = getTaskManager(Configuration.getInstance().getTaskManagerServiceEndpoint(), token);
+		ITaskManagementService tms = getTaskManager(Configuration.getTaskmanagerServiceEndpoint(), token);
 		try {
 			task = tms.getTask(taskId);
 		} catch (AuthException e) {
@@ -76,7 +76,7 @@ public class TaskUtil {
 	public static Task getTaskByDescription(String token, String description) {
 		LOG.debug("Getting PIPA task list via TaskManagerService for participant token: " + token);
 		Task selectedTask = null;
-		ITaskManagementService tms = getTaskManager(Configuration.getInstance().getTaskManagerServiceEndpoint(), token);
+		ITaskManagementService tms = getTaskManager(Configuration.getTaskmanagerServiceEndpoint(), token);
 		try {
 			List<Task> tasks = null;
 			tasks = Arrays.asList(tms.getAvailableTasks("PIPATask",""));

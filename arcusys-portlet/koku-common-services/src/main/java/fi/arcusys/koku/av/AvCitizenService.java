@@ -1,11 +1,17 @@
 package fi.arcusys.koku.av;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import fi.arcusys.koku.av.citizenservice.AppointmentRespondedTO;
 import fi.arcusys.koku.av.citizenservice.AppointmentWithTarget;
 import fi.arcusys.koku.av.citizenservice.KokuKunpoAppointmentService_Service;
+import fi.arcusys.koku.tiva.tietopyynto.employee.KokuEmployeeTietopyyntoService;
+import fi.arcusys.koku.util.PropertiesUtil;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
  * Retrieves appointment data and related operations via web services
@@ -13,8 +19,20 @@ import fi.arcusys.koku.av.citizenservice.KokuKunpoAppointmentService_Service;
  * Aug 22, 2011
  */
 public class AvCitizenService {
+		
+	private static final Logger LOG = Logger.getLogger(AvCitizenService.class);		
+	public static final URL AV_CITIZEN_WSDL_LOCATION;
 	
-	public final URL AV_CITIZEN_WSDL_LOCATION = getClass().getClassLoader().getResource("AvCitizenService.wsdl");
+	static {
+		try {
+			LOG.info("AvCitizenService WSDL location: " + KoKuPropertiesUtil.get("AvCitizenService"));
+			AV_CITIZEN_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("AvCitizenService"));
+		} catch (MalformedURLException e) {
+			LOG.error("Failed to create AvCitizenService WSDL url! Given URL address is not valid!");
+			throw new ExceptionInInitializerError(e);
+		}
+	}
+	
 	private KokuKunpoAppointmentService_Service as;
 	
 	/**

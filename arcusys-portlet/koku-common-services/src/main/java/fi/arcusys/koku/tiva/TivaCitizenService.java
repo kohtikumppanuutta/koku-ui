@@ -1,12 +1,18 @@
 package fi.arcusys.koku.tiva;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import fi.arcusys.koku.tiva.citizenservice.ConsentShortSummary;
 import fi.arcusys.koku.tiva.citizenservice.ConsentSummary;
 import fi.arcusys.koku.tiva.citizenservice.ConsentTO;
 import fi.arcusys.koku.tiva.citizenservice.KokuKunpoSuostumusService_Service;
+import fi.arcusys.koku.users.KokuUserService;
+import fi.arcusys.koku.util.PropertiesUtil;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
  * Retrieves Tiva consent data and related operations via web services
@@ -15,7 +21,19 @@ import fi.arcusys.koku.tiva.citizenservice.KokuKunpoSuostumusService_Service;
  */
 public class TivaCitizenService {
 	
-	public final URL TIVA_CITIZEN_WSDL_LOCATION = getClass().getClassLoader().getResource("TivaCitizenService.wsdl");
+	private static final Logger LOG = Logger.getLogger(TivaCitizenService.class);		
+	public static final URL TIVA_CITIZEN_WSDL_LOCATION;
+	
+	static {
+		try {
+			LOG.info("TivaCitizenService WSDL location: " + KoKuPropertiesUtil.get("TivaCitizenService"));
+			TIVA_CITIZEN_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("TivaCitizenService"));
+		} catch (MalformedURLException e) {
+			LOG.error("Failed to create TivaCitizenService WSDL url! Given URL address is not valid!");
+			throw new ExceptionInInitializerError(e);
+		}
+	}
+	
 	private KokuKunpoSuostumusService_Service kks;
 	
 	/**

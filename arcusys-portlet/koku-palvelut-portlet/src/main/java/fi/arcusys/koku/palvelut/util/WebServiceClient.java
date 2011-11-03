@@ -1,14 +1,12 @@
 package fi.arcusys.koku.palvelut.util;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.io.StringReader;
+
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.springframework.ws.WebServiceMessageFactory;
 import org.springframework.ws.client.core.WebServiceTemplate;
-import org.springframework.ws.transport.WebServiceMessageSender;
 
 /**
  * Sample class for KokuAppointmentProcessingServiceImpl <br/>
@@ -41,8 +39,6 @@ public class WebServiceClient {
     public void customSendAndReceive() {
         StreamSource source = new StreamSource(new StringReader(MESSAGE));
         StreamResult result = new StreamResult(System.out);
-        webServiceTemplate.sendSourceAndReceiveToResult("http://trelx28b:8080/AnotherWebService",
-            source, result);
+        webServiceTemplate.sendSourceAndReceiveToResult("http://trelx28b:8080/AnotherWebService", source, result);
     }
-
 }
