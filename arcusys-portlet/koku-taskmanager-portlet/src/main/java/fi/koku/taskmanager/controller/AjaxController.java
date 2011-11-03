@@ -32,7 +32,7 @@ import fi.arcusys.koku.util.TaskUtil;
  */
 @Controller("ajaxController")
 @RequestMapping(value = "VIEW")
-public class AjaxController extends AbstractController {
+public class AjaxController {
 	
 	private static final Logger LOG = Logger.getLogger(AjaxController.class);
 
@@ -55,8 +55,8 @@ public class AjaxController extends AbstractController {
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		
 		PortletSession portletSession = request.getPortletSession();				
-		String token = (String) portletSession.getAttribute(ATTR_TOKEN);
-		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+		final String token = (String) portletSession.getAttribute(ATTR_TOKEN);
+		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 
 		int taskType = getTaskType(taskTypeStr);
 		JSONObject jsonModel = getJsonModel(taskType, page, keyword, orderType, token, username);
@@ -82,8 +82,8 @@ public class AjaxController extends AbstractController {
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		
 		PortletSession portletSession = request.getPortletSession();				
-		String token = (String) portletSession.getAttribute(ATTR_TOKEN);
-		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+		final String token = (String) portletSession.getAttribute(ATTR_TOKEN);
+		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		JSONObject jsonModel = new JSONObject();
 		
 		if (token == null) {
