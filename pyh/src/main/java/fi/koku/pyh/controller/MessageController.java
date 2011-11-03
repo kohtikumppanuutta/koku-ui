@@ -22,6 +22,7 @@ import fi.koku.services.entity.community.v1.CommunityServiceConstants;
 import fi.koku.services.entity.community.v1.CommunityServiceFactory;
 import fi.koku.services.entity.community.v1.CommunityServicePortType;
 import fi.koku.services.entity.community.v1.MembershipApprovalType;
+import fi.koku.services.entity.community.v1.ServiceFault;
 
 /**
  * Controller for handling acceptance or rejection of membership request messages.
@@ -50,7 +51,6 @@ public class MessageController {
     String familyId = removeCurrentFamily ? currentFamilyId : null;
     
     MembershipApprovalType membershipApproval = new MembershipApprovalType();
-    // userPic is the person approving the request
     membershipApproval.setApproverPic(userPic);
     membershipApproval.setMembershipRequestId(messageId);
     membershipApproval.setStatus(CommunityServiceConstants.MEMBERSHIP_REQUEST_STATUS_APPROVED);
@@ -65,8 +65,7 @@ public class MessageController {
         communityService.opDeleteCommunity(familyId, communityAuditInfoType);
         Log.getInstance().update(userPic, "", "pyh.family.community", "Removing family " + familyId);
       }
-    } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
-      // TODO: error handling
+    } catch (ServiceFault fault) {
       log.error("PyhDemoService.acceptMembershipRequest: opUpdateMembershipApproval raised a ServiceFault", fault);
     }
 
@@ -80,24 +79,14 @@ public class MessageController {
   @ActionMapping(params = "action=rejectMessage")
   public void reject(@RequestParam String userPic, @RequestParam String messageId, ActionResponse response) {
     MembershipApprovalType membershipApproval = new MembershipApprovalType();
-    // userPic is the person approving the request
     membershipApproval.setApproverPic(userPic);
     membershipApproval.setMembershipRequestId(messageId);
     membershipApproval.setStatus(CommunityServiceConstants.MEMBERSHIP_REQUEST_STATUS_REJECTED);
     
     try {
       communityService.opUpdateMembershipApproval(membershipApproval, CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
-      Log.getInstance().update(userPic, "", "pyh.membership.approval", "Membership approval status for user " + userPic + " was set to '" + CommunityServiceConstants.MEMBERSHIP_REQUEST_STATUS_REJECTED + "'");
-      
-      // TODO: check this, seems familyId was always null when this code were in the PyhDemoService
-//      if (familyId != null) {
-//        communityService.opDeleteCommunity(familyId, communityAuditInfoType);
-//        Log.getInstance().update(userPic, "", "pyh.family.community", "Removing family " + familyId);
-//        
-//      }
-      
-    } catch (fi.koku.services.entity.community.v1.ServiceFault fault) {
-      // TODO: error handling
+      Log.getInstance().update(userPic, "", "pyh.membership.approval", "Membership approval status for user " + userPic + " was set to '" + CommunityServiceConstants.MEMBERSHIP_REQUEST_STATUS_REJECTED + "'");      
+    } catch (ServiceFault fault) {
       log.error("PyhDemoService.acceptMembershipRequest: opUpdateMembershipApproval raised a ServiceFault", fault);
     }    
     
