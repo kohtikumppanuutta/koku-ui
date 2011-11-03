@@ -28,8 +28,8 @@
 			</tr>
 			<tr class="evenRow"><td><spring:message code="config.openForm" /></td>
 				<td><select name="openForm" id="openForm">
-						<option value="1" >In portlet</option>
-						<option value="2" >New window</option>
+						<option value="1">In portlet</option>
+						<option value="2">New window</option>
 						<option value="3">Pop-up</option>
 				</select></td>
 			</tr>
