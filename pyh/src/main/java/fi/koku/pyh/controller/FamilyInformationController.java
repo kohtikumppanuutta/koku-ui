@@ -11,22 +11,23 @@ import javax.portlet.RenderRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.portlet.filter.userinfo.UserInfoUtils;
-import fi.koku.pyh.model.DependantsAndFamily;
-import fi.koku.pyh.model.FamilyIdAndFamilyMembers;
-import fi.koku.pyh.model.Person;
+import fi.koku.services.entity.customerservice.model.DependantsAndFamily;
+import fi.koku.services.entity.customerservice.model.FamilyIdAndFamilyMembers;
+import fi.koku.services.entity.customerservice.model.Person;
 import fi.koku.pyh.ui.common.PyhConstants;
-import fi.koku.pyh.ui.common.PyhDemoService;
+import fi.koku.services.entity.community.v1.CommunityServiceFactory;
+import fi.koku.services.entity.community.v1.CommunityServicePortType;
 import fi.koku.services.entity.customer.v1.CustomerServiceFactory;
 import fi.koku.services.entity.customer.v1.CustomerServicePortType;
 import fi.koku.services.entity.customer.v1.CustomerType;
+import fi.koku.services.entity.customerservice.helper.FamilyHelper;
+import fi.koku.services.entity.customerservice.helper.MessageHelper;
 
 /**
  * Controller for user's family information view.
@@ -34,24 +35,32 @@ import fi.koku.services.entity.customer.v1.CustomerType;
  * @author hurulmi
  *
  */
-
 @Controller(value = "familyInformationController")
 @RequestMapping(value = "VIEW")
 public class FamilyInformationController {
 
   private static Logger log = LoggerFactory.getLogger(FamilyInformationController.class);
-
-  @Autowired
-  @Qualifier(value = "pyhDemoService")
-  private PyhDemoService pyhDemoService;
   
   private CustomerServicePortType customerService;
+  
+  private FamilyHelper familyHelper;
+  
+  private MessageHelper messageHelper;
   
   public FamilyInformationController() {
     CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory(PyhConstants.CUSTOMER_SERVICE_USER_ID, PyhConstants.CUSTOMER_SERVICE_PASSWORD, PyhConstants.CUSTOMER_SERVICE_ENDPOINT);
     customerService = customerServiceFactory.getCustomerService();
+    
+    CommunityServiceFactory communityServiceFactory = new CommunityServiceFactory(PyhConstants.COMMUNITY_SERVICE_USER_ID, PyhConstants.COMMUNITY_SERVICE_PASSWORD, PyhConstants.COMMUNITY_SERVICE_ENDPOINT);
+    CommunityServicePortType communityService = communityServiceFactory.getCommunityService();
+    familyHelper = new FamilyHelper(customerService, communityService, PyhConstants.COMPONENT_PYH);
+    
+    messageHelper = new MessageHelper(customerService, communityService, PyhConstants.COMPONENT_PYH);
   }
   
+  /**
+   * View family information.
+   */
   @RenderMapping
   public String render(Model model, RenderRequest request) {
     String userPic = UserInfoUtils.getPicFromSession(request);
@@ -72,15 +81,15 @@ public class FamilyInformationController {
     log.debug("--");
     Person user = new Person(customer);
     
-    DependantsAndFamily daf = pyhDemoService.getDependantsAndFamily(userPic);
-    FamilyIdAndFamilyMembers fidm = pyhDemoService.getOtherFamilyMembers(userPic);
-    
+    DependantsAndFamily daf = familyHelper.getDependantsAndFamily(userPic);
+    FamilyIdAndFamilyMembers fidm = familyHelper.getOtherFamilyMembers(userPic);
+        
     model.addAttribute("user", user);
     model.addAttribute("dependants", daf.getDependants());
     model.addAttribute("otherFamilyMembers", fidm.getFamilyMembers());
     model.addAttribute("currentFamilyId", fidm.getFamilyId());
-    model.addAttribute("messages", pyhDemoService.getMessagesFor(user));
-    model.addAttribute("sentMessages", pyhDemoService.getSentMessages(user));
+    model.addAttribute("messages", messageHelper.getMessagesFor(user, familyHelper.isParentsSet(user.getPic())));
+    model.addAttribute("sentMessages", messageHelper.getSentMessages(user));
     model.addAttribute("supportEmailAddress", PyhConstants.KOKU_SUPPORT_EMAIL_ADDRESS);
     
     return "familyinformation";
