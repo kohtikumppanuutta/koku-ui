@@ -89,10 +89,11 @@ public class ShowConsentController extends AbstractController {
 			TivaEmployeeServiceHandle handle = new TivaEmployeeServiceHandle();
 			handle.setMessageSource(messageSource);
 			consent = handle.getConsentDetails(consentId);
-		} else if (taskType.equals(TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS)) {
-			// TODO: Need some logic here? 
-			// REMOVE ME?
-		}
+		} 
+//		else if (taskType.equals(TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS)) {
+//			// TODO: Need some logic here? 
+//			// REMOVE ME?
+//		}
 		return consent;
 	}
 	

@@ -33,8 +33,8 @@ import fi.arcusys.koku.palvelut.util.LoggerUtil;
 
 public class ProxyFilter implements Filter {
 
-    private static final Log log = LogFactory.getLog(ProxyFilter.class);
-    private static final boolean debug = true;
+    private static final Log LOG = LogFactory.getLog(ProxyFilter.class);
+    private static final boolean DEBUG = true;
     
     private static final String PROXY_STORED_COOKIES = "proxyFilter_storedCookies";
     
@@ -47,7 +47,9 @@ public class ProxyFilter implements Filter {
 				String proxyConfigName = filterConfig.getInitParameter("proxyConfigName");
 				String proxyConfigLocation = filterConfig.getInitParameter("proxyConfigLocation");
 				
-				if (proxyConfigName == null || proxyConfigLocation == null) throw new ServletException("ProxyFilter requires proxyConfigName and proxyConfigLocation as init parameters.");
+				if (proxyConfigName == null || proxyConfigLocation == null) {
+					throw new ServletException("ProxyFilter requires proxyConfigName and proxyConfigLocation as init parameters.");
+				}
 				_proxyConfig = getProxyConfig(proxyConfigName, proxyConfigLocation);
     }
 
@@ -65,26 +67,29 @@ public class ProxyFilter implements Filter {
      * @param chain
      */
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (!(request instanceof HttpServletRequest) || !(response instanceof HttpServletResponse))
-            return;
+        if (!(request instanceof HttpServletRequest) || !(response instanceof HttpServletResponse)){
+        	return;
+        }
         
         HttpServletRequest  req = (HttpServletRequest)request;
         HttpServletResponse res = (HttpServletResponse)response;
         
         if (_proxyConfig.isIgnored(req.getRequestURI())) {
-            log.debug("Skip url: " + req.getRequestURI());
+            LOG.debug("Skip url: " + req.getRequestURI());
             chain.doFilter(req, res);
             return;
         }
             
-        log.debug("FILTERING..............");
-        log.debug("Request URL: "+new String(req.getRequestURL())+ " ___ " + req.getQueryString());
+        LOG.debug("FILTERING..............");
+        LOG.debug("Request URL: "+new String(req.getRequestURL())+ " ___ " + req.getQueryString());
         
         if (req.getQueryString()==null&&isInit(new String(req.getRequestURL()))) {
         	logAction(req, "Käyttäjä_lähetti_lomakkeen");
         }        
               
-        if(debug) dumpRequestHeaders(req);
+        if(DEBUG) {
+        	dumpRequestHeaders(req);
+        }
         
         HttpURLConnection urlCon = createServerConnection(req);
 
@@ -109,7 +114,7 @@ public class ProxyFilter implements Filter {
             String header = (String)e.nextElement();
             sb.append(" " + header + "=" + req.getHeader(header) + "\n");
         }
-        log.debug(sb.toString());
+        LOG.debug(sb.toString());
     }
     
     @SuppressWarnings("unchecked")
@@ -127,7 +132,7 @@ public class ProxyFilter implements Filter {
     	String customerId = _filterConfig.getServletContext().getInitParameter("loggingCustomer");
     	String applicationId = _filterConfig.getServletContext().getInitParameter("loggingApplication");
     	String message = customerId+" "+applicationId+" "+userId+" "+msg +"_" +formName;
-    	log.debug("MESSAGE: " + message);
+    	LOG.debug("MESSAGE: " + message);
     	LoggerUtil.logAction(message);
     }    
     
@@ -140,7 +145,7 @@ public class ProxyFilter implements Filter {
     private String parseUser(String referer) {
     	String[] splitted = referer.split("user=kuntalainen%2F");    	
     	String user = splitted[1];
-    	log.debug("USER: "+user);
+    	LOG.debug("USER: "+user);
     	return user;    	
     }
     
@@ -154,7 +159,7 @@ public class ProxyFilter implements Filter {
     	String[] splitted = referer.split("forms%2F");
     	String[] splitted2 = splitted[1].split(".xform");
     	String formName = splitted2[0];
-    	log.debug("FORMNAME: "+formName);
+    	LOG.debug("FORMNAME: "+formName);
     	return formName;
     }
     
@@ -179,20 +184,21 @@ public class ProxyFilter implements Filter {
 					req.getRequestURI().replaceFirst(_proxyConfig.getProxyFilterPath(), "") + 
 					(req.getQueryString() != null ? "?" + req.getQueryString() : "");
 			URL url = new URL(urlStr);
-			log.debug("Trying to connect to: "+url.toString());
+			LOG.debug("Trying to connect to: "+url.toString());
 			HttpURLConnection urlCon = (HttpURLConnection)url.openConnection();
 			urlCon.setInstanceFollowRedirects(false);
 			ConnectionHelper.prepareConnectionRequest(req, urlCon);
 			if (_proxyConfig.isStoreCookies()) {
 				HttpSession session = req.getSession();
 				String storedCookies = (String) session.getAttribute(PROXY_STORED_COOKIES);
-				if (storedCookies != null)
+				if (storedCookies != null) {
 					ConnectionHelper.setConnectionCookies(urlCon, storedCookies);
+				}
 			}
 			if(!"GET".equalsIgnoreCase(req.getMethod())) {
 					urlCon.setDoOutput(true);
 					urlCon.setRequestMethod(req.getMethod());
-					log.debug("POST used.");
+					LOG.debug("POST used.");
 					InputStream is = req.getInputStream();
 					OutputStream os = urlCon.getOutputStream();
 					ConnectionHelper.streamContents(is, os);

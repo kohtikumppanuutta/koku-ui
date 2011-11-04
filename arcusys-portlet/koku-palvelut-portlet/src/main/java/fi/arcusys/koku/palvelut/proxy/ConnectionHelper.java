@@ -25,7 +25,7 @@ import org.apache.commons.logging.LogFactory;
 
 public class ConnectionHelper {
 	
-    private static Log log = LogFactory.getLog(ConnectionHelper.class);
+    private static final Log LOG = LogFactory.getLog(ConnectionHelper.class);
     
     private static final String HEADER_USER_AGENT = "User-Agent";
     private static final String HEADER_COOKIE = "Cookie";
@@ -56,12 +56,14 @@ public class ConnectionHelper {
 	public static void prepareConnectionRequest(HttpServletRequest req, HttpURLConnection urlCon, boolean setCookies) {
         for (Enumeration e = req.getHeaderNames();e.hasMoreElements();) {
             String header = (String) e.nextElement();
-            if (!setCookies && header.equalsIgnoreCase(HEADER_COOKIE))
+            if (!setCookies && header.equalsIgnoreCase(HEADER_COOKIE)) {
                 continue;
+            }
             if (!header.equalsIgnoreCase(HEADER_HOST) && 
                 !header.equalsIgnoreCase(HEADER_CONTENT_LENGTH) && 
-                !header.equalsIgnoreCase(HEADER_REFERER) )
+                !header.equalsIgnoreCase(HEADER_REFERER) ) {
                 urlCon.setRequestProperty(header, req.getHeader(header));
+            }
         }
     }
 
@@ -103,7 +105,7 @@ public class ConnectionHelper {
                 }
             }
         }
-        log.debug(sb.toString());
+        LOG.debug(sb.toString());
     }
 
     /**
@@ -147,7 +149,7 @@ public class ConnectionHelper {
         
 				String contentType = getContentType(req, res, proxyConfig);
 				
-				log.debug("filterContents(): Content type is " + contentType);
+				LOG.debug("filterContents(): Content type is " + contentType);
 				
 				//if (contentType == null) return;
         if (isFilterContentType(contentType, proxyConfig)) {
@@ -157,7 +159,7 @@ public class ConnectionHelper {
             	while((ln=reader.readLine()) != null) os.write(ln.getBytes());
             }
 						catch(Exception e) {
-							log.debug("Unable to read line! Exception:" + e);
+							LOG.debug("Unable to read line! Exception:" + e);
 							is.reset();
 							streamContents(is, os);
 						}
@@ -196,11 +198,14 @@ public class ConnectionHelper {
      * @param contentType
      */
     private static boolean isFilterContentType(String contentType, ProxyConfig proxyConfig) {
-    	if (contentType == null) contentType = ""; // No content type equals empty string in filterConfigTypes
-			List<String> filterContentTypes = proxyConfig.getFilterContentTypes();
+    	if (contentType == null) {
+    		contentType = ""; // No content type equals empty string in filterConfigTypes
+    	}
+		List<String> filterContentTypes = proxyConfig.getFilterContentTypes();
     	for (String filterContentType: filterContentTypes) {
-    		if (contentType.toLowerCase().startsWith(filterContentType))
-    			return true;
+    		if (contentType.toLowerCase().startsWith(filterContentType)) {
+    			return true;    			
+    		}
     	}
     	return false;
     }
@@ -212,14 +217,17 @@ public class ConnectionHelper {
      */
     public static HttpURLConnection executeRedirect(HttpURLConnection urlCon) throws IOException{
         //executes the redirect preserving the cookies set by the response
-        if (urlCon.getHeaderField(HEADER_LOCATION) == null) return urlCon;
-        log.debug("Redirecting to: "+urlCon.getHeaderField(HEADER_LOCATION));
+        if (urlCon.getHeaderField(HEADER_LOCATION) == null)  {
+        	return urlCon;
+        }
+        LOG.debug("Redirecting to: "+urlCon.getHeaderField(HEADER_LOCATION));
         URL redirectUrl = new URL(urlCon.getHeaderField(HEADER_LOCATION));
         
         HttpURLConnection newCon = (HttpURLConnection) redirectUrl.openConnection();
         newCon.setInstanceFollowRedirects(false);
-        if (urlCon.getRequestProperty(HEADER_USER_AGENT) != null)
-            newCon.setRequestProperty(HEADER_USER_AGENT, urlCon.getRequestProperty(HEADER_USER_AGENT));        
+        if (urlCon.getRequestProperty(HEADER_USER_AGENT) != null) {
+        	newCon.setRequestProperty(HEADER_USER_AGENT, urlCon.getRequestProperty(HEADER_USER_AGENT));        
+        }
         String headerName=null;
         for (int i=1; (headerName = urlCon.getHeaderFieldKey(i))!=null; i++) {
             if (headerName.equalsIgnoreCase(HEADER_SET_COOKIE)) {                  
@@ -245,7 +253,7 @@ public class ConnectionHelper {
      */
     public static void setConnectionCookies(HttpURLConnection urlCon, String cookies) {
         urlCon.setRequestProperty(HEADER_COOKIE, cookies);
-        log.debug("Connection request cookies set to: "+cookies);
+        LOG.debug("Connection request cookies set to: "+cookies);
     }
 
     /**
@@ -259,14 +267,16 @@ public class ConnectionHelper {
         for (int i=1; (headerName = urlCon.getHeaderFieldKey(i))!=null; i++) {
             if (headerName.equalsIgnoreCase(HEADER_SET_COOKIE)) {                  
                 String cookieStr = urlCon.getHeaderField(i);
-                if (cookieStr.indexOf(';') != -1)
-                    cookieStr = cookieStr.substring(0,cookieStr.indexOf(';'));
+                if (cookieStr.indexOf(';') != -1) {
+                	cookieStr = cookieStr.substring(0,cookieStr.indexOf(';'));
+                }
                 cookies += cookieStr;
-                if (urlCon.getHeaderFieldKey(i+1) != null)
-                    cookies += ";";
+                if (urlCon.getHeaderFieldKey(i+1) != null){
+                	cookies += ";";
+                }
             }
         }
-        log.debug("Received cookies: "+cookies);
+        LOG.debug("Received cookies: "+cookies);
         return cookies;
     }
 

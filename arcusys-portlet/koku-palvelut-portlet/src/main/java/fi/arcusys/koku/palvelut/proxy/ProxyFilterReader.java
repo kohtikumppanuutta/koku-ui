@@ -39,7 +39,9 @@ public class ProxyFilterReader extends BufferedReader{
         } catch (IOException e) {
             throw new ProxyFilterException(e);
         }
-        if (ln != null) ln = replaceMatches(ln) + '\n';
+        if (ln != null) {
+        	ln = replaceMatches(ln) + '\n';
+        }
         return ln;
     }
 

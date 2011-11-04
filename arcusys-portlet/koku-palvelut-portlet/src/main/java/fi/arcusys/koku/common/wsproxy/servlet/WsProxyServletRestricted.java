@@ -115,8 +115,9 @@ public class WsProxyServletRestricted extends HttpServlet implements Servlet {
 
         String action = request.getParameter("action");
 
-        if (action == null)
-            action = request.getHeader("soapaction");
+        if (action == null) {
+        	action = request.getHeader("soapaction");
+        }
         options.setAction(action);
 
         return send(omelement, options);
