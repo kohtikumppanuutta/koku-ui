@@ -63,10 +63,18 @@ public class ChildController {
       @RequestParam(value = "message", required = false) String message, RenderResponse response, Model model) {
     LOG.debug("show child");
 
+    String pic = Utils.getPicFromSession(session);
+    
+    boolean loggedIn = Utils.isLoggedIn(session);
+    
+    if ( !loggedIn ) {
+      return Utils.notAuthenticated(model, session);
+    }
+    
     if (StringUtils.isEmpty(child.getFirstName())) {
       child = getChild(session, child.getPic());
     }
-    String pic = Utils.getPicFromSession(session);
+
     model.addAttribute("child", child);
     model.addAttribute("collections", kksService.getKksCollections(child.getPic(), pic));
     model.addAttribute("creatables", kksService.searchPersonCreatableCollections(child, pic));

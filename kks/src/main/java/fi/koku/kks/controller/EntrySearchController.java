@@ -57,10 +57,18 @@ public class EntrySearchController {
     List<KKSCollection> collections = kksService.searchKksCollections(names, child.getPic(),
         Utils.getPicFromSession(session));
 
+    String pic = Utils.getPicFromSession(session);
+    boolean loggedIn = Utils.isLoggedIn(session);
+    
+    if ( !loggedIn ) {
+      return Utils.notAuthenticated(model, session);
+    }
+    
+    
     model.addAttribute("child", child);
     model.addAttribute("collections", collections);
     model.addAttribute("description", description);
-    model.addAttribute("authorized", kksService.getAuthorizedRegistries(Utils.getPicFromSession(session)));
+    model.addAttribute("authorized", kksService.getAuthorizedRegistries(pic));
 
     return "search_result";
   }

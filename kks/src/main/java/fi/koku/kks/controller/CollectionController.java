@@ -68,16 +68,23 @@ public class CollectionController {
     KKSCollection c = kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
     collectionForm.setEntries(c.getEntries());
     session.setAttribute("kks.collection", c );
+    String pic = Utils.getPicFromSession(session);
+    boolean loggedIn = Utils.isLoggedIn(session);
     
-    boolean parent = kksService.isParent(Utils.getPicFromSession(session), child.getPic());
+    if ( !loggedIn ) {
+      return Utils.notAuthenticated(model, session);
+    }
+    
+    boolean parent = kksService.isParent(pic, child.getPic());
     boolean canSave = !parent || hasParentGroups(c.getCollectionClass());
     model.addAttribute("child", child);
     model.addAttribute("collection", c);
-    model.addAttribute("authorized", kksService.getAuthorizedRegistries(Utils.getPicFromSession(session)));
+    model.addAttribute("authorized", kksService.getAuthorizedRegistries(pic));
     model.addAttribute("master", parent || VALID.equals(c.getUserConsentStatus() ));
     model.addAttribute("parent", parent);
     model.addAttribute("empty_collection", c == null || c.getEntries() == null || c.getEntries().size() == 0);
     model.addAttribute("can_save", canSave);
+    
     if (!model.containsAttribute("version")) {
       Version v = new Version();
       v.setName(c == null ? "" : c.getName());
@@ -224,12 +231,22 @@ public class CollectionController {
     LOG.debug("show collection");
 
     KKSCollection c = (KKSCollection)session.getAttribute("kks.collection");
-
-    KksEntryClassType t = kksService.getEntryClassType(entryType, Utils.getPicFromSession(session));
+    
+    String pic = Utils.getPicFromSession(session);
+    
+    boolean loggedIn = Utils.isLoggedIn(session);
+    
+    if ( !loggedIn ) {
+      return Utils.notAuthenticated(model, session);
+    }
+    
+    
+    KksEntryClassType t = kksService.getEntryClassType(entryType, pic);
     model.addAttribute("child", child);
     model.addAttribute("collection", c);
     model.addAttribute("type", t);
     model.addAttribute("valueId", valueId);
+
 
     if (StringUtils.isNotEmpty(entry)) {
       Entry ent = c.getEntry(entry);
@@ -253,4 +270,5 @@ public class CollectionController {
 
     return "multivalue";
   }
+  
 }

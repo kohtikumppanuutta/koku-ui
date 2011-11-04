@@ -53,7 +53,15 @@ public class MunicipalEmployeeController {
       @RequestParam(value = "childs", required = false) String[] childs,
       @RequestParam(value = "search", required = false) String search, Model model) {
     LOG.debug("show employee");
-    model.addAttribute("childs", toChilds(childs, Utils.getPicFromSession(session)));
+    
+    String pic = Utils.getPicFromSession(session);
+    boolean loggedIn = Utils.isLoggedIn(session);
+    
+    if ( !loggedIn ) {
+      return Utils.notAuthenticated(model, session);
+    }
+    
+    model.addAttribute("childs", toChilds(childs, pic));
 
     if (search != null) {
       model.addAttribute("search", search);

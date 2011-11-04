@@ -9,6 +9,9 @@ package fi.koku.kks.ui.common.utils;
 
 import javax.portlet.PortletSession;
 
+import org.apache.commons.lang.StringUtils;
+import org.springframework.ui.Model;
+
 import fi.koku.portlet.filter.userinfo.UserInfo;
 
 /**
@@ -33,5 +36,34 @@ public final class Utils {
 
   public static UserInfo getUserInfoFromSession(PortletSession session) {
     return (UserInfo) session.getAttribute(UserInfo.KEY_USER_INFO);
+  }
+  
+  public static boolean isLoggedIn(PortletSession session) {
+    UserInfo ui = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
+    
+    if ( ui == null ) {
+      return false;
+    }
+    
+    if (ui.isStrongAuthenticationEnabled()) {
+      return ui.hasStrongAuthentication();
+    }
+    return StringUtils.isNotEmpty(getPicFromSession(session));
+  }
+  
+  
+  public static String getAuthenticationURL(PortletSession session) {
+    UserInfo ui = (UserInfo)session.getAttribute(UserInfo.KEY_USER_INFO);
+    
+    String url = "";
+    if (ui != null && ui.isStrongAuthenticationEnabled() && !ui.hasStrongAuthentication()) {
+      url = (String)session.getAttribute(UserInfo.KEY_VETUMA_AUTHENTICATION_URL);
+    }
+    return url;
+  }
+  
+  public static String notAuthenticated(Model model, PortletSession session ) {
+    model.addAttribute("stronAuthenticationURL", Utils.getAuthenticationURL(session));
+    return "authenticate";
   }
 }
