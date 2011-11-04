@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -52,13 +51,13 @@ public class WsProxyServletRestricted extends HttpServlet implements Servlet {
     	}
     }
     
-    /**
-     * @param config
-     * @throws ServletException
-     */
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
+//    /**
+//     * @param config
+//     * @throws ServletException
+//     */
+//    @Override
+//    public void init(ServletConfig config) throws ServletException {
+//        super.init(config);
 //        if (config.getInitParameter("endpoints") != null) {
 //            for (final String parameter : config.getInitParameter("endpoints").split(",")) {
 //                final String endpoint = parameter.trim();
@@ -67,8 +66,8 @@ public class WsProxyServletRestricted extends HttpServlet implements Servlet {
 //                }
 //            }
 //        }
-        
-    }
+//        
+//    }
 
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
@@ -186,7 +185,7 @@ public class WsProxyServletRestricted extends HttpServlet implements Servlet {
             omelement1.addChild(omelement4);
         }
 
-        System.out.println("Test output:" + omelement1.toString());
+        LOG.info("Test output:" + omelement1.toString());
         return omelement1.toString();
     }
 
@@ -198,7 +197,4 @@ public class WsProxyServletRestricted extends HttpServlet implements Servlet {
         return omelement;
     }
     
-    public static void main(String[] args) {
-        System.out.println(256 + "");
-    }
 }
