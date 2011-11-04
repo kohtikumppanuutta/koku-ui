@@ -34,6 +34,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import fi.koku.portlet.filter.userinfo.UserInfoUtils;
 import fi.koku.pyh.ui.common.Log;
 import fi.koku.pyh.ui.common.PyhConstants;
+import fi.koku.services.entity.community.v1.AuditInfoType;
 import fi.koku.services.entity.community.v1.CommunitiesType;
 import fi.koku.services.entity.community.v1.CommunityQueryCriteriaType;
 import fi.koku.services.entity.community.v1.CommunityServiceConstants;
@@ -64,12 +65,11 @@ import fi.koku.services.entity.customerservice.model.Person;
  * @author hurulmi
  * 
  */
-
 @Controller(value = "editFamilyInformationController")
 @RequestMapping(value = "VIEW")
 public class EditFamilyInformationController {
 
-  private static Logger log = LoggerFactory.getLogger(EditFamilyInformationController.class);
+  private static Logger logger = LoggerFactory.getLogger(EditFamilyInformationController.class);
   
   @Autowired
   private MailSender mailSender;
@@ -100,14 +100,9 @@ public class EditFamilyInformationController {
     
     // TODO: hae perhe ja huoltajuusyhteisöt vain kertaalleen
     
-    CustomerType customer;
-    fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
-    customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
-    customerAuditInfoType.setUserId(userPic);
+    CustomerType customer = customerService.opGetCustomer(userPic, CustomerServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
     
-    customer = customerService.opGetCustomer(userPic, customerAuditInfoType);
-    
-    log.debug("EditFamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
+    logger.debug("EditFamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
     Person user = new Person(customer);
     
     DependantsAndFamily daf = familyHelper.getDependantsAndFamily(userPic);
@@ -137,20 +132,14 @@ public class EditFamilyInformationController {
   @RenderMapping(params = "action=editFamilyInformationWithSearchResults")
   public String renderWithSearchResults(RenderRequest request, Model model) throws fi.koku.services.entity.customer.v1.ServiceFault {
     String userPic = UserInfoUtils.getPicFromSession(request);
-    
     String surname = request.getParameter("surname");
     String pic = request.getParameter("pic");
     List<Person> searchedUsers = familyHelper.searchUsers(surname, pic, userPic);
     
-    CustomerType customer;
-    fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
-    customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
-    customerAuditInfoType.setUserId(userPic);
+    CustomerType customer = customerService.opGetCustomer(userPic, CustomerServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
     
-    customer = customerService.opGetCustomer(userPic, customerAuditInfoType);
-    
-    log.debug("EditFamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
-    log.debug("--");
+    logger.debug("EditFamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
+
     Person user = new Person(customer);
     
     DependantsAndFamily daf = familyHelper.getDependantsAndFamily(userPic);
@@ -232,13 +221,13 @@ public class EditFamilyInformationController {
     boolean childsGuardianshipInformationNotFound = false;
     try {
       
-      if (log.isDebugEnabled()) {
-        log.debug("addPersonsAsFamilyMembers(): adding persons:");
+      if (logger.isDebugEnabled()) {
+        logger.debug("addPersonsAsFamilyMembers(): adding persons:");
         Set<String> set = personMap.keySet();
         Iterator<String> it = set.iterator();
         while (it.hasNext()) {
           String personPic = it.next();
-          log.debug("person pic: " + personPic);
+          logger.debug("person pic: " + personPic);
         }
       }
       
@@ -291,7 +280,7 @@ public class EditFamilyInformationController {
           try {
             this.mailSender.send(mailMessage);
           } catch (MailException me) {
-            log.error("PyhDemoService.addPersonsAsFamilyMembers: sending mail to KoKu support failed!", me);
+            logger.error("PyhDemoService.addPersonsAsFamilyMembers: sending mail to KoKu support failed!", me);
           }
           
           Log.getInstance().send(userPic, "", "pyh.membership.request", "Cannot send approval request because guardian for child " + memberToAddPic + " is not found");
@@ -305,7 +294,7 @@ public class EditFamilyInformationController {
       }
       
     } catch (GuardianForChildNotFoundException gnfe) {
-      log.error("EditFamilyInformationController.addUsersToFamily() caught GuardianForChildNotFoundException: cannot send membership " +
+      logger.error("EditFamilyInformationController.addUsersToFamily() caught GuardianForChildNotFoundException: cannot send membership " +
       		"request because guardian for the child was not found. The child was not added into the family.");
       // show error message in JSP view
       childsGuardianshipInformationNotFound = true;
@@ -334,12 +323,8 @@ public class EditFamilyInformationController {
       communityCriteria.setMemberPics(memberPics);
       
       CommunitiesType communitiesType = null;
-
-      fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
-      communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
-      communityAuditInfoType.setUserId(currentUserPic);
       
-      communitiesType = communityService.opQueryCommunities(communityCriteria, communityAuditInfoType);
+      communitiesType = communityService.opQueryCommunities(communityCriteria, CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, currentUserPic));
       
       if (communitiesType != null) {
         List<CommunityType> communities = communitiesType.getCommunity();
@@ -383,11 +368,11 @@ public class EditFamilyInformationController {
       }
     }
     
-    if (log.isDebugEnabled()) {
-      log.debug("generateRecipients(): returning pics:");
+    if (logger.isDebugEnabled()) {
+      logger.debug("generateRecipients(): returning pics:");
       Iterator<String> rpi = recipientPics.iterator();
       while (rpi.hasNext()) {
-        log.debug("recipient pic: " + rpi.next());
+        logger.debug("recipient pic: " + rpi.next());
       }
     }
     
@@ -405,32 +390,28 @@ public class EditFamilyInformationController {
     if (family != null) {
       family.addFamilyMember(memberToAddPic, role.getRoleID());
       
-      fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
-      communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
-      communityAuditInfoType.setUserId(toFamilyPic); // toFamilyPic is current user's pic
-      
-      communityService.opUpdateCommunity(family.getCommunity(), communityAuditInfoType);
+      communityService.opUpdateCommunity(family.getCommunity(), CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, toFamilyPic));
       Log.getInstance().update(toFamilyPic, "", "pyh.family.community", "Adding person " + memberToAddPic + " into family");
       
-      if (log.isDebugEnabled()) {
-        log.debug("insertInto(): members after insert:");
+      if (logger.isDebugEnabled()) {
+        logger.debug("insertInto(): members after insert:");
         List<MemberType> members = family.getAllMembers();
         Iterator<MemberType> mti = members.iterator();
         while (mti.hasNext()) {
           MemberType m = mti.next();
-          log.debug("member pic: " + m.getPic());
+          logger.debug("member pic: " + m.getPic());
         }
       }
     }
   }
   
-  public String addFamily(String userPic) throws fi.koku.services.entity.community.v1.ServiceFault {
-    log.debug("calling addFamily() with parameter:");
-    log.debug("userPic: " + userPic);
-    
-    fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
-    communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
-    communityAuditInfoType.setUserId(userPic);
+  /**
+   * Inserts new community with one member.
+   * 
+   */
+  private String addFamily(String userPic) throws fi.koku.services.entity.community.v1.ServiceFault {
+    logger.debug("calling addFamily() with parameter:");
+    logger.debug("userPic: " + userPic);
     
     MemberType member = new MemberType();
     member.setPic(userPic);
@@ -444,7 +425,7 @@ public class EditFamilyInformationController {
     community.setType(CommunityServiceConstants.COMMUNITY_TYPE_FAMILY);
     
     String communityId = null;
-    communityId = communityService.opAddCommunity(community, communityAuditInfoType);
+    communityId = communityService.opAddCommunity(community, CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
     Log.getInstance().update(userPic, "", "pyh.family.community", "Adding family for user " + userPic);
     
     return communityId;
@@ -453,7 +434,7 @@ public class EditFamilyInformationController {
   /**
    * Inserts a dependant into a family.
    */
-  public void insertDependantToFamily(String userPic, String dependantPic, CommunityRole role) throws TooManyFamiliesException, 
+  private void insertDependantToFamily(String userPic, String dependantPic, CommunityRole role) throws TooManyFamiliesException, 
     FamilyNotFoundException, fi.koku.services.entity.community.v1.ServiceFault {
     
     Family family = null;
@@ -462,20 +443,16 @@ public class EditFamilyInformationController {
     if (family != null) {
       family.addFamilyMember(dependantPic, role.getRoleID());
       
-      fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
-      communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
-      communityAuditInfoType.setUserId(userPic);
-      
-      communityService.opUpdateCommunity(family.getCommunity(), communityAuditInfoType);
+      communityService.opUpdateCommunity(family.getCommunity(), CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
       Log.getInstance().update(userPic, "", "pyh.family.community", "Adding dependant " + dependantPic + " into family");
       
-      if (log.isDebugEnabled()) {
-        log.debug("insertDependantToFamily(): family members after insert:");
+      if (logger.isDebugEnabled()) {
+        logger.debug("insertDependantToFamily(): family members after insert:");
         List<MemberType> members = family.getAllMembers();
         Iterator<MemberType> mi = members.iterator();
         while (mi.hasNext()) {
           MemberType m = mi.next();
-          log.debug("member pic: " + m.getPic());
+          logger.debug("member pic: " + m.getPic());
         }
       }
     }
@@ -484,7 +461,7 @@ public class EditFamilyInformationController {
   /**
    * Removes a family member from a family community.
    */
-  public void removeFamilyMember(String familyMemberPic, String userPic) throws fi.koku.services.entity.community.v1.ServiceFault {
+  private void removeFamilyMember(String familyMemberPic, String userPic) throws fi.koku.services.entity.community.v1.ServiceFault {
     CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
     communityQueryCriteria.setCommunityType(CommunityServiceConstants.COMMUNITY_TYPE_FAMILY);
     
@@ -492,12 +469,9 @@ public class EditFamilyInformationController {
     memberPics.getMemberPic().add(familyMemberPic);
     communityQueryCriteria.setMemberPics(memberPics);
     
-    fi.koku.services.entity.community.v1.AuditInfoType communityAuditInfoType = new fi.koku.services.entity.community.v1.AuditInfoType();
-    communityAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
-    communityAuditInfoType.setUserId(userPic);
-    CommunitiesType communitiesType = null;
+    AuditInfoType communityAuditInfoType = CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic);
     
-    communitiesType = communityService.opQueryCommunities(communityQueryCriteria, communityAuditInfoType);
+    CommunitiesType communitiesType = communityService.opQueryCommunities(communityQueryCriteria, communityAuditInfoType);
     
     if (communitiesType != null) {
       List<CommunityType> communityType = communitiesType.getCommunity();
@@ -517,12 +491,12 @@ public class EditFamilyInformationController {
             communityService.opUpdateCommunity(community, communityAuditInfoType);
             Log.getInstance().update(userPic, "", "pyh.family.community", "Removing family member " + familyMemberPic + " from family");
             
-            if (log.isDebugEnabled()) {
-              log.debug("removeFamilyMember(): members after removing:");
+            if (logger.isDebugEnabled()) {
+              logger.debug("removeFamilyMember(): members after removing:");
               Iterator<MemberType> mit = members.iterator();
               while (mit.hasNext()) {
                 MemberType m = mit.next();
-                log.debug("member pic: " + m.getPic());
+                logger.debug("member pic: " + m.getPic());
               }
             }
             

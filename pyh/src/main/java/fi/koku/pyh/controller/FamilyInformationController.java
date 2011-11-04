@@ -41,7 +41,7 @@ import fi.koku.services.entity.customerservice.model.Person;
 @RequestMapping(value = "VIEW")
 public class FamilyInformationController {
 
-  private static Logger log = LoggerFactory.getLogger(FamilyInformationController.class);
+  private static Logger logger = LoggerFactory.getLogger(FamilyInformationController.class);
   
   private CustomerServicePortType customerService;
   
@@ -65,18 +65,13 @@ public class FamilyInformationController {
    * @throws fi.koku.services.entity.customer.v1.ServiceFault 
    */
   @RenderMapping
-  public String render(Model model, RenderRequest request) throws fi.koku.services.entity.customer.v1.ServiceFault {
+  public String render(Model model, RenderRequest request) throws ServiceFault {
     String userPic = UserInfoUtils.getPicFromSession(request);
     
-    CustomerType customer;
-    fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
-    customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
-    customerAuditInfoType.setUserId(userPic);
+    CustomerType customer = customerService.opGetCustomer(userPic, CustomerServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
     
-    customer = customerService.opGetCustomer(userPic, customerAuditInfoType);
-    
-    log.debug("FamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
-    log.debug("--");
+    logger.debug("FamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
+
     Person user = new Person(customer);
     
     DependantsAndFamily daf = familyHelper.getDependantsAndFamily(userPic);
