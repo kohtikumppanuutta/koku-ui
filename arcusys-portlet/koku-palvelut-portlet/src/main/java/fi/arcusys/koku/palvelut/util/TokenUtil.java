@@ -18,19 +18,20 @@ public class TokenUtil {
 
 	private static final String TOKEN_SESSION_PARAMETER = "intalioParticipantToken";
 
-	private static Log LOG = LogFactory.getLog(TokenUtil.class);
-	private static String defaultPassword = null;
-	private static String realm = null;
+	private static final Log LOG = LogFactory.getLog(TokenUtil.class);
+	private static final String DEFAULT_PASSWORD;
+	private static final String REALM;
 
 	static {
-
+		ResourceBundle rb = null;
 		try {
-			ResourceBundle rb = ResourceBundle.getBundle("veera");
-			defaultPassword = rb.getString("password");
-			realm = rb.getString("realm");
+			rb = ResourceBundle.getBundle("veera");
 		} catch (Exception e) {
-			LOG.debug("Couldn't get default password", e);
+			LOG.error("ResourceBundle failure: ", e);
+			throw new ExceptionInInitializerError("Error while loading Veera ResourceBundle. ");
 		}
+		DEFAULT_PASSWORD = rb.getString("password");
+		REALM = rb.getString("realm");
 	}
 
 	/*

@@ -23,8 +23,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.web.context.support.ServletContextResource;
 
-import fi.arcusys.koku.palvelut.util.LoggerUtil;
-
 /**
  * Filter used to secure transmission between the portal and intalio's XFormsManager.
  * 
@@ -133,7 +131,6 @@ public class ProxyFilter implements Filter {
     	String applicationId = _filterConfig.getServletContext().getInitParameter("loggingApplication");
     	String message = customerId+" "+applicationId+" "+userId+" "+msg +"_" +formName;
     	LOG.debug("MESSAGE: " + message);
-    	LoggerUtil.logAction(message);
     }    
     
     /**

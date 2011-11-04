@@ -15,7 +15,7 @@ import fi.arcusys.koku.palvelut.bean.Configuration;
 
 public class TaskUtil {
 	
-	private static Log LOG = LogFactory.getLog(TaskUtil.class);
+	private static final Log LOG = LogFactory.getLog(TaskUtil.class);
 	
 	private TaskUtil() {
 		// No need to instantiate this class

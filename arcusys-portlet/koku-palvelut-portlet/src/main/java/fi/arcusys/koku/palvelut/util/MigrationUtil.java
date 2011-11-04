@@ -1,11 +1,11 @@
 package fi.arcusys.koku.palvelut.util;
 
-import javax.portlet.ActionRequest;
 import javax.portlet.PortletRequest;
-import org.jasig.cas.client.validation.Assertion;
-import fi.koku.settings.KoKuPropertiesUtil;
-
 import javax.servlet.http.HttpServletRequest;
+
+import org.jasig.cas.client.validation.Assertion;
+
+import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
  * Porting from Liferay to JBoss - here I've placed all values, related to Liferay's specifics.
