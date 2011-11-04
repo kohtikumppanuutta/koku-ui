@@ -487,6 +487,7 @@ public class EditFamilyInformationController {
           if (member.getPic().equals(familyMemberPic) && isMemberOfCommunity(userPic, members)) {
             members.remove(member);
             
+            // although this WS call is inside loop, it will be called only once because this method will return after the WS call
             communityService.opUpdateCommunity(community, communityAuditInfoType);
             Log.getInstance().update(userPic, "", "pyh.family.community", "Removing family member " + familyMemberPic + " from family");
             
