@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
+import javax.annotation.Resource;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletSession;
@@ -21,6 +23,7 @@ import javax.portlet.RenderRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -76,6 +79,9 @@ public class EditFamilyInformationController {
   
   @Autowired
   private SimpleMailMessage templateMessage;
+  
+  @Autowired
+  private ResourceBundleMessageSource messageSource;
   
   private CustomerServicePortType customerService;
   private CommunityServicePortType communityService;
@@ -169,7 +175,7 @@ public class EditFamilyInformationController {
     insertDependantToFamily(userPic, dependantPic, CommunityRole.CHILD);
     response.setRenderParameter("action", "editFamilyInformation");
   }
-
+  
   @ActionMapping(params = "action=removeFamilyMember")
   public void removeFamilyMember(ActionRequest request, @RequestParam String familyMemberPic, ActionResponse response)
     throws fi.koku.services.entity.community.v1.ServiceFault {
@@ -198,8 +204,6 @@ public class EditFamilyInformationController {
     String surname = request.getParameter("searchSurname");
     String pic = request.getParameter("searchPic");
     
-    // TODO: refactoring: this method will not be called but we call render method directly
-    //pyhDemoService.searchUsers(surname, pic /*, userPic /*customer id == user pic*/, userPic);
     response.setRenderParameter("surname", surname);
     response.setRenderParameter("pic", pic);
     response.setRenderParameter("action", "editFamilyInformationWithSearchResults");
@@ -222,7 +226,7 @@ public class EditFamilyInformationController {
     try {
       
       if (logger.isDebugEnabled()) {
-        logger.debug("addPersonsAsFamilyMembers(): adding persons:");
+        logger.debug("addUsersToFamily(): adding persons:");
         Set<String> set = personMap.keySet();
         Iterator<String> it = set.iterator();
         while (it.hasNext()) {
@@ -232,7 +236,7 @@ public class EditFamilyInformationController {
       }
       
       if (familyCommunityId == null) {
-        throw new FamilyNotFoundException("PyhDemoService.addPersonsAsFamilyMembers: cannot add family members because family community does not exist!");
+        throw new FamilyNotFoundException("EditFamilyInformationController.addUsersToFamily: cannot add family members because family community does not exist!");
       }
       
       Set<String> keys = personMap.keySet();
@@ -265,10 +269,10 @@ public class EditFamilyInformationController {
         } else if (CommunityRole.CHILD.equals(communityRole) && recipients.size() == 0) {
           // we don't have guardian information for the child so we can't send the request
           
-          // TODO: nämä tekstit Language-ext.properties
-          String messageSubject = "KoKu: puutteelliset tiedot järjestelmässä";
-          String messageText = "Järjestelmästä ei löydy lapsen huoltajatietoja. Lapsen HETU: " + memberToAddPic;
+          String messageSubject = messageSource.getMessage("ui.pyh.mail.missing.information.subject", null, "", Locale.getDefault());
+          String messageText = messageSource.getMessage("ui.pyh.mail.missing.information.text", new Object[]{memberToAddPic}, "", Locale.getDefault());
           
+          // send mail notification to KoKu support
           SimpleMailMessage mailMessage = new SimpleMailMessage(this.templateMessage);
           mailMessage.setFrom(PyhConstants.KOKU_FROM_EMAIL_ADDRESS);
           mailMessage.setTo(PyhConstants.KOKU_SUPPORT_EMAIL_ADDRESS);
@@ -279,10 +283,11 @@ public class EditFamilyInformationController {
             this.mailSender.send(mailMessage);
           } catch (MailException me) {
             // even if mail sending fails, PYH operation continues normally
-            logger.error("PyhDemoService.addPersonsAsFamilyMembers: sending mail to KoKu support failed!", me);
+            logger.error("EditFamilyInformationController.addUsersToFamily: sending mail to KoKu support failed!", me);
           }
           
           Log.getInstance().send(userPic, "", "pyh.membership.request", "Cannot send approval request because guardian for child " + memberToAddPic + " is not found");
+          // and notify user that family membership request cannot be sent
           throw new GuardianForChildNotFoundException("Guardian for child (pic: " + memberToAddPic + ") not found!");
           
         } else if (recipients.size() == 0) {
