@@ -17,6 +17,9 @@ import static fi.arcusys.koku.util.Constants.RESPONSE;
 import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN;
 import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_INVALID;
 import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_VALID;
+import static fi.arcusys.koku.util.Constants.PORTAL_MODE_KUNPO;
+import static fi.arcusys.koku.util.Constants.PORTAL_MODE_LOORA;
+
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
@@ -57,6 +60,9 @@ public class AjaxController {
 	
 	static {
 		PORTAL_MODE = KoKuPropertiesUtil.get("environment.name");
+		if (PORTAL_MODE == null) {
+			throw new ExceptionInInitializerError("environment.name is null!");
+		}
 	}
 	
 	/**
@@ -222,9 +228,9 @@ public class AjaxController {
 	 * @return PortalRole
 	 */
 	protected PortalRole getPortalRole() {
-		if (PORTAL_MODE.contains("kunpo")) {
+		if (PORTAL_MODE.contains(PORTAL_MODE_KUNPO)) {
 			return PortalRole.CITIZEN;
-		} else if (PORTAL_MODE.contains("loora")) {
+		} else if (PORTAL_MODE.contains(PORTAL_MODE_LOORA)) {
 			return PortalRole.EMPLOYEE;
 		} else {
 			throw new IllegalArgumentException("PortalMode not supported: "+ PORTAL_MODE);

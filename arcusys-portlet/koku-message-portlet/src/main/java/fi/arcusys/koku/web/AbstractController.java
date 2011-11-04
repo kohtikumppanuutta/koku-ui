@@ -1,34 +1,34 @@
 package fi.arcusys.koku.web;
 
-import javax.portlet.PortletRequest;
-
-import org.apache.log4j.Logger;
+import static fi.arcusys.koku.util.Constants.PORTAL_MODE_KUNPO;
+import static fi.arcusys.koku.util.Constants.PORTAL_MODE_LOORA;
 
 import fi.arcusys.koku.util.PortalRole;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 public class AbstractController {
 	
-	private Logger LOG = Logger.getLogger(AbstractController.class);
-
+	private static final String PORTAL_MODE;
+	
+	static {
+		PORTAL_MODE = KoKuPropertiesUtil.get("environment.name");
+		if (PORTAL_MODE == null) {
+			throw new ExceptionInInitializerError("environment.name is null!");
+		}
+	}
 	
 	/**
 	 * Resolves which portalRole portal has
 	 * 
-	 * FIXME: Super stupid portalRole resolving. For now
-	 * we determine if portal is citizen or employee only by portal name. 
-	 * 
-	 * 
-	 * @param request PortletRequest
 	 * @return PortalRole
 	 */
-	protected PortalRole getPortalRole(PortletRequest request) {
-		
-		LOG.debug("Currently used portal: " + request.getPortalContext().getPortalInfo());
-		String portalInfo = request.getPortalContext().getPortalInfo();
-		if (portalInfo.contains("EPP") || portalInfo.contains("GateIn")) {
+	protected PortalRole getPortalRole() {		
+		if (PORTAL_MODE.contains(PORTAL_MODE_KUNPO)) {
 			return PortalRole.CITIZEN;
-		} else {
+		} else if (PORTAL_MODE.contains(PORTAL_MODE_LOORA)) {
 			return PortalRole.EMPLOYEE;
-		}
+		} else {
+			throw new IllegalArgumentException("PortalMode not supported: "+ PORTAL_MODE);
+		}		
 	}
 }

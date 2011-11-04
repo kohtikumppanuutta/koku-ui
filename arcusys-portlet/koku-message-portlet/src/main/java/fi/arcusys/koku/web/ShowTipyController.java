@@ -81,7 +81,7 @@ public class ShowTipyController extends AbstractController {
 		PortletSession portletSession = request.getPortletSession();
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		UserIdResolver resolver = new UserIdResolver();
-		String userId = resolver.getUserId(username, getPortalRole(request));
+		String userId = resolver.getUserId(username, getPortalRole());
 		long reqId = -1; 
 		try {
 			reqId  = Long.valueOf(requestId);

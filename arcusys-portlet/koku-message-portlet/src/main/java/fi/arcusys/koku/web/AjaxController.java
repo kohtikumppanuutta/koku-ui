@@ -1,6 +1,7 @@
 package fi.arcusys.koku.web;
 
 import static fi.arcusys.koku.util.Constants.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +31,6 @@ import fi.arcusys.koku.hak.model.HakServiceHandle;
 import fi.arcusys.koku.kv.message.MessageHandle;
 import fi.arcusys.koku.kv.request.citizen.CitizenRequestHandle;
 import fi.arcusys.koku.kv.request.employee.EmployeeRequestHandle;
-import fi.arcusys.koku.tiva.KokuConsent;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
 import fi.arcusys.koku.tiva.tietopyynto.employee.KokuEmployeeTietopyyntoServiceHandle;
@@ -83,7 +83,7 @@ public class AjaxController extends AbstractController {
 		String userId = null;
 		try {
 			UserIdResolver resolver = new UserIdResolver();
-			userId = resolver.getUserId(username, getPortalRole(request));			
+			userId = resolver.getUserId(username, getPortalRole());			
 		} catch (Exception e) {
 			LOG.error("Error while trying to resolve userId. See following error msg: "+ e.getMessage());
 		}
@@ -159,9 +159,9 @@ public class AjaxController extends AbstractController {
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		UserIdResolver resolver = new UserIdResolver();
-		String userId = resolver.getUserId(username, getPortalRole(request));
+		String userId = resolver.getUserId(username, getPortalRole());
 
-		PortalRole role = getPortalRole(request);
+		PortalRole role = getPortalRole();
 		TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle(userId);		
 		
 		for(String consentId : messageList) {
@@ -193,7 +193,7 @@ public class AjaxController extends AbstractController {
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		UserIdResolver resolver = new UserIdResolver();
-		String userId = resolver.getUserId(username, getPortalRole(request));
+		String userId = resolver.getUserId(username, getPortalRole());
 
 		KokuCitizenWarrantHandle warrantHandle = new KokuCitizenWarrantHandle();		
 		
@@ -235,7 +235,7 @@ public class AjaxController extends AbstractController {
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		UserIdResolver resolver = new UserIdResolver();
-		String userId = resolver.getUserId(username, getPortalRole(request));
+		String userId = resolver.getUserId(username, getPortalRole());
 
 		
 		if(taskType.endsWith("citizen")) {
@@ -310,7 +310,7 @@ public class AjaxController extends AbstractController {
 		LOG.debug("Ajax call");
 		
 		if(userUid == null) {
-			jsonModel.put("loginStatus", "INVALID");
+			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_INVALID);
 			LOG.info("No logged in user");
 		} else {			
 			int numPerPage = PAGE_NUMBER;
@@ -419,7 +419,7 @@ public class AjaxController extends AbstractController {
 			jsonModel.put(TASKS, tasks);
 			jsonModel.put(JSON_TOTAL_ITEMS, totalTasksNum);
 			jsonModel.put(JSON_TOTAL_PAGES, totalPages);
-			jsonModel.put(JSON_LOGIN_STATUS, "VALID");
+			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_VALID);
 		}		
 		return jsonModel;	
 	}
