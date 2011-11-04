@@ -3,16 +3,13 @@ package fi.arcusys.koku.palvelut.controller;
 import static fi.arcusys.koku.util.Constants.ATTR_PREFERENCES;
 import static fi.arcusys.koku.util.Constants.JSON_RESULT;
 import static fi.arcusys.koku.util.Constants.PORTAL_GATEIN;
-import static fi.arcusys.koku.util.Constants.PREF_SHOW_ONLY_CHECKED;
 import static fi.arcusys.koku.util.Constants.PREF_SHOW_ONLY_FORM_BY_DESCRIPTION;
 import static fi.arcusys.koku.util.Constants.PREF_SHOW_ONLY_FORM_BY_ID;
 import static fi.arcusys.koku.util.Constants.PREF_SHOW_TASKS_BY_ID;
 import static fi.arcusys.koku.util.Constants.RESPONSE;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.portlet.ActionRequest;
@@ -29,7 +26,6 @@ import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.intalio.tempo.workflow.task.Task;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,12 +37,7 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import fi.arcusys.koku.palvelut.exceptions.IllegalOperationCall;
 import fi.arcusys.koku.palvelut.model.client.FormHolder;
-import fi.arcusys.koku.palvelut.model.client.VeeraCategoryImpl;
-import fi.arcusys.koku.palvelut.model.client.VeeraFormImpl;
-import fi.arcusys.koku.palvelut.services.VeeraServicesFacade;
 import fi.arcusys.koku.palvelut.util.AjaxViewResolver;
-import fi.arcusys.koku.palvelut.util.CategoryUtil;
-import fi.arcusys.koku.palvelut.util.MigrationUtil;
 import fi.arcusys.koku.palvelut.util.OperationsValidator;
 import fi.arcusys.koku.palvelut.util.OperationsValidatorImpl;
 import fi.arcusys.koku.palvelut.util.TaskUtil;
@@ -90,10 +81,6 @@ public class ViewController extends FormHolderController {
 		}
 		JS_ENDPOINTS = Collections.unmodifiableMap(endpoints);
 	}
-
-
-	@Autowired
-	private VeeraServicesFacade servicesFacade;
 	
 	
 	@ResourceMapping(value = "servicesAjax")
@@ -182,120 +169,33 @@ public class ViewController extends FormHolderController {
 		String portalInfo = (String)request.getPortalContext().getPortalInfo();
 		Boolean isGateInPortal = portalInfo.toLowerCase().contains(PORTAL_GATEIN);
 		
+		ModelAndView mav = new ModelAndView(FORM_VIEW_ACTION, "model", null);
+		mav.addObject(ATTR_PREFERENCES, request.getPreferences());
+		Task t = null;
 		
-		if (prefs.getValue(PREF_SHOW_ONLY_CHECKED, null) != null) {
-			ModelAndView mav = new ModelAndView(FORM_VIEW_ACTION, "model", null);
-			mav.addObject(ATTR_PREFERENCES, request.getPreferences());
-			Task t = null;
-			
-			Boolean showFormById = Boolean.valueOf(prefs.getValue(PREF_SHOW_TASKS_BY_ID, null));
-			LOG.debug("showFormById " + showFormById);
-			try {
-				if (isGateInPortal || showFormById) {
-					LOG.debug("Loading taskID: " + prefs.getValue(PREF_SHOW_ONLY_FORM_BY_ID, null) + "isGateIn: "+ isGateInPortal);
+		Boolean showFormById = Boolean.valueOf(prefs.getValue(PREF_SHOW_TASKS_BY_ID, null));
+		LOG.debug("showFormById " + showFormById);
+		try {
+			if (isGateInPortal || showFormById) {
+				LOG.debug("Loading taskID: " + prefs.getValue(PREF_SHOW_ONLY_FORM_BY_ID, null) + "isGateIn: "+ isGateInPortal);
+				t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue(PREF_SHOW_ONLY_FORM_BY_ID, null));
+			} else {
+				t = TaskUtil.getTaskByDescription(TokenUtil.getAuthenticationToken(request), prefs.getValue(PREF_SHOW_ONLY_FORM_BY_DESCRIPTION, null));
+				LOG.debug("t status: " + (t == null));
+				// Fallback. Try to get form by Id
+				if (t == null) {
+					LOG.error("Fallback! Couldn't find task by description name. Trying to get form by Id. Description: '" + prefs.getValue(PREF_SHOW_ONLY_FORM_BY_DESCRIPTION, null) + "'");
 					t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue(PREF_SHOW_ONLY_FORM_BY_ID, null));
-				} else {
-					t = TaskUtil.getTaskByDescription(TokenUtil.getAuthenticationToken(request), prefs.getValue(PREF_SHOW_ONLY_FORM_BY_DESCRIPTION, null));
-					LOG.debug("t status: " + (t == null));
-					// Fallback. Try to get form by Id
-					if (t == null) {
-						LOG.error("Fallback! Couldn't find task by description name. Trying to get form by Id. Description: '" + prefs.getValue(PREF_SHOW_ONLY_FORM_BY_DESCRIPTION, null) + "'");
-						t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue(PREF_SHOW_ONLY_FORM_BY_ID, null));
-					}
 				}
-			} catch (Exception e) {
-				LOG.error("Failure while trying to get Task.\nSome hints to fix problem: \n1. Logged in proper user? (this portlet doesn't work correctly with admin/nonlogged users \n2. Task might be updated. Reselect form in 'edit'-mode. \n3. Check that connection to Intalio server is up. ", e);
-				return getFailureView(request);
 			}
-			FormHolder fh = getFormHolderFromTask(request, t.getDescription());
-			mav.addObject("formholder", fh);
-			return mav;
-		}
-		long companyId = MigrationUtil.getCompanyId(request);
-		Integer rootFolderId = null;
-		try {
-			rootFolderId = getRootFolderId(companyId);			
 		} catch (Exception e) {
-			LOG.error("Failure while trying to get RootFolderId. See following log for more information: ", e);
+			LOG.error("Failure while trying to get Task.\nSome hints to fix problem: \n1. Logged in proper user? (this portlet doesn't work correctly with admin/nonlogged users \n2. Task might be updated. Reselect form in 'edit'-mode. \n3. Check that connection to Intalio server is up. ", e);
 			return getFailureView(request);
 		}
-		String folderId = request.getParameter(ViewController.VIEW_CURRENT_FOLDER);
-		if (folderId == null) {
-			folderId = (String) request.getAttribute(EditController.CURRENT_CATEGORY);
-			if (folderId == null) {
-				folderId = (String)request.getParameter(EditController.CURRENT_CATEGORY);
-			}
-			if (folderId == null) {
-				folderId = rootFolderId.toString();
-			}
-		}
-		int currentFolder;
-		try {
-			currentFolder = Integer.parseInt(folderId);
-		} catch (NumberFormatException e) {
-			currentFolder = rootFolderId;
-		}
-
-		try {
+		FormHolder fh = getFormHolderFromTask(request, t.getDescription());
+		mav.addObject("formholder", fh);
+		return mav;
 		
-			// Category currently selected
-			VeeraCategoryImpl currentCategory = servicesFacade.findCategoryByEntryAndCompanyId(currentFolder, companyId);
-			if (currentCategory == null) {
-				// If category doesn't exist, use root category
-				currentCategory =  servicesFacade.findCategoryByEntryAndCompanyId(rootFolderId, companyId);
-			}
-	
-			// Child categories & forms of currently selected category
-			List<VeeraCategoryImpl> categories = servicesFacade.findChildCategories(currentFolder, companyId);
-			for (VeeraCategoryImpl vc : categories) {
-				vc.setFormCount(servicesFacade.findChildForms(vc.getEntryId()).size());
-			}
-		
-			List<VeeraFormImpl> forms = servicesFacade.findChildFormsByFormHolders(currentFolder, companyId, getFormHoldersFromTasks(request));
-			List<Object[]> formCount = (List<Object[]>) servicesFacade.findChildFormsCount(currentFolder, companyId);
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("categories", categories);
-			map.put("forms", forms);
-			map.put("rootFolderId", rootFolderId);
-			map.put("currentFolder", currentFolder);
-			map.put("currentCategory", currentCategory);
-			map.put("childFormCount", formCount);
-			String currentFolderArg = request.getParameter(ViewController.VIEW_CURRENT_FOLDER);
-			if (currentFolderArg == null) {
-				if (currentFolderArg == null) {
-					// Form/Category edit/view or redirect from EditController
-					currentFolderArg = (String) request.getAttribute(EditController.CURRENT_CATEGORY);
-				}
-			}
-			
-	
-			int currentFolderId = -1;
-			VeeraCategoryImpl category = null;
-			try {
-				currentFolderId = Integer.parseInt(currentFolderArg);
-				category = servicesFacade.findCategoryByEntryAndCompanyId(currentFolderId, companyId);
-			} catch (NumberFormatException e) {
-				// category remains as null
-			}
-	
-			boolean currentCategoryIsRoot = currentFolderId == rootFolderId;
-			List<VeeraCategoryImpl> path = new ArrayList<VeeraCategoryImpl>();
-			if (category != null && !currentCategoryIsRoot) {
-				while (category != null && category.getEntryId() != rootFolderId) {
-					path.add(category);
-					category = servicesFacade.findCategoryByEntryAndCompanyId(category.getParent(), companyId);
-				}
-				path.add(category);
-			}
-			Collections.reverse(path);
-			ModelAndView mav = new ModelAndView(VIEW_ACTION, "model", map);
-			mav.addObject("breadcrumb", path);
-			mav.addObject(ATTR_PREFERENCES, request.getPreferences());
-			return mav;
-		} catch (Exception e) {
-			LOG.error("VeeraServicesFacade failure. See following log for more information: ", e);
-			return getFailureView(request);
-		}
 	}
 	
 	private ModelAndView getFailureView(RenderRequest request) {
@@ -305,28 +205,6 @@ public class ViewController extends FormHolderController {
 
 	}
 	
-	private Integer getRootFolderId(long companyId) {
-
-		List<VeeraCategoryImpl> list = servicesFacade.findAllCategoriesByCompanyId(companyId);
-		int[] entryIds = CategoryUtil.getEntryIds(list);
-		Integer rootFolderId = CategoryUtil.min(entryIds);
-		if (rootFolderId == null) {
-			createNewCategory(companyId);
-			list = servicesFacade.findAllCategoriesByCompanyId(companyId);
-			entryIds = CategoryUtil.getEntryIds(list);
-			rootFolderId = CategoryUtil.min(entryIds);
-		}
-		return rootFolderId;
-	}
-	
-	private void createNewCategory(long companyId) {
-		VeeraCategoryImpl category = new VeeraCategoryImpl();
-		category.setName("Palvelut");
-		category.setParent(Integer.valueOf(-1));
-		category.setDescription("");
-		category.setCompanyId(Long.valueOf(companyId));
-		servicesFacade.createCategory(category);
-	}
 	
 	@ActionMapping(value="NORMAL")
 	public void handleActionRequestInternal( ActionRequest request, ActionResponse response ) throws Exception {

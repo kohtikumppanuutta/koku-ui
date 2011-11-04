@@ -222,39 +222,10 @@
 
 
 <div id="form_wrap" style="margin:5px; position:relative; min-width: 720px;">
-<div class="veera_form_window_header">
-	<c:if test="${helpContent != null}">
-		<span class="form_help_link">
-			<a href="#" onclick="
-				var html = '<c:out value="${helpContent}"/>';
-				var popup = new Liferay.Popup(
-					{
-						header: 'Ohje',
-						position:[150,150],
-						modal:false,
-						handles: '',
-						width:600,
-						height:600,
-						xy: ['center', 100],
-						message: html
-					}
-				);">Ohje</a>
-		</span>
-	</c:if>
-	
-	<span>
-		<jsp:include page="/jsp/breadCrumb.jsp" />
-		<%-- <span style="display: inline">» ${formholder.name}</span> --%>
-	</span>
-
-</div>
-
-<!-- <iframe id="hiddenIframe" width="0" height="0" src="https://intalio:8443/xssEnabler.html" style="display: none;"></iframe> -->
 
 <iframe src="" id="<portlet:namespace />xforms_iframe" class="xforms_container_iframe" frameborder="0" scrolling="no" horizontalscrolling="no" style="height: 700px; width:100%; overflow-x: hidden;"></iframe>
 
 <script type="text/javascript">
 	startResizer();
-	// jQuery('<portlet:namespace />xforms_iframe').iframeAutoHeight({minHeight: 700});
 </script>
 

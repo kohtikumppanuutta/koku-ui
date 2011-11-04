@@ -136,4 +136,15 @@ div[label="IntalioInternal_AttachmentsImageBlock"] {
     display: none !important;
 }
 
+/* GateIn portlet configuration popup fix */
+.UIPopupCategory {
+	z-index: 10;
+}
+
+.configuration {
+	padding: 10px;
+	padding-bottom: 20px;
+}
+
+
 

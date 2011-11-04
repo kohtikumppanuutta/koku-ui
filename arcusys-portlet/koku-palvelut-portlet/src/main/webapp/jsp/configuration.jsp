@@ -12,11 +12,11 @@
 	<c:choose>
 		<c:when test="<%= portalInfo.equals(Constants.PORTAL_JBOSS) %>">		
 		<!-- JBoss	  -->
-			 <c:set value="<%=prefs.getValue(\"showOnlyForm\", null) %>" var="formId"></c:set>
-			 <c:set value="<%=prefs.getValue(\"showOnlyFormByDescription\", null) %>" var="formDescription"></c:set>
-		 	 <c:set value="<%=prefs.getValue(\"useTaskId\", null) %>" var="selectFormById"></c:set>
+			 <c:set value="<%=prefs.getValue(Constants.PREF_SHOW_ONLY_FORM_BY_ID, null) %>" var="formId"></c:set>
+			 <c:set value="<%=prefs.getValue(Constants.PREF_SHOW_ONLY_FORM_BY_DESCRIPTION, null) %>" var="formDescription"></c:set>
+		 	 <c:set value="<%=prefs.getValue(Constants.PREF_SHOW_TASKS_BY_ID, null) %>" var="selectFormById"></c:set>
 			 <div class="CurrentForm">Tällähetkellä valittu lomake:
-			 <% Boolean isTaskIdEnabled = Boolean.valueOf(prefs.getValue(Constants.SHOW_TASKS_BY_ID, null)); %>
+			 <% Boolean isTaskIdEnabled = Boolean.valueOf(prefs.getValue(Constants.PREF_SHOW_TASKS_BY_ID, null)); %>
 			 <c:choose>	 
 			 	<c:when test="<%= (isTaskIdEnabled) %>">
 					'${formDescription}' - <b>'${formId}'</b>
@@ -49,10 +49,10 @@
 	
 		<!--  GateIn -->
 		<form action="<portlet:actionURL portletMode="edit"><portlet:param name="action" value="config" /></portlet:actionURL>" method="post">	
-				<span>Näytettävä lomake</span>		
+				<span>Näytettävä lomake</span>
 				<select name="showOnlyForm">
 					<c:forEach var="form" items="${formList}">
-						<c:set value="<%=prefs.getValue(\"showOnlyForm\", null) %>" var="formId"></c:set>
+						<c:set value="<%=prefs.getValue(Constants.PREF_SHOW_ONLY_FORM_BY_ID, null) %>" var="formId"></c:set>
 						<c:choose>
 							<c:when test="${formId eq form.task.ID}">
 								<option value="${form.task.ID}" selected="selected">${form.task.description}</option>
@@ -63,16 +63,7 @@
 						</c:choose>
 					</c:forEach>
 				</select>
-				<span>Näytä vain lomake: </span>
-				<c:choose>
-					<c:when test="<%=prefs.getValue(\"showOnlyChecked\", null) != null %>">
-						<input type="checkbox" name="showOnlyChecked" checked="checked"/>
-					</c:when>
-					<c:otherwise>
-						<input type="checkbox" name="showOnlyChecked"/ >
-					</c:otherwise>
-				</c:choose>
-				<input type="submit" value="Submit">  
+				<input type="submit" value="Tallenna">  
 			</form>	
 		</c:otherwise>
 	</c:choose>

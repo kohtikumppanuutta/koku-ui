@@ -11,7 +11,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.intalio.tempo.workflow.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.portlet.mvc.AbstractController;
 
 import fi.arcusys.koku.palvelut.model.client.FormHolder;
 import fi.arcusys.koku.palvelut.util.MigrationUtil;
@@ -23,29 +22,21 @@ import fi.arcusys.koku.palvelut.util.URLUtil;
  * @author Dmitry Kudinov (dmitry.kudinov@arcusys.fi)
  * Jul 21, 2011
  */
-public abstract class FormHolderController
-//extends AbstractController 
-{
+public abstract class FormHolderController {
 	@Autowired(required = false)
 	private PortletContext portletContext;
 	
-	private static Log log = LogFactory.getLog(FormHolderController.class);
+	private static final Log LOG = LogFactory.getLog(FormHolderController.class);
 
-	/**
-	 * 
-	 */
 	public FormHolderController() {
 		super();
 	}
 
 	protected List<FormHolder> getFormHoldersFromTasks(PortletRequest request) {
 		String token = TokenUtil.getAuthenticationToken(request);
-		//String formManagerUrl = "http://ouka-jboss2.mermit.fi:8080/xFormsManager/init";
-		//String formManagerUrl = "/veera/xforms/init";
 		List<Task> taskList = TaskUtil.getPIPATaskList(token);
 		List<FormHolder> formList = new ArrayList<FormHolder>();
 		for (Task task: taskList) {
-				//String formManagerUrl = URLUtil.getFormManagerURLForTask(task);
 				String taskFormURL = getFormUrlByTask(request, token, task);
 				formList.add(new FormHolder(task.getDescription(), taskFormURL));
 		}
@@ -78,14 +69,14 @@ public abstract class FormHolderController
 					String message = customerId + " " + applicationId + " "
 							+ userName + " Käyttäjä_avasi_lomakkeen_"
 							+ actionString;
-					log.warn(message);
+					LOG.warn(message);
 				} catch (Exception e) {
-					log.error("Something went wrong" +e);
+					LOG.error("Something went wrong" +e);
 				}
 				return new FormHolder(description, taskFormURL);
 			}
 		}
-		log.error("Didn't find any form!");
+		LOG.error("Didn't find any form!");
 	
 		return null;
 	}

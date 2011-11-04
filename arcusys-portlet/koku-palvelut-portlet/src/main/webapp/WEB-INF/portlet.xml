@@ -9,7 +9,7 @@
 		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
 		<init-param>
 			<name>contextConfigLocation</name>
-			<value>/WEB-INF/context/portlet/veera.xml</value>
+			<value>/WEB-INF/context/applicationContext.xml</value>
 		</init-param>
 		<supports>
 			<mime-type>text/html</mime-type>
@@ -25,19 +25,6 @@
 		</portlet-info>
 		<portlet-preferences>
 			<preference>
-				<name>portlet-enabled-for-public-pages</name>
-				<value>true</value>
-			</preference>
-			<preference>
-				<name>portlet-enabled-for-private-pages</name>
-				<value>true</value>
-			</preference>
-			
-			<preference>
-				<name>showOnlyChecked</name>
-				<value>true</value>
-			</preference>
-			<preference>
 				<name>showOnlyForm</name>
 				<value>123123</value>
 			</preference>
@@ -49,7 +36,6 @@
 				<name>useTaskId</name>
 				<value>false</value>
 			</preference>
-			
 		</portlet-preferences>
 		<security-role-ref>
 			<role-name>power-user</role-name>

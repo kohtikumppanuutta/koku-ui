@@ -11,10 +11,6 @@
          <instance-id>ApViestitUusiViesti</instance-id>
          <portlet-ref>palvelut-portlet</portlet-ref>
          <preferences>
-            <preference>
-				<name>showOnlyChecked</name>
-				<value>true</value>
-			</preference>
 			<preference>
 				<name>showOnlyForm</name>
 				<value>0</value>
@@ -43,10 +39,6 @@
          <instance-id>ApPyynnotUusiPyynto</instance-id>
          <portlet-ref>palvelut-portlet</portlet-ref>
          <preferences>
-            <preference>
-				<name>showOnlyChecked</name>
-				<value>true</value>
-			</preference>
 			<preference>
 				<name>showOnlyForm</name>
 				<value>0</value>
@@ -74,10 +66,6 @@
          <instance-id>ApPyynnotLuoUusiPohja</instance-id>
          <portlet-ref>palvelut-portlet</portlet-ref>
          <preferences>
-            <preference>
-				<name>showOnlyChecked</name>
-				<value>true</value>
-			</preference>
 			<preference>
 				<name>showOnlyForm</name>
 				<value>0</value>
@@ -105,10 +93,6 @@
          <instance-id>ApTapaamisetLuoUusiTapaaminen</instance-id>
          <portlet-ref>palvelut-portlet</portlet-ref>
          <preferences>
-            <preference>
-				<name>showOnlyChecked</name>
-				<value>true</value>
-			</preference>
 			<preference>
 				<name>showOnlyForm</name>
 				<value>0</value>
@@ -136,10 +120,6 @@
          <instance-id>ApSuostumuksetLuoUusiSuostumispohja</instance-id>
          <portlet-ref>palvelut-portlet</portlet-ref>
          <preferences>
-            <preference>
-				<name>showOnlyChecked</name>
-				<value>true</value>
-			</preference>
 			<preference>
 				<name>showOnlyForm</name>
 				<value>de870d63-3073-48f5-bb84-703420db350d</value>
@@ -167,10 +147,6 @@
          <instance-id>ApSuostumuksetLuoUusiSuostumisPyyntö</instance-id>
          <portlet-ref>palvelut-portlet</portlet-ref>
          <preferences>
-            <preference>
-				<name>showOnlyChecked</name>
-				<value>true</value>
-			</preference>
 			<preference>
 				<name>showOnlyForm</name>
 				<value>ed58a6bd-7f26-464b-88b4-17f1963aaeb6</value>
@@ -198,10 +174,6 @@
          <instance-id>ApTietopyyntöUusiTietopyynto</instance-id>
          <portlet-ref>palvelut-portlet</portlet-ref>
          <preferences>
-            <preference>
-				<name>showOnlyChecked</name>
-				<value>true</value>
-			</preference>
 			<preference>
 				<name>showOnlyForm</name>
 				<value>3a8011d7-25f5-47f1-8f70-25fc2f92b802</value>
@@ -229,10 +201,6 @@
          <instance-id>ApTietopyyntöKirjaaSuostumus</instance-id>
          <portlet-ref>palvelut-portlet</portlet-ref>
          <preferences>
-            <preference>
-				<name>showOnlyChecked</name>
-				<value>true</value>
-			</preference>
 			<preference>
 				<name>showOnlyForm</name>
 				<value>0</value>
@@ -260,10 +228,6 @@
          <instance-id>ApPaivahoitohakemuksenVahvistus</instance-id>
          <portlet-ref>palvelut-portlet</portlet-ref>
          <preferences>
-            <preference>
-				<name>showOnlyChecked</name>
-				<value>true</value>
-			</preference>
 			<preference>
 				<name>showOnlyForm</name>
 				<value>0</value>
