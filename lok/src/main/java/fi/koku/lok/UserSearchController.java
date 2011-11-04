@@ -150,8 +150,7 @@ public class UserSearchController {
 
     customer = customerService.opGetCustomer(pic, customerAuditInfoType);
 
-    if (customer != null) {
-      
+    if (customer != null) {  
       // the User instance is needed so that the full name can be shown
       cust = new User(customer.getHenkiloTunnus(), customer.getId(), customer.getEtunimetNimi(), customer.getSukuNimi());
       log.debug(cust.getFname() + ", " + cust.getSname() + ", " + cust.getPic());

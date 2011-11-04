@@ -77,7 +77,7 @@
 								<c:forEach var="e" items="${entries}">
 									<tr>
 										<td width=15%><fmt:formatDate
-												pattern="dd.MM.yyyy hh:mm:ss" value="${e.timestamp}" />
+												pattern="dd.MM.yyyy HH:mm:ss" value="${e.timestamp}" />
 										</td>
 										<td width=15%><c:out value="${e.user}" />
 										</td>

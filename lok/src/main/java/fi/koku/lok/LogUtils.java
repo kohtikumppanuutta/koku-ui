@@ -160,9 +160,7 @@ public class LogUtils {
     }
     if (info.getPic() == null) {
       log.error("cannot get pic from session");
-    } else {
-      log.debug("got pic from userinfo: " + info.getPic());
-    }
+    } 
 
     return info.getPic();
   }
@@ -175,9 +173,7 @@ public class LogUtils {
     }
     if (info.getUid() == null) {
       log.error("cannot get uid from session");
-    } else {
-      log.debug("got uid from userinfo: " + info.getUid());
-    }
+    } 
 
     return info.getUid();
   }

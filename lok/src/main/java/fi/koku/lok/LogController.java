@@ -69,7 +69,7 @@ public class LogController {
     } else if (AuthUtils.isOperationAllowed("ViewAdminLogFile", userRoles)) {
       model.addAttribute("redirectToSearch", true);
     } else{
-      log.debug("virhe!");
+      log.error("No role found for Lok");
     }
     
     return "menu";

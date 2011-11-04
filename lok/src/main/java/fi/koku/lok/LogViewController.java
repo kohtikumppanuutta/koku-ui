@@ -164,9 +164,7 @@ public class LogViewController {
     if (visited != null) {
       response.setRenderParameter("visited", visited);
     }
-
-    log.debug("action criteria = " + criteria);
-   
+    
     // If something goes wrong in serializing the criteria, the portlet must not
     // die and the portlet must not query the log service
     try {
@@ -206,7 +204,7 @@ public class LogViewController {
       // call to lok service
       LogEntriesType entriestype = logService.opQueryLog(criteriatype, audit);
 
-      // get the log entries list from the database
+      // set the values 
       List<LogEntryType> entryTypeList = entriestype.getLogEntry();
 
       for (Iterator<?> i = entryTypeList.iterator(); i.hasNext();) {

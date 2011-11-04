@@ -143,10 +143,10 @@ public class LogArchiveController {
           String defaultDateStr = lu.getDateString(2); 
           model.addAttribute("endDate", defaultDateStr);
         }
+        
+        log.error("error = " + error);
+        model.addAttribute("error", error);
       }
-      log.error("error = " + error);
-
-      model.addAttribute("error", error);
 
     } catch (KoKuFaultException e) {
       log.error(e.getMessage(), e);
