@@ -18,7 +18,6 @@ import fi.koku.services.utility.log.v1.LogEntriesType;
 import fi.koku.services.utility.log.v1.LogEntryType;
 import fi.koku.services.utility.log.v1.LogServiceFactory;
 import fi.koku.services.utility.log.v1.LogServicePortType;
-import fi.koku.services.utility.log.v1.ServiceFault;
 
 /**
  * This class provides logging services for using the LOK component of KoKu.
@@ -104,9 +103,10 @@ public class Log {
       entries.getLogEntry().add(logEntryType);
       logServicePortType.opLog(entries, getLogAuditInfo(userId));
       
-    } catch (ServiceFault fault) {
+    } catch (fi.koku.services.utility.log.v1.ServiceFault fault) {
+      // if log operation fails, stacktrace will be logged in server log
+      // PYH still operates normally
       logger.error("LOK service failed to log operation " + operation + " for data type " + dataType, fault);
-      throw new RuntimeException(fault);
     }
   }
 }

@@ -275,11 +275,10 @@ public class EditFamilyInformationController {
           mailMessage.setSubject(messageSubject);
           mailMessage.setText(messageText);
           
-          // TODO: miten tässä jos syntyy MailException mutta halutaan heittää myös GuardianForChildNotFoundException?
-          
           try {
             this.mailSender.send(mailMessage);
           } catch (MailException me) {
+            // even if mail sending fails, PYH operation continues normally
             logger.error("PyhDemoService.addPersonsAsFamilyMembers: sending mail to KoKu support failed!", me);
           }
           
@@ -303,8 +302,6 @@ public class EditFamilyInformationController {
     response.setRenderParameter("childsGuardianshipInformationNotFound", String.valueOf(childsGuardianshipInformationNotFound));
     response.setRenderParameter("action", "editFamilyInformation");
   }
-  
-  // PRIVATE METHODS
   
   /**
    * Selects persons (PICs) to whom send the confirmation message for a operation, for example adding a dependant 
