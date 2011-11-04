@@ -102,14 +102,6 @@
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
-
-		<dependency>
-			<groupId>palvelut-portlet</groupId>
-			<artifactId>loggingServiceClient</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/loggingserviceclient.jar</systemPath>
-		</dependency>
 		<dependency>
 			<groupId>org.intalio.tempo</groupId>
 			<artifactId>tempo-tms-common</artifactId>
@@ -312,6 +304,7 @@
 			<artifactId>commons-codec</artifactId>
 			<version>${commons-codec.version}</version>
 		</dependency>
+		
 		<!-- Java Mail API -->
 		<dependency>
 			<groupId>javax.mail</groupId>
@@ -350,11 +343,11 @@
 	    </dependency>
 		
 		<!--  Spring WebServices -->
-		<dependency>
-		  <groupId>org.springframework.ws</groupId>
-		  <artifactId>spring-ws-core</artifactId>
-		  <version>2.0.0-M1</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 		  <groupId>org.springframework.ws</groupId> -->
+<!-- 		  <artifactId>spring-ws-core</artifactId> -->
+<!-- 		  <version>2.0.0-M1</version> -->
+<!-- 		</dependency> -->
 		
 		<!-- Common services -->
 		 <dependency>

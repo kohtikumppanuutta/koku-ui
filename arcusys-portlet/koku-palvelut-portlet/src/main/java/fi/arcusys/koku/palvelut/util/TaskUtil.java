@@ -33,7 +33,6 @@ public class TaskUtil {
 		try {
 			tasks = Arrays.asList(tms.getTaskList());
 		} catch (AuthException e) {
-			// TODO Auto-generated catch block
 			LOG.error("Authentication error", e);
 		}
 		return tasks;

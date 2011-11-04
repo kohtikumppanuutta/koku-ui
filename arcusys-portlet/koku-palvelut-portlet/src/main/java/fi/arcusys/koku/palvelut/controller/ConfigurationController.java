@@ -33,18 +33,15 @@ import fi.arcusys.koku.palvelut.util.URLUtil;
 @RequestMapping(value = "EDIT")
 public class ConfigurationController { 
 	
+	private static final Logger LOG = Logger.getLogger(ConfigurationController.class.getName());
 	public static final String EDIT_ACTION = "configuration";
 	public static final String JBOSS_PORTAL = "JBoss Portal 2.7";
-			
-	private static final Logger LOG = Logger.getLogger(ConfigurationController.class.getName());
-
 	
 	@RenderMapping
 	protected ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderResponse response) throws Exception {
 		LOG.debug("handleRenderRequestInternal");
 		Map<String, Object> map = new HashMap<String, Object>();
-//		map.put("taskList", getTaskHolders(request));
 		ModelAndView mav = new ModelAndView(EDIT_ACTION, "model", map);
 		String portalInfo = request.getPortalContext().getPortalInfo();
 		
@@ -69,7 +66,6 @@ public class ConfigurationController {
 	@ActionMapping(params="action=config")
 	protected void handleActionRequestInternal(ActionRequest request,
 			ActionResponse response) throws Exception {
-		// TODO Auto-generated method stub
 		LOG.debug("handleActionRequestInternal - Save settings");
 		PortletPreferences prefs = request.getPreferences();
 		prefs.setValue(PREF_SHOW_ONLY_CHECKED, request.getParameter(PREF_SHOW_ONLY_CHECKED));

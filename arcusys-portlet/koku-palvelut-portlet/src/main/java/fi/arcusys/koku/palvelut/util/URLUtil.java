@@ -48,10 +48,8 @@ public class URLUtil {
 		String userName = null;
 		
 		try {
-
 			String realm = MigrationUtil.getCompanyWebId(request);
 			userName = realm + "/" + MigrationUtil.getUser(request);
-			
 		} catch (Exception e) {
 			LOG.error("Couldn't fetch realm or username from request.", e);
 			return null;

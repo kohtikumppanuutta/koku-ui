@@ -1,6 +1,5 @@
 package fi.arcusys.koku.palvelut.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -30,17 +29,6 @@ public abstract class FormHolderController {
 
 	public FormHolderController() {
 		super();
-	}
-
-	protected List<FormHolder> getFormHoldersFromTasks(PortletRequest request) {
-		String token = TokenUtil.getAuthenticationToken(request);
-		List<Task> taskList = TaskUtil.getPIPATaskList(token);
-		List<FormHolder> formList = new ArrayList<FormHolder>();
-		for (Task task: taskList) {
-				String taskFormURL = getFormUrlByTask(request, token, task);
-				formList.add(new FormHolder(task.getDescription(), taskFormURL));
-		}
-		return formList;
 	}
 
 	protected FormHolder getFormHolderFromTask(PortletRequest request, String description) {
@@ -77,7 +65,6 @@ public abstract class FormHolderController {
 			}
 		}
 		LOG.error("Didn't find any form!");
-	
 		return null;
 	}
 	

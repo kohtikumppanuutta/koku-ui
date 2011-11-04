@@ -25,26 +25,6 @@ public class MigrationUtil {
 		SERVICE_URL = value;		
 	}
 	
-	public static long getCompanyId(PortletRequest request) {
-		//import com.liferay.portal.util.PortalUtil;
-//		long companyId = PortalUtil.getCompanyId(request);
-		long companyId = 0;
-		return companyId;
-	}
-
-	public static long getCompanyId(HttpServletRequest request) {
-		//import com.liferay.portal.util.PortalUtil;
-//		long companyId = PortalUtil.getCompanyId(request);
-		long companyId = 0;
-		return companyId;
-	}
-
-	public static long getCompanyByUser(PortletRequest request) {
-//		long userId = Long.parseLong(request.getRemoteUser());
-//		User user = UserLocalServiceUtil.getUser(userId);
-//		long companyId = user.getCompanyId();
-		return 0;
-	}
 	
 	public static String getCompanyWebId(PortletRequest request) {
 //		PortalUtil.getCompany(request).getWebId()
@@ -55,12 +35,7 @@ public class MigrationUtil {
 //		PortalUtil.getUser(request).getScreenName()
 		return request.getUserPrincipal().getName();
 	}
-	
-	public static String getUser(HttpServletRequest request) {
-//		PortalUtil.getUser(request).getScreenName()
-		return request.getUserPrincipal().getName();
-	}
-	
+		
 	public static Assertion getAssertion(PortletRequest request) {
 //		HttpServletRequest req = PortalUtil.getHttpServletRequest(request);
 //		Assertion assertion = (Assertion)req.getSession().getAttribute(AbstractCasFilter.CONST_CAS_ASSERTION);
