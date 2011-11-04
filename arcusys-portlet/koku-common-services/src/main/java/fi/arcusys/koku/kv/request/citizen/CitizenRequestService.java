@@ -1,11 +1,15 @@
 package fi.arcusys.koku.kv.request.citizen;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import fi.arcusys.koku.kv.requestservice.KokuKunpoRequestService_Service;
 import fi.arcusys.koku.kv.requestservice.ResponseDetail;
 import fi.arcusys.koku.kv.requestservice.ResponseSummary;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
  * Retrieves request data and related operations via web services
@@ -13,8 +17,21 @@ import fi.arcusys.koku.kv.requestservice.ResponseSummary;
  * Aug 22, 2011
  */
 public class CitizenRequestService {
+		
+	private static final Logger LOG = Logger.getLogger(CitizenRequestService.class);		
+	private static final URL REQUEST_WSDL_LOCATION;	
 	
-	public final URL REQUEST_WSDL_LOCATION = getClass().getClassLoader().getResource("KokuKunpoRequestServiceImpl.wsdl");
+	static {
+		try {
+			LOG.info("KvMessageservice WSDL location: "+ KoKuPropertiesUtil.get("KokuKunpoRequestService"));
+			REQUEST_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("KokuKunpoRequestService"));
+		} catch (MalformedURLException e) {
+			LOG.error("Failed to create KokuKunpoRequestService WSDL url! Given URL address is not valid!");
+			throw new ExceptionInInitializerError(e);
+		}
+	}
+	
+	
 	private KokuKunpoRequestService_Service rs;
 	
 	/**

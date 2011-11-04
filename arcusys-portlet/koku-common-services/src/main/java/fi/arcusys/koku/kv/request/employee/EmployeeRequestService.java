@@ -1,12 +1,18 @@
 package fi.arcusys.koku.kv.request.employee;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import fi.arcusys.koku.kv.message.MessageService;
+import fi.arcusys.koku.kv.messageservice.KokuMessageService_Service;
 import fi.arcusys.koku.kv.requestservice.KokuRequestService_Service;
 import fi.arcusys.koku.kv.requestservice.Request;
 import fi.arcusys.koku.kv.requestservice.RequestSummary;
 import fi.arcusys.koku.kv.requestservice.RequestType;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
  * Retrieves request data and related operations via web services
@@ -14,8 +20,20 @@ import fi.arcusys.koku.kv.requestservice.RequestType;
  * Aug 22, 2011
  */
 public class EmployeeRequestService {
+		
+	private static final Logger LOG = Logger.getLogger(EmployeeRequestService.class);		
+	private static final URL REQUEST_WSDL_LOCATION;	
 	
-	public final URL REQUEST_WSDL_LOCATION = getClass().getClassLoader().getResource("KvRequestService.wsdl");
+	static {
+		try {
+			LOG.info("KvMessageservice WSDL location: "+ KoKuPropertiesUtil.get("KvRequestService"));
+			REQUEST_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("KvRequestService"));
+		} catch (MalformedURLException e) {
+			LOG.error("Failed to create KvRequestService WSDL url! Given URL address is not valid!");
+			throw new ExceptionInInitializerError(e);
+		}
+	}
+	
 	private KokuRequestService_Service rs;
 	
 	/**
