@@ -35,9 +35,8 @@ import fi.arcusys.koku.users.UserIdResolver;
 @Controller("singleTipyController")
 @RequestMapping(value = "VIEW")
 public class ShowTipyController extends AbstractController {
-	private Logger LOG = Logger.getLogger(ShowTipyController.class);
+	private static final Logger LOG = Logger.getLogger(ShowTipyController.class);
 
-	
 	@Resource
 	ResourceBundleMessageSource messageSource;
 	

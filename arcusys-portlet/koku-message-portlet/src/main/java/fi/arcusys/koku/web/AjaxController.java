@@ -56,7 +56,7 @@ public class AjaxController extends AbstractController {
 	@Resource
 	private ResourceBundleMessageSource messageSource;
 
-	private static Logger LOG = Logger.getLogger(AjaxController.class);
+	private static final Logger LOG = Logger.getLogger(AjaxController.class);
 	
 	/**
 	 * Handles portlet ajax request of tasks such as messages, requests,

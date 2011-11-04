@@ -29,8 +29,7 @@ import fi.arcusys.koku.users.UserIdResolver;
 @Controller("singleWarrantController")
 @RequestMapping(value = "VIEW")
 public class ShowWarrantController extends AbstractController {
-	private Logger LOG = Logger.getLogger(ShowWarrantController.class);
-
+	private static final Logger LOG = Logger.getLogger(ShowWarrantController.class);
 	
 	@Resource
 	ResourceBundleMessageSource messageSource;

@@ -25,11 +25,11 @@ import static fi.arcusys.koku.util.Constants.*;
 @RequestMapping(value = "EDIT")
 public class ConfigController {
 	
-	private Logger logger = Logger.getLogger(ConfigController.class);
+	private static final Logger LOG = Logger.getLogger(ConfigController.class);
 	
 	@RenderMapping
 	public String showConfig(RenderRequest request, RenderResponse response, ModelMap modelmap) {	
-		logger.debug("show edit mode");
+		LOG.debug("show edit mode");
 		return VIEW_CONFIG;
 	}
 	
@@ -41,17 +41,17 @@ public class ConfigController {
     		String refreshDuration = request.getParameter(PREF_REFRESH_DURATION);
     		String messageType = request.getParameter(PREF_MESSAGE_TYPE);
     		String portletPath = request.getParameter(PREF_MESSAGE_PORTLET_PATH);
-    		logger.info("User '"+request.getRemoteUser() + "' saved settings: refresh: " + refreshDuration + " messageType: " + messageType + " PortletPath: '"+portletPath+"'");
+    		LOG.info("User '"+request.getRemoteUser() + "' saved settings: refresh: " + refreshDuration + " messageType: " + messageType + " PortletPath: '"+portletPath+"'");
     		pref.setValue(PREF_REFRESH_DURATION, refreshDuration);
     		pref.setValue(PREF_MESSAGE_TYPE, messageType);
-    		pref.setValue(PREF_MESSAGE_PORTLET_PATH, portletPath);    		
+    		pref.setValue(PREF_MESSAGE_PORTLET_PATH, portletPath);	
     		pref.store();
     		
     		response.setPortletMode(PortletMode.VIEW);
             response.setWindowState(WindowState.NORMAL);
  
         } catch (Exception e) { 
-        	logger.error("Configuration edit mode failed with exception");
+        	LOG.error("Configuration edit mode failed with exception");
         }         
 	}	
 

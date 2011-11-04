@@ -31,7 +31,7 @@ import static fi.arcusys.koku.util.Constants.*;
 @RequestMapping(value = "VIEW")
 public class ShowAppointmentController {
 	
-	private Logger LOG = Logger.getLogger(ShowAppointmentController.class);
+	private static final Logger LOG = Logger.getLogger(ShowAppointmentController.class);
 	
 	@Resource
 	ResourceBundleMessageSource messageSource;

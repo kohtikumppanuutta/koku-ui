@@ -32,7 +32,7 @@ import fi.arcusys.koku.hak.model.KokuApplicationSummary;
 @Controller("singleKindergartenController")
 @RequestMapping(value = "VIEW")
 public class ShowKindergartenController extends AbstractController {
-	private Logger LOG = Logger.getLogger(ShowKindergartenController.class);
+	private static final Logger LOG = Logger.getLogger(ShowKindergartenController.class);
 
 	
 	@Resource

@@ -18,9 +18,6 @@ import fi.arcusys.koku.kv.model.KokuQuestion;
 import fi.arcusys.koku.kv.model.KokuRequest;
 import fi.arcusys.koku.kv.model.KokuResponse;
 import fi.arcusys.koku.kv.request.employee.EmployeeRequestHandle;
-import fi.arcusys.koku.kv.requestservice.Answer;
-import fi.arcusys.koku.kv.requestservice.Question;
-import fi.arcusys.koku.kv.requestservice.Response;
 
 /**
  * Generates csv file containing response summary information
@@ -31,7 +28,7 @@ import fi.arcusys.koku.kv.requestservice.Response;
 @RequestMapping(value = "VIEW")
 public class ExportFileController {
 
-	private Logger logger = Logger.getLogger(ExportFileController.class);
+	private static final Logger LOG = Logger.getLogger(ExportFileController.class);
 	
 	/**
 	 * Generates the request summary with given request id in csv format 
@@ -101,7 +98,7 @@ public class ExportFileController {
 				writer.close();
 			}
 		} catch (IOException e) {
-			logger.error("Generate csv file failed");
+			LOG.error("Generate csv file failed");
 		}
 	}
 	

@@ -21,7 +21,7 @@ import static fi.arcusys.koku.util.Constants.*;
 @RequestMapping(value = "VIEW")
 public class MessageController {
 
-	Logger logger = Logger.getLogger(MessageController.class);
+	private static final Logger LOG = Logger.getLogger(MessageController.class);
 	
 	/**
 	 * Handles the portlet request to show the default page
@@ -104,7 +104,7 @@ public class MessageController {
 				portletSession.setAttribute(ATTR_USERNAME, userid);
 			}
 		} catch (Exception e) {
-			logger.error("Exception when getting user id");
+			LOG.error("Exception when getting user id");
 		}
 
 		if (userid != null) {

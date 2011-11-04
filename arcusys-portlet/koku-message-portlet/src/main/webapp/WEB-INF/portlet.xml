@@ -21,7 +21,15 @@
 		<portlet-preferences>
 			<preference>
 				<name>portletPath</name>
-				<value>/tre/public/asiointi/koku/Message</value>
+				<value>/tre/public/asiointi/koku/Messages</value>
+			</preference>
+			<preference>
+				<name>refreshDuration</name>
+				<value>60</value>
+			</preference>
+			<preference>
+				<name>messageType</name>
+				<value>2</value>
 			</preference>
 		</portlet-preferences>		
 	</portlet>

@@ -28,7 +28,7 @@ import static fi.arcusys.koku.util.Constants.*;
 @Controller("singleConsentController")
 @RequestMapping(value = "VIEW")
 public class ShowConsentController extends AbstractController {
-	private Logger LOG = Logger.getLogger(ShowConsentController.class);
+	private static final Logger LOG = Logger.getLogger(ShowConsentController.class);
 
 	
 	@Resource

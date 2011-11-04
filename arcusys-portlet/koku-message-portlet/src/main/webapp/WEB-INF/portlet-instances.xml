@@ -9,6 +9,14 @@
 				<name>portletPath</name>
 				<value>/portal/private/classic/Message</value>
 			</preference>
+			<preference>
+				<name>refreshDuration</name>
+				<value>60</value>
+			</preference>
+			<preference>
+				<name>messageType</name>
+				<value>2</value>
+			</preference>
 		</portlet-preferences>
       </instance>
    </deployment>
