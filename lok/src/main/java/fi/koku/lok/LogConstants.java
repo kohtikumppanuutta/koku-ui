@@ -43,6 +43,7 @@ public class LogConstants {
   public static Role ROLE_LOK_LOG_ADMIN = new Role("ROLE_LOK_LOG_ADMIN");
   
   public static final int QUERY_RESULT_LIMIT = 50;
+  public static final int CONCEPT_MIN_LENGTH = 4;
   
   private LogConstants() {
     // Contains only static constants. No need for new instances
