@@ -22,6 +22,8 @@ public class Constants {
 	
 	public static final String PATH_MAIN									= "/Message";
 	
+	public static final String PORTAL_MODE_LOORA							= "loora";
+	public static final String PORTAL_MODE_KUNPO							= "kunpo";
 	
 	/* ModelMap attribute key */                                        
 	public static final String RESPONSE										= "response";
@@ -48,10 +50,10 @@ public class Constants {
 	public static final String ATTR_NAVI_TYPE								= "naviType";
 	
 	/** PortalId. Check Portal types PORTAL_*  */
-	public static final String ATTR_PORTAL_ID 							= "portal";
+	public static final String ATTR_PORTAL_ID 								= "portal";
 	/** PortalPreferences key */
-	public static final String ATTR_PREFERENCES 						= "prefs";
-	public static final String ATTR_FORM_LIST							= "formList";
+	public static final String ATTR_PREFERENCES 							= "prefs";
+	public static final String ATTR_FORM_LIST								= "formList";
 
 	                                                                    
 	/* ATTR_MY_ACTION parameter possible values.
