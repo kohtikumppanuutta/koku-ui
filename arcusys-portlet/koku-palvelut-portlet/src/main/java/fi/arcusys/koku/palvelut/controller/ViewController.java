@@ -1,10 +1,13 @@
 package fi.arcusys.koku.palvelut.controller;
 
-import static fi.arcusys.koku.palvelut.util.Constants.ATTR_PREFERENCES;
-import static fi.arcusys.koku.palvelut.util.Constants.SHOW_ONLY_CHECKED;
-import static fi.arcusys.koku.palvelut.util.Constants.SHOW_ONLY_FORM_BY_DESCRIPTION;
-import static fi.arcusys.koku.palvelut.util.Constants.SHOW_ONLY_FORM_BY_ID;
-import static fi.arcusys.koku.palvelut.util.Constants.SHOW_TASKS_BY_ID;
+import static fi.arcusys.koku.util.Constants.ATTR_PREFERENCES;
+import static fi.arcusys.koku.util.Constants.JSON_RESULT;
+import static fi.arcusys.koku.util.Constants.PORTAL_GATEIN;
+import static fi.arcusys.koku.util.Constants.PREF_SHOW_ONLY_CHECKED;
+import static fi.arcusys.koku.util.Constants.PREF_SHOW_ONLY_FORM_BY_DESCRIPTION;
+import static fi.arcusys.koku.util.Constants.PREF_SHOW_ONLY_FORM_BY_ID;
+import static fi.arcusys.koku.util.Constants.PREF_SHOW_TASKS_BY_ID;
+import static fi.arcusys.koku.util.Constants.RESPONSE;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,9 +18,12 @@ import java.util.Map;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import javax.portlet.RenderRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.xml.stream.XMLStreamException;
 
 import net.sf.json.JSONObject;
 
@@ -27,26 +33,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import fi.arcusys.koku.palvelut.exceptions.IllegalOperationCall;
 import fi.arcusys.koku.palvelut.model.client.FormHolder;
 import fi.arcusys.koku.palvelut.model.client.VeeraCategoryImpl;
 import fi.arcusys.koku.palvelut.model.client.VeeraFormImpl;
 import fi.arcusys.koku.palvelut.services.VeeraServicesFacade;
+import fi.arcusys.koku.palvelut.util.AjaxViewResolver;
 import fi.arcusys.koku.palvelut.util.CategoryUtil;
-import fi.arcusys.koku.palvelut.util.Constants;
 import fi.arcusys.koku.palvelut.util.MigrationUtil;
+import fi.arcusys.koku.palvelut.util.OperationsValidator;
+import fi.arcusys.koku.palvelut.util.OperationsValidatorImpl;
 import fi.arcusys.koku.palvelut.util.TaskUtil;
 import fi.arcusys.koku.palvelut.util.TokenUtil;
+import fi.arcusys.koku.palvelut.util.XmlProxy;
+import fi.arcusys.koku.util.KokuWebServicesJS;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 
 @Controller("viewController")
 @RequestMapping(value = "VIEW")
 public class ViewController extends FormHolderController {
+	
 	private static Logger LOG = Logger.getLogger(ViewController.class);
+	
 	public static final String FORM_VIEW_ACTION 						= "formview";
 	public static final String VIEW_ACTION 								= "view";
 	public static final String VIEW_CURRENT_FOLDER 						= "folderId";
@@ -56,86 +71,99 @@ public class ViewController extends FormHolderController {
 	public static final String ROOT_CATEGORY_LIST_MODEL_NAME 			= "rootCategories";
 	
 
-//	private static final String APPOINTMENT_PROCESS_SERVICE				= "http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuAppointmentProcessingServiceImpl";
-//	private static final String APPOINTMENT_SERVICE_CITIZEN				= "http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuKunpoAppointmentServiceImpl";
-//	private static final String APPOINTMENT_SERVICE_EMPLOYEE			= "http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuLooraAppointmentServiceImpl";
-//	private static final String REQUEST_SERVICE		 					= "http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuRequestServiceImpl";
-//	private static final String MESSAGE_SERVICE							= "http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuMessageServiceImpl";	
-//	private static final String TIVA_CITIZEN_SERVICE					= "http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuLooraSuostumusServiceImpl";
-//	private static final String TIVA_EMPLOYEE_SERVICE					= "http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuKunpoSuostumusServiceImpl";
+	private static final Map<String, String> JS_ENDPOINTS;
+	
+	static {
+		Map<String, String> endpoints = new HashMap<String, String>();
+		
+		for (KokuWebServicesJS key : KokuWebServicesJS.values()) {
+    		String value = KoKuPropertiesUtil.get(key.value());
+    		if (value == null) {
+    			throw new ExceptionInInitializerError("Coulnd't find property '"+ key.value()+"'");
+    		}
+    		if (value.endsWith("?wsdl")) {
+    			int end = value.indexOf("?wsdl");
+    			value = value.substring(0, end);
+    		} 
+    		endpoints.put(key.value(), value);
+    		LOG.info("Added new endpoint to WsProxyServlet: "+value);
+		}
+		JS_ENDPOINTS = Collections.unmodifiableMap(endpoints);
+	}
 
 
 	@Autowired
 	private VeeraServicesFacade servicesFacade;
 	
-//	@ResourceMapping(value = "intalioAjax")
-//	public String intalioAjax(
-//			@RequestParam(value = "service") String service,
-//			@RequestParam(value = "data") String data,
-//			ModelMap modelmap, PortletRequest request, PortletResponse response) {
-//		
-//		if (service.isEmpty()) {
-//			LOG.error("AjaxMessage Command is empty");
-//			returnEmptyString(modelmap);
-//			return AjaxViewResolver.AJAX_PREFIX;
-//		}
-//		
-//		if (data.isEmpty()) {
-//			LOG.error("AjaxMessage Data is empty");
-//			returnEmptyString(modelmap);
-//			return AjaxViewResolver.AJAX_PREFIX;
-//		}
-//		
-//		String result = null;
-//		XmlProxy proxy = getProxy(service, data);
-//		
-//		if (proxy != null) {
-//			try {
-//				result = proxy.send();				
-//			} catch (IllegalOperationCall ioc) {
-//				LOG.error("Illegal operation call. User '" + request.getUserPrincipal().getName() + "' tried to call restricted method that he/she doesn't have sufficient permission. ");
-//			} catch (XMLStreamException xse) {
-//				LOG.error("Unexpected XML-parsing error. User '" + request.getUserPrincipal().getName() + "'", xse);
-//			} catch (Exception e) {
-//				LOG.error("Coulnd't send given message. Parsing error propably. ", e);
-//			}
-//		}
-//		
-//		JSONObject obj = new JSONObject();
-//		if (result == null || result.isEmpty()) {
-//			obj.element("result", "");			
-//		} else {
-//			obj.element("result", result);
-//		}
-//		modelmap.addAttribute("response", obj);
-//		return AjaxViewResolver.AJAX_PREFIX;
-//	}
 	
-//	private XmlProxy getProxy(String service, String data) {
-//		
-//		OperationsValidator validator = new OperationsValidatorImpl();
-//		validator = null;
-//		if (service.equals(APPOINTMENT_SERVICE_CITIZEN_NAME)) {
-//			return new XmlProxy("", APPOINTMENT_SERVICE_CITIZEN, data, validator);	
-//		} else if (service.equals(APPOINTMENT_SERVICE_EMPLOYEE_NAME)) {
-//			return new XmlProxy("", APPOINTMENT_SERVICE_EMPLOYEE, data, validator);	
-//		} else if (service.equals(MESSAGE_SERVICE_NAME)) {
-//			return new XmlProxy("", REQUEST_SERVICE, data, validator);
-//		} else if (service.equals(REQUEST_SERVICE_NAME)) {
-//			return new XmlProxy("", MESSAGE_SERVICE, data, validator);
-//		} else if (service.equals(TIVA_CITIZEN_SERVICE_NAME)) {
-//			return new XmlProxy("", TIVA_CITIZEN_SERVICE, data, validator);
-//		} else if (service.equals(TIVA_EMPLOYEE_SERVICE_NAME)) {
-//			return new XmlProxy("", TIVA_EMPLOYEE_SERVICE, data, validator);	
-//		} else {
-//			return null;
-//		}
-//	}
+	@ResourceMapping(value = "servicesAjax")
+	public String servicesAjax(ModelMap modelmap, PortletRequest request, PortletResponse response) {
+		JSONObject obj = new JSONObject();
+		obj.element("endpoints" , JS_ENDPOINTS.keySet());
+		modelmap.addAttribute(RESPONSE, obj);
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
+	
+	@ResourceMapping(value = "intalioAjax")
+	public String intalioAjax(
+			@RequestParam(value = "service") String service,
+			@RequestParam(value = "data") String data,
+			ModelMap modelmap, PortletRequest request, PortletResponse response) {
+		LOG.debug("Service: '"+service+"' Messsage: '"+data+"'");
+		if (service.isEmpty()) {
+			LOG.error("AjaxMessage Command is empty");
+			returnEmptyString(modelmap);
+			return AjaxViewResolver.AJAX_PREFIX;
+		}
+		
+		if (data.isEmpty()) {
+			LOG.error("AjaxMessage Data is empty");
+			returnEmptyString(modelmap);
+			return AjaxViewResolver.AJAX_PREFIX;
+		}
+		
+		String result = null;
+		XmlProxy proxy = getProxy(service, data);
+		
+		if (proxy != null) {
+			try {
+				result = proxy.send();				
+			} catch (IllegalOperationCall ioc) {
+				LOG.error("Illegal operation call. User '" + request.getUserPrincipal().getName() + "' tried to call restricted method that he/she doesn't have sufficient permission. ");
+			} catch (XMLStreamException xse) {
+				LOG.error("Unexpected XML-parsing error. User '" + request.getUserPrincipal().getName() + "'", xse);
+			} catch (Exception e) {
+				LOG.error("Coulnd't send given message. Parsing error propably. ", e);
+			}
+		} 
+		
+		JSONObject obj = new JSONObject();
+		if (result == null || result.isEmpty()) {
+			obj.element(JSON_RESULT, "");			
+		} else {
+			obj.element(JSON_RESULT, result);
+		}
+		modelmap.addAttribute(RESPONSE, obj);
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
+	
+	private XmlProxy getProxy(String service, String data) {
+		
+		OperationsValidator validator = new OperationsValidatorImpl();
+		validator = null;
+		String endpointUrl = JS_ENDPOINTS.get(service);
+		if (endpointUrl == null) {
+			LOG.error("Coulnd't create XMLProxy. No service found by given service name: '"+service+"'");
+			return null;
+		} else {
+			return new XmlProxy("", endpointUrl, data, validator);
+		}
+	}
 	
 	private ModelMap returnEmptyString(ModelMap modelmap) {
 		JSONObject obj = new JSONObject();
-		obj.element("result", "");
-		modelmap.addAttribute("response", obj);
+		obj.element(JSON_RESULT, "");
+		modelmap.addAttribute(RESPONSE, obj);
 		return modelmap;
 	}
 	
@@ -152,27 +180,27 @@ public class ViewController extends FormHolderController {
 		LOG.debug("handleRenderRequestInternal");
 		PortletPreferences prefs = request.getPreferences();
 		String portalInfo = (String)request.getPortalContext().getPortalInfo();
-		Boolean isGateInPortal = portalInfo.toLowerCase().contains(Constants.PORTAL_GATEIN);
+		Boolean isGateInPortal = portalInfo.toLowerCase().contains(PORTAL_GATEIN);
 		
 		
-		if (prefs.getValue(SHOW_ONLY_CHECKED, null) != null) {
+		if (prefs.getValue(PREF_SHOW_ONLY_CHECKED, null) != null) {
 			ModelAndView mav = new ModelAndView(FORM_VIEW_ACTION, "model", null);
 			mav.addObject(ATTR_PREFERENCES, request.getPreferences());
 			Task t = null;
 			
-			Boolean showFormById = Boolean.valueOf(prefs.getValue(SHOW_TASKS_BY_ID, null));
+			Boolean showFormById = Boolean.valueOf(prefs.getValue(PREF_SHOW_TASKS_BY_ID, null));
 			LOG.debug("showFormById " + showFormById);
 			try {
 				if (isGateInPortal || showFormById) {
-					LOG.debug("Loading taskID: " + prefs.getValue(SHOW_ONLY_FORM_BY_ID, null) + "isGateIn: "+ isGateInPortal);
-					t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue(SHOW_ONLY_FORM_BY_ID, null));
+					LOG.debug("Loading taskID: " + prefs.getValue(PREF_SHOW_ONLY_FORM_BY_ID, null) + "isGateIn: "+ isGateInPortal);
+					t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue(PREF_SHOW_ONLY_FORM_BY_ID, null));
 				} else {
-					t = TaskUtil.getTaskByDescription(TokenUtil.getAuthenticationToken(request), prefs.getValue(SHOW_ONLY_FORM_BY_DESCRIPTION, null));
+					t = TaskUtil.getTaskByDescription(TokenUtil.getAuthenticationToken(request), prefs.getValue(PREF_SHOW_ONLY_FORM_BY_DESCRIPTION, null));
 					LOG.debug("t status: " + (t == null));
 					// Fallback. Try to get form by Id
 					if (t == null) {
-						LOG.error("Fallback! Couldn't find task by description name. Trying to get form by Id. Description: '" + prefs.getValue(SHOW_ONLY_FORM_BY_DESCRIPTION, null) + "'");
-						t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue(SHOW_ONLY_FORM_BY_ID, null));
+						LOG.error("Fallback! Couldn't find task by description name. Trying to get form by Id. Description: '" + prefs.getValue(PREF_SHOW_ONLY_FORM_BY_DESCRIPTION, null) + "'");
+						t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue(PREF_SHOW_ONLY_FORM_BY_ID, null));
 					}
 				}
 			} catch (Exception e) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import static fi.arcusys.koku.util.Constants.*;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -23,11 +24,10 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.arcusys.koku.palvelut.model.client.TaskHolder;
-import fi.arcusys.koku.palvelut.util.Constants;
 import fi.arcusys.koku.palvelut.util.TaskUtil;
 import fi.arcusys.koku.palvelut.util.TokenUtil;
 import fi.arcusys.koku.palvelut.util.URLUtil;
-import static fi.arcusys.koku.palvelut.util.Constants.*;
+
 
 @Controller("configurationController")
 @RequestMapping(value = "EDIT")
@@ -49,9 +49,9 @@ public class ConfigurationController {
 		String portalInfo = request.getPortalContext().getPortalInfo();
 		
 		if (portalInfo.startsWith(JBOSS_PORTAL)) {
-			mav.addObject(ATTR_PORTAL_ID, Constants.PORTAL_JBOSS);
+			mav.addObject(ATTR_PORTAL_ID, PORTAL_JBOSS);
 		} else {
-			mav.addObject(ATTR_PORTAL_ID, Constants.PORTAL_GATEIN);
+			mav.addObject(ATTR_PORTAL_ID, PORTAL_GATEIN);
 		}
 		
 		try {
@@ -72,13 +72,13 @@ public class ConfigurationController {
 		// TODO Auto-generated method stub
 		LOG.debug("handleActionRequestInternal - Save settings");
 		PortletPreferences prefs = request.getPreferences();
-		prefs.setValue(SHOW_ONLY_CHECKED, request.getParameter(SHOW_ONLY_CHECKED));
-		prefs.setValue(SHOW_ONLY_FORM_BY_ID, request.getParameter(SHOW_ONLY_FORM_BY_ID));
-		prefs.setValue(SHOW_TASKS_BY_ID, Boolean.TRUE.toString());
+		prefs.setValue(PREF_SHOW_ONLY_CHECKED, request.getParameter(PREF_SHOW_ONLY_CHECKED));
+		prefs.setValue(PREF_SHOW_ONLY_FORM_BY_ID, request.getParameter(PREF_SHOW_ONLY_FORM_BY_ID));
+		prefs.setValue(PREF_SHOW_TASKS_BY_ID, Boolean.TRUE.toString());
 		prefs.store();
-		LOG.debug("showOnlyChecked: " + prefs.getValue(SHOW_ONLY_CHECKED, null));
-		LOG.debug("showOnlyForm: " + prefs.getValue(SHOW_ONLY_FORM_BY_ID, null));
-		LOG.debug("showTasksById: "+ prefs.getValue(SHOW_TASKS_BY_ID, Boolean.TRUE.toString()));
+		LOG.debug("showOnlyChecked: " + prefs.getValue(PREF_SHOW_ONLY_CHECKED, null));
+		LOG.debug("showOnlyForm: " + prefs.getValue(PREF_SHOW_ONLY_FORM_BY_ID, null));
+		LOG.debug("showTasksById: "+ prefs.getValue(PREF_SHOW_TASKS_BY_ID, Boolean.TRUE.toString()));
 		request.setAttribute(ATTR_PREFERENCES, prefs);
 		 
 		/* Return back to VIEW mode */

@@ -2,6 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 
 <portlet:resourceURL var="ajax" id="intalioAjax"></portlet:resourceURL>
+<portlet:resourceURL var="services" id="servicesAjax"></portlet:resourceURL>
 
 <%-- Load jQuery --%>
 <%-- This just temporary fix, because jQuery should be made available from theme or by portal not in portlet. --%>
@@ -111,6 +112,7 @@
 		}
 	}
 
+<%-- 
 	/* Simple function to send some example ajax data */
 	function ajaxSampleData() {	
 		var command = jQuery('#ajaxCommand').val();
@@ -126,13 +128,19 @@
 		jQuery(".test").append("<div><pre>"+test1+"</pre></div>");
 	}	
 	
+	function showServices() {
+		var result = getKokuServices();
+		jQuery(".test2").append("<div><pre>"+result+"</pre></div>");
+	}
+--%>
+	
 	/**
 	 * Simple function to send some example ajax data 
 	 * 
 	 * @param service ServiceName (e.g AppoimentService)
 	 * @param data XML-data
 	 */
-	function sendDataToPortlet(service, data) {	
+	function kokuServiceSend(service, data) {	
 		var url="<%= ajax %>";		
 		var ajaxObject = {
 							"service":service,
@@ -143,6 +151,16 @@
 			url: url,  
 			type: "POST", 
 			data: ajaxObject, 
+		    dataType: "html",
+			async: false 
+		}).responseText;
+	}
+		
+	function getKokuServices() {
+		var url="<%= services %>";
+		return jQuery.ajax( {
+			url: url,  
+			type: "POST", 
 		    dataType: "html",
 			async: false 
 		}).responseText;
@@ -187,8 +205,9 @@
 </portlet:renderURL>
 
 
- <%-- Disabled for security reasons 
  
+ <%--  
+<!--  <div class="test" style="display: none;"> -->
  <div class="test" style="display: none;">
 	<div class="testTextAreas">
 		<textarea id="ajaxCommand" rows="3" cols="15" name="Command:"></textarea>
@@ -196,8 +215,11 @@
 	</div>	
 	<button type="button" id="ajaxTest" name="Send data" onclick="ajaxSampleData()">Send data</button>
 </div>
+<div class="test2" style="display: none;">
+	<button type="button" id="ajaxTest" name="Send data" onclick="showServices()">Show services</button>
+</div>
+--%>
 
- --%>
 
 <div id="form_wrap" style="margin:5px; position:relative; min-width: 720px;">
 <div class="veera_form_window_header">

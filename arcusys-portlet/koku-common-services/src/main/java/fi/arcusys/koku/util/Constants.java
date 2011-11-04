@@ -23,8 +23,6 @@ public class Constants {
 	public static final String PATH_MAIN									= "/Message";
 	
 	
-
-	
 	/* ModelMap attribute key */                                        
 	public static final String RESPONSE										= "response";
 	                                                                    
@@ -48,6 +46,13 @@ public class Constants {
 	public static final String ATTR_PORTAL_INFO								= "portalInfo";
 	public static final String ATTR_PORTAL_ROLE								= "portalRole";
 	public static final String ATTR_NAVI_TYPE								= "naviType";
+	
+	/** PortalId. Check Portal types PORTAL_*  */
+	public static final String ATTR_PORTAL_ID 							= "portal";
+	/** PortalPreferences key */
+	public static final String ATTR_PREFERENCES 						= "prefs";
+	public static final String ATTR_FORM_LIST							= "formList";
+
 	                                                                    
 	/* ATTR_MY_ACTION parameter possible values.
 	 * These values define which .jsp file action will referred e.g. showRequest.jsp etc.  
@@ -151,6 +156,14 @@ public class Constants {
 	/* PortletPreferences keys: MessagePortlet */               	
 	public static final String PREF_MESSAGE_TYPE 							= "messageType";
 	public static final String PREF_MESSAGE_PORTLET_PATH					= "portletPath";
+	
+	/* PortletPreferences keys: Palvelut-portlet */
+	public static final String PREF_SHOW_ONLY_CHECKED 						= "showOnlyChecked";
+	public static final String PREF_SHOW_ONLY_FORM_BY_ID 					= "showOnlyForm";
+	public static final String PREF_SHOW_ONLY_FORM_BY_DESCRIPTION			= "showOnlyFormByDescription";
+	/** Use taskId or taskDescription to get intalio form. Possible values: "true" / "false" */
+	public static final String PREF_SHOW_TASKS_BY_ID						= "useTaskId";
+
 	
                                                             	
 	/* ? (Should be JSON values?) */                                                	
