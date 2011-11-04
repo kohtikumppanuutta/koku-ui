@@ -34,11 +34,6 @@ public class AjaxView extends AbstractView {
     }
 
     @Override
-    public void setContentType (String contentType) {
-        super.setContentType (contentType);
-    }
-
-    @Override
     protected void renderMergedOutputModel (Map<String, Object> map, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         if (map == null || map.isEmpty ()) {
