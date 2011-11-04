@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import javax.annotation.Resource;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletSession;
@@ -68,6 +67,7 @@ import fi.koku.services.entity.customerservice.model.Person;
  * @author hurulmi
  * 
  */
+
 @Controller(value = "editFamilyInformationController")
 @RequestMapping(value = "VIEW")
 public class EditFamilyInformationController {
@@ -89,6 +89,7 @@ public class EditFamilyInformationController {
   private MessageHelper messageHelper;
   
   public EditFamilyInformationController() {
+    
     CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory(PyhConstants.CUSTOMER_SERVICE_USER_ID, PyhConstants.CUSTOMER_SERVICE_PASSWORD, PyhConstants.CUSTOMER_SERVICE_ENDPOINT);
     customerService = customerServiceFactory.getCustomerService();
     
@@ -102,10 +103,8 @@ public class EditFamilyInformationController {
   @RenderMapping(params = "action=editFamilyInformation")
   public String render(RenderRequest request, Model model) throws fi.koku.services.entity.customer.v1.ServiceFault,
     fi.koku.services.entity.community.v1.ServiceFault {
+    
     String userPic = UserInfoUtils.getPicFromSession(request);
-    
-    // TODO: hae perhe ja huoltajuusyhteisöt vain kertaalleen
-    
     CustomerType customer = customerService.opGetCustomer(userPic, CustomerServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
     
     logger.debug("EditFamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
@@ -137,15 +136,14 @@ public class EditFamilyInformationController {
   // this render method does not clear the search results
   @RenderMapping(params = "action=editFamilyInformationWithSearchResults")
   public String renderWithSearchResults(RenderRequest request, Model model) throws fi.koku.services.entity.customer.v1.ServiceFault {
+    
     String userPic = UserInfoUtils.getPicFromSession(request);
     String surname = request.getParameter("surname");
     String pic = request.getParameter("pic");
     List<Person> searchedUsers = familyHelper.searchUsers(surname, pic, userPic);
     
     CustomerType customer = customerService.opGetCustomer(userPic, CustomerServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
-    
     logger.debug("EditFamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
-
     Person user = new Person(customer);
     
     DependantsAndFamily daf = familyHelper.getDependantsAndFamily(userPic);
@@ -170,8 +168,8 @@ public class EditFamilyInformationController {
   @ActionMapping(params = "action=addDependantAsFamilyMember")
   public void addDependantAsFamilyMember(ActionRequest request, @RequestParam String dependantPic, ActionResponse response) 
     throws TooManyFamiliesException, FamilyNotFoundException, fi.koku.services.entity.community.v1.ServiceFault {
-    String userPic = UserInfoUtils.getPicFromSession(request);
     
+    String userPic = UserInfoUtils.getPicFromSession(request);
     insertDependantToFamily(userPic, dependantPic, CommunityRole.CHILD);
     response.setRenderParameter("action", "editFamilyInformation");
   }
@@ -179,8 +177,8 @@ public class EditFamilyInformationController {
   @ActionMapping(params = "action=removeFamilyMember")
   public void removeFamilyMember(ActionRequest request, @RequestParam String familyMemberPic, ActionResponse response)
     throws fi.koku.services.entity.community.v1.ServiceFault {
-    String userPic = UserInfoUtils.getPicFromSession(request);
     
+    String userPic = UserInfoUtils.getPicFromSession(request);
     removeFamilyMember(familyMemberPic, userPic);
     response.setRenderParameter("action", "editFamilyInformation");
   }
@@ -188,8 +186,8 @@ public class EditFamilyInformationController {
   @ActionMapping(params = "action=removeDependant")
   public void removeDependant(ActionRequest request, @RequestParam String familyMemberPic, ActionResponse response)
     throws fi.koku.services.entity.community.v1.ServiceFault {
-    String userPic = UserInfoUtils.getPicFromSession(request);
     
+    String userPic = UserInfoUtils.getPicFromSession(request);
     for (Dependant d : familyHelper.getDependantsAndFamily(userPic).getDependants()) {
       if (d.getPic().equals(familyMemberPic)) {
         d.setMemberOfUserFamily(false);
@@ -201,6 +199,7 @@ public class EditFamilyInformationController {
   
   @ActionMapping(params = "action=searchUsers")
   public void searchUsers(ActionRequest request, ActionResponse response) {
+    
     String surname = request.getParameter("searchSurname");
     String pic = request.getParameter("searchPic");
     
@@ -212,8 +211,8 @@ public class EditFamilyInformationController {
   @ActionMapping(params = "action=addUsersToFamily")
   public void addUsersToFamily(ActionRequest request, ActionResponse response, PortletSession session) throws FamilyNotFoundException,
     TooManyFamiliesException, fi.koku.services.entity.customer.v1.ServiceFault, fi.koku.services.entity.community.v1.ServiceFault {
-    String userPic = UserInfoUtils.getPicFromSession(request);
     
+    String userPic = UserInfoUtils.getPicFromSession(request);
     HashMap<String, String> personMap = new HashMap<String, String>();
     
     String familyCommunityId = request.getParameter("familyCommunityId");
@@ -242,8 +241,6 @@ public class EditFamilyInformationController {
       Set<String> keys = personMap.keySet();
       Iterator<String> si = keys.iterator();
       
-      // get current user (unnecessary?)
-      // -->
       CustomerType customer;
       fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
       customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
@@ -251,16 +248,12 @@ public class EditFamilyInformationController {
       
       customer = customerService.opGetCustomer(userPic, customerAuditInfoType);
       Person user = new Person(customer);
-      // <--
       
       while (si.hasNext()) {
         String memberToAddPic = si.next();
         String role = personMap.get(memberToAddPic);
         
         CommunityRole communityRole = CommunityRole.create(role);
-        
-        // TODO: check generateRecipients 'user' parameter: can we use PIC instead of Person?
-        // if we can then getting Person user is unnecessary
         List<String> recipients = generateRecipients(memberToAddPic, user, communityRole, userPic/*current user's pic*/);
         
         if (CommunityRole.PARENT.equals(communityRole) || CommunityRole.FATHER.equals(communityRole) || 
@@ -288,7 +281,7 @@ public class EditFamilyInformationController {
           }
           
           Log.getInstance().send(userPic, "", "pyh.membership.request", "Cannot send approval request because guardian for child " + memberToAddPic + " is not found");
-          // and notify user that family membership request cannot be sent
+          // notify end user that family membership request cannot be sent
           throw new GuardianForChildNotFoundException("Guardian for child (pic: " + memberToAddPic + ") not found!");
           
         } else if (recipients.size() == 0) {
@@ -316,6 +309,7 @@ public class EditFamilyInformationController {
    */
   private List<String> generateRecipients(String memberToAddPic, Person user, CommunityRole role, String currentUserPic) 
     throws fi.koku.services.entity.community.v1.ServiceFault, TooManyFamiliesException, FamilyNotFoundException {
+    
     List<String> recipientPics = new ArrayList<String>();
     
     if (CommunityRole.CHILD.equals(role)) {
@@ -327,7 +321,6 @@ public class EditFamilyInformationController {
       communityCriteria.setMemberPics(memberPics);
       
       CommunitiesType communitiesType = null;
-      
       communitiesType = communityService.opQueryCommunities(communityCriteria, CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, currentUserPic));
       
       if (communitiesType != null) {
@@ -388,6 +381,7 @@ public class EditFamilyInformationController {
    */
   private void insertInto(String toFamilyPic, String memberToAddPic, CommunityRole role) throws TooManyFamiliesException, 
     FamilyNotFoundException, fi.koku.services.entity.community.v1.ServiceFault {
+    
     Family family = null;
     family = familyHelper.getFamily(toFamilyPic);
     
@@ -414,6 +408,7 @@ public class EditFamilyInformationController {
    * 
    */
   private String addFamily(String userPic) throws fi.koku.services.entity.community.v1.ServiceFault {
+    
     logger.debug("calling addFamily() with parameter:");
     logger.debug("userPic: " + userPic);
     
@@ -466,6 +461,7 @@ public class EditFamilyInformationController {
    * Removes a family member from a family community.
    */
   private void removeFamilyMember(String familyMemberPic, String userPic) throws fi.koku.services.entity.community.v1.ServiceFault {
+    
     CommunityQueryCriteriaType communityQueryCriteria = new CommunityQueryCriteriaType();
     communityQueryCriteria.setCommunityType(CommunityServiceConstants.COMMUNITY_TYPE_FAMILY);
     
@@ -491,7 +487,6 @@ public class EditFamilyInformationController {
           if (member.getPic().equals(familyMemberPic) && isMemberOfCommunity(userPic, members)) {
             members.remove(member);
             
-            // TODO: place outside the loop
             communityService.opUpdateCommunity(community, communityAuditInfoType);
             Log.getInstance().update(userPic, "", "pyh.family.community", "Removing family member " + familyMemberPic + " from family");
             
@@ -503,7 +498,6 @@ public class EditFamilyInformationController {
                 logger.debug("member pic: " + m.getPic());
               }
             }
-            
             return;
           }
         }
@@ -518,6 +512,7 @@ public class EditFamilyInformationController {
    * members - list of members of the community
    */
   private boolean isMemberOfCommunity(String personPic, List<MemberType> members) {
+    
     Iterator<MemberType> mi = members.iterator();
     while (mi.hasNext()) {
       MemberType member = mi.next();
@@ -527,5 +522,4 @@ public class EditFamilyInformationController {
     }
     return false;
   }
-  
 }

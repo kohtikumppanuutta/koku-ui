@@ -15,6 +15,7 @@ import fi.koku.settings.KoKuPropertiesUtil;
  * @author hurulmi
  *
  */
+
 public class PyhConstants {
   
   public static final String CUSTOMER_SERVICE_ENDPOINT = KoKuPropertiesUtil.get("customer.service.endpointaddress");

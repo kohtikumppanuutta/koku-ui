@@ -8,7 +8,6 @@
 package fi.koku.pyh.controller;
 
 import javax.portlet.RenderRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -30,33 +29,31 @@ import fi.koku.services.entity.customerservice.model.DependantsAndFamily;
 import fi.koku.services.entity.customerservice.model.FamilyIdAndFamilyMembers;
 import fi.koku.services.entity.customerservice.model.Person;
 
-
 /**
  * Controller for user's family information view.
  * 
  * @author hurulmi
  *
  */
+
 @Controller(value = "familyInformationController")
 @RequestMapping(value = "VIEW")
 public class FamilyInformationController {
 
   private static Logger logger = LoggerFactory.getLogger(FamilyInformationController.class);
-  
   private CustomerServicePortType customerService;
-  
   private FamilyHelper familyHelper;
-  
   private MessageHelper messageHelper;
   
   public FamilyInformationController() {
+    
     CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory(PyhConstants.CUSTOMER_SERVICE_USER_ID, PyhConstants.CUSTOMER_SERVICE_PASSWORD, PyhConstants.CUSTOMER_SERVICE_ENDPOINT);
     customerService = customerServiceFactory.getCustomerService();
     
     CommunityServiceFactory communityServiceFactory = new CommunityServiceFactory(PyhConstants.COMMUNITY_SERVICE_USER_ID, PyhConstants.COMMUNITY_SERVICE_PASSWORD, PyhConstants.COMMUNITY_SERVICE_ENDPOINT);
     CommunityServicePortType communityService = communityServiceFactory.getCommunityService();
-    familyHelper = new FamilyHelper(customerService, communityService, PyhConstants.COMPONENT_PYH);
     
+    familyHelper = new FamilyHelper(customerService, communityService, PyhConstants.COMPONENT_PYH);
     messageHelper = new MessageHelper(customerService, communityService, PyhConstants.COMPONENT_PYH);
   }
   
@@ -66,12 +63,10 @@ public class FamilyInformationController {
    */
   @RenderMapping
   public String render(Model model, RenderRequest request) throws ServiceFault {
+    
     String userPic = UserInfoUtils.getPicFromSession(request);
-    
     CustomerType customer = customerService.opGetCustomer(userPic, CustomerServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
-    
     logger.debug("FamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
-
     Person user = new Person(customer);
     
     DependantsAndFamily daf = familyHelper.getDependantsAndFamily(userPic);

@@ -28,6 +28,7 @@ import fi.koku.services.entity.community.v1.ServiceFault;
  * @author hurulmi
  *
  */
+
 @Controller(value = "messageController")
 @RequestMapping(value = "VIEW")
 public class MessageController {
@@ -35,6 +36,7 @@ public class MessageController {
   private CommunityServicePortType communityService;  
   
   public MessageController() {
+    
     CommunityServiceFactory communityServiceFactory = new CommunityServiceFactory(PyhConstants.COMMUNITY_SERVICE_USER_ID, PyhConstants.COMMUNITY_SERVICE_PASSWORD, PyhConstants.COMMUNITY_SERVICE_ENDPOINT);
     communityService = communityServiceFactory.getCommunityService();    
   }
@@ -45,6 +47,7 @@ public class MessageController {
    */
   @ActionMapping(params = "action=acceptMessage")
   public void accept(@RequestParam String userPic, @RequestParam String messageId, @RequestParam String currentFamilyId, @RequestParam boolean removeCurrentFamily, ActionResponse response) throws ServiceFault {    
+    
     String familyId = removeCurrentFamily ? currentFamilyId : null;
     
     MembershipApprovalType membershipApproval = new MembershipApprovalType();
@@ -72,6 +75,7 @@ public class MessageController {
    */
   @ActionMapping(params = "action=rejectMessage")
   public void reject(@RequestParam String userPic, @RequestParam String messageId, ActionResponse response) throws ServiceFault {
+    
     MembershipApprovalType membershipApproval = new MembershipApprovalType();
     membershipApproval.setApproverPic(userPic);
     membershipApproval.setMembershipRequestId(messageId);

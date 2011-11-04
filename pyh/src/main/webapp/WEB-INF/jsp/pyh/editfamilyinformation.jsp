@@ -152,13 +152,9 @@
 					<tr class="portlet-table-body th">
 						<th width="38%"><spring:message code="ui.pyh.table.name" /></th>
 						<th width="26%"><spring:message code="ui.pyh.table.pic" /></th>
-						<%-- hide text for checkbox column --%>
-						<th width="10%"> <%-- <spring:message code="ui.pyh.table.add" /> --%> </th>
+						<th width="10%"></th>
 						<th width="26%"><spring:message code="ui.pyh.table.role" /></th>
 					</tr>
-					
-					<%-- <c:set var="userVar" value="1" /> --%>
-					
 					
 					<input name="familyCommunityId" type="hidden" value="${familyCommunityId}"/>
 					
@@ -171,20 +167,12 @@
 							<td> 
 								<c:out value="${user.pic}"/>
 								<input name="userPic" type="hidden" value="${user.pic}" />
-								<%-- <input id="user_pic_${userVar}" name="userPic_${userVar}" type="hidden" value="${user.pic}" /> --%>
 							</td>
 							
 							<td>
-							<%-- hack: check box is hidden because at the moment we have only one search result by PIC --%>
-							<%--
-							<div style="visibility: hidden;">
-							<input name="addUserCheckbox_${userVar}" value="${userVar}" type="checkbox" />
-							</div>
-							--%>
 							</td>
 							
 							<td>
-								<%-- <select id="user_role_${userVar}" class="syntmaika"> --%>
 								<select name="userRole" class="syntmaika">
 									<option value="${MEMBER}"><spring:message code="${MEMBER.bundleId}"/></option>
 									<option value="${CHILD}"><spring:message code="${CHILD.bundleId}"/></option>
@@ -198,7 +186,6 @@
 							</td>
 						</tr>
 						
-						<%-- <c:set var="userVar" value="${userVar + 1}" /> --%>
 					</c:forEach>
 					
 				</table>
@@ -207,17 +194,6 @@
 				
 				<input class="portlet-form-button" type="submit" value="<spring:message code="ui.pyh.save" />" class="tallenna"/>
 			</form:form>
-			
-			<%--
-			<form:form name="addUsersToFamily" method="post" action="${addUsersToFamily}" id="addUsersToFamilyForm">
-				<input name="familyCommunityId" type="hidden" value="${familyCommunityId}"/>
-				
-				<%-- user information is added to this form dynamically with jQuery before submitting the form --%>
-				<%--
-				<input class="portlet-form-button" type="button"
-					value="<spring:message code="ui.pyh.save" />" class="tallenna" onclick="doSubmitForm()" />
-			</form:form>
-			--%>
 			
 		</c:when>
 		<c:otherwise>
@@ -241,31 +217,6 @@
 	src="http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.4.js"></script>
 <script type="text/javascript" language="JavaScript">
 
-	<%--
-	function addUserToForm(user) {
-		$('#addUsersToFamilyForm').append($('#user_pic_' + user));
-		var userRole = $('#user_role_' + user + ' option:selected').val();
-		$('#addUsersToFamilyForm').append('<input name="userRole_' + user + '" type="hidden" value="' + userRole + '"/>');
-	}
-	--%>
-	<%--
-	function doSubmitForm() {
-		<%--
-		var $checkboxes = $('input[name^="addUserCheckbox_"]').filter(
-				":checked");
-		--%>
-		<%-- select all checkboxes. *at the moment* we have only one search result and it must be selected always. --%>
-		<%--
-		var $checkboxes = $('input[name^="addUserCheckbox_"]');
-
-		$checkboxes.each(function() {
-			addUserToForm($(this).val());
-		});
-
-		$('#addUsersToFamilyForm').submit();
-	}
-	--%>
-	
 	function doAddDependantConfirmation() {
 		return confirm("<spring:message code="ui.pyh.add.dependant.family.member.question"/>");
 	}

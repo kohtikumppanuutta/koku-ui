@@ -77,15 +77,13 @@
         </h3>
         <c:forEach var="sentMessage" items="${sentMessages}">
             
-            
             <div class="sentMessage">
                 <c:out value="${sentMessage.text}"/> 
             </div>
             
         </c:forEach>
     </c:if>
-    
-	
+   	
     <c:if test="${not empty messages}">
         <h3 class="portlet-section-subheader"><spring:message code="ui.pyh.messages" />
         </h3>

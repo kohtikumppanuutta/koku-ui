@@ -8,7 +8,6 @@
 package fi.koku.pyh.ui.common;
 
 import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +26,7 @@ import fi.koku.services.utility.log.v1.LogServicePortType;
  * @author hurulmi
  *
  */
+
 public class Log {
 
   private static final Logger logger = LoggerFactory.getLogger(Log.class);
@@ -37,22 +37,18 @@ public class Log {
   public static final String REMOVE = "remove";
   
   private LogServicePortType logServicePortType;
-  
-  // Singleton instance
   private static Log log = new Log();
   
-  // Hidden constructor
   private Log() {
     logServicePortType = getLogService();
   }
   
-  // Get the singleton instance
   public static Log getInstance() {
     return log;
   }
   
-  // userId == user's PIC (required)
-  // customerPic == child's PIC (not required)
+  // userId == user's PIC (required as parameter)
+  // customerPic == child's PIC (not required as parameter, can be empty string)
   public void update(String userId, String customerPic, String dataType, String message) {
     log(Log.UPDATE, userId, customerPic, dataType, message);
   }
@@ -66,6 +62,7 @@ public class Log {
   }
   
   private LogServicePortType getLogService() {
+    
     LogServiceFactory logServiceFactory = new LogServiceFactory(PyhConstants.LOK_SERVICE_USER_ID, PyhConstants.LOK_SERVICE_PASSWORD, PyhConstants.LOK_SERVICE_ENDPOINT);
     return logServiceFactory.getLogService();
   }
@@ -75,6 +72,7 @@ public class Log {
    * 
    */
   private AuditInfoType getLogAuditInfo(String userId) {
+    
     AuditInfoType logAuditInfoType = new fi.koku.services.utility.log.v1.AuditInfoType();
     logAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
     logAuditInfoType.setUserId(userId);
@@ -105,7 +103,7 @@ public class Log {
       
     } catch (fi.koku.services.utility.log.v1.ServiceFault fault) {
       // if log operation fails, stacktrace will be logged in server log
-      // PYH still operates normally
+      // PYH still operates normally even if the logging fails
       logger.error("LOK service failed to log operation " + operation + " for data type " + dataType, fault);
     }
   }
