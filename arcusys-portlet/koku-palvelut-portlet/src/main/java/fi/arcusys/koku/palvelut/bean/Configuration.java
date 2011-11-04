@@ -10,7 +10,7 @@ import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import fi.arcusys.koku.util.PropertiesUtil;
+
 import fi.koku.settings.KoKuPropertiesUtil;
 
 public class Configuration {
