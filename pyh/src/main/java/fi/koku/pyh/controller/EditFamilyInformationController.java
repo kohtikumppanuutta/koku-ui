@@ -266,6 +266,7 @@ public class EditFamilyInformationController {
         if (CommunityRole.PARENT.equals(communityRole) || CommunityRole.FATHER.equals(communityRole) || 
             CommunityRole.MOTHER.equals(communityRole)) {
           messageHelper.sendParentAdditionMessage(familyCommunityId, memberToAddPic, userPic, communityRole);
+          Log.getInstance().send(userPic, "", "pyh.membership.request", "Sending membership request to add person " + memberToAddPic + " into family");
         } else if (CommunityRole.CHILD.equals(communityRole) && recipients.size() == 0) {
           // we don't have guardian information for the child so we can't send the request
           
@@ -294,6 +295,7 @@ public class EditFamilyInformationController {
           insertInto(userPic, memberToAddPic, communityRole);
         } else {
           messageHelper.sendFamilyAdditionMessage(familyCommunityId, recipients, userPic, memberToAddPic, communityRole);
+          Log.getInstance().send(userPic, "", "pyh.membership.request", "Sending membership request to add person " + memberToAddPic + " into family");
         }
       }
       
