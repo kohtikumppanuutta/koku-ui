@@ -10,33 +10,30 @@
   <name>pyh-portlet</name>
   <version>0.0.1-SNAPSHOT</version>
 
+  <properties>
+    <lokservice-api.version>0.0.17</lokservice-api.version>
+    <customerservice-api.version>0.0.18-SNAPSHOT</customerservice-api.version>
+    <portlet-common.version>0.0.17</portlet-common.version>    
+  </properties>
+
   <dependencies>
-  
-    <!--  
-    <dependency>
-      <groupId>org.exoplatform.portal</groupId>
-  	<artifactId>exo.portal.webui.portal</artifactId>
-  	<version>3.1.0-GA</version>
-  	<scope>provided</scope>
-    </dependency>
-    -->  
   
     <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>customerservice-api</artifactId>
-      <version>0.0.18-SNAPSHOT</version>
+      <version>${customerservice-api.version}</version>
     </dependency>     
   
     <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>portlet-common</artifactId>
-      <version>0.0.17</version>
+      <version>${portlet-common.version}</version>
 	</dependency>
     
     <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>lokservice-api</artifactId>
-      <version>0.0.17</version>
+      <version>${lokservice-api.version}</version>
     </dependency>
     
   </dependencies>
