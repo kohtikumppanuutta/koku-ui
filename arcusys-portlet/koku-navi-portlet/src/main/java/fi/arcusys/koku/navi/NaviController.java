@@ -19,7 +19,8 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 @Controller("naviController")
 @RequestMapping(value = "VIEW")
 public class NaviController {
-	private Logger logger = Logger.getLogger(NaviController.class);
+	private static final Logger LOG = Logger.getLogger(NaviController.class);
+	
 	// maps the incoming portlet request to this method, returns the default page
 	@RenderMapping
 	public String home(RenderRequest request, RenderResponse response, ModelMap modelmap) {
@@ -33,10 +34,9 @@ public class NaviController {
 		if(user != null) {
 			return "VALID";
 		} else {
-			logger.info("no logged in user");
+			LOG.info("no logged in user");
 			return "INVALID";
-		}
-			
+		}			
 	}
 	
 	/**

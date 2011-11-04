@@ -18,8 +18,6 @@ import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN
 import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_INVALID;
 import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_VALID;
 
-import java.io.IOException;
-
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletSession;
@@ -42,6 +40,7 @@ import fi.arcusys.koku.kv.model.KokuFolderType;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.users.UserIdResolver;
 import fi.arcusys.koku.util.PortalRole;
+import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
  * Handles ajax request and return the response with json string
@@ -51,9 +50,14 @@ import fi.arcusys.koku.util.PortalRole;
 
 @Controller("ajaxController")
 @RequestMapping(value = "VIEW")
-public class AjaxController extends AbstractController {
+public class AjaxController {
 
-	private static Logger LOGGER = Logger.getLogger(AjaxController.class);
+	private static final Logger LOGGER = Logger.getLogger(AjaxController.class);	
+	private static final String PORTAL_MODE;
+	
+	static {
+		PORTAL_MODE = KoKuPropertiesUtil.get("environment.name");
+	}
 	
 	/**
 	 * Gets the amount of new unread messages for user
@@ -70,7 +74,7 @@ public class AjaxController extends AbstractController {
 		try {
 			if (username != null) {
 				UserIdResolver resolver = new UserIdResolver();
-				userId = resolver.getUserId(username, getPortalRole(request));			
+				userId = resolver.getUserId(username, getPortalRole());			
 			}
 		} catch (Exception e) {
 			LOGGER.error("Error while trying to resolve userId. Usually WSDL location is wrong or server down. See following error msg: "+e.getMessage());
@@ -93,7 +97,7 @@ public class AjaxController extends AbstractController {
 		String portal = (String) session.getAttribute(ATTR_PORTAL_ROLE);
 		PortalRole portalRole = null;
 		if (portal == null || portal.isEmpty()) {
-			portalRole = getPortalRole(request);
+			portalRole = getPortalRole();
 			session.setAttribute(ATTR_PORTAL_ROLE, portalRole.toString());
 		} else {
 			portalRole = PortalRole.fromValue(portal);		
@@ -217,15 +221,13 @@ public class AjaxController extends AbstractController {
 	 * @param request PortletRequest
 	 * @return PortalRole
 	 */
-	protected PortalRole getPortalRole(PortletRequest request) {
-		
-		LOGGER.debug("Currently used portal: " + request.getPortalContext().getPortalInfo());
-		String portalInfo = request.getPortalContext().getPortalInfo();
-		if (portalInfo.contains("EPP") || portalInfo.contains("GateIn")) {
+	protected PortalRole getPortalRole() {
+		if (PORTAL_MODE.contains("kunpo")) {
 			return PortalRole.CITIZEN;
-		} else {
+		} else if (PORTAL_MODE.contains("loora")) {
 			return PortalRole.EMPLOYEE;
+		} else {
+			throw new IllegalArgumentException("PortalMode not supported: "+ PORTAL_MODE);
 		}
 	}
-
 }
