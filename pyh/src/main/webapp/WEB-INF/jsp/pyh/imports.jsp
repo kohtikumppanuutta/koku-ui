@@ -1,4 +1,10 @@
 <%--
+ Copyright 2011 Ixonos Plc, Finland. All rights reserved.
+
+ You should have received a copy of the license text along with this program.
+ If not, please contact the copyright holder (http://www.ixonos.com/).
+--%>
+<%--
 	This file contains imports that are common for all JSP pages in PYH.
 	
 	author: Mikko Hurula
