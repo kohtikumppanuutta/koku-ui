@@ -199,7 +199,7 @@ public class EditFamilyInformationController {
     throws TooManyFamiliesException, FamilyNotFoundException, fi.koku.services.entity.community.v1.ServiceFault {
     
     String userPic = UserInfoUtils.getPicFromSession(request);
-    insertDependantToFamily(userPic, dependantPic, CommunityRole.CHILD);
+    insertDependantToFamily(userPic, dependantPic);
     response.setRenderParameter("action", "editFamilyInformation");
   }
   
@@ -264,14 +264,13 @@ public class EditFamilyInformationController {
    * 
    * @param request - portlet action request
    * @param response - portlet action response
-   * @param session - portlet session
    * @throws FamilyNotFoundException
    * @throws TooManyFamiliesException
    * @throws fi.koku.services.entity.customer.v1.ServiceFault
    * @throws fi.koku.services.entity.community.v1.ServiceFault
    */
   @ActionMapping(params = "action=addUsersToFamily")
-  public void addUsersToFamily(ActionRequest request, ActionResponse response, PortletSession session) throws FamilyNotFoundException,
+  public void addUsersToFamily(ActionRequest request, ActionResponse response) throws FamilyNotFoundException,
     TooManyFamiliesException, fi.koku.services.entity.customer.v1.ServiceFault, fi.koku.services.entity.community.v1.ServiceFault {
     
     String userPic = UserInfoUtils.getPicFromSession(request);
@@ -303,20 +302,12 @@ public class EditFamilyInformationController {
       Set<String> keys = personMap.keySet();
       Iterator<String> si = keys.iterator();
       
-      CustomerType customer;
-      fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
-      customerAuditInfoType.setComponent(PyhConstants.COMPONENT_PYH);
-      customerAuditInfoType.setUserId(userPic);
-      
-      customer = customerService.opGetCustomer(userPic, customerAuditInfoType);
-      Person user = new Person(customer);
-      
       while (si.hasNext()) {
         String memberToAddPic = si.next();
         String role = personMap.get(memberToAddPic);
         
         CommunityRole communityRole = CommunityRole.create(role);
-        List<String> recipients = generateRecipients(memberToAddPic, user, communityRole, userPic/*current user's pic*/);
+        List<String> recipients = generateRecipients(memberToAddPic, communityRole, userPic/*current user's pic*/);
         
         if (CommunityRole.PARENT.equals(communityRole) || CommunityRole.FATHER.equals(communityRole) || 
             CommunityRole.MOTHER.equals(communityRole)) {
@@ -370,7 +361,6 @@ public class EditFamilyInformationController {
    * for example adding a dependant into the family.
    * 
    * @param memberToAddPic - PIC of the person to be added as family member
-   * @param user - current user
    * @param role - role of the person to be added into the family
    * @param currentUserPic - current user's PIC
    * @return - a list of the persons (PICs) receiving the membership request
@@ -378,7 +368,7 @@ public class EditFamilyInformationController {
    * @throws TooManyFamiliesException
    * @throws FamilyNotFoundException
    */
-  private List<String> generateRecipients(String memberToAddPic, Person user, CommunityRole role, String currentUserPic) 
+  private List<String> generateRecipients(String memberToAddPic, CommunityRole role, String currentUserPic) 
     throws fi.koku.services.entity.community.v1.ServiceFault, TooManyFamiliesException, FamilyNotFoundException {
     
     List<String> recipientPics = new ArrayList<String>();
@@ -413,7 +403,7 @@ public class EditFamilyInformationController {
     } else {
       
       MemberType familyMember = null;
-      familyMember = familyHelper.getFamily(currentUserPic).getOtherParent(user.getPic());
+      familyMember = familyHelper.getFamily(currentUserPic).getOtherParent(currentUserPic);
       
       if (familyMember != null) {
         recipientPics.add(familyMember.getPic());
@@ -429,7 +419,7 @@ public class EditFamilyInformationController {
       
       if (family != null) {
         for (MemberType member : family.getParents()) {
-          if (!member.getPic().equals(user.getPic()) && !recipientPics.contains(member.getPic())) {
+          if (!member.getPic().equals(currentUserPic) && !recipientPics.contains(member.getPic())) {
             recipientPics.add(member.getPic());
           }
         }
@@ -516,19 +506,18 @@ public class EditFamilyInformationController {
    * 
    * @param userPic - current user's PIC
    * @param dependantPic - PIC of the dependant to insert
-   * @param role - role of the dependant
    * @throws TooManyFamiliesException
    * @throws FamilyNotFoundException
    * @throws fi.koku.services.entity.community.v1.ServiceFault
    */
-  private void insertDependantToFamily(String userPic, String dependantPic, CommunityRole role) throws TooManyFamiliesException, 
+  private void insertDependantToFamily(String userPic, String dependantPic) throws TooManyFamiliesException, 
     FamilyNotFoundException, fi.koku.services.entity.community.v1.ServiceFault {
     
     Family family = null;
     family = familyHelper.getFamily(userPic);
     
     if (family != null) {
-      family.addFamilyMember(dependantPic, role.getRoleID());
+      family.addFamilyMember(dependantPic, CommunityRole.CHILD.getRoleID());
       
       communityService.opUpdateCommunity(family.getCommunity(), CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
       Log.getInstance().update(userPic, "", "pyh.family.community", "Adding dependant " + dependantPic + " into family");
