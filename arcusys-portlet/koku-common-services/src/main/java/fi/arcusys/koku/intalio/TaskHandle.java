@@ -27,14 +27,13 @@ import static fi.arcusys.koku.util.Constants.*;
 
 public class TaskHandle {
 	
+	private static final Logger logger = Logger.getLogger(TaskHandle.class);
 	// TODO: We probably need some sort filter here?
-	public static final String TASKMGR_REQUESTS_FILTER = "";
-	
+	public static final String TASKMGR_REQUESTS_FILTER = "";	
 	private static final String LOCAL_AJAXFORMS_WEB_APP_URL_PART = "/palvelut-portlet/ajaxforms/";
 	private static final String ADDRESS_REGEX = "http://.+/gi/";
 
-	
-	private static final Logger logger = Logger.getLogger(TaskHandle.class);
+	private final TaskManagementService taskMngServ = new TaskManagementService();
 	
 	private String message;
 	private String participantToken;
@@ -86,12 +85,16 @@ public class TaskHandle {
 	 */
 	public List<Task> getTasksFromServ(String taskType, String subQuery, String first, String max) {
 		List<Task> myTasklist = new ArrayList<Task>();
-		TaskManagementService taskMngServ = new TaskManagementService();
 		List<TaskMetadata> tasklist = taskMngServ.getAvailableTasks(participantToken, taskType, subQuery, 
         		first, max);
 		myTasklist = createTask(tasklist);
 		
 		return myTasklist;
+	}
+	
+	public Task getTask(String taskId, String token) {
+		fi.arcusys.intalio.tms.Task task = taskMngServ.getTask(taskId, token);
+		return createTask(task.getMetadata());
 	}
 
 	/**
@@ -101,7 +104,6 @@ public class TaskHandle {
 	 */
 	public String getTaskStatus(String taskId) {
 		String status;
-		TaskManagementService taskMngServ = new TaskManagementService();
 		status = taskMngServ.getTask(taskId, participantToken).getMetadata().getTaskState();
 		
 		return status;
@@ -114,26 +116,32 @@ public class TaskHandle {
 	 */
 	public List<Task> createTask(List<TaskMetadata> tasklist) {
 		List<Task> myTasklist = new ArrayList<Task>();
-		Task myTask = new Task();
 		Iterator<TaskMetadata> it = tasklist.iterator();
 		
 		while (it.hasNext()) {
 			TaskMetadata task = it.next();
-			myTask = new Task();
-			myTask.setDescription(task.getDescription());
-			
-			if (task.getTaskState() != null) {
-				myTask.setState(task.getTaskState().toString());
-			} else {
-				myTask.setState("");
-
-			}
-			myTask.setCreationDate(formatTaskDate(task.getCreationDate()));
-			myTask.setLink(createTaskLink(task));
-			myTasklist.add(myTask);
+			myTasklist.add(createTask(task));
 		}
 
 		return myTasklist;
+	}
+	
+	private Task createTask(TaskMetadata task) {
+		if (task == null) {
+			return null;
+		}
+		Task myTask = new Task();
+		myTask.setDescription(task.getDescription());
+		
+		if (task.getTaskState() != null) {
+			myTask.setState(task.getTaskState().toString());
+		} else {
+			myTask.setState("");
+
+		}
+		myTask.setCreationDate(formatTaskDate(task.getCreationDate()));
+		myTask.setLink(createTaskLink(task));
+		return myTask;
 	}
 	
 	/**
@@ -195,7 +203,6 @@ public class TaskHandle {
 		String taskTypeStr;
 		taskTypeStr = TaskUtil.getTaskType(taskType);
 		subQuery = createTotalNumSubQuery(taskType, keyword);
-		TaskManagementService taskMngServ = new TaskManagementService();
 		totalNumStr = taskMngServ.getTotalTasksNumber(participantToken, taskTypeStr, subQuery);
 		totalNum = Integer.parseInt(totalNumStr);
 		
@@ -204,7 +211,6 @@ public class TaskHandle {
 	
 	public int getRequestsTasksTotalNumber() {
 		int taskType = 1;
-		TaskManagementService taskMngServ = new TaskManagementService();
 		return Integer.valueOf(taskMngServ.getTotalTasksNumber(participantToken, TaskUtil.TASK_TYPE, createTotalNumSubQuery(taskType, TASKMGR_REQUESTS_FILTER)));
 	}
 	
@@ -307,7 +313,6 @@ public class TaskHandle {
 	 */
 	public String getTokenByUser(String username, String password) {
 		String token = null;
-		TaskManagementService taskMngServ = new TaskManagementService();
 		token = taskMngServ.getParticipantToken(username, password);
 		return token;
 	}
@@ -335,5 +340,7 @@ public class TaskHandle {
 	public String getMessage() {
 		return message;
 	}
+
+
 
 }
