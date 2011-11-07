@@ -129,7 +129,7 @@
 	}	
 	
 	function showServices() {
-		var result = getKokuServices();
+		var result = getKokuServicesEndpoints();
 		jQuery(".test2").append("<div><pre>"+result+"</pre></div>");
 	}
 --%>
@@ -158,6 +158,16 @@
 		
 	function getKokuServices() {
 		var url="<%= services %>";
+		return jQuery.ajax( {
+			url: url,  
+			type: "POST", 
+		    dataType: "html",
+			async: false 
+		}).responseText;
+	}
+	
+	function getKokuServicesEndpoints() {
+		var url="/palvelut-portlet/Services";
 		return jQuery.ajax( {
 			url: url,  
 			type: "POST", 
@@ -205,8 +215,8 @@
 </portlet:renderURL>
 
 
+ <%-- 
  
- <%--  
 <!--  <div class="test" style="display: none;"> -->
  <div class="test" style="display: none;">
 	<div class="testTextAreas">
@@ -219,7 +229,6 @@
 	<button type="button" id="ajaxTest" name="Send data" onclick="showServices()">Show services</button>
 </div>
 --%>
-
 
 <div id="form_wrap" style="margin:5px; position:relative; min-width: 720px;">
 

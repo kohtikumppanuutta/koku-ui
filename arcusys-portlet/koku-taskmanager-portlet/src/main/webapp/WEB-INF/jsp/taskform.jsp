@@ -48,6 +48,16 @@
 		loadingTimes += 1;
 	}
 	
+	function getKokuServicesEndpoints() {
+		var url="/palvelut-portlet/Services";
+		return jQuery.ajax( {
+			url: url,  
+			type: "POST", 
+		    dataType: "html",
+			async: false 
+		}).responseText;
+	}
+	
 	/* In EPP portlet won't expand fully because PORTLET-FRAGMENT has inline style width: 770px 
 		Unfortunately there is no easy way to change this size using CSS. */
 	function eppHack() {		
