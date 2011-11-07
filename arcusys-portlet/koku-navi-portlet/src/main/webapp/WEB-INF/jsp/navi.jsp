@@ -241,7 +241,7 @@
 %>		
 		
 		<!--  VIESTIT -->
-		<li><a href="<%= frontPagePath %>" >Etusivu</a></li>
+		<li><a href="<%= frontPagePath %>">Etusivu</a></li>
 		<!-- For citizen in Gatein portal-->
 		<c:if test="${fn:contains(naviPortalMode, 'kunpo')}">
 		<li id="kks"><a href="<%= kksPath %>">Sopimukset ja suunnitelmat</a>
@@ -253,7 +253,7 @@
 		<li id="lok"><a href="<%= lokPath %>">Lokihallinta</a></li>
 		</c:if>
 		
-		<li><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')" >Viestit</a>
+		<li><span class="naviLinkHeaderNonLink">Viestit</span>
 			<ul class="child">
 					<!-- Show "New message" only for employee in Jboss portal -->
 				<c:if test="${fn:contains(naviPortalMode, 'loora')}">
@@ -273,7 +273,7 @@
 		<!--  PYYNNÖT -->
 		<!-- For citizen in Gatein portal-->
 		<c:if test="${fn:contains(naviPortalMode, 'kunpo')}">
-		<li><a href="#">Pyynnöt</a>
+		<li><span class="naviLinkHeaderNonLink">Pyynnöt</span>
 			<ul class="child">
 				<li id="req_valid_request"><a href="<%= defaultPath %>/ValidRequest">Saapuneet</a><span id="requests_num" class="message_num"></span></li>
 				<li id="<%=Constants.TASK_TYPE_REQUEST_REPLIED %>"><a href="javascript:void(0)" onclick="navigateToPage('<%=Constants.TASK_TYPE_REQUEST_REPLIED %>')">Vastatut</a></li>
@@ -283,11 +283,11 @@
 		</c:if>
 		<!-- For employee in Jboss portal -->
 		<c:if test="${fn:contains(naviPortalMode, 'loora')}">
-		<li><a href="#">Pyynnöt</a>
+		<li><span class="naviLinkHeaderNonLink">Pyynnöt</span>
 			<ul class="child">
 				<li id="req_new"><a href="<%= defaultPath %>/NewRequest">Uusi pyyntö</a></li>
 				<li id="luopohja"><a href="<%= defaultPath %>/LuoPohja">Luo uusi pohja</a></li>
-				<li>Lähetetyt
+				<li><span class="naviLinkHeaderNonLink">Lähetetyt</span>
 					<ul class="child">
 						<li id="<%=Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>"><a href="javascript:void(0)" onclick="navigateToPage('<%=Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>')">Avoimet</a></li>
 						<li id="<%=Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE %>"><a  href="javascript:void(0)" onclick="navigateToPage('<%=Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE %>')">Valmiit</a></li>
@@ -300,7 +300,7 @@
 		<!-- TAPAAMISET -->
 		<!-- For citizen in Gatein portal-->
 		<c:if test="${fn:contains(naviPortalMode, 'kunpo')}">
-		<li><a href="#">Tapaamiset</a>
+		<li><span class="naviLinkHeaderNonLink">Tapaamiset</span>
 			<ul class="child">
 				<li id="<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN%>')">Vastausta odottavat</a><span id="appointments_num" class="message_num"></span></li>
 				<li id="<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN%>')">Vastatut</a></li>
@@ -310,7 +310,7 @@
 		</c:if>
 		<!-- For employee in Jboss portal-->
 		<c:if test="${fn:contains(naviPortalMode, 'loora')}">
-		<li><a href="#">Tapaamiset</a>
+		<li><span class="naviLinkHeaderNonLink">Tapaamiset</span>
 			<ul class="child">
 				<li id="app_new"><a href="<%= defaultPath %>/NewAppointment">Uusi tapaaminen</a></li>
 				<li id="app_inbox_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_inbox_employee')">Avoimet</a></li>
@@ -321,7 +321,7 @@
 		<!--  SUOSTUMUKSET -->
 		<!-- For citizen in Gatein portal-->
 		<c:if test="${fn:contains(naviPortalMode, 'kunpo')}">
-			<li><a href="#">Suostumukset</a>
+			<li><span class="naviLinkHeaderNonLink">Suostumukset</span>
 				<ul class="child">
 					<li id="<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>')">Saapuneet</a><span id="consents_num" class="message_num"></span></li>
 					<li id="<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS%>')">Vastatut</a></li>
@@ -329,7 +329,7 @@
 				</ul>
 			</li>
 				
-			<li><a href="#">Valtakirjat</a>
+			<li><span class="naviLinkHeaderNonLink">Valtakirjat</span>
 				<ul class="child">
 					<li id="valtakirjaconsent"><a href="<%= defaultPath %>/ValtakirjaConsent">Anna valtakirja</a></li>
 					<li id="<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED%>')">Vastaanotetut</a></li>
@@ -344,7 +344,7 @@
 		</c:if>
 		<!-- For employee in Jboss portal-->
 		<c:if test="${fn:contains(naviPortalMode, 'loora')}">
-		<li><a href="#">Suostumukset</a>
+		<li><span class="naviLinkHeaderNonLink">Suostumukset</span>
 			<ul class="child">
 				<li id="cst_new"><a href="<%= defaultPath %>/NewConsent">Uusi suostumuspohja</a></li>
 				<li id="sendconsent"><a href="<%= defaultPath %>/SendConsent">Uusi suostumuspyyntö</a></li>
@@ -352,7 +352,7 @@
 				<li id="<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>')">Lähetetyt suostumuspyynnöt</a></li>
 			</ul>
 		</li>
-		<li><a href="#">Valtakirjat</a>
+		<li><span class="naviLinkHeaderNonLink">Valtakirjat</span>
 			<ul class="child">
 				<%-- <li id="valtakirjaconsent"><a href="<%= defaultPath %>/ValtakirjaConsent">Asiakkaan valtakirjat </a></li>  --%>
 				<li id="<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>')">Asiakkaan valtakirjat </a></li> 
@@ -361,11 +361,11 @@
 		</li>
 			
 		<!--  TIETOPYYNNÖT -->
-		<li><a href="javascript:void(0)">Tietopyynnöt</a>
+		<li><span class="naviLinkHeaderNonLink">Tietopyynnöt</span>
 			<ul class="child">
 				<li id="newinformation"><a href="<%= defaultPath %>/NewInformation">Uusi tietopyyntö</a></li>
 				<li id="informationbox"><a href="<%= defaultPath %>/InformationBox">Saapuneet</a></li>
-				<li>Lähetetyt
+				<li><span class="naviLinkHeaderNonLink">Lähetetyt</span>
 					<ul class="child">
 						<%-- <li id="info_request_open"><a href="<%= defaultPath %>/Ilmoitukset">Avoimet</a></li> --%>
 						<%-- <li id="sendconsent"><a href="<%= defaultPath %>/Ilmoitukset">Valmiit</a></li> --%>
@@ -378,9 +378,9 @@
 		</li>
 		</c:if>	
 		
-		<li><a href="#">Asiointipalvelut</a>
+		<li><span class="naviLinkHeaderNonLink">Asiointipalvelut</span>
 			<ul class="child">
-				<li><a href="#">Palveluhakemukset</a>
+				<li><span class="naviLinkHeaderNonLink">Palveluhakemukset</span>
 					<ul class="child">
 						<!--  show only citizens -->
 						<c:if test="${fn:contains(naviPortalMode, 'kunpo')}">
