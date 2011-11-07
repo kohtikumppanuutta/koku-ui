@@ -18,6 +18,7 @@
 	//final String naviPortalMode = preferences.getValue(Constants.PREF_NAVI_PORTAL, PortalNavigationMode.KUNPO.toString());
 	final String naviPortalMode = KoKuPropertiesUtil.get("environment.name");
 	final String defaultPathPref = preferences.getValue(Constants.PREF_NAVI_DEFAULT_PATH, "/portal/auth/portal/default/koku/Message");
+	final String defaultPage = defaultPathPref.substring(defaultPathPref.lastIndexOf('/')+1, defaultPathPref.length());
 	final String frontPagePath = preferences.getValue(Constants.PREF_NAVI_FRONTPAGE, "/portal/auth/portal/default/koku/");
 	request.setAttribute("naviPortalMode", naviPortalMode);	
 	final String portalInfo = renderRequest.getPortalContext().getPortalInfo();

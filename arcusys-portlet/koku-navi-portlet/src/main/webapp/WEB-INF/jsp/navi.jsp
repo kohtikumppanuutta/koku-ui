@@ -77,7 +77,7 @@
 	function focusCurrentItem() {
 		var currentPage = "<%= currentPage %>";
 		
-		if(currentPage == 'Message') {
+		if(currentPage == '<%= defaultPage %>') {
 			var naviType = getNaviType();
 			if(naviType != "") {
 				var obj = "#" + naviType;
