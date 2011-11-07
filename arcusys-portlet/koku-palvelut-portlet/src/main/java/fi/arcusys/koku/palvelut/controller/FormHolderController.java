@@ -1,5 +1,6 @@
 package fi.arcusys.koku.palvelut.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,14 +15,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import fi.arcusys.koku.palvelut.model.client.FormHolder;
 import fi.arcusys.koku.palvelut.util.MigrationUtil;
 import fi.arcusys.koku.palvelut.util.TaskUtil;
-import fi.arcusys.koku.palvelut.util.TokenUtil;
+import fi.arcusys.koku.palvelut.util.TokenResolver;
 import fi.arcusys.koku.palvelut.util.URLUtil;
+
 
 /**
  * @author Dmitry Kudinov (dmitry.kudinov@arcusys.fi)
  * Jul 21, 2011
  */
-public abstract class FormHolderController {
+public abstract class FormHolderController
+{
 	@Autowired(required = false)
 	private PortletContext portletContext;
 	
@@ -31,8 +34,21 @@ public abstract class FormHolderController {
 		super();
 	}
 
+	protected List<FormHolder> getFormHoldersFromTasks(PortletRequest request) {
+		TokenResolver tokenResolver = new TokenResolver();
+		String token = tokenResolver.getAuthenticationToken(request);
+		List<Task> taskList = TaskUtil.getPIPATaskList(token);
+		List<FormHolder> formList = new ArrayList<FormHolder>();
+		for (Task task: taskList) {
+				String taskFormURL = getFormUrlByTask(request, token, task);
+				formList.add(new FormHolder(task.getDescription(), taskFormURL));
+		}
+		return formList;
+	}
+
 	protected FormHolder getFormHolderFromTask(PortletRequest request, String description) {
-		String token = TokenUtil.getAuthenticationToken(request);
+		TokenResolver tokenResolver = new TokenResolver();
+		String token = tokenResolver.getAuthenticationToken(request);
 	
 		List<Task> taskList = TaskUtil.getPIPATaskList(token);
 		for (Task task : taskList) {
@@ -65,6 +81,7 @@ public abstract class FormHolderController {
 			}
 		}
 		LOG.error("Didn't find any form!");
+	
 		return null;
 	}
 	

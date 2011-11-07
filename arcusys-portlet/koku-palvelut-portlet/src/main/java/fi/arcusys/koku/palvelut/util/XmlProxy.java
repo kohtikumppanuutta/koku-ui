@@ -16,7 +16,8 @@ import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fi.arcusys.koku.palvelut.exceptions.IllegalOperationCall;
 
@@ -29,7 +30,7 @@ import fi.arcusys.koku.palvelut.exceptions.IllegalOperationCall;
  */
 public class XmlProxy {
 	
-	private static final Logger LOG = Logger.getLogger(XmlProxy.class);
+	private static final Logger LOG = LoggerFactory.getLogger(XmlProxy.class);
 
 	private final String message;
 	private final String action;

@@ -15,8 +15,9 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.WindowState;
 
-import org.apache.log4j.Logger;
 import org.intalio.tempo.workflow.task.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.ModelAndView;
@@ -25,15 +26,16 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.arcusys.koku.palvelut.model.client.TaskHolder;
 import fi.arcusys.koku.palvelut.util.TaskUtil;
-import fi.arcusys.koku.palvelut.util.TokenUtil;
+import fi.arcusys.koku.palvelut.util.TokenResolver;
 import fi.arcusys.koku.palvelut.util.URLUtil;
+
 
 
 @Controller("configurationController")
 @RequestMapping(value = "EDIT")
 public class ConfigurationController { 
 	
-	private static final Logger LOG = Logger.getLogger(ConfigurationController.class.getName());
+	private static final Logger LOG = LoggerFactory.getLogger(ConfigurationController.class.getName());
 	public static final String EDIT_ACTION = "configuration";
 	public static final String JBOSS_PORTAL = "JBoss Portal 2.7";
 	
@@ -83,7 +85,7 @@ public class ConfigurationController {
 	}
 	
 	private List<TaskHolder<Task>> getTaskHolders(PortletRequest request) {
-		String token = TokenUtil.getAuthenticationToken(request);
+		String token = new TokenResolver().getAuthenticationToken(request);
 		LOG.debug("Token: "+token);
 		List<Task> taskList = TaskUtil.getPIPATaskList(token);
 		LOG.debug("taskList size: "+ taskList.size());

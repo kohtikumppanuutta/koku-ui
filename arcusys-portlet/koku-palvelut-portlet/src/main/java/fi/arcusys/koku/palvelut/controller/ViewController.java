@@ -24,8 +24,9 @@ import javax.xml.stream.XMLStreamException;
 
 import net.sf.json.JSONObject;
 
-import org.apache.log4j.Logger;
 import org.intalio.tempo.workflow.task.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,12 +37,11 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import fi.arcusys.koku.palvelut.exceptions.IllegalOperationCall;
-import fi.arcusys.koku.palvelut.model.client.FormHolder;
 import fi.arcusys.koku.palvelut.util.AjaxViewResolver;
 import fi.arcusys.koku.palvelut.util.OperationsValidator;
 import fi.arcusys.koku.palvelut.util.OperationsValidatorImpl;
 import fi.arcusys.koku.palvelut.util.TaskUtil;
-import fi.arcusys.koku.palvelut.util.TokenUtil;
+import fi.arcusys.koku.palvelut.util.TokenResolver;
 import fi.arcusys.koku.palvelut.util.XmlProxy;
 import fi.arcusys.koku.util.KokuWebServicesJS;
 import fi.koku.settings.KoKuPropertiesUtil;
@@ -51,7 +51,7 @@ import fi.koku.settings.KoKuPropertiesUtil;
 @RequestMapping(value = "VIEW")
 public class ViewController extends FormHolderController {
 	
-	private static final Logger LOG = Logger.getLogger(ViewController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ViewController.class);
 	
 	public static final String FORM_VIEW_ACTION 						= "formview";
 	public static final String VIEW_ACTION 								= "view";
@@ -159,43 +159,48 @@ public class ViewController extends FormHolderController {
 	 * @see org.springframework.web.portlet.mvc.AbstractController#handleRenderRequestInternal(javax.portlet.RenderRequest,
 	 *      javax.portlet.RenderResponse)
 	 */
-	@SuppressWarnings("unchecked")
 	@RenderMapping
 	public ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderRequest response) throws Exception {
 
 		LOG.debug("handleRenderRequestInternal");
-		PortletPreferences prefs = request.getPreferences();
-		String portalInfo = (String)request.getPortalContext().getPortalInfo();
-		Boolean isGateInPortal = portalInfo.toLowerCase().contains(PORTAL_GATEIN);
+		final PortletPreferences prefs = request.getPreferences();
+		final String portalInfo = (String)request.getPortalContext().getPortalInfo();
+		final Boolean isGateInPortal = portalInfo.toLowerCase().contains(PORTAL_GATEIN);
+		final Boolean showFormById = Boolean.valueOf(prefs.getValue(PREF_SHOW_TASKS_BY_ID, null));
+		final String formId = prefs.getValue(PREF_SHOW_ONLY_FORM_BY_ID, null);
+		final String formDescription = prefs.getValue(PREF_SHOW_ONLY_FORM_BY_DESCRIPTION, null);
+		LOG.debug("showFormById " + showFormById);
 		
 		ModelAndView mav = new ModelAndView(FORM_VIEW_ACTION, "model", null);
 		mav.addObject(ATTR_PREFERENCES, request.getPreferences());
-		Task t = null;
-		
-		Boolean showFormById = Boolean.valueOf(prefs.getValue(PREF_SHOW_TASKS_BY_ID, null));
-		LOG.debug("showFormById " + showFormById);
+		Task t = null;	
+		TokenResolver tokenUtil = new TokenResolver();
 		try {
-			if (isGateInPortal || showFormById) {
-				LOG.debug("Loading taskID: " + prefs.getValue(PREF_SHOW_ONLY_FORM_BY_ID, null) + "isGateIn: "+ isGateInPortal);
-				t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue(PREF_SHOW_ONLY_FORM_BY_ID, null));
+//			if (isGateInPortal || showFormById) {
+			if (showFormById) {
+				LOG.debug("Loading taskID: " +formId + "isGateIn: "+ isGateInPortal);
+				t = TaskUtil.getTask(tokenUtil.getAuthenticationToken(request), formId);
 			} else {
-				t = TaskUtil.getTaskByDescription(TokenUtil.getAuthenticationToken(request), prefs.getValue(PREF_SHOW_ONLY_FORM_BY_DESCRIPTION, null));
+				t = TaskUtil.getTaskByDescription(tokenUtil.getAuthenticationToken(request), formDescription);
 				LOG.debug("t status: " + (t == null));
 				// Fallback. Try to get form by Id
 				if (t == null) {
-					LOG.error("Fallback! Couldn't find task by description name. Trying to get form by Id. Description: '" + prefs.getValue(PREF_SHOW_ONLY_FORM_BY_DESCRIPTION, null) + "'");
-					t = TaskUtil.getTask(TokenUtil.getAuthenticationToken(request), prefs.getValue(PREF_SHOW_ONLY_FORM_BY_ID, null));
+					LOG.error("Fallback! Couldn't find task by description name. Trying to get form by Id. Description: '" + formDescription + "'");
+					t = TaskUtil.getTask(tokenUtil.getAuthenticationToken(request), formId);
 				}
 			}
 		} catch (Exception e) {
 			LOG.error("Failure while trying to get Task.\nSome hints to fix problem: \n1. Logged in proper user? (this portlet doesn't work correctly with admin/nonlogged users \n2. Task might be updated. Reselect form in 'edit'-mode. \n3. Check that connection to Intalio server is up. ", e);
 			return getFailureView(request);
 		}
-		FormHolder fh = getFormHolderFromTask(request, t.getDescription());
-		mav.addObject("formholder", fh);
-		return mav;
 		
+		if (t == null) {
+			LOG.error("Coulnd't find task by descrption or formId! Description: '"+formDescription+"' FormId: '"+formId+"'");
+		}
+		
+		mav.addObject("formholder", getFormHolderFromTask(request, t.getDescription()));
+		return mav;
 	}
 	
 	private ModelAndView getFailureView(RenderRequest request) {

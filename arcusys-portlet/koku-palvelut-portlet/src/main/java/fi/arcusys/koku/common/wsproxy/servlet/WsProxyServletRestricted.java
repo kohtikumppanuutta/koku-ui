@@ -24,8 +24,8 @@ import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fi.arcusys.koku.util.KokuWebServicesJS;
 import fi.koku.settings.KoKuPropertiesUtil;
@@ -34,7 +34,7 @@ public class WsProxyServletRestricted extends HttpServlet implements Servlet {
     private static final long serialVersionUID = 1L;
     
     private static final Set<String> RESTRICTED_ENDPOINTS = new HashSet<String>(); 
-	private static final Log LOG = LogFactory.getLog(WsProxyServletRestricted.class);
+	private static final Logger LOG = LoggerFactory.getLogger(WsProxyServletRestricted.class);
 
     static {    	
     	for (KokuWebServicesJS key : KokuWebServicesJS.values()) {

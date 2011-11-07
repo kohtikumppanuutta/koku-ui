@@ -39,5 +39,4 @@ public class EndPointResolverImpl implements EndPointResolver {
 		return soap;
 	}
 
-
 }

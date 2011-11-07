@@ -8,14 +8,14 @@ import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fi.koku.settings.KoKuPropertiesUtil;
 
 public final class Configuration {
 
-	private static final Log LOG = LogFactory.getLog(Configuration.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
 	private static final String TOKEN_SERVICE_ENDPOINT;
 	private static final String TASKMANAGER_SERVICE_ENDPOINT;
 	private static final Configuration INSTANCE = new Configuration();

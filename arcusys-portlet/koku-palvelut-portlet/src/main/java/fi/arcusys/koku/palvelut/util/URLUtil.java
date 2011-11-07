@@ -6,9 +6,9 @@ import java.text.MessageFormat;
 
 import javax.portlet.PortletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.intalio.tempo.workflow.task.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class URLUtil {
 	
@@ -22,7 +22,7 @@ public final class URLUtil {
 		public String url;
 	}
 
-	private static final Log LOG = LogFactory.getLog(URLUtil.class);
+	private static final Logger LOG = LoggerFactory.getLogger(URLUtil.class);
 	
 	private static final String ORBEON_FORMS_URL_SCHEME = "oxf://";
 	
