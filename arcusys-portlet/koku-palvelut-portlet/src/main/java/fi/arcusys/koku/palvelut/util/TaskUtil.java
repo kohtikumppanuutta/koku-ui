@@ -13,7 +13,7 @@ import org.intalio.tempo.workflow.tms.client.RemoteTMSFactory;
 
 import fi.arcusys.koku.palvelut.bean.Configuration;
 
-public class TaskUtil {
+public final class TaskUtil {
 	
 	private static final Log LOG = LogFactory.getLog(TaskUtil.class);
 	

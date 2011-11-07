@@ -51,7 +51,7 @@ import fi.koku.settings.KoKuPropertiesUtil;
 @RequestMapping(value = "VIEW")
 public class ViewController extends FormHolderController {
 	
-	private static Logger LOG = Logger.getLogger(ViewController.class);
+	private static final Logger LOG = Logger.getLogger(ViewController.class);
 	
 	public static final String FORM_VIEW_ACTION 						= "formview";
 	public static final String VIEW_ACTION 								= "view";

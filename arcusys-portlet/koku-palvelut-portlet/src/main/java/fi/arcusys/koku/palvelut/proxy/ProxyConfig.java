@@ -18,7 +18,7 @@ import fi.koku.settings.KoKuPropertiesUtil;
  * 
  * @author Jon Haikarainen
  */
-public class ProxyConfig {
+public final class ProxyConfig {
 
 	// Singleton pattern removed by Tuomas.
 	//private static ProxyConfig instance = new ProxyConfig();

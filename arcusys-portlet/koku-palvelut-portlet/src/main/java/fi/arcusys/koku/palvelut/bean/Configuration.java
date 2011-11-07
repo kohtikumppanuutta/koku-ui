@@ -13,12 +13,12 @@ import org.apache.commons.logging.LogFactory;
 
 import fi.koku.settings.KoKuPropertiesUtil;
 
-public class Configuration {
+public final class Configuration {
 
-	private static Log LOG = LogFactory.getLog(Configuration.class);
+	private static final Log LOG = LogFactory.getLog(Configuration.class);
 	private static final String TOKEN_SERVICE_ENDPOINT;
 	private static final String TASKMANAGER_SERVICE_ENDPOINT;
-	private static Configuration instance = new Configuration();
+	private static final Configuration INSTANCE = new Configuration();
 	
 	static {		
 		TASKMANAGER_SERVICE_ENDPOINT = KoKuPropertiesUtil.get("palvelutPortlet.taskManagerServiceEndpoint");
@@ -70,7 +70,7 @@ public class Configuration {
 	}
 
 	public static Configuration getInstance() {
-		return instance;
+		return INSTANCE;
 	}
 
 	public static final String getTokenServiceEndpoint() {

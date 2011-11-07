@@ -25,7 +25,7 @@ public class EndPointResolverImpl implements EndPointResolver {
 		soap = data.substring(soapMsgBeginIndex);
 		
 		int serviceIndex = data.indexOf(ENDPOINT_REGEX, 0) + ENDPOINT_REGEX.length();
-		int serviceEndIndex = data.indexOf("&", serviceIndex);
+		int serviceEndIndex = data.indexOf('&', serviceIndex);
 		endPoint = data.substring(serviceIndex, serviceEndIndex);		
 	}	
 

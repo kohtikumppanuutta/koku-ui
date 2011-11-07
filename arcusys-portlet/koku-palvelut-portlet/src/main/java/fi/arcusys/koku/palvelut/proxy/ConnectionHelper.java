@@ -36,6 +36,7 @@ public class ConnectionHelper {
     private static final String HEADER_TRANSFER_ENCODING = "Transfer-Encoding";
     private static final String HEADER_LOCATION = "Location";
     private static final String HEADER_HOST = "Host";
+    private static final int BUFFER_SIZE = 2048;
     
     public ConnectionHelper() {
     }
@@ -116,11 +117,11 @@ public class ConnectionHelper {
      */
     public static void streamContents(InputStream is, OutputStream os) throws IOException {
         /*Stream the contents from an inputstream to an outputstream*/
-        byte[] buf = new byte[2048];
+        byte[] buf = new byte[BUFFER_SIZE];
         int n;
                         
         try {
-            while((n=is.read(buf, 0, 2048)) != -1 ) {
+            while((n=is.read(buf, 0, BUFFER_SIZE)) != -1 ) {
                 os.write(buf, 0, n);
             }
         }
@@ -156,7 +157,9 @@ public class ConnectionHelper {
             BufferedReader reader = new ProxyFilterReader(new InputStreamReader(is), proxyConfig);
             String ln;
             try {
-            	while((ln=reader.readLine()) != null) os.write(ln.getBytes());
+            	while((ln=reader.readLine()) != null) {
+            		os.write(ln.getBytes());
+            	}
             }
 						catch(Exception e) {
 							LOG.debug("Unable to read line! Exception:" + e);
