@@ -193,12 +193,12 @@
 	}
 	
 	<%  //for jboss portal
-	if(defaultPath.contains("default")) { %>
+	if (portalInfo.startsWith(Constants.PORTAL_JBOSS)) { %>
 	function navigateToPage(naviType) {		
 		var url = "<%= defaultPath %><%= actionParam %>" + '&naviType=' + naviType;	
 		window.location = url;
 	}
-	<%}else{ // for gatein portal %>
+	<%} else { // for gatein portal %>
 	function navigateToPage(naviType) {
 		var url = "<%= naviRenderURL %>";	
 		url = formatUrl(url);
@@ -233,11 +233,6 @@
 	String kksPath = kksPref; 
 	String lokPath = lokPref; 
 	String pyhPath = pyhPref;
-// 	if (useRelativePath.equals(Boolean.TRUE.toString())) {
-// 		kksPath = defaultPath + kksPref;
-// 		lokPath = defaultPath + lokPref;
-// 		pyhPath = defaultPath + pyhPref;
-// 	}
 %>		
 		
 		<!--  VIESTIT -->
@@ -248,7 +243,6 @@
 		<li id="pyh"><a href="<%= pyhPath %>">Omat tiedot</a></li>
 		</c:if>
 		<c:if test="${fn:contains(naviPortalMode, 'loora')}">
-<%-- 		<c:if test="${fn:contains(naviURL, '/default/')}"> --%>
 		<li id="kks"><a href="<%= kksPath %>">Sopimukset ja suunnitelmat</a>
 		<li id="lok"><a href="<%= lokPath %>">Lokihallinta</a></li>
 		</c:if>
