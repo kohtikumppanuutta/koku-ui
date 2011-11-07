@@ -45,6 +45,9 @@ public class FamilyInformationController {
   private FamilyHelper familyHelper;
   private MessageHelper messageHelper;
   
+  /**
+   * Constructor creates customer service and community service instances and helper class instances.
+   */
   public FamilyInformationController() {
     
     CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory(PyhConstants.CUSTOMER_SERVICE_USER_ID, PyhConstants.CUSTOMER_SERVICE_PASSWORD, PyhConstants.CUSTOMER_SERVICE_ENDPOINT);
@@ -58,8 +61,12 @@ public class FamilyInformationController {
   }
   
   /**
-   * View family information.
-   * @throws fi.koku.services.entity.customer.v1.ServiceFault 
+   * Render method for showing user's family information view.
+   * 
+   * @param model - model object which makes data accessible to the JSP page
+   * @param request - portlet render request
+   * @return - the name of the JSP page to render
+   * @throws ServiceFault
    */
   @RenderMapping
   public String render(Model model, RenderRequest request) throws ServiceFault {

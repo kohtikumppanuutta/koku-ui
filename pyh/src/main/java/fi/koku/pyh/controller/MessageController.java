@@ -35,6 +35,9 @@ public class MessageController {
   
   private CommunityServicePortType communityService;  
   
+  /**
+   * Constructor creates a community service instance.
+   */
   public MessageController() {
     
     CommunityServiceFactory communityServiceFactory = new CommunityServiceFactory(PyhConstants.COMMUNITY_SERVICE_USER_ID, PyhConstants.COMMUNITY_SERVICE_PASSWORD, PyhConstants.COMMUNITY_SERVICE_ENDPOINT);
@@ -42,8 +45,14 @@ public class MessageController {
   }
   
   /**
-   * Call service to accept a request.
-   * @throws ServiceFault 
+   * Action method to accept a community membership request.
+   * 
+   * @param userPic - current user's PIC
+   * @param messageId - ID of the membership request message
+   * @param currentFamilyId - ID of the family community of the user who is accepting the message (used for removing the old family community)
+   * @param removeCurrentFamily - boolean to indicate is it necessary to remove the family community
+   * @param response - portlet action response
+   * @throws ServiceFault
    */
   @ActionMapping(params = "action=acceptMessage")
   public void accept(@RequestParam String userPic, @RequestParam String messageId, @RequestParam String currentFamilyId, @RequestParam boolean removeCurrentFamily, ActionResponse response) throws ServiceFault {    
@@ -70,8 +79,12 @@ public class MessageController {
   }
 
   /**
-   * Call service to reject a request.
-   * @throws ServiceFault 
+   * Action method to reject a community membership request.
+   * 
+   * @param userPic - current user's PIC
+   * @param messageId - ID of the membership request message
+   * @param response - portlet action response
+   * @throws ServiceFault
    */
   @ActionMapping(params = "action=rejectMessage")
   public void reject(@RequestParam String userPic, @RequestParam String messageId, ActionResponse response) throws ServiceFault {

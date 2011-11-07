@@ -39,28 +39,59 @@ public class Log {
   private LogServicePortType logServicePortType;
   private static Log log = new Log();
   
+  /**
+   * Only one Log instance is allowed.
+   */
   private Log() {
     logServicePortType = getLogService();
   }
   
+  /**
+   * @return - Log instance
+   */
   public static Log getInstance() {
     return log;
   }
   
-  // userId == user's PIC (required as parameter)
-  // customerPic == child's PIC (not required as parameter, can be empty string)
+  /**
+   * Log an update operation.
+   * 
+   * @param userId - current user's PIC
+   * @param customerPic - child's PIC (not required, can be empty string)
+   * @param dataType - data type identifier, for example "pyh.family.community"
+   * @param message - log message
+   */
   public void update(String userId, String customerPic, String dataType, String message) {
     log(Log.UPDATE, userId, customerPic, dataType, message);
   }
   
+  /**
+   * Log a send operation.
+   * 
+   * @param userId - current user's PIC
+   * @param customerPic - child's PIC (not required, can be empty string)
+   * @param dataType - data type identifier, for example "pyh.family.community"
+   * @param message - log message
+   */
   public void send(String userId, String customerPic, String dataType, String message) {
     log(Log.SEND, userId, customerPic, dataType, message);
   }
   
+  /**
+   * Log a remove operation.
+   * 
+   * @param userId - current user's PIC
+   * @param customerPic - child's PIC (not required, can be empty string)
+   * @param dataType - data type identifier, for example "pyh.family.community"
+   * @param message - log message
+   */
   public void remove(String userId, String customerPic, String dataType, String message) {
     log(Log.REMOVE, userId, customerPic, dataType, message);
   }
   
+  /**
+   * @return - LogServicePortType instance
+   */
   private LogServicePortType getLogService() {
     
     LogServiceFactory logServiceFactory = new LogServiceFactory(PyhConstants.LOK_SERVICE_USER_ID, PyhConstants.LOK_SERVICE_PASSWORD, PyhConstants.LOK_SERVICE_ENDPOINT);
@@ -68,8 +99,10 @@ public class Log {
   }
   
   /**
-   * Creates AuditInfo for log web service call.
+   * Creates an AuditInfo for log web service call.
    * 
+   * @param userId - current user's PIC
+   * @return - AuditInfoType
    */
   private AuditInfoType getLogAuditInfo(String userId) {
     
@@ -81,8 +114,13 @@ public class Log {
   }
   
   /**
-   * Calls the actual log web service.
+   * Call the log web service.
    * 
+   * @param operation - operation type
+   * @param userId - current user's PIC
+   * @param customerPic - child's PIC (not required, can be empty string)
+   * @param dataType - data type identifier, for example "pyh.family.community"
+   * @param message - log message
    */
   private void log(String operation, String userId, String customerPic, String dataType, String message) {
     

@@ -88,6 +88,9 @@ public class EditFamilyInformationController {
   private FamilyHelper familyHelper;
   private MessageHelper messageHelper;
   
+  /**
+   * Constructor creates customer service and community service instances and helper class instances.
+   */
   public EditFamilyInformationController() {
     
     CustomerServiceFactory customerServiceFactory = new CustomerServiceFactory(PyhConstants.CUSTOMER_SERVICE_USER_ID, PyhConstants.CUSTOMER_SERVICE_PASSWORD, PyhConstants.CUSTOMER_SERVICE_ENDPOINT);
@@ -100,6 +103,15 @@ public class EditFamilyInformationController {
     messageHelper = new MessageHelper(customerService, communityService, PyhConstants.COMPONENT_PYH);
   }
   
+  /**
+   * Render method for showing user's family information editing view.
+   * 
+   * @param request - portlet render request
+   * @param model - model object which makes data accessible to the JSP page
+   * @return - the name of the JSP page to render
+   * @throws fi.koku.services.entity.customer.v1.ServiceFault
+   * @throws fi.koku.services.entity.community.v1.ServiceFault
+   */
   @RenderMapping(params = "action=editFamilyInformation")
   public String render(RenderRequest request, Model model) throws fi.koku.services.entity.customer.v1.ServiceFault,
     fi.koku.services.entity.community.v1.ServiceFault {
@@ -133,7 +145,14 @@ public class EditFamilyInformationController {
     return "editfamilyinformation";
   }
   
-  // this render method does not clear the search results
+  /**
+   * Render method for showing user's family information editing view with search results.
+   * 
+   * @param request - portlet render request
+   * @param model - model object which makes data accessible to the JSP page
+   * @return - the name of the JSP page to render
+   * @throws fi.koku.services.entity.customer.v1.ServiceFault
+   */
   @RenderMapping(params = "action=editFamilyInformationWithSearchResults")
   public String renderWithSearchResults(RenderRequest request, Model model) throws fi.koku.services.entity.customer.v1.ServiceFault {
     
@@ -165,6 +184,16 @@ public class EditFamilyInformationController {
     return "editfamilyinformation";
   }
   
+  /**
+   * Action method for adding a dependant as a family member.
+   * 
+   * @param request - portlet action request
+   * @param dependantPic - PIC of the dependant to add as family member
+   * @param response - portlet action response
+   * @throws TooManyFamiliesException
+   * @throws FamilyNotFoundException
+   * @throws fi.koku.services.entity.community.v1.ServiceFault
+   */
   @ActionMapping(params = "action=addDependantAsFamilyMember")
   public void addDependantAsFamilyMember(ActionRequest request, @RequestParam String dependantPic, ActionResponse response) 
     throws TooManyFamiliesException, FamilyNotFoundException, fi.koku.services.entity.community.v1.ServiceFault {
@@ -174,6 +203,14 @@ public class EditFamilyInformationController {
     response.setRenderParameter("action", "editFamilyInformation");
   }
   
+  /**
+   * Action method for removing a family member.
+   * 
+   * @param request - portlet action request
+   * @param familyMemberPic - PIC of the family member to remove
+   * @param response - portlet action response
+   * @throws fi.koku.services.entity.community.v1.ServiceFault
+   */
   @ActionMapping(params = "action=removeFamilyMember")
   public void removeFamilyMember(ActionRequest request, @RequestParam String familyMemberPic, ActionResponse response)
     throws fi.koku.services.entity.community.v1.ServiceFault {
@@ -183,6 +220,14 @@ public class EditFamilyInformationController {
     response.setRenderParameter("action", "editFamilyInformation");
   }
   
+  /**
+   * Action method for removing a dependant from the family.
+   * 
+   * @param request - portlet action request
+   * @param familyMemberPic - PIC of the dependant to remove from the family
+   * @param response - portlet action response
+   * @throws fi.koku.services.entity.community.v1.ServiceFault
+   */
   @ActionMapping(params = "action=removeDependant")
   public void removeDependant(ActionRequest request, @RequestParam String familyMemberPic, ActionResponse response)
     throws fi.koku.services.entity.community.v1.ServiceFault {
@@ -197,6 +242,12 @@ public class EditFamilyInformationController {
     response.setRenderParameter("action", "editFamilyInformation");
   }
   
+  /**
+   * Action method for searching users.
+   * 
+   * @param request - portlet action request
+   * @param response - portlet action response
+   */
   @ActionMapping(params = "action=searchUsers")
   public void searchUsers(ActionRequest request, ActionResponse response) {
     
@@ -208,6 +259,17 @@ public class EditFamilyInformationController {
     response.setRenderParameter("action", "editFamilyInformationWithSearchResults");
   }
   
+  /**
+   * Action method for adding new family members.
+   * 
+   * @param request - portlet action request
+   * @param response - portlet action response
+   * @param session - portlet session
+   * @throws FamilyNotFoundException
+   * @throws TooManyFamiliesException
+   * @throws fi.koku.services.entity.customer.v1.ServiceFault
+   * @throws fi.koku.services.entity.community.v1.ServiceFault
+   */
   @ActionMapping(params = "action=addUsersToFamily")
   public void addUsersToFamily(ActionRequest request, ActionResponse response, PortletSession session) throws FamilyNotFoundException,
     TooManyFamiliesException, fi.koku.services.entity.customer.v1.ServiceFault, fi.koku.services.entity.community.v1.ServiceFault {
@@ -304,8 +366,17 @@ public class EditFamilyInformationController {
   }
   
   /**
-   * Selects persons (PICs) to whom send the confirmation message for a operation, for example adding a dependant 
-   * into a family.
+   * Select recipients (PICs) to whom send the confirmation message (membership request) for an operation, 
+   * for example adding a dependant into the family.
+   * 
+   * @param memberToAddPic - PIC of the person to be added as family member
+   * @param user - current user
+   * @param role - role of the person to be added into the family
+   * @param currentUserPic - current user's PIC
+   * @return - a list of the persons (PICs) receiving the membership request
+   * @throws fi.koku.services.entity.community.v1.ServiceFault
+   * @throws TooManyFamiliesException
+   * @throws FamilyNotFoundException
    */
   private List<String> generateRecipients(String memberToAddPic, Person user, CommunityRole role, String currentUserPic) 
     throws fi.koku.services.entity.community.v1.ServiceFault, TooManyFamiliesException, FamilyNotFoundException {
@@ -377,7 +448,14 @@ public class EditFamilyInformationController {
   }
   
   /**
-   * Inserts a new member into a family community.
+   * Insert a new member into a family community.
+   * 
+   * @param toFamilyPic - PIC of a person who is member of the target community
+   * @param memberToAddPic - PIC of the person to be added as family member
+   * @param role - role of the person to be added
+   * @throws TooManyFamiliesException
+   * @throws FamilyNotFoundException
+   * @throws fi.koku.services.entity.community.v1.ServiceFault
    */
   private void insertInto(String toFamilyPic, String memberToAddPic, CommunityRole role) throws TooManyFamiliesException, 
     FamilyNotFoundException, fi.koku.services.entity.community.v1.ServiceFault {
@@ -404,8 +482,11 @@ public class EditFamilyInformationController {
   }
   
   /**
-   * Inserts new community with one member.
+   * Create a family community for the user.
    * 
+   * @param userPic - current user's PIC
+   * @return - returns the family community ID
+   * @throws fi.koku.services.entity.community.v1.ServiceFault
    */
   private String addFamily(String userPic) throws fi.koku.services.entity.community.v1.ServiceFault {
     
@@ -431,7 +512,14 @@ public class EditFamilyInformationController {
   }
   
   /**
-   * Inserts a dependant into a family.
+   * Insert a dependant into the family.
+   * 
+   * @param userPic - current user's PIC
+   * @param dependantPic - PIC of the dependant to insert
+   * @param role - role of the dependant
+   * @throws TooManyFamiliesException
+   * @throws FamilyNotFoundException
+   * @throws fi.koku.services.entity.community.v1.ServiceFault
    */
   private void insertDependantToFamily(String userPic, String dependantPic, CommunityRole role) throws TooManyFamiliesException, 
     FamilyNotFoundException, fi.koku.services.entity.community.v1.ServiceFault {
@@ -458,7 +546,11 @@ public class EditFamilyInformationController {
   }
   
   /**
-   * Removes a family member from a family community.
+   * Remove a family member from the family.
+   * 
+   * @param familyMemberPic - PIC of the member to remove
+   * @param userPic - current user's PIC
+   * @throws fi.koku.services.entity.community.v1.ServiceFault
    */
   private void removeFamilyMember(String familyMemberPic, String userPic) throws fi.koku.services.entity.community.v1.ServiceFault {
     
@@ -507,10 +599,11 @@ public class EditFamilyInformationController {
   }
   
   /**
-   * Returns true if person is member of a community. Otherwise returns false.
+   * Check if a person is member of a community.
    * 
-   * personPic - PIC of the person
-   * members - list of members of the community
+   * @param personPic - PIC of the person
+   * @param members - members of the community
+   * @return - returns true if the person is member of a community, otherwise returns false
    */
   private boolean isMemberOfCommunity(String personPic, List<MemberType> members) {
     
