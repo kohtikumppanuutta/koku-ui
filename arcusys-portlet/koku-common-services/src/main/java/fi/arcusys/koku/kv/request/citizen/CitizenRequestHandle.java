@@ -62,8 +62,10 @@ public class CitizenRequestHandle extends AbstractHandle {
 		List<KokuResponseSummary> reqList = new ArrayList<KokuResponseSummary>();
 		for (ResponseSummary summary : reqs) {
 			KokuResponseSummary kokuSummary = new KokuResponseSummary(summary);
-			kokuSummary.setReplierName(userService.getKunpoNameByUserUid(kokuSummary.getReplierUid()));
-			reqList.add(kokuSummary);	
+			// TODO: SERVICES NEED TO UPDATE!
+//			kokuSummary.setReplierName(userService.getKunpoNameByUserUid(kokuSummary.getReplierUid()));
+			kokuSummary.setReplierName(kokuSummary.getReplierUid());
+			reqList.add(kokuSummary);
 		}
 		return reqList;
 
