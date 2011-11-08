@@ -8,6 +8,7 @@
 package fi.koku.pyh.controller;
 
 import javax.portlet.RenderRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -23,9 +24,12 @@ import fi.koku.services.entity.customer.v1.CustomerServiceFactory;
 import fi.koku.services.entity.customer.v1.CustomerServicePortType;
 import fi.koku.services.entity.customer.v1.CustomerType;
 import fi.koku.services.entity.customer.v1.ServiceFault;
+import fi.koku.services.entity.customerservice.exception.FamilyNotFoundException;
+import fi.koku.services.entity.customerservice.exception.TooManyFamiliesException;
 import fi.koku.services.entity.customerservice.helper.FamilyHelper;
 import fi.koku.services.entity.customerservice.helper.MessageHelper;
 import fi.koku.services.entity.customerservice.model.DependantsAndFamily;
+import fi.koku.services.entity.customerservice.model.Family;
 import fi.koku.services.entity.customerservice.model.FamilyIdAndFamilyMembers;
 import fi.koku.services.entity.customerservice.model.Person;
 
@@ -69,21 +73,28 @@ public class FamilyInformationController {
    * @throws ServiceFault
    */
   @RenderMapping
-  public String render(Model model, RenderRequest request) throws ServiceFault {
+  public String render(Model model, RenderRequest request) throws fi.koku.services.entity.customer.v1.ServiceFault, TooManyFamiliesException {
     
     String userPic = UserInfoUtils.getPicFromSession(request);
     CustomerType customer = customerService.opGetCustomer(userPic, CustomerServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
     logger.debug("FamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
     Person user = new Person(customer);
     
-    DependantsAndFamily daf = familyHelper.getDependantsAndFamily(userPic);
-    FamilyIdAndFamilyMembers fidm = familyHelper.getOtherFamilyMembers(userPic);
-        
+    Family userFamily = null;
+    try {
+      userFamily = familyHelper.getFamily(userPic);
+    } catch (FamilyNotFoundException e) {
+      // user doesn't belong to any family community
+    }
+    
+    DependantsAndFamily daf = familyHelper.getDependantsAndFamily(userPic, userFamily);
+    FamilyIdAndFamilyMembers fidm = familyHelper.getOtherFamilyMembers(userPic, userFamily);
+    
     model.addAttribute("user", user);
     model.addAttribute("dependants", daf.getDependants());
     model.addAttribute("otherFamilyMembers", fidm.getFamilyMembers());
     model.addAttribute("currentFamilyId", fidm.getFamilyId());
-    model.addAttribute("messages", messageHelper.getMessagesFor(user, familyHelper.isParentsSet(user.getPic())));
+    model.addAttribute("messages", messageHelper.getMessagesFor(user, familyHelper.isParentsSet(userPic, userFamily)));
     model.addAttribute("sentMessages", messageHelper.getSentMessages(user));
     model.addAttribute("supportEmailAddress", PyhConstants.KOKU_SUPPORT_EMAIL_ADDRESS);
     

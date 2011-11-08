@@ -114,7 +114,7 @@ public class EditFamilyInformationController {
    */
   @RenderMapping(params = "action=editFamilyInformation")
   public String render(RenderRequest request, Model model) throws fi.koku.services.entity.customer.v1.ServiceFault,
-    fi.koku.services.entity.community.v1.ServiceFault {
+    fi.koku.services.entity.community.v1.ServiceFault, TooManyFamiliesException {
     
     String userPic = UserInfoUtils.getPicFromSession(request);
     CustomerType customer = customerService.opGetCustomer(userPic, CustomerServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
@@ -122,13 +122,21 @@ public class EditFamilyInformationController {
     logger.debug("EditFamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
     Person user = new Person(customer);
     
-    DependantsAndFamily daf = familyHelper.getDependantsAndFamily(userPic);
-    FamilyIdAndFamilyMembers fidm = familyHelper.getOtherFamilyMembers(userPic);
+    Family userFamily = null;
+    try {
+      userFamily = familyHelper.getFamily(userPic);
+    } catch (FamilyNotFoundException e) {
+      // user has no family community so create a new family community
+      userFamily = addFamily(userPic);
+    }
+    
+    DependantsAndFamily daf = familyHelper.getDependantsAndFamily(userPic, userFamily);
+    FamilyIdAndFamilyMembers fidm = familyHelper.getOtherFamilyMembers(userPic, userFamily);
     
     model.addAttribute("user", user);
     model.addAttribute("dependants", daf.getDependants());
     model.addAttribute("otherFamilyMembers", fidm.getFamilyMembers());
-    model.addAttribute("parentsFull", familyHelper.isParentsSet(userPic));
+    model.addAttribute("parentsFull", familyHelper.isParentsSet(userPic, userFamily));
     model.addAttribute("messages", messageHelper.getSentMessages(user));
     model.addAttribute("searchedUsers", null);
     
@@ -136,11 +144,6 @@ public class EditFamilyInformationController {
     
     // if child's guardianship information is not found show a notification in JSP
     model.addAttribute("childsGuardianshipInformationNotFound", childsGuardianshipInformationNotFound.booleanValue());
-    
-    // create user family community if does not exist
-    if (daf.getFamily() == null) {
-      addFamily(userPic);
-    }
     
     return "editfamilyinformation";
   }
@@ -154,7 +157,8 @@ public class EditFamilyInformationController {
    * @throws fi.koku.services.entity.customer.v1.ServiceFault
    */
   @RenderMapping(params = "action=editFamilyInformationWithSearchResults")
-  public String renderWithSearchResults(RenderRequest request, Model model) throws fi.koku.services.entity.customer.v1.ServiceFault {
+  public String renderWithSearchResults(RenderRequest request, Model model) throws TooManyFamiliesException, 
+    fi.koku.services.entity.customer.v1.ServiceFault, fi.koku.services.entity.community.v1.ServiceFault {
     
     String userPic = UserInfoUtils.getPicFromSession(request);
     String surname = request.getParameter("surname");
@@ -165,20 +169,26 @@ public class EditFamilyInformationController {
     logger.debug("EditFamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
     Person user = new Person(customer);
     
-    DependantsAndFamily daf = familyHelper.getDependantsAndFamily(userPic);
-    FamilyIdAndFamilyMembers fidm = familyHelper.getOtherFamilyMembers(userPic);
+    Family userFamily = null;
+    try {
+      // user family should exist because it was created in the other render method already
+      userFamily = familyHelper.getFamily(userPic);
+    } catch (FamilyNotFoundException e) {
+      // if user has no family community then create it
+      userFamily = addFamily(userPic);
+    }
+    String familyCommunityId = userFamily.getCommunityId();
+    
+    DependantsAndFamily daf = familyHelper.getDependantsAndFamily(userPic, userFamily);
+    FamilyIdAndFamilyMembers fidm = familyHelper.getOtherFamilyMembers(userPic, userFamily);
     
     request.setAttribute("search", true);
     model.addAttribute("user", user);
     model.addAttribute("dependants", daf.getDependants());
     model.addAttribute("otherFamilyMembers", fidm.getFamilyMembers());
-    model.addAttribute("parentsFull", familyHelper.isParentsSet(userPic));
+    model.addAttribute("parentsFull", familyHelper.isParentsSet(userPic, userFamily));
     model.addAttribute("messages", messageHelper.getSentMessages(user));
     model.addAttribute("searchedUsers", searchedUsers);
-    
-    // user family shouldn't be null because it was created in the other render method already
-    Family family = daf.getFamily();
-    String familyCommunityId = family.getCommunityId();
     model.addAttribute("familyCommunityId", familyCommunityId);
     
     return "editfamilyinformation";
@@ -233,7 +243,8 @@ public class EditFamilyInformationController {
     throws fi.koku.services.entity.community.v1.ServiceFault {
     
     String userPic = UserInfoUtils.getPicFromSession(request);
-    for (Dependant d : familyHelper.getDependantsAndFamily(userPic).getDependants()) {
+    // null parameter in getDependantsAndFamily is ok because we want only depedants
+    for (Dependant d : familyHelper.getDependantsAndFamily(userPic, null).getDependants()) {
       if (d.getPic().equals(familyMemberPic)) {
         d.setMemberOfUserFamily(false);
       }
@@ -478,7 +489,7 @@ public class EditFamilyInformationController {
    * @return - returns the family community ID
    * @throws fi.koku.services.entity.community.v1.ServiceFault
    */
-  private String addFamily(String userPic) throws fi.koku.services.entity.community.v1.ServiceFault {
+  private Family addFamily(String userPic) throws fi.koku.services.entity.community.v1.ServiceFault {
     
     logger.debug("calling addFamily() with parameter:");
     logger.debug("userPic: " + userPic);
@@ -498,7 +509,9 @@ public class EditFamilyInformationController {
     communityId = communityService.opAddCommunity(community, CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
     Log.getInstance().update(userPic, "", "pyh.family.community", "Adding family for user " + userPic);
     
-    return communityId;
+    community.setId(communityId);
+    
+    return new Family(community);
   }
   
   /**
