@@ -100,8 +100,7 @@ public class MessageUtil {
 			Calendar cal = xmlGregorianCalendar.toGregorianCalendar();
 			SimpleDateFormat dateformat = new SimpleDateFormat(DATE_FORMAT);
 			dateformat.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
-			String dateStr = dateformat.format(cal.getTime());
-		
+			String dateStr = dateformat.format(cal.getTime());		
 			return dateStr;	
 		} else {
 			return "";
@@ -128,7 +127,8 @@ public class MessageUtil {
 		if(xmlGregorianCalendar != null ) {
 			Calendar cal = xmlGregorianCalendar.toGregorianCalendar();
 			SimpleDateFormat dateformat = new SimpleDateFormat(formatString);	
-			dateformat.setTimeZone(TimeZone.getTimeZone("GMT+3:00"));
+//			dateformat.setTimeZone(TimeZone.getTimeZone("GMT+3:00"));
+			dateformat.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
 			String timeStr = dateformat.format(cal.getTime());
 		
 			return timeStr;	
