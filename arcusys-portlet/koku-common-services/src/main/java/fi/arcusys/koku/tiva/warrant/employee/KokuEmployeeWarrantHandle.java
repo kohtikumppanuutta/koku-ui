@@ -13,7 +13,6 @@ import fi.arcusys.koku.tiva.warrant.employeewarrantservice.Valtakirjapohja;
 import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationSummary;
 import fi.arcusys.koku.tiva.warrant.model.KokuValtakirjapohja;
 import fi.arcusys.koku.users.KokuUserService;
-import fi.arcusys.koku.util.MessageUtil;
 
 /**
  * Handles warrants (valtakirja) related operations for employee

@@ -85,7 +85,7 @@ public class AjaxController extends AbstractController {
 			UserIdResolver resolver = new UserIdResolver();
 			userId = resolver.getUserId(username, getPortalRole());			
 		} catch (Exception e) {
-			LOG.error("Error while trying to resolve userId. See following error msg: "+ e.getMessage());
+			LOG.error("Error while trying to resolve userId. See following error msg: "+ e);
 		}
 		JSONObject jsonModel = getJsonModel(taskType, page, keyword, field, orderType, userId);
 		modelmap.addAttribute(RESPONSE, jsonModel);
@@ -309,7 +309,7 @@ public class AjaxController extends AbstractController {
 		
 		LOG.debug("Ajax call");
 		
-		if(userUid == null) {
+		if (userUid == null) {
 			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_INVALID);
 			LOG.info("No logged in user");
 		} else {			

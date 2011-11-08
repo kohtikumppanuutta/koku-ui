@@ -1346,8 +1346,8 @@
 		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS %>') {
 			jQuery('#warrants-search-citizens').show();
 			jQuery('#message-search').hide();
-		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS %>') {
-			jQuery('#warrants-search-citizens').show();
+		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>') {
+			jQuery('#warrants-search-warrants').show();
 			jQuery('#message-search').hide();
 		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE %>') {
 			jQuery('#applicationKindergartenBrowse').show();
