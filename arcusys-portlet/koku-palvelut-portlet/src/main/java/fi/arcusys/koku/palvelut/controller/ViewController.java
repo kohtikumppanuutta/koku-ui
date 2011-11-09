@@ -163,6 +163,13 @@ public class ViewController extends FormHolderController {
 	public ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderRequest response) throws Exception {
 
+		
+		final String username = request.getRemoteUser();
+		if (username == null) {
+			LOG.info("Can't show Intalio form. User not logged in");
+			return getFailureView(request);
+		}
+		
 		LOG.debug("handleRenderRequestInternal");
 		final PortletPreferences prefs = request.getPreferences();
 		final String portalInfo = (String)request.getPortalContext().getPortalInfo();
@@ -197,8 +204,6 @@ public class ViewController extends FormHolderController {
 						" admin/nonlogged users. Current user: '"+request.getUserPrincipal().getName()+"'" +
 						" \n2. Task might be updated. Reselect form in 'edit'-mode. " +
 						"\n3. Check that connection to Intalio server is up. ", e);				
-			} else {
-				LOG.info("Can't show Intalio form. User not logged in");
 			}
 			return getFailureView(request);
 		}
