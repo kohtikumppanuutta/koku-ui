@@ -53,10 +53,11 @@ function formatUrl(url) {
 	<span class="text-bold"><spring:message code="consent.secondApprover"/>:</span> <c:out value="${consent.anotherPermitterUid}" /><br />
 	</c:if>
 	<span class="text-bold"><spring:message code="consent.recipients"/>:</span> <c:out value="${consent.recipients}" /><br />
-	
+	<% if (naviPortalMode.equals(Constants.PORTAL_MODE_KUNPO)) { %>
 	<span class="modifyConsentLink">
 		<a href="<%= defaultPath %>/NewConsent?FormID=<c:out value="${consent.consentId}"/>"><spring:message code="consent.modifyConsentLink"/></a>
 	</span><br />
+	<% } %>
 	
     <h3><spring:message code="consent.actionRequest"/></h3>
     <table class="request-table">
