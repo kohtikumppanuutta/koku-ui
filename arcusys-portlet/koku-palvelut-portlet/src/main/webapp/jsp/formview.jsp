@@ -158,22 +158,24 @@
 		
 	function getKokuServices() {
 		var url="<%= services %>";
-		return jQuery.ajax( {
-			url: url,  
-			type: "POST", 
-		    dataType: "html",
-			async: false 
-		}).responseText;
+		return jQuery.parseJSON(
+			jQuery.ajax( {
+				url: url,  
+				type: "POST", 
+			    dataType: "html",
+				async: false 
+			}).responseText);
 	}
 	
 	function getKokuServicesEndpoints() {
 		var url="/palvelut-portlet/Services";
-		return jQuery.ajax( {
-			url: url,  
-			type: "POST", 
-		    dataType: "html",
-			async: false 
-		}).responseText;
+		return jQuery.parseJSON(
+			 jQuery.ajax( {
+				url: url,  
+				type: "POST", 
+			    dataType: "html",
+				async: false 
+			}).responseText);
 	}
 
 	 
