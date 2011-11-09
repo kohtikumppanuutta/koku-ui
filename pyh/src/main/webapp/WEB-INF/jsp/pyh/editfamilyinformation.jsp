@@ -4,14 +4,20 @@
  You should have received a copy of the license text along with this program.
  If not, please contact the copyright holder (http://www.ixonos.com/).
 --%>
+<%--
+	View for editing user's family information.
+	
+	author: Mikko Hurula
+--%>
+
 <%@ include file="imports.jsp" %>
 
-<c:set var="CHILD" value="<%=com.ixonos.koku.pyh.util.CommunityRole.CHILD%>" />
-<c:set var="PARENT" value="<%=com.ixonos.koku.pyh.util.CommunityRole.PARENT%>" />
-<c:set var="MEMBER"	value="<%=com.ixonos.koku.pyh.util.CommunityRole.FAMILY_MEMBER%>" />
-<c:set var="DEPENDANT" value="<%=com.ixonos.koku.pyh.util.CommunityRole.DEPENDANT%>" />
-<c:set var="FATHER" value="<%=com.ixonos.koku.pyh.util.CommunityRole.FATHER%>" />
-<c:set var="MOTHER" value="<%=com.ixonos.koku.pyh.util.CommunityRole.MOTHER%>" />
+<c:set var="CHILD" value="<%=fi.koku.services.entity.customerservice.model.CommunityRole.CHILD%>" />
+<c:set var="PARENT" value="<%=fi.koku.services.entity.customerservice.model.CommunityRole.PARENT%>" />
+<c:set var="MEMBER"	value="<%=fi.koku.services.entity.customerservice.model.CommunityRole.FAMILY_MEMBER%>" />
+<c:set var="DEPENDANT" value="<%=fi.koku.services.entity.customerservice.model.CommunityRole.DEPENDANT%>" />
+<c:set var="FATHER" value="<%=fi.koku.services.entity.customerservice.model.CommunityRole.FATHER%>" />
+<c:set var="MOTHER" value="<%=fi.koku.services.entity.customerservice.model.CommunityRole.MOTHER%>" />
 
 <portlet:defineObjects />
 
@@ -38,9 +44,9 @@
 
 	<c:if test="${not empty user}">
 		<div class="name">
-			${user.firstname} ${user.surname} <br />
+			<c:out value="${user.firstname} ${user.surname}"/> <br />
 		</div>
-        <div class="email"><spring:message code="ui.pyh.econtactinfo" />  ${user.econtactinfo}</div>
+        <div class="email"><spring:message code="ui.pyh.econtactinfo" /> <c:out value="${user.econtactinfo}"/> </div>
 		<br />
 	</c:if>
 	
@@ -56,8 +62,8 @@
             
             <c:forEach var="child" items="${dependants}">
             <tr>
-                <td> ${child.fullName} </td>
-                <td> ${child.pic} </td>
+                <td> <c:out value="${child.fullName}"/> </td>
+                <td> <c:out value="${child.pic}"/> </td>
                 <td><spring:message code="${DEPENDANT.bundleId}"/><c:if test="${child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.added.into.family" /></c:if><c:if test="${!child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.not.added.into.family" /></c:if></td>
                 <td> 
                 <span class="actions">
@@ -65,7 +71,7 @@
 		                        
                                 <c:when test="${child.memberOfUserFamily}">
                                    <span class="pyh-link"> 
-                                         <portlet:actionURL var="removeFamilyMember">
+                                        <portlet:actionURL var="removeFamilyMember">
                                         <portlet:param name="action" value="removeDependant" />
                                         <portlet:param name="familyMemberPic" value="${child.pic}" />
                                     </portlet:actionURL>
@@ -86,8 +92,8 @@
             
             <c:forEach var="familyMember" items="${otherFamilyMembers}">
                 <tr>
-                <td>${familyMember.fullName} </td>
-                <td>${familyMember.pic} </td>
+                <td> <c:out value="${familyMember.fullName}"/> </td>
+                <td> <c:out value="${familyMember.pic}"/> </td>
                 <td><spring:message code="${familyMember.role.bundleId}"/></td>
                 <td>
                 	<span class="pyh-linkki">
@@ -114,7 +120,7 @@
         <c:forEach var="message" items="${messages}">            
             
             <div class="pyh-message">
-                ${message.text}  <%-- <spring:message code="ui.pyh.waiting.approval" /> --%>
+                <c:out value="${message.text}"/>
             </div>
             
         </c:forEach>
@@ -145,62 +151,56 @@
 
 	<c:choose>
 		<c:when test="${not empty searchedUsers}">
-			<table class="portlet-table-body" width="100%" border="0">
-
-				<tr class="portlet-table-body th">
-					<th width="38%"><spring:message code="ui.pyh.table.name" /></th>
-					<th width="26%"><spring:message code="ui.pyh.table.pic" /></th>
-					<%-- hide text for checkbox column --%>
-					<th width="10%"> <%-- <spring:message code="ui.pyh.table.add" /> --%> </th>
-					<th width="26%"><spring:message code="ui.pyh.table.role" /></th>
-				</tr>
-
-				<c:set var="userVar" value="1" />
-				<c:forEach var="user" items="${searchedUsers}">
-
-					<tr>
-						<td>${user.firstname} ${user.surname}</td>
-						<td>${user.pic} <input id="user_pic_${userVar}"
-							name="userPic_${userVar}" type="hidden" value="${user.pic}" />
-						</td>
-
-						<td>
-						<%-- hack: check box is hidden because at the moment we have only one search result by PIC --%>
-						<div style="visibility: hidden;">
-						<input name="addUserCheckbox_${userVar}" value="${userVar}" type="checkbox" />
-						</div>
-						</td>
-
-						<td><select id="user_role_${userVar}" class="syntmaika">
-								<option value="${ MEMBER }"><spring:message code="${MEMBER.bundleId}"/></option>
-								<%-- <option value="${ DEPENDANT }"><spring:message code="${DEPENDANT.bundleId}"/></option> --%>
-								<option value="${ CHILD }"><spring:message code="${CHILD.bundleId }"/></option>
-								
-								<c:if test="${ not parentsFull }">
-								<option value="${ FATHER }"><spring:message code="${FATHER.bundleId}"/></option>
-								<option value="${ MOTHER }"><spring:message code="${MOTHER.bundleId}"/></option>
-								    <option value="${ PARENT }"><spring:message code="${PARENT.bundleId}"/></option>
-								    
-								</c:if>
-						</select></td>
+			<form:form name="addUsersToFamily" method="post" action="${addUsersToFamily}" id="addUsersToFamilyForm">
+			
+				<table class="portlet-table-body" width="100%" border="0">
+	
+					<tr class="portlet-table-body th">
+						<th width="38%"><spring:message code="ui.pyh.table.name" /></th>
+						<th width="26%"><spring:message code="ui.pyh.table.pic" /></th>
+						<th width="10%"></th>
+						<th width="26%"><spring:message code="ui.pyh.table.role" /></th>
 					</tr>
-
-					<c:set var="userVar" value="${userVar + 1}" />
-				</c:forEach>
-			</table>
-
-			<p>&nbsp;</p>
-
-
-
-			<form:form name="addUsersToFamily" method="post"
-				action="${addUsersToFamily}" id="addUsersToFamilyForm">
-
-				<%-- user information is added to this form dynamically with jQuery before submitting the form --%>
-
-				<input class="portlet-form-button" type="button"
-					value="<spring:message code="ui.pyh.save" />" class="tallenna" onclick="doSubmitForm()" />
+					
+					<input name="familyCommunityId" type="hidden" value="${familyCommunityId}"/>
+					
+					<c:forEach var="user" items="${searchedUsers}">
+						
+						<tr>
+							<td>
+								<c:out value="${user.firstname} ${user.surname}"/>
+							</td>
+							<td> 
+								<c:out value="${user.pic}"/>
+								<input name="userPic" type="hidden" value="${user.pic}" />
+							</td>
+							
+							<td>
+							</td>
+							
+							<td>
+								<select name="userRole" class="syntmaika">
+									<option value="${MEMBER}"><spring:message code="${MEMBER.bundleId}"/></option>
+									<option value="${CHILD}"><spring:message code="${CHILD.bundleId}"/></option>
+									
+									<c:if test="${not parentsFull}">
+										<option value="${FATHER}"><spring:message code="${FATHER.bundleId}"/></option>
+										<option value="${MOTHER}"><spring:message code="${MOTHER.bundleId}"/></option>
+										<option value="${PARENT}"><spring:message code="${PARENT.bundleId}"/></option>
+									</c:if>
+								</select>
+							</td>
+						</tr>
+						
+					</c:forEach>
+					
+				</table>
+				
+				<p>&nbsp;</p>
+				
+				<input class="portlet-form-button" type="submit" value="<spring:message code="ui.pyh.save" />" class="tallenna"/>
 			</form:form>
+			
 		</c:when>
 		<c:otherwise>
 			<c:if test="${search}">
@@ -216,35 +216,13 @@
 </div>
 </div>
 
+<%-- script source URLs will be localized later --%>
 <script type="text/javascript"
 	src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
 <script type="text/javascript"
 	src="http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.4.js"></script>
 <script type="text/javascript" language="JavaScript">
 
-	function addUserToForm(user) {
-		$('#addUsersToFamilyForm').append($('#user_pic_' + user));
-		var userRole = $('#user_role_' + user + ' option:selected').val();
-		$('#addUsersToFamilyForm')
-				.append(
-						'<input name="userRole_' + user + '" type="hidden" value="' + userRole + '"/>');
-	}
-
-	function doSubmitForm() {
-		<%--
-		var $checkboxes = $('input[name^="addUserCheckbox_"]').filter(
-				":checked");
-		--%>
-		<%-- select all checkboxes. *at the moment* we have only one search result and it must be selected always. --%>
-		var $checkboxes = $('input[name^="addUserCheckbox_"]');
-
-		$checkboxes.each(function() {
-			addUserToForm($(this).val());
-		});
-
-		$('#addUsersToFamilyForm').submit();
-	}
-	
 	function doAddDependantConfirmation() {
 		return confirm("<spring:message code="ui.pyh.add.dependant.family.member.question"/>");
 	}

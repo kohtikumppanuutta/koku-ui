@@ -4,12 +4,18 @@
  You should have received a copy of the license text along with this program.
  If not, please contact the copyright holder (http://www.ixonos.com/).
 --%>
-<%@page import="com.ixonos.koku.pyh.util.CommunityRole"%>
+<%--
+	The main view in PYH. Page shows user's family information.
+	
+	author: Mikko Hurula
+--%>
+
+<%@page import="fi.koku.services.entity.customerservice.model.CommunityRole"%>
 <%@ include file="imports.jsp" %>
 
 <portlet:defineObjects />
 
-<c:set var="dp" value="<%=com.ixonos.koku.pyh.util.CommunityRole.DEPENDANT%>" />
+<c:set var="DEPENDANT" value="<%=fi.koku.services.entity.customerservice.model.CommunityRole.DEPENDANT%>" />
 
 <portlet:renderURL var="editFamilyInformation">
 	<portlet:param name="action" value="editFamilyInformation" />
@@ -17,6 +23,14 @@
 
 <div class="koku-pyh">
 <div class="portlet-section-body">
+
+<c:choose>
+<c:when test="${empty user}">
+
+<spring:message code="ui.pyh.no.person.info" />
+
+</c:when>
+<c:otherwise>
 
 <div class="pyh-temp">
   <span class="pyh-right"> <a href="${editFamilyInformation}"> <spring:message code="ui.pyh.modify.info" /> </a> </span>
@@ -29,8 +43,8 @@
 	</h1>
 
 	<c:if test="${not empty user}">
-		<div class="name">${user.firstnames} ${user.surname} </div>
-		<div class="email"><spring:message code="ui.pyh.econtactinfo" /> ${user.econtactinfo}</div>
+		<div class="name"><c:out value="${user.firstnames} ${user.surname}"/></div>
+		<div class="email"><spring:message code="ui.pyh.econtactinfo"/> <c:out value="${user.econtactinfo}"/></div>
 	</c:if>
 
 </br>
@@ -46,16 +60,16 @@
             
             <c:forEach var="child" items="${dependants}">
             <tr>
-                <td> ${child.fullName} </td>
-                <td> ${child.pic} </td>
-                <td><spring:message code="${dp.bundleId}"/><c:if test="${child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.added.into.family" /></c:if><c:if test="${!child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.not.added.into.family" /></c:if></td>
+                <td> <c:out value="${child.fullName}"/> </td>
+                <td> <c:out value="${child.pic}"/> </td>
+                <td><spring:message code="${DEPENDANT.bundleId}"/><c:if test="${child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.added.into.family" /></c:if><c:if test="${!child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.not.added.into.family" /></c:if></td>
             </tr>
             </c:forEach>
             
             <c:forEach var="familyMember" items="${otherFamilyMembers}">
-             <tr>
-                <td>${familyMember.fullName} </td>
-                <td>${familyMember.pic} </td>
+            <tr>
+                <td> <c:out value="${familyMember.fullName}"/> </td>
+                <td> <c:out value="${familyMember.pic}"/> </td>
                 <td><spring:message code="${familyMember.role.bundleId}"/></td>
             </tr>
             </c:forEach>
@@ -69,21 +83,19 @@
         </h3>
         <c:forEach var="sentMessage" items="${sentMessages}">
             
-            
             <div class="sentMessage">
-                ${sentMessage.text} 
+                <c:out value="${sentMessage.text}"/> 
             </div>
             
         </c:forEach>
     </c:if>
-    
-	
+   	
     <c:if test="${not empty messages}">
         <h3 class="portlet-section-subheader"><spring:message code="ui.pyh.messages" />
         </h3>
         <c:forEach var="message" items="${messages}">
             <div class="message">
-                <strong> ${message.text} </strong>
+                <strong> <c:out value="${message.text}"/> </strong>
                 
                 <span class="pyh-right"> 
 
@@ -123,7 +135,7 @@
             <span class="pyh-mail">
             <form:form name="accept" method="post" action="${accept}">
                 
-                <a href="mailto:${supportEmailAddress}?subject=<spring:message code="ui.pyh.inappropriate.request.email.subject" />:${ message.id }"><spring:message code="ui.pyh.report.inappropriate.request" /></a> 
+                <a href="mailto:${supportEmailAddress}?subject=<spring:message code="ui.pyh.inappropriate.request.email.subject" />:${message.id}"><spring:message code="ui.pyh.report.inappropriate.request" /></a> 
                 </form:form>
                 </span>
                 </div>
@@ -131,6 +143,9 @@
             
         </c:forEach>
     </c:if>
+
+</c:otherwise>
+</c:choose>
 
 <div class="pyh-reset-floating"></div>
 </br>
