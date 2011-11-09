@@ -137,7 +137,8 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 		slot.setAppointmentDate(MessageUtil.formatDateByString(appSlot.getAppointmentDate(), DATE));
 		slot.setStartTime(MessageUtil.formatDateByString(appSlot.getStartTime(), TIME));
 		slot.setEndTime(MessageUtil.formatDateByString(appSlot.getEndTime(), TIME));
-		slot.setLocation(appSlot.getLocation());		
+		slot.setLocation(appSlot.getLocation());
+		slot.setComment(appSlot.getComment());
 		return slot;
 	}
 	
