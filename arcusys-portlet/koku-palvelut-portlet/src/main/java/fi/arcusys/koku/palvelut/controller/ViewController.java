@@ -197,6 +197,8 @@ public class ViewController extends FormHolderController {
 						" admin/nonlogged users. Current user: '"+request.getUserPrincipal().getName()+"'" +
 						" \n2. Task might be updated. Reselect form in 'edit'-mode. " +
 						"\n3. Check that connection to Intalio server is up. ", e);				
+			} else {
+				LOG.error("Can't show Intalio form. User not logged in");
 			}
 			return getFailureView(request);
 		}
