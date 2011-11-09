@@ -24,6 +24,7 @@ import org.springframework.web.portlet.ModelAndView;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.arcusys.koku.intalio.TaskHandle;
 import fi.arcusys.koku.palvelut.model.client.TaskHolder;
 import fi.arcusys.koku.palvelut.util.TaskUtil;
 import fi.arcusys.koku.palvelut.util.TokenResolver;
@@ -65,27 +66,50 @@ public class ConfigurationController {
 		return mav;
 	}
 	
+	/** 
+	 * Save palvelut-portlet configurations
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@ActionMapping(params="action=config")
 	protected void handleActionRequestInternal(ActionRequest request,
 			ActionResponse response) throws Exception {
 		LOG.debug("handleActionRequestInternal - Save settings");
+		
+		fi.arcusys.koku.intalio.Task task = null;
+		try {
+			final TokenResolver tokenUtil = new TokenResolver();
+			final String token = tokenUtil.getAuthenticationToken(request);
+			final TaskHandle handle = new TaskHandle(token, request.getUserPrincipal().getName());
+			task = handle.getTask(request.getParameter(PREF_SHOW_ONLY_FORM_BY_ID), token);			
+		} catch (Exception e) {
+			LOG.error("Username '"+request.getUserPrincipal().getName()+"' tried to change palvelut-portlet settings. See following errormsg: ", e);
+			response.setPortletMode(PortletMode.VIEW);
+	        response.setWindowState(WindowState.NORMAL);
+	        return;
+		}
+
 		PortletPreferences prefs = request.getPreferences();
-		prefs.setValue(PREF_SHOW_ONLY_CHECKED, request.getParameter(PREF_SHOW_ONLY_CHECKED));
 		prefs.setValue(PREF_SHOW_ONLY_FORM_BY_ID, request.getParameter(PREF_SHOW_ONLY_FORM_BY_ID));
-		prefs.setValue(PREF_SHOW_TASKS_BY_ID, Boolean.TRUE.toString());
+		prefs.setValue(PREF_SHOW_TASKS_BY_ID, Boolean.FALSE.toString());
+		prefs.setValue(PREF_SHOW_ONLY_FORM_BY_DESCRIPTION, task.getDescription());
 		prefs.store();
-		LOG.debug("showOnlyChecked: " + prefs.getValue(PREF_SHOW_ONLY_CHECKED, null));
-		LOG.debug("showOnlyForm: " + prefs.getValue(PREF_SHOW_ONLY_FORM_BY_ID, null));
-		LOG.debug("showTasksById: "+ prefs.getValue(PREF_SHOW_TASKS_BY_ID, Boolean.TRUE.toString()));
+		LOG.info("Username: '"+request.getUserPrincipal().getName()+"' changed palvelut-portlet settings: ");
+		LOG.info("showOnlyForm: " + prefs.getValue(PREF_SHOW_ONLY_FORM_BY_ID, null));
+		LOG.info("showOnlyFormByDescription: " + prefs.getValue(PREF_SHOW_ONLY_FORM_BY_DESCRIPTION, null));
+		LOG.info("showTasksById: "+ prefs.getValue(PREF_SHOW_TASKS_BY_ID, Boolean.FALSE.toString()));
 		request.setAttribute(ATTR_PREFERENCES, prefs);
 		 
 		/* Return back to VIEW mode */
 		response.setPortletMode(PortletMode.VIEW);
         response.setWindowState(WindowState.NORMAL);
 	}
+		
 	
 	private List<TaskHolder<Task>> getTaskHolders(PortletRequest request) {
-		String token = new TokenResolver().getAuthenticationToken(request);
+		final String token = new TokenResolver().getAuthenticationToken(request);
 		LOG.debug("Token: "+token);
 		List<Task> taskList = TaskUtil.getPIPATaskList(token);
 		LOG.debug("taskList size: "+ taskList.size());

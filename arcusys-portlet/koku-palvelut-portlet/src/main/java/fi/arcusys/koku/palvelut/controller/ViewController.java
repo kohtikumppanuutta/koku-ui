@@ -179,19 +179,25 @@ public class ViewController extends FormHolderController {
 		try {
 //			if (isGateInPortal || showFormById) {
 			if (showFormById) {
-				LOG.debug("Loading taskID: " +formId + "isGateIn: "+ isGateInPortal);
+				LOG.debug("Loading taskID: '" +formId+"'");
 				t = TaskUtil.getTask(tokenUtil.getAuthenticationToken(request), formId);
 			} else {
 				t = TaskUtil.getTaskByDescription(tokenUtil.getAuthenticationToken(request), formDescription);
-				LOG.debug("t status: " + (t == null));
 				// Fallback. Try to get form by Id
 				if (t == null) {
 					LOG.error("Fallback! Couldn't find task by description name. Trying to get form by Id. Description: '" + formDescription + "'");
 					t = TaskUtil.getTask(tokenUtil.getAuthenticationToken(request), formId);
 				}
+				LOG.debug("Loading taskDescription: '" +t.getDescription()+ "' Id: '"+t.getID()+"'");
 			}
 		} catch (Exception e) {
-			LOG.error("Failure while trying to get Task.\nSome hints to fix problem: \n1. Logged in proper user? (this portlet doesn't work correctly with admin/nonlogged users \n2. Task might be updated. Reselect form in 'edit'-mode. \n3. Check that connection to Intalio server is up. ", e);
+			if (request.getUserPrincipal() != null && request.getUserPrincipal().getName() != null) {
+				LOG.error("Failure while trying to get Task.\nSome hints to fix problem: " +
+						"\n1. Logged in proper user? (this portlet doesn't work correctly with" +
+						" admin/nonlogged users. Current user: '"+request.getUserPrincipal().getName()+"'" +
+						" \n2. Task might be updated. Reselect form in 'edit'-mode. " +
+						"\n3. Check that connection to Intalio server is up. ", e);				
+			}
 			return getFailureView(request);
 		}
 		
