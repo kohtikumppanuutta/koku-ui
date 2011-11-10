@@ -71,7 +71,7 @@ import fi.koku.services.entity.customerservice.model.Person;
 @Controller(value = "editFamilyInformationController")
 @RequestMapping(value = "VIEW")
 public class EditFamilyInformationController {
-
+  
   private static Logger logger = LoggerFactory.getLogger(EditFamilyInformationController.class);
   
   @Autowired
