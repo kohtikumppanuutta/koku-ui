@@ -16,7 +16,6 @@ import java.util.Set;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 
 import org.slf4j.Logger;
