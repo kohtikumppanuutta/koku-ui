@@ -73,7 +73,8 @@ public class FamilyInformationController {
    * @throws ServiceFault
    */
   @RenderMapping
-  public String render(Model model, RenderRequest request) throws fi.koku.services.entity.customer.v1.ServiceFault, TooManyFamiliesException {
+  public String render(Model model, RenderRequest request) throws fi.koku.services.entity.customer.v1.ServiceFault, 
+    fi.koku.services.entity.community.v1.ServiceFault, TooManyFamiliesException {
     
     String userPic = UserInfoUtils.getPicFromSession(request);
     CustomerType customer = customerService.opGetCustomer(userPic, CustomerServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));

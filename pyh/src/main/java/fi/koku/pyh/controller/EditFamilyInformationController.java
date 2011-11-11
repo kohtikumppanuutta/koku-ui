@@ -240,7 +240,7 @@ public class EditFamilyInformationController {
    */
   @ActionMapping(params = "action=removeDependant")
   public void removeDependant(ActionRequest request, @RequestParam String familyMemberPic, ActionResponse response)
-    throws fi.koku.services.entity.community.v1.ServiceFault {
+    throws fi.koku.services.entity.community.v1.ServiceFault, fi.koku.services.entity.customer.v1.ServiceFault {
     
     String userPic = UserInfoUtils.getPicFromSession(request);
     // null parameter in getDependantsAndFamily is ok because we want only depedants
