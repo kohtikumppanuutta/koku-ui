@@ -10,7 +10,7 @@
 	<artifactId>portlet-common</artifactId>
 	<name>portlet-common</name>
 	<packaging>jar</packaging>
-    <version>0.0.17-SNAPSHOT</version>
+    <version>0.0.18-SNAPSHOT</version>
 	<description>code shared between koku portlet projects.
 the code can depend on servlet and portlet apis as well as koku service-api but not koku-portlets.</description>
 
