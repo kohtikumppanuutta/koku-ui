@@ -7,10 +7,14 @@
  */
 package fi.koku.pyh.controller;
 
+import java.util.Locale;
+
 import javax.portlet.RenderRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +52,9 @@ public class FamilyInformationController {
   private CustomerServicePortType customerService;
   private FamilyHelper familyHelper;
   private MessageHelper messageHelper;
+  
+  @Autowired
+  private ResourceBundleMessageSource messageSource;
   
   /**
    * Constructor creates customer service and community service instances and helper class instances.
@@ -95,8 +102,8 @@ public class FamilyInformationController {
     model.addAttribute("dependants", daf.getDependants());
     model.addAttribute("otherFamilyMembers", fidm.getFamilyMembers());
     model.addAttribute("currentFamilyId", fidm.getFamilyId());
-    model.addAttribute("messages", messageHelper.getMessagesFor(user, familyHelper.isParentsSet(userPic, userFamily)));
-    model.addAttribute("sentMessages", messageHelper.getSentMessages(user));
+    model.addAttribute("messages", messageHelper.getMessagesFor(user, familyHelper.isParentsSet(userPic, userFamily), messageSource.getMessage("ui.pyh.received.messages.content", null, "", Locale.getDefault()), messageSource.getMessage("ui.pyh.received.messages.content.two.parents", null, "", Locale.getDefault())));
+    model.addAttribute("sentMessages", messageHelper.getSentMessages(user, messageSource.getMessage("ui.pyh.sent.messages.content", null, "", Locale.getDefault())));
     model.addAttribute("supportEmailAddress", PyhConstants.KOKU_SUPPORT_EMAIL_ADDRESS);
     
     return "familyinformation";

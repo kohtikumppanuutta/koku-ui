@@ -136,7 +136,7 @@ public class EditFamilyInformationController {
     model.addAttribute("dependants", daf.getDependants());
     model.addAttribute("otherFamilyMembers", fidm.getFamilyMembers());
     model.addAttribute("parentsFull", familyHelper.isParentsSet(userPic, userFamily));
-    model.addAttribute("messages", messageHelper.getSentMessages(user));
+    model.addAttribute("messages", messageHelper.getSentMessages(user, messageSource.getMessage("ui.pyh.sent.messages.content", null, "", Locale.getDefault())));
     model.addAttribute("searchedUsers", null);
     
     Boolean childsGuardianshipInformationNotFound = Boolean.valueOf(request.getParameter("childsGuardianshipInformationNotFound"));
@@ -186,7 +186,7 @@ public class EditFamilyInformationController {
     model.addAttribute("dependants", daf.getDependants());
     model.addAttribute("otherFamilyMembers", fidm.getFamilyMembers());
     model.addAttribute("parentsFull", familyHelper.isParentsSet(userPic, userFamily));
-    model.addAttribute("messages", messageHelper.getSentMessages(user));
+    model.addAttribute("messages", messageHelper.getSentMessages(user, messageSource.getMessage("ui.pyh.sent.messages.content", null, "", Locale.getDefault())));
     model.addAttribute("searchedUsers", searchedUsers);
     model.addAttribute("familyCommunityId", familyCommunityId);
     
