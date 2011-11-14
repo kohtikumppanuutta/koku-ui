@@ -45,13 +45,6 @@ public class GuardianController {
   public String showChilds(PortletSession session, RenderResponse response, Model model) {
     LOG.debug("showChildrens");
     String pic = Utils.getPicFromSession(session);
-    boolean loggedIn = Utils.isLoggedIn(session);
-    
-    if ( !loggedIn ) {
-      return Utils.notAuthenticated(model, session);
-    }
-    
-    
     model.addAttribute("childs", getChilds(session));
     return "childs";
   }

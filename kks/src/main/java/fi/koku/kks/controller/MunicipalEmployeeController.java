@@ -55,12 +55,7 @@ public class MunicipalEmployeeController {
     LOG.debug("show employee");
     
     String pic = Utils.getPicFromSession(session);
-    boolean loggedIn = Utils.isLoggedIn(session);
-    
-    if ( !loggedIn ) {
-      return Utils.notAuthenticated(model, session);
-    }
-    
+   
     model.addAttribute("childs", toChilds(childs, pic));
 
     if (search != null) {

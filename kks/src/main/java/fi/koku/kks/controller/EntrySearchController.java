@@ -58,12 +58,6 @@ public class EntrySearchController {
         Utils.getPicFromSession(session));
 
     String pic = Utils.getPicFromSession(session);
-    boolean loggedIn = Utils.isLoggedIn(session);
-    
-    if ( !loggedIn ) {
-      return Utils.notAuthenticated(model, session);
-    }
-    
     
     model.addAttribute("child", child);
     model.addAttribute("collections", collections);

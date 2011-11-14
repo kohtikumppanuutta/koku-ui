@@ -34,13 +34,6 @@ public class MainController {
 
   @RenderMapping
   public String render(PortletSession session, RenderRequest req, Model model) {
-
-    String pic = Utils.getPicFromSession(session);
-    boolean loggedIn = Utils.isLoggedIn(session);
-    
-    if ( !loggedIn ) {
-      return Utils.notAuthenticated(model, session);
-    }
     
     String kunpo = KoKuPropertiesUtil.get("environment.name");
     if ("kunpo".equalsIgnoreCase(kunpo)) {

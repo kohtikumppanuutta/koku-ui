@@ -65,12 +65,6 @@ public class ChildController {
 
     String pic = Utils.getPicFromSession(session);
     
-    boolean loggedIn = Utils.isLoggedIn(session);
-    
-    if ( !loggedIn ) {
-      return Utils.notAuthenticated(model, session);
-    }
-    
     if (StringUtils.isEmpty(child.getFirstName())) {
       child = getChild(session, child.getPic());
     }
@@ -93,7 +87,7 @@ public class ChildController {
     }
 
     return "child";
-  }
+  } 
 
   @ActionMapping(params = "action=sendConsentRequest")
   public void sendConsentRequest(PortletSession session, @ModelAttribute(value = "child") Person child,

@@ -69,12 +69,7 @@ public class CollectionController {
     collectionForm.setEntries(c.getEntries());
     session.setAttribute("kks.collection", c );
     String pic = Utils.getPicFromSession(session);
-    boolean loggedIn = Utils.isLoggedIn(session);
-    
-    if ( !loggedIn ) {
-      return Utils.notAuthenticated(model, session);
-    }
-    
+
     boolean parent = kksService.isParent(pic, child.getPic());
     boolean canSave = !parent || hasParentGroups(c.getCollectionClass());
     model.addAttribute("child", child);
@@ -233,13 +228,6 @@ public class CollectionController {
     KKSCollection c = (KKSCollection)session.getAttribute("kks.collection");
     
     String pic = Utils.getPicFromSession(session);
-    
-    boolean loggedIn = Utils.isLoggedIn(session);
-    
-    if ( !loggedIn ) {
-      return Utils.notAuthenticated(model, session);
-    }
-    
     
     KksEntryClassType t = kksService.getEntryClassType(entryType, pic);
     model.addAttribute("child", child);
