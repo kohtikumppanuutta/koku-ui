@@ -9,17 +9,17 @@
 		<param-value>/WEB-INF/classes/log4j.properties</param-value>
 	</context-param>
 	<display-name>redirectionPortlet</display-name>
-	<!-- This part is only for gatein skin, it must be quoted for jboss portal  -->
-<!-- 	<filter>
-		<filter-name>ResourceRequestFilter</filter-name>
-		<filter-class>org.exoplatform.portal.application.ResourceRequestFilter</filter-class>
-	</filter>
+ <!-- EPP only: start -->
+<filter>
+    <filter-name>ResourceRequestFilter</filter-name>
+    <filter-class>org.exoplatform.portal.application.ResourceRequestFilter</filter-class>
+</filter>
 
-	<filter-mapping>
-		<filter-name>ResourceRequestFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping> -->
-	<!-- For gatein skin ends -->
+<filter-mapping>
+    <filter-name>ResourceRequestFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping> 
+  <!-- EPP only: end -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
