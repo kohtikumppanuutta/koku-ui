@@ -10,6 +10,7 @@
 	
 <fmt:setBundle basename="Language-ext"/>
 
+
 <c:choose>
 	<c:when test="${not empty requestScope.authenticationURL}">
 	  <div class="portlet-section-text">
