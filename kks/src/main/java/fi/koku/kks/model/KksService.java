@@ -172,9 +172,9 @@ public class KksService {
     collectionClasses.clear();
   }
 
-  public List<KKSCollection> getKksCollections(String pic, String user) {
+  public List<KKSCollection> getKksCollections(String pic, String user) throws ServiceFault {
     List<KKSCollection> tmp = new ArrayList<KKSCollection>();
-    try {
+
 
       KksCollectionsCriteriaType criteria = new KksCollectionsCriteriaType();
       criteria.setPic(pic);
@@ -191,10 +191,6 @@ public class KksService {
 
       setCollectionCreators(user, tmp);
       Collections.sort(tmp, new CollectionComparator());
-
-    } catch (ServiceFault e) {
-      LOG.error("Failed to get KKS collections", e);
-    }
 
     return tmp;
   }
@@ -232,13 +228,13 @@ public class KksService {
     return personService.getPersonsByPics(creators, domain, user, "KKS");
   }
 
-  public KKSCollection getKksCollection(String collectionId, UserInfo info) {
+  public KKSCollection getKksCollection(String collectionId, UserInfo info) throws ServiceFault {
 
     if (info == null) {
       return null;
     }
 
-    try {
+
       KksCollectionType kks = kksService.opGetKksCollection(collectionId, getKksAuditInfo(info.getPic()));
 
       KKSCollection col = converter.fromWsType(kks, info.getPic());
@@ -246,10 +242,7 @@ public class KksService {
       col.setAuthorizedRegistrys(getAuthorizedRegistries(info.getPic()));
       setEntryModifiers(info, col);
       return col;
-    } catch (ServiceFault e) {
-      LOG.error("Failed to get KKS collection " + collectionId, e);
-    }
-    return null;
+
   }
 
   private void setEntryModifiers(UserInfo info, KKSCollection col) {

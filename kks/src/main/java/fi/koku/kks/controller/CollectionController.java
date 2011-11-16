@@ -41,6 +41,7 @@ import fi.koku.kks.ui.common.utils.Utils;
 import fi.koku.services.entity.kks.v1.KksCollectionClassType;
 import fi.koku.services.entity.kks.v1.KksEntryClassType;
 import fi.koku.services.entity.kks.v1.KksGroupType;
+import fi.koku.services.entity.kks.v1.ServiceFault;
 
 /**
  * Controller for managing collection showing and value setting
@@ -60,36 +61,42 @@ public class CollectionController {
   private static final Logger LOG = LoggerFactory.getLogger(CollectionController.class);
 
   @RenderMapping(params = "action=showCollection")
-  public String show(PortletSession session, @ModelAttribute(value = "child") Person child, @ModelAttribute(value = "collectionForm") CollectionForm collectionForm,
+  public String show(PortletSession session, @ModelAttribute(value = "child") Person child,
+      @ModelAttribute(value = "collectionForm") CollectionForm collectionForm,
       @RequestParam(value = "collection") String collection,
       @RequestParam(value = "error", required = false) String error, RenderResponse response, Model model) {
     LOG.debug("show collection");
 
-    KKSCollection c = kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
-    collectionForm.setEntries(c.getEntries());
-    session.setAttribute("kks.collection", c );
-    String pic = Utils.getPicFromSession(session);
+    try {
+      KKSCollection c = kksService.getKksCollection(collection, Utils.getUserInfoFromSession(session));
+      collectionForm.setEntries(c.getEntries());
+      session.setAttribute("kks.collection", c);
+      String pic = Utils.getPicFromSession(session);
 
-    boolean parent = kksService.isParent(pic, child.getPic());
-    boolean canSave = !parent || hasParentGroups(c.getCollectionClass());
-    model.addAttribute("child", child);
-    model.addAttribute("collection", c);
-    model.addAttribute("authorized", kksService.getAuthorizedRegistries(pic));
-    model.addAttribute("master", parent || VALID.equals(c.getUserConsentStatus() ));
-    model.addAttribute("parent", parent);
-    model.addAttribute("empty_collection", c == null || c.getEntries() == null || c.getEntries().size() == 0);
-    model.addAttribute("can_save", canSave);
-    
-    if (!model.containsAttribute("version")) {
-      Version v = new Version();
-      v.setName(c == null ? "" : c.getName());
-      model.addAttribute("version", v);
-    }
+      boolean parent = kksService.isParent(pic, child.getPic());
+      boolean canSave = !parent || hasParentGroups(c.getCollectionClass());
+      model.addAttribute("child", child);
+      model.addAttribute("collection", c);
+      model.addAttribute("authorized", kksService.getAuthorizedRegistries(pic));
+      model.addAttribute("master", parent || VALID.equals(c.getUserConsentStatus()));
+      model.addAttribute("parent", parent);
+      model.addAttribute("empty_collection", c == null || c.getEntries() == null || c.getEntries().size() == 0);
+      model.addAttribute("can_save", canSave);
 
-    if (StringUtils.isNotEmpty(error)) {
-      model.addAttribute("error", error);
+      if (!model.containsAttribute("version")) {
+        Version v = new Version();
+        v.setName(c == null ? "" : c.getName());
+        model.addAttribute("version", v);
+      }
+
+      if (StringUtils.isNotEmpty(error)) {
+        model.addAttribute("error", error);
+      }
+      return "collection";
+    } catch (ServiceFault e) {
+      LOG.error("Failed to get KKS collection " + collection );
+      return "error";
     }
-    return "collection";
   }
 
   private boolean hasParentGroups(KksCollectionClassType metadata) {

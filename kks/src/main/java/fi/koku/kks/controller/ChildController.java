@@ -30,6 +30,7 @@ import fi.koku.kks.model.Creation;
 import fi.koku.kks.model.KksService;
 import fi.koku.kks.model.Person;
 import fi.koku.kks.ui.common.utils.Utils;
+import fi.koku.services.entity.kks.v1.ServiceFault;
 
 /**
  * Controller for child info
@@ -63,31 +64,37 @@ public class ChildController {
       @RequestParam(value = "message", required = false) String message, RenderResponse response, Model model) {
     LOG.debug("show child");
 
-    String pic = Utils.getPicFromSession(session);
-    
-    if (StringUtils.isEmpty(child.getFirstName())) {
-      child = getChild(session, child.getPic());
+    try {
+      String pic = Utils.getPicFromSession(session);
+
+      if (StringUtils.isEmpty(child.getFirstName())) {
+        child = getChild(session, child.getPic());
+      }
+
+      model.addAttribute("child", child);
+      model.addAttribute("collections", kksService.getKksCollections(child.getPic(), pic));
+      model.addAttribute("creatables", kksService.searchPersonCreatableCollections(child, pic));
+      model.addAttribute("registries", kksService.getAuthorizedRegistries(pic));
+
+      if (!model.containsAttribute("creation")) {
+        model.addAttribute("creation", new Creation());
+      }
+
+      if (StringUtils.isNotEmpty(error)) {
+        model.addAttribute("error", error);
+      }
+
+      if (StringUtils.isNotEmpty(message)) {
+        model.addAttribute("message", message);
+      }
+
+      return "child";
+
+    } catch (ServiceFault e) {
+      LOG.error("Failed to get KKS collections", e);
+      return "error";
     }
-
-    model.addAttribute("child", child);
-    model.addAttribute("collections", kksService.getKksCollections(child.getPic(), pic));
-    model.addAttribute("creatables", kksService.searchPersonCreatableCollections(child, pic));
-    model.addAttribute("registries", kksService.getAuthorizedRegistries(pic));
-
-    if (!model.containsAttribute("creation")) {
-      model.addAttribute("creation", new Creation());
-    }
-
-    if (StringUtils.isNotEmpty(error)) {
-      model.addAttribute("error", error);
-    }
-
-    if (StringUtils.isNotEmpty(message)) {
-      model.addAttribute("message", message);
-    }
-
-    return "child";
-  } 
+  }
 
   @ActionMapping(params = "action=sendConsentRequest")
   public void sendConsentRequest(PortletSession session, @ModelAttribute(value = "child") Person child,

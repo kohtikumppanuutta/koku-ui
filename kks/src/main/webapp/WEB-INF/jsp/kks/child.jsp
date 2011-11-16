@@ -6,7 +6,6 @@
 --%>
 <%@ include file="imports.jsp" %>
 
-<fmt:setBundle basename="com.ixonos.eservices.koku.bundle.KokuBundle" />
 
 <portlet:renderURL var="homeUrl">
 	<c:if test="${ not sessionScope.municipal_employee }">
