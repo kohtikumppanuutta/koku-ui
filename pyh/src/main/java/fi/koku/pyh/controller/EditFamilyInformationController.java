@@ -58,6 +58,7 @@ import fi.koku.services.entity.customerservice.model.Dependant;
 import fi.koku.services.entity.customerservice.model.DependantsAndFamily;
 import fi.koku.services.entity.customerservice.model.Family;
 import fi.koku.services.entity.customerservice.model.FamilyIdAndFamilyMembers;
+import fi.koku.services.entity.customerservice.model.Message;
 import fi.koku.services.entity.customerservice.model.Person;
 
 /**
@@ -180,13 +181,14 @@ public class EditFamilyInformationController {
     
     DependantsAndFamily daf = familyHelper.getDependantsAndFamily(userPic, userFamily);
     FamilyIdAndFamilyMembers fidm = familyHelper.getOtherFamilyMembers(userPic, userFamily);
+    List<Message> sentMessages = messageHelper.getSentMessages(user, messageSource.getMessage("ui.pyh.sent.messages.content", null, "", Locale.getDefault()));
     
     request.setAttribute("search", true);
     model.addAttribute("user", user);
     model.addAttribute("dependants", daf.getDependants());
     model.addAttribute("otherFamilyMembers", fidm.getFamilyMembers());
     model.addAttribute("parentsFull", familyHelper.isParentsSet(userPic, userFamily));
-    model.addAttribute("messages", messageHelper.getSentMessages(user, messageSource.getMessage("ui.pyh.sent.messages.content", null, "", Locale.getDefault())));
+    model.addAttribute("messages", sentMessages);
     model.addAttribute("searchedUsers", searchedUsers);
     model.addAttribute("familyCommunityId", familyCommunityId);
     
