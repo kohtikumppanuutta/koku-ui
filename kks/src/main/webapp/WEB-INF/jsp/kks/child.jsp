@@ -122,7 +122,7 @@
 										</c:otherwise>
 									</c:choose></td>
 									<td>
-										<c:if test="${not collection.consentRequested}">
+										<c:if test="${not collection.consentRequested && not empty collection.collectionClass.consentType }">
 					                        <form:form name="sendForm-${collection.id}"  method="post" action="${sendConsentURL}">
 					                                <input type="hidden" id="collectionId" name="collectionId" value="${ collection.id }"/>
 					                                <input type="hidden" id="consent" name="consent" value="${ collection.collectionClass.consentType }"/>
