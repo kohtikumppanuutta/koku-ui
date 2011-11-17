@@ -11,31 +11,27 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <lokservice-api.version>0.0.17</lokservice-api.version>
+    <lokservice-api.version>0.0.18</lokservice-api.version>
     <customerservice-api.version>0.0.22</customerservice-api.version>
     <portlet-common.version>0.0.19</portlet-common.version>    
   </properties>
 
   <dependencies>
-  
     <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>customerservice-api</artifactId>
       <version>${customerservice-api.version}</version>
     </dependency>     
-  
     <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>portlet-common</artifactId>
       <version>${portlet-common.version}</version>
-	</dependency>
-    
+	</dependency> 
     <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>lokservice-api</artifactId>
       <version>${lokservice-api.version}</version>
-    </dependency>
-    
+    </dependency>    
   </dependencies>
 
 </project>
