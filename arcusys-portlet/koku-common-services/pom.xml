@@ -16,7 +16,9 @@
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <koku.portlet.common>0.0.18-SNAPSHOT</koku.portlet.common>
   </properties>
+  
   <build>
 	<finalName>koku-common-services</finalName>
 	<plugins>
@@ -38,6 +40,12 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+	 <dependency>  
+	    <groupId>kohti-kumppanuutta</groupId>  
+	    <artifactId>portlet-common</artifactId>  
+	    <version>${koku.portlet.common}</version>  
+	</dependency> 
+		
 	</dependencies>
 
 </project>

@@ -33,4 +33,15 @@
 			</preference>
 		</portlet-preferences>		
 	</portlet>
+	
+	<!-- external portlet-filter from portlet-common-project -->
+    <filter>
+		<filter-name>userInfoFilter</filter-name>
+		<filter-class>fi.koku.portlet.filter.userinfo.UserInfoPortletFilter</filter-class>
+		<lifecycle>RENDER_PHASE</lifecycle>
+	</filter>
+	<filter-mapping>
+		<filter-name>userInfoFilter</filter-name>
+		<portlet-name>koku-message-portlet</portlet-name>
+	</filter-mapping>	
 </portlet-app>

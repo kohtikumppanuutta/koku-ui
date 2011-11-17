@@ -25,6 +25,11 @@ public class Constants {
 	public static final String PORTAL_MODE_LOORA							= "loora";
 	public static final String PORTAL_MODE_KUNPO							= "kunpo";
 	
+	/* koku-settings.properties keys */
+	public static final String PROPERTIES_ENVIROMENT_NAME					= "environment.name";
+	public static final String PROPERTIES_VETUMA_ENABLED					= "vetuma.enabled";
+	
+	
 	/* ModelMap attribute key */                                        
 	public static final String RESPONSE										= "response";
 	                                                                    

@@ -1,6 +1,8 @@
 package fi.koku.taskmanager.controller;
 
 import static fi.arcusys.koku.util.Constants.*;
+import static fi.arcusys.koku.util.Properties.IS_KUNPO_PORTAL;
+import static fi.arcusys.koku.util.Properties.VETUMA_ENABLED;
 
 import java.util.List;
 
@@ -24,7 +26,9 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import fi.arcusys.koku.intalio.Task;
 import fi.arcusys.koku.intalio.TaskHandle;
+import fi.arcusys.koku.util.AuthenticationUtil;
 import fi.arcusys.koku.util.TaskUtil;
+
 /**
  * Handles ajax request from web and returns the data with json string
  * @author Jinhua Chen
@@ -57,6 +61,10 @@ public class AjaxController {
 		PortletSession portletSession = request.getPortletSession();				
 		final String token = (String) portletSession.getAttribute(ATTR_TOKEN);
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+		
+		if (isInvalidStrongAuthentication(portletSession)) {
+			return authenticationFailed(modelmap, username);
+		}
 
 		int taskType = getTaskType(taskTypeStr);
 		JSONObject jsonModel = getJsonModel(taskType, page, keyword, orderType, token, username);
@@ -84,6 +92,10 @@ public class AjaxController {
 		PortletSession portletSession = request.getPortletSession();				
 		final String token = (String) portletSession.getAttribute(ATTR_TOKEN);
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+		if (isInvalidStrongAuthentication(portletSession)) {
+			return authenticationFailed(modelmap, username);
+		}
+		
 		JSONObject jsonModel = new JSONObject();
 		
 		if (token == null) {
@@ -159,6 +171,13 @@ public class AjaxController {
 			@RequestParam(value = "keyword") String keyword,
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
+		
+		PortletSession portletSession = request.getPortletSession();				
+		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+		if (isInvalidStrongAuthentication(portletSession)) {
+			return authenticationFailed(modelmap, username);
+		}
+		
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_TASKFORM);
 		renderUrlObj.setParameter( ATTR_TASK_LINK, taskLink);
@@ -184,6 +203,13 @@ public class AjaxController {
 	public String createPopupRenderUrl(
 			@RequestParam(value = "tasklink") String taskLink,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
+		
+		PortletSession portletSession = request.getPortletSession();				
+		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+		if (isInvalidStrongAuthentication(portletSession)) {
+			return authenticationFailed(modelmap, username);
+		}
+		
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_TASKFORM);
 		renderUrlObj.setParameter( ATTR_TASK_LINK, taskLink);
@@ -200,5 +226,30 @@ public class AjaxController {
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
-
+	
+	/**
+	 * Returns true when following conditions are true:
+	 * <ul>
+	 * <li>Vetuma is enabled (vetuma.authentication=true)</li>
+	 * <li>User is _NOT_ authenticated by using strong authentication (Vetuma)</li>
+	 * <li>Portal is Kunpo (enviroment.name=kunpo)</li>
+	 * </ul>
+	 * @param portletSession
+	 * @return 
+	 */
+	protected boolean isInvalidStrongAuthentication(PortletSession portletSession) {
+		if (VETUMA_ENABLED && IS_KUNPO_PORTAL && !AuthenticationUtil.getUserInfoFromSession(portletSession).hasStrongAuthentication()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	protected String authenticationFailed(ModelMap modelMap, String username){
+		LOG.error("Strong authentication required! User '"+username+"' is not Vetuma authenticated!");	
+		JSONObject jsonModel = new JSONObject();
+		jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_INVALID);
+		modelMap.addAttribute(RESPONSE, jsonModel);
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
 }

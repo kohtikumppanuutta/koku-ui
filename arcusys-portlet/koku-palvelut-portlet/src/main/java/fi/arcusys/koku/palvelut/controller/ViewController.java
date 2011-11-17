@@ -1,12 +1,16 @@
 package fi.arcusys.koku.palvelut.controller;
 
 import static fi.arcusys.koku.util.Constants.ATTR_PREFERENCES;
+import static fi.arcusys.koku.util.Constants.JSON_LOGIN_STATUS;
 import static fi.arcusys.koku.util.Constants.JSON_RESULT;
 import static fi.arcusys.koku.util.Constants.PORTAL_GATEIN;
 import static fi.arcusys.koku.util.Constants.PREF_SHOW_ONLY_FORM_BY_DESCRIPTION;
 import static fi.arcusys.koku.util.Constants.PREF_SHOW_ONLY_FORM_BY_ID;
 import static fi.arcusys.koku.util.Constants.PREF_SHOW_TASKS_BY_ID;
 import static fi.arcusys.koku.util.Constants.RESPONSE;
+import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_INVALID;
+import static fi.arcusys.koku.util.Properties.IS_KUNPO_PORTAL;
+import static fi.arcusys.koku.util.Properties.VETUMA_ENABLED;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,6 +21,7 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
+import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
@@ -43,6 +48,7 @@ import fi.arcusys.koku.palvelut.util.OperationsValidatorImpl;
 import fi.arcusys.koku.palvelut.util.TaskUtil;
 import fi.arcusys.koku.palvelut.util.TokenResolver;
 import fi.arcusys.koku.palvelut.util.XmlProxy;
+import fi.arcusys.koku.util.AuthenticationUtil;
 import fi.arcusys.koku.util.KokuWebServicesJS;
 import fi.koku.settings.KoKuPropertiesUtil;
 
@@ -163,17 +169,18 @@ public class ViewController extends FormHolderController {
 	public ModelAndView handleRenderRequestInternal(RenderRequest request,
 			RenderRequest response) throws Exception {
 
-		
 		final String username = request.getRemoteUser();
+		PortletSession portletSession = request.getPortletSession();
+		if (isInvalidStrongAuthentication(portletSession)) {
+			return authenticationFailed(request);
+		}
+		
 		if (username == null) {
 			LOG.info("Can't show Intalio form. User not logged in");
 			return getFailureView(request);
 		}
 		
-		LOG.debug("handleRenderRequestInternal");
 		final PortletPreferences prefs = request.getPreferences();
-		final String portalInfo = (String)request.getPortalContext().getPortalInfo();
-		final Boolean isGateInPortal = portalInfo.toLowerCase().contains(PORTAL_GATEIN);
 		final Boolean showFormById = Boolean.valueOf(prefs.getValue(PREF_SHOW_TASKS_BY_ID, null));
 		final String formId = prefs.getValue(PREF_SHOW_ONLY_FORM_BY_ID, null);
 		final String formDescription = prefs.getValue(PREF_SHOW_ONLY_FORM_BY_DESCRIPTION, null);
@@ -184,7 +191,6 @@ public class ViewController extends FormHolderController {
 		Task t = null;	
 		TokenResolver tokenUtil = new TokenResolver();
 		try {
-//			if (isGateInPortal || showFormById) {
 			if (showFormById) {
 				LOG.debug("Loading taskID: '" +formId+"'");
 				t = TaskUtil.getTask(tokenUtil.getAuthenticationToken(request), formId);
@@ -220,7 +226,6 @@ public class ViewController extends FormHolderController {
 		ModelAndView failureMav = new ModelAndView("failureView", "model", null);
 		failureMav.addObject("prefs", request.getPreferences());
 		return failureMav;
-
 	}
 	
 	
@@ -232,4 +237,28 @@ public class ViewController extends FormHolderController {
 	public void handleResourceRequestInteral(ResourceRequest request, ResourceResponse response ) throws Exception {
 		
 	}
+	
+	/**
+	 * Returns true when following conditions are true:
+	 * <ul>
+	 * <li>Vetuma is enabled (vetuma.authentication=true)</li>
+	 * <li>User is _NOT_ authenticated by using strong authentication (Vetuma)</li>
+	 * <li>Portal is Kunpo (enviroment.name=kunpo)</li>
+	 * </ul>
+	 * @param portletSession
+	 * @return 
+	 */
+	private boolean isInvalidStrongAuthentication(PortletSession portletSession) {
+		if (VETUMA_ENABLED && IS_KUNPO_PORTAL && !AuthenticationUtil.getUserInfoFromSession(portletSession).hasStrongAuthentication()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private ModelAndView authenticationFailed(RenderRequest request){
+		LOG.error("Strong authentication required! User '"+request.getUserPrincipal().getName()+"' is not Vetuma authenticated!");	
+		return getFailureView(request);
+	}
+	
 }
