@@ -88,7 +88,7 @@ public class CitizenRequestHandle extends AbstractHandle {
 		KokuResponseDetail kokuReq = new KokuResponseDetail(req);
 		// FIXME: Pitää korjata kun WS päivittyy!
 //		kokuReq.setReplierName(userService.getKunpoNameByUserUid(kokuReq.getReplierUid()));
-		kokuSummary.setReplierName(kokuSummary.getReplierUid());
+		kokuReq.setReplierName(kokuReq.getReplierUid());
 
 		return kokuReq;
 	}
