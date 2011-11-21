@@ -62,7 +62,7 @@ public class AjaxController {
 		try {
 			if (username != null) {
 				UserIdResolver resolver = new UserIdResolver();
-				userId = resolver.getUserId(username, getPortalRole());			
+				userId = resolver.getUserId(username, getPortalRole());
 			}
 		} catch (Exception e) {
 			LOGGER.error("Error while trying to resolve userId. Usually WSDL location is wrong or server down. See following error msg: "+e.getMessage());
@@ -72,12 +72,13 @@ public class AjaxController {
 		
 		// Resolve user Intalio token (if not already done)
 		String token = (String) session.getAttribute(ATTR_TOKEN);
-		if ((token == null || token.isEmpty()  && userId != null)) {
+		if (userId != null &&  (token == null || token.isEmpty())) {
 			try {
 				token = resolveIntalioToken(session, username);
 				session.setAttribute(ATTR_TOKEN, token);
 			} catch (IntalioAuthException iae) {
 				LOGGER.error("Couldn't resolve intalio token. Username: '"+username+"' ErrorMsg: "+iae.getMessage());
+				session.setAttribute(ATTR_TOKEN, "No token");
 			}
 		}
 		
