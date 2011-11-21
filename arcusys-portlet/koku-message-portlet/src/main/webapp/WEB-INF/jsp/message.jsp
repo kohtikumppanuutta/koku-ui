@@ -659,7 +659,7 @@
 		
 	function createBrowseEmployeeOwnConsents(tasks) {
 		if (tasks == undefined || tasks == null || tasks.length == 0) {
-			return showErrorMsgNoConsents();
+			return showErrorMsgNoSendedConsents();
 		}
 		
 		var columnNames = ["<spring:message code="message.choose"/>",
@@ -738,7 +738,9 @@
 // 		ajaxGetTasks();
 // 	}
 
-
+	function showErrorMsgNoSendedConsents() {
+		return "<div class='errorMsg noConsents'><spring:message code="consent.errorMsg.noSendedConsents"/></div>";
+	}
 	
 	function showErrorMsgNoConsents() {
 		return "<div class='errorMsg noConsents'><spring:message code="consent.errorMsg.noWarrants2"/></div>";
