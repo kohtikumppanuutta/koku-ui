@@ -157,7 +157,7 @@
 								json["<%=Constants.JSON_REQUESTS_TOTAL %>"]								
 							);
 					}
-					naviRefreshTimer = setTimeout('ajaxUpdate()', 5000);		
+					naviRefreshTimer = setTimeout('ajaxUpdate()', 30000);		
 			  }
 			});
 	}
