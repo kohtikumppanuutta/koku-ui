@@ -42,6 +42,7 @@ import fi.arcusys.koku.kv.model.KokuFolderType;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.users.UserIdResolver;
 import fi.arcusys.koku.util.PortalRole;
+import fi.koku.portlet.filter.userinfo.UserInfo;
 import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
@@ -76,6 +77,7 @@ public class AjaxController {
 
 		String username = request.getRemoteUser();
 		String userId = null;
+				
 		try {
 			if (username != null) {
 				UserIdResolver resolver = new UserIdResolver();
@@ -176,7 +178,7 @@ public class AjaxController {
 	 * @return number of assigned appointments
 	 */
 	private int getTotalAssignedAppointments(String userId) {
-		AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
+		AvCitizenServiceHandle handle = new AvCitizenServiceHandle(userId);
 		return handle.getTotalAppointmentsNum(userId, TASK_TYPE_APPOINTMENT_INBOX_CITIZEN);
 	}
 	

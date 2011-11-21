@@ -38,6 +38,7 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 	}
 	
 	public AvCitizenServiceHandle( String loginUser) {
+		loginUserId = loginUser;
 		acs = new AvCitizenService();
 	}
 	
