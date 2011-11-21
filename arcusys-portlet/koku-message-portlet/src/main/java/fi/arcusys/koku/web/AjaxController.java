@@ -38,6 +38,7 @@ import fi.arcusys.koku.tiva.warrant.citizens.KokuCitizenWarrantHandle;
 import fi.arcusys.koku.tiva.warrant.employee.KokuEmployeeWarrantHandle;
 import fi.arcusys.koku.users.UserIdResolver;
 import fi.arcusys.koku.util.PortalRole;
+import fi.koku.portlet.filter.userinfo.UserInfo;
 import fi.koku.portlet.filter.userinfo.VetumaUserInfo;
 
 /**
@@ -81,6 +82,10 @@ public class AjaxController extends AbstractController {
 		
 		PortletSession portletSession = request.getPortletSession();		
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+		
+		
+//	    UserInfo userInfo = (UserInfo) portletSession.getAttribute(UserInfo.KEY_USER_INFO);	    
+//	    LOG.info("Username: '"+username+"' Hetu: "+userInfo);
 
 		if (isInvalidStrongAuthentication(portletSession)) {
 			return authenticationFailed(modelmap, username);
@@ -388,7 +393,7 @@ public class AjaxController extends AbstractController {
 			} else if (taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_CITIZEN)
 					|| taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD)
 					|| taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)) {	// Tapaamiset - Vastausta odottavat / vastatut 
-				AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
+				AvCitizenServiceHandle handle = new AvCitizenServiceHandle(userUid);
 				handle.setMessageSource(messageSource);
 				tasks = handle.getAppointments(userUid, first, max, taskType);
 				totalTasksNum = handle.getTotalAppointmentsNum(userUid, taskType);

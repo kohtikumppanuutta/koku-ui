@@ -1,25 +1,6 @@
 package fi.arcusys.koku.navi;
 
-import static fi.arcusys.koku.util.Constants.ATTR_MY_ACTION;
-import static fi.arcusys.koku.util.Constants.ATTR_NAVI_TYPE;
-import static fi.arcusys.koku.util.Constants.ATTR_PORTAL_ROLE;
-import static fi.arcusys.koku.util.Constants.ATTR_TOKEN;
-import static fi.arcusys.koku.util.Constants.INTALIO_GROUP_PREFIX;
-import static fi.arcusys.koku.util.Constants.JSON_APPOINTMENT_TOTAL;
-import static fi.arcusys.koku.util.Constants.JSON_ARCHIVE_INBOX;
-import static fi.arcusys.koku.util.Constants.JSON_CONSENTS_TOTAL;
-import static fi.arcusys.koku.util.Constants.JSON_INBOX;
-import static fi.arcusys.koku.util.Constants.JSON_LOGIN_STATUS;
-import static fi.arcusys.koku.util.Constants.JSON_RENDER_URL;
-import static fi.arcusys.koku.util.Constants.JSON_REQUESTS_TOTAL;
-import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_NAVI;
-import static fi.arcusys.koku.util.Constants.PORTAL_MODE_KUNPO;
-import static fi.arcusys.koku.util.Constants.PORTAL_MODE_LOORA;
-import static fi.arcusys.koku.util.Constants.RESPONSE;
-import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN;
-import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_INVALID;
-import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_VALID;
-
+import static fi.arcusys.koku.util.Constants.*;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletSession;
@@ -36,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import fi.arcusys.koku.av.AvCitizenServiceHandle;
+import fi.arcusys.koku.exceptions.IntalioAuthException;
 import fi.arcusys.koku.intalio.TaskHandle;
 import fi.arcusys.koku.kv.message.MessageHandle;
 import fi.arcusys.koku.kv.model.KokuFolderType;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.users.UserIdResolver;
 import fi.arcusys.koku.util.PortalRole;
-import fi.koku.portlet.filter.userinfo.UserInfo;
 import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
@@ -91,13 +72,13 @@ public class AjaxController {
 		
 		// Resolve user Intalio token (if not already done)
 		String token = (String) session.getAttribute(ATTR_TOKEN);
-		if ((token == null || token.isEmpty()) && userId != null) {
+		if ((token == null || token.isEmpty()  && userId != null)) {
 			try {
 				token = resolveIntalioToken(session, username);
-			} catch (Exception e) {
-				LOGGER.error("Couldn't resolve intalio token. Username: "+username+" ErrorMsg: "+e.getMessage());
+				session.setAttribute(ATTR_TOKEN, token);
+			} catch (IntalioAuthException iae) {
+				LOGGER.error("Couldn't resolve intalio token. Username: '"+username+"' ErrorMsg: "+iae.getMessage());
 			}
-			session.setAttribute(ATTR_TOKEN, token);
 		}
 		
 		// Resolve portalRole (Employee or Citizen portal)
@@ -115,7 +96,7 @@ public class AjaxController {
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 		
-	private String resolveIntalioToken(PortletSession session, String userId) {
+	private String resolveIntalioToken(PortletSession session, String userId) throws IntalioAuthException {
 		TaskHandle handle = new TaskHandle();
 		// Magic password! Fix also TaskManagerController magic password when possible.
 		return handle.getTokenByUser(INTALIO_GROUP_PREFIX + userId, "test");
@@ -130,8 +111,7 @@ public class AjaxController {
 		JSONObject jsonModel = new JSONObject();
 		if (userId == null) {
 			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_INVALID);
-		} else {
-			
+		} else {			
 			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_VALID);			
 			jsonModel.put(JSON_INBOX, String.valueOf(getNewMessageNum(userId, KokuFolderType.INBOX)));			
 			jsonModel.put(JSON_ARCHIVE_INBOX, String.valueOf(getNewMessageNum(userId, KokuFolderType.ARCHIVE_INBOX)));

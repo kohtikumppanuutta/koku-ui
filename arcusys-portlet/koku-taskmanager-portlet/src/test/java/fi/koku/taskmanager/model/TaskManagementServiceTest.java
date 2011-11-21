@@ -16,6 +16,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import fi.arcusys.intalio.tms.TaskMetadata;
+import fi.arcusys.koku.exceptions.IntalioAuthException;
 import fi.arcusys.koku.intalio.TaskManagementService;
 
 public class TaskManagementServiceTest {
@@ -47,7 +48,7 @@ public class TaskManagementServiceTest {
 	
 	@Ignore
 	@Test
-	public void getParticipantToken() {
+	public void getParticipantToken() throws IntalioAuthException {
 		String username = TEST_USERNAME;
 		String password = TEST_PASSWORD;
 		String participantToken = tester.getParticipantToken(username, password);
@@ -61,7 +62,7 @@ public class TaskManagementServiceTest {
 
 	@Ignore
 	@Test
-	public void getAvailableTasks() {
+	public void getAvailableTasks() throws IntalioAuthException {
 		String participantToken = getToken();
 		String taskType = "PATask";
 		String subQuery = "T._state = TaskState.READY";
@@ -82,7 +83,7 @@ public class TaskManagementServiceTest {
 	
 	@Ignore
 	@Test
-	public void getTotalTasksNumber() {
+	public void getTotalTasksNumber() throws IntalioAuthException {
 		String participantToken = getToken();
 		String taskTypeStr = "PATask";
 		String subQuery = "T._state = TaskState.READY";
@@ -100,7 +101,7 @@ public class TaskManagementServiceTest {
 	
 	@Ignore
 	@Test
-	public void getTask() {
+	public void getTask() throws IntalioAuthException {
 		String taskId = "77630ab9-ad62-41c2-8fdf-dc875a0795e3";
 		//taskId = "e795b3bfa0de38ff:-23df788e:13064213459:-75a210.5.12.2331554"; // incorrect form url
 		// taskId = "ebc49ec8-ff7c-4455-b5bf-f90e9596e5f0";
@@ -114,7 +115,7 @@ public class TaskManagementServiceTest {
 		assertNull("getTask with wrong task id failed", task);
 	}
 	
-	private String getToken() {
+	private String getToken() throws IntalioAuthException {
 		String username = TEST_USERNAME;
 		String password = TEST_PASSWORD;
 		String participantToken = tester.getParticipantToken(username, password);

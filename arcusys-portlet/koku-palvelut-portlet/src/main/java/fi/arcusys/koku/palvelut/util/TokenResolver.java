@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fi.arcusys.koku.exceptions.IntalioAuthException;
 import fi.arcusys.koku.intalio.TaskHandle;
 
 
@@ -54,7 +55,11 @@ public class TokenResolver {
 		String token = null;
 		TaskHandle handle = new TaskHandle();
 		// Magic password! Fix also TaskManagerController magic password when possible.
-		token =  handle.getTokenByUser(INTALIO_GROUP_PREFIX + userName, "test");
+		try {
+			token =  handle.getTokenByUser(INTALIO_GROUP_PREFIX + userName, "test");
+		} catch (IntalioAuthException e) {
+			LOG.error("Coulnd't get Intalio token. Username: '"+userName+"'");
+		}
 		if (token == null) {
 			LOG.error("Coulnd't find Intalio token for user: '"+userName+"'");
 		}

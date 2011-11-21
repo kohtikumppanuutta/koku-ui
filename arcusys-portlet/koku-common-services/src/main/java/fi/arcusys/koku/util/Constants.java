@@ -41,6 +41,7 @@ public class Constants {
 	public static final String ATTR_ORDER_TYPE								= "orderType";
 	public static final String ATTR_USERNAME								= "USER_username";
 	public static final String ATTR_TOKEN									= "USER_token";
+	public static final String ATTR_TOKEN_FAILED							= "USER_no_token";
 	public static final String ATTR_MESSAGE_ID								= "messageId";
 	public static final String ATTR_REQUEST_ID								= "requestId";
 	public static final String ATTR_RESPONSE_ID								= "responseId";

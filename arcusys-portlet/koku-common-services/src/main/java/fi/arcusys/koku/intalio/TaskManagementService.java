@@ -18,6 +18,7 @@ import fi.arcusys.intalio.tms.Task;
 import fi.arcusys.intalio.tms.TaskManagementServices;
 import fi.arcusys.intalio.tms.TaskMetadata;
 import fi.arcusys.intalio.token.TokenService;
+import fi.arcusys.koku.exceptions.IntalioAuthException;
 import fi.arcusys.koku.util.PropertiesUtil;
 import fi.koku.settings.KoKuPropertiesUtil;
 
@@ -61,7 +62,7 @@ public class TaskManagementService {
 	 * @param password password of intalio user
 	 * @return Intalio participant token
 	 */
-	public String getParticipantToken(String username, String password) {
+	public String getParticipantToken(String username, String password) throws IntalioAuthException {
 		String participantToken = null;
 		String wsdlLocation = null;
 		try {     
@@ -69,11 +70,8 @@ public class TaskManagementService {
 			
 			participantToken = ts.getService().authenticateUser(username, password);
 		} catch (Exception e) {
-			LOG.error("Trying to get intalio token failed.\n" +
-					"Hints for fixing problem:\n" +
-					"1. Check that that WSDL(s) location is correct \n" +
-					"2. Check that intalio server is online\n"+ e.getMessage());	
-		}				
+			throw new IntalioAuthException("Trying to get intalio token failed: " + e.getMessage(), e);	
+		}
 		return participantToken;
 	}
 

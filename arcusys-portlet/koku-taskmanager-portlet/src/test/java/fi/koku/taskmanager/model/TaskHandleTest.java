@@ -16,6 +16,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import fi.arcusys.intalio.tms.TaskMetadata;
+import fi.arcusys.koku.exceptions.IntalioAuthException;
 import fi.arcusys.koku.intalio.Task;
 import fi.arcusys.koku.intalio.TaskHandle;
 import fi.arcusys.koku.intalio.TaskManagementService;
@@ -92,7 +93,7 @@ public class TaskHandleTest{
 		}
 		
 		task.setTaskId("task-id-1");
-		String url = "http://localhost:8080/form.htm";
+		String url = "http://trelx28b:8080/form.htm";
 		task.setFormUrl(url);
 		tasklist.add(task);
 		task.setDescription("task test 1");
@@ -140,10 +141,10 @@ public class TaskHandleTest{
 		}
 		task.setCreationDate(xmlGregorianCalendar);
 		task.setTaskId("task-id-1");
-		String url = "http://localhost:8080/form.htm";
+		String url = "http://trelx28b:8080/form.htm";
 		task.setFormUrl(url);
 		tester.setToken("testtoken");
-		String expected = "http://localhost:8080/form.htm?id=task-id-1&type=PATask&url=http%3A%2F%2Flocalhost%3A8080%2Fform.htm&token=testtoken&user=Ville+Virkamies&claimTaskOnOpen=false";
+		String expected = "http://trelx28b:8080/form.htm?id=task-id-1&type=PATask&url=http%3A%2F%2Flocalhost%3A8080%2Fform.htm&token=testtoken&user=Ville+Virkamies&claimTaskOnOpen=false";
 		String actual = tester.createTaskLink(task);
 		assertEquals("createTask task link failed", expected, actual);
 	}
@@ -254,7 +255,7 @@ public class TaskHandleTest{
 
 	@Ignore
 	@Test
-	public void getTokenByUser() {
+	public void getTokenByUser() throws IntalioAuthException {
 		String username = TEST_USERNAME;
 		String password = TEST_PASSWORD;
 		String participantToken = tester.getTokenByUser(username, password);
@@ -285,7 +286,7 @@ public class TaskHandleTest{
 		fail("Not yet implemented");
 	}
 	
-	private String getTestToken() {
+	private String getTestToken() throws IntalioAuthException {
 		TaskManagementService tms = new TaskManagementService();
 		String username = TEST_USERNAME;
 		String password = TEST_PASSWORD;

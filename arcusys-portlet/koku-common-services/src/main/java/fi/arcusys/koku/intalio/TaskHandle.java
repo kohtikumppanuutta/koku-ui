@@ -15,6 +15,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.log4j.Logger;
 
 import fi.arcusys.intalio.tms.TaskMetadata;
+import fi.arcusys.koku.exceptions.IntalioAuthException;
 import fi.arcusys.koku.util.TaskUtil;
 import static fi.arcusys.koku.util.Constants.*;
 
@@ -311,7 +312,7 @@ public class TaskHandle {
 	 * @param password password of intalio user
 	 * @return intalio participant token
 	 */
-	public String getTokenByUser(String username, String password) {
+	public String getTokenByUser(String username, String password) throws IntalioAuthException  {
 		String token = null;
 		token = taskMngServ.getParticipantToken(username, password);
 		return token;
