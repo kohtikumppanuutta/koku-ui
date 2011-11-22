@@ -118,8 +118,8 @@ public class AjaxController extends AbstractController {
 	    	return;
 	    }
 	    
-		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-    	UserInfo userInfo = (UserInfo) portletSession.getAttribute(UserInfo.KEY_USER_INFO);	    
+		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+    	final UserInfo userInfo = (UserInfo) portletSession.getAttribute(UserInfo.KEY_USER_INFO);	    
     	LOG.info("Username: '"+username+"' Hetu: "+userInfo);
     	
     	if (userInfo == null) {	    		
@@ -127,7 +127,7 @@ public class AjaxController extends AbstractController {
     		return;
     	}
     	
-		KokuUserService userService = new KokuUserService();
+		final KokuUserService userService = new KokuUserService();
 		KokuUser user = null;
     	if (Properties.IS_KUNPO_PORTAL) {
     		// Kunpo
