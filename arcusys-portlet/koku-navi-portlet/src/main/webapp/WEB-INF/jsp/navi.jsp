@@ -393,6 +393,6 @@
 				</c:if>
 			</ul>
 		</li>
-		<li><a href="#">Ohjeet</a></li>
+		<li><a href="/koku/ohjeet">Ohjeet</a></li>
 	</ul>
 </div>
