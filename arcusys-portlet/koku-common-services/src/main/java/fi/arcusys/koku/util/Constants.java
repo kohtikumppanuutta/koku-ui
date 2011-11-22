@@ -54,6 +54,7 @@ public class Constants {
 	public static final String ATTR_PORTAL_INFO								= "portalInfo";
 	public static final String ATTR_PORTAL_ROLE								= "portalRole";
 	public static final String ATTR_NAVI_TYPE								= "naviType";
+	public static final String ATTR_KOKU_USER								= "kokuUser";
 	
 	/** PortalId. Check Portal types PORTAL_*  */
 	public static final String ATTR_PORTAL_ID 								= "portal";

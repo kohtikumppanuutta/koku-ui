@@ -36,8 +36,11 @@ import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
 import fi.arcusys.koku.tiva.tietopyynto.employee.KokuEmployeeTietopyyntoServiceHandle;
 import fi.arcusys.koku.tiva.warrant.citizens.KokuCitizenWarrantHandle;
 import fi.arcusys.koku.tiva.warrant.employee.KokuEmployeeWarrantHandle;
+import fi.arcusys.koku.users.KokuUser;
+import fi.arcusys.koku.users.KokuUserService;
 import fi.arcusys.koku.users.UserIdResolver;
 import fi.arcusys.koku.util.PortalRole;
+import fi.arcusys.koku.util.Properties;
 import fi.koku.portlet.filter.userinfo.UserInfo;
 import fi.koku.portlet.filter.userinfo.VetumaUserInfo;
 
@@ -83,10 +86,8 @@ public class AjaxController extends AbstractController {
 		PortletSession portletSession = request.getPortletSession();		
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		
-		
-//	    UserInfo userInfo = (UserInfo) portletSession.getAttribute(UserInfo.KEY_USER_INFO);	    
-//	    LOG.info("Username: '"+username+"' Hetu: "+userInfo);
-
+		registerUserToWS(portletSession);
+	    
 		if (isInvalidStrongAuthentication(portletSession)) {
 			return authenticationFailed(modelmap, username);
 		}
@@ -102,6 +103,48 @@ public class AjaxController extends AbstractController {
 		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}	
+	
+	/**
+	 * KOKU-805
+	 * 
+	 * Pilot KunPo users register themselves one-by-one in KunPo, they're not registered a priori.
+	 * These users need to be added to Intalio LDAP also for HAK/TIVA/KV/AV to work.
+	 * 
+	 * @param portletSession
+	 */
+	private void registerUserToWS(PortletSession portletSession) {
+		/* No need to re-register user if already done */
+	    if (portletSession.getAttribute(ATTR_KOKU_USER) != null) {
+	    	return;
+	    }
+	    
+		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+    	UserInfo userInfo = (UserInfo) portletSession.getAttribute(UserInfo.KEY_USER_INFO);	    
+    	LOG.info("Username: '"+username+"' Hetu: "+userInfo);
+    	
+    	if (userInfo == null) {	    		
+    		LOG.error("UserInfo is null! Can't register user to WS. Username: '"+username+"'");
+    		return;
+    	}
+    	
+		KokuUserService userService = new KokuUserService();
+		KokuUser user = null;
+    	if (Properties.IS_KUNPO_PORTAL) {
+    		// Kunpo
+    		user = userService.loginKunpo(username, userInfo.getPic());
+    	} else {
+    		// Loora
+    		user = userService.loginLoora(username, userInfo.getPic());
+    	}
+    	if (user == null) {
+    		// TODO: Remove if statement when Loora side implementation is ready
+    		if (Properties.IS_KUNPO_PORTAL) {
+    			LOG.error("For some reason userService didn't find KokuUser. Username: '"+username+"' SSN: '"+userInfo.getPic()+"' ");
+    		}
+    		user = new KokuUser();
+    	}
+    	portletSession.setAttribute(ATTR_KOKU_USER, user);	    	
+	}
 	
 	/**
 	 * Archives the messages

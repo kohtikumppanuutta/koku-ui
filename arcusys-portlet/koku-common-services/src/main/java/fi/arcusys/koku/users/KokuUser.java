@@ -11,14 +11,19 @@ public class KokuUser {
 	private String phoneNumber;
 	private String email;
 	
+	public KokuUser() {
+		
+	}
 	
 	public KokuUser(User user) {
-		setUid(user.getUid());
-		setFirstname(user.getFirstname());
-		setLastname(user.getLastname());
-		setDisplayname(user.getDisplayName());
-		setPhoneNumber(user.getPhoneNumber());
-		setEmail(user.getEmail());
+		if (user != null) {
+			setUid(user.getUid());
+			setFirstname(user.getFirstname());
+			setLastname(user.getLastname());
+			setDisplayname(user.getDisplayName());
+			setPhoneNumber(user.getPhoneNumber());
+			setEmail(user.getEmail());			
+		}
 	}
 
 

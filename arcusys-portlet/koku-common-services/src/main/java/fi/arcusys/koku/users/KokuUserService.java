@@ -72,7 +72,12 @@ public class KokuUserService {
 	}
 	
 	public KokuUser getUserInfo(String userUid) {
-		return new KokuUser(service.getUsersAndGroupsServicePort().getUserInfo(userUid));
+		User user = service.getUsersAndGroupsServicePort().getUserInfo(userUid);
+		if (user != null) {
+			return new KokuUser(user);
+		} else {
+			return null;
+		}
 	}	
 	
 	public List<KokuChild> getUsersChildren(String userUid) {
@@ -94,9 +99,13 @@ public class KokuUserService {
 	}
 		
 	public KokuChild getChildInfo(String childUid) {
-		return new KokuChild(service.getUsersAndGroupsServicePort().getChildInfo(childUid));
+		Child child = service.getUsersAndGroupsServicePort().getChildInfo(childUid);
+		if (child != null) {
+			return new KokuChild(child); 
+		} else {
+			return null;
+		}
 	}	
-	
 	
 	public List<KokuChild> searchChildren(String searchString, int limit) {
 		List<Child> childs = service.getUsersAndGroupsServicePort().searchChildren(searchString, limit);
@@ -123,4 +132,32 @@ public class KokuUserService {
 		}
 		return kokuUsers;
 	}
+	
+	
+	public KokuUser loginKunpo(String kunpoUsername, String hetu) {
+		User user = service.getUsersAndGroupsServicePort().loginByKunpoNameAndSsn(kunpoUsername, hetu);
+		if (user != null) {
+			return new KokuUser(user);
+		} else {
+			return null;
+		}
+	}
+	
+	public KokuUser loginLoora(String looraUsername, String hetu) {
+		User user = service.getUsersAndGroupsServicePort().loginByLooraNameAndSsn(looraUsername, hetu);
+		if (user != null) {
+			return new KokuUser(user);
+		} else {
+			return null;
+		}
+	}
+	
+	public String getKunpoUserUidByHetu(String hetu) {
+		return service.getUsersAndGroupsServicePort().getUserUidByKunpoSsn(hetu);
+	}
+	
+	public String getLooraUserUidByUsername(String username) {
+		return service.getUsersAndGroupsServicePort().getUserUidByLooraName(username);
+	}
+	
 }
