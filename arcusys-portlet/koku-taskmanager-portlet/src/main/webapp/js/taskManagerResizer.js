@@ -92,10 +92,15 @@
 				jsx1.style.position = 'absolute';
 				jsx1.style.width = '100%';
 			}
+			
+			// Hide some intalio form buttons
+			jQuery('#taskform').contents().find("[label=IntalioInternal_SaveButton]").css('display', 'none');
+			jQuery('#taskform').contents().find("[label=IntalioInternal_ClaimButton]").css('display', 'none');
+			jQuery('#taskform').contents().find("[label=IntalioInternal_RevokeButton]").css('display', 'none');
 							
 			return body.scrollHeight + (body.offsetHeight - body.clientHeight);
 		} else {
-			return body.scrollHeight;		
+			return body.scrollHeight;
 		}
 		
 	}
