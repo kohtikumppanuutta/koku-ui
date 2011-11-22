@@ -120,7 +120,8 @@
 	                            <portlet:param name="messageId" value="${message.id}" />
 	                            <portlet:param name="currentFamilyId" value="${currentFamilyId}"/>
 	                    		<portlet:param name="removeCurrentFamily" value="${message.memberToAddPic == user.pic}"/>
-	                    </portlet:actionURL>
+	                    		<portlet:param name="requesterPic" value="${message.from}"/>
+	                   	</portlet:actionURL>
 	                    <form:form name="accept" method="post" action="${accept}">
 	                        <input type="submit" class="portlet-form-button" value="<spring:message code="ui.pyh.accept" />"/>                      
 	                    </form:form>
