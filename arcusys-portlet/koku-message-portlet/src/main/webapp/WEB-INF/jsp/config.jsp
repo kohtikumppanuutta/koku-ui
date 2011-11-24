@@ -31,7 +31,7 @@
 			<tr>
 				<td><spring:message code="config.portletPath" /></td>
 				<td>
-					<textarea style="width: 200px" rows="1" name="<%= Constants.PREF_MESSAGE_PORTLET_PATH %>" id="<%= Constants.PREF_MESSAGE_PORTLET_PATH %>"></textarea>				
+					<div><%= PortletProperties.NAVIGATION_PORTLET_PATH %></div>				
 				</td>
 			</tr>
 			<tr>
@@ -49,5 +49,4 @@
 	// set the default selected option for selectors refreshDuration and openForm
 	jQuery('#refreshDuration').val("<%= refreshDuration %>");
 	jQuery('#messageType').val("<%= messageType %>");
-	jQuery('#<%= Constants.PREF_MESSAGE_PORTLET_PATH %>').val("<%= portletPath %>");
 </script>
