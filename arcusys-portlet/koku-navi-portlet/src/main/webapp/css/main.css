@@ -93,5 +93,22 @@ li {
 
 .naviLinkHeaderNonLink {
 	cursor: default;	
-}	
+}
+
+.kokuNavigationInfo {
+	padding-bottom: 10px;
+	padding-left: 2px;	
+}
+
+.kokuNavigationSettings {
+	padding-left: 2px;
+}
+
+.kokuNavigationSettings .naviEditHeader {
+	font-weight: bold;
+}
+
+.kokuNavigationSettings .naviEditValue {
+	padding-bottom: 4px;
+}
 

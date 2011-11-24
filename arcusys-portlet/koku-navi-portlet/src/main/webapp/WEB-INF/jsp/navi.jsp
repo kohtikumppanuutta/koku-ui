@@ -12,7 +12,6 @@
 
 <%
 	/* Parses the parent path url from the portlet renderURL */
-	final String defaultPath = defaultPathPref;
 	String currentPage = "";
 	String actionParam = "";	
 	
@@ -393,6 +392,6 @@
 				</c:if>
 			</ul>
 		</li>
-		<li><a href="/koku/ohjeet">Ohjeet</a></li>
+		<li><a href="<%= helpLinkPath %>">Ohjeet</a></li>
 	</ul>
 </div>
