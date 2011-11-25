@@ -5,7 +5,7 @@
 <%@ page import="javax.portlet.PortletPreferences" %>
 <%@ page import="javax.portlet.WindowState" %>
 <%@ page import="fi.arcusys.koku.util.Constants" %>
-<%@ page import="fi.arcusys.koku.navi.NavigationPortletProperties" %>
+<%@ page import="fi.arcusys.koku.util.NavigationPortletProperties" %>
 <%@ page import="fi.arcusys.koku.util.Properties" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %> 
 <portlet:defineObjects />
