@@ -39,9 +39,9 @@
 					+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
 					+ "&orderType=" + pageObj.orderType;
 		}else if(pageObj.taskType == "app_inbox_employee"){
-			url = "<%= defaultPath %>" + "/NewAppointment" + "?FormID=" + appointmentId;			
+			url = "<%= defaultPath %><%= NavigationPortletProperties.APPOINTMENTS_NEW_APPOINTMENT %>" + "?FormID=" + appointmentId;			
 		}else if(pageObj.taskType == "app_inbox_citizen") {
-			url = "<%= defaultPath %>" + "/OpenAppointment" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;				
+			url = "<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_ANSWER_TO_CONSENT %>" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;				
 		}		
 		window.location = url;				
 	}
@@ -59,9 +59,9 @@
 					+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
 					+ "&orderType=" + pageObj.orderType;
 		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>") {
-			url = "<%= defaultPath %>" + "/NewConsent" + "?FormID=" + consentId;
+			url = "<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT %>" + "?FormID=" + consentId;
 		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>") {
-			url = "<%= defaultPath %>" + "/NewConsent" + "?FormID=" + consentId;			
+			url = "<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT %>" + "?FormID=" + consentId;			
 			<%--  			
 			url = "<%= intalioFormURL %>";
 			url += "&consentId=" + consentId

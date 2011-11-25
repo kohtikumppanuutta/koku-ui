@@ -31,7 +31,7 @@
 			<tr>
 				<td><spring:message code="config.portletPath" /></td>
 				<td>
-					<div><%= PortletProperties.NAVIGATION_PORTLET_PATH %></div>				
+					<div><%= PortletProperties.MESSAGE_PORTLET_PATH %></div>				
 				</td>
 			</tr>
 			<tr>

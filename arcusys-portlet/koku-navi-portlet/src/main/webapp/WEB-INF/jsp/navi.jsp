@@ -305,7 +305,7 @@
 		<c:if test="${fn:contains(naviPortalMode, 'loora')}">
 		<li><span class="naviLinkHeaderNonLink">Tapaamiset</span>
 			<ul class="child">
-				<li id="app_new"><a href="<%= defaultPath %>/NewAppointment">Uusi tapaaminen</a></li>
+				<li id="app_new"><a href="<%= defaultPath %><%= NavigationPortletProperties.APPOINTMENTS_NEW_APPOINTMENT %>" >Uusi tapaaminen</a></li>
 				<li id="app_inbox_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_inbox_employee')">Avoimet</a></li>
 				<li id="app_response_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_response_employee')">Valmiit</a></li>
 			</ul></li>
