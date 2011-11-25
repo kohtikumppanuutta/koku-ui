@@ -69,8 +69,11 @@ public class AjaxController {
 				token = resolveIntalioToken(session, username);
 				session.setAttribute(ATTR_TOKEN, token);
 			} catch (IntalioAuthException iae) {
-				LOGGER.error("Couldn't resolve intalio token. Username: '"+username+"' ErrorMsg: "+iae.getMessage());
+				LOGGER.error("Couldn't resolve Intalio token. Username: '"+username+"' ErrorMsg: "+iae.getMessage());
 				session.setAttribute(ATTR_TOKEN, "No token");
+			} catch (Exception e) {
+				session.setAttribute(ATTR_TOKEN, "No token");
+				LOGGER.error("Error while trying to resolve Intalio token. Username: '"+username+"': ",e);
 			}
 		}
 		
