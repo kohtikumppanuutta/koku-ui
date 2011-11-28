@@ -117,28 +117,26 @@
 <div class="kks-right">
          <c:if      
             test="${ not empty collection.prevVersion }">            
-            <a
-                href="
+            <a href="
                         <portlet:renderURL>
                             <portlet:param name="action" value="showCollection" />
                             <portlet:param name="pic" value="${child.pic}" />
                             <portlet:param name="collection" value="${collection.prevVersion}" />
                         </portlet:renderURL>">
-                <strong><spring:message code="ui.kks.prev.version" />
-            </strong> </a>
+                <spring:message code="ui.kks.prev.version" />
+            </a>
         </c:if> <c:if test="${not empty collection.nextVersion }">
             <c:if test="${ not empty collection.prevVersion }"><br></br>            
     		
             </c:if>
-            <a
-                href="
+            <a href="
                         <portlet:renderURL>
                             <portlet:param name="action" value="showCollection" />
                             <portlet:param name="pic" value="${child.pic}" />
                             <portlet:param name="collection" value="${collection.nextVersion}" />
                         </portlet:renderURL>">
-                <strong><spring:message code="ui.kks.next.version" />
-            </strong> </a>
+                <spring:message code="ui.kks.next.version" />
+            </a>
         </c:if> 
 </div>
 <div class="kks-reset-floating"></div>
