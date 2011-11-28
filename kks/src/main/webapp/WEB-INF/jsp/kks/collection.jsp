@@ -14,9 +14,7 @@
 <c:set var="select" value="<%=DataType.SELECT%>" />
 <c:set var="guardian" value="<%=Accountable.GUARDIAN%>" />
 
-
-<fmt:setBundle basename="com.ixonos.eservices.koku.bundle.KokuBundle" />
-
+<fmt:setBundle basename="Language-ext" />
 
 <portlet:defineObjects />
 
@@ -75,21 +73,22 @@
                         class="kks-close"><spring:message code="ui.kks.hide" /> </span> </a>
                     <div class="kks-fields" style="display: none;">
           
+          				<fmt:message key="ui.kks.clear.fields" var="checkBoxLabel"/>
                         <form:form name="newVersionForm" commandName="version" method="post" action="${createVersionURL}">
                                 <input type="hidden" id="id" name="id" value="${ collection.id }"/>
                                 <div class="portlet-form-field-label"><spring:message code="ui.kks.contract.name" /></div>
                                 <div class="portlet-form-field">
                                 	<form:input path="name" maxlength="250" size="70" class="portlet-form-input-field"  />                                 
                                 </div>
-                                <div class="portlet-form-field-label">
-                                   <span class="portlet-form-field"><form:checkbox path="clear" class="portlet-form-input-field" />
-                                    <label class="portlet-form-field-label" for="clear"> <spring:message code="ui.kks.clear.fields" /> </label>
-                                   </span>
-                                </div>                                                                 
-                                <span class="kks-right">
+                                <div class="portlet-form-field">
+                                   <form:checkbox label="${checkBoxLabel}" path="clear" class="portlet-form-input-field" />                                   
+                                </div> 
+                                <div>                                                                
+                                
                                 <input type="submit" class="portlet-form-button"
                                 value="<spring:message code="ui.kks.contract.create"/>">
-                                </span>
+                          
+                                </div>
                         </form:form>
 
                     </div>
