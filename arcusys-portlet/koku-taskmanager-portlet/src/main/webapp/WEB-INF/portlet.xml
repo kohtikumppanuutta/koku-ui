@@ -9,6 +9,8 @@
 		<portlet-name>taskManager</portlet-name>
 		<display-name>koku-taskmanager-portlet</display-name>
 		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+		<expiration-cache>0</expiration-cache>
+		
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
@@ -33,7 +35,6 @@
 				<value>1</value>
 			</preference>
 		</portlet-preferences>
-
 	</portlet>
 	
 	
