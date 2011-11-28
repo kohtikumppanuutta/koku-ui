@@ -9,6 +9,8 @@
 		<portlet-name>koku-message-portlet</portlet-name>
 		<display-name>koku-message-portlet</display-name>
 		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+		<expiration-cache>0</expiration-cache>
+		
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
