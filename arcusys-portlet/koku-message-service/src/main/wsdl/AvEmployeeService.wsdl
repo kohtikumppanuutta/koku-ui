@@ -1,262 +1,320 @@
-<definitions name='KokuLooraAppointmentService' targetNamespace='http://soa.av.koku.arcusys.fi/' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://soa.av.koku.arcusys.fi/' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
- <types>
-  <xs:schema targetNamespace='http://soa.av.koku.arcusys.fi/' version='1.0' xmlns:tns='http://soa.av.koku.arcusys.fi/' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
-   <xs:element name='cancelAppointment' type='tns:cancelAppointment'/>
-   <xs:element name='cancelAppointmentResponse' type='tns:cancelAppointmentResponse'/>
-   <xs:element name='getAppointmentById' type='tns:getAppointmentById'/>
-   <xs:element name='getAppointmentByIdResponse' type='tns:getAppointmentByIdResponse'/>
-   <xs:element name='getCreatedAppointments' type='tns:getCreatedAppointments'/>
-   <xs:element name='getCreatedAppointmentsResponse' type='tns:getCreatedAppointmentsResponse'/>
-   <xs:element name='getProcessedAppointments' type='tns:getProcessedAppointments'/>
-   <xs:element name='getProcessedAppointmentsResponse' type='tns:getProcessedAppointmentsResponse'/>
-   <xs:element name='getTotalCreatedAppointments' type='tns:getTotalCreatedAppointments'/>
-   <xs:element name='getTotalCreatedAppointmentsResponse' type='tns:getTotalCreatedAppointmentsResponse'/>
-   <xs:element name='getTotalProcessedAppointments' type='tns:getTotalProcessedAppointments'/>
-   <xs:element name='getTotalProcessedAppointmentsResponse' type='tns:getTotalProcessedAppointmentsResponse'/>
-   <xs:complexType name='getProcessedAppointments'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='user' type='xs:string'/>
-     <xs:element name='startNum' type='xs:int'/>
-     <xs:element name='maxNum' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getProcessedAppointmentsResponse'>
-    <xs:sequence>
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:appointmentSummary'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='appointmentSummary'>
-    <xs:sequence>
-     <xs:element name='appointmentId' type='xs:long'/>
-     <xs:element minOccurs='0' name='status' type='tns:appointmentSummaryStatus'/>
-     <xs:element minOccurs='0' name='sender' type='xs:string'/>
-     <xs:element minOccurs='0' name='subject' type='xs:string'/>
-     <xs:element minOccurs='0' name='description' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getTotalProcessedAppointments'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='user' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getTotalProcessedAppointmentsResponse'>
-    <xs:sequence>
-     <xs:element name='return' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getCreatedAppointments'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='user' type='xs:string'/>
-     <xs:element name='startNum' type='xs:int'/>
-     <xs:element name='maxNum' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getCreatedAppointmentsResponse'>
-    <xs:sequence>
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:appointmentSummary'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getTotalCreatedAppointments'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='user' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getTotalCreatedAppointmentsResponse'>
-    <xs:sequence>
-     <xs:element name='return' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='cancelAppointment'>
-    <xs:sequence>
-     <xs:element name='appointmentId' type='xs:long'/>
-     <xs:element minOccurs='0' name='comment' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='cancelAppointmentResponse'>
-    <xs:sequence/>
-   </xs:complexType>
-   <xs:complexType name='getAppointmentById'>
-    <xs:sequence>
-     <xs:element name='appointmentId' type='xs:long'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getAppointmentByIdResponse'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='return' type='tns:appointment'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='appointment'>
-    <xs:complexContent>
-     <xs:extension base='tns:appointmentSummary'>
-      <xs:sequence>
-       <xs:element maxOccurs='unbounded' minOccurs='0' name='slots' nillable='true' type='tns:appointmentSlot'/>
-       <xs:element maxOccurs='unbounded' minOccurs='0' name='recipients' nillable='true' type='tns:appointmentReceipientTO'/>
-       <xs:element name='acceptedSlots'>
-        <xs:complexType>
-         <xs:sequence>
-          <xs:element maxOccurs='unbounded' minOccurs='0' name='entry'>
-           <xs:complexType>
-            <xs:sequence>
-             <xs:element minOccurs='0' name='key' type='xs:int'/>
-             <xs:element minOccurs='0' name='value' type='xs:string'/>
-            </xs:sequence>
-           </xs:complexType>
-          </xs:element>
-         </xs:sequence>
-        </xs:complexType>
-       </xs:element>
-       <xs:element maxOccurs='unbounded' minOccurs='0' name='usersRejected' nillable='true' type='xs:string'/>
-      </xs:sequence>
-     </xs:extension>
-    </xs:complexContent>
-   </xs:complexType>
-   <xs:complexType name='appointmentSlot'>
-    <xs:sequence>
-     <xs:element name='slotNumber' type='xs:int'/>
-     <xs:element minOccurs='0' name='appointmentDate' type='xs:date'/>
-     <xs:element minOccurs='0' name='startTime' type='xs:time'/>
-     <xs:element minOccurs='0' name='endTime' type='xs:time'/>
-     <xs:element minOccurs='0' name='location' type='xs:string'/>
-     <xs:element minOccurs='0' name='comment' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='appointmentReceipientTO'>
-    <xs:sequence>
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='receipients' nillable='true' type='xs:string'/>
-     <xs:element minOccurs='0' name='targetPerson' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:simpleType name='appointmentSummaryStatus'>
-    <xs:restriction base='xs:string'>
-     <xs:enumeration value='Created'/>
-     <xs:enumeration value='Approved'/>
-     <xs:enumeration value='Cancelled'/>
-    </xs:restriction>
-   </xs:simpleType>
-  </xs:schema>
- </types>
- <message name='KokuLooraAppointmentService_getAppointmentById'>
-  <part element='tns:getAppointmentById' name='getAppointmentById'></part>
- </message>
- <message name='KokuLooraAppointmentService_getProcessedAppointments'>
-  <part element='tns:getProcessedAppointments' name='getProcessedAppointments'></part>
- </message>
- <message name='KokuLooraAppointmentService_cancelAppointment'>
-  <part element='tns:cancelAppointment' name='cancelAppointment'></part>
- </message>
- <message name='KokuLooraAppointmentService_getTotalCreatedAppointmentsResponse'>
-  <part element='tns:getTotalCreatedAppointmentsResponse' name='getTotalCreatedAppointmentsResponse'></part>
- </message>
- <message name='KokuLooraAppointmentService_getTotalProcessedAppointmentsResponse'>
-  <part element='tns:getTotalProcessedAppointmentsResponse' name='getTotalProcessedAppointmentsResponse'></part>
- </message>
- <message name='KokuLooraAppointmentService_cancelAppointmentResponse'>
-  <part element='tns:cancelAppointmentResponse' name='cancelAppointmentResponse'></part>
- </message>
- <message name='KokuLooraAppointmentService_getProcessedAppointmentsResponse'>
-  <part element='tns:getProcessedAppointmentsResponse' name='getProcessedAppointmentsResponse'></part>
- </message>
- <message name='KokuLooraAppointmentService_getCreatedAppointments'>
-  <part element='tns:getCreatedAppointments' name='getCreatedAppointments'></part>
- </message>
- <message name='KokuLooraAppointmentService_getCreatedAppointmentsResponse'>
-  <part element='tns:getCreatedAppointmentsResponse' name='getCreatedAppointmentsResponse'></part>
- </message>
- <message name='KokuLooraAppointmentService_getTotalCreatedAppointments'>
-  <part element='tns:getTotalCreatedAppointments' name='getTotalCreatedAppointments'></part>
- </message>
- <message name='KokuLooraAppointmentService_getAppointmentByIdResponse'>
-  <part element='tns:getAppointmentByIdResponse' name='getAppointmentByIdResponse'></part>
- </message>
- <message name='KokuLooraAppointmentService_getTotalProcessedAppointments'>
-  <part element='tns:getTotalProcessedAppointments' name='getTotalProcessedAppointments'></part>
- </message>
- <portType name='KokuLooraAppointmentService'>
-  <operation name='cancelAppointment' parameterOrder='cancelAppointment'>
-   <input message='tns:KokuLooraAppointmentService_cancelAppointment'></input>
-   <output message='tns:KokuLooraAppointmentService_cancelAppointmentResponse'></output>
-  </operation>
-  <operation name='getAppointmentById' parameterOrder='getAppointmentById'>
-   <input message='tns:KokuLooraAppointmentService_getAppointmentById'></input>
-   <output message='tns:KokuLooraAppointmentService_getAppointmentByIdResponse'></output>
-  </operation>
-  <operation name='getCreatedAppointments' parameterOrder='getCreatedAppointments'>
-   <input message='tns:KokuLooraAppointmentService_getCreatedAppointments'></input>
-   <output message='tns:KokuLooraAppointmentService_getCreatedAppointmentsResponse'></output>
-  </operation>
-  <operation name='getProcessedAppointments' parameterOrder='getProcessedAppointments'>
-   <input message='tns:KokuLooraAppointmentService_getProcessedAppointments'></input>
-   <output message='tns:KokuLooraAppointmentService_getProcessedAppointmentsResponse'></output>
-  </operation>
-  <operation name='getTotalCreatedAppointments' parameterOrder='getTotalCreatedAppointments'>
-   <input message='tns:KokuLooraAppointmentService_getTotalCreatedAppointments'></input>
-   <output message='tns:KokuLooraAppointmentService_getTotalCreatedAppointmentsResponse'></output>
-  </operation>
-  <operation name='getTotalProcessedAppointments' parameterOrder='getTotalProcessedAppointments'>
-   <input message='tns:KokuLooraAppointmentService_getTotalProcessedAppointments'></input>
-   <output message='tns:KokuLooraAppointmentService_getTotalProcessedAppointmentsResponse'></output>
-  </operation>
- </portType>
- <binding name='KokuLooraAppointmentServiceBinding' type='tns:KokuLooraAppointmentService'>
-  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
-  <operation name='cancelAppointment'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getAppointmentById'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getCreatedAppointments'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getProcessedAppointments'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getTotalCreatedAppointments'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getTotalProcessedAppointments'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
- </binding>
- <service name='KokuLooraAppointmentService'>
-  <port binding='tns:KokuLooraAppointmentServiceBinding' name='KokuLooraAppointmentServicePort'>
-   <soap:address location='http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuLooraAppointmentServiceImpl'/>
-  </port>
- </service>
-</definitions>
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="KokuLooraAppointmentService" targetNamespace="http://soa.av.koku.arcusys.fi/" xmlns:ns1="http://schemas.xmlsoap.org/wsdl/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://soa.av.koku.arcusys.fi/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema elementFormDefault="unqualified" targetNamespace="http://soa.av.koku.arcusys.fi/" version="1.0" xmlns:tns="http://soa.av.koku.arcusys.fi/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="cancelAppointment" type="tns:cancelAppointment" />
+<xs:element name="cancelAppointmentResponse" type="tns:cancelAppointmentResponse" />
+<xs:element name="getAppointmentById" type="tns:getAppointmentById" />
+<xs:element name="getAppointmentByIdResponse" type="tns:getAppointmentByIdResponse" />
+<xs:element name="getCreatedAppointments" type="tns:getCreatedAppointments" />
+<xs:element name="getCreatedAppointmentsResponse" type="tns:getCreatedAppointmentsResponse" />
+<xs:element name="getProcessedAppointments" type="tns:getProcessedAppointments" />
+<xs:element name="getProcessedAppointmentsResponse" type="tns:getProcessedAppointmentsResponse" />
+<xs:element name="getTotalCreatedAppointments" type="tns:getTotalCreatedAppointments" />
+<xs:element name="getTotalCreatedAppointmentsResponse" type="tns:getTotalCreatedAppointmentsResponse" />
+<xs:element name="getTotalProcessedAppointments" type="tns:getTotalProcessedAppointments" />
+<xs:element name="getTotalProcessedAppointmentsResponse" type="tns:getTotalProcessedAppointmentsResponse" />
+<xs:complexType name="getTotalProcessedAppointments">
+
+<xs:sequence>
+<xs:element minOccurs="0" name="user" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getTotalProcessedAppointmentsResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getTotalCreatedAppointments">
+<xs:sequence>
+<xs:element minOccurs="0" name="user" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getTotalCreatedAppointmentsResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int" />
+
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getAppointmentById">
+<xs:sequence>
+<xs:element name="appointmentId" type="xs:long" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getAppointmentByIdResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:appointment" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="appointment">
+<xs:complexContent>
+<xs:extension base="tns:appointmentSummary">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="slots" nillable="true" type="tns:appointmentSlot" />
+
+<xs:element maxOccurs="unbounded" minOccurs="0" name="recipients" nillable="true" type="tns:appointmentReceipientTO" />
+<xs:element name="acceptedSlots">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="entry">
+<xs:complexType>
+<xs:sequence>
+<xs:element minOccurs="0" name="key" type="xs:int" />
+<xs:element minOccurs="0" name="value" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="usersRejected" nillable="true" type="xs:string" />
+<xs:element maxOccurs="unbounded" minOccurs="0" name="usersRejectedWithComments" nillable="true" type="tns:appointmentUserRejected" />
+
+<xs:element minOccurs="0" name="cancelComment" type="xs:string" />
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="appointmentSummary">
+<xs:sequence>
+<xs:element name="appointmentId" type="xs:long" />
+<xs:element minOccurs="0" name="status" type="tns:appointmentSummaryStatus" />
+<xs:element minOccurs="0" name="sender" type="xs:string" />
+<xs:element minOccurs="0" name="subject" type="xs:string" />
+<xs:element minOccurs="0" name="description" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="appointmentSlot">
+<xs:sequence>
+<xs:element name="slotNumber" type="xs:int" />
+
+<xs:element minOccurs="0" name="appointmentDate" type="xs:date" />
+<xs:element minOccurs="0" name="startTime" type="xs:time" />
+<xs:element minOccurs="0" name="endTime" type="xs:time" />
+<xs:element minOccurs="0" name="location" type="xs:string" />
+<xs:element minOccurs="0" name="comment" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="appointmentReceipientTO">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="receipients" nillable="true" type="xs:string" />
+<xs:element minOccurs="0" name="targetPerson" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="appointmentUserRejected">
+<xs:sequence>
+<xs:element minOccurs="0" name="rejectComment" type="xs:string" />
+<xs:element minOccurs="0" name="userDisplayName" type="xs:string" />
+
+<xs:element minOccurs="0" name="userUid" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getCreatedAppointments">
+<xs:sequence>
+<xs:element minOccurs="0" name="user" type="xs:string" />
+<xs:element name="startNum" type="xs:int" />
+<xs:element name="maxNum" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getCreatedAppointmentsResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:appointmentSummary" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getProcessedAppointments">
+<xs:sequence>
+
+<xs:element minOccurs="0" name="user" type="xs:string" />
+<xs:element name="startNum" type="xs:int" />
+<xs:element name="maxNum" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getProcessedAppointmentsResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:appointmentSummary" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="cancelAppointment">
+<xs:sequence>
+<xs:element name="appointmentId" type="xs:long" />
+<xs:element minOccurs="0" name="comment" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="cancelAppointmentResponse">
+
+<xs:sequence />
+</xs:complexType>
+<xs:simpleType name="appointmentSummaryStatus">
+<xs:restriction base="xs:string">
+<xs:enumeration value="Created" />
+<xs:enumeration value="Approved" />
+<xs:enumeration value="Cancelled" />
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getProcessedAppointments">
+    <wsdl:part element="tns:getProcessedAppointments" name="parameters">
+    </wsdl:part>
+
+  </wsdl:message>
+  <wsdl:message name="getProcessedAppointmentsResponse">
+    <wsdl:part element="tns:getProcessedAppointmentsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCreatedAppointments">
+    <wsdl:part element="tns:getCreatedAppointments" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="getAppointmentByIdResponse">
+    <wsdl:part element="tns:getAppointmentByIdResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTotalProcessedAppointmentsResponse">
+    <wsdl:part element="tns:getTotalProcessedAppointmentsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTotalCreatedAppointmentsResponse">
+
+    <wsdl:part element="tns:getTotalCreatedAppointmentsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTotalCreatedAppointments">
+    <wsdl:part element="tns:getTotalCreatedAppointments" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTotalProcessedAppointments">
+    <wsdl:part element="tns:getTotalProcessedAppointments" name="parameters">
+
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelAppointmentResponse">
+    <wsdl:part element="tns:cancelAppointmentResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAppointmentById">
+    <wsdl:part element="tns:getAppointmentById" name="parameters">
+    </wsdl:part>
+
+  </wsdl:message>
+  <wsdl:message name="cancelAppointment">
+    <wsdl:part element="tns:cancelAppointment" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCreatedAppointmentsResponse">
+    <wsdl:part element="tns:getCreatedAppointmentsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:portType name="KokuLooraAppointmentService">
+    <wsdl:operation name="getTotalProcessedAppointments">
+      <wsdl:input message="tns:getTotalProcessedAppointments" name="getTotalProcessedAppointments">
+    </wsdl:input>
+      <wsdl:output message="tns:getTotalProcessedAppointmentsResponse" name="getTotalProcessedAppointmentsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTotalCreatedAppointments">
+      <wsdl:input message="tns:getTotalCreatedAppointments" name="getTotalCreatedAppointments">
+
+    </wsdl:input>
+      <wsdl:output message="tns:getTotalCreatedAppointmentsResponse" name="getTotalCreatedAppointmentsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAppointmentById">
+      <wsdl:input message="tns:getAppointmentById" name="getAppointmentById">
+    </wsdl:input>
+      <wsdl:output message="tns:getAppointmentByIdResponse" name="getAppointmentByIdResponse">
+    </wsdl:output>
+
+    </wsdl:operation>
+    <wsdl:operation name="getCreatedAppointments">
+      <wsdl:input message="tns:getCreatedAppointments" name="getCreatedAppointments">
+    </wsdl:input>
+      <wsdl:output message="tns:getCreatedAppointmentsResponse" name="getCreatedAppointmentsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProcessedAppointments">
+      <wsdl:input message="tns:getProcessedAppointments" name="getProcessedAppointments">
+
+    </wsdl:input>
+      <wsdl:output message="tns:getProcessedAppointmentsResponse" name="getProcessedAppointmentsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cancelAppointment">
+      <wsdl:input message="tns:cancelAppointment" name="cancelAppointment">
+    </wsdl:input>
+      <wsdl:output message="tns:cancelAppointmentResponse" name="cancelAppointmentResponse">
+    </wsdl:output>
+
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="KokuLooraAppointmentServiceSoapBinding" type="tns:KokuLooraAppointmentService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getTotalCreatedAppointments">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getTotalCreatedAppointments">
+        <soap:body use="literal" />
+      </wsdl:input>
+
+      <wsdl:output name="getTotalCreatedAppointmentsResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTotalProcessedAppointments">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getTotalProcessedAppointments">
+        <soap:body use="literal" />
+      </wsdl:input>
+
+      <wsdl:output name="getTotalProcessedAppointmentsResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAppointmentById">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getAppointmentById">
+        <soap:body use="literal" />
+      </wsdl:input>
+
+      <wsdl:output name="getAppointmentByIdResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCreatedAppointments">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getCreatedAppointments">
+        <soap:body use="literal" />
+      </wsdl:input>
+
+      <wsdl:output name="getCreatedAppointmentsResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProcessedAppointments">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getProcessedAppointments">
+        <soap:body use="literal" />
+      </wsdl:input>
+
+      <wsdl:output name="getProcessedAppointmentsResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cancelAppointment">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="cancelAppointment">
+        <soap:body use="literal" />
+      </wsdl:input>
+
+      <wsdl:output name="cancelAppointmentResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="KokuLooraAppointmentService">
+    <wsdl:port binding="tns:KokuLooraAppointmentServiceSoapBinding" name="KokuLooraAppointmentServicePort">
+      <soap:address location="http://kohtikumppanuutta-dev.dmz:8180/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuLooraAppointmentServiceImpl" />
+    </wsdl:port>
+
+  </wsdl:service>
+</wsdl:definitions>
