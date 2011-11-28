@@ -63,7 +63,7 @@ public class ShowResponseController {
 		request.getPortletSession().setAttribute(ATTR_ORDER_TYPE, orderType, PortletSession.APPLICATION_SCOPE);
 		
 		KokuResponseDetail details = null;
-		if (taskType.equals(Constants.TASK_TYPE_REQUEST_REPLIED)) {
+		if (taskType.equals(Constants.TASK_TYPE_REQUEST_REPLIED) || taskType.equals(Constants.TASK_TYPE_REQUEST_OLD)) {
 			CitizenRequestHandle handle = new CitizenRequestHandle();
 			details = handle.getResponseById(responseId);
 		}
