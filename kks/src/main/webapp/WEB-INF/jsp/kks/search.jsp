@@ -43,9 +43,11 @@
             
 			<span class="portlet-form-field"> 
 			 <form:input class="defaultText"  path="pic" /> 
+			 <input type="submit" class="portlet-form-button" value="<spring:message code="ui.kks.search.info"/>"> 
 			</span>
+					
 			</div>
-			<span class="kks-left"> <input type="submit" class="portlet-form-button" value="<spring:message code="ui.kks.search.info"/>" ></span>
+			
 
 			<div class="kks-reset-floating"></div>
 		</form:form>
