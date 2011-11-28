@@ -89,7 +89,13 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	 */
 	public EmployeeAppointment getAppointmentById(String appointmentId) {
 		 
-		long  appId = (long) Long.parseLong(appointmentId);
+		long  appId = 0;
+		try {
+			appId = (long) Long.parseLong(appointmentId);
+		} catch (NumberFormatException nfe) {
+			LOG.warn("Invalid appointmentId. AppointmentId: '"+appointmentId+"'");
+			return null;
+		}
 		EmployeeAppointment empAppointment = new EmployeeAppointment();
 		Appointment appointment = aes.getAppointmentById(appId);
 		empAppointment.setAppointmentId(appointment.getAppointmentId());
@@ -303,7 +309,13 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	 * @return
 	 */
 	public String cancelAppointments(String appointmentIdStr, String comment) {
-		long  appId = (long) Long.parseLong(appointmentIdStr);
+		long  appId = 0;
+		try {
+			appId = (long) Long.parseLong(appointmentIdStr);
+		} catch (NumberFormatException nfe) {
+			LOG.warn("Invalid AppointmentId. AppointmentId: '"+appointmentIdStr+"'");
+			return RESPONSE_FAIL;
+		}
 		
 		try {
 			aes.cancelAppointment(appId, comment);

@@ -88,7 +88,13 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 	 * @return detailed citizen appointment
 	 */
 	public CitizenAppointment getAppointmentById(String appointmentId, String targetUser) {
-		long  appId = (long) Long.parseLong(appointmentId);
+		long  appId = 0;
+		try {
+			appId = (long) Long.parseLong(appointmentId);
+		} catch (NumberFormatException nfe) {
+			LOG.warn("Invalid appointmentId. AppointmentId: '"+appointmentId+"'");
+			return null;
+		}
 		CitizenAppointment ctzAppointment = new CitizenAppointment();
 		AppointmentRespondedTO appointment = acs.getAppointmentRespondedById(appId, targetUser);
 		ctzAppointment.setAppointmentId(appointment.getAppointmentId());
@@ -151,7 +157,13 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 	 * @return operation response
 	 */
 	public String cancelAppointments(String appointmentIdStr, String targetPerson, String comment) {
-		long  appId = (long) Long.parseLong(appointmentIdStr);
+		long  appId = 0;
+		try {
+			appId = (long) Long.parseLong(appointmentIdStr);
+		} catch (NumberFormatException nfe) {
+			LOG.warn("Invalid appointmentId. AppointmentId: '"+appointmentIdStr+"'");
+			return RESPONSE_FAIL;
+		}
 		
 		try {
 			acs.cancelAppointment(appId, targetPerson, loginUserId, comment);
