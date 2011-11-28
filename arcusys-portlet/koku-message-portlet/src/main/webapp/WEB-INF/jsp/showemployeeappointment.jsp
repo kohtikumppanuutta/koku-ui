@@ -32,6 +32,10 @@ function formatUrl(url) {
 	<span class="request-c-1"><spring:message code="message.subject"/>:</span> <c:out value="${appointment.subject}" /><br />
 	<span class="request-c-1"><spring:message code="message.description"/>:</span> <c:out value="${appointment.description}" /><br />
 	<span class="request-c-1"><spring:message code="message.status"/>:</span> <c:out value="${appointment.status}" /><br />
+	<c:if test="${appointment.cancellationComment != null}">
+	<span class="request-c-1"><spring:message code="appointment.cancellationComment"/>:</span> <c:out value="${appointment.cancellationComment}" /><br />
+	</c:if>
+	
 	
 	<c:if test="${fn:length(appointment.approvedSlots) > 0}">
     <h3><spring:message code="appointment.approvedSlots"/></h3>   
@@ -119,6 +123,26 @@ function formatUrl(url) {
       	</c:forEach>
     </table>  
 	</c:if>
+	
+	<%-- Users who cancelled their appointment --%>
+	<c:if test="${fn:length(appointment.usersRejected) > 0}">
+	<h3><spring:message code="appointment.userCancellationHeader"/></h3>
+	<table class="request-table">
+    	<tr>
+    		<td class="head"><spring:message code="appointment.targetPerson"/></td>
+    		<td class="head"><spring:message code="appointment.replierComment"/></td>
+
+    	</tr>
+    	<c:forEach var="reject" items="${appointment.usersRejected}" varStatus="loopStatus">
+        <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
+          <td>${reject.userDisplayName}</td>
+          <td>${reject.rejectComment}</td>  
+        </tr>
+      	</c:forEach>
+    </table>  
+	</c:if>
+	
+	
 	</div>
 	<div id="task-manager-operation" class="task-manager-operation-part">
 		<input type="button" value="<spring:message code="page.return"/>" onclick="returnMainPage()" />

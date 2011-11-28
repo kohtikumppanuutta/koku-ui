@@ -24,6 +24,8 @@ import fi.arcusys.koku.av.employeeservice.AppointmentReceipientTO;
 import fi.arcusys.koku.av.employeeservice.AppointmentSlot;
 import fi.arcusys.koku.av.employeeservice.AppointmentSummary;
 import fi.arcusys.koku.av.employeeservice.AppointmentSummaryStatus;
+import fi.arcusys.koku.av.employeeservice.AppointmentUserRejected;
+import fi.arcusys.koku.users.KokuUser;
 import fi.arcusys.koku.util.MessageUtil;
 
 
@@ -76,7 +78,7 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 			kokuAppointment.setSubject(appSummary.getSubject());
 			kokuAppointment.setDescription(appSummary.getDescription());
 			kokuAppointment.setStatus(localizeActionRequestStatus(appSummary.getStatus()));
-			appList.add(kokuAppointment);		
+			appList.add(kokuAppointment);
 		}
 		
 		return appList;
@@ -105,12 +107,25 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		empAppointment.setStatus(localizeActionRequestStatus(appointment.getStatus()));		
 		empAppointment.setAcceptedSlots(appointment.getAcceptedSlots());
 		empAppointment.setRecipients(appointment.getRecipients());
-		empAppointment.setUsersRejected(appointment.getUsersRejected());
+		empAppointment.setCancellationComment(appointment.getCancelComment());
+//		empAppointment.setUsersRejected(appointment.getUsersRejected());
+		empAppointment.setUserRejected(convertUserRejectedToKokuUserRejected(appointment.getUsersRejectedWithComments()));
 		empAppointment.setRejectedUsers(formatRejectedUsers(appointment.getUsersRejected(), appointment.getRecipients()));
 		empAppointment.setUnrespondedUsers(calcUnrespondedUsers(appointment));
 		List<Slot> allSlots = formatSlots(appointment.getSlots(), appointment.getAcceptedSlots(), appointment.getRecipients());		
 		setSlots(empAppointment, allSlots);
 		return empAppointment;		
+	}
+	
+	private List<KokuAppointmentUserRejected> convertUserRejectedToKokuUserRejected(List<AppointmentUserRejected> rejectedUsers) {
+		if (rejectedUsers == null) {
+			return new ArrayList<KokuAppointmentUserRejected>();
+		}
+		List<KokuAppointmentUserRejected> list = new ArrayList<KokuAppointmentUserRejected>();
+		for (AppointmentUserRejected rejectedUser : rejectedUsers ) {
+			list.add(new KokuAppointmentUserRejected(rejectedUser));
+		}
+		return list;
 	}
 	
 	/**

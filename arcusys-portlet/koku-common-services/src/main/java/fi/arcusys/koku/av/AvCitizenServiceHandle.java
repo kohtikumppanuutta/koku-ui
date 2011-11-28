@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.log4j.Logger;
+import org.omg.CORBA.CTX_RESTRICT_SCOPE;
 import org.springframework.context.NoSuchMessageException;
 
 import fi.arcusys.koku.AbstractHandle;
@@ -110,6 +111,7 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 		ctzAppointment.setReplier(appointment.getReplier());
 		ctzAppointment.setReplierComment(appointment.getReplierComment());
 		ctzAppointment.setTargetPerson(appointment.getTargetPerson());
+		ctzAppointment.setCancellationComment(appointment.getEmployeesCancelComent());
 		
 		return ctzAppointment;		
 	}

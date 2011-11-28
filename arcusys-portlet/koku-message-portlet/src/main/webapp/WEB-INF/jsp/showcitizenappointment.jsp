@@ -33,6 +33,9 @@ function formatUrl(url) {
 	<span class="request-c-1"><spring:message code="message.subject"/>:</span> <c:out value="${appointment.subject}" /><br />
 	<span class="request-c-1"><spring:message code="message.description"/>:</span> <c:out value="${appointment.description}" /><br />
 	<span class="request-c-1"><spring:message code="message.status"/>:</span> <c:out value="${appointment.status}" /><br />
+	<c:if test="${appointment.cancellationComment  != null}">
+	<span class="request-c-1"><spring:message code="appointment.cancellationComment"/>:</span> <c:out value="${appointment.cancellationComment}" /><br />
+	</c:if>
 	<span class="request-c-1"><spring:message code="appointment.targetPerson"/>:</span> <c:out value="${appointment.targetPerson}" /><br />
 	<span class="request-c-1"><spring:message code="appointment.replier"/>:</span> <c:out value="${appointment.replier}" /><br />
 	<span class="request-c-1"><spring:message code="appointment.replierComment"/>:</span> <c:out value="${appointment.replierComment}" /><br />

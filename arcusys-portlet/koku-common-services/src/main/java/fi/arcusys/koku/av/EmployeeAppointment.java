@@ -1,5 +1,6 @@
 package fi.arcusys.koku.av;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fi.arcusys.koku.av.employeeservice.Appointment.AcceptedSlots;
@@ -12,24 +13,19 @@ import fi.arcusys.koku.av.employeeservice.AppointmentReceipientTO;
  */
 public class EmployeeAppointment extends KokuAppointment{
 
-	private String status;
 	private List<Slot> approvedSlots;
 	private List<Slot> unapprovedSlots;
 	private List<AppointmentReceipientTO> recipients;
 	private AcceptedSlots acceptedSlots;
-	private List<String> usersRejected;
 	private List<UserWithTarget> rejectedUsers;
 	private List<UserWithTarget> unrespondedUsers;
+	private List<KokuAppointmentUserRejected> usersRejected;
 	
 	/* getters */	
 	public List<AppointmentReceipientTO> getRecipients() {
 		return recipients;
 	}
-	
-	public String getStatus() {
-		return status;
-	}
-	
+		
 	public List<Slot> getApprovedSlots() {
 		return approvedSlots;
 	}
@@ -41,11 +37,7 @@ public class EmployeeAppointment extends KokuAppointment{
 	public AcceptedSlots getAcceptedSlots() {
 		return acceptedSlots;
 	}
-	
-	public List<String> getUsersRejected() {
-		return usersRejected;
-	}
-	
+		
 	public List<UserWithTarget> getRejectedUsers() {
 		return rejectedUsers;
 	}
@@ -56,10 +48,6 @@ public class EmployeeAppointment extends KokuAppointment{
 	/* setters */	
 	public void setRecipients(List<AppointmentReceipientTO> recipients) {
 		this.recipients = recipients;
-	}
-	
-	public void setStatus(String status) {
-		this.status = status;
 	}
 	
 	public void setApprovedSlots(List<Slot> approvedSlots) {
@@ -73,11 +61,7 @@ public class EmployeeAppointment extends KokuAppointment{
 	public void setAcceptedSlots(AcceptedSlots acceptedSlots) {
 		this.acceptedSlots = acceptedSlots;
 	}
-	
-	public void setUsersRejected(List<String> usersRejected) {
-		this.usersRejected = usersRejected;
-	}
-	
+		
 	public void setRejectedUsers(List<UserWithTarget> rejectedUsers) {
 		this.rejectedUsers = rejectedUsers;
 	}
@@ -86,6 +70,17 @@ public class EmployeeAppointment extends KokuAppointment{
 		this.unrespondedUsers = unrespondedUsers;
 	}
 	
+	public final List<KokuAppointmentUserRejected> getUsersRejected() {
+		if (usersRejected == null) {
+			return new ArrayList<KokuAppointmentUserRejected>();
+		}
+		return usersRejected;
+	}
+
+	public final void setUserRejected(List<KokuAppointmentUserRejected> usersRejected) {
+		this.usersRejected = usersRejected;
+	}
+
 	public static class UserWithTarget {
 		private String targetPerson;
 		private String recipients;
