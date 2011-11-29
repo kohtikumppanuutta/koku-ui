@@ -5,8 +5,13 @@
  * css file for task manager portlet
  * @Author: JinhuaChen
  */
+ 
+#task-manager-outer-wrap {
+	
+} 
+
 #task-manager-wrap {
-	margin: 5px;
+	padding: 5px;
 	position: relative;
 	color: #666666;
 }
@@ -55,13 +60,12 @@
 }
 
 #task-manager-tasklist {
-	margin: 10px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 	border: 1px solid #cccccc;
 	min-height: 360px;
-	padding: 2px;
+	padding: 5px;
 }
 
 /* main table */
@@ -233,12 +237,19 @@
 }
 
 .task-manager-operation-part {
-	margin: 5px 10px 5px 10px;
+	/* margin: 5px 10px 5px 10px; */
+/* 	margin-bottom: 5px; */
+/* 	margin-top: 5px; */
 	padding: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 	background: #bbbbbb url('../images/bg.gif');
+}
+
+.taskmanager-operation-part-wrapper {
+	padding-top: 5px;
+	width: 100%;
 }
 
 #task-manager-operation-page {
