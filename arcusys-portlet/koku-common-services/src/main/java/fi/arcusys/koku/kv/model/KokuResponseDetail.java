@@ -13,10 +13,12 @@ public class KokuResponseDetail extends KokuResponseSummary {
 
 	private List<KokuAnswer> answers;
 	private List<KokuQuestion> questions;
+	private String comment;
 	
 	public KokuResponseDetail(ResponseDetail req) {
 		super(req);
 		if (req != null) {
+			this.comment = req.getComment();
 			if (req.getQuestions() != null) {
 				questions = new ArrayList<KokuQuestion>();
 				for (Question question : req.getQuestions()) {
@@ -83,6 +85,14 @@ public class KokuResponseDetail extends KokuResponseSummary {
 
 	public void setQuestions(List<KokuQuestion> questions) {
 		this.questions = questions;
+	}
+	
+	public final String getComment() {
+		return comment;
+	}
+
+	public final void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	@Override

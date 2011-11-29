@@ -44,17 +44,17 @@ function formatUrl(url) {
     		<td class="head"><spring:message code="response.tableheader.indexnro"/></td>
     		<td class="head"><spring:message code="response.tableheader.description"/></td>    		
     		<td class="head"><spring:message code="response.tableheader.answer"/></td>
-    		<td class="head"><spring:message code="response.tableheader.comment"/></td>    		
     	</tr>
     	<c:forEach var="question" items="${response.questions}" varStatus="loopStatus">
 	        <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
 	          <td>${question.number}</td>
 	          <td>${question.description}</td>
 	          <td>${question.answer.answer}</td>
-	          <td>${question.answer.comment}</td>
 	        </tr>
       	</c:forEach>
     </table>
+    <h3><spring:message code="response.comment"/></h3>
+    <div class="responseComment">${response.comment}</div>
     
 	</div>
 	<div id="task-manager-operation" class="task-manager-operation-part">
