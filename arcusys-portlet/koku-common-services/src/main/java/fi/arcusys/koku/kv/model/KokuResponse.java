@@ -14,6 +14,9 @@ public class KokuResponse {
 	}
 	
 	public KokuResponse(fi.arcusys.koku.kv.requestservice.Response response) {
+		if (response == null) {
+			return;
+		}
 		name = response.getName();
 		answers = new ArrayList<KokuAnswer>();
 		if (response.getAnswers() != null) {

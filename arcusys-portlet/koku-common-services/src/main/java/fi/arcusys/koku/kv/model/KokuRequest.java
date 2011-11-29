@@ -30,6 +30,9 @@ public class KokuRequest {
 	}
 	
 	public KokuRequest(fi.arcusys.koku.kv.requestservice.RequestSummary reqSum) {
+		if (reqSum == null) {
+			return;
+		}
 		requestId = reqSum.getRequestId();
 		sender = reqSum.getSender();
 		subject = reqSum.getSubject();
@@ -41,6 +44,9 @@ public class KokuRequest {
 
 	public KokuRequest(fi.arcusys.koku.kv.requestservice.Request req) {
 		this((fi.arcusys.koku.kv.requestservice.RequestSummary) req);
+		if (req == null) {
+			return;
+		}
 		content = req.getContent();
 		unrespondedList = req.getNotResponded();
 		
