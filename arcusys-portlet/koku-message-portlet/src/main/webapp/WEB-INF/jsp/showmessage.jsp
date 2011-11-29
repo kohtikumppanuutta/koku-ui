@@ -60,6 +60,10 @@ public String htmlToCode(String s)
 		jQuery('#messageContent').html(content);
 	}
 	
+	function kokuRedirectToRecievedRequests() {
+		window.location = "<%= NavigationPortletProperties.NAVIGATION_PORTLET_PATH %><%= NavigationPortletProperties.REQUESTS_RECIEVED_REQUESTS %>";
+	}
+	
 	/**
 	 * Returns to the main portlet page
 	 */
