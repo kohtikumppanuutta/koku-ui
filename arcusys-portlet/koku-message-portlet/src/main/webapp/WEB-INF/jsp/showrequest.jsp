@@ -116,13 +116,14 @@ function exportFile() {
     	<tr>
     		<td rowspan=2 style="vertical-align: middle;" class="head"><spring:message code="request.respondent"/></td>
     		<c:forEach items="${request.questions}" varStatus="status" var="question" >
-    			<td colspan=2 class="head">${question.description}</td>
-    		</c:forEach></tr>
+    			<td  class="head">${question.description}</td>
+    		</c:forEach>
+    		<td rowspan=2 style="vertical-align: middle;" class="head"><spring:message code="request.comment"/></td>
+   		</tr>    		
     	<tr>
     	<c:forEach items="${request.questions}" >
     		<td class="head"><spring:message code="request.answer"/></td>
     	</c:forEach>
-    		<td class="head"><spring:message code="request.comment"/></td>
     	</tr>
     	<c:forEach var="response" items="${request.respondedList}" varStatus="loopStatus">
         <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
