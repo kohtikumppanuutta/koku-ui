@@ -465,6 +465,10 @@ table.task-manager-table tr.trheader {
 	cursor: default;
 }
 
+#applicationKindergartenBrowse {
+	background-color: #F0F0F0;
+}
+
 #applicationKindergartenBrowse span.searchTitle {
 	width: 100px;
 }
