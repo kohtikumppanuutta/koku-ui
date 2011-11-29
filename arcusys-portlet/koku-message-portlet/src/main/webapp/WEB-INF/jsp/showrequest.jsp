@@ -115,8 +115,8 @@ function exportFile() {
     <table class="request-table">
     	<tr>
     		<td rowspan=2 style="vertical-align: middle;" class="head"><spring:message code="request.respondent"/></td>
-    		<c:forEach items="${request.questions}" varStatus="status" >
-    			<td colspan=2 class="head"><spring:message code="request.question"/> ${status.count}</td>
+    		<c:forEach items="${request.questions}" varStatus="status" var="question" >
+    			<td colspan=2 class="head">${question.description}</td>
     		</c:forEach></tr>
     	<tr>
     	<c:forEach items="${request.questions}" >
