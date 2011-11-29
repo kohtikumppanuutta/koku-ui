@@ -84,9 +84,20 @@ public class FamilyInformationController {
     fi.koku.services.entity.community.v1.ServiceFault, TooManyFamiliesException {
     
     String userPic = UserInfoUtils.getPicFromSession(request);
-    CustomerType customer = customerService.opGetCustomer(userPic, CustomerServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
-    logger.debug("FamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
-    Person user = new Person(customer);
+    
+    CustomerType customer = null;
+    try {
+      customer = customerService.opGetCustomer(userPic, CustomerServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
+    } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
+      // catch the exception when the user information cannot be fetched; user will be null and a notification about 
+      // missing user information will be shown in JSP
+    }
+    
+    Person user = null;
+    if (customer != null) {
+      logger.debug("FamilyInformationController.render(): returning customer: " + customer.getEtunimetNimi() + " " + customer.getSukuNimi() + ", " + customer.getHenkiloTunnus());
+      user = new Person(customer);
+    }
     
     Family userFamily = null;
     try {
