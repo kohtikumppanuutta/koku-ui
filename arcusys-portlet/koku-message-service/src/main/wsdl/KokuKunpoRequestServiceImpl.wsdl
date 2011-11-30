@@ -1,247 +1,264 @@
-<definitions name='KokuKunpoRequestService' targetNamespace='http://soa.kv.koku.arcusys.fi/' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://soa.kv.koku.arcusys.fi/' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
- <types>
-  <xs:schema targetNamespace='http://soa.kv.koku.arcusys.fi/' version='1.0' xmlns:tns='http://soa.kv.koku.arcusys.fi/' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
-   <xs:element name='getOldRequests' type='tns:getOldRequests'/>
-   <xs:element name='getOldRequestsResponse' type='tns:getOldRequestsResponse'/>
-   <xs:element name='getRepliedRequests' type='tns:getRepliedRequests'/>
-   <xs:element name='getRepliedRequestsResponse' type='tns:getRepliedRequestsResponse'/>
-   <xs:element name='getResponseDetail' type='tns:getResponseDetail'/>
-   <xs:element name='getResponseDetailResponse' type='tns:getResponseDetailResponse'/>
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="KokuKunpoRequestService" targetNamespace="http://soa.kv.koku.arcusys.fi/" xmlns:ns1="http://schemas.xmlsoap.org/wsdl/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://soa.kv.koku.arcusys.fi/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema elementFormDefault="unqualified" targetNamespace="http://soa.kv.koku.arcusys.fi/" version="1.0" xmlns:tns="http://soa.kv.koku.arcusys.fi/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="getOldRequests" type="tns:getOldRequests" />
+<xs:element name="getOldRequestsResponse" type="tns:getOldRequestsResponse" />
+<xs:element name="getRepliedRequests" type="tns:getRepliedRequests" />
+<xs:element name="getRepliedRequestsResponse" type="tns:getRepliedRequestsResponse" />
+<xs:element name="getResponseDetail" type="tns:getResponseDetail" />
+<xs:element name="getResponseDetailResponse" type="tns:getResponseDetailResponse" />
+<xs:element name="getTotalOldRequests" type="tns:getTotalOldRequests" />
+<xs:element name="getTotalOldRequestsResponse" type="tns:getTotalOldRequestsResponse" />
+<xs:element name="getTotalRepliedRequests" type="tns:getTotalRepliedRequests" />
+<xs:element name="getTotalRepliedRequestsResponse" type="tns:getTotalRepliedRequestsResponse" />
+<xs:complexType name="getTotalOldRequests">
+<xs:sequence>
+<xs:element minOccurs="0" name="userUid" type="xs:string" />
 
-   <xs:element name='getTotalOldRequests' type='tns:getTotalOldRequests'/>
-   <xs:element name='getTotalOldRequestsResponse' type='tns:getTotalOldRequestsResponse'/>
-   <xs:element name='getTotalRepliedRequests' type='tns:getTotalRepliedRequests'/>
-   <xs:element name='getTotalRepliedRequestsResponse' type='tns:getTotalRepliedRequestsResponse'/>
-   <xs:complexType name='getRepliedRequests'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='userUid' type='xs:string'/>
-     <xs:element name='startNum' type='xs:int'/>
-     <xs:element name='maxNum' type='xs:int'/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getTotalOldRequestsResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getResponseDetail">
+<xs:sequence>
+<xs:element name="arg0" type="xs:long" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getResponseDetailResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:responseDetail" />
+</xs:sequence>
+</xs:complexType>
 
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getRepliedRequestsResponse'>
-    <xs:sequence>
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:responseSummary'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='responseSummary'>
-    <xs:sequence>
+<xs:complexType name="responseDetail">
+<xs:complexContent>
+<xs:extension base="tns:responseSummary">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="answers" nillable="true" type="tns:answer" />
+<xs:element minOccurs="0" name="comment" type="xs:string" />
+<xs:element maxOccurs="unbounded" minOccurs="0" name="questions" nillable="true" type="tns:question" />
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="responseSummary">
+<xs:sequence>
+<xs:element minOccurs="0" name="replierUid" type="xs:string" />
+<xs:element minOccurs="0" name="request" type="tns:requestShortSummary" />
+<xs:element minOccurs="0" name="responseId" type="xs:long" />
+</xs:sequence>
 
-     <xs:element minOccurs='0' name='replierUid' type='xs:string'/>
-     <xs:element minOccurs='0' name='request' type='tns:requestShortSummary'/>
-     <xs:element minOccurs='0' name='responseId' type='xs:long'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='requestShortSummary'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='creationDate' type='xs:dateTime'/>
-     <xs:element minOccurs='0' name='endDate' type='xs:dateTime'/>
+</xs:complexType>
+<xs:complexType name="answer">
+<xs:sequence>
+<xs:element minOccurs="0" name="answer" type="xs:string" />
+<xs:element minOccurs="0" name="comment" type="xs:string" />
+<xs:element name="questionNumber" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="question">
+<xs:sequence>
+<xs:element minOccurs="0" name="description" type="xs:string" />
+<xs:element name="number" type="xs:int" />
+<xs:element minOccurs="0" name="type" type="tns:questionType" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="requestShortSummary">
+<xs:sequence>
 
-     <xs:element name='requestId' type='xs:long'/>
-     <xs:element minOccurs='0' name='sender' type='xs:string'/>
-     <xs:element minOccurs='0' name='subject' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getTotalRepliedRequests'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='userUid' type='xs:string'/>
-    </xs:sequence>
+<xs:element minOccurs="0" name="creationDate" type="xs:dateTime" />
+<xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
+<xs:element name="requestId" type="xs:long" />
+<xs:element minOccurs="0" name="sender" type="xs:string" />
+<xs:element minOccurs="0" name="subject" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getRepliedRequests">
+<xs:sequence>
+<xs:element minOccurs="0" name="userUid" type="xs:string" />
+<xs:element name="startNum" type="xs:int" />
+<xs:element name="maxNum" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getRepliedRequestsResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:responseSummary" />
 
-   </xs:complexType>
-   <xs:complexType name='getTotalRepliedRequestsResponse'>
-    <xs:sequence>
-     <xs:element name='return' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getTotalOldRequests'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='userUid' type='xs:string'/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getOldRequests">
+<xs:sequence>
+<xs:element minOccurs="0" name="userUid" type="xs:string" />
+<xs:element name="startNum" type="xs:int" />
+<xs:element name="maxNum" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getOldRequestsResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:responseSummary" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getTotalRepliedRequests">
+<xs:sequence>
+<xs:element minOccurs="0" name="userUid" type="xs:string" />
 
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getTotalOldRequestsResponse'>
-    <xs:sequence>
-     <xs:element name='return' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getOldRequests'>
-    <xs:sequence>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getTotalRepliedRequestsResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:simpleType name="questionType">
+<xs:restriction base="xs:string">
+<xs:enumeration value="YES_NO" />
+<xs:enumeration value="FREE_TEXT" />
+<xs:enumeration value="MULTIPLE_CHOICE" />
+<xs:enumeration value="CALENDAR" />
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>
+  </wsdl:types>
 
-     <xs:element minOccurs='0' name='userUid' type='xs:string'/>
-     <xs:element name='startNum' type='xs:int'/>
-     <xs:element name='maxNum' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getOldRequestsResponse'>
-    <xs:sequence>
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:responseSummary'/>
-    </xs:sequence>
+  <wsdl:message name="getOldRequests">
+    <wsdl:part element="tns:getOldRequests" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTotalRepliedRequestsResponse">
+    <wsdl:part element="tns:getTotalRepliedRequestsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getOldRequestsResponse">
 
-   </xs:complexType>
-   <xs:complexType name='getResponseDetail'>
-    <xs:sequence>
-     <xs:element name='arg0' type='xs:long'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getResponseDetailResponse'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='return' type='tns:responseDetail'/>
+    <wsdl:part element="tns:getOldRequestsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRepliedRequests">
+    <wsdl:part element="tns:getRepliedRequests" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getResponseDetailResponse">
+    <wsdl:part element="tns:getResponseDetailResponse" name="parameters">
 
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='responseDetail'>
-    <xs:complexContent>
-     <xs:extension base='tns:responseSummary'>
-      <xs:sequence>
-       <xs:element maxOccurs='unbounded' minOccurs='0' name='answers' nillable='true' type='tns:answer'/>
-       <xs:element maxOccurs='unbounded' minOccurs='0' name='questions' nillable='true' type='tns:question'/>
-      </xs:sequence>
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getResponseDetail">
+    <wsdl:part element="tns:getResponseDetail" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTotalOldRequestsResponse">
+    <wsdl:part element="tns:getTotalOldRequestsResponse" name="parameters">
+    </wsdl:part>
 
-     </xs:extension>
-    </xs:complexContent>
-   </xs:complexType>
-   <xs:complexType name='answer'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='answer' type='xs:string'/>
-     <xs:element minOccurs='0' name='comment' type='xs:string'/>
-     <xs:element name='questionNumber' type='xs:int'/>
-    </xs:sequence>
+  </wsdl:message>
+  <wsdl:message name="getTotalOldRequests">
+    <wsdl:part element="tns:getTotalOldRequests" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getRepliedRequestsResponse">
+    <wsdl:part element="tns:getRepliedRequestsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
 
-   </xs:complexType>
-   <xs:complexType name='question'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='description' type='xs:string'/>
-     <xs:element name='number' type='xs:int'/>
-     <xs:element minOccurs='0' name='type' type='tns:questionType'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:simpleType name='questionType'>
+  <wsdl:message name="getTotalRepliedRequests">
+    <wsdl:part element="tns:getTotalRepliedRequests" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="KokuKunpoRequestService">
+    <wsdl:operation name="getTotalOldRequests">
+      <wsdl:input message="tns:getTotalOldRequests" name="getTotalOldRequests">
+    </wsdl:input>
+      <wsdl:output message="tns:getTotalOldRequestsResponse" name="getTotalOldRequestsResponse">
 
-    <xs:restriction base='xs:string'>
-     <xs:enumeration value='YES_NO'/>
-     <xs:enumeration value='FREE_TEXT'/>
-     <xs:enumeration value='MULTIPLE_CHOICE'/>
-     <xs:enumeration value='CALENDAR'/>
-    </xs:restriction>
-   </xs:simpleType>
-  </xs:schema>
- </types>
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getResponseDetail">
+      <wsdl:input message="tns:getResponseDetail" name="getResponseDetail">
+    </wsdl:input>
+      <wsdl:output message="tns:getResponseDetailResponse" name="getResponseDetailResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getRepliedRequests">
 
- <message name='KokuKunpoRequestService_getTotalOldRequestsResponse'>
-  <part element='tns:getTotalOldRequestsResponse' name='getTotalOldRequestsResponse'></part>
- </message>
- <message name='KokuKunpoRequestService_getResponseDetail'>
-  <part element='tns:getResponseDetail' name='getResponseDetail'></part>
- </message>
- <message name='KokuKunpoRequestService_getResponseDetailResponse'>
-  <part element='tns:getResponseDetailResponse' name='getResponseDetailResponse'></part>
- </message>
+      <wsdl:input message="tns:getRepliedRequests" name="getRepliedRequests">
+    </wsdl:input>
+      <wsdl:output message="tns:getRepliedRequestsResponse" name="getRepliedRequestsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getOldRequests">
+      <wsdl:input message="tns:getOldRequests" name="getOldRequests">
+    </wsdl:input>
+      <wsdl:output message="tns:getOldRequestsResponse" name="getOldRequestsResponse">
 
- <message name='KokuKunpoRequestService_getTotalRepliedRequestsResponse'>
-  <part element='tns:getTotalRepliedRequestsResponse' name='getTotalRepliedRequestsResponse'></part>
- </message>
- <message name='KokuKunpoRequestService_getTotalOldRequests'>
-  <part element='tns:getTotalOldRequests' name='getTotalOldRequests'></part>
- </message>
- <message name='KokuKunpoRequestService_getOldRequests'>
-  <part element='tns:getOldRequests' name='getOldRequests'></part>
- </message>
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTotalRepliedRequests">
+      <wsdl:input message="tns:getTotalRepliedRequests" name="getTotalRepliedRequests">
+    </wsdl:input>
+      <wsdl:output message="tns:getTotalRepliedRequestsResponse" name="getTotalRepliedRequestsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
 
- <message name='KokuKunpoRequestService_getRepliedRequests'>
-  <part element='tns:getRepliedRequests' name='getRepliedRequests'></part>
- </message>
- <message name='KokuKunpoRequestService_getRepliedRequestsResponse'>
-  <part element='tns:getRepliedRequestsResponse' name='getRepliedRequestsResponse'></part>
- </message>
- <message name='KokuKunpoRequestService_getTotalRepliedRequests'>
-  <part element='tns:getTotalRepliedRequests' name='getTotalRepliedRequests'></part>
- </message>
+  <wsdl:binding name="KokuKunpoRequestServiceSoapBinding" type="tns:KokuKunpoRequestService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getTotalOldRequests">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getTotalOldRequests">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getTotalOldRequestsResponse">
+        <soap:body use="literal" />
 
- <message name='KokuKunpoRequestService_getOldRequestsResponse'>
-  <part element='tns:getOldRequestsResponse' name='getOldRequestsResponse'></part>
- </message>
- <portType name='KokuKunpoRequestService'>
-  <operation name='getOldRequests' parameterOrder='getOldRequests'>
-   <input message='tns:KokuKunpoRequestService_getOldRequests'></input>
-   <output message='tns:KokuKunpoRequestService_getOldRequestsResponse'></output>
-  </operation>
-  <operation name='getRepliedRequests' parameterOrder='getRepliedRequests'>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getResponseDetail">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getResponseDetail">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getResponseDetailResponse">
+        <soap:body use="literal" />
 
-   <input message='tns:KokuKunpoRequestService_getRepliedRequests'></input>
-   <output message='tns:KokuKunpoRequestService_getRepliedRequestsResponse'></output>
-  </operation>
-  <operation name='getResponseDetail' parameterOrder='getResponseDetail'>
-   <input message='tns:KokuKunpoRequestService_getResponseDetail'></input>
-   <output message='tns:KokuKunpoRequestService_getResponseDetailResponse'></output>
-  </operation>
-  <operation name='getTotalOldRequests' parameterOrder='getTotalOldRequests'>
-   <input message='tns:KokuKunpoRequestService_getTotalOldRequests'></input>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getRepliedRequests">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getRepliedRequests">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getRepliedRequestsResponse">
+        <soap:body use="literal" />
 
-   <output message='tns:KokuKunpoRequestService_getTotalOldRequestsResponse'></output>
-  </operation>
-  <operation name='getTotalRepliedRequests' parameterOrder='getTotalRepliedRequests'>
-   <input message='tns:KokuKunpoRequestService_getTotalRepliedRequests'></input>
-   <output message='tns:KokuKunpoRequestService_getTotalRepliedRequestsResponse'></output>
-  </operation>
- </portType>
- <binding name='KokuKunpoRequestServiceBinding' type='tns:KokuKunpoRequestService'>
-  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getOldRequests">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getOldRequests">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getOldRequestsResponse">
+        <soap:body use="literal" />
 
-  <operation name='getOldRequests'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTotalRepliedRequests">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getTotalRepliedRequests">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getTotalRepliedRequestsResponse">
+        <soap:body use="literal" />
 
-  <operation name='getRepliedRequests'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-
-  <operation name='getResponseDetail'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-
-  <operation name='getTotalOldRequests'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-
-  <operation name='getTotalRepliedRequests'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-
- </binding>
- <service name='KokuKunpoRequestService'>
-  <port binding='tns:KokuKunpoRequestServiceBinding' name='KokuKunpoRequestServicePort'>
-   <soap:address location='http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuKunpoRequestServiceImpl'/>
-  </port>
- </service>
-</definitions>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="KokuKunpoRequestService">
+    <wsdl:port binding="tns:KokuKunpoRequestServiceSoapBinding" name="KokuKunpoRequestServicePort">
+      <soap:address location="http://kohtikumppanuutta-dev.dmz:8180/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuKunpoRequestServiceImpl" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

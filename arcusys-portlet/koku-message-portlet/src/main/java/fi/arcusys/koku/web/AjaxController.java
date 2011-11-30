@@ -168,7 +168,11 @@ public class AjaxController extends AbstractController {
 		List<Long> messageIds = new ArrayList<Long>();
 		
 		for(String msgId : messageList) {
-			messageIds.add(Long.parseLong(msgId));
+			try {
+				messageIds.add(Long.parseLong(msgId));				
+			} catch (NumberFormatException nfe) {
+				LOG.warn("Error while parsing messageIds. Username: '"+username+"'  MessageId is not valid number: '"+msgId+"'");
+			}
 		}
 		
 		String result = msghandle.archiveMessages(messageIds); // OK or FAIL
@@ -201,7 +205,11 @@ public class AjaxController extends AbstractController {
 		List<Long> messageIds = new ArrayList<Long>();
 		
 		for(String msgId : messageList) {
-			messageIds.add(Long.parseLong(msgId));
+			try {
+				messageIds.add(Long.parseLong(msgId));
+			} catch (NumberFormatException nfe) {
+				LOG.warn("Couldn't delete message! Invalid messageId. Username: '"+ username + "' MessageId: '"+ msgId + "'");
+			}
 		}
 		
 		String result = msghandle.deleteMessages(messageIds); // OK or FAIL

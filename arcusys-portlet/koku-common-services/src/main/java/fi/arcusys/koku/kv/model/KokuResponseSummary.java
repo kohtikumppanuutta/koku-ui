@@ -12,7 +12,7 @@ public class KokuResponseSummary {
     
     
 	public KokuResponseSummary(ResponseSummary summary) {
-		if (summary != null) {			
+		if (summary != null) {
 			replierUid = summary.getReplierUid();
 			responseId = summary.getResponseId();
 			if (summary.getRequest() != null) {

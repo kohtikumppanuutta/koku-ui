@@ -1,354 +1,382 @@
-<definitions name='KokuKunpoAppointmentService' targetNamespace='http://soa.av.koku.arcusys.fi/' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://soa.av.koku.arcusys.fi/' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
- <types>
-  <xs:schema targetNamespace='http://soa.av.koku.arcusys.fi/' version='1.0' xmlns:tns='http://soa.av.koku.arcusys.fi/' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
-   <xs:element name='cancelRespondedAppointment' type='tns:cancelRespondedAppointment'/>
-   <xs:element name='cancelRespondedAppointmentResponse' type='tns:cancelRespondedAppointmentResponse'/>
-   <xs:element name='getAppointmentRespondedById' type='tns:getAppointmentRespondedById'/>
-   <xs:element name='getAppointmentRespondedByIdResponse' type='tns:getAppointmentRespondedByIdResponse'/>
-   <xs:element name='getAssignedAppointments' type='tns:getAssignedAppointments'/>
-   <xs:element name='getAssignedAppointmentsResponse' type='tns:getAssignedAppointmentsResponse'/>
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="KokuKunpoAppointmentService" targetNamespace="http://soa.av.koku.arcusys.fi/" xmlns:ns1="http://schemas.xmlsoap.org/wsdl/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://soa.av.koku.arcusys.fi/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema elementFormDefault="unqualified" targetNamespace="http://soa.av.koku.arcusys.fi/" version="1.0" xmlns:tns="http://soa.av.koku.arcusys.fi/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="cancelRespondedAppointment" type="tns:cancelRespondedAppointment" />
+<xs:element name="cancelRespondedAppointmentResponse" type="tns:cancelRespondedAppointmentResponse" />
+<xs:element name="getAppointmentRespondedById" type="tns:getAppointmentRespondedById" />
+<xs:element name="getAppointmentRespondedByIdResponse" type="tns:getAppointmentRespondedByIdResponse" />
+<xs:element name="getAssignedAppointments" type="tns:getAssignedAppointments" />
+<xs:element name="getAssignedAppointmentsResponse" type="tns:getAssignedAppointmentsResponse" />
+<xs:element name="getOldAppointments" type="tns:getOldAppointments" />
+<xs:element name="getOldAppointmentsResponse" type="tns:getOldAppointmentsResponse" />
+<xs:element name="getRespondedAppointments" type="tns:getRespondedAppointments" />
+<xs:element name="getRespondedAppointmentsResponse" type="tns:getRespondedAppointmentsResponse" />
+<xs:element name="getTotalAssignedAppointments" type="tns:getTotalAssignedAppointments" />
+<xs:element name="getTotalAssignedAppointmentsResponse" type="tns:getTotalAssignedAppointmentsResponse" />
+<xs:element name="getTotalOldAppointments" type="tns:getTotalOldAppointments" />
 
-   <xs:element name='getOldAppointments' type='tns:getOldAppointments'/>
-   <xs:element name='getOldAppointmentsResponse' type='tns:getOldAppointmentsResponse'/>
-   <xs:element name='getRespondedAppointments' type='tns:getRespondedAppointments'/>
-   <xs:element name='getRespondedAppointmentsResponse' type='tns:getRespondedAppointmentsResponse'/>
-   <xs:element name='getTotalAssignedAppointments' type='tns:getTotalAssignedAppointments'/>
-   <xs:element name='getTotalAssignedAppointmentsResponse' type='tns:getTotalAssignedAppointmentsResponse'/>
-   <xs:element name='getTotalOldAppointments' type='tns:getTotalOldAppointments'/>
-   <xs:element name='getTotalOldAppointmentsResponse' type='tns:getTotalOldAppointmentsResponse'/>
-   <xs:element name='getTotalRespondedAppointments' type='tns:getTotalRespondedAppointments'/>
+<xs:element name="getTotalOldAppointmentsResponse" type="tns:getTotalOldAppointmentsResponse" />
+<xs:element name="getTotalRespondedAppointments" type="tns:getTotalRespondedAppointments" />
+<xs:element name="getTotalRespondedAppointmentsResponse" type="tns:getTotalRespondedAppointmentsResponse" />
+<xs:complexType name="getTotalRespondedAppointments">
+<xs:sequence>
+<xs:element minOccurs="0" name="user" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getTotalRespondedAppointmentsResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getAppointmentRespondedById">
+<xs:sequence>
+<xs:element name="appointmentId" type="xs:long" />
+<xs:element minOccurs="0" name="targetUser" type="xs:string" />
 
-   <xs:element name='getTotalRespondedAppointmentsResponse' type='tns:getTotalRespondedAppointmentsResponse'/>
-   <xs:complexType name='getAssignedAppointments'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='user' type='xs:string'/>
-     <xs:element name='startNum' type='xs:int'/>
-     <xs:element name='maxNum' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getAssignedAppointmentsResponse'>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getAppointmentRespondedByIdResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:appointmentRespondedTO" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="appointmentRespondedTO">
+<xs:complexContent>
+<xs:extension base="tns:appointmentSummary">
+<xs:sequence>
+<xs:element minOccurs="0" name="approvedSlot" type="tns:appointmentSlot" />
+<xs:element minOccurs="0" name="employeesCancelComent" type="xs:string" />
+<xs:element minOccurs="0" name="replier" type="xs:string" />
+<xs:element minOccurs="0" name="replierComment" type="xs:string" />
+<xs:element minOccurs="0" name="targetPerson" type="xs:string" />
+</xs:sequence>
 
-    <xs:sequence>
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:appointmentWithTarget'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='appointmentWithTarget'>
-    <xs:complexContent>
-     <xs:extension base='tns:appointmentSummary'>
-      <xs:sequence>
-       <xs:element minOccurs='0' name='targetPerson' type='xs:string'/>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="appointmentSummary">
+<xs:sequence>
+<xs:element name="appointmentId" type="xs:long" />
+<xs:element minOccurs="0" name="status" type="tns:appointmentSummaryStatus" />
+<xs:element minOccurs="0" name="sender" type="xs:string" />
+<xs:element minOccurs="0" name="subject" type="xs:string" />
+<xs:element minOccurs="0" name="description" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="appointmentSlot">
+<xs:sequence>
+<xs:element name="slotNumber" type="xs:int" />
+<xs:element minOccurs="0" name="appointmentDate" type="xs:date" />
+<xs:element minOccurs="0" name="startTime" type="xs:time" />
 
-      </xs:sequence>
-     </xs:extension>
-    </xs:complexContent>
-   </xs:complexType>
-   <xs:complexType name='appointmentSummary'>
-    <xs:sequence>
-     <xs:element name='appointmentId' type='xs:long'/>
-     <xs:element minOccurs='0' name='status' type='tns:appointmentSummaryStatus'/>
-     <xs:element minOccurs='0' name='sender' type='xs:string'/>
+<xs:element minOccurs="0" name="endTime" type="xs:time" />
+<xs:element minOccurs="0" name="location" type="xs:string" />
+<xs:element minOccurs="0" name="comment" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="cancelRespondedAppointment">
+<xs:sequence>
+<xs:element name="appointmentId" type="xs:long" />
+<xs:element minOccurs="0" name="targetUser" type="xs:string" />
+<xs:element minOccurs="0" name="user" type="xs:string" />
+<xs:element minOccurs="0" name="comment" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="cancelRespondedAppointmentResponse">
+<xs:sequence />
+</xs:complexType>
+<xs:complexType name="getOldAppointments">
 
-     <xs:element minOccurs='0' name='subject' type='xs:string'/>
-     <xs:element minOccurs='0' name='description' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getTotalAssignedAppointments'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='user' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
+<xs:sequence>
+<xs:element minOccurs="0" name="user" type="xs:string" />
+<xs:element name="startNum" type="xs:int" />
+<xs:element name="maxNum" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getOldAppointmentsResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:appointmentWithTarget" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="appointmentWithTarget">
+<xs:complexContent>
+<xs:extension base="tns:appointmentSummary">
+<xs:sequence>
+<xs:element minOccurs="0" name="targetPerson" type="xs:string" />
+</xs:sequence>
 
-   <xs:complexType name='getTotalAssignedAppointmentsResponse'>
-    <xs:sequence>
-     <xs:element name='return' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getTotalRespondedAppointments'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='user' type='xs:string'/>
-    </xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="getRespondedAppointments">
+<xs:sequence>
+<xs:element minOccurs="0" name="user" type="xs:string" />
+<xs:element name="startNum" type="xs:int" />
+<xs:element name="maxNum" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getRespondedAppointmentsResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:appointmentWithTarget" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getTotalOldAppointments">
+<xs:sequence>
 
-   </xs:complexType>
-   <xs:complexType name='getTotalRespondedAppointmentsResponse'>
-    <xs:sequence>
-     <xs:element name='return' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getRespondedAppointments'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='user' type='xs:string'/>
+<xs:element minOccurs="0" name="user" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getTotalOldAppointmentsResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getAssignedAppointments">
+<xs:sequence>
+<xs:element minOccurs="0" name="user" type="xs:string" />
+<xs:element name="startNum" type="xs:int" />
+<xs:element name="maxNum" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getAssignedAppointmentsResponse">
+<xs:sequence>
 
-     <xs:element name='startNum' type='xs:int'/>
-     <xs:element name='maxNum' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getRespondedAppointmentsResponse'>
-    <xs:sequence>
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:appointmentWithTarget'/>
-    </xs:sequence>
-   </xs:complexType>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:appointmentWithTarget" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getTotalAssignedAppointments">
+<xs:sequence>
+<xs:element minOccurs="0" name="user" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getTotalAssignedAppointmentsResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:simpleType name="appointmentSummaryStatus">
+<xs:restriction base="xs:string">
+<xs:enumeration value="Created" />
+<xs:enumeration value="Approved" />
 
-   <xs:complexType name='getAppointmentRespondedById'>
-    <xs:sequence>
-     <xs:element name='appointmentId' type='xs:long'/>
-     <xs:element minOccurs='0' name='targetUser' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getAppointmentRespondedByIdResponse'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='return' type='tns:appointmentRespondedTO'/>
+<xs:enumeration value="Cancelled" />
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getRespondedAppointmentsResponse">
+    <wsdl:part element="tns:getRespondedAppointmentsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTotalAssignedAppointmentsResponse">
+    <wsdl:part element="tns:getTotalAssignedAppointmentsResponse" name="parameters">
 
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='appointmentRespondedTO'>
-    <xs:complexContent>
-     <xs:extension base='tns:appointmentSummary'>
-      <xs:sequence>
-       <xs:element minOccurs='0' name='approvedSlot' type='tns:appointmentSlot'/>
-       <xs:element minOccurs='0' name='replier' type='xs:string'/>
-       <xs:element minOccurs='0' name='replierComment' type='xs:string'/>
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTotalAssignedAppointments">
+    <wsdl:part element="tns:getTotalAssignedAppointments" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelRespondedAppointmentResponse">
+    <wsdl:part element="tns:cancelRespondedAppointmentResponse" name="parameters">
+    </wsdl:part>
 
-       <xs:element minOccurs='0' name='targetPerson' type='xs:string'/>
-      </xs:sequence>
-     </xs:extension>
-    </xs:complexContent>
-   </xs:complexType>
-   <xs:complexType name='appointmentSlot'>
-    <xs:sequence>
-     <xs:element name='slotNumber' type='xs:int'/>
-     <xs:element minOccurs='0' name='appointmentDate' type='xs:date'/>
+  </wsdl:message>
+  <wsdl:message name="getOldAppointments">
+    <wsdl:part element="tns:getOldAppointments" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getOldAppointmentsResponse">
+    <wsdl:part element="tns:getOldAppointmentsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
 
-     <xs:element minOccurs='0' name='startTime' type='xs:time'/>
-     <xs:element minOccurs='0' name='endTime' type='xs:time'/>
-     <xs:element minOccurs='0' name='location' type='xs:string'/>
-     <xs:element minOccurs='0' name='comment' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='cancelRespondedAppointment'>
-    <xs:sequence>
-     <xs:element name='appointmentId' type='xs:long'/>
+  <wsdl:message name="getTotalOldAppointmentsResponse">
+    <wsdl:part element="tns:getTotalOldAppointmentsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAssignedAppointments">
+    <wsdl:part element="tns:getAssignedAppointments" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAssignedAppointmentsResponse">
 
-     <xs:element minOccurs='0' name='targetUser' type='xs:string'/>
-     <xs:element minOccurs='0' name='user' type='xs:string'/>
-     <xs:element minOccurs='0' name='comment' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='cancelRespondedAppointmentResponse'>
-    <xs:sequence/>
-   </xs:complexType>
-   <xs:complexType name='getTotalOldAppointments'>
+    <wsdl:part element="tns:getAssignedAppointmentsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTotalRespondedAppointments">
+    <wsdl:part element="tns:getTotalRespondedAppointments" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAppointmentRespondedByIdResponse">
+    <wsdl:part element="tns:getAppointmentRespondedByIdResponse" name="parameters">
 
-    <xs:sequence>
-     <xs:element minOccurs='0' name='user' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getTotalOldAppointmentsResponse'>
-    <xs:sequence>
-     <xs:element name='return' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTotalRespondedAppointmentsResponse">
+    <wsdl:part element="tns:getTotalRespondedAppointmentsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAppointmentRespondedById">
+    <wsdl:part element="tns:getAppointmentRespondedById" name="parameters">
+    </wsdl:part>
 
-   <xs:complexType name='getOldAppointments'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='user' type='xs:string'/>
-     <xs:element name='startNum' type='xs:int'/>
-     <xs:element name='maxNum' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getOldAppointmentsResponse'>
-    <xs:sequence>
+  </wsdl:message>
+  <wsdl:message name="getRespondedAppointments">
+    <wsdl:part element="tns:getRespondedAppointments" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTotalOldAppointments">
+    <wsdl:part element="tns:getTotalOldAppointments" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
 
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:appointmentWithTarget'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:simpleType name='appointmentSummaryStatus'>
-    <xs:restriction base='xs:string'>
-     <xs:enumeration value='Created'/>
-     <xs:enumeration value='Approved'/>
-     <xs:enumeration value='Cancelled'/>
-    </xs:restriction>
+  <wsdl:message name="cancelRespondedAppointment">
+    <wsdl:part element="tns:cancelRespondedAppointment" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="KokuKunpoAppointmentService">
+    <wsdl:operation name="getTotalRespondedAppointments">
+      <wsdl:input message="tns:getTotalRespondedAppointments" name="getTotalRespondedAppointments">
+    </wsdl:input>
+      <wsdl:output message="tns:getTotalRespondedAppointmentsResponse" name="getTotalRespondedAppointmentsResponse">
 
-   </xs:simpleType>
-  </xs:schema>
- </types>
- <message name='KokuKunpoAppointmentService_getTotalOldAppointments'>
-  <part element='tns:getTotalOldAppointments' name='getTotalOldAppointments'></part>
- </message>
- <message name='KokuKunpoAppointmentService_getAppointmentRespondedById'>
-  <part element='tns:getAppointmentRespondedById' name='getAppointmentRespondedById'></part>
- </message>
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAppointmentRespondedById">
+      <wsdl:input message="tns:getAppointmentRespondedById" name="getAppointmentRespondedById">
+    </wsdl:input>
+      <wsdl:output message="tns:getAppointmentRespondedByIdResponse" name="getAppointmentRespondedByIdResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cancelRespondedAppointment">
 
- <message name='KokuKunpoAppointmentService_getOldAppointments'>
-  <part element='tns:getOldAppointments' name='getOldAppointments'></part>
- </message>
- <message name='KokuKunpoAppointmentService_getOldAppointmentsResponse'>
-  <part element='tns:getOldAppointmentsResponse' name='getOldAppointmentsResponse'></part>
- </message>
- <message name='KokuKunpoAppointmentService_getTotalOldAppointmentsResponse'>
-  <part element='tns:getTotalOldAppointmentsResponse' name='getTotalOldAppointmentsResponse'></part>
- </message>
+      <wsdl:input message="tns:cancelRespondedAppointment" name="cancelRespondedAppointment">
+    </wsdl:input>
+      <wsdl:output message="tns:cancelRespondedAppointmentResponse" name="cancelRespondedAppointmentResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getOldAppointments">
+      <wsdl:input message="tns:getOldAppointments" name="getOldAppointments">
+    </wsdl:input>
+      <wsdl:output message="tns:getOldAppointmentsResponse" name="getOldAppointmentsResponse">
 
- <message name='KokuKunpoAppointmentService_getTotalAssignedAppointments'>
-  <part element='tns:getTotalAssignedAppointments' name='getTotalAssignedAppointments'></part>
- </message>
- <message name='KokuKunpoAppointmentService_getTotalRespondedAppointmentsResponse'>
-  <part element='tns:getTotalRespondedAppointmentsResponse' name='getTotalRespondedAppointmentsResponse'></part>
- </message>
- <message name='KokuKunpoAppointmentService_getTotalAssignedAppointmentsResponse'>
-  <part element='tns:getTotalAssignedAppointmentsResponse' name='getTotalAssignedAppointmentsResponse'></part>
- </message>
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getRespondedAppointments">
+      <wsdl:input message="tns:getRespondedAppointments" name="getRespondedAppointments">
+    </wsdl:input>
+      <wsdl:output message="tns:getRespondedAppointmentsResponse" name="getRespondedAppointmentsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTotalOldAppointments">
 
- <message name='KokuKunpoAppointmentService_getAssignedAppointments'>
-  <part element='tns:getAssignedAppointments' name='getAssignedAppointments'></part>
- </message>
- <message name='KokuKunpoAppointmentService_getRespondedAppointments'>
-  <part element='tns:getRespondedAppointments' name='getRespondedAppointments'></part>
- </message>
- <message name='KokuKunpoAppointmentService_getRespondedAppointmentsResponse'>
-  <part element='tns:getRespondedAppointmentsResponse' name='getRespondedAppointmentsResponse'></part>
- </message>
+      <wsdl:input message="tns:getTotalOldAppointments" name="getTotalOldAppointments">
+    </wsdl:input>
+      <wsdl:output message="tns:getTotalOldAppointmentsResponse" name="getTotalOldAppointmentsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAssignedAppointments">
+      <wsdl:input message="tns:getAssignedAppointments" name="getAssignedAppointments">
+    </wsdl:input>
+      <wsdl:output message="tns:getAssignedAppointmentsResponse" name="getAssignedAppointmentsResponse">
 
- <message name='KokuKunpoAppointmentService_getAssignedAppointmentsResponse'>
-  <part element='tns:getAssignedAppointmentsResponse' name='getAssignedAppointmentsResponse'></part>
- </message>
- <message name='KokuKunpoAppointmentService_getTotalRespondedAppointments'>
-  <part element='tns:getTotalRespondedAppointments' name='getTotalRespondedAppointments'></part>
- </message>
- <message name='KokuKunpoAppointmentService_cancelRespondedAppointment'>
-  <part element='tns:cancelRespondedAppointment' name='cancelRespondedAppointment'></part>
- </message>
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTotalAssignedAppointments">
+      <wsdl:input message="tns:getTotalAssignedAppointments" name="getTotalAssignedAppointments">
+    </wsdl:input>
+      <wsdl:output message="tns:getTotalAssignedAppointmentsResponse" name="getTotalAssignedAppointmentsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
 
- <message name='KokuKunpoAppointmentService_cancelRespondedAppointmentResponse'>
-  <part element='tns:cancelRespondedAppointmentResponse' name='cancelRespondedAppointmentResponse'></part>
- </message>
- <message name='KokuKunpoAppointmentService_getAppointmentRespondedByIdResponse'>
-  <part element='tns:getAppointmentRespondedByIdResponse' name='getAppointmentRespondedByIdResponse'></part>
- </message>
- <portType name='KokuKunpoAppointmentService'>
-  <operation name='cancelRespondedAppointment' parameterOrder='cancelRespondedAppointment'>
-   <input message='tns:KokuKunpoAppointmentService_cancelRespondedAppointment'></input>
+  <wsdl:binding name="KokuKunpoAppointmentServiceSoapBinding" type="tns:KokuKunpoAppointmentService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getTotalRespondedAppointments">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getTotalRespondedAppointments">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getTotalRespondedAppointmentsResponse">
+        <soap:body use="literal" />
 
-   <output message='tns:KokuKunpoAppointmentService_cancelRespondedAppointmentResponse'></output>
-  </operation>
-  <operation name='getAppointmentRespondedById' parameterOrder='getAppointmentRespondedById'>
-   <input message='tns:KokuKunpoAppointmentService_getAppointmentRespondedById'></input>
-   <output message='tns:KokuKunpoAppointmentService_getAppointmentRespondedByIdResponse'></output>
-  </operation>
-  <operation name='getAssignedAppointments' parameterOrder='getAssignedAppointments'>
-   <input message='tns:KokuKunpoAppointmentService_getAssignedAppointments'></input>
-   <output message='tns:KokuKunpoAppointmentService_getAssignedAppointmentsResponse'></output>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAppointmentRespondedById">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getAppointmentRespondedById">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getAppointmentRespondedByIdResponse">
+        <soap:body use="literal" />
 
-  </operation>
-  <operation name='getOldAppointments' parameterOrder='getOldAppointments'>
-   <input message='tns:KokuKunpoAppointmentService_getOldAppointments'></input>
-   <output message='tns:KokuKunpoAppointmentService_getOldAppointmentsResponse'></output>
-  </operation>
-  <operation name='getRespondedAppointments' parameterOrder='getRespondedAppointments'>
-   <input message='tns:KokuKunpoAppointmentService_getRespondedAppointments'></input>
-   <output message='tns:KokuKunpoAppointmentService_getRespondedAppointmentsResponse'></output>
-  </operation>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cancelRespondedAppointment">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="cancelRespondedAppointment">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="cancelRespondedAppointmentResponse">
+        <soap:body use="literal" />
 
-  <operation name='getTotalAssignedAppointments' parameterOrder='getTotalAssignedAppointments'>
-   <input message='tns:KokuKunpoAppointmentService_getTotalAssignedAppointments'></input>
-   <output message='tns:KokuKunpoAppointmentService_getTotalAssignedAppointmentsResponse'></output>
-  </operation>
-  <operation name='getTotalOldAppointments' parameterOrder='getTotalOldAppointments'>
-   <input message='tns:KokuKunpoAppointmentService_getTotalOldAppointments'></input>
-   <output message='tns:KokuKunpoAppointmentService_getTotalOldAppointmentsResponse'></output>
-  </operation>
-  <operation name='getTotalRespondedAppointments' parameterOrder='getTotalRespondedAppointments'>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getOldAppointments">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getOldAppointments">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getOldAppointmentsResponse">
+        <soap:body use="literal" />
 
-   <input message='tns:KokuKunpoAppointmentService_getTotalRespondedAppointments'></input>
-   <output message='tns:KokuKunpoAppointmentService_getTotalRespondedAppointmentsResponse'></output>
-  </operation>
- </portType>
- <binding name='KokuKunpoAppointmentServiceBinding' type='tns:KokuKunpoAppointmentService'>
-  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
-  <operation name='cancelRespondedAppointment'>
-   <soap:operation soapAction=''/>
-   <input>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getRespondedAppointments">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getRespondedAppointments">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getRespondedAppointmentsResponse">
+        <soap:body use="literal" />
 
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getAppointmentRespondedById'>
-   <soap:operation soapAction=''/>
-   <input>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTotalOldAppointments">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getTotalOldAppointments">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getTotalOldAppointmentsResponse">
+        <soap:body use="literal" />
 
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getAssignedAppointments'>
-   <soap:operation soapAction=''/>
-   <input>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAssignedAppointments">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getAssignedAppointments">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getAssignedAppointmentsResponse">
+        <soap:body use="literal" />
 
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getOldAppointments'>
-   <soap:operation soapAction=''/>
-   <input>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTotalAssignedAppointments">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getTotalAssignedAppointments">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getTotalAssignedAppointmentsResponse">
+        <soap:body use="literal" />
 
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getRespondedAppointments'>
-   <soap:operation soapAction=''/>
-   <input>
-
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getTotalAssignedAppointments'>
-   <soap:operation soapAction=''/>
-   <input>
-
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getTotalOldAppointments'>
-   <soap:operation soapAction=''/>
-   <input>
-
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getTotalRespondedAppointments'>
-   <soap:operation soapAction=''/>
-   <input>
-
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
- </binding>
- <service name='KokuKunpoAppointmentService'>
-  <port binding='tns:KokuKunpoAppointmentServiceBinding' name='KokuKunpoAppointmentServicePort'>
-
-   <soap:address location='http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuKunpoAppointmentServiceImpl'/>
-  </port>
- </service>
-</definitions>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="KokuKunpoAppointmentService">
+    <wsdl:port binding="tns:KokuKunpoAppointmentServiceSoapBinding" name="KokuKunpoAppointmentServicePort">
+      <soap:address location="http://kohtikumppanuutta-dev.dmz:8180/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuKunpoAppointmentServiceImpl" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

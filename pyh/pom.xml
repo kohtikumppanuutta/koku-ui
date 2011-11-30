@@ -3,7 +3,7 @@
   <parent>
     <artifactId>koku-ui</artifactId>
     <groupId>kohti-kumppanuutta</groupId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
   </parent>
   <artifactId>pyh-portlet</artifactId>
   <packaging>war</packaging>
@@ -13,7 +13,7 @@
   <properties>
     <lokservice-api.version>0.0.18</lokservice-api.version>
     <customerservice-api.version>0.0.23</customerservice-api.version>
-    <portlet-common.version>0.0.19</portlet-common.version>    
+    <portlet-common.version>0.0.21</portlet-common.version>    
   </properties>
 
   <dependencies>

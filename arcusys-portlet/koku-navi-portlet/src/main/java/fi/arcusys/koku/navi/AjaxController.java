@@ -24,7 +24,7 @@ import fi.arcusys.koku.kv.model.KokuFolderType;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.users.UserIdResolver;
 import fi.arcusys.koku.util.PortalRole;
-import fi.koku.settings.KoKuPropertiesUtil;
+import fi.arcusys.koku.util.Properties;
 
 /**
  * Handles ajax request and return the response with json string
@@ -37,14 +37,6 @@ import fi.koku.settings.KoKuPropertiesUtil;
 public class AjaxController {
 
 	private static final Logger LOGGER = Logger.getLogger(AjaxController.class);	
-	private static final String PORTAL_MODE;
-	
-	static {
-		PORTAL_MODE = KoKuPropertiesUtil.get("environment.name");
-		if (PORTAL_MODE == null) {
-			throw new ExceptionInInitializerError("environment.name is null!");
-		}
-	}
 	
 	/**
 	 * Gets the amount of new unread messages for user
@@ -55,7 +47,7 @@ public class AjaxController {
 	 */
 	@ResourceMapping(value = "update")
 	public String showAjax(ModelMap modelmap, PortletRequest request, PortletResponse response) {
-
+		
 		String username = request.getRemoteUser();
 		String userId = null;
 				
@@ -77,8 +69,11 @@ public class AjaxController {
 				token = resolveIntalioToken(session, username);
 				session.setAttribute(ATTR_TOKEN, token);
 			} catch (IntalioAuthException iae) {
-				LOGGER.error("Couldn't resolve intalio token. Username: '"+username+"' ErrorMsg: "+iae.getMessage());
+				LOGGER.error("Authentication exception. Invalid user. Username: '"+username+"' ErrorMsg: "+iae.getMessage());
 				session.setAttribute(ATTR_TOKEN, "No token");
+			} catch (Exception e) {
+				session.setAttribute(ATTR_TOKEN, "No token");
+				LOGGER.error("Error while trying to resolve Intalio token. Username: '"+username+"': ",e);
 			}
 		}
 		
@@ -210,12 +205,12 @@ public class AjaxController {
 	 * @return PortalRole
 	 */
 	protected PortalRole getPortalRole() {
-		if (PORTAL_MODE.contains(PORTAL_MODE_KUNPO)) {
+		if (Properties.PORTAL_MODE.contains(PORTAL_MODE_KUNPO)) {
 			return PortalRole.CITIZEN;
-		} else if (PORTAL_MODE.contains(PORTAL_MODE_LOORA)) {
+		} else if (Properties.PORTAL_MODE.contains(PORTAL_MODE_LOORA)) {
 			return PortalRole.EMPLOYEE;
 		} else {
-			throw new IllegalArgumentException("PortalMode not supported: "+ PORTAL_MODE);
+			throw new IllegalArgumentException("PortalMode not supported: "+ Properties.PORTAL_MODE);
 		}
 	}
 }

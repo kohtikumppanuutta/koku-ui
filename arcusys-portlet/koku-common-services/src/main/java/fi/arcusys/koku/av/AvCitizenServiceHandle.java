@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.log4j.Logger;
+import org.omg.CORBA.CTX_RESTRICT_SCOPE;
 import org.springframework.context.NoSuchMessageException;
 
 import fi.arcusys.koku.AbstractHandle;
@@ -88,7 +89,13 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 	 * @return detailed citizen appointment
 	 */
 	public CitizenAppointment getAppointmentById(String appointmentId, String targetUser) {
-		long  appId = (long) Long.parseLong(appointmentId);
+		long  appId = 0;
+		try {
+			appId = (long) Long.parseLong(appointmentId);
+		} catch (NumberFormatException nfe) {
+			LOG.warn("Invalid appointmentId. AppointmentId: '"+appointmentId+"'");
+			return null;
+		}
 		CitizenAppointment ctzAppointment = new CitizenAppointment();
 		AppointmentRespondedTO appointment = acs.getAppointmentRespondedById(appId, targetUser);
 		ctzAppointment.setAppointmentId(appointment.getAppointmentId());
@@ -104,6 +111,7 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 		ctzAppointment.setReplier(appointment.getReplier());
 		ctzAppointment.setReplierComment(appointment.getReplierComment());
 		ctzAppointment.setTargetPerson(appointment.getTargetPerson());
+		ctzAppointment.setCancellationComment(appointment.getEmployeesCancelComent());
 		
 		return ctzAppointment;		
 	}
@@ -151,7 +159,13 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 	 * @return operation response
 	 */
 	public String cancelAppointments(String appointmentIdStr, String targetPerson, String comment) {
-		long  appId = (long) Long.parseLong(appointmentIdStr);
+		long  appId = 0;
+		try {
+			appId = (long) Long.parseLong(appointmentIdStr);
+		} catch (NumberFormatException nfe) {
+			LOG.warn("Invalid appointmentId. AppointmentId: '"+appointmentIdStr+"'");
+			return RESPONSE_FAIL;
+		}
 		
 		try {
 			acs.cancelAppointment(appId, targetPerson, loginUserId, comment);

@@ -6,10 +6,6 @@
          <portlet-ref>koku-message-portlet</portlet-ref>         
          <portlet-preferences>
 			<preference>
-				<name>portletPath</name>
-				<value>/portal/private/classic/Message</value>
-			</preference>
-			<preference>
 				<name>refreshDuration</name>
 				<value>60</value>
 			</preference>

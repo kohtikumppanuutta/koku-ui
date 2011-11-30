@@ -12,7 +12,6 @@
 
 <%
 	/* Parses the parent path url from the portlet renderURL */
-	final String defaultPath = defaultPathPref;
 	String currentPage = "";
 	String actionParam = "";	
 	
@@ -251,7 +250,7 @@
 			<ul class="child">
 					<!-- Show "New message" only for employee in Jboss portal -->
 				<c:if test="${fn:contains(naviPortalMode, 'loora')}">
-				<li id="msg_new"><a href="<%= defaultPath %>/NewMessage">Uusi viesti</a> </li>
+				<li id="msg_new"><a href="<%= defaultPath %><%= NavigationPortletProperties.MESSAGES_NEW_MESSAGE %>">Uusi viesti</a> </li>
 				</c:if>
 				<li id="msg_inbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')">Saapuneet</a><span id="inbox_num" class="message_num"></span></li>
 				<li id="msg_outbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_outbox')">Lähetetyt</a></li>
@@ -269,7 +268,7 @@
 		<c:if test="${fn:contains(naviPortalMode, 'kunpo')}">
 		<li><span class="naviLinkHeaderNonLink">Pyynnöt</span>
 			<ul class="child">
-				<li id="req_valid_request"><a href="<%= defaultPath %>/ValidRequest">Saapuneet</a><span id="requests_num" class="message_num"></span></li>
+				<li id="req_valid_request"><a href="<%= defaultPath %><%= NavigationPortletProperties.REQUESTS_RECIEVED_REQUESTS %>">Saapuneet</a><span id="requests_num" class="message_num"></span></li>
 				<li id="<%=Constants.TASK_TYPE_REQUEST_REPLIED %>"><a href="javascript:void(0)" onclick="navigateToPage('<%=Constants.TASK_TYPE_REQUEST_REPLIED %>')">Vastatut</a></li>
 				<li id="<%=Constants.TASK_TYPE_REQUEST_OLD %>"><a href="javascript:void(0)" onclick="navigateToPage('<%=Constants.TASK_TYPE_REQUEST_OLD %>')">Vanhat</a></li>
 			</ul>
@@ -279,8 +278,8 @@
 		<c:if test="${fn:contains(naviPortalMode, 'loora')}">
 		<li><span class="naviLinkHeaderNonLink">Pyynnöt</span>
 			<ul class="child">
-				<li id="req_new"><a href="<%= defaultPath %>/NewRequest">Uusi pyyntö</a></li>
-				<li id="luopohja"><a href="<%= defaultPath %>/LuoPohja">Luo uusi pohja</a></li>
+				<li id="req_new"><a href="<%= defaultPath %><%= NavigationPortletProperties.REQUESTS_NEW_REQUEST %>">Uusi pyyntö</a></li>
+				<li id="luopohja"><a href="<%= defaultPath %><%= NavigationPortletProperties.REQUESTS_NEW_TEMPLATE%>">Luo uusi pohja</a></li>
 				<li><span class="naviLinkHeaderNonLink">Lähetetyt</span>
 					<ul class="child">
 						<li id="<%=Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>"><a href="javascript:void(0)" onclick="navigateToPage('<%=Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>')">Avoimet</a></li>
@@ -306,7 +305,7 @@
 		<c:if test="${fn:contains(naviPortalMode, 'loora')}">
 		<li><span class="naviLinkHeaderNonLink">Tapaamiset</span>
 			<ul class="child">
-				<li id="app_new"><a href="<%= defaultPath %>/NewAppointment">Uusi tapaaminen</a></li>
+				<li id="app_new"><a href="<%= defaultPath %><%= NavigationPortletProperties.APPOINTMENTS_NEW_APPOINTMENT %>" >Uusi tapaaminen</a></li>
 				<li id="app_inbox_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_inbox_employee')">Avoimet</a></li>
 				<li id="app_response_employee"><a href="javascript:void(0)" onclick="navigateToPage('app_response_employee')">Valmiit</a></li>
 			</ul></li>
@@ -325,12 +324,12 @@
 				
 			<li><span class="naviLinkHeaderNonLink">Valtakirjat</span>
 				<ul class="child">
-					<li id="valtakirjaconsent"><a href="<%= defaultPath %>/ValtakirjaConsent">Anna valtakirja</a></li>
+					<li id="valtakirjaconsent"><a href="<%= defaultPath %><%= NavigationPortletProperties.WARRANTS_NEW_WARRANT %>">Anna valtakirja</a></li>
 					<li id="<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED%>')">Vastaanotetut</a></li>
 					<li><a href="#">Omat valtakirjat</a>
 						<ul class="child">
 							<li id="<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT%>')">Valtuuttajana</a></li>
-							<li id="selaaOmiaValtakirjoja"><a href="<%= defaultPath %>/SelaaValtakirjoja">Valtuutettuna</a></li>
+							<li id="selaaOmiaValtakirjoja"><a href="<%= defaultPath %><%= NavigationPortletProperties.WARRANTS_BROWSE_WARRANTS %>">Valtuutettuna</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -340,15 +339,14 @@
 		<c:if test="${fn:contains(naviPortalMode, 'loora')}">
 		<li><span class="naviLinkHeaderNonLink">Suostumukset</span>
 			<ul class="child">
-				<li id="cst_new"><a href="<%= defaultPath %>/NewConsent">Uusi suostumuspohja</a></li>
-				<li id="sendconsent"><a href="<%= defaultPath %>/SendConsent">Uusi suostumuspyyntö</a></li>
-				<li id="fillconsent"><a href="<%= defaultPath %>/FillConsent">Kirjaa asiakkaan suostumus</a></li>				
+				<li id="cst_new"><a href="<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT_TEMPLATE %>">Uusi suostumuspohja</a></li>
+				<li id="sendconsent"><a href="<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT %>">Uusi suostumuspyyntö</a></li>
+				<li id="fillconsent"><a href="<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_CUSTOMER_CONSENT %>">Kirjaa asiakkaan suostumus</a></li>				
 				<li id="<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>')">Lähetetyt suostumuspyynnöt</a></li>
 			</ul>
 		</li>
 		<li><span class="naviLinkHeaderNonLink">Valtakirjat</span>
 			<ul class="child">
-				<%-- <li id="valtakirjaconsent"><a href="<%= defaultPath %>/ValtakirjaConsent">Asiakkaan valtakirjat </a></li>  --%>
 				<li id="<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>')">Asiakkaan valtakirjat </a></li> 
 				<li id="<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS%>"><a href="javascript:void(0)" onclick="navigateToPage('<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS%>')">Asian valtakirjat</a></li>
 			</ul>
@@ -357,8 +355,8 @@
 		<!--  TIETOPYYNNÖT -->
 		<li><span class="naviLinkHeaderNonLink">Tietopyynnöt</span>
 			<ul class="child">
-				<li id="newinformation"><a href="<%= defaultPath %>/NewInformation">Uusi tietopyyntö</a></li>
-				<li id="informationbox"><a href="<%= defaultPath %>/InformationBox">Saapuneet</a></li>
+				<li id="newinformation"><a href="<%= defaultPath %><%= NavigationPortletProperties.INFO_REQ_NEW_INFORMATION_REQ %>">Uusi tietopyyntö</a></li>
+				<li id="informationbox"><a href="<%= defaultPath %><%= NavigationPortletProperties.INFO_REQ_RECIEVED_INFO_REQS %>">Saapuneet</a></li>
 				<li><span class="naviLinkHeaderNonLink">Lähetetyt</span>
 					<ul class="child">
 						<%-- <li id="info_request_open"><a href="<%= defaultPath %>/Ilmoitukset">Avoimet</a></li> --%>
@@ -378,8 +376,8 @@
 					<ul class="child">
 						<!--  show only citizens -->
 						<c:if test="${fn:contains(naviPortalMode, 'kunpo')}">
-						<li id="kid_new"><a href="<%= defaultPath %>/NewKindergarten">Päivähoitohakemus</a></li>
-						<li id="applicationsConfirm"><a href="<%= defaultPath %>/ConfirmApplications">Hakemusten vahvistuspyynnöt</a></li>
+						<li id="kid_new"><a href="<%= defaultPath %><%= NavigationPortletProperties.APPLICATIONS_NEW_KINDERGARTEN %>">Päivähoitohakemus</a></li>
+						<li id="applicationsConfirm"><a href="<%= defaultPath %><%= NavigationPortletProperties.APPLICATIONS_NEED_TO_CONFIRM %>">Hakemusten vahvistuspyynnöt</a></li>
 						</c:if>	
 						<!--  show only employees -->						
 						<c:if test="${fn:contains(naviPortalMode, 'loora')}">
@@ -393,6 +391,6 @@
 				</c:if>
 			</ul>
 		</li>
-		<li><a href="/koku/ohjeet">Ohjeet</a></li>
+		<li><a href="<%= helpLinkPath %>">Ohjeet</a></li>
 	</ul>
 </div>

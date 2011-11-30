@@ -7,16 +7,11 @@ package fi.arcusys.koku.av;
  */
 public class CitizenAppointment extends KokuAppointment{
 
-	private String status;
 	private Slot slot;
 	private String replier;
 	private String replierComment;
 	private String targetPerson;
 	
-	/* getters */
-	public String getStatus() {
-		return status;
-	}
 	
 	public Slot getSlot() {
 		return slot;
@@ -34,10 +29,6 @@ public class CitizenAppointment extends KokuAppointment{
 		return targetPerson;
 	}
 	
-	/* setters */
-	public void setStatus(String status) {
-		this.status = status;
-	}
 	
 	public void setSlot(Slot slot) {
 		this.slot = slot;

@@ -10,7 +10,7 @@
   <parent>
     <artifactId>koku-ui</artifactId>
     <groupId>kohti-kumppanuutta</groupId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
   </parent>
 
 	<properties>

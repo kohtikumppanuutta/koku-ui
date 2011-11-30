@@ -78,14 +78,14 @@
 					<c:if
 						test="${ sessionScope.municipal_employee || not collection.versioned }">
 						<tr>
-							<td><span class="collection"> <a
+							<td><span class="collection"><strong><a
 									href="
 						<portlet:renderURL>
 							<portlet:param name="action" value="showCollection" />
 							<portlet:param name="pic" value="${child.pic}" />
 							<portlet:param name="collection" value="${collection.id}" />
 						</portlet:renderURL>">
-										<strong><c:out value="${ collection.name }"/></strong> </a> </span></td>
+										<c:out value="${ collection.name }"/> </a> </strong> </span></td>
 							<td><c:out value="${collection.modifierFullName}"/><c:out value=" "/><fmt:formatDate
 									pattern="dd.MM.yyyy" value="${collection.creationTime}" />
 							</td>

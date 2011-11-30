@@ -43,9 +43,11 @@
             
 			<span class="portlet-form-field"> 
 			 <form:input class="defaultText"  path="pic" /> 
+			 <input type="submit" class="portlet-form-button" value="<spring:message code="ui.kks.search.info"/>"> 
 			</span>
+					
 			</div>
-			<span class="kks-left"> <input type="submit" class="portlet-form-button" value="<spring:message code="ui.kks.search.info"/>" ></span>
+			
 
 			<div class="kks-reset-floating"></div>
 		</form:form>
@@ -60,7 +62,7 @@
                             <portlet:param name="action" value="toChildInfo" />
                             <portlet:param name="pic" value="${child.pic}" />
                         </portlet:actionURL>">
-							<strong><c:out value="${child.lastName }"/>, <c:out value="${child.firstName}"/></strong></a> <span>${child.pic}</span>
+							<c:out value="${child.lastName }"/>, <c:out value="${child.firstName}"/></a> <span>${child.pic}</span>
 					</span>
 				</c:forEach>
 			</c:if>

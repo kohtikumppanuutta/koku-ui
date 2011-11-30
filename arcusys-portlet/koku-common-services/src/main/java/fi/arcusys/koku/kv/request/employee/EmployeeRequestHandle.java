@@ -3,7 +3,10 @@ package fi.arcusys.koku.kv.request.employee;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import fi.arcusys.koku.AbstractHandle;
+import fi.arcusys.koku.kv.request.citizen.CitizenRequestHandle;
 import fi.arcusys.koku.kv.requestservice.Request;
 import fi.arcusys.koku.kv.requestservice.RequestSummary;
 import fi.arcusys.koku.kv.requestservice.RequestType;
@@ -16,6 +19,8 @@ import fi.arcusys.koku.users.KokuUserService;
  * Aug 22, 2011
  */
 public class EmployeeRequestHandle extends AbstractHandle {
+	
+	private final static Logger LOG = Logger.getLogger(EmployeeRequestHandle.class);
 	
 	private EmployeeRequestService rs;
 	private final KokuUserService userService;	
@@ -59,8 +64,14 @@ public class EmployeeRequestHandle extends AbstractHandle {
 	 * @param requestId request id
 	 * @return detailed request
 	 */
-	public KokuRequest getKokuRequestById(String requestId) {	
-		long  reqId = (long) Long.parseLong(requestId);
+	public KokuRequest getKokuRequestById(String requestId) {
+		long  reqId = 0;
+		try {
+			reqId = (long) Long.parseLong(requestId);			
+		} catch (NumberFormatException nfe) {
+			LOG.warn("Given requestId invalid. RequestId: '"+requestId+"'");
+			return null;
+		}
 		Request req = rs.getRequestById(reqId);
 		KokuRequest kokuReq = new KokuRequest(req);		
 		return kokuReq;

@@ -113,9 +113,9 @@ public class TaskManagerController {
 					token = taskhandle.getTokenByUser(username, password);
 					portletSession.setAttribute(ATTR_TOKEN, token);
 					portletSession.setAttribute(ATTR_USERNAME, username);
-					LOG.warn("Intalio username: '" + username + "' Password:  '" + password + "' Intalio token: '" + token + "'");
+					LOG.debug("Intalio username: '" + username + "' Password:  '" + password + "' Intalio token: '" + token + "'");
 				}
-				LOG.info("Login user:" + userid);
+				LOG.debug("Login user:" + userid);
 			}
 
 		} catch (Exception e) {

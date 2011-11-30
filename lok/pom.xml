@@ -3,7 +3,7 @@
   <parent>
     <artifactId>koku-ui</artifactId>
     <groupId>kohti-kumppanuutta</groupId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
   </parent>
   <groupId>kohti-kumppanuutta</groupId>
   <artifactId>lok-portlet</artifactId>
@@ -22,7 +22,7 @@
     <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>portlet-common</artifactId>
-      <version>0.0.19</version>
+      <version>0.0.21</version>
     </dependency>
     
     <dependency>
@@ -35,7 +35,7 @@
     <dependency>
       <groupId>kohti-kumppanuutta</groupId>
       <artifactId>authorizationinfoservice-api</artifactId>
-      <version>0.0.7</version>
+      <version>0.0.8</version>
     </dependency>
     <dependency>
       <groupId>kohti-kumppanuutta</groupId>

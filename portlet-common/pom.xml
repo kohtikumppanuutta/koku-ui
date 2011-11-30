@@ -4,13 +4,13 @@
 	<parent>
 		<artifactId>koku-ui</artifactId>
 		<groupId>kohti-kumppanuutta</groupId>
-		<version>0.0.1</version>
+		<version>0.0.2</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>portlet-common</artifactId>
 	<name>portlet-common</name>
 	<packaging>jar</packaging>
-    <version>0.0.19-SNAPSHOT</version>
+    <version>0.0.22-SNAPSHOT</version>
 	<description>code shared between koku portlet projects.
 the code can depend on servlet and portlet apis as well as koku service-api but not koku-portlets.</description>
 
@@ -28,8 +28,7 @@ the code can depend on servlet and portlet apis as well as koku service-api but 
 			<version>0.0.2</version>
 			<scope>provided</scope>
 		</dependency>
-		
+    
 	</dependencies>
-
 
 </project>

@@ -12,6 +12,7 @@ public class KokuAppointment {
 	private String subject;
 	private String description;
 	private String status;
+	private String cancellationComment;
 	
 	/* getters */
 	public long getAppointmentId() {
@@ -52,6 +53,14 @@ public class KokuAppointment {
 	
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public final String getCancellationComment() {
+		return cancellationComment;
+	}
+
+	public final void setCancellationComment(String cancellationComment) {
+		this.cancellationComment = cancellationComment;
 	}
 }
 

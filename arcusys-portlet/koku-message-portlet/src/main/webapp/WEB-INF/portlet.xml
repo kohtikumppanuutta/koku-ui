@@ -9,6 +9,8 @@
 		<portlet-name>koku-message-portlet</portlet-name>
 		<display-name>koku-message-portlet</display-name>
 		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+		<expiration-cache>0</expiration-cache>
+		
 		<supports>
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
@@ -19,10 +21,6 @@
 			<title>Message Portlet</title>
 		</portlet-info>	
 		<portlet-preferences>
-			<preference>
-				<name>portletPath</name>
-				<value>/tre/public/asiointi/koku/Messages</value>
-			</preference>
 			<preference>
 				<name>refreshDuration</name>
 				<value>60</value>

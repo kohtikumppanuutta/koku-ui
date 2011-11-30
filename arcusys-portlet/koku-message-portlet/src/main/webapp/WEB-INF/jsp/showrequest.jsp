@@ -113,11 +113,16 @@ function exportFile() {
      --> 
     <h3><spring:message code="request.responseSummary"/></h3>
     <table class="request-table">
-    	<tr><td rowspan=2 style="vertical-align: middle;" class="head"><spring:message code="request.respondent"/></td><c:forEach items="${request.questions}" varStatus="status" ><td colspan=2 class="head"><spring:message code="request.question"/> ${status.count}</td></c:forEach></tr>
+    	<tr>
+    		<td rowspan=2 style="vertical-align: middle;" class="head"><spring:message code="request.respondent"/></td>
+    		<c:forEach items="${request.questions}" varStatus="status" var="question" >
+    			<td  class="head">${question.description}</td>
+    		</c:forEach>
+    		<td rowspan=2 style="vertical-align: middle;" class="head"><spring:message code="request.comment"/></td>
+   		</tr>    		
     	<tr>
     	<c:forEach items="${request.questions}" >
     		<td class="head"><spring:message code="request.answer"/></td>
-    		<td class="head"><spring:message code="request.comment"/></td>
     	</c:forEach>
     	</tr>
     	<c:forEach var="response" items="${request.respondedList}" varStatus="loopStatus">
@@ -125,8 +130,8 @@ function exportFile() {
           <td>${response.name}</td>
           <c:forEach var="answer" items="${response.answers}">
           <td>${answer.answer}</td>
-          <td>${answer.comment}</td>
-          </c:forEach>         
+          </c:forEach>
+          <td>${response.comment}</td>
         </tr>
       </c:forEach>
     </table>  

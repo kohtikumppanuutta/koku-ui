@@ -82,7 +82,13 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	 * @return detailed consent
 	 */
 	public KokuConsent getConsentById(String consentIdStr) {
-		long  consentId = (long) Long.parseLong(consentIdStr);
+		long  consentId = 0;
+		try {
+			consentId = (long) Long.parseLong(consentIdStr);			
+		} catch (NumberFormatException nfe) {
+			LOG.warn("Invalid ConsentId. ConsentId: '"+consentIdStr+"'");
+			return null;
+		}
 		KokuConsent kokuConsent = new KokuConsent();
 		ConsentTO consent = tcs.getConsentById(consentId, this.userId);
 		kokuConsent.setConsentId(consent.getConsentId());
@@ -186,7 +192,13 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	 * @return operation response
 	 */
 	public String revokeOwnConsent(String consentIdStr) {
-		long  consentId = (long) Long.parseLong(consentIdStr);
+		long consentId = 0;		
+		try {
+			consentId = (long) Long.parseLong(consentIdStr);
+		} catch (NumberFormatException nfe) {
+			LOG.warn("Invalid consentId. ConsentId: '"+consentIdStr+"'");
+			return RESPONSE_FAIL;
+		}
 		
 		try {
 			tcs.revokeOwnConsent(consentId, this.userId);
