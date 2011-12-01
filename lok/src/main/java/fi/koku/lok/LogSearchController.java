@@ -143,8 +143,9 @@ public class LogSearchController {
           }catch(ServiceFault fault){
             model.addAttribute("error", "koku.lok.error.log");
             log.info("error while searching log: "+fault.getFaultInfo().getCode());
-          }catch(Exception e){
-            log.error("Other exception: "+e.getMessage());
+          } catch (Exception e) {
+            model.addAttribute("error", "koku.lok.error.log");
+            log.error("Other exception while searching log: " + e);
           }
           
           model.addAttribute("searchParams", criteria);
