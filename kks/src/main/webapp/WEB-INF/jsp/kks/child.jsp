@@ -142,13 +142,13 @@
 		</table>
 		<br />
 		<div class="kks-collection">
-			<div class="kks-link"> <a
+			<!-- <div class="kks-link"> <a
 				href="
                         <portlet:renderURL>
                             <portlet:param name="action" value="showPegasos" />
                             <portlet:param name="pic" value="${child.pic}" />
                         </portlet:renderURL>">
-					<spring:message code="ui.kks.patient.healthcare" /> </a> </div>
+					<spring:message code="ui.kks.patient.healthcare" /> </a> </div>  -->
 
             <div class="kks-link"> <a
                 href="
