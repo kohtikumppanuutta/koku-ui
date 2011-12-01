@@ -105,28 +105,36 @@ public class UserSearchController {
     if (AuthUtils.isOperationAllowed("AdminSystemLogFile", userRoles)) {
       model.addAttribute("allowedToView", true);
     }
-
-    try {
-      customer = findUser(pic, userPic);
-    } catch (ServiceFault fault) {
-      if(fault.getMessage().equalsIgnoreCase("Customer not found.")){
-        model.addAttribute("error", "koku.lok.no.user.results");
-      }else{
+    
+    // see http://fi.wikipedia.org/wiki/Henkil%C3%B6tunnus#Tunnuksen_muoto
+    if (pic != null && pic.length() == 11 &&
+       (pic.charAt(6) == '-' || pic.charAt(6) == '+' || pic.charAt(6) == 'A')) {
+      // pic is well formed
+      try {
+        customer = findUser(pic, userPic);
+      } catch (ServiceFault fault) {
+        if (fault.getMessage().equalsIgnoreCase("Customer not found.")) {
+          model.addAttribute("error", "koku.lok.no.user.results");
+        } else {
+          model.addAttribute("error", "koku.lok.error.customer");
+        }
+        log.error("servicefault");
+        log.error(fault.getMessage());
+      } catch (SOAPFaultException e) {
+        log.error("SOAPFaultException: " + e.getMessage());
         model.addAttribute("error", "koku.lok.error.customer");
       }
-      log.error("servicefault");
-      log.error(fault.getMessage());
-    } catch (SOAPFaultException e) {
-      log.error("SOAPFaultException: " + e.getMessage());
-      model.addAttribute("error", "koku.lok.error.customer");
-    }
 
-    if (customer != null) {
-      model.addAttribute("searchedUsers", customer);
-      model.addAttribute("foundName", customer.getSname() + " " + customer.getFname());
-      model.addAttribute("foundPic", customer.getPic());
+      if (customer != null) {
+        model.addAttribute("searchedUsers", customer);
+        model.addAttribute("foundName", customer.getSname() + " " + customer.getFname());
+        model.addAttribute("foundPic", customer.getPic());
+      }
+    } else {
+      // pic is not well formed
+      model.addAttribute("error", "koku.lok.malformed.pic");
     }
-
+    
     model.addAttribute("search", true); // This means that search was done
 
     return "usersearch";
