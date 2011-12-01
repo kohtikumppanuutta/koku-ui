@@ -95,10 +95,13 @@
 
 						<c:if test="${not empty entries}">
 							<c:if test="${not empty visited}">
-								<h2 class="portlet-section-subheader">
+								<h2 class="portlet-section-subheader">									
 									<spring:message code="koku.common.searchResults" />
+									<c:out value=" "/>
 									<c:out value="${searchParams.pic}" />,
+									<c:out value=" "/>									
 									<c:out value="${searchParams.concept}" />
+									<c:out value=" "/>
 									<fmt:formatDate pattern="dd.MM.yyyy"
 										value="${searchParams.from}" />
 									-

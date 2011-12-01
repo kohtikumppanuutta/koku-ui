@@ -57,6 +57,7 @@
 						<c:if test="${not empty visited}">
 							<h2 class="portlet-section-subheader">
 								<spring:message code="koku.lok.view.results.header" />
+								<c:out value=" "/>
 								<fmt:formatDate pattern="dd.MM.yyyy"
 									value="${searchParams.from}" />
 								-
