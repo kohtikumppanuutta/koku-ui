@@ -62,8 +62,7 @@ public String htmlToCode(String s)
 	}
 	
 	
-	var KokuMessage = {
-			
+	var KokuMessage = {			
 		citizen : {
 			redirectToRequestsRecieved: function () {
 				window.location = "<%= NavigationPortletProperties.NAVIGATION_PORTLET_PATH %><%= NavigationPortletProperties.REQUESTS_RECIEVED_REQUESTS %>";
@@ -73,7 +72,10 @@ public String htmlToCode(String s)
 			},
 			redirectToAppointmentsRecieved: function() {
 				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN %>");
-			},			
+			},
+			redirectToAppointmentsOld: function() {
+				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD %>");
+			},
 			redirectToConsentsRecieved: function() {
 				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN %>");
 			}
@@ -94,6 +96,15 @@ public String htmlToCode(String s)
 			},
 			redirectToInfoRequestsRecieved: function() {
 				window.location = "<%= NavigationPortletProperties.NAVIGATION_PORTLET_PATH %><%= NavigationPortletProperties.INFO_REQ_RECIEVED_INFO_REQS %>";
+			},
+			redirectToBrowseWarrants: function() {
+				window.location = "<%= NavigationPortletProperties.NAVIGATION_PORTLET_PATH %><%= NavigationPortletProperties.WARRANTS_BROWSE_WARRANTS %>";
+			},
+			redirectToKindergartenApplicationBrowsing: function() {
+				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE %>");
+			},
+			redirectToKindergartenApplication: function(formId) {
+				window.location = "<%= NavigationPortletProperties.NAVIGATION_PORTLET_PATH %>/EditKindergarten?FormID="+formId;
 			}
 		},
 			
@@ -121,10 +132,16 @@ public String htmlToCode(String s)
 		
 	};	
 	
+	/**
+	 * @Deprecated Please use KokuMessage.citizen.redirectToRecievedRequests() method
+	 */
 	function kokuRedirectToRecievedRequests() {
 		KokuMessage.citizen.redirectToRecievedRequests();
 	}
 	
+	/**
+	 * @Deprecated Please use KokuMessage.util.returnToMainPage() method
+	 */
 	function returnToMainPage() {
 		KokuMessage.util.returnToMainPage();
 	}
