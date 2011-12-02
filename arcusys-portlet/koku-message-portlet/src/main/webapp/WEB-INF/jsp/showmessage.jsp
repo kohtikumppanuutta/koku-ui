@@ -129,7 +129,6 @@ public String htmlToCode(String s)
 				window.location = url;
 			}
 		}
-		
 	};	
 	
 	/**
