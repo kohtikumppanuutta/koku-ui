@@ -3,6 +3,7 @@
 <portlet:renderURL var="homeURL" windowState="<%= WindowState.NORMAL.toString() %>" >
 	<portlet:param name="myaction" value="home" />
 </portlet:renderURL>
+
 <%!
 
 public String htmlToCode_old(String s)
@@ -60,35 +61,79 @@ public String htmlToCode(String s)
 		jQuery('#messageContent').html(content);
 	}
 	
-	function kokuRedirectToRecievedRequests() {
-		window.location = "<%= NavigationPortletProperties.NAVIGATION_PORTLET_PATH %><%= NavigationPortletProperties.REQUESTS_RECIEVED_REQUESTS %>";
-	}
 	
-	/**
-	 * Returns to the main portlet page
-	 */
-	function returnMainPage() {
-		var url = "<%= homeURL %>";
-		url = formatUrl(url);
-		window.location = url;
-	}
-	
-	/* Formats url mainly for gatein epp*/
-	function formatUrl(url) {
-		var newUrl;
-		newUrl = url.replace(/&quot;/g,'"');
-		newUrl = newUrl.replace(/&amp;/g,"&");
-		newUrl = newUrl.replace(/&lt;/g,"<");
-		newUrl =  newUrl.replace(/&gt;/g,">");
+	var KokuMessage = {
+			
+		citizen : {
+			redirectToRequestsRecieved: function () {
+				window.location = "<%= NavigationPortletProperties.NAVIGATION_PORTLET_PATH %><%= NavigationPortletProperties.REQUESTS_RECIEVED_REQUESTS %>";
+			},
+			redirectToRequestsReplied: function() {
+				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_REQUEST_REPLIED %>");
+			},
+			redirectToAppointmentsRecieved: function() {
+				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN %>");
+			},			
+			redirectToConsentsRecieved: function() {
+				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN %>");
+			}
+		},
 		
-		return newUrl;
+		employee: {			
+			redirectToRequestOpen: function() {
+				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>");
+			},
+			redirectToRequestReady: function() {
+				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE %>");
+			},			
+			redirectToAppointmentsOpen: function() {
+				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE %>");
+			},
+			redirectToAppointmentsReady: function() {
+				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE %>");
+			},
+			redirectToInfoRequestsRecieved: function() {
+				window.location = "<%= NavigationPortletProperties.NAVIGATION_PORTLET_PATH %><%= NavigationPortletProperties.INFO_REQ_RECIEVED_INFO_REQS %>";
+			}
+		},
+			
+		util : {			
+			returnToMainPage: function() {			
+				window.location = KokuMessage.formatUrl("<%= homeURL %>");
+			},
+			formatUrl: function(url) {
+				var newUrl;
+				newUrl = url.replace(/&quot;/g,'"');
+				newUrl = newUrl.replace(/&amp;/g,"&");
+				newUrl = newUrl.replace(/&lt;/g,"<");
+				newUrl =  newUrl.replace(/&gt;/g,">");			
+				return newUrl;
+			},			
+			/**
+			 * Returns to the main portlet page
+			 */
+			returnMainPage: function() {
+				var url = "<%= homeURL %>";
+				url = formatUrl(url);
+				window.location = url;
+			}
+		}
+		
+	};	
+	
+	function kokuRedirectToRecievedRequests() {
+		KokuMessage.citizen.redirectToRecievedRequests();
+	}
+	
+	function returnToMainPage() {
+		KokuMessage.util.returnToMainPage();
 	}
 
 </script>
 <div id="task-manager-wrap" class="single">	
 	<div id="messageContent"></div>
 	<div id="task-manager-operation" class="task-manager-operation-part">
-		<input type="button" value="<spring:message code="page.return"/>" onclick="returnMainPage()" />
+		<input type="button" value="<spring:message code="page.return"/>" onclick="KokuMessage.util.returnMainPage()" />
 	</div>
 </div>
 
