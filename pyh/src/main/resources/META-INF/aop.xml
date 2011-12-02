@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aspectj PUBLIC
+  "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
+<!--
+  aspectj config for KoKu portlets
+  ixonos / aspluma
+ -->
+<aspectj>
+  <weaver options="-verbose -showWeaveInfo">
+    <include within="fi.koku..*"/>
+  </weaver>
+  <aspects>
+
+    <!-- match service layer outcalls made from controllers -->
+    <concrete-aspect name="KokuProfilingAspect">
+      <before pointcut="execution(public * fi.koku.services..*.*ServicePortType.*(..)) || execution(public * fi.koku..*.*Controller.*(..))"
+        invokeClass="fi.koku.perf.ProfilingLogger" 
+        invokeMethod="before(JoinPoint tjp)"/>
+      <after pointcut="execution(public * fi.koku.services..*.*ServicePortType.*(..)) || execution(public * fi.koku..*.*Controller.*(..))"
+        invokeClass="fi.koku.perf.ProfilingLogger" 
+        invokeMethod="after(JoinPoint tjp)"/>
+    </concrete-aspect>
+     
+  </aspects>
+</aspectj>
