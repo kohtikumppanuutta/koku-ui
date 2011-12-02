@@ -13,10 +13,10 @@
 
     <!-- match service layer outcalls made from controllers -->
     <concrete-aspect name="KokuProfilingAspect">
-      <before pointcut="execution(public * fi.koku.services..*.*ServicePortType.*(..)) || execution(public * fi.koku..*.*Controller.*(..))"
+      <before pointcut="call(public * fi.koku.services..*.*ServicePortType.*(..)) || execution(public * fi.koku..*.*Controller.*(..))"
         invokeClass="fi.koku.perf.ProfilingLogger" 
         invokeMethod="before(JoinPoint tjp)"/>
-      <after pointcut="execution(public * fi.koku.services..*.*ServicePortType.*(..)) || execution(public * fi.koku..*.*Controller.*(..))"
+      <after pointcut="call(public * fi.koku.services..*.*ServicePortType.*(..)) || execution(public * fi.koku..*.*Controller.*(..))"
         invokeClass="fi.koku.perf.ProfilingLogger" 
         invokeMethod="after(JoinPoint tjp)"/>
     </concrete-aspect>
