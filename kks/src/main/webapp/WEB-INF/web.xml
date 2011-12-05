@@ -15,6 +15,10 @@
 </filter-mapping>  
   <!-- EPP only: end -->
 
+  <session-config>
+    <session-timeout>60</session-timeout>
+  </session-config>
+    
   <servlet>
     <servlet-name>ViewRendererServlet</servlet-name>
     <servlet-class>org.springframework.web.servlet.ViewRendererServlet</servlet-class>
