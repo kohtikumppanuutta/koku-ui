@@ -17,6 +17,11 @@
 	<!-- State ajaxViewResolver at first or define order attribute -->
 	<bean id="ajaxViewResolver" class="fi.arcusys.koku.navi.AjaxViewResolver">
 	</bean>
+	
+	 <!-- Error page configuration -->
+    <bean id="exceptionResolver" class="org.springframework.web.portlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultErrorView" value="error"/>
+    </bean>
 
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
