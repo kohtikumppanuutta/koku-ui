@@ -63,51 +63,36 @@ public class ExportFileController {
 		try {
 			BufferedWriter writer = new BufferedWriter(response.getWriter());
 
-			if (kokuRequest == null) {
-				return;
-			} else {
+			if (kokuRequest != null) {
+				/* Headers */
 				writer.write(addQuote(messageSource.getMessage("export.responseSummary", null, locale)));
 				writer.newLine();
-				// writer.write(addQuote()+",");
-
-				Iterator<KokuQuestion> it_q = kokuRequest.getQuestions().iterator();
-
-				while (it_q.hasNext()) {
-					KokuQuestion q = it_q.next();
-					writer.write(addQuote(q.getDescription()) + "," +addQuote()+ ",");
-				}
-				writer.newLine();
-				writer.newLine();
-
 				writer.write(addQuote(messageSource.getMessage("export.respondent", null, locale))+",");
-				
 
-				for (int i = 0; i < kokuRequest.getQuestions().size(); i++) {
-					writer.write(addQuote(messageSource.getMessage("export.answer", null, locale))+","+addQuote(messageSource.getMessage("export.comment", null, locale))+",");
-				}
+				for (KokuQuestion q : kokuRequest.getQuestions()) {
+					writer.write(addQuote(q.getDescription()) + ",");
+				}				
+				writer.write(addQuote(messageSource.getMessage("export.comment", null, locale))+",");
 				writer.newLine();
-
-				Iterator<KokuResponse> it_res = kokuRequest.getRespondedList()
-						.iterator();
-				while (it_res.hasNext()) {
-					KokuResponse res = it_res.next();
-					writer.write(addQuote(res.getName()) + ",");
-
-					Iterator<KokuAnswer> it_ans = res.getAnswers().iterator();
-					while (it_ans.hasNext()) {
-						KokuAnswer answer = it_ans.next();
-						writer.write(addQuote(answer.getAnswer()) + ","
-								+ addQuote(res.getComment()) + ",");
+				
+				/* Data */
+				for (KokuResponse res : kokuRequest.getRespondedList()) {
+					
+					writer.write(addQuote(res.getName())+",");
+					
+					for (KokuAnswer answer : res.getAnswers()) {
+						writer.write(addQuote(answer.getAnswer()) + ",");
 					}
+					writer.write(addQuote(res.getComment()));
+					writer.newLine();
 					writer.newLine();
 				}
+				
 				writer.newLine();
 				writer.write(addQuote(messageSource.getMessage("export.missed", null, locale)));
 				writer.newLine();
-				Iterator<String> it_unres = kokuRequest.getUnrespondedList()
-						.iterator();
-				while (it_unres.hasNext()) {
-					String name = it_unres.next();
+
+				for(String name : kokuRequest.getUnrespondedList()) {
 					writer.write(addQuote(name));
 					writer.newLine();
 				}
