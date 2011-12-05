@@ -62,7 +62,19 @@ public String htmlToCode(String s)
 	}
 	
 	
-	var KokuMessage = {			
+	var KokuMessage = {
+			
+		portal: "<%= naviPortalMode %>",
+		
+		common : {
+			redirectToAppointmentCancelled : function() {
+				if (KokuMessage.portal == '<%= Constants.PORTAL_MODE_KUNPO %>') {
+					KokuMessage.citizen.redirectToAppointmentsOld();
+				} else if (KokuMessage.portal == '<%= Constants.PORTAL_MODE_LOORA %>') {
+					KokuMessage.employee.redirectToAppointmentsReady();
+				}
+			}
+		},
 		citizen : {
 			redirectToRequestsRecieved: function () {
 				window.location = "<%= NavigationPortletProperties.NAVIGATION_PORTLET_PATH %><%= NavigationPortletProperties.REQUESTS_RECIEVED_REQUESTS %>";
