@@ -81,7 +81,7 @@ public String htmlToCode(String s)
 			}
 		},
 		
-		employee: {			
+		employee: {	
 			redirectToRequestOpen: function() {
 				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>");
 			},
@@ -105,6 +105,9 @@ public String htmlToCode(String s)
 			},
 			redirectToKindergartenApplication: function(formId) {
 				window.location = "<%= NavigationPortletProperties.NAVIGATION_PORTLET_PATH %>/EditKindergarten?FormID="+formId;
+			},
+			redirectToSentConsents: function() {
+				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS %>");
 			}
 		},
 			
