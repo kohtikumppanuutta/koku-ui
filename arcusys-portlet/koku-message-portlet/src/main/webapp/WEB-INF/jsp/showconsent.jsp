@@ -52,12 +52,15 @@ function formatUrl(url) {
 	<c:if test="${consent.anotherPermitterUid != '' && consent.anotherPermitterUid != null}">
 	<span class="text-bold"><spring:message code="consent.secondApprover"/>:</span> <c:out value="${consent.anotherPermitterUid}" /><br />
 	</c:if>
-	<span class="text-bold"><spring:message code="consent.recipients"/>:</span> <c:out value="${consent.recipients}" /><br />
+	<span class="text-bold"><spring:message code="consent.recipients"/>:</span><c:out value="${consent.recipients}" /><br />
+	<span class="text-bold"><spring:message code="consent.comment"/>:</span><c:out value="${consent.comment}" /><br />
+	
 	<% if (naviPortalMode.equals(Constants.PORTAL_MODE_KUNPO)) { %>
 	<span class="modifyConsentLink">
 		<a href="<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT %>?FormID=<c:out value="${consent.consentId}"/>"><spring:message code="consent.modifyConsentLink"/></a>
 	</span><br />
 	<% } %>
+	
 	
     <h3><spring:message code="consent.actionRequest"/></h3>
     <table class="request-table">
@@ -70,7 +73,7 @@ function formatUrl(url) {
         <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
           <td>${request.name}</td>
           <td>${request.description}</td>
-          <td>${request.status}</td>    
+          <td style="min-width:60px">${request.status}</td>    
         </tr>
       	</c:forEach>
     </table>  

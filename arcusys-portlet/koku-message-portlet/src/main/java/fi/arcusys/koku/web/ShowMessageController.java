@@ -38,7 +38,7 @@ public class ShowMessageController {
 
 		return VIEW_SHOW_MESSAGE;
 	}
-		
+			
 	/**
 	 * Creates data model integrated into the page and stores the page
 	 * @param messageId message id

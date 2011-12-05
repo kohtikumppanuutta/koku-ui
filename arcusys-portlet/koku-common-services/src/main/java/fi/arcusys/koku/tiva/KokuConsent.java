@@ -21,6 +21,7 @@ public class KokuConsent {
 	private List<ActionRequest> actionRequests;
 	private String recipients;
 	private String replyTill;
+	private String comment;
 	
 	public long getConsentId() {
 		return consentId;
@@ -117,7 +118,13 @@ public class KokuConsent {
 	public void setReplyTill(String replyTill) {
 		this.replyTill = replyTill;
 	}
-	
-	
-	
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+		
 }

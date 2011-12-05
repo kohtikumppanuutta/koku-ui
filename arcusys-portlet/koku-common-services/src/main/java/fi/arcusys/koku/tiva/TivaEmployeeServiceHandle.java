@@ -128,6 +128,8 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 		kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
 		kokuConsent.setActionRequests(convertActionRequests(consent.getActionRequests()));
 		kokuConsent.setRecipients(MessageUtil.formatRecipients(consent.getReceipients()));
+		// TODO: Get comment from WS
+		kokuConsent.setComment(null);
 			
 		return kokuConsent;
 	}
