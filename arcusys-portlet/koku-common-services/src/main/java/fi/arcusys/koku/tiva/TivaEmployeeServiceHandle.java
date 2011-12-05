@@ -9,19 +9,17 @@ import org.apache.log4j.Logger;
 import org.springframework.context.NoSuchMessageException;
 
 import fi.arcusys.koku.AbstractHandle;
-import fi.arcusys.koku.tiva.employeeservice.ConsentApprovalStatus;
-import fi.arcusys.koku.tiva.employeeservice.ConsentCreateType;
 import fi.arcusys.koku.tiva.employeeservice.ActionRequestStatus;
 import fi.arcusys.koku.tiva.employeeservice.ActionRequestSummary;
+import fi.arcusys.koku.tiva.employeeservice.ConsentApprovalStatus;
+import fi.arcusys.koku.tiva.employeeservice.ConsentCreateType;
 import fi.arcusys.koku.tiva.employeeservice.ConsentCriteria;
 import fi.arcusys.koku.tiva.employeeservice.ConsentQuery;
 import fi.arcusys.koku.tiva.employeeservice.ConsentStatus;
 import fi.arcusys.koku.tiva.employeeservice.ConsentSummary;
 import fi.arcusys.koku.tiva.employeeservice.ConsentTO;
 import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
-import fi.arcusys.koku.users.KokuUserService;
 import fi.arcusys.koku.util.MessageUtil;
-import fi.arcusys.koku.util.PortalRole;
 
 /**
  * Handles tiva consents related operations for employee
@@ -128,9 +126,7 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 		kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
 		kokuConsent.setActionRequests(convertActionRequests(consent.getActionRequests()));
 		kokuConsent.setRecipients(MessageUtil.formatRecipients(consent.getReceipients()));
-		// TODO: Get comment from WS
-		kokuConsent.setComment(null);
-			
+		kokuConsent.setComment(consent.getComment());
 		return kokuConsent;
 	}
 	

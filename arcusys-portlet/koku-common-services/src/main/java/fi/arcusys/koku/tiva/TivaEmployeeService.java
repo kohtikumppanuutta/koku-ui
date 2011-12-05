@@ -12,8 +12,6 @@ import fi.arcusys.koku.tiva.employeeservice.ConsentSummary;
 import fi.arcusys.koku.tiva.employeeservice.ConsentTO;
 import fi.arcusys.koku.tiva.employeeservice.KokuLooraSuostumusService_Service;
 import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
-import fi.arcusys.koku.users.KokuUserService;
-import fi.arcusys.koku.util.PropertiesUtil;
 import fi.koku.settings.KoKuPropertiesUtil;
 
 /**

@@ -104,8 +104,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 		kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
 		kokuConsent.setActionRequests(convertActionRequests(consent.getActionRequests()));
 		kokuConsent.setReplyTill(MessageUtil.formatTaskDateByDay(consent.getReplyTill()));
-		// TODO: Set comment from WS
-		kokuConsent.setComment(null);
+		kokuConsent.setComment(consent.getComment());
 		return kokuConsent;
 	}
 	

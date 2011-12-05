@@ -52,8 +52,8 @@ function formatUrl(url) {
 	<c:if test="${consent.anotherPermitterUid != '' && consent.anotherPermitterUid != null}">
 	<span class="text-bold"><spring:message code="consent.secondApprover"/>:</span> <c:out value="${consent.anotherPermitterUid}" /><br />
 	</c:if>
-	<span class="text-bold"><spring:message code="consent.recipients"/>:</span><c:out value="${consent.recipients}" /><br />
-	<span class="text-bold"><spring:message code="consent.comment"/>:</span><c:out value="${consent.comment}" /><br />
+	<span class="text-bold"><spring:message code="consent.recipients"/>:</span> <c:out value="${consent.recipients}" /><br />
+	<span class="text-bold"><spring:message code="consent.comment"/>:</span> <c:out value="${consent.comment}" /><br />
 	
 	<% if (naviPortalMode.equals(Constants.PORTAL_MODE_KUNPO)) { %>
 	<span class="modifyConsentLink">

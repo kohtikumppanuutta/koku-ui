@@ -10,8 +10,6 @@ import fi.arcusys.koku.tiva.citizenservice.ConsentShortSummary;
 import fi.arcusys.koku.tiva.citizenservice.ConsentSummary;
 import fi.arcusys.koku.tiva.citizenservice.ConsentTO;
 import fi.arcusys.koku.tiva.citizenservice.KokuKunpoSuostumusService_Service;
-import fi.arcusys.koku.users.KokuUserService;
-import fi.arcusys.koku.util.PropertiesUtil;
 import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
