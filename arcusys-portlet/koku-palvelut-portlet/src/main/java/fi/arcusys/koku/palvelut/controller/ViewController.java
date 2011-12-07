@@ -205,7 +205,7 @@ public class ViewController extends FormHolderController {
 			}
 		} catch (Exception e) {
 			if (request.getUserPrincipal() != null && request.getUserPrincipal().getName() != null) {
-				LOG.error("Failure while trying to get Task. Description: '"+formDescription+"' Username: '"+request.getUserPrincipal().getName()+"'. Some hints to fix problem: " +
+				LOG.error("Failure while trying to get Task. Use FormId: '"+showFormById+"' Description: '"+formDescription+"' Username: '"+request.getUserPrincipal().getName()+"'. Some hints to fix problem: " +
 						"\n\t1. Logged in proper user? (this portlet doesn't work correctly with admin/nonlogged users. " +
 						"\n\t2. Task might be updated. Reselect form in 'edit'-mode. " +
 						"\n\t3. Check that connection to Intalio server is up. ", e.getMessage());				
