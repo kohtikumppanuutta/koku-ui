@@ -1120,12 +1120,13 @@
 		
 		if (pageObj.taskType == '<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS %>') {
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="revokeConsents()" /></li>';
-		} else if(pageObj.taskType.indexOf('msg') > -1) {
+		} else if (pageObj.taskType.indexOf('msg') > -1) {
 			pageHtml += '<li><input type="button" value="<spring:message code="page.removeSelected"/>"  onclick="deleteMessages()" /></li>';
-		} else if( pageObj.taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE %>' 
-				|| pageObj.taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE %>' 
-				|| pageObj.taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN %>') {
+		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN %>') {
 			pageHtml += '<li><input type="button" value="<spring:message code="consent.cancel"/>"  onclick="cancelAppointments()" /></li>';
+		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE %>' 
+				|| pageObj.taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE %>') {
+			pageHtml += '<li><input type="button" value="<spring:message code="message.search"/>"  onclick="showSearchUI()" /><input type="button" value="<spring:message code="consent.cancel"/>"  onclick="cancelAppointments()" /></li>';
 		}
 			
 		pageHtml += '<li><a><img src="<%= request.getContextPath() %>/images/first.gif" onclick="movePage(\'first\')"/></a></li>'
@@ -1351,6 +1352,10 @@
 		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>') {
 			jQuery('#warrants-search-warrants').show();
 			jQuery('#message-search').hide();
+		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE %>'
+			    || pageObj.taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE %>') {
+			jQuery('#employeeAppointment-search').show();
+			jQuery('#message-search').hide();
 		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE %>') {
 			jQuery('#applicationKindergartenBrowse').show();
 			jQuery('#message-search').hide();
@@ -1466,6 +1471,15 @@
 		return false;
 	}
 	
+	function searchAppointmentsByTargetPersonSsn() {
+		
+		pageObj.keyword = jQuery("input#appointmentTargetPerson").val();	
+		var field = '';
+		pageObj.field = field;	
+		ajaxGetTasks();
+		return false;	
+	}
+	
 	function searchInfoRequests() {
 		var keyword = jQuery("input#tipyTimeRangeFrom").val();		
 		keyword += '|' + jQuery("input#tipyTimeRangeTo").val();		
@@ -1513,6 +1527,8 @@
 		jQuery("input#userIdRecieved").val('');
 		jQuery("input#userIdSent").val('');
 		jQuery("input#warrantTemplateName").val('');
+		
+		jQuery("input#appointmentTargetPerson").val('');
 		
 		jQuery("input#tipyTimeRangeFrom").val('');
 		jQuery("input#tipyTimeRangeTo").val('');
@@ -1562,6 +1578,18 @@
 						<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
 					</form>
 				</div>
+				
+				<!-- Employee appointments search -->
+				<div id="employeeAppointment-search" class="basic-search" style="display:none; position:relative;">
+					<form name="searchForm" onsubmit="searchAppointmentsByTargetPersonSsn(); return false;">		
+						<span class="text-bold" ><spring:message code="appointment.targetPerson" /></span>
+						<input type="text" name="appointmentTargetPerson" id="appointmentTargetPerson" style="width:100px;" />
+						<input type="submit" value="<spring:message code="message.search"/>" />
+						<input type="button" value="<spring:message code="message.searchReset"/>" onclick="resetSearch()" />
+					</form>
+				</div>
+				
+				
 				
 				<!-- TIVA-13 Selaa asiakkaan suostumuksia -->
 				<div id="warrants-search-citizens" class="basic-search" style="display:none; position:relative;">

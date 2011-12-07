@@ -451,7 +451,7 @@ public class AjaxController extends AbstractController {
 			} else if(taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE) || taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE)) { // Tapaamiset - Avoimet / Valmiit
 				AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
 				handle.setMessageSource(messageSource);
-				tasks = handle.getAppointments(userUid, first, max, taskType);
+				tasks = handle.getAppointments(userUid, first, max, taskType, keyword);
 				totalTasksNum = handle.getTotalAppointmentsNum(userUid, taskType);
 			} else if (taskType.equals(TASK_TYPE_CONSENT_ASSIGNED_CITIZEN)) { // consent (Valtakirja / Suostumus) Kansalaiselle saapuneet pyynnöt(/suostumukset) 
 				TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();

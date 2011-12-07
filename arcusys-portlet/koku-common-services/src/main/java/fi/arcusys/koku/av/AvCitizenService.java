@@ -9,8 +9,6 @@ import org.apache.log4j.Logger;
 import fi.arcusys.koku.av.citizenservice.AppointmentRespondedTO;
 import fi.arcusys.koku.av.citizenservice.AppointmentWithTarget;
 import fi.arcusys.koku.av.citizenservice.KokuKunpoAppointmentService_Service;
-import fi.arcusys.koku.tiva.tietopyynto.employee.KokuEmployeeTietopyyntoService;
-import fi.arcusys.koku.util.PropertiesUtil;
 import fi.koku.settings.KoKuPropertiesUtil;
 
 /**

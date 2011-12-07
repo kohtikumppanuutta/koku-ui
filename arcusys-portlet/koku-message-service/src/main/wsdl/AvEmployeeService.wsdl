@@ -14,9 +14,14 @@
 <xs:element name="getTotalProcessedAppointments" type="tns:getTotalProcessedAppointments" />
 <xs:element name="getTotalProcessedAppointmentsResponse" type="tns:getTotalProcessedAppointmentsResponse" />
 <xs:complexType name="getTotalProcessedAppointments">
-
 <xs:sequence>
 <xs:element minOccurs="0" name="user" type="xs:string" />
+<xs:element minOccurs="0" name="criteria" type="tns:appointmentCriteria" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="appointmentCriteria">
+<xs:sequence>
+<xs:element minOccurs="0" name="targetPersonHetu" type="xs:string" />
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getTotalProcessedAppointmentsResponse">
@@ -27,12 +32,12 @@
 <xs:complexType name="getTotalCreatedAppointments">
 <xs:sequence>
 <xs:element minOccurs="0" name="user" type="xs:string" />
+<xs:element minOccurs="0" name="criteria" type="tns:appointmentCriteria" />
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getTotalCreatedAppointmentsResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:int" />
-
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getAppointmentById">
@@ -50,7 +55,6 @@
 <xs:extension base="tns:appointmentSummary">
 <xs:sequence>
 <xs:element maxOccurs="unbounded" minOccurs="0" name="slots" nillable="true" type="tns:appointmentSlot" />
-
 <xs:element maxOccurs="unbounded" minOccurs="0" name="recipients" nillable="true" type="tns:appointmentReceipientTO" />
 <xs:element name="acceptedSlots">
 <xs:complexType>
@@ -68,7 +72,6 @@
 </xs:element>
 <xs:element maxOccurs="unbounded" minOccurs="0" name="usersRejected" nillable="true" type="xs:string" />
 <xs:element maxOccurs="unbounded" minOccurs="0" name="usersRejectedWithComments" nillable="true" type="tns:appointmentUserRejected" />
-
 <xs:element minOccurs="0" name="cancelComment" type="xs:string" />
 </xs:sequence>
 </xs:extension>
@@ -86,7 +89,6 @@
 <xs:complexType name="appointmentSlot">
 <xs:sequence>
 <xs:element name="slotNumber" type="xs:int" />
-
 <xs:element minOccurs="0" name="appointmentDate" type="xs:date" />
 <xs:element minOccurs="0" name="startTime" type="xs:time" />
 <xs:element minOccurs="0" name="endTime" type="xs:time" />
@@ -104,7 +106,6 @@
 <xs:sequence>
 <xs:element minOccurs="0" name="rejectComment" type="xs:string" />
 <xs:element minOccurs="0" name="userDisplayName" type="xs:string" />
-
 <xs:element minOccurs="0" name="userUid" type="xs:string" />
 </xs:sequence>
 </xs:complexType>
@@ -113,6 +114,7 @@
 <xs:element minOccurs="0" name="user" type="xs:string" />
 <xs:element name="startNum" type="xs:int" />
 <xs:element name="maxNum" type="xs:int" />
+<xs:element minOccurs="0" name="criteria" type="tns:appointmentCriteria" />
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getCreatedAppointmentsResponse">
@@ -122,10 +124,10 @@
 </xs:complexType>
 <xs:complexType name="getProcessedAppointments">
 <xs:sequence>
-
 <xs:element minOccurs="0" name="user" type="xs:string" />
 <xs:element name="startNum" type="xs:int" />
 <xs:element name="maxNum" type="xs:int" />
+<xs:element minOccurs="0" name="criteria" type="tns:appointmentCriteria" />
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getProcessedAppointmentsResponse">
@@ -140,7 +142,6 @@
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="cancelAppointmentResponse">
-
 <xs:sequence />
 </xs:complexType>
 <xs:simpleType name="appointmentSummaryStatus">
@@ -155,7 +156,6 @@
   <wsdl:message name="getProcessedAppointments">
     <wsdl:part element="tns:getProcessedAppointments" name="parameters">
     </wsdl:part>
-
   </wsdl:message>
   <wsdl:message name="getProcessedAppointmentsResponse">
     <wsdl:part element="tns:getProcessedAppointmentsResponse" name="parameters">
@@ -165,7 +165,6 @@
     <wsdl:part element="tns:getCreatedAppointments" name="parameters">
     </wsdl:part>
   </wsdl:message>
-
   <wsdl:message name="getAppointmentByIdResponse">
     <wsdl:part element="tns:getAppointmentByIdResponse" name="parameters">
     </wsdl:part>
@@ -175,7 +174,6 @@
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getTotalCreatedAppointmentsResponse">
-
     <wsdl:part element="tns:getTotalCreatedAppointmentsResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
@@ -185,7 +183,6 @@
   </wsdl:message>
   <wsdl:message name="getTotalProcessedAppointments">
     <wsdl:part element="tns:getTotalProcessedAppointments" name="parameters">
-
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="cancelAppointmentResponse">
@@ -195,7 +192,6 @@
   <wsdl:message name="getAppointmentById">
     <wsdl:part element="tns:getAppointmentById" name="parameters">
     </wsdl:part>
-
   </wsdl:message>
   <wsdl:message name="cancelAppointment">
     <wsdl:part element="tns:cancelAppointment" name="parameters">
@@ -205,7 +201,6 @@
     <wsdl:part element="tns:getCreatedAppointmentsResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-
   <wsdl:portType name="KokuLooraAppointmentService">
     <wsdl:operation name="getTotalProcessedAppointments">
       <wsdl:input message="tns:getTotalProcessedAppointments" name="getTotalProcessedAppointments">
@@ -215,7 +210,6 @@
     </wsdl:operation>
     <wsdl:operation name="getTotalCreatedAppointments">
       <wsdl:input message="tns:getTotalCreatedAppointments" name="getTotalCreatedAppointments">
-
     </wsdl:input>
       <wsdl:output message="tns:getTotalCreatedAppointmentsResponse" name="getTotalCreatedAppointmentsResponse">
     </wsdl:output>
@@ -225,7 +219,6 @@
     </wsdl:input>
       <wsdl:output message="tns:getAppointmentByIdResponse" name="getAppointmentByIdResponse">
     </wsdl:output>
-
     </wsdl:operation>
     <wsdl:operation name="getCreatedAppointments">
       <wsdl:input message="tns:getCreatedAppointments" name="getCreatedAppointments">
@@ -235,7 +228,6 @@
     </wsdl:operation>
     <wsdl:operation name="getProcessedAppointments">
       <wsdl:input message="tns:getProcessedAppointments" name="getProcessedAppointments">
-
     </wsdl:input>
       <wsdl:output message="tns:getProcessedAppointmentsResponse" name="getProcessedAppointmentsResponse">
     </wsdl:output>
@@ -245,7 +237,6 @@
     </wsdl:input>
       <wsdl:output message="tns:cancelAppointmentResponse" name="cancelAppointmentResponse">
     </wsdl:output>
-
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="KokuLooraAppointmentServiceSoapBinding" type="tns:KokuLooraAppointmentService">
@@ -255,7 +246,6 @@
       <wsdl:input name="getTotalCreatedAppointments">
         <soap:body use="literal" />
       </wsdl:input>
-
       <wsdl:output name="getTotalCreatedAppointmentsResponse">
         <soap:body use="literal" />
       </wsdl:output>
@@ -265,7 +255,6 @@
       <wsdl:input name="getTotalProcessedAppointments">
         <soap:body use="literal" />
       </wsdl:input>
-
       <wsdl:output name="getTotalProcessedAppointmentsResponse">
         <soap:body use="literal" />
       </wsdl:output>
@@ -275,7 +264,6 @@
       <wsdl:input name="getAppointmentById">
         <soap:body use="literal" />
       </wsdl:input>
-
       <wsdl:output name="getAppointmentByIdResponse">
         <soap:body use="literal" />
       </wsdl:output>
@@ -285,7 +273,6 @@
       <wsdl:input name="getCreatedAppointments">
         <soap:body use="literal" />
       </wsdl:input>
-
       <wsdl:output name="getCreatedAppointmentsResponse">
         <soap:body use="literal" />
       </wsdl:output>
@@ -295,7 +282,6 @@
       <wsdl:input name="getProcessedAppointments">
         <soap:body use="literal" />
       </wsdl:input>
-
       <wsdl:output name="getProcessedAppointmentsResponse">
         <soap:body use="literal" />
       </wsdl:output>
@@ -305,7 +291,6 @@
       <wsdl:input name="cancelAppointment">
         <soap:body use="literal" />
       </wsdl:input>
-
       <wsdl:output name="cancelAppointmentResponse">
         <soap:body use="literal" />
       </wsdl:output>
@@ -315,6 +300,5 @@
     <wsdl:port binding="tns:KokuLooraAppointmentServiceSoapBinding" name="KokuLooraAppointmentServicePort">
       <soap:address location="http://kohtikumppanuutta-dev.dmz:8180/arcusys-koku-0.1-SNAPSHOT-av-model-0.1-SNAPSHOT/KokuLooraAppointmentServiceImpl" />
     </wsdl:port>
-
   </wsdl:service>
 </wsdl:definitions>

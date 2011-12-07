@@ -7,9 +7,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import fi.arcusys.koku.av.employeeservice.Appointment;
+import fi.arcusys.koku.av.employeeservice.AppointmentCriteria;
 import fi.arcusys.koku.av.employeeservice.AppointmentSummary;
 import fi.arcusys.koku.av.employeeservice.KokuLooraAppointmentService_Service;
-import fi.arcusys.koku.util.PropertiesUtil;
 import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
@@ -48,8 +48,8 @@ public class AvEmployeeService {
 	 * @param maxNum the maximum number
 	 * @return a list of summary of appointments
 	 */
-	public List<AppointmentSummary> getCreatedAppointments(String user, int startNum, int maxNum) {
-		return as.getKokuLooraAppointmentServicePort().getCreatedAppointments(user, startNum, maxNum);
+	public List<AppointmentSummary> getCreatedAppointments(String user, AppointmentCriteria criteria, int startNum, int maxNum) {
+		return as.getKokuLooraAppointmentServicePort().getCreatedAppointments(user, startNum, maxNum, criteria);
 	}
 	
 	/**
@@ -59,8 +59,9 @@ public class AvEmployeeService {
 	 * @param maxNum the maximum number
 	 * @return a list of summary of appointments
 	 */
-	public List<AppointmentSummary> getProcessedAppointments(String user, int startNum, int maxNum) {
-		return as.getKokuLooraAppointmentServicePort().getProcessedAppointments(user, startNum, maxNum);
+	public List<AppointmentSummary> getProcessedAppointments(String user, AppointmentCriteria criteria, int startNum, int maxNum) {
+		return as.getKokuLooraAppointmentServicePort().getProcessedAppointments(user, startNum, maxNum, criteria);
+		
 	}
 	
 	/**
@@ -68,8 +69,8 @@ public class AvEmployeeService {
 	 * @param user user name
 	 * @return the number of created appointments
 	 */
-	public int getTotalCreatedAppointmentNum(String user) {
-		return as.getKokuLooraAppointmentServicePort().getTotalCreatedAppointments(user);
+	public int getTotalCreatedAppointmentNum(String user, AppointmentCriteria criteria) {
+		return as.getKokuLooraAppointmentServicePort().getTotalCreatedAppointments(user, criteria);
 	}
 	
 	/**
@@ -77,8 +78,8 @@ public class AvEmployeeService {
 	 * @param user user name
 	 * @return the number of processed appointments
 	 */
-	public int getTotalProcessedAppointments(String user) {
-		return as.getKokuLooraAppointmentServicePort().getTotalProcessedAppointments(user);
+	public int getTotalProcessedAppointments(String user, AppointmentCriteria criteria) {
+		return as.getKokuLooraAppointmentServicePort().getTotalProcessedAppointments(user, criteria);
 	}
 	
 	/**

@@ -1,6 +1,12 @@
 package fi.arcusys.koku.av;
 
-import static fi.arcusys.koku.util.Constants.*;
+import static fi.arcusys.koku.util.Constants.DATE;
+import static fi.arcusys.koku.util.Constants.RESPONSE_FAIL;
+import static fi.arcusys.koku.util.Constants.RESPONSE_OK;
+import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN;
+import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN;
+import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD;
+import static fi.arcusys.koku.util.Constants.TIME;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,7 +14,6 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.log4j.Logger;
-import org.omg.CORBA.CTX_RESTRICT_SCOPE;
 import org.springframework.context.NoSuchMessageException;
 
 import fi.arcusys.koku.AbstractHandle;

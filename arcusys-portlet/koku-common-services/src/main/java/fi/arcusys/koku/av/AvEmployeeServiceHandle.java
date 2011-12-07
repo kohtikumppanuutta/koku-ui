@@ -20,12 +20,12 @@ import fi.arcusys.koku.av.EmployeeAppointment.UserWithTarget;
 import fi.arcusys.koku.av.employeeservice.Appointment;
 import fi.arcusys.koku.av.employeeservice.Appointment.AcceptedSlots;
 import fi.arcusys.koku.av.employeeservice.Appointment.AcceptedSlots.Entry;
+import fi.arcusys.koku.av.employeeservice.AppointmentCriteria;
 import fi.arcusys.koku.av.employeeservice.AppointmentReceipientTO;
 import fi.arcusys.koku.av.employeeservice.AppointmentSlot;
 import fi.arcusys.koku.av.employeeservice.AppointmentSummary;
 import fi.arcusys.koku.av.employeeservice.AppointmentSummaryStatus;
 import fi.arcusys.koku.av.employeeservice.AppointmentUserRejected;
-import fi.arcusys.koku.users.KokuUser;
 import fi.arcusys.koku.util.MessageUtil;
 
 
@@ -55,32 +55,57 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	 * @param taskType task type requested
 	 * @return a list of summary appointments
 	 */
-	public List<KokuAppointment> getAppointments(String userId, int startNum, int maxNum, String taskType) {
-
-		List<AppointmentSummary> appSummaryList;
-		List<KokuAppointment> appList = new ArrayList<KokuAppointment>();
+	public List<KokuAppointment> getAppointments(String userId, int startNum, int maxNum, String taskType, String keyword) {		
 		
-		if(taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE))
-			appSummaryList = aes.getCreatedAppointments(userId, startNum, maxNum);
-		else if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE))
-			appSummaryList = aes.getProcessedAppointments(userId, startNum, maxNum);
-		else
-			return appList;
-			
-		KokuAppointment kokuAppointment;
+		String targetPersonSsn = keyword;
 		
-		Iterator<AppointmentSummary> it = appSummaryList.iterator();
-		while(it.hasNext()) {
-			AppointmentSummary appSummary = it.next();
-			kokuAppointment = new KokuAppointment();
+		if(taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE)) {
+			return getCreatedAppointments(userId, targetPersonSsn, startNum, maxNum);			
+		} else  if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE)) {
+			return getProcessedAppointment(userId, targetPersonSsn,  startNum, maxNum);			
+		} else {
+			return new ArrayList<KokuAppointment>();
+		}
+	}
+	
+	
+	public List<KokuAppointment> getCreatedAppointments(String userId, String targetPersonSsn, int startNum, int maxNum) {
+		return getAppointmentList(aes.getCreatedAppointments(userId,  createAppointmentCriteria(targetPersonSsn), startNum, maxNum));
+	}
+		
+	public List<KokuAppointment> getProcessedAppointment(String userId, String targetPersonSsn, int startNum, int maxNum) {
+		return getAppointmentList(aes.getProcessedAppointments(userId, createAppointmentCriteria(targetPersonSsn), startNum, maxNum));
+	}
+	
+	private AppointmentCriteria createAppointmentCriteria(String targetPersonSsn) {
+		AppointmentCriteria criteria = null;
+		if (targetPersonSsn != null && !targetPersonSsn.trim().isEmpty()) {
+			criteria = new AppointmentCriteria();
+			criteria.setTargetPersonHetu(targetPersonSsn);			
+		}
+		return criteria;
+	}
+	
+	
+	/**
+	 * Gets summary appointments
+	 * @param user user
+	 * @param startNum start index of appointment
+	 * @param maxNum maximum number of appointments
+	 * @param taskType task type requested
+	 * @return a list of summary appointments
+	 */
+	private List<KokuAppointment> getAppointmentList(List<AppointmentSummary> appSummaryList) {
+		List<KokuAppointment> appList = new ArrayList<KokuAppointment>();					
+		for (AppointmentSummary appSummary : appSummaryList) {
+			KokuAppointment kokuAppointment = new KokuAppointment();
 			kokuAppointment.setAppointmentId(appSummary.getAppointmentId());
 			kokuAppointment.setSender(appSummary.getSender());
 			kokuAppointment.setSubject(appSummary.getSubject());
 			kokuAppointment.setDescription(appSummary.getDescription());
 			kokuAppointment.setStatus(localizeActionRequestStatus(appSummary.getStatus()));
 			appList.add(kokuAppointment);
-		}
-		
+		}		
 		return appList;
 	}
 
@@ -135,10 +160,11 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	 * @return the number of appointments
 	 */
 	public int getTotalAppointmentsNum(String userId, String taskType) {
+		AppointmentCriteria criteria = new AppointmentCriteria();		
 		if(taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE))// for employee
-			return aes.getTotalCreatedAppointmentNum(userId);
+			return aes.getTotalCreatedAppointmentNum(userId, criteria);
 		else if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE))
-			return aes.getTotalProcessedAppointments(userId);
+			return aes.getTotalProcessedAppointments(userId, criteria);
 		else
 			return 0;
 	}

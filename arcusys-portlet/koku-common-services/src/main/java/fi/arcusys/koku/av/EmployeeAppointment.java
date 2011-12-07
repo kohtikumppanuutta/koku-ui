@@ -11,7 +11,7 @@ import fi.arcusys.koku.av.employeeservice.AppointmentReceipientTO;
  * @author Jinhua Chen
  * Aug 22, 2011
  */
-public class EmployeeAppointment extends KokuAppointment{
+public class EmployeeAppointment extends KokuAppointment {
 
 	private List<Slot> approvedSlots;
 	private List<Slot> unapprovedSlots;
