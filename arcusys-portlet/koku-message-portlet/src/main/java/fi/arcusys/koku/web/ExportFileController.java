@@ -80,11 +80,18 @@ public class ExportFileController {
 					
 					writer.write(addQuote(res.getName())+",");
 					
+					int length = res.getAnswers().size();
+					String[] answers = new String[length];
+										
 					for (KokuAnswer answer : res.getAnswers()) {
-						writer.write(addQuote(answer.getAnswer()) + ",");
+						answers[answer.getQuestionNumber()] = answer.getAnswer();
 					}
+					
+					for (String answer : answers) {
+						writer.write(addQuote(answer) + ",");						
+					}
+					
 					writer.write(addQuote(res.getComment()));
-					writer.newLine();
 					writer.newLine();
 				}
 				
