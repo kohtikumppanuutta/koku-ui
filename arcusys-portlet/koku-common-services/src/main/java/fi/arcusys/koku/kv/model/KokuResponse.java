@@ -1,6 +1,8 @@
 package fi.arcusys.koku.kv.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class KokuResponse {
@@ -26,6 +28,19 @@ public class KokuResponse {
 				answers.add(new KokuAnswer(answer));
 			}
 		}
+		
+		Collections.sort(answers, new Comparator<KokuAnswer>() {
+			@Override
+			public int compare(KokuAnswer o1, KokuAnswer o2) {
+				if (o1.getQuestionNumber() > o2.getQuestionNumber()) {
+					return 1;
+				} else if (o1.getQuestionNumber() == o2.getQuestionNumber()) {
+					return 0;
+				} else {
+					return -1;
+				}
+			}				
+		});
 	}
 
 	public List<KokuAnswer> getAnswers() {
