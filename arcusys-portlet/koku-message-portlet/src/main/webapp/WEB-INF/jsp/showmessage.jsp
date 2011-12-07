@@ -150,7 +150,7 @@ public String htmlToCode(String s)
 	 * @Deprecated Please use KokuMessage.citizen.redirectToRecievedRequests() method
 	 */
 	function kokuRedirectToRecievedRequests() {
-		KokuMessage.citizen.redirectToRecievedRequests();
+		KokuMessage.citizen.redirectToRequestsRecieved();
 	}
 	
 	/**
