@@ -159,14 +159,14 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	 * @param taskType task type requested
 	 * @return the number of appointments
 	 */
-	public int getTotalAppointmentsNum(String userId, String taskType) {
-		AppointmentCriteria criteria = new AppointmentCriteria();		
-		if(taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE))// for employee
-			return aes.getTotalCreatedAppointmentNum(userId, criteria);
-		else if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE))
-			return aes.getTotalProcessedAppointments(userId, criteria);
-		else
+	public int getTotalAppointmentsNum(String userId, String taskType, String keyword) {
+		if(taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE)) {	// for employee
+			return aes.getTotalCreatedAppointmentNum(userId, createAppointmentCriteria(keyword));
+		} else if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE)) {
+			return aes.getTotalProcessedAppointments(userId, createAppointmentCriteria(keyword));
+		} else {
 			return 0;
+		}
 	}
 	
 	/**

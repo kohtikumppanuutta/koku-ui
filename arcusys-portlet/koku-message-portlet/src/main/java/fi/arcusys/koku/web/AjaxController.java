@@ -452,7 +452,7 @@ public class AjaxController extends AbstractController {
 				AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
 				handle.setMessageSource(messageSource);
 				tasks = handle.getAppointments(userUid, first, max, taskType, keyword);
-				totalTasksNum = handle.getTotalAppointmentsNum(userUid, taskType);
+				totalTasksNum = handle.getTotalAppointmentsNum(userUid, taskType, keyword);
 			} else if (taskType.equals(TASK_TYPE_CONSENT_ASSIGNED_CITIZEN)) { // consent (Valtakirja / Suostumus) Kansalaiselle saapuneet pyynnöt(/suostumukset) 
 				TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
 				tivaHandle.setMessageSource(messageSource);
