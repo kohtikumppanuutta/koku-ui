@@ -22,6 +22,7 @@ public class KokuConsent {
 	private String recipients;
 	private String replyTill;
 	private String comment;
+	private String templateTypeName;
 	
 	public long getConsentId() {
 		return consentId;
@@ -125,6 +126,14 @@ public class KokuConsent {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public void setTemplateTypeName(String templateTypeName) {
+		this.templateTypeName = templateTypeName;
+	}
+	
+	public String getTemplateTypeName() {
+		return templateTypeName;
 	}
 		
 }

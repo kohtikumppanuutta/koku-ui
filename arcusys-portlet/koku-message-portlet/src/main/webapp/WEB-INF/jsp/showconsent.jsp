@@ -44,6 +44,7 @@ function formatUrl(url) {
 	<div id="show-message" style="padding:12px">
 	<span class="text-bold"><spring:message code="consent.requester" />: <c:out value="${consent.requester}" /> </span><br />
 	<span class="text-bold"><spring:message code="consent.templateName" />:</span> <c:out value="${consent.templateName}" /><br />
+	<span class="text-bold"><spring:message code="consent.templateTypeName" />:</span> <c:out value="${consent.templateTypeName}" /><br />
 	<span class="text-bold"><spring:message code="consent.status"/>:</span> <c:out value="${consent.status}" /><br />
 	<span class="text-bold"><spring:message code="consent.approvalStatus"/>:</span> <c:out value="${consent.approvalStatus}" /><br />
 	<span class="text-bold"><spring:message code="consent.createType"/>:</span> <c:out value="${consent.createType}" /><br />

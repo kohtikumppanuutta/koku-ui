@@ -14,6 +14,7 @@
 <xs:sequence>
 <xs:element minOccurs="0" name="searchString" type="xs:string" />
 <xs:element name="limit" type="xs:int" />
+
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="searchConsentTemplatesResponse">
@@ -31,6 +32,7 @@
 <xs:sequence>
 <xs:element minOccurs="0" name="user" type="xs:string" />
 <xs:element minOccurs="0" name="criteria" type="tns:consentCriteria" />
+
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="consentCriteria">
@@ -48,6 +50,7 @@
 <xs:sequence>
 <xs:element name="suostumusId" type="xs:long" />
 </xs:sequence>
+
 </xs:complexType>
 <xs:complexType name="getConsentDetailsResponse">
 <xs:sequence>
@@ -65,6 +68,7 @@
 </xs:complexContent>
 </xs:complexType>
 <xs:complexType name="consentSummary">
+
 <xs:complexContent>
 <xs:extension base="tns:consentShortSummary">
 <xs:sequence>
@@ -82,6 +86,7 @@
 <xs:element minOccurs="0" name="anotherPermitterUid" type="xs:string" />
 <xs:element minOccurs="0" name="consentId" type="xs:long" />
 <xs:element minOccurs="0" name="createType" type="tns:consentCreateType" />
+
 <xs:element maxOccurs="unbounded" minOccurs="0" name="givenToParties" nillable="true" type="ns1:givenTo" />
 <xs:element minOccurs="0" name="informationTargetId" type="xs:string" />
 <xs:element minOccurs="0" name="metaInfo" type="xs:string" />
@@ -91,12 +96,15 @@
 <xs:element minOccurs="0" name="templateDescription" type="xs:string" />
 <xs:element minOccurs="0" name="templateId" type="xs:long" />
 <xs:element minOccurs="0" name="templateName" type="xs:string" />
+<xs:element minOccurs="0" name="templateTypeId" type="xs:long" />
+<xs:element minOccurs="0" name="templateTypeName" type="xs:string" />
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="actionRequestSummary">
 <xs:sequence>
 <xs:element minOccurs="0" name="description" type="xs:string" />
 <xs:element minOccurs="0" name="name" type="xs:string" />
+
 <xs:element minOccurs="0" name="status" type="tns:actionRequestStatus" />
 </xs:sequence>
 </xs:complexType>
@@ -114,6 +122,7 @@
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getConsentsResponse">
+
 <xs:sequence>
 <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:consentSummary" />
 </xs:sequence>
@@ -131,6 +140,7 @@
 </xs:restriction>
 </xs:simpleType>
 <xs:simpleType name="consentStatus">
+
 <xs:restriction base="xs:string">
 <xs:enumeration value="Open" />
 <xs:enumeration value="PartiallyGiven" />
@@ -148,6 +158,7 @@
 </xs:restriction>
 </xs:simpleType>
 </xs:schema>
+
 <xs:schema targetNamespace="http://services.koku.fi/entity/tiva/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 <xs:complexType name="givenTo">
 <xs:sequence>
@@ -161,6 +172,7 @@
     <wsdl:part element="tns:getConsents" name="parameters">
     </wsdl:part>
   </wsdl:message>
+
   <wsdl:message name="getConsentDetails">
     <wsdl:part element="tns:getConsentDetails" name="parameters">
     </wsdl:part>
@@ -170,6 +182,7 @@
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="searchConsentTemplatesResponse">
+
     <wsdl:part element="tns:searchConsentTemplatesResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
@@ -179,6 +192,7 @@
   </wsdl:message>
   <wsdl:message name="getConsentsResponse">
     <wsdl:part element="tns:getConsentsResponse" name="parameters">
+
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getTotalConsentsResponse">
@@ -188,6 +202,7 @@
   <wsdl:message name="searchConsentTemplates">
     <wsdl:part element="tns:searchConsentTemplates" name="parameters">
     </wsdl:part>
+
   </wsdl:message>
   <wsdl:portType name="KokuLooraSuostumusService">
     <wsdl:operation name="searchConsentTemplates">
@@ -197,6 +212,7 @@
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getTotalConsents">
+
       <wsdl:input message="tns:getTotalConsents" name="getTotalConsents">
     </wsdl:input>
       <wsdl:output message="tns:getTotalConsentsResponse" name="getTotalConsentsResponse">
@@ -206,6 +222,7 @@
       <wsdl:input message="tns:getConsentDetails" name="getConsentDetails">
     </wsdl:input>
       <wsdl:output message="tns:getConsentDetailsResponse" name="getConsentDetailsResponse">
+
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getConsents">
@@ -215,6 +232,7 @@
     </wsdl:output>
     </wsdl:operation>
   </wsdl:portType>
+
   <wsdl:binding name="KokuLooraSuostumusServiceSoapBinding" type="tns:KokuLooraSuostumusService">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="searchConsentTemplates">
@@ -224,6 +242,7 @@
       </wsdl:input>
       <wsdl:output name="searchConsentTemplatesResponse">
         <soap:body use="literal" />
+
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getTotalConsents">
@@ -233,6 +252,7 @@
       </wsdl:input>
       <wsdl:output name="getTotalConsentsResponse">
         <soap:body use="literal" />
+
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getConsentDetails">
@@ -242,6 +262,7 @@
       </wsdl:input>
       <wsdl:output name="getConsentDetailsResponse">
         <soap:body use="literal" />
+
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getConsents">
@@ -251,6 +272,7 @@
       </wsdl:input>
       <wsdl:output name="getConsentsResponse">
         <soap:body use="literal" />
+
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>

@@ -78,6 +78,7 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 			kokuConsent.setApprovalStatus(localizeApprovalConsentStatus(consent.getApprovalStatus()));
 			kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
 			kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
+			kokuConsent.setTemplateTypeName(consent.getTemplateTypeName());
 			consentList.add(kokuConsent);
 		}
 		
@@ -127,6 +128,7 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 		kokuConsent.setActionRequests(convertActionRequests(consent.getActionRequests()));
 		kokuConsent.setRecipients(MessageUtil.formatRecipients(consent.getReceipients()));
 		kokuConsent.setComment(consent.getComment());
+		kokuConsent.setTemplateTypeName(consent.getTemplateTypeName());
 		return kokuConsent;
 	}
 	
