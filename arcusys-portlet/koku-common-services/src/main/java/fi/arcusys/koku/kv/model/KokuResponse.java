@@ -44,6 +44,9 @@ public class KokuResponse {
 	}
 
 	public List<KokuAnswer> getAnswers() {
+		if (answers == null) {
+			answers = new ArrayList<KokuAnswer>();
+		}
 		return answers;
 	}
 	public void setAnswers(List<KokuAnswer> answers) {
