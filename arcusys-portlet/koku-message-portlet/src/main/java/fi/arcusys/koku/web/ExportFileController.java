@@ -2,6 +2,7 @@ package fi.arcusys.koku.web;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
 
@@ -80,15 +81,17 @@ public class ExportFileController {
 					
 					writer.write(addQuote(res.getName())+",");
 					
-					int length = res.getAnswers().size();
+					int length = res.getAnswers().size()+1;
 					String[] answers = new String[length];
-										
+					
 					for (KokuAnswer answer : res.getAnswers()) {
-						answers[answer.getQuestionNumber()] = answer.getAnswer();
+						answers[answer.getQuestionNumber()] =  answer.getAnswer();
 					}
 					
 					for (String answer : answers) {
-						writer.write(addQuote(answer) + ",");						
+						if (answer != null) {
+							writer.write(addQuote(answer) + ",");													
+						}
 					}
 					
 					writer.write(addQuote(res.getComment()));
