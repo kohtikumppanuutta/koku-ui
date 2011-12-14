@@ -13,6 +13,7 @@ public class KokuInformationRequestSummary {
     private KokuInformationRequestStatus status;
     private String localizedStatus;
     private String targetPersonUid;
+    private String recieverRoleUid;
     private String targetPersonName;
     private String title;
     private String validTill;
@@ -25,6 +26,7 @@ public class KokuInformationRequestSummary {
 		setStatusAsString(summary.getStatus().value());
 		this.targetPersonUid = summary.getTargetPersonUid();
 		this.title = summary.getTitle();
+		this.recieverRoleUid = summary.getReceiverRoleUid();
 		this.validTill = MessageUtil.formatTaskDateByDay(summary.getValidTill());
 	}
 	
@@ -107,17 +109,33 @@ public class KokuInformationRequestSummary {
 		this.targetPersonName = targetPersonName;
 	}
 
+	public String getRecieverRoleUid() {
+		return recieverRoleUid;
+	}
+
+	public void setRecieverRoleUid(String recieverRoleUid) {
+		this.recieverRoleUid = recieverRoleUid;
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "KokuInformationRequestSummary [requestId=" + requestId
-				+ ", receiverUid=" + receiverUid + ", receiverName="
+				+ ", receiverUid=" + receiverUid + ", recieverName="
 				+ recieverName + ", senderUid=" + senderUid + ", senderName="
 				+ senderName + ", status=" + status + ", localizedStatus="
 				+ localizedStatus + ", targetPersonUid=" + targetPersonUid
+				+ ", recieverRoleUid=" + recieverRoleUid
 				+ ", targetPersonName=" + targetPersonName + ", title=" + title
 				+ ", validTill=" + validTill + "]";
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -125,9 +143,11 @@ public class KokuInformationRequestSummary {
 		result = prime * result
 				+ ((localizedStatus == null) ? 0 : localizedStatus.hashCode());
 		result = prime * result
+				+ ((receiverUid == null) ? 0 : receiverUid.hashCode());
+		result = prime * result
 				+ ((recieverName == null) ? 0 : recieverName.hashCode());
 		result = prime * result
-				+ ((receiverUid == null) ? 0 : receiverUid.hashCode());
+				+ ((recieverRoleUid == null) ? 0 : recieverRoleUid.hashCode());
 		result = prime * result
 				+ ((requestId == null) ? 0 : requestId.hashCode());
 		result = prime * result
@@ -146,6 +166,9 @@ public class KokuInformationRequestSummary {
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -165,6 +188,13 @@ public class KokuInformationRequestSummary {
 		} else if (!localizedStatus.equals(other.localizedStatus)) {
 			return false;
 		}
+		if (receiverUid == null) {
+			if (other.receiverUid != null) {
+				return false;
+			}
+		} else if (!receiverUid.equals(other.receiverUid)) {
+			return false;
+		}
 		if (recieverName == null) {
 			if (other.recieverName != null) {
 				return false;
@@ -172,11 +202,11 @@ public class KokuInformationRequestSummary {
 		} else if (!recieverName.equals(other.recieverName)) {
 			return false;
 		}
-		if (receiverUid == null) {
-			if (other.receiverUid != null) {
+		if (recieverRoleUid == null) {
+			if (other.recieverRoleUid != null) {
 				return false;
 			}
-		} else if (!receiverUid.equals(other.receiverUid)) {
+		} else if (!recieverRoleUid.equals(other.recieverRoleUid)) {
 			return false;
 		}
 		if (requestId == null) {
@@ -185,7 +215,7 @@ public class KokuInformationRequestSummary {
 			}
 		} else if (!requestId.equals(other.requestId)) {
 			return false;
-		} 
+		}
 		if (senderName == null) {
 			if (other.senderName != null) {
 				return false;
