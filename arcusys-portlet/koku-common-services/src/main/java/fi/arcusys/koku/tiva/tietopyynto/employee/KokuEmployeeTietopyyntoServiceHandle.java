@@ -238,9 +238,14 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 		if (kokuSummary.getStatus() != null) {
 			kokuSummary.setLocalizedStatus(getLocalizedInformationRequestSummary(kokuSummary.getStatus()));
 		}
-		if (kokuSummary.getSenderUid() != null && kokuSummary.getReceiverUid() != null) {
+		if (kokuSummary.getSenderUid() != null ) {
 			kokuSummary.setSenderName(userService.getLooraNameByUserUid(kokuSummary.getSenderUid()));
-			kokuSummary.setRecieverName(userService.getLooraNameByUserUid(kokuSummary.getReceiverUid()));
+		}
+		if (kokuSummary.getReceiverUid() != null) {
+			kokuSummary.setRecieverName(userService.getLooraNameByUserUid(kokuSummary.getReceiverUid()));			
+		} else {
+			// NOTE: Small hack if ReceiverUid missing. This might change in future.
+			kokuSummary.setRecieverName(kokuSummary.getRecieverRoleUid());
 		}
 		if (kokuSummary.getTargetPersonUid() != null) {
 			kokuSummary.setTargetPersonName(userService.getKunpoNameByUserUid(kokuSummary.getTargetPersonUid()));

@@ -30,12 +30,7 @@ function formatUrl(url) {
 </script>
 <div id="task-manager-wrap" class="single">
 	<div id="show-message" style="padding:12px">
-		<c:if test="${tipy.recieverName != null}" >
 		<span class="text-bold"><spring:message code="tipy.details.reciever" />:</span> <c:out value="${tipy.recieverName}" /><br />
-		</c:if>
-		<c:if test="${tipy.recieverRoleUid != null}" >
-		<span class="text-bold"><spring:message code="tipy.details.reciever" />:</span> <c:out value="${tipy.recieverRoleUid}" /><br />
-		</c:if>
 		<span class="text-bold"><spring:message code="tipy.details.sender" />:</span> <c:out value="${tipy.senderName}" /><br />
 		<span class="text-bold"><spring:message code="tipy.details.requestStatus" />:</span> <c:out value="${tipy.localizedStatus}" /><br />
 		<span class="text-bold"><spring:message code="tipy.details.targetPerson" />:</span> <c:out value="${tipy.targetPersonName}" /><br />
