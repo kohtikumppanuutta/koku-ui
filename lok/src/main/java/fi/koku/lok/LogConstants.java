@@ -48,7 +48,4 @@ public class LogConstants {
   private LogConstants() {
     // Contains only static constants. No need for new instances
   }
-
 }
-
-

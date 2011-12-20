@@ -44,5 +44,4 @@ public class ServiceFactory {
     AuthorizationInfoServiceFactory f = new AuthorizationInfoServiceFactory(uid, pwd, ep);
     return f.getAuthorizationInfoService();
   }
-  
 }

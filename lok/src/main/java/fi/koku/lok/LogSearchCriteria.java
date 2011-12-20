@@ -10,6 +10,7 @@ package fi.koku.lok;
 import java.util.Date;
 
 /**
+ * Data class for user Log search criteria.
  * 
  * @author aspluma
  */
@@ -60,5 +61,4 @@ public class LogSearchCriteria {
   public void setTo(Date to) {
     this.to = to;
   }
-  
 }

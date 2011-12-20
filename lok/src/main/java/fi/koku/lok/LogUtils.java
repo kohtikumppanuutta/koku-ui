@@ -29,8 +29,7 @@ import fi.koku.services.utility.log.v1.LogEntryType;
 /**
  * Helper class for LOK portlet controllers.
  * 
- * @author makinsu
- * 
+ * @author makinsu 
  */
 public class LogUtils {
 
@@ -318,6 +317,4 @@ public class LogUtils {
      }
    }
   }
-  
- 
 }

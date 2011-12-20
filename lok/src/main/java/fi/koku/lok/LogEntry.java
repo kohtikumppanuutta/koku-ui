@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Data class for Log entry.
  * 
  * @author aspluma
  */
@@ -97,8 +98,6 @@ public class LogEntry {
   }
   
   public String getMessage() {
-    
     return message;
   }
- 
 }

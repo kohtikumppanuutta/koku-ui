@@ -302,31 +302,5 @@ public class LogArchiveController {
 
       return date;
     }
-
-    /**
-     * Method for parsing the date parameter.
-     * 
-     * @param text
-     * @return
-     */
-    /*
-     * public LogArchiveDate getFromRenderParameter(String text) {
-     * 
-     * Date d1 = null; try { if (StringUtils.isNotEmpty(text)) { d1 =
-     * df.parse(text); } } catch (ParseException e) { throw new
-     * IllegalArgumentException("error parsing date string", e); }
-     * 
-     * return new LogArchiveDate(d1); }
-     * 
-     * // TODO: tarvitaanko tätä? public LogArchiveDate
-     * getFromRenderParameter(String[] text) {
-     * 
-     * Date d1 = null; try { if (ArrayUtils.isNotEmpty(text) &&
-     * StringUtils.isNotEmpty(text[0])) { d1 = df.parse(text[0]); } } catch
-     * (ParseException e) { throw new
-     * IllegalArgumentException("error parsing date string", e); }
-     * 
-     * return new LogArchiveDate(d1); } }
-     */
   }
 }

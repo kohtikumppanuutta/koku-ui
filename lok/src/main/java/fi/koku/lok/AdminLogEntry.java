@@ -10,6 +10,7 @@ package fi.koku.lok;
 import java.util.Date;
 
 /**
+ * Data class for admin log entry.
  * 
  * @author makinsu
  */
@@ -69,5 +70,4 @@ public class AdminLogEntry {
   public String getMessage() {
     return message;
   }
- 
 }

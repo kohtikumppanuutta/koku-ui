@@ -9,6 +9,9 @@ package fi.koku.lok;
 
 import java.util.Date;
 
+/**
+ * Data class for log archive date data.
+ */
 public class LogArchiveDate {
 
   private Date endDate;
