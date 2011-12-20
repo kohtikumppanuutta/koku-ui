@@ -64,7 +64,7 @@
             <tr>
                 <td> <c:out value="${child.fullName}"/> </td>
                 <td> <c:out value="${child.pic}"/> </td>
-                <td><spring:message code="${DEPENDANT.bundleId}"/><c:if test="${child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.added.into.family" /></c:if><c:if test="${!child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.not.added.into.family" /></c:if></td>
+                <td><spring:message code="ui.pyh.${DEPENDANT.roleID}"/><c:if test="${child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.added.into.family" /></c:if><c:if test="${!child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.not.added.into.family" /></c:if></td>
                 <td> 
                 <span class="actions">
                         <span class="pyh-link"> <c:choose>
@@ -94,7 +94,7 @@
                 <tr>
                 <td> <c:out value="${familyMember.fullName}"/> </td>
                 <td> <c:out value="${familyMember.pic}"/> </td>
-                <td><spring:message code="${familyMember.role.bundleId}"/></td>
+                <td><spring:message code="ui.pyh.${familyMember.role.roleID}"/></td>
                 <td>
                 	<span class="pyh-linkki">
                     <portlet:actionURL var="removeFamilyMember">
@@ -180,13 +180,13 @@
 							
 							<td>
 								<select name="userRole" class="syntmaika">
-									<option value="${MEMBER}"><spring:message code="${MEMBER.bundleId}"/></option>
-									<option value="${CHILD}"><spring:message code="${CHILD.bundleId}"/></option>
+									<option value="${MEMBER}"><spring:message code="ui.pyh.${MEMBER.roleID}"/></option>
+									<option value="${CHILD}"><spring:message code="ui.pyh.${CHILD.roleID}"/></option>
 									
 									<c:if test="${not parentsFull}">
-										<option value="${FATHER}"><spring:message code="${FATHER.bundleId}"/></option>
-										<option value="${MOTHER}"><spring:message code="${MOTHER.bundleId}"/></option>
-										<option value="${PARENT}"><spring:message code="${PARENT.bundleId}"/></option>
+										<option value="${FATHER}"><spring:message code="ui.pyh.${FATHER.roleID}"/></option>
+										<option value="${MOTHER}"><spring:message code="ui.pyh.${MOTHER.roleID}"/></option>
+										<option value="${PARENT}"><spring:message code="ui.pyh.${PARENT.roleID}"/></option>
 									</c:if>
 								</select>
 							</td>

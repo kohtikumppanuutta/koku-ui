@@ -62,7 +62,7 @@
             <tr>
                 <td> <c:out value="${child.fullName}"/> </td>
                 <td> <c:out value="${child.pic}"/> </td>
-                <td><spring:message code="${DEPENDANT.bundleId}"/><c:if test="${child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.added.into.family" /></c:if><c:if test="${!child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.not.added.into.family" /></c:if></td>
+                <td><spring:message code="ui.pyh.${DEPENDANT.roleID}"/><c:if test="${child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.added.into.family" /></c:if><c:if test="${!child.memberOfUserFamily}">,&nbsp;<spring:message code="ui.pyh.not.added.into.family" /></c:if></td>
             </tr>
             </c:forEach>
             
@@ -70,7 +70,7 @@
             <tr>
                 <td> <c:out value="${familyMember.fullName}"/> </td>
                 <td> <c:out value="${familyMember.pic}"/> </td>
-                <td><spring:message code="${familyMember.role.bundleId}"/></td>
+                <td><spring:message code="ui.pyh.${familyMember.role.roleID}"/></td>
             </tr>
             </c:forEach>
         </table>    
