@@ -7,8 +7,6 @@
  */
 package fi.koku.kks.controller;
 
-import java.util.Map;
-import java.util.Set;
 
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletSession;

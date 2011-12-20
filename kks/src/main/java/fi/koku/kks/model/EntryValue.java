@@ -11,6 +11,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Class for entry value
+ * 
+ * @author Ixonos / tuomape
+ *
+ */
 public class EntryValue {
 
   private String id;

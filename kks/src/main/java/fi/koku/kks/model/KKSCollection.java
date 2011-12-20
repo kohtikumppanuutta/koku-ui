@@ -18,7 +18,7 @@ import fi.koku.services.entity.kks.v1.KksCollectionClassType;
 import fi.koku.services.utility.authorizationinfo.v1.model.Registry;
 
 /**
- * Single collection
+ * class for single collection
  * 
  * @author tuomape
  */

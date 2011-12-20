@@ -63,7 +63,6 @@ import fi.koku.services.entity.tiva.v1.GivenTo;
 import fi.koku.services.entity.tiva.v1.KokuTivaToKksService;
 import fi.koku.services.utility.authorizationinfo.v1.AuthorizationInfoService;
 import fi.koku.services.utility.authorizationinfo.v1.AuthorizationInfoServiceFactory;
-import fi.koku.services.utility.authorizationinfo.v1.model.OrgUnit;
 import fi.koku.services.utility.authorizationinfo.v1.model.Registry;
 import fi.koku.settings.KoKuPropertiesUtil;
 

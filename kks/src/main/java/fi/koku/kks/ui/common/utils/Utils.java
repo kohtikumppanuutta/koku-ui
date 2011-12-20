@@ -9,8 +9,6 @@ package fi.koku.kks.ui.common.utils;
 
 import javax.portlet.PortletSession;
 
-import org.apache.commons.lang.StringUtils;
-import org.springframework.ui.Model;
 
 import fi.koku.portlet.filter.userinfo.UserInfo;
 

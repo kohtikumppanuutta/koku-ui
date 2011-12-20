@@ -19,6 +19,12 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.kks.model.KksService;
 
+/**
+ * Edit mode controller. Allows metadata clearing
+ * 
+ * @author Ixonos / tuomape
+ *
+ */
 @Controller(value = "EditController")
 @RequestMapping(value = "EDIT")
 public class EditController {

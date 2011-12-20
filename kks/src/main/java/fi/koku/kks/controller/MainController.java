@@ -24,6 +24,12 @@ import fi.koku.kks.model.Person;
 import fi.koku.kks.ui.common.utils.Utils;
 import fi.koku.settings.KoKuPropertiesUtil;
 
+/**
+ * Main controller (handler request that have no action)
+ * 
+ * @author Ixonos / tuomape
+ *
+ */
 @Controller("mainController")
 @RequestMapping(value = "VIEW")
 public class MainController {
