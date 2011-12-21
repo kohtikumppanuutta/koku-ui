@@ -233,14 +233,13 @@ public class KksService {
       return null;
     }
 
+    KksCollectionType kks = kksService.opGetKksCollection(collectionId, getKksAuditInfo(info.getPic()));
 
-      KksCollectionType kks = kksService.opGetKksCollection(collectionId, getKksAuditInfo(info.getPic()));
-
-      KKSCollection col = converter.fromWsType(kks, info.getPic());
-      col.setMaster(isParent(info.getPic(), col.getCustomer()));
-      col.setAuthorizedRegistrys(getAuthorizedRegistries(info.getPic()));
-      setEntryModifiers(info, col);
-      return col;
+    KKSCollection col = converter.fromWsType(kks, info.getPic());
+    col.setParent(isParent(info.getPic(), col.getCustomer()));
+    col.setAuthorizedRegistrys(getAuthorizedRegistries(info.getPic()));
+    setEntryModifiers(info, col);
+    return col;
 
   }
 

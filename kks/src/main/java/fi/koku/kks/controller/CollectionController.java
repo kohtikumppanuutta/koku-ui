@@ -71,7 +71,7 @@ public class CollectionController {
       session.setAttribute("kks.collection", c);
       String pic = Utils.getPicFromSession(session);
 
-      boolean parent = kksService.isParent(pic, child.getPic());
+      boolean parent = c.isParent();
       boolean canSave = !parent || hasParentGroups(c.getCollectionClass());
       model.addAttribute("child", child);
       model.addAttribute("collection", c);

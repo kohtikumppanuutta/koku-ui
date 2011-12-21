@@ -249,11 +249,11 @@ public class KKSCollection {
     this.authorizedRegistrys = authorizedRegistrys;
   }
 
-  public boolean isMaster() {
+  public boolean isParent() {
     return master;
   }
 
-  public void setMaster(boolean master) {
+  public void setParent(boolean master) {
     this.master = master;
   }
 
