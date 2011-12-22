@@ -7,6 +7,8 @@
  */
 package fi.koku.pyh.controller;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 import javax.portlet.RenderRequest;
@@ -35,6 +37,7 @@ import fi.koku.services.entity.customerservice.helper.MessageHelper;
 import fi.koku.services.entity.customerservice.model.DependantsAndFamily;
 import fi.koku.services.entity.customerservice.model.Family;
 import fi.koku.services.entity.customerservice.model.FamilyIdAndFamilyMembers;
+import fi.koku.services.entity.customerservice.model.Message;
 import fi.koku.services.entity.customerservice.model.Person;
 
 /**
@@ -109,11 +112,20 @@ public class FamilyInformationController {
     DependantsAndFamily daf = familyHelper.getDependantsAndFamily(userPic, userFamily);
     FamilyIdAndFamilyMembers fidm = familyHelper.getOtherFamilyMembers(userPic, userFamily);
     
+    List<Message> messages = messageHelper.getMessagesFor(user, familyHelper.isParentsSet(userPic, userFamily), messageSource.getMessage("ui.pyh.received.messages.content", null, "", Locale.getDefault()), messageSource.getMessage("ui.pyh.received.messages.content.two.parents", null, "", Locale.getDefault()));
+    Iterator<Message> mi = messages.iterator();
+    String roleText = "";
+    while (mi.hasNext()) {
+      Message message = mi.next();
+      roleText = messageSource.getMessage("ui.pyh." + message.getRole(), null, "", Locale.getDefault());
+      message.setText(message.getText().replace("@TARGET_ROLE@", roleText));
+    }
+    
     model.addAttribute("user", user);
     model.addAttribute("dependants", daf.getDependants());
     model.addAttribute("otherFamilyMembers", fidm.getFamilyMembers());
     model.addAttribute("currentFamilyId", fidm.getFamilyId());
-    model.addAttribute("messages", messageHelper.getMessagesFor(user, familyHelper.isParentsSet(userPic, userFamily), messageSource.getMessage("ui.pyh.received.messages.content", null, "", Locale.getDefault()), messageSource.getMessage("ui.pyh.received.messages.content.two.parents", null, "", Locale.getDefault())));
+    model.addAttribute("messages", messages);
     model.addAttribute("sentMessages", messageHelper.getSentMessages(user, messageSource.getMessage("ui.pyh.sent.messages.content", null, "", Locale.getDefault())));
     model.addAttribute("supportEmailAddress", PyhConstants.KOKU_SUPPORT_EMAIL_ADDRESS);
     
