@@ -25,6 +25,7 @@
 
     <div class="kks-reset-floating"></div>
     
+	<c:if test="${not empty error}"><div class="error"><spring:message code="${error}"></spring:message> </div></c:if>
 
 	<div class="kks-content">
 		<h1 class="portlet-section-header">

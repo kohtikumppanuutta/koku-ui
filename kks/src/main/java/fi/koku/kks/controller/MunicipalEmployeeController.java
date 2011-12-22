@@ -51,7 +51,8 @@ public class MunicipalEmployeeController {
   @RenderMapping(params = "action=showEmployee")
   public String show(PortletSession session, RenderResponse response,
       @RequestParam(value = "childs", required = false) String[] childs,
-      @RequestParam(value = "search", required = false) String search, Model model) {
+      @RequestParam(value = "search", required = false) String search,  @RequestParam(value = "error", required = false) String error,
+      Model model) {
     LOG.debug("show employee");
     
     String pic = Utils.getPicFromSession(session);
@@ -61,6 +62,10 @@ public class MunicipalEmployeeController {
     if (search != null) {
       model.addAttribute("search", search);
     }
+    
+    if (error != null) {
+      model.addAttribute("error", error);
+    }
     return "search";
   }
 
@@ -69,7 +74,9 @@ public class MunicipalEmployeeController {
       BindingResult bindingResult, ActionResponse response, SessionStatus sessionStatus) {
     LOG.info("search child");
 
-    Person p = kksService.searchPerson(child, Utils.getPicFromSession(session));
+    String pic = Utils.getPicFromSession(session);
+    String error = validateInput(child, pic);
+    Person p = error == null ? kksService.searchPerson(child, Utils.getPicFromSession(session)) : null;
 
     if (p != null) {
       response.setRenderParameter("action", "showChild");
@@ -78,8 +85,20 @@ public class MunicipalEmployeeController {
       response.setRenderParameter("action", "showEmployee");
       response.setRenderParameter("childs", new String[] { "" });
       response.setRenderParameter("search", "true");
+      
+      if ( error != null ) {
+        response.setRenderParameter("error", error );
+      }
     }
     sessionStatus.setComplete();
+  }
+
+  private String validateInput(Person child, String pic) {
+    if ( child.getPic().trim().equals( pic ) ) {
+      return "ui.kks.illegal.pic.search";
+    }
+    
+    return null;
   }
 
   @ModelAttribute("child")
