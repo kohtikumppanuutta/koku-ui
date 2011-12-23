@@ -37,6 +37,11 @@ public class ExportFileController {
 	
 	@Resource
 	private ResourceBundleMessageSource messageSource;
+	
+	private final static String SEPARATOR 					= ";";
+	private final static String TEXT_DELIMITER				= "\"";
+	private final static String NEW_LINE					= "\n";
+	private final static String FILTER						= "\\r\\n|\\r|\\n|"+SEPARATOR+"|"+TEXT_DELIMITER;
 
 	
 	/**
@@ -57,29 +62,30 @@ public class ExportFileController {
 			requestSubject = "vastaus";
 		}
 		response.setProperty("Content-Disposition", "attachment; filename="+requestSubject+".csv");
-		final String username = resourceRequest.getUserPrincipal().getName();
+		response.setProperty("Content-Type", "text/xml, charset=UTF-8; encoding=UTF-8");
 
-		final Locale locale = MessageUtil.getLocale();
-		
+		final String username = resourceRequest.getUserPrincipal().getName();
+		final Locale locale = MessageUtil.getLocale();		
 		try {
 			BufferedWriter writer = new BufferedWriter(response.getWriter());
-
+			/* UTF-8 BOM (Do not remove, otherwise Excel won't recognize characters correctly!) */
+			writer.append('\uFEFF');
 			if (kokuRequest != null) {
 				/* Headers */
 				writer.write(addQuote(messageSource.getMessage("export.responseSummary", null, locale)));
-				writer.newLine();
-				writer.write(addQuote(messageSource.getMessage("export.respondent", null, locale))+",");
+				writer.write(NEW_LINE);
+				writer.write(addQuote(messageSource.getMessage("export.respondent", null, locale))+SEPARATOR);
 
 				for (KokuQuestion q : kokuRequest.getQuestions()) {
-					writer.write(addQuote(q.getDescription()) + ",");
+					writer.write(addQuote(q.getDescription()) + SEPARATOR);
 				}				
-				writer.write(addQuote(messageSource.getMessage("export.comment", null, locale))+",");
-				writer.newLine();
+				writer.write(addQuote(messageSource.getMessage("export.comment", null, locale)));
+				writer.write(NEW_LINE);
 				
 				/* Data */
 				for (KokuResponse res : kokuRequest.getRespondedList()) {
 					
-					writer.write(addQuote(res.getName())+",");
+					writer.write(addQuote(res.getName())+SEPARATOR);
 					
 					int length = res.getAnswers().size()+1;
 					String[] answers = new String[length];
@@ -90,23 +96,21 @@ public class ExportFileController {
 					
 					for (String answer : answers) {
 						if (answer != null) {
-							writer.write(addQuote(answer) + ",");													
+							writer.write(addQuote(answer) + SEPARATOR);													
 						}
-					}
-					
+					}					
 					writer.write(addQuote(res.getComment()));
-					writer.newLine();
+					writer.write(NEW_LINE);
 				}
 				
-				writer.newLine();
+				writer.write(NEW_LINE);
 				writer.write(addQuote(messageSource.getMessage("export.missed", null, locale)));
-				writer.newLine();
+				writer.write(NEW_LINE);
 
 				for(String name : kokuRequest.getUnrespondedList()) {
 					writer.write(addQuote(name));
-					writer.newLine();
+					writer.write(NEW_LINE);
 				}
-
 				writer.flush();
 				writer.close();
 			}
@@ -120,18 +124,8 @@ public class ExportFileController {
 	 * @param s
 	 * @return
 	 */
-	private String addQuote(String s) {
-		String q = "\"";
-		
-		return q+s+q;
-	}
-	
-	/**
-	 * Generates quotation mark char '"'
-	 * @return
-	 */
-	private String addQuote() {
-		return "\"\"";
+	private String addQuote(String s) {		
+		return TEXT_DELIMITER+s.replaceAll(FILTER, "")+TEXT_DELIMITER;
 	}
 
 }
