@@ -4,7 +4,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
 	<portlet>
+        <description>Kohti kumppanuutta - sopimukset ja suunnitelmat</description>
 		<portlet-name>KKS</portlet-name>
+        <display-name>KKS portlet</display-name>
 		<portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
 		<supports>
 			<mime-type>text/html</mime-type>
