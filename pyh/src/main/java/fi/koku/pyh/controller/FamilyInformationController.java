@@ -92,8 +92,7 @@ public class FamilyInformationController {
     try {
       customer = customerService.opGetCustomer(userPic, CustomerServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
     } catch (fi.koku.services.entity.customer.v1.ServiceFault fault) {
-      // catch the exception when the user information cannot be fetched; user will be null and a notification about 
-      // missing user information will be shown in JSP
+      // user information cannot be fetched; user will be null and a notification about missing user information will be shown in JSP
     }
     
     Person user = null;

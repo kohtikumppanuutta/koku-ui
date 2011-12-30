@@ -78,9 +78,9 @@ public class MessageController {
     if (familyId != null && !"".equals(familyId)) {
       
       // opposite membership requests must be deleted: 
-      // check if the member to be added into the family has sent a request to add the current user into her family
+      // check if the membership request sender and the recipient have sent requests to each other
       
-      // query opposite membership request: set requester as approver and approver as requester
+      // opposite membership requests are queried by setting requester as approver and approver as requester
       MembershipRequestQueryCriteriaType membershipRequestQueryCriteria = new MembershipRequestQueryCriteriaType();
       membershipRequestQueryCriteria.setApproverPic(requesterPic);
       membershipRequestQueryCriteria.setRequesterPic(userPic);

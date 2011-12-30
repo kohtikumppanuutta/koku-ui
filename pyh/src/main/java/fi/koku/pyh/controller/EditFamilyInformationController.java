@@ -171,10 +171,8 @@ public class EditFamilyInformationController {
     
     Family userFamily = null;
     try {
-      // user family should exist because it was created in the other render method already
       userFamily = familyHelper.getFamily(userPic);
     } catch (FamilyNotFoundException e) {
-      // if user has no family community then create it
       userFamily = addFamily(userPic);
     }
     String familyCommunityId = userFamily.getCommunityId();
@@ -244,7 +242,6 @@ public class EditFamilyInformationController {
     throws fi.koku.services.entity.community.v1.ServiceFault, fi.koku.services.entity.customer.v1.ServiceFault {
     
     String userPic = UserInfoUtils.getPicFromSession(request);
-    // null parameter in getDependantsAndFamily is ok because we want only depedants
     for (Dependant d : familyHelper.getDependantsAndFamily(userPic, null).getDependants()) {
       if (d.getPic().equals(familyMemberPic)) {
         d.setMemberOfUserFamily(false);
@@ -341,7 +338,7 @@ public class EditFamilyInformationController {
           try {
             this.mailSender.send(mailMessage);
           } catch (MailException me) {
-            // even if mail sending fails, PYH operation continues normally
+            // if mail sending fails, PYH operation continues normally
             logger.error("EditFamilyInformationController.addUsersToFamily: sending mail to KoKu support failed!", me);
           }
           
@@ -582,7 +579,6 @@ public class EditFamilyInformationController {
           if (member.getPic().equals(familyMemberPic) && isMemberOfCommunity(userPic, members)) {
             members.remove(member);
             
-            // although this WS call is inside loop, it will be called only once because this method will return after the WS call
             communityService.opUpdateCommunity(community, communityAuditInfoType);
             Log.getInstance().update(userPic, "", "pyh.family.community", "Removing family member " + familyMemberPic + " from family");
             

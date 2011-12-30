@@ -140,8 +140,7 @@ public class Log {
       logServicePortType.opLog(entries, getLogAuditInfo(userId));
       
     } catch (fi.koku.services.utility.log.v1.ServiceFault fault) {
-      // if log operation fails, stacktrace will be logged in server log
-      // PYH still operates normally even if the logging fails
+      // PYH operates normally even if logging fails
       logger.error("LOK service failed to log operation " + operation + " for data type " + dataType, fault);
     }
   }
