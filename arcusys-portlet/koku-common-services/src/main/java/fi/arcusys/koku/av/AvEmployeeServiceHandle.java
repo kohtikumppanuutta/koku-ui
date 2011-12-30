@@ -8,6 +8,7 @@ import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPL
 import static fi.arcusys.koku.util.Constants.TIME;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -26,6 +27,7 @@ import fi.arcusys.koku.av.employeeservice.AppointmentSlot;
 import fi.arcusys.koku.av.employeeservice.AppointmentSummary;
 import fi.arcusys.koku.av.employeeservice.AppointmentSummaryStatus;
 import fi.arcusys.koku.av.employeeservice.AppointmentUserRejected;
+import fi.arcusys.koku.av.employeeservice.User;
 import fi.arcusys.koku.util.MessageUtil;
 
 
@@ -100,7 +102,7 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		for (AppointmentSummary appSummary : appSummaryList) {
 			KokuAppointment kokuAppointment = new KokuAppointment();
 			kokuAppointment.setAppointmentId(appSummary.getAppointmentId());
-			kokuAppointment.setSender(appSummary.getSender());
+			kokuAppointment.setSender(getDisplayName(appSummary.getSenderUserInfo()));
 			kokuAppointment.setSubject(appSummary.getSubject());
 			kokuAppointment.setDescription(appSummary.getDescription());
 			kokuAppointment.setStatus(localizeActionRequestStatus(appSummary.getStatus()));
@@ -126,7 +128,7 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		EmployeeAppointment empAppointment = new EmployeeAppointment();
 		Appointment appointment = aes.getAppointmentById(appId);
 		empAppointment.setAppointmentId(appointment.getAppointmentId());
-		empAppointment.setSender(appointment.getSender());
+		empAppointment.setSender(getDisplayName(appointment.getSenderUserInfo()));
 		empAppointment.setSubject(appointment.getSubject());
 		empAppointment.setDescription(appointment.getDescription());
 		empAppointment.setStatus(localizeActionRequestStatus(appointment.getStatus()));		
@@ -135,7 +137,7 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		empAppointment.setCancellationComment(appointment.getCancelComment());
 //		empAppointment.setUsersRejected(appointment.getUsersRejected());
 		empAppointment.setUserRejected(convertUserRejectedToKokuUserRejected(appointment.getUsersRejectedWithComments()));
-		empAppointment.setRejectedUsers(formatRejectedUsers(appointment.getUsersRejected(), appointment.getRecipients()));
+		empAppointment.setRejectedUsers(formatRejectedUsers(getDisplayNames(getUsers(appointment.getUsersRejectedWithComments())), appointment.getRecipients()));
 		empAppointment.setUnrespondedUsers(calcUnrespondedUsers(appointment));
 		List<Slot> allSlots = formatSlots(appointment.getSlots(), appointment.getAcceptedSlots(), appointment.getRecipients());		
 		setSlots(empAppointment, allSlots);
@@ -207,7 +209,7 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 				slot = slots.get(i);
 				if(slot.getSlotNumber() == slotId) {
 					slot.setApproved(true);
-					targetPerson = entry.getValue();
+					targetPerson = getDisplayName(entry.getValue());
 					slot.setTargetPerson(targetPerson);
 					slot.setRecipients(mapRecipients(targetPerson, recipients));
 					break;
@@ -217,7 +219,14 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		
 		return slots;
 	}
-	
+
+    private String getDisplayName(final User user) {
+        if (user == null) {
+            return null;
+        }
+        return user.getDisplayName();
+    }
+    
 	/**
 	 * Finds the approved slots and unapproved slots and sets them afterwards
 	 * @param empAppointment EmployeeAppointment
@@ -255,8 +264,8 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		
 		while(it.hasNext()) {
 			receipientTo = it.next();
-			if(receipientTo.getTargetPerson().equals(targetPerson)) {
-				recipientsStr = MessageUtil.formatRecipients(receipientTo.getReceipients());
+			if(getDisplayName(receipientTo.getTargetPersonUserInfo()).equals(targetPerson)) {
+				recipientsStr = MessageUtil.formatRecipients(getDisplayNames(receipientTo.getReceipientUserInfos()));
 				break;
 			}
 		}
@@ -291,7 +300,7 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	
 	private List<UserWithTarget> calcUnrespondedUsers(Appointment appointment) {
 		List<UserWithTarget> unrespondedUsers = new ArrayList<UserWithTarget>();
-		List<String> userRejected = appointment.getUsersRejected();
+		List<String> userRejected = getDisplayNames(getUsers(appointment.getUsersRejectedWithComments()));
 		List<AppointmentReceipientTO> recipients = appointment.getRecipients();
 		AcceptedSlots acceptedSlots = appointment.getAcceptedSlots();
 		
@@ -299,12 +308,12 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		
 		while(itApp.hasNext()) {
 			AppointmentReceipientTO app = itApp.next();
-			String targetPerson = app.getTargetPerson();
+			String targetPerson = getDisplayName(app.getTargetPersonUserInfo());
 			
 			if(!hasTargetPerson(targetPerson, acceptedSlots, userRejected)) {
 				UserWithTarget user = new UserWithTarget();
 				user.setTargetPerson(targetPerson);
-				user.setRecipients(MessageUtil.formatRecipients(app.getReceipients()));
+				user.setRecipients(MessageUtil.formatRecipients(getDisplayNames(app.getReceipientUserInfos())));
 				unrespondedUsers.add(user);
 			}
 		}
@@ -313,6 +322,39 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	}
 	
 	/**
+     * @param users
+     * @return
+     */
+    private List<User> getUsers(List<AppointmentUserRejected> users) {
+        if (users == null || users.isEmpty()) {
+            return Collections.emptyList();
+        }
+        
+        final List<User> result = new ArrayList<User>(users.size());
+        for (final AppointmentUserRejected user : users) {
+            result.add(user.getUserInfo());
+        }
+        return result;
+    }
+
+    /**
+     * @param receipientUserInfos
+     * @return
+     */
+    private List<String> getDisplayNames(List<User> userInfos) {
+        if (userInfos == null || userInfos.isEmpty()) {
+            return Collections.emptyList();
+        }
+        
+        final List<String> result = new ArrayList<String>(userInfos.size());
+        for (final User user : userInfos) {
+            result.add(getDisplayName(user));
+        }
+        
+        return result;
+    }
+
+    /**
 	 * Checks that the targetPeson exists or not
 	 * @param targetPerson
 	 * @param acceptedSlots
@@ -325,7 +367,7 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		
 		while(itEntry.hasNext()) {
 			Entry entry = itEntry.next();
-			String target = entry.getValue();
+			String target = getDisplayName(entry.getValue());
 			
 			if(target.equals(targetPerson)) {
 				return true;

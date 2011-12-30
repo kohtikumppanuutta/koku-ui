@@ -143,21 +143,20 @@ public class MessageUtil {
 	 * @return recipients string
 	 */
 	public static String formatRecipients(List<String> recipients) {
-		Iterator<String> it = recipients.iterator();
-		String recipientStr = "";
-		String recipient;
-		
-		while(it.hasNext()) {
-			recipient = it.next();
-			
-			if(recipient.trim().length() > 0)
-				recipientStr += recipient + ", ";		
-		}
-		
-		if(recipientStr.lastIndexOf(",") > 0)
-			recipientStr = recipientStr.substring(0, recipientStr.length()-2);
-		
-		return recipientStr;
+	    final StringBuilder result = new StringBuilder();
+	    
+	    for (final String recipient : recipients) {
+	        final String user = recipient.trim();
+            if (!user.isEmpty()) {
+                result.append(user).append(", ");
+            }
+	    }
+	    
+	    if (result.length() > 0) {
+	        result.setLength(result.length() - 2);
+	    }
+	    
+	    return result.toString();
 	}
 	
 	

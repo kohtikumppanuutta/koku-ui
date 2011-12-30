@@ -49,7 +49,7 @@
 	function showAppointment(index) {
 		var task = pageObj.tasks[index];
 		var appointmentId = task["appointmentId"];
-		var targetPerson = task['targetPerson'];
+		var targetPerson = task['targetPersonUid'];
 		var url="";
 		
 		if (pageObj.taskType == "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE%>" 

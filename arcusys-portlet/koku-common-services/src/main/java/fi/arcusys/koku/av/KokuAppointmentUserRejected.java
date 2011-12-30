@@ -14,8 +14,8 @@ public class KokuAppointmentUserRejected {
     
     public KokuAppointmentUserRejected(AppointmentUserRejected userRejected) {
     	rejectComment = userRejected.getRejectComment();
-    	userUid = userRejected.getUserUid();
-    	userDisplayName = userRejected.getUserDisplayName();
+    	userUid = userRejected.getUserInfo().getUid();
+    	userDisplayName = userRejected.getUserInfo().getDisplayName();
     }    
     
 	public final String getRejectComment() {

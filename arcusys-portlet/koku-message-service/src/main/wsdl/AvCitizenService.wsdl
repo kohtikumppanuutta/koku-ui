@@ -1,6 +1,27 @@
 <?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="KokuKunpoAppointmentService" targetNamespace="http://soa.av.koku.arcusys.fi/" xmlns:ns1="http://schemas.xmlsoap.org/wsdl/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://soa.av.koku.arcusys.fi/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <wsdl:types>
-<xs:schema elementFormDefault="unqualified" targetNamespace="http://soa.av.koku.arcusys.fi/" version="1.0" xmlns:tns="http://soa.av.koku.arcusys.fi/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema targetNamespace="http://soa.common.koku.arcusys.fi/" version="1.0" xmlns:tns="http://soa.common.koku.arcusys.fi/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="perform" type="tns:perform" />
+<xs:element name="performResponse" type="tns:performResponse" />
+<xs:complexType name="user">
+<xs:sequence>
+<xs:element minOccurs="0" name="displayName" type="xs:string" />
+<xs:element minOccurs="0" name="email" type="xs:string" />
+<xs:element minOccurs="0" name="firstname" type="xs:string" />
+<xs:element minOccurs="0" name="lastname" type="xs:string" />
+<xs:element minOccurs="0" name="phoneNumber" type="xs:string" />
+<xs:element minOccurs="0" name="uid" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="performResponse">
+<xs:sequence />
+</xs:complexType>
+<xs:complexType name="perform">
+<xs:sequence />
+</xs:complexType>
+</xs:schema>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://soa.av.koku.arcusys.fi/" xmlns:ns1="http://soa.common.koku.arcusys.fi/" xmlns:tns="http://soa.av.koku.arcusys.fi/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:import namespace="http://soa.common.koku.arcusys.fi/" />
 <xs:element name="cancelRespondedAppointment" type="tns:cancelRespondedAppointment" />
 <xs:element name="cancelRespondedAppointmentResponse" type="tns:cancelRespondedAppointmentResponse" />
 <xs:element name="getAppointmentRespondedById" type="tns:getAppointmentRespondedById" />
@@ -14,7 +35,6 @@
 <xs:element name="getTotalAssignedAppointments" type="tns:getTotalAssignedAppointments" />
 <xs:element name="getTotalAssignedAppointmentsResponse" type="tns:getTotalAssignedAppointmentsResponse" />
 <xs:element name="getTotalOldAppointments" type="tns:getTotalOldAppointments" />
-
 <xs:element name="getTotalOldAppointmentsResponse" type="tns:getTotalOldAppointmentsResponse" />
 <xs:element name="getTotalRespondedAppointments" type="tns:getTotalRespondedAppointments" />
 <xs:element name="getTotalRespondedAppointmentsResponse" type="tns:getTotalRespondedAppointmentsResponse" />
@@ -32,7 +52,6 @@
 <xs:sequence>
 <xs:element name="appointmentId" type="xs:long" />
 <xs:element minOccurs="0" name="targetUser" type="xs:string" />
-
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getAppointmentRespondedByIdResponse">
@@ -48,9 +67,10 @@
 <xs:element minOccurs="0" name="employeesCancelComent" type="xs:string" />
 <xs:element minOccurs="0" name="replier" type="xs:string" />
 <xs:element minOccurs="0" name="replierComment" type="xs:string" />
+<xs:element minOccurs="0" name="replierUserInfo" type="ns1:user" />
 <xs:element minOccurs="0" name="targetPerson" type="xs:string" />
+<xs:element minOccurs="0" name="targetPersonUserInfo" type="ns1:user" />
 </xs:sequence>
-
 </xs:extension>
 </xs:complexContent>
 </xs:complexType>
@@ -59,6 +79,7 @@
 <xs:element name="appointmentId" type="xs:long" />
 <xs:element minOccurs="0" name="status" type="tns:appointmentSummaryStatus" />
 <xs:element minOccurs="0" name="sender" type="xs:string" />
+<xs:element minOccurs="0" name="senderUserInfo" type="ns1:user" />
 <xs:element minOccurs="0" name="subject" type="xs:string" />
 <xs:element minOccurs="0" name="description" type="xs:string" />
 </xs:sequence>
@@ -68,7 +89,6 @@
 <xs:element name="slotNumber" type="xs:int" />
 <xs:element minOccurs="0" name="appointmentDate" type="xs:date" />
 <xs:element minOccurs="0" name="startTime" type="xs:time" />
-
 <xs:element minOccurs="0" name="endTime" type="xs:time" />
 <xs:element minOccurs="0" name="location" type="xs:string" />
 <xs:element minOccurs="0" name="comment" type="xs:string" />
@@ -86,7 +106,6 @@
 <xs:sequence />
 </xs:complexType>
 <xs:complexType name="getOldAppointments">
-
 <xs:sequence>
 <xs:element minOccurs="0" name="user" type="xs:string" />
 <xs:element name="startNum" type="xs:int" />
@@ -103,8 +122,8 @@
 <xs:extension base="tns:appointmentSummary">
 <xs:sequence>
 <xs:element minOccurs="0" name="targetPerson" type="xs:string" />
+<xs:element minOccurs="0" name="targetPersonUserInfo" type="ns1:user" />
 </xs:sequence>
-
 </xs:extension>
 </xs:complexContent>
 </xs:complexType>
@@ -122,7 +141,6 @@
 </xs:complexType>
 <xs:complexType name="getTotalOldAppointments">
 <xs:sequence>
-
 <xs:element minOccurs="0" name="user" type="xs:string" />
 </xs:sequence>
 </xs:complexType>
@@ -140,7 +158,6 @@
 </xs:complexType>
 <xs:complexType name="getAssignedAppointmentsResponse">
 <xs:sequence>
-
 <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:appointmentWithTarget" />
 </xs:sequence>
 </xs:complexType>
@@ -158,7 +175,6 @@
 <xs:restriction base="xs:string">
 <xs:enumeration value="Created" />
 <xs:enumeration value="Approved" />
-
 <xs:enumeration value="Cancelled" />
 </xs:restriction>
 </xs:simpleType>
@@ -170,7 +186,6 @@
   </wsdl:message>
   <wsdl:message name="getTotalAssignedAppointmentsResponse">
     <wsdl:part element="tns:getTotalAssignedAppointmentsResponse" name="parameters">
-
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getTotalAssignedAppointments">
@@ -180,7 +195,6 @@
   <wsdl:message name="cancelRespondedAppointmentResponse">
     <wsdl:part element="tns:cancelRespondedAppointmentResponse" name="parameters">
     </wsdl:part>
-
   </wsdl:message>
   <wsdl:message name="getOldAppointments">
     <wsdl:part element="tns:getOldAppointments" name="parameters">
@@ -190,7 +204,6 @@
     <wsdl:part element="tns:getOldAppointmentsResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-
   <wsdl:message name="getTotalOldAppointmentsResponse">
     <wsdl:part element="tns:getTotalOldAppointmentsResponse" name="parameters">
     </wsdl:part>
@@ -200,7 +213,6 @@
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getAssignedAppointmentsResponse">
-
     <wsdl:part element="tns:getAssignedAppointmentsResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
@@ -210,7 +222,6 @@
   </wsdl:message>
   <wsdl:message name="getAppointmentRespondedByIdResponse">
     <wsdl:part element="tns:getAppointmentRespondedByIdResponse" name="parameters">
-
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getTotalRespondedAppointmentsResponse">
@@ -220,7 +231,6 @@
   <wsdl:message name="getAppointmentRespondedById">
     <wsdl:part element="tns:getAppointmentRespondedById" name="parameters">
     </wsdl:part>
-
   </wsdl:message>
   <wsdl:message name="getRespondedAppointments">
     <wsdl:part element="tns:getRespondedAppointments" name="parameters">
@@ -230,7 +240,6 @@
     <wsdl:part element="tns:getTotalOldAppointments" name="parameters">
     </wsdl:part>
   </wsdl:message>
-
   <wsdl:message name="cancelRespondedAppointment">
     <wsdl:part element="tns:cancelRespondedAppointment" name="parameters">
     </wsdl:part>
@@ -240,7 +249,6 @@
       <wsdl:input message="tns:getTotalRespondedAppointments" name="getTotalRespondedAppointments">
     </wsdl:input>
       <wsdl:output message="tns:getTotalRespondedAppointmentsResponse" name="getTotalRespondedAppointmentsResponse">
-
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getAppointmentRespondedById">
@@ -250,7 +258,6 @@
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="cancelRespondedAppointment">
-
       <wsdl:input message="tns:cancelRespondedAppointment" name="cancelRespondedAppointment">
     </wsdl:input>
       <wsdl:output message="tns:cancelRespondedAppointmentResponse" name="cancelRespondedAppointmentResponse">
@@ -260,7 +267,6 @@
       <wsdl:input message="tns:getOldAppointments" name="getOldAppointments">
     </wsdl:input>
       <wsdl:output message="tns:getOldAppointmentsResponse" name="getOldAppointmentsResponse">
-
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getRespondedAppointments">
@@ -270,7 +276,6 @@
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getTotalOldAppointments">
-
       <wsdl:input message="tns:getTotalOldAppointments" name="getTotalOldAppointments">
     </wsdl:input>
       <wsdl:output message="tns:getTotalOldAppointmentsResponse" name="getTotalOldAppointmentsResponse">
@@ -280,7 +285,6 @@
       <wsdl:input message="tns:getAssignedAppointments" name="getAssignedAppointments">
     </wsdl:input>
       <wsdl:output message="tns:getAssignedAppointmentsResponse" name="getAssignedAppointmentsResponse">
-
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getTotalAssignedAppointments">
@@ -290,7 +294,6 @@
     </wsdl:output>
     </wsdl:operation>
   </wsdl:portType>
-
   <wsdl:binding name="KokuKunpoAppointmentServiceSoapBinding" type="tns:KokuKunpoAppointmentService">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="getTotalRespondedAppointments">
@@ -300,7 +303,6 @@
       </wsdl:input>
       <wsdl:output name="getTotalRespondedAppointmentsResponse">
         <soap:body use="literal" />
-
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getAppointmentRespondedById">
@@ -310,7 +312,6 @@
       </wsdl:input>
       <wsdl:output name="getAppointmentRespondedByIdResponse">
         <soap:body use="literal" />
-
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="cancelRespondedAppointment">
@@ -320,7 +321,6 @@
       </wsdl:input>
       <wsdl:output name="cancelRespondedAppointmentResponse">
         <soap:body use="literal" />
-
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getOldAppointments">
@@ -330,7 +330,6 @@
       </wsdl:input>
       <wsdl:output name="getOldAppointmentsResponse">
         <soap:body use="literal" />
-
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getRespondedAppointments">
@@ -340,7 +339,6 @@
       </wsdl:input>
       <wsdl:output name="getRespondedAppointmentsResponse">
         <soap:body use="literal" />
-
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getTotalOldAppointments">
@@ -350,7 +348,6 @@
       </wsdl:input>
       <wsdl:output name="getTotalOldAppointmentsResponse">
         <soap:body use="literal" />
-
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getAssignedAppointments">
@@ -360,7 +357,6 @@
       </wsdl:input>
       <wsdl:output name="getAssignedAppointmentsResponse">
         <soap:body use="literal" />
-
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getTotalAssignedAppointments">
@@ -370,7 +366,6 @@
       </wsdl:input>
       <wsdl:output name="getTotalAssignedAppointmentsResponse">
         <soap:body use="literal" />
-
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>

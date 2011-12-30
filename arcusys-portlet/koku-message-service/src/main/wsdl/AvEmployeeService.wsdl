@@ -1,6 +1,27 @@
 <?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="KokuLooraAppointmentService" targetNamespace="http://soa.av.koku.arcusys.fi/" xmlns:ns1="http://schemas.xmlsoap.org/wsdl/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://soa.av.koku.arcusys.fi/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <wsdl:types>
-<xs:schema elementFormDefault="unqualified" targetNamespace="http://soa.av.koku.arcusys.fi/" version="1.0" xmlns:tns="http://soa.av.koku.arcusys.fi/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema targetNamespace="http://soa.common.koku.arcusys.fi/" version="1.0" xmlns:tns="http://soa.common.koku.arcusys.fi/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="perform" type="tns:perform" />
+<xs:element name="performResponse" type="tns:performResponse" />
+<xs:complexType name="user">
+<xs:sequence>
+<xs:element minOccurs="0" name="displayName" type="xs:string" />
+<xs:element minOccurs="0" name="email" type="xs:string" />
+<xs:element minOccurs="0" name="firstname" type="xs:string" />
+<xs:element minOccurs="0" name="lastname" type="xs:string" />
+<xs:element minOccurs="0" name="phoneNumber" type="xs:string" />
+<xs:element minOccurs="0" name="uid" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="performResponse">
+<xs:sequence />
+</xs:complexType>
+<xs:complexType name="perform">
+<xs:sequence />
+</xs:complexType>
+</xs:schema>
+<xs:schema elementFormDefault="unqualified" targetNamespace="http://soa.av.koku.arcusys.fi/" version="1.0" xmlns:ns1="http://soa.common.koku.arcusys.fi/" xmlns:tns="http://soa.av.koku.arcusys.fi/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:import namespace="http://soa.common.koku.arcusys.fi/" />
 <xs:element name="cancelAppointment" type="tns:cancelAppointment" />
 <xs:element name="cancelAppointmentResponse" type="tns:cancelAppointmentResponse" />
 <xs:element name="getAppointmentById" type="tns:getAppointmentById" />
@@ -63,7 +84,7 @@
 <xs:complexType>
 <xs:sequence>
 <xs:element minOccurs="0" name="key" type="xs:int" />
-<xs:element minOccurs="0" name="value" type="xs:string" />
+<xs:element minOccurs="0" name="value" type="ns1:user" />
 </xs:sequence>
 </xs:complexType>
 </xs:element>
@@ -82,6 +103,7 @@
 <xs:element name="appointmentId" type="xs:long" />
 <xs:element minOccurs="0" name="status" type="tns:appointmentSummaryStatus" />
 <xs:element minOccurs="0" name="sender" type="xs:string" />
+<xs:element minOccurs="0" name="senderUserInfo" type="ns1:user" />
 <xs:element minOccurs="0" name="subject" type="xs:string" />
 <xs:element minOccurs="0" name="description" type="xs:string" />
 </xs:sequence>
@@ -98,14 +120,17 @@
 </xs:complexType>
 <xs:complexType name="appointmentReceipientTO">
 <xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="receipientUserInfos" nillable="true" type="ns1:user" />
 <xs:element maxOccurs="unbounded" minOccurs="0" name="receipients" nillable="true" type="xs:string" />
 <xs:element minOccurs="0" name="targetPerson" type="xs:string" />
+<xs:element minOccurs="0" name="targetPersonUserInfo" type="ns1:user" />
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="appointmentUserRejected">
 <xs:sequence>
 <xs:element minOccurs="0" name="rejectComment" type="xs:string" />
 <xs:element minOccurs="0" name="userDisplayName" type="xs:string" />
+<xs:element minOccurs="0" name="userInfo" type="ns1:user" />
 <xs:element minOccurs="0" name="userUid" type="xs:string" />
 </xs:sequence>
 </xs:complexType>
