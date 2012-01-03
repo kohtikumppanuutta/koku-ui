@@ -320,10 +320,11 @@ public class EditFamilyInformationController {
         
         if (CommunityRole.PARENT.equals(communityRole) || CommunityRole.FATHER.equals(communityRole) || 
             CommunityRole.MOTHER.equals(communityRole)) {
-          messageHelper.sendParentAdditionMessage(familyCommunityId, memberToAddPic, userPic, communityRole);
           Log.getInstance().send(userPic, "", "pyh.membership.request", "Sending membership request to add person " + memberToAddPic + " into family");
+          messageHelper.sendParentAdditionMessage(familyCommunityId, memberToAddPic, userPic, communityRole);
         } else if (CommunityRole.CHILD.equals(communityRole) && recipients.size() == 0) {
           // we don't have guardian information for the child so we can't send the request
+          Log.getInstance().send(userPic, "", "pyh.membership.request", "Cannot send approval request because guardian for child " + memberToAddPic + " is not found");
           
           String messageSubject = messageSource.getMessage("ui.pyh.mail.missing.information.subject", null, "", Locale.getDefault());
           String messageText = messageSource.getMessage("ui.pyh.mail.missing.information.text", new Object[]{memberToAddPic}, "", Locale.getDefault());
@@ -342,15 +343,14 @@ public class EditFamilyInformationController {
             logger.error("EditFamilyInformationController.addUsersToFamily: sending mail to KoKu support failed!", me);
           }
           
-          Log.getInstance().send(userPic, "", "pyh.membership.request", "Cannot send approval request because guardian for child " + memberToAddPic + " is not found");
           // notify end user that family membership request cannot be sent
           throw new GuardianForChildNotFoundException("Guardian for child (pic: " + memberToAddPic + ") not found!");
           
         } else if (recipients.size() == 0) {
           insertInto(userPic, memberToAddPic, communityRole);
         } else {
-          messageHelper.sendFamilyAdditionMessage(familyCommunityId, recipients, userPic, memberToAddPic, communityRole);
           Log.getInstance().send(userPic, "", "pyh.membership.request", "Sending membership request to add person " + memberToAddPic + " into family");
+          messageHelper.sendFamilyAdditionMessage(familyCommunityId, recipients, userPic, memberToAddPic, communityRole);
         }
       }
       
@@ -463,10 +463,10 @@ public class EditFamilyInformationController {
     family = familyHelper.getFamily(toFamilyPic);
     
     if (family != null) {
-      family.addFamilyMember(memberToAddPic, role.getRoleID());
-      
-      communityService.opUpdateCommunity(family.getCommunity(), CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, toFamilyPic));
       Log.getInstance().update(toFamilyPic, "", "pyh.family.community", "Adding person " + memberToAddPic + " into family");
+      
+      family.addFamilyMember(memberToAddPic, role.getRoleID());
+      communityService.opUpdateCommunity(family.getCommunity(), CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, toFamilyPic));
       
       if (logger.isDebugEnabled()) {
         logger.debug("insertInto(): members after insert:");
@@ -488,6 +488,7 @@ public class EditFamilyInformationController {
    * @throws fi.koku.services.entity.community.v1.ServiceFault
    */
   private Family addFamily(String userPic) throws fi.koku.services.entity.community.v1.ServiceFault {
+    Log.getInstance().update(userPic, "", "pyh.family.community", "Adding family for user " + userPic);
     
     logger.debug("calling addFamily() with parameter:");
     logger.debug("userPic: " + userPic);
@@ -505,8 +506,6 @@ public class EditFamilyInformationController {
     
     String communityId = null;
     communityId = communityService.opAddCommunity(community, CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
-    Log.getInstance().update(userPic, "", "pyh.family.community", "Adding family for user " + userPic);
-    
     community.setId(communityId);
     
     return new Family(community);
@@ -528,10 +527,10 @@ public class EditFamilyInformationController {
     family = familyHelper.getFamily(userPic);
     
     if (family != null) {
-      family.addFamilyMember(dependantPic, CommunityRole.CHILD.getRoleID());
-      
-      communityService.opUpdateCommunity(family.getCommunity(), CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
       Log.getInstance().update(userPic, "", "pyh.family.community", "Adding dependant " + dependantPic + " into family");
+      
+      family.addFamilyMember(dependantPic, CommunityRole.CHILD.getRoleID());
+      communityService.opUpdateCommunity(family.getCommunity(), CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
       
       if (logger.isDebugEnabled()) {
         logger.debug("insertDependantToFamily(): family members after insert:");
@@ -577,10 +576,10 @@ public class EditFamilyInformationController {
         while (mi.hasNext()) {
           MemberType member = mi.next();
           if (member.getPic().equals(familyMemberPic) && isMemberOfCommunity(userPic, members)) {
-            members.remove(member);
-            
-            communityService.opUpdateCommunity(community, communityAuditInfoType);
             Log.getInstance().update(userPic, "", "pyh.family.community", "Removing family member " + familyMemberPic + " from family");
+            
+            members.remove(member);
+            communityService.opUpdateCommunity(community, communityAuditInfoType);
             
             if (logger.isDebugEnabled()) {
               logger.debug("removeFamilyMember(): members after removing:");

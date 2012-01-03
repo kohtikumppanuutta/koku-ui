@@ -72,10 +72,11 @@ public class MessageController {
     
     AuditInfoType communityAuditInfoType = CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic);
     
-    communityService.opUpdateMembershipApproval(membershipApproval, communityAuditInfoType);
     Log.getInstance().update(userPic, "", "pyh.membership.approval", "Membership approval status for user " + userPic + " was set to '" + CommunityServiceConstants.MEMBERSHIP_REQUEST_STATUS_APPROVED + "'");
+    communityService.opUpdateMembershipApproval(membershipApproval, communityAuditInfoType);
     
     if (familyId != null && !"".equals(familyId)) {
+      Log.getInstance().update(userPic, "", "pyh.family.community", "Removing family " + familyId);
       
       // opposite membership requests must be deleted: 
       // check if the membership request sender and the recipient have sent requests to each other
@@ -93,7 +94,6 @@ public class MessageController {
       }
       
       communityService.opDeleteCommunity(familyId, communityAuditInfoType);
-      Log.getInstance().update(userPic, "", "pyh.family.community", "Removing family " + familyId);
     }
     
     // go to familyinformation.jsp
@@ -110,6 +110,7 @@ public class MessageController {
    */
   @ActionMapping(params = "action=rejectMessage")
   public void reject(@RequestParam String userPic, @RequestParam String messageId, ActionResponse response) throws ServiceFault {
+    Log.getInstance().update(userPic, "", "pyh.membership.approval", "Membership approval status for user " + userPic + " was set to '" + CommunityServiceConstants.MEMBERSHIP_REQUEST_STATUS_REJECTED + "'");
     
     MembershipApprovalType membershipApproval = new MembershipApprovalType();
     membershipApproval.setApproverPic(userPic);
@@ -117,7 +118,6 @@ public class MessageController {
     membershipApproval.setStatus(CommunityServiceConstants.MEMBERSHIP_REQUEST_STATUS_REJECTED);
     
     communityService.opUpdateMembershipApproval(membershipApproval, CommunityServiceFactory.createAuditInfoType(PyhConstants.COMPONENT_PYH, userPic));
-    Log.getInstance().update(userPic, "", "pyh.membership.approval", "Membership approval status for user " + userPic + " was set to '" + CommunityServiceConstants.MEMBERSHIP_REQUEST_STATUS_REJECTED + "'");
     
     // go to familyinformation.jsp
     response.setRenderParameter("action", "");
