@@ -62,9 +62,9 @@
 </div>
 
 
-<h1 class="portlet-section-header"><c:out value="${child.name}"/><c:out value=" "/><c:out value="${collection.name}"/></h1>
+<h1 class="portlet-section-header kks-print"><c:out value="${child.name}"/><c:out value=" "/><c:out value="${collection.name}"/></h1>
 
-	<div class="kks-entry">
+	<div class="kks-entry kks-print">
 
 		<form:form name="addMultivalue" commandName="value"
 			method="post" action="${addMultivalue}">

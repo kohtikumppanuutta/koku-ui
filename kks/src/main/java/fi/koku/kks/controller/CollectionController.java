@@ -11,6 +11,8 @@ package fi.koku.kks.controller;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletSession;
 import javax.portlet.RenderResponse;
+import javax.portlet.WindowState;
+import javax.portlet.WindowStateException;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -57,11 +59,14 @@ public class CollectionController {
   private final static String VALID = "VALID";
 
   private static final Logger LOG = LoggerFactory.getLogger(CollectionController.class);
+  
+  
 
   @RenderMapping(params = "action=showCollection")
   public String show(PortletSession session, @ModelAttribute(value = "child") Person child,
       @ModelAttribute(value = "collectionForm") CollectionForm collectionForm,
       @RequestParam(value = "collection") String collection,
+      @RequestParam(value = "print", required = false) String print,
       @RequestParam(value = "error", required = false) String error, RenderResponse response, Model model) {
     LOG.debug("show collection");
 
@@ -89,6 +94,10 @@ public class CollectionController {
 
       if (StringUtils.isNotEmpty(error)) {
         model.addAttribute("error", error);
+      }
+      
+      if (StringUtils.isNotEmpty(print)) {
+        model.addAttribute("print_mode", print);
       }
       return "collection";
     } catch (ServiceFault e) {
@@ -219,6 +228,22 @@ public class CollectionController {
     response.setRenderParameter("action", "showCollection");
     response.setRenderParameter("pic", child.getPic());
     response.setRenderParameter("collection", collection);
+    sessionStatus.setComplete();
+  }
+  
+  @ActionMapping(params = "action=printCollection")
+  public void printCollection(@ModelAttribute(value = "child") Person child,
+      @RequestParam(value = "collection") String collection, ActionResponse response, SessionStatus sessionStatus) {
+    LOG.debug("printCollection");
+    response.setRenderParameter("action", "showCollection");
+    response.setRenderParameter("pic", child.getPic());
+    response.setRenderParameter("collection", collection);
+    response.setRenderParameter("print", "print");
+    try {
+      response.setWindowState(WindowState.MAXIMIZED);
+    } catch (WindowStateException e) {
+     LOG.error("Failed to set maximized state",e);
+    }
     sessionStatus.setComplete();
   }
 

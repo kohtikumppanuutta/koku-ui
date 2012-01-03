@@ -52,7 +52,6 @@ public class ChildController {
   public void toChildInfo(@ModelAttribute(value = "child") Person child, BindingResult bindingResult,
       ActionResponse response, SessionStatus sessionStatus) {
     LOG.debug("toChildInfo");
-
     response.setRenderParameter("action", "showChild");
     response.setRenderParameter("pic", child.getPic());
     sessionStatus.setComplete();

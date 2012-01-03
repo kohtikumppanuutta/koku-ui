@@ -18,9 +18,16 @@
 
 <portlet:defineObjects />
 
-<portlet:renderURL var="homeUrl">
-	<portlet:param name="action" value="showChild" />
-	<portlet:param name="pic" value="${child.pic}" />
+<portlet:renderURL var="homeUrl" windowState="normal">
+	<c:if test="${empty print_mode}">
+		<portlet:param name="action" value="showChild" />
+		<portlet:param name="pic" value="${child.pic}" />
+	</c:if>
+	<c:if test="${not empty print_mode}">
+		<portlet:param name="action" value="showCollection" />
+		<portlet:param name="pic" value="${child.pic}" />
+		<portlet:param name="collection" value="${collection.id}" />
+	</c:if>
 </portlet:renderURL>
 <portlet:actionURL var="saveActionUrl">
 	<portlet:param name="action" value="saveCollection" />
@@ -68,7 +75,7 @@
 			     </spring:bind>
 				</spring:hasBindErrors>
 			</div>
-                <c:if test="${ sessionScope.municipal_employee && !collection.versioned }">
+                <c:if test="${ sessionScope.municipal_employee && !collection.versioned && empty print_mode}">
                     <a class="create"> <spring:message code="ui.kks.new.version" /><span
                         class="kks-close"><spring:message code="ui.kks.hide" /> </span> </a>
                     <div class="kks-fields" style="display: none;">
@@ -105,7 +112,7 @@
 <div class="kks-reset-floating"></div>
 
 <div class="kks-left">
-<h1 class="portlet-section-header">
+<h1 class="portlet-section-header kks-print">
     <c:out value="${child.name}"/><c:out value=" "/><c:out value="${collection.name}"/> 
     <c:if test="${not collection.state.active}">
         (<spring:message code="ui.kks.locked" />)
@@ -114,8 +121,22 @@
 </h1>
 </div>
 <div class="kks-right">
+
+		<c:if test="${empty print_mode}">
+		<div>
+				<a href="
+						<portlet:actionURL>
+							<portlet:param name="action" value="printCollection" />
+							<portlet:param name="pic" value="${child.pic}" />
+							<portlet:param name="collection" value="${collection.id}" />
+						</portlet:actionURL>">
+										<spring:message code="ui.kks.printable"/></a> 
+					</div>
+				</c:if>
          <c:if      
-            test="${ not empty collection.prevVersion }">            
+            test="${ not empty collection.prevVersion && empty print_mode }">
+            
+            <div>            
             <a href="
                         <portlet:renderURL>
                             <portlet:param name="action" value="showCollection" />
@@ -124,10 +145,9 @@
                         </portlet:renderURL>">
                 <spring:message code="ui.kks.prev.version" />
             </a>
-        </c:if> <c:if test="${not empty collection.nextVersion }">
-            <c:if test="${ not empty collection.prevVersion }"><br></br>            
-    		
-            </c:if>
+            </div>
+        </c:if> <c:if test="${not empty collection.nextVersion && empty print_mode }">
+        <div>
             <a href="
                         <portlet:renderURL>
                             <portlet:param name="action" value="showCollection" />
@@ -136,10 +156,15 @@
                         </portlet:renderURL>">
                 <spring:message code="ui.kks.next.version" />
             </a>
+            </div>
         </c:if> 
 </div>
+
 <div class="kks-reset-floating"></div>
-    <div class="kks-content">
+
+
+<div class="kks-reset-floating"></div>
+    <div  class="kks-content kks-print">
     
         <c:if test="${ empty_collection }"><spring:message code="ui.kks.no.authorization" /></c:if>
 
@@ -174,14 +199,17 @@
                             <c:forEach var="type" items='${ childGroup.kksEntryClasses.kksEntryClass  }'>
                                 <div class="kks-entry">
                                     <span class="portlet-form-field-label">${type.name} 
-                                       <c:if test="${not block_guardian && type.multiValue && collection.state.active }">
+                                       <c:if test="${not block_guardian && type.multiValue && collection.state.active && empty print_mode }">
+                                       <span class="kks-no-print">
                                             <a
                                                 href="javascript:void(0)" onclick="doSubmitNewMulti('${type.id}');">	
                                                 (<spring:message code="ui.kks.add.multivalue" />) </a>
+                                        </span>
                                         </c:if>
+                                        
                                     </span>
    
-                                    <c:if test="${ collection.state.active }">
+                                    <c:if test="${ collection.state.active && empty print_mode }">
                                     
                                         <c:if test="${type.multiValue}">                                        
                                             <div class="kks-free-text">
@@ -200,13 +228,12 @@
                                                       <div class="kks-comment">
                                                        <p class="kks-entry-value">${multivalue.value}</p>
                                                        
-                                                       <c:if test="${not block_guardian}">
-	                                                       <span class="kks-right">
+                                                       <c:if test="${not block_guardian && empty print_mode}">
+	                                                       <span class="kks-right kks-no-print">
 	                                                          <a href="javascript:void(0)" onclick="doSubmitForm('${type.id}', '${collection.entries[type.id].id}', '${multivalue.id}' );">
 	                                                                   <spring:message code="ui.kks.modify" /> </a>                                                       
 	                                                       </span> 
                                                        </c:if>
-                                                       </span>
                                                        <div class="portlet-section-text">
                                                         <span class="kks-commenter">${multivalue.modifierFullName} <fmt:formatDate type="both" pattern="dd.MM.yyyy HH:mm:ss" value="${multivalue.modified}"/>
                                                            </span> 
@@ -256,7 +283,7 @@
                                         </c:if>
                                     </c:if>
 
-                                    <c:if test="${ not collection.state.active }">
+                                    <c:if test="${ not collection.state.active || not empty print_mode }">
                                        
                                         <div class="portlet-section-text">
                                         
@@ -268,7 +295,7 @@
                                             <c:otherwise>
 	                                             <c:if test="${ type.multiValue }">
 	                                                    <c:forEach var="multivalue" items='${ collection.entries[type.id].entryValues }'>
-	                                                        <span class="kks-read-only-text"><c:out value="${multivalue.value}"/><c:out value="(${multivalue.modifierFullName}"/> <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${multivalue.modified}"/>)</span>                                                       
+	                                                        <span class="kks-read-only-text"><c:out value="${multivalue.value}"/><c:out value=" (${multivalue.modifierFullName}"/> <fmt:formatDate type="both" pattern="dd.MM.yyyy hh:mm" value="${multivalue.modified}"/>)</span>                                                       
 	                                                    </c:forEach>
 	                                                </c:if> <c:if test="${ not type.multiValue }">
 	                                                    <p class="kks-read-only-text"><c:out value="${collection.entries[type.id].firstValue.value}"></c:out> </p>
@@ -287,13 +314,25 @@
                     </c:if>
                 </c:forEach>
 
-                <div class="kks-right">
-                <c:if test="${ not empty_collection && can_save && collection.state.active }">
+				
+				<c:if test="${empty print_mode}">
+					<div class="kks-bottom-left kks-no-print">
+					 	<a href="
+							<portlet:actionURL>
+								<portlet:param name="action" value="printCollection" />
+								<portlet:param name="pic" value="${child.pic}" />
+								<portlet:param name="collection" value="${collection.id}" />
+							</portlet:actionURL>">
+											<spring:message code="ui.kks.printable"/></a> 
+					</div>
+				</c:if>
+                <div class="kks-bottom-right kks-no-print">
+                <c:if test="${ not empty_collection && can_save && collection.state.active && empty print_mode}">
                     <input type="submit" class="portlet-form-button"
                         value="<spring:message code="ui.kks.save"/>" >
                 </c:if>
                 </div>
-                <div class="kks-reset-floating" />
+                <div class="kks-reset-floating" ></div>
             </form:form>
 
         </c:if>
@@ -303,7 +342,7 @@
 
 </div>
 
-
+  
 <script type="text/javascript"
 	src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
 <script type="text/javascript"

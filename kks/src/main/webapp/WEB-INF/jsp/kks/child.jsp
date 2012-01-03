@@ -38,7 +38,7 @@
 
     <div class="kks-reset-floating"></div>
 <div >
-	<h1 class="portlet-section-header">
+	<h1 class="portlet-section-header kks-print">
 		<c:out value="${child.name}"/><c:out value=" "/><spring:message code="ui.kks.title" />
 	</h1>
 
@@ -58,7 +58,7 @@
 	</c:if>
 	<div class="kks-table">	
 
-		<table class="portlet-table-body" width="100%" border="0">
+		<table class="portlet-table-body kks-print" width="100%" border="0">
 			<tr>
 				<th><spring:message code="ui.kks.collection" /></th>
 				<th><spring:message code="ui.kks.last.entry" />
@@ -85,7 +85,8 @@
 							<portlet:param name="pic" value="${child.pic}" />
 							<portlet:param name="collection" value="${collection.id}" />
 						</portlet:renderURL>">
-										<c:out value="${ collection.name }"/> </a> </strong> </span></td>
+										<c:out value="${ collection.name }"/> </a> 
+										</strong> </span></td>
 							<td><c:out value="${collection.modifierFullName}"/><c:out value=" "/><fmt:formatDate
 									pattern="dd.MM.yyyy" value="${collection.creationTime}" />
 							</td>

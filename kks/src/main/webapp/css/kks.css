@@ -70,6 +70,16 @@
 .koku-kks .kks-left {
     float: left;
 }
+
+.koku-kks .kks-bottom-right {
+    float: right;
+    margin-top: 20px;
+}
+.koku-kks .kks-bottom-left {
+    float: left;
+    margin-top: 20px;
+}
+
 .koku-kks a.create {
     cursor:pointer;
     text-transform:uppercase;
@@ -115,4 +125,49 @@
 
 .koku-kks .kks-entry {
     padding: 0 0 0 5px;
+}
+
+.koku-kks .kks-tmp {
+	padding: 0px;
+}
+
+@media print {
+    body {visibility:hidden;}
+    
+    .koku-kks .kks-print {
+	    visibility:visible;
+	    background-image: none;
+	    background-color: #FFFFFF;
+	    float: none;
+	    margin: 0px;
+	    padding: 0%;
+	    width: auto;
+	    position: relative;
+	    top: -100px;
+	}
+	
+	.koku-kks .kks-no-print {visibility:hidden;}
+
+	.koku-kks .portlet-section-header .kks-print {
+		visibility:visible;
+	    font-size: 22px;
+	    font-weight: normal; 
+	    margin: 12px 0;
+	}
+	.koku-kks h2.portlet-section-subheader .kks-print {
+		visibility:visible;
+	    background-color: #25AAE1;
+	    color: #FFFFFF; 
+	    margin: 12px 0;
+	    padding: 8px 15px;
+	    font-size:16px;
+	    font-weight:normal;
+	}
+	.koku-kks h3.portlet-section-subheader .kks-print {
+		visibility:visible;
+	    margin: 12px 0;
+	    font-size:15px;
+	    color:#555555;
+	}
+
 }
