@@ -314,23 +314,11 @@
                     </c:if>
                 </c:forEach>
 
-				
-				<c:if test="${empty print_mode}">
-					<div class="kks-bottom-left kks-no-print">
-					 	<a href="
-							<portlet:actionURL>
-								<portlet:param name="action" value="printCollection" />
-								<portlet:param name="pic" value="${child.pic}" />
-								<portlet:param name="collection" value="${collection.id}" />
-							</portlet:actionURL>">
-											<spring:message code="ui.kks.printable"/></a> 
-					</div>
-				</c:if>
                 <div class="kks-bottom-right kks-no-print">
-                <c:if test="${ not empty_collection && can_save && collection.state.active && empty print_mode}">
-                    <input type="submit" class="portlet-form-button"
-                        value="<spring:message code="ui.kks.save"/>" >
-                </c:if>
+	                <c:if test="${ not empty_collection && can_save && collection.state.active && empty print_mode}">
+	                    <input type="submit" class="portlet-form-button"
+	                        value="<spring:message code="ui.kks.save"/>" >
+	                </c:if>
                 </div>
                 <div class="kks-reset-floating" ></div>
             </form:form>
