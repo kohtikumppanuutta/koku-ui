@@ -36,7 +36,7 @@ function formatUrl(url) {
 	<c:if test="${appointment.cancellationComment  != null}">
 	<span class="request-c-1"><spring:message code="appointment.cancellationComment"/>:</span> <c:out value="${appointment.cancellationComment}" /><br />
 	</c:if>
-	<span class="request-c-1"><spring:message code="appointment.targetPerson"/>:</span> <c:out value="${appointment.targetPerson}" /><br />
+	<span class="request-c-1"><spring:message code="appointment.targetPerson"/>:</span> <c:out value="${appointment.targetPersonDisplayName}" /><br />
 	<span class="request-c-1"><spring:message code="appointment.replier"/>:</span> <c:out value="${appointment.replier}" /><br />
 	<span class="request-c-1"><spring:message code="appointment.replierComment"/>:</span> <c:out value="${appointment.replierComment}" /><br />
 	
