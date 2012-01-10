@@ -3,7 +3,11 @@ package fi.arcusys.koku.web;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Resource;
@@ -22,6 +26,7 @@ import fi.arcusys.koku.kv.model.KokuQuestion;
 import fi.arcusys.koku.kv.model.KokuRequest;
 import fi.arcusys.koku.kv.model.KokuResponse;
 import fi.arcusys.koku.kv.request.employee.EmployeeRequestHandle;
+import fi.arcusys.koku.kv.requestservice.Answer;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
@@ -42,7 +47,19 @@ public class ExportFileController {
 	private final static String TEXT_DELIMITER				= "\"";
 	private final static String NEW_LINE					= "\n";
 	private final static String FILTER						= "\\r\\n|\\r|\\n|"+SEPARATOR+"|"+TEXT_DELIMITER;
-
+	
+	private final static Comparator<KokuAnswer> SORT_BY_ANSWER_NUMBER = new Comparator<KokuAnswer>() {
+			@Override
+			public int compare(KokuAnswer o1, KokuAnswer o2) {
+				if (o1.getQuestionNumber() > o2.getQuestionNumber()) {
+					return 1;
+				} else if (o1.getQuestionNumber() < o2.getQuestionNumber()) {
+					return -1;
+				} else {
+					return 0;
+				}
+			}
+		};
 	
 	/**
 	 * Generates the request summary with given request id in csv format 
@@ -85,20 +102,13 @@ public class ExportFileController {
 				/* Data */
 				for (KokuResponse res : kokuRequest.getRespondedList()) {
 					
-					writer.write(addQuote(res.getName())+SEPARATOR);
-					
-					int length = res.getAnswers().size()+1;
-					String[] answers = new String[length];
-					
+					writer.write(addQuote(res.getName())+SEPARATOR);					
+					Collections.sort(res.getAnswers(), SORT_BY_ANSWER_NUMBER);
 					for (KokuAnswer answer : res.getAnswers()) {
-						answers[answer.getQuestionNumber()] =  answer.getAnswer();
-					}
-					
-					for (String answer : answers) {
 						if (answer != null) {
-							writer.write(addQuote(answer) + SEPARATOR);													
+							writer.write(addQuote(answer.getAnswer()) + SEPARATOR);													
 						}
-					}					
+					}		
 					writer.write(addQuote(res.getComment()));
 					writer.write(NEW_LINE);
 				}
