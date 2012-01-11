@@ -16,12 +16,7 @@
 		<resource-bundle>Language-ext</resource-bundle>
 		<portlet-info>
 			<title>Sopimukset ja Suunnitelmat</title>
-		</portlet-info>
-	    <init-param>
-	      <name>kunpo</name>
-	      <value>false</value>
-	    </init-param>
-		
+		</portlet-info>		
 	</portlet>
 	
 	
@@ -30,6 +25,7 @@
 		<filter-name>userInfoFilter</filter-name>
 		<filter-class>fi.koku.portlet.filter.userinfo.UserInfoPortletFilter</filter-class>
 		<lifecycle>RENDER_PHASE</lifecycle>
+		<lifecycle>ACTION_PHASE</lifecycle>
 	</filter>
 	<filter-mapping>
 		<filter-name>userInfoFilter</filter-name>
