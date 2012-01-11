@@ -2,4 +2,4 @@
 
 <portlet:defineObjects />
 
-<p>Boom!</p>
+<p>Virhetilanne palveimella.</p>

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.arcusys.koku.util.Properties;
+
 /**
  * Handles the controller for navigation page
  * @author Jinhua Chen
@@ -24,7 +26,14 @@ public class NaviController {
 	// maps the incoming portlet request to this method, returns the default page
 	@RenderMapping
 	public String home(RenderRequest request, RenderResponse response, ModelMap modelmap) {
-		return "navi";
+		if (Properties.IS_KUNPO_PORTAL) {
+			return "navi_kunpo";			
+		} else if (Properties.IS_LOORA_PORTAL) {
+			return "navi_loora";
+		} else {
+			LOG.error("Coulnd't determine proper portalMode. Please check properties files and/or code for possible errors.");
+			return "error";
+		}
 	}
 
 	// @ModelAttribute here works as the referenceData method
