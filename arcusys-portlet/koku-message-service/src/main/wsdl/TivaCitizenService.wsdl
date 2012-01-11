@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="KokuKunpoSuostumusService" targetNamespace="http://soa.tiva.koku.arcusys.fi/" xmlns:ns1="http://schemas.xmlsoap.org/wsdl/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://soa.tiva.koku.arcusys.fi/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <wsdl:types>
-<xs:schema elementFormDefault="unqualified" targetNamespace="http://soa.tiva.koku.arcusys.fi/" version="1.0" xmlns:ns1="http://services.koku.fi/entity/tiva/v1" xmlns:tns="http://soa.tiva.koku.arcusys.fi/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema elementFormDefault="unqualified" targetNamespace="http://soa.tiva.koku.arcusys.fi/" version="1.0" xmlns:ns1="http://soa.common.koku.arcusys.fi/" xmlns:ns2="http://services.koku.fi/entity/tiva/v1" xmlns:tns="http://soa.tiva.koku.arcusys.fi/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:import namespace="http://soa.common.koku.arcusys.fi/" />
 <xs:import namespace="http://services.koku.fi/entity/tiva/v1" />
 <xs:element name="getAssignedConsents" type="tns:getAssignedConsents" />
 <xs:element name="getAssignedConsentsResponse" type="tns:getAssignedConsentsResponse" />
@@ -13,8 +14,8 @@
 <xs:element name="getTotalAssignedConsents" type="tns:getTotalAssignedConsents" />
 <xs:element name="getTotalAssignedConsentsResponse" type="tns:getTotalAssignedConsentsResponse" />
 <xs:element name="getTotalOldConsents" type="tns:getTotalOldConsents" />
-<xs:element name="getTotalOldConsentsResponse" type="tns:getTotalOldConsentsResponse" />
 
+<xs:element name="getTotalOldConsentsResponse" type="tns:getTotalOldConsentsResponse" />
 <xs:element name="getTotalOwnConsents" type="tns:getTotalOwnConsents" />
 <xs:element name="getTotalOwnConsentsResponse" type="tns:getTotalOwnConsentsResponse" />
 <xs:element name="revokeOwnConsent" type="tns:revokeOwnConsent" />
@@ -31,8 +32,8 @@
 </xs:complexType>
 <xs:complexType name="getAssignedConsents">
 <xs:sequence>
-<xs:element minOccurs="0" name="user" type="xs:string" />
 
+<xs:element minOccurs="0" name="user" type="xs:string" />
 <xs:element name="startNum" type="xs:int" />
 <xs:element name="maxNum" type="xs:int" />
 </xs:sequence>
@@ -45,15 +46,18 @@
 <xs:complexType name="consentShortSummary">
 <xs:sequence>
 <xs:element minOccurs="0" name="anotherPermitterUid" type="xs:string" />
+<xs:element minOccurs="0" name="anotherPermitterUserInfo" type="ns1:user" />
 <xs:element minOccurs="0" name="consentId" type="xs:long" />
 <xs:element minOccurs="0" name="createType" type="tns:consentCreateType" />
-<xs:element maxOccurs="unbounded" minOccurs="0" name="givenToParties" nillable="true" type="ns1:givenTo" />
+<xs:element maxOccurs="unbounded" minOccurs="0" name="givenToParties" nillable="true" type="ns2:givenTo" />
+
 <xs:element minOccurs="0" name="informationTargetId" type="xs:string" />
 <xs:element minOccurs="0" name="metaInfo" type="xs:string" />
-
 <xs:element minOccurs="0" name="replyTill" type="xs:date" />
 <xs:element minOccurs="0" name="requestor" type="xs:string" />
+<xs:element minOccurs="0" name="requestorUserInfo" type="ns1:user" />
 <xs:element minOccurs="0" name="targetPersonUid" type="xs:string" />
+<xs:element minOccurs="0" name="targetPersonUserInfo" type="ns1:user" />
 <xs:element minOccurs="0" name="templateDescription" type="xs:string" />
 <xs:element minOccurs="0" name="templateId" type="xs:long" />
 <xs:element minOccurs="0" name="templateName" type="xs:string" />
@@ -64,11 +68,11 @@
 <xs:complexType name="revokeOwnConsent">
 <xs:sequence>
 <xs:element name="suostumusId" type="xs:long" />
+
 <xs:element minOccurs="0" name="arg1" type="xs:string" />
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="revokeOwnConsentResponse">
-
 <xs:sequence />
 </xs:complexType>
 <xs:complexType name="getTotalAssignedConsents">
@@ -82,11 +86,11 @@
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getOldConsents">
+
 <xs:sequence>
 <xs:element minOccurs="0" name="user" type="xs:string" />
 <xs:element name="startNum" type="xs:int" />
 <xs:element name="maxNum" type="xs:int" />
-
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getOldConsentsResponse">
@@ -100,11 +104,12 @@
 <xs:sequence>
 <xs:element minOccurs="0" name="approvalStatus" type="tns:consentApprovalStatus" />
 <xs:element minOccurs="0" name="givenAt" type="xs:date" />
+
+<xs:element maxOccurs="unbounded" minOccurs="0" name="receipientUserInfos" nillable="true" type="ns1:user" />
 <xs:element maxOccurs="unbounded" minOccurs="0" name="receipients" nillable="true" type="xs:string" />
 <xs:element minOccurs="0" name="status" type="tns:consentStatus" />
 <xs:element minOccurs="0" name="validTill" type="xs:date" />
 </xs:sequence>
-
 </xs:extension>
 </xs:complexContent>
 </xs:complexType>
@@ -117,12 +122,12 @@
 </xs:complexType>
 <xs:complexType name="getOwnConsentsResponse">
 <xs:sequence>
+
 <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:consentSummary" />
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getTotalOldConsents">
 <xs:sequence>
-
 <xs:element minOccurs="0" name="user" type="xs:string" />
 </xs:sequence>
 </xs:complexType>
@@ -135,12 +140,12 @@
 <xs:sequence>
 <xs:element name="suostumusId" type="xs:long" />
 <xs:element minOccurs="0" name="arg1" type="xs:string" />
+
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getConsentByIdResponse">
 <xs:sequence>
 <xs:element minOccurs="0" name="return" type="tns:consentTO" />
-
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="consentTO">
@@ -153,12 +158,12 @@
 </xs:extension>
 </xs:complexContent>
 </xs:complexType>
+
 <xs:complexType name="actionRequestSummary">
 <xs:sequence>
 <xs:element minOccurs="0" name="description" type="xs:string" />
 <xs:element minOccurs="0" name="name" type="xs:string" />
 <xs:element minOccurs="0" name="status" type="tns:actionRequestStatus" />
-
 </xs:sequence>
 </xs:complexType>
 <xs:simpleType name="consentCreateType">
@@ -171,12 +176,12 @@
 <xs:simpleType name="consentApprovalStatus">
 <xs:restriction base="xs:string">
 <xs:enumeration value="Approved" />
+
 <xs:enumeration value="Declined" />
 </xs:restriction>
 </xs:simpleType>
 <xs:simpleType name="consentStatus">
 <xs:restriction base="xs:string">
-
 <xs:enumeration value="Open" />
 <xs:enumeration value="PartiallyGiven" />
 <xs:enumeration value="Valid" />
@@ -189,12 +194,33 @@
 <xs:restriction base="xs:string">
 <xs:enumeration value="Given" />
 <xs:enumeration value="Declined" />
+
 </xs:restriction>
 </xs:simpleType>
 </xs:schema>
+<xs:schema targetNamespace="http://soa.common.koku.arcusys.fi/" version="1.0" xmlns:tns="http://soa.common.koku.arcusys.fi/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="perform" type="tns:perform" />
+<xs:element name="performResponse" type="tns:performResponse" />
+<xs:complexType name="user">
+<xs:sequence>
+<xs:element minOccurs="0" name="displayName" type="xs:string" />
+<xs:element minOccurs="0" name="email" type="xs:string" />
+<xs:element minOccurs="0" name="firstname" type="xs:string" />
+<xs:element minOccurs="0" name="lastname" type="xs:string" />
+<xs:element minOccurs="0" name="phoneNumber" type="xs:string" />
+<xs:element minOccurs="0" name="uid" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="performResponse">
+
+<xs:sequence />
+</xs:complexType>
+<xs:complexType name="perform">
+<xs:sequence />
+</xs:complexType>
+</xs:schema>
 <xs:schema targetNamespace="http://services.koku.fi/entity/tiva/v1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 <xs:complexType name="givenTo">
-
 <xs:sequence>
 <xs:element name="partyId" type="xs:string" />
 <xs:element name="partyName" type="xs:string" />
@@ -203,219 +229,219 @@
 </xs:schema>
   </wsdl:types>
   <wsdl:message name="getTotalAssignedConsents">
+
     <wsdl:part element="tns:getTotalAssignedConsents" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getTotalAssignedConsentsResponse">
-
     <wsdl:part element="tns:getTotalAssignedConsentsResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="revokeOwnConsentResponse">
     <wsdl:part element="tns:revokeOwnConsentResponse" name="parameters">
+
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getConsentById">
     <wsdl:part element="tns:getConsentById" name="parameters">
-
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="revokeOwnConsent">
     <wsdl:part element="tns:revokeOwnConsent" name="parameters">
     </wsdl:part>
+
   </wsdl:message>
   <wsdl:message name="getTotalOldConsents">
     <wsdl:part element="tns:getTotalOldConsents" name="parameters">
     </wsdl:part>
-
   </wsdl:message>
   <wsdl:message name="getConsentByIdResponse">
     <wsdl:part element="tns:getConsentByIdResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
+
   <wsdl:message name="getTotalOwnConsentsResponse">
     <wsdl:part element="tns:getTotalOwnConsentsResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-
   <wsdl:message name="getOldConsentsResponse">
     <wsdl:part element="tns:getOldConsentsResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getTotalOwnConsents">
+
     <wsdl:part element="tns:getTotalOwnConsents" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getAssignedConsents">
-
     <wsdl:part element="tns:getAssignedConsents" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getOwnConsentsResponse">
     <wsdl:part element="tns:getOwnConsentsResponse" name="parameters">
+
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getOldConsents">
     <wsdl:part element="tns:getOldConsents" name="parameters">
-
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getAssignedConsentsResponse">
     <wsdl:part element="tns:getAssignedConsentsResponse" name="parameters">
     </wsdl:part>
+
   </wsdl:message>
   <wsdl:message name="getOwnConsents">
     <wsdl:part element="tns:getOwnConsents" name="parameters">
     </wsdl:part>
-
   </wsdl:message>
   <wsdl:message name="getTotalOldConsentsResponse">
     <wsdl:part element="tns:getTotalOldConsentsResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
+
   <wsdl:portType name="KokuKunpoSuostumusService">
     <wsdl:operation name="getTotalOwnConsents">
       <wsdl:input message="tns:getTotalOwnConsents" name="getTotalOwnConsents">
     </wsdl:input>
-
       <wsdl:output message="tns:getTotalOwnConsentsResponse" name="getTotalOwnConsentsResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getAssignedConsents">
       <wsdl:input message="tns:getAssignedConsents" name="getAssignedConsents">
+
     </wsdl:input>
       <wsdl:output message="tns:getAssignedConsentsResponse" name="getAssignedConsentsResponse">
     </wsdl:output>
     </wsdl:operation>
-
     <wsdl:operation name="revokeOwnConsent">
       <wsdl:input message="tns:revokeOwnConsent" name="revokeOwnConsent">
     </wsdl:input>
       <wsdl:output message="tns:revokeOwnConsentResponse" name="revokeOwnConsentResponse">
     </wsdl:output>
+
     </wsdl:operation>
     <wsdl:operation name="getTotalAssignedConsents">
       <wsdl:input message="tns:getTotalAssignedConsents" name="getTotalAssignedConsents">
     </wsdl:input>
-
       <wsdl:output message="tns:getTotalAssignedConsentsResponse" name="getTotalAssignedConsentsResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getOldConsents">
       <wsdl:input message="tns:getOldConsents" name="getOldConsents">
+
     </wsdl:input>
       <wsdl:output message="tns:getOldConsentsResponse" name="getOldConsentsResponse">
     </wsdl:output>
     </wsdl:operation>
-
     <wsdl:operation name="getOwnConsents">
       <wsdl:input message="tns:getOwnConsents" name="getOwnConsents">
     </wsdl:input>
       <wsdl:output message="tns:getOwnConsentsResponse" name="getOwnConsentsResponse">
     </wsdl:output>
+
     </wsdl:operation>
     <wsdl:operation name="getTotalOldConsents">
       <wsdl:input message="tns:getTotalOldConsents" name="getTotalOldConsents">
     </wsdl:input>
-
       <wsdl:output message="tns:getTotalOldConsentsResponse" name="getTotalOldConsentsResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getConsentById">
       <wsdl:input message="tns:getConsentById" name="getConsentById">
+
     </wsdl:input>
       <wsdl:output message="tns:getConsentByIdResponse" name="getConsentByIdResponse">
     </wsdl:output>
     </wsdl:operation>
-
   </wsdl:portType>
   <wsdl:binding name="KokuKunpoSuostumusServiceSoapBinding" type="tns:KokuKunpoSuostumusService">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="getTotalOwnConsents">
       <soap:operation soapAction="" style="document" />
+
       <wsdl:input name="getTotalOwnConsents">
         <soap:body use="literal" />
       </wsdl:input>
       <wsdl:output name="getTotalOwnConsentsResponse">
-
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getAssignedConsents">
       <soap:operation soapAction="" style="document" />
+
       <wsdl:input name="getAssignedConsents">
         <soap:body use="literal" />
       </wsdl:input>
       <wsdl:output name="getAssignedConsentsResponse">
-
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="revokeOwnConsent">
       <soap:operation soapAction="" style="document" />
+
       <wsdl:input name="revokeOwnConsent">
         <soap:body use="literal" />
       </wsdl:input>
       <wsdl:output name="revokeOwnConsentResponse">
-
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getTotalAssignedConsents">
       <soap:operation soapAction="" style="document" />
+
       <wsdl:input name="getTotalAssignedConsents">
         <soap:body use="literal" />
       </wsdl:input>
       <wsdl:output name="getTotalAssignedConsentsResponse">
-
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getOldConsents">
       <soap:operation soapAction="" style="document" />
+
       <wsdl:input name="getOldConsents">
         <soap:body use="literal" />
       </wsdl:input>
       <wsdl:output name="getOldConsentsResponse">
-
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getOwnConsents">
       <soap:operation soapAction="" style="document" />
+
       <wsdl:input name="getOwnConsents">
         <soap:body use="literal" />
       </wsdl:input>
       <wsdl:output name="getOwnConsentsResponse">
-
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getTotalOldConsents">
       <soap:operation soapAction="" style="document" />
+
       <wsdl:input name="getTotalOldConsents">
         <soap:body use="literal" />
       </wsdl:input>
       <wsdl:output name="getTotalOldConsentsResponse">
-
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getConsentById">
       <soap:operation soapAction="" style="document" />
+
       <wsdl:input name="getConsentById">
         <soap:body use="literal" />
       </wsdl:input>
       <wsdl:output name="getConsentByIdResponse">
-
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="KokuKunpoSuostumusService">
+
     <wsdl:port binding="tns:KokuKunpoSuostumusServiceSoapBinding" name="KokuKunpoSuostumusServicePort">
       <soap:address location="http://kohtikumppanuutta-dev.dmz:8180/arcusys-koku-0.1-SNAPSHOT-tiva-model-0.1-SNAPSHOT/KokuKunpoSuostumusServiceImpl" />
     </wsdl:port>
   </wsdl:service>
-
 </wsdl:definitions>
