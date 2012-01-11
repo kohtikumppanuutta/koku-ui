@@ -144,7 +144,7 @@ function exportFile() {
 	  			<tr style="font-weight:bold;" ><td><spring:message code="request.name"/></td></tr>
       			<c:forEach var="unresponse" items="${request.unrespondedList}">
         		<tr>
-          			<td>${unresponse}</td>
+          			<td>${unresponse.fullName}</td>
         		</tr>
       </c:forEach>
     </table>

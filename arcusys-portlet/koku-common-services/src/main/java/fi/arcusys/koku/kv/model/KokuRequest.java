@@ -3,6 +3,7 @@ package fi.arcusys.koku.kv.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import fi.arcusys.koku.users.KokuUser;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
@@ -22,7 +23,7 @@ public class KokuRequest {
 	private String endDate;
 	private String requestType;
 	private List<KokuResponse> respondedList;
-	private List<String> unrespondedList;
+	private List<KokuUser> unrespondedList;
 	private List<KokuQuestion> questions;
 	
 	public KokuRequest() {
@@ -48,7 +49,12 @@ public class KokuRequest {
 			return;
 		}
 		content = req.getContent();
-		unrespondedList = req.getNotResponded();
+		
+		if (req.getNotRespondedUserInfos() != null) {
+			for (fi.arcusys.koku.kv.requestservice.User user : req.getNotRespondedUserInfos()) {
+				getUnrespondedList().add(new KokuUser(user));
+			}
+		}
 		
 		if (req.getResponses() != null) {
 			for (fi.arcusys.koku.kv.requestservice.Response response : req.getResponses()) {
@@ -126,13 +132,13 @@ public class KokuRequest {
 	public final void setRespondedList(List<KokuResponse> respondedList) {
 		this.respondedList = respondedList;
 	}
-	public final List<String> getUnrespondedList() {
-		if (respondedList == null) {
-			respondedList = new ArrayList<KokuResponse>();
+	public final List<KokuUser> getUnrespondedList() {
+		if (unrespondedList == null) {
+			unrespondedList = new ArrayList<KokuUser>();
 		}
 		return unrespondedList;
 	}
-	public final void setUnrespondedList(List<String> unrespondedList) {
+	public final void setUnrespondedList(List<KokuUser> unrespondedList) {
 		this.unrespondedList = unrespondedList;
 	}
 	public final List<KokuQuestion> getQuestions() {

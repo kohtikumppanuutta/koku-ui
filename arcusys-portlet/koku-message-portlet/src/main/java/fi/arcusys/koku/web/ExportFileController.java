@@ -2,12 +2,8 @@ package fi.arcusys.koku.web;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Resource;
@@ -26,7 +22,7 @@ import fi.arcusys.koku.kv.model.KokuQuestion;
 import fi.arcusys.koku.kv.model.KokuRequest;
 import fi.arcusys.koku.kv.model.KokuResponse;
 import fi.arcusys.koku.kv.request.employee.EmployeeRequestHandle;
-import fi.arcusys.koku.kv.requestservice.Answer;
+import fi.arcusys.koku.users.KokuUser;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
@@ -117,8 +113,8 @@ public class ExportFileController {
 				writer.write(addQuote(messageSource.getMessage("export.missed", null, locale)));
 				writer.write(NEW_LINE);
 
-				for(String name : kokuRequest.getUnrespondedList()) {
-					writer.write(addQuote(name));
+				for (KokuUser name : kokuRequest.getUnrespondedList()) {
+					writer.write(addQuote(name.getFullName()));
 					writer.write(NEW_LINE);
 				}
 				writer.flush();

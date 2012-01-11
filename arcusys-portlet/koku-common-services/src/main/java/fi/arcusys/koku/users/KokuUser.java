@@ -1,7 +1,5 @@
 package fi.arcusys.koku.users;
 
-import fi.arcusys.koku.user.usersandgroupsservice.User;
-
 public class KokuUser {
 	
 	private String uid;
@@ -15,7 +13,7 @@ public class KokuUser {
 		
 	}
 	
-	public KokuUser(User user) {
+	public KokuUser(fi.arcusys.koku.user.usersandgroupsservice.User user) {
 		if (user != null) {
 			setUid(user.getUid());
 			setFirstname(user.getFirstname());
@@ -26,6 +24,17 @@ public class KokuUser {
 		}
 	}
 
+
+	public KokuUser(fi.arcusys.koku.kv.requestservice.User user) {
+		if (user != null) {
+			setUid(user.getUid());
+			setFirstname(user.getFirstname());
+			setLastname(user.getLastname());
+			setDisplayname(user.getDisplayName());
+			setPhoneNumber(user.getPhoneNumber());
+			setEmail(user.getEmail());			
+		}
+	}
 
 	public String getUid() {
 		return uid;
@@ -84,6 +93,10 @@ public class KokuUser {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public String getFullName() {
+		return firstname + " " + lastname;
 	}
 
 
