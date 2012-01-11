@@ -26,14 +26,7 @@ public class NaviController {
 	// maps the incoming portlet request to this method, returns the default page
 	@RenderMapping
 	public String home(RenderRequest request, RenderResponse response, ModelMap modelmap) {
-		if (Properties.IS_KUNPO_PORTAL) {
-			return "navi_kunpo";			
-		} else if (Properties.IS_LOORA_PORTAL) {
-			return "navi_loora";
-		} else {
-			LOG.error("Coulnd't determine proper portalMode. Please check properties files and/or code for possible errors.");
-			return "error";
-		}
+		return selectJsp();
 	}
 
 	// @ModelAttribute here works as the referenceData method
@@ -61,7 +54,18 @@ public class NaviController {
 			RenderRequest request, RenderResponse response, ModelMap modelmap) {
 		modelmap.addAttribute("naviType", naviType);
 		
-		return "navi";
+		return selectJsp();
+	}
+	
+	private String selectJsp() {		
+		if (Properties.IS_KUNPO_PORTAL) {
+			return "navi_kunpo";			
+		} else if (Properties.IS_LOORA_PORTAL) {
+			return "navi_loora";
+		} else {
+			LOG.error("Coulnd't determine proper portalMode. Please check properties files and/or code for possible errors.");
+			return "error";
+		}
 	}
 
 }
