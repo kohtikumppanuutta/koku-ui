@@ -9,12 +9,13 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import fi.arcusys.koku.tiva.tietopyynto.AbstractTietopyyntoHandle;
 import fi.arcusys.koku.tiva.tietopyynto.model.KokuInformationRequestDetail;
 import fi.arcusys.koku.tiva.tietopyynto.model.KokuInformationRequestSummary;
 import fi.arcusys.koku.users.KokuUserService;
-import fi.arcusys.koku.util.Constants;
 import fi.arcusys.koku.util.MessageUtil;
 
 public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHandle {
@@ -180,22 +181,31 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 		}
 		
 		Map<String, String> searchMap = new HashMap<String, String>(MAP_INIT_SIZE);
-		String[] split = keyword.split(SPLIT_REGEX);
-
-		if (split.length == 0) {
-			return null;
-		}
-		// FIXME: Not like this..  
-		for (int i = 0; i < split.length; i++) {
-			if (i == 0) { addToMap(searchMap, CREATED_FROM, split[i]); }
-			if (i == 1) { addToMap(searchMap, CREATED_TO, split[i]);	}
-			if (i == 2) { addToMap(searchMap, REPLIED_FROM, split[i]);}
-			if (i == 3) { addToMap(searchMap, REPLIED_TO, split[i]);	}			
-			if (i == 4) { addToMap(searchMap, SENDER_UID, split[i]); }
-			if (i == 5) { addToMap(searchMap, RECIEVER_UID, split[i]); }
-			if (i == 6) { addToMap(searchMap, TARGET_PERSON_UID, split[i]); }
-			if (i == 7) { addToMap(searchMap, INFORMATION, split[i]); }
-			if (i == 8) { addToMap(searchMap, FREE_TEXT_SEARCH, split[i]); }
+		
+		try {
+			JSONObject json = new JSONObject(keyword);			
+			
+			addToMap(searchMap, CREATED_FROM, json.getString("createdFrom"));
+			addToMap(searchMap, CREATED_TO, json.getString("createdTo"));
+			addToMap(searchMap, REPLIED_FROM, json.getString("repliedFrom")); 
+			addToMap(searchMap, REPLIED_TO, json.getString("repliedTo"));
+			final String sender = json.getString("sender");
+			final String reciever = json.getString("reciever");
+			final String targetPerson = json.getString("targetPerson");
+			if (sender != null && !sender.isEmpty()) {
+				addToMap(searchMap, SENDER_UID, userService.getLooraUserUidByUsername(sender));				
+			}
+			if (reciever != null && !reciever.isEmpty()) {
+				addToMap(searchMap, RECIEVER_UID, userService.getLooraUserUidByUsername(reciever));				
+			}
+			if (targetPerson != null && !targetPerson.isEmpty()) {
+				addToMap(searchMap, TARGET_PERSON_UID, targetPerson);		
+			}
+			addToMap(searchMap, INFORMATION, json.getString("information"));
+			addToMap(searchMap, FREE_TEXT_SEARCH, json.getString("freeTextSearch"));
+			
+		} catch (JSONException e) {
+			// TODO Do something!
 		}
 		return searchMap;
 	}

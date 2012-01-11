@@ -1481,19 +1481,26 @@
 	}
 	
 	function searchInfoRequests() {
-		var keyword = jQuery("input#tipyTimeRangeFrom").val();		
-		keyword += '|' + jQuery("input#tipyTimeRangeTo").val();		
-		keyword += '|' + jQuery("input#tipyTargetPerson").val();
-		keyword += '|' + jQuery("input#tipyRequester").val();
-		keyword += '|' + jQuery("input#tipyHandOver").val();
-		keyword += '|' + jQuery("input#tipyInformation").val();
-		keyword += '|' + jQuery("input#tipyFreeTextSearch").val();
 		
+		var keywordObject = {
+				createdFrom : "",
+				createdTo : "",
+				repliedFrom : jQuery("input#tipyTimeRangeFrom").val(),		
+				repliedTo : jQuery("input#tipyTimeRangeTo").val(),		
+				targetPerson : jQuery("input#tipyTargetPerson").val(),
+				reciever : jQuery("input#tipyHandOver").val(),
+				sender : jQuery("input#tipyRequester").val(),
+				information : jQuery("input#tipyInformation").val(),
+				freeTextSearch : jQuery("input#tipyFreeTextSearch").val(),
+				taskType : ""
+		};
+
 		if (pageObj.taskType === '<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT%>') {
-			keyword += '|' + "Sent";
+			keywordObject.taskType = "Sent";
 		} else if(pageObj.taskType === '<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED%>') {
-			keyword += '|' + "Replied";		
+			keywordObject.taskType = "Replied";		
 		}
+		
 		
 		var templateName = jQuery("input#warrantTemplateNameCitizen").val();
 		
@@ -1506,7 +1513,7 @@
 			pageObj.field = templateId;
 		}
 		
-		pageObj.keyword = keyword;			
+		pageObj.keyword = JSON.stringify(keywordObject);
 		ajaxGetTasks();
 		return false;	
 	}

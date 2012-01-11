@@ -9,6 +9,7 @@ import static fi.arcusys.koku.util.Constants.ATTR_USERNAME;
 import static fi.arcusys.koku.util.Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED;
 import static fi.arcusys.koku.util.Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT;
 import static fi.arcusys.koku.util.Constants.VIEW_SHOW_INFO_REQUEST;
+import static fi.arcusys.koku.util.Constants.TASK_TYPE_INFO_REQUEST_BROWSE;
 
 import javax.annotation.Resource;
 import javax.portlet.PortletSession;
@@ -89,7 +90,9 @@ public class ShowTipyController extends AbstractController {
 			return null;
 		}
 		
-		if(taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED) || taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_SENT)) {
+		if(taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED) 
+		   || taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_SENT)
+		   || taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE)) {
 			KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
 			handle.setMessageSource(messageSource);
 			info = handle.getRequestDetails(reqId);

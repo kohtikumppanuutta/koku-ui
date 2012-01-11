@@ -45,7 +45,11 @@
 	    <artifactId>portlet-common</artifactId>  
 	    <version>${koku.portlet.common}</version>  
 	</dependency> 
-		
+	<dependency>
+		<groupId>org.json</groupId>
+		<artifactId>json</artifactId>
+		<version>20090211</version>
+	</dependency>
 	</dependencies>
 
 </project>
