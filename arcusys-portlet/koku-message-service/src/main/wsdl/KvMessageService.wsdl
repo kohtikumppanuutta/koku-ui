@@ -1,370 +1,503 @@
-<definitions name='KokuMessageService' targetNamespace='http://soa.kv.koku.arcusys.fi/' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://soa.kv.koku.arcusys.fi/' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
- <types>
-  <xs:schema targetNamespace='http://soa.kv.koku.arcusys.fi/' version='1.0' xmlns:tns='http://soa.kv.koku.arcusys.fi/' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
-   <xs:element name='archiveMessages' type='tns:archiveMessages'/>
-   <xs:element name='archiveMessagesResponse' type='tns:archiveMessagesResponse'/>
-   <xs:element name='deleteMessages' type='tns:deleteMessages'/>
-   <xs:element name='deleteMessagesResponse' type='tns:deleteMessagesResponse'/>
-   <xs:element name='getMessageById' type='tns:getMessageById'/>
-   <xs:element name='getMessageByIdResponse' type='tns:getMessageByIdResponse'/>
-   <xs:element name='getMessages' type='tns:getMessages'/>
-   <xs:element name='getMessagesOld' type='tns:getMessagesOld'/>
-   <xs:element name='getMessagesOldResponse' type='tns:getMessagesOldResponse'/>
-   <xs:element name='getMessagesResponse' type='tns:getMessagesResponse'/>
-   <xs:element name='getTotalMessages' type='tns:getTotalMessages'/>
-   <xs:element name='getTotalMessagesOld' type='tns:getTotalMessagesOld'/>
-   <xs:element name='getTotalMessagesOldResponse' type='tns:getTotalMessagesOldResponse'/>
-   <xs:element name='getTotalMessagesResponse' type='tns:getTotalMessagesResponse'/>
-   <xs:element name='getUnreadMessages' type='tns:getUnreadMessages'/>
-   <xs:element name='getUnreadMessagesResponse' type='tns:getUnreadMessagesResponse'/>
-   <xs:element name='setMessagesStatus' type='tns:setMessagesStatus'/>
-   <xs:element name='setMessagesStatusResponse' type='tns:setMessagesStatusResponse'/>
-   <xs:complexType name='getMessageById'>
-    <xs:sequence>
-     <xs:element name='messageId' type='xs:long'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getMessageByIdResponse'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='return' type='tns:message'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='message'>
-    <xs:complexContent>
-     <xs:extension base='tns:messageSummary'>
-      <xs:sequence>
-       <xs:element minOccurs='0' name='content' type='xs:string'/>
-      </xs:sequence>
-     </xs:extension>
-    </xs:complexContent>
-   </xs:complexType>
-   <xs:complexType name='messageSummary'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='creationDate' type='xs:dateTime'/>
-     <xs:element name='messageId' type='xs:long'/>
-     <xs:element minOccurs='0' name='messageStatus' type='tns:messageStatus'/>
-     <xs:element minOccurs='0' name='messageType' type='tns:folderType'/>
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='recipients' nillable='true' type='xs:string'/>
-     <xs:element minOccurs='0' name='sender' type='xs:string'/>
-     <xs:element minOccurs='0' name='subject' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getMessages'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='user' type='xs:string'/>
-     <xs:element minOccurs='0' name='folderType' type='tns:folderType'/>
-     <xs:element minOccurs='0' name='subQuery' type='tns:messageQuery'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='messageQuery'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='criteria' type='tns:criteria'/>
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='orderBy' nillable='true' type='tns:orderBy'/>
-     <xs:element name='startNum' type='xs:int'/>
-     <xs:element name='maxNum' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='criteria'>
-    <xs:sequence>
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='fields' nillable='true' type='tns:fields'/>
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='keywords' nillable='true' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='orderBy'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='field' type='tns:fields'/>
-     <xs:element minOccurs='0' name='type' type='tns:type'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getMessagesResponse'>
-    <xs:sequence>
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:messageSummary'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='archiveMessages'>
-    <xs:sequence>
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='messageId' type='xs:long'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='archiveMessagesResponse'>
-    <xs:sequence/>
-   </xs:complexType>
-   <xs:complexType name='deleteMessages'>
-    <xs:sequence>
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='messageId' type='xs:long'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='deleteMessagesResponse'>
-    <xs:sequence/>
-   </xs:complexType>
-   <xs:complexType name='getMessagesOld'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='user' type='xs:string'/>
-     <xs:element minOccurs='0' name='folderType' type='tns:folderType'/>
-     <xs:element minOccurs='0' name='subQuery' type='xs:string'/>
-     <xs:element name='startNum' type='xs:int'/>
-     <xs:element name='maxNum' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getMessagesOldResponse'>
-    <xs:sequence>
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='return' type='tns:messageSummary'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getTotalMessagesOld'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='user' type='xs:string'/>
-     <xs:element minOccurs='0' name='folderType' type='tns:folderType'/>
-     <xs:element minOccurs='0' name='subQuery' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getTotalMessagesOldResponse'>
-    <xs:sequence>
-     <xs:element name='return' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getTotalMessages'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='user' type='xs:string'/>
-     <xs:element minOccurs='0' name='folderType' type='tns:folderType'/>
-     <xs:element minOccurs='0' name='criteria' type='tns:criteria'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getTotalMessagesResponse'>
-    <xs:sequence>
-     <xs:element name='return' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getUnreadMessages'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='user' type='xs:string'/>
-     <xs:element minOccurs='0' name='folderType' type='tns:folderType'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='getUnreadMessagesResponse'>
-    <xs:sequence>
-     <xs:element name='return' type='xs:int'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='setMessagesStatus'>
-    <xs:sequence>
-     <xs:element maxOccurs='unbounded' minOccurs='0' name='messageId' type='xs:long'/>
-     <xs:element minOccurs='0' name='messageStatus' type='tns:messageStatus'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='setMessagesStatusResponse'>
-    <xs:sequence/>
-   </xs:complexType>
-   <xs:simpleType name='messageStatus'>
-    <xs:restriction base='xs:string'>
-     <xs:enumeration value='Read'/>
-     <xs:enumeration value='Unread'/>
-    </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name='folderType'>
-    <xs:restriction base='xs:string'>
-     <xs:enumeration value='Inbox'/>
-     <xs:enumeration value='Outbox'/>
-     <xs:enumeration value='Archive_Inbox'/>
-     <xs:enumeration value='Archive_Outbox'/>
-    </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name='fields'>
-    <xs:restriction base='xs:string'>
-     <xs:enumeration value='Sender'/>
-     <xs:enumeration value='Receiver'/>
-     <xs:enumeration value='Subject'/>
-     <xs:enumeration value='Content'/>
-     <xs:enumeration value='CreatedDate'/>
-    </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name='type'>
-    <xs:restriction base='xs:string'>
-     <xs:enumeration value='ASC'/>
-     <xs:enumeration value='DESC'/>
-    </xs:restriction>
-   </xs:simpleType>
-  </xs:schema>
- </types>
- <message name='KokuMessageService_archiveMessagesResponse'>
-  <part element='tns:archiveMessagesResponse' name='archiveMessagesResponse'></part>
- </message>
- <message name='KokuMessageService_deleteMessages'>
-  <part element='tns:deleteMessages' name='deleteMessages'></part>
- </message>
- <message name='KokuMessageService_deleteMessagesResponse'>
-  <part element='tns:deleteMessagesResponse' name='deleteMessagesResponse'></part>
- </message>
- <message name='KokuMessageService_getMessages'>
-  <part element='tns:getMessages' name='getMessages'></part>
- </message>
- <message name='KokuMessageService_getMessagesOldResponse'>
-  <part element='tns:getMessagesOldResponse' name='getMessagesOldResponse'></part>
- </message>
- <message name='KokuMessageService_getUnreadMessages'>
-  <part element='tns:getUnreadMessages' name='getUnreadMessages'></part>
- </message>
- <message name='KokuMessageService_archiveMessages'>
-  <part element='tns:archiveMessages' name='archiveMessages'></part>
- </message>
- <message name='KokuMessageService_getTotalMessagesResponse'>
-  <part element='tns:getTotalMessagesResponse' name='getTotalMessagesResponse'></part>
- </message>
- <message name='KokuMessageService_getMessagesResponse'>
-  <part element='tns:getMessagesResponse' name='getMessagesResponse'></part>
- </message>
- <message name='KokuMessageService_getTotalMessagesOldResponse'>
-  <part element='tns:getTotalMessagesOldResponse' name='getTotalMessagesOldResponse'></part>
- </message>
- <message name='KokuMessageService_getTotalMessagesOld'>
-  <part element='tns:getTotalMessagesOld' name='getTotalMessagesOld'></part>
- </message>
- <message name='KokuMessageService_setMessagesStatusResponse'>
-  <part element='tns:setMessagesStatusResponse' name='setMessagesStatusResponse'></part>
- </message>
- <message name='KokuMessageService_getUnreadMessagesResponse'>
-  <part element='tns:getUnreadMessagesResponse' name='getUnreadMessagesResponse'></part>
- </message>
- <message name='KokuMessageService_getMessagesOld'>
-  <part element='tns:getMessagesOld' name='getMessagesOld'></part>
- </message>
- <message name='KokuMessageService_setMessagesStatus'>
-  <part element='tns:setMessagesStatus' name='setMessagesStatus'></part>
- </message>
- <message name='KokuMessageService_getTotalMessages'>
-  <part element='tns:getTotalMessages' name='getTotalMessages'></part>
- </message>
- <message name='KokuMessageService_getMessageById'>
-  <part element='tns:getMessageById' name='getMessageById'></part>
- </message>
- <message name='KokuMessageService_getMessageByIdResponse'>
-  <part element='tns:getMessageByIdResponse' name='getMessageByIdResponse'></part>
- </message>
- <portType name='KokuMessageService'>
-  <operation name='archiveMessages' parameterOrder='archiveMessages'>
-   <input message='tns:KokuMessageService_archiveMessages'></input>
-   <output message='tns:KokuMessageService_archiveMessagesResponse'></output>
-  </operation>
-  <operation name='deleteMessages' parameterOrder='deleteMessages'>
-   <input message='tns:KokuMessageService_deleteMessages'></input>
-   <output message='tns:KokuMessageService_deleteMessagesResponse'></output>
-  </operation>
-  <operation name='getMessageById' parameterOrder='getMessageById'>
-   <input message='tns:KokuMessageService_getMessageById'></input>
-   <output message='tns:KokuMessageService_getMessageByIdResponse'></output>
-  </operation>
-  <operation name='getMessages' parameterOrder='getMessages'>
-   <input message='tns:KokuMessageService_getMessages'></input>
-   <output message='tns:KokuMessageService_getMessagesResponse'></output>
-  </operation>
-  <operation name='getMessagesOld' parameterOrder='getMessagesOld'>
-   <input message='tns:KokuMessageService_getMessagesOld'></input>
-   <output message='tns:KokuMessageService_getMessagesOldResponse'></output>
-  </operation>
-  <operation name='getTotalMessages' parameterOrder='getTotalMessages'>
-   <input message='tns:KokuMessageService_getTotalMessages'></input>
-   <output message='tns:KokuMessageService_getTotalMessagesResponse'></output>
-  </operation>
-  <operation name='getTotalMessagesOld' parameterOrder='getTotalMessagesOld'>
-   <input message='tns:KokuMessageService_getTotalMessagesOld'></input>
-   <output message='tns:KokuMessageService_getTotalMessagesOldResponse'></output>
-  </operation>
-  <operation name='getUnreadMessages' parameterOrder='getUnreadMessages'>
-   <input message='tns:KokuMessageService_getUnreadMessages'></input>
-   <output message='tns:KokuMessageService_getUnreadMessagesResponse'></output>
-  </operation>
-  <operation name='setMessagesStatus' parameterOrder='setMessagesStatus'>
-   <input message='tns:KokuMessageService_setMessagesStatus'></input>
-   <output message='tns:KokuMessageService_setMessagesStatusResponse'></output>
-  </operation>
- </portType>
- <binding name='KokuMessageServiceBinding' type='tns:KokuMessageService'>
-  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
-  <operation name='archiveMessages'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='deleteMessages'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getMessageById'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getMessages'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getMessagesOld'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getTotalMessages'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getTotalMessagesOld'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='getUnreadMessages'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
-  <operation name='setMessagesStatus'>
-   <soap:operation soapAction=''/>
-   <input>
-    <soap:body use='literal'/>
-   </input>
-   <output>
-    <soap:body use='literal'/>
-   </output>
-  </operation>
- </binding>
- <service name='KokuMessageService'>
-  <port binding='tns:KokuMessageServiceBinding' name='KokuMessageServicePort'>
-   <soap:address location='http://trelx51x:8080/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuMessageServiceImpl'/>
-  </port>
- </service>
-</definitions>
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="KokuMessageService" targetNamespace="http://soa.kv.koku.arcusys.fi/" xmlns:ns1="http://schemas.xmlsoap.org/wsdl/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://soa.kv.koku.arcusys.fi/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema elementFormDefault="unqualified" targetNamespace="http://soa.kv.koku.arcusys.fi/" version="1.0" xmlns:ns1="http://soa.common.koku.arcusys.fi/" xmlns:tns="http://soa.kv.koku.arcusys.fi/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:import namespace="http://soa.common.koku.arcusys.fi/" />
+<xs:element name="archiveMessages" type="tns:archiveMessages" />
+<xs:element name="archiveMessagesResponse" type="tns:archiveMessagesResponse" />
+<xs:element name="archiveOldMessages" type="tns:archiveOldMessages" />
+<xs:element name="archiveOldMessagesResponse" type="tns:archiveOldMessagesResponse" />
+<xs:element name="deleteMessages" type="tns:deleteMessages" />
+<xs:element name="deleteMessagesResponse" type="tns:deleteMessagesResponse" />
+<xs:element name="getMessageById" type="tns:getMessageById" />
+<xs:element name="getMessageByIdResponse" type="tns:getMessageByIdResponse" />
+<xs:element name="getMessages" type="tns:getMessages" />
+<xs:element name="getMessagesOld" type="tns:getMessagesOld" />
+<xs:element name="getMessagesOldResponse" type="tns:getMessagesOldResponse" />
+<xs:element name="getMessagesResponse" type="tns:getMessagesResponse" />
+
+<xs:element name="getTotalMessages" type="tns:getTotalMessages" />
+<xs:element name="getTotalMessagesOld" type="tns:getTotalMessagesOld" />
+<xs:element name="getTotalMessagesOldResponse" type="tns:getTotalMessagesOldResponse" />
+<xs:element name="getTotalMessagesResponse" type="tns:getTotalMessagesResponse" />
+<xs:element name="getUnreadMessages" type="tns:getUnreadMessages" />
+<xs:element name="getUnreadMessagesResponse" type="tns:getUnreadMessagesResponse" />
+<xs:element name="setMessagesStatus" type="tns:setMessagesStatus" />
+<xs:element name="setMessagesStatusResponse" type="tns:setMessagesStatusResponse" />
+<xs:complexType name="archiveOldMessages">
+<xs:sequence>
+<xs:element minOccurs="0" name="userUid" type="xs:string" />
+<xs:element minOccurs="0" name="folderType" type="tns:folderType" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="archiveOldMessagesResponse">
+<xs:sequence />
+</xs:complexType>
+
+<xs:complexType name="getMessagesOld">
+<xs:sequence>
+<xs:element minOccurs="0" name="user" type="xs:string" />
+<xs:element minOccurs="0" name="folderType" type="tns:folderType" />
+<xs:element minOccurs="0" name="subQuery" type="xs:string" />
+<xs:element name="startNum" type="xs:int" />
+<xs:element name="maxNum" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getMessagesOldResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:messageSummary" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="messageSummary">
+<xs:sequence>
+<xs:element minOccurs="0" name="creationDate" type="xs:dateTime" />
+
+<xs:element name="messageId" type="xs:long" />
+<xs:element minOccurs="0" name="messageStatus" type="tns:messageStatus" />
+<xs:element minOccurs="0" name="messageType" type="tns:folderType" />
+<xs:element maxOccurs="unbounded" minOccurs="0" name="recipientUserInfos" nillable="true" type="ns1:user" />
+<xs:element maxOccurs="unbounded" minOccurs="0" name="recipients" nillable="true" type="xs:string" />
+<xs:element minOccurs="0" name="sender" type="xs:string" />
+<xs:element minOccurs="0" name="senderUserInfo" type="ns1:user" />
+<xs:element minOccurs="0" name="subject" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="deleteMessages">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="messageId" type="xs:long" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="deleteMessagesResponse">
+<xs:sequence />
+
+</xs:complexType>
+<xs:complexType name="getMessageById">
+<xs:sequence>
+<xs:element name="messageId" type="xs:long" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getMessageByIdResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:message" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="message">
+<xs:complexContent>
+<xs:extension base="tns:messageSummary">
+<xs:sequence>
+<xs:element minOccurs="0" name="content" type="xs:string" />
+<xs:element maxOccurs="unbounded" minOccurs="0" name="deliveryFailedTo" nillable="true" type="ns1:user" />
+
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+<xs:complexType name="setMessagesStatus">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="messageId" type="xs:long" />
+<xs:element minOccurs="0" name="messageStatus" type="tns:messageStatus" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="setMessagesStatusResponse">
+<xs:sequence />
+</xs:complexType>
+<xs:complexType name="getTotalMessagesOld">
+<xs:sequence>
+<xs:element minOccurs="0" name="user" type="xs:string" />
+<xs:element minOccurs="0" name="folderType" type="tns:folderType" />
+
+<xs:element minOccurs="0" name="subQuery" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getTotalMessagesOldResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getTotalMessages">
+<xs:sequence>
+<xs:element minOccurs="0" name="user" type="xs:string" />
+<xs:element minOccurs="0" name="folderType" type="tns:folderType" />
+<xs:element minOccurs="0" name="criteria" type="tns:criteria" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="criteria">
+<xs:sequence>
+
+<xs:element maxOccurs="unbounded" minOccurs="0" name="fields" nillable="true" type="tns:fields" />
+<xs:element maxOccurs="unbounded" minOccurs="0" name="keywords" nillable="true" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getTotalMessagesResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getUnreadMessages">
+<xs:sequence>
+<xs:element minOccurs="0" name="user" type="xs:string" />
+<xs:element minOccurs="0" name="folderType" type="tns:folderType" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getUnreadMessagesResponse">
+<xs:sequence>
+
+<xs:element name="return" type="xs:int" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getMessages">
+<xs:sequence>
+<xs:element minOccurs="0" name="user" type="xs:string" />
+<xs:element minOccurs="0" name="folderType" type="tns:folderType" />
+<xs:element minOccurs="0" name="subQuery" type="tns:messageQuery" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="messageQuery">
+<xs:sequence>
+<xs:element minOccurs="0" name="criteria" type="tns:criteria" />
+<xs:element maxOccurs="unbounded" minOccurs="0" name="orderBy" nillable="true" type="tns:orderBy" />
+<xs:element name="startNum" type="xs:int" />
+<xs:element name="maxNum" type="xs:int" />
+</xs:sequence>
+
+</xs:complexType>
+<xs:complexType name="orderBy">
+<xs:sequence>
+<xs:element minOccurs="0" name="field" type="tns:fields" />
+<xs:element minOccurs="0" name="type" type="tns:type" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getMessagesResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:messageSummary" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="archiveMessages">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="messageId" type="xs:long" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="archiveMessagesResponse">
+<xs:sequence />
+</xs:complexType>
+<xs:simpleType name="folderType">
+<xs:restriction base="xs:string">
+<xs:enumeration value="Inbox" />
+<xs:enumeration value="Outbox" />
+<xs:enumeration value="Archive_Inbox" />
+<xs:enumeration value="Archive_Outbox" />
+</xs:restriction>
+</xs:simpleType>
+<xs:simpleType name="messageStatus">
+<xs:restriction base="xs:string">
+<xs:enumeration value="Read" />
+<xs:enumeration value="Unread" />
+</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="fields">
+<xs:restriction base="xs:string">
+<xs:enumeration value="Sender" />
+<xs:enumeration value="Receiver" />
+<xs:enumeration value="Subject" />
+<xs:enumeration value="Content" />
+<xs:enumeration value="CreatedDate" />
+</xs:restriction>
+</xs:simpleType>
+<xs:simpleType name="type">
+<xs:restriction base="xs:string">
+<xs:enumeration value="ASC" />
+<xs:enumeration value="DESC" />
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>
+<xs:schema targetNamespace="http://soa.common.koku.arcusys.fi/" version="1.0" xmlns:tns="http://soa.common.koku.arcusys.fi/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:element name="perform" type="tns:perform" />
+<xs:element name="performResponse" type="tns:performResponse" />
+<xs:complexType name="user">
+<xs:sequence>
+<xs:element minOccurs="0" name="displayName" type="xs:string" />
+<xs:element minOccurs="0" name="email" type="xs:string" />
+<xs:element minOccurs="0" name="firstname" type="xs:string" />
+<xs:element minOccurs="0" name="lastname" type="xs:string" />
+<xs:element minOccurs="0" name="phoneNumber" type="xs:string" />
+<xs:element minOccurs="0" name="uid" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="performResponse">
+<xs:sequence />
+</xs:complexType>
+<xs:complexType name="perform">
+<xs:sequence />
+
+</xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="archiveOldMessages">
+    <wsdl:part element="tns:archiveOldMessages" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMessagesResponse">
+    <wsdl:part element="tns:getMessagesResponse" name="parameters">
+    </wsdl:part>
+
+  </wsdl:message>
+  <wsdl:message name="deleteMessages">
+    <wsdl:part element="tns:deleteMessages" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="archiveMessages">
+    <wsdl:part element="tns:archiveMessages" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="getTotalMessagesOld">
+    <wsdl:part element="tns:getTotalMessagesOld" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getUnreadMessages">
+    <wsdl:part element="tns:getUnreadMessages" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="deleteMessagesResponse">
+
+    <wsdl:part element="tns:deleteMessagesResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setMessagesStatusResponse">
+    <wsdl:part element="tns:setMessagesStatusResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMessageByIdResponse">
+    <wsdl:part element="tns:getMessageByIdResponse" name="parameters">
+
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTotalMessages">
+    <wsdl:part element="tns:getTotalMessages" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setMessagesStatus">
+    <wsdl:part element="tns:setMessagesStatus" name="parameters">
+    </wsdl:part>
+
+  </wsdl:message>
+  <wsdl:message name="getUnreadMessagesResponse">
+    <wsdl:part element="tns:getUnreadMessagesResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="archiveOldMessagesResponse">
+    <wsdl:part element="tns:archiveOldMessagesResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="getTotalMessagesOldResponse">
+    <wsdl:part element="tns:getTotalMessagesOldResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMessagesOld">
+    <wsdl:part element="tns:getMessagesOld" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTotalMessagesResponse">
+
+    <wsdl:part element="tns:getTotalMessagesResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMessagesOldResponse">
+    <wsdl:part element="tns:getMessagesOldResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMessageById">
+    <wsdl:part element="tns:getMessageById" name="parameters">
+
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="archiveMessagesResponse">
+    <wsdl:part element="tns:archiveMessagesResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMessages">
+    <wsdl:part element="tns:getMessages" name="parameters">
+    </wsdl:part>
+
+  </wsdl:message>
+  <wsdl:portType name="KokuMessageService">
+    <wsdl:operation name="archiveOldMessages">
+      <wsdl:input message="tns:archiveOldMessages" name="archiveOldMessages">
+    </wsdl:input>
+      <wsdl:output message="tns:archiveOldMessagesResponse" name="archiveOldMessagesResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMessagesOld">
+
+      <wsdl:input message="tns:getMessagesOld" name="getMessagesOld">
+    </wsdl:input>
+      <wsdl:output message="tns:getMessagesOldResponse" name="getMessagesOldResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteMessages">
+      <wsdl:input message="tns:deleteMessages" name="deleteMessages">
+    </wsdl:input>
+      <wsdl:output message="tns:deleteMessagesResponse" name="deleteMessagesResponse">
+
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMessageById">
+      <wsdl:input message="tns:getMessageById" name="getMessageById">
+    </wsdl:input>
+      <wsdl:output message="tns:getMessageByIdResponse" name="getMessageByIdResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setMessagesStatus">
+
+      <wsdl:input message="tns:setMessagesStatus" name="setMessagesStatus">
+    </wsdl:input>
+      <wsdl:output message="tns:setMessagesStatusResponse" name="setMessagesStatusResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTotalMessagesOld">
+      <wsdl:input message="tns:getTotalMessagesOld" name="getTotalMessagesOld">
+    </wsdl:input>
+      <wsdl:output message="tns:getTotalMessagesOldResponse" name="getTotalMessagesOldResponse">
+
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTotalMessages">
+      <wsdl:input message="tns:getTotalMessages" name="getTotalMessages">
+    </wsdl:input>
+      <wsdl:output message="tns:getTotalMessagesResponse" name="getTotalMessagesResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUnreadMessages">
+
+      <wsdl:input message="tns:getUnreadMessages" name="getUnreadMessages">
+    </wsdl:input>
+      <wsdl:output message="tns:getUnreadMessagesResponse" name="getUnreadMessagesResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMessages">
+      <wsdl:input message="tns:getMessages" name="getMessages">
+    </wsdl:input>
+      <wsdl:output message="tns:getMessagesResponse" name="getMessagesResponse">
+
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="archiveMessages">
+      <wsdl:input message="tns:archiveMessages" name="archiveMessages">
+    </wsdl:input>
+      <wsdl:output message="tns:archiveMessagesResponse" name="archiveMessagesResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="KokuMessageServiceSoapBinding" type="tns:KokuMessageService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="archiveOldMessages">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="archiveOldMessages">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="archiveOldMessagesResponse">
+        <soap:body use="literal" />
+
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMessagesOld">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getMessagesOld">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getMessagesOldResponse">
+        <soap:body use="literal" />
+
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteMessages">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="deleteMessages">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="deleteMessagesResponse">
+        <soap:body use="literal" />
+
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMessageById">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getMessageById">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getMessageByIdResponse">
+        <soap:body use="literal" />
+
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setMessagesStatus">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="setMessagesStatus">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="setMessagesStatusResponse">
+        <soap:body use="literal" />
+
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTotalMessagesOld">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getTotalMessagesOld">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getTotalMessagesOldResponse">
+        <soap:body use="literal" />
+
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTotalMessages">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getTotalMessages">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getTotalMessagesResponse">
+        <soap:body use="literal" />
+
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUnreadMessages">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getUnreadMessages">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getUnreadMessagesResponse">
+        <soap:body use="literal" />
+
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="archiveMessages">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="archiveMessages">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="archiveMessagesResponse">
+        <soap:body use="literal" />
+
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMessages">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input name="getMessages">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getMessagesResponse">
+        <soap:body use="literal" />
+
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="KokuMessageService">
+    <wsdl:port binding="tns:KokuMessageServiceSoapBinding" name="KokuMessageServicePort">
+      <soap:address location="http://kohtikumppanuutta-dev.dmz:8180/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuMessageServiceImpl" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
