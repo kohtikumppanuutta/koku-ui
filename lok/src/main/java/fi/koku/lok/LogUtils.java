@@ -11,8 +11,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.portlet.PortletSession;
 
@@ -199,31 +201,70 @@ public class LogUtils {
     List<String> picList = new ArrayList<String>();
 
     // collect all different pics found in entries in a local list
-    Iterator iter = entries.iterator();
-    while (iter.hasNext()) {
-      LogEntry entry = (LogEntry) iter.next();
+    for (LogEntry entry : entries) {
       pic = entry.getUser();
       if (!picList.contains(pic)) {
         picList.add(pic);
       }
     }
 
+    Map<String, Person> picToPerson = new HashMap<String, Person>();
     try {
       log.info("call the Person service");
       // call the Person service to get the persons
       list = personService.getPersonsByPics(picList, PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER, portletUserPic,
           LogConstants.COMPONENT_LOK);
+         
+      // create a map from person list, so we do not have to loop the list many times.
+      // personservice officer domain returns persons with null data if a person info is not found
+      // ingnore these.      
+      if (list != null) {
+        for (Person person : list) {
+          if (isNotNullOrEmpty(person.getPic()) && isNotNullOrEmpty(person.getFname())
+              && isNotNullOrEmpty(person.getSname())) {
+            picToPerson.put(person.getPic(), person);
+          }
+        }
+      }
+
+      // check if we failed to get match for all pics.
+      if (picToPerson.keySet().size() != picList.size()) {
+        List<String> notFoundPics = new ArrayList<String>();
+        // add all to not found and remove the found, this way we have left the ones that
+        // were not found from "PERSON_SERVICE_DOMAIN_OFFICER"
+        notFoundPics.addAll(picList);    
+        if(picToPerson.keySet().size() > 0){
+          notFoundPics.removeAll(picToPerson.keySet());
+        }       
+        
+        // try to find rest from "PERSON_SERVICE_DOMAIN_CUSTOMER".
+        List<Person> customers = personService.getPersonsByPics(notFoundPics,
+            PersonConstants.PERSON_SERVICE_DOMAIN_CUSTOMER, portletUserPic, LogConstants.COMPONENT_LOK);
+        
+        // add found customers
+        if (customers != null) {
+          for (Person person : customers) {
+            if (isNotNullOrEmpty(person.getPic()) && isNotNullOrEmpty(person.getFname())) {
+              picToPerson.put(person.getPic(), person);
+            }
+          }
+        }
+      }            
     } catch (Exception e) {
-      log.error("Person service threw an exception " + e.getMessage());
+      log.error("Person service threw an exception ", e);
     }
 
     // Replace the pics in entries with the names we got from Person service
-    Iterator<LogEntry> it = entries.iterator();
-    while (it.hasNext()) {
-      LogEntry entry = (LogEntry) it.next();
+    for (LogEntry entry : entries) {
       String userpic = entry.getUser();
+      Person person = picToPerson.get(userpic);
 
-      changeEntry(entry, picList, list, userpic);
+      if (person == null) {
+        log.info("No name found in personservice for pic " + userpic);
+        // no name was found so keep the original pic in the entry!
+      } else {
+        entry.setUser(person.getFname() + " " + person.getSname());
+      }
     }
   } 
   
@@ -294,27 +335,11 @@ public class LogUtils {
    }
   }
   
-  /**
-   * Helper method for replacing the pic in the entry with the name we got from
-   * the Person service
-   * 
-   * @param entries
-   * @param picList
-   * @param list
-   */
-  private void changeEntry(LogEntry entry, List<String> picList, List<Person> list, String userpic){
-   Person person = null;  
- 
-   for (int i = 0; i < picList.size(); i++) {
-     if(picList.get(i).equalsIgnoreCase(userpic)){
-       person = list.get(i);
-       if(person==null || person.getFname()==null || person.getSname()==null){
-         log.info("No name found in personservice for pic " + userpic);
-         // no name was found so keep the original pic in the entry!
-       } else{
-         entry.setUser(person.getFname() + " "+person.getSname());
-       }
-     }
-   }
+  private boolean isNotNullOrEmpty(String s){
+    if(s!=null && !s.isEmpty()){
+      return true;
+    }else{
+      return false;  
+    }
   }
 }
