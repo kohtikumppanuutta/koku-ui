@@ -16,7 +16,7 @@
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <koku.portlet.common>0.0.24</koku.portlet.common>
+    <koku.portlet.common>0.0.25</koku.portlet.common>
   </properties>
   
   <build>
