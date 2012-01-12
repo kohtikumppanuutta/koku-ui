@@ -29,15 +29,10 @@ public class AjaxView extends AbstractView {
     @Override
     public String getContentType () {
         String orgiContentType = super.getContentType ();
-        if (StringUtils.isEmpty (orgiContentType))
+        if (StringUtils.isEmpty(orgiContentType)) {
             orgiContentType = DEFAULT_AJAX_CONTENT_TYPE;
-
+        }
         return orgiContentType;
-    }
-
-    @Override
-    public void setContentType (String contentType) {
-        super.setContentType (contentType);
     }
 
     @Override
