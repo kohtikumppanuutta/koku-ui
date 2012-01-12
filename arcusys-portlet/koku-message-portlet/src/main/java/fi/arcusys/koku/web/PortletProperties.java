@@ -3,6 +3,9 @@ package fi.arcusys.koku.web;
 import fi.koku.settings.KoKuPropertiesUtil;
 
 public class PortletProperties {
+	
+	private PortletProperties() { } // No need to instantiate
+	
 	/* koku-settings.properties keys */
 	public static final String PROPERTY_MESSAGE_PORTLET_PATH 		= "messagePortlet.path";	
 	
