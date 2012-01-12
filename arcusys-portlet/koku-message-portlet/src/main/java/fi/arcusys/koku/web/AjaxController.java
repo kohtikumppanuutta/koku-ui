@@ -1,9 +1,36 @@
 package fi.arcusys.koku.web;
 
-import static fi.arcusys.koku.util.Constants.*;
+import static fi.arcusys.koku.util.Constants.ATTR_APPLICATION_ID;
+import static fi.arcusys.koku.util.Constants.ATTR_APPOIMENT_ID;
+import static fi.arcusys.koku.util.Constants.ATTR_AUTHORIZATION_ID;
+import static fi.arcusys.koku.util.Constants.ATTR_CONSENT_ID;
+import static fi.arcusys.koku.util.Constants.ATTR_CURRENT_PAGE;
+import static fi.arcusys.koku.util.Constants.ATTR_KEYWORD;
+import static fi.arcusys.koku.util.Constants.ATTR_KOKU_USER;
+import static fi.arcusys.koku.util.Constants.ATTR_MESSAGE_ID;
+import static fi.arcusys.koku.util.Constants.ATTR_MY_ACTION;
+import static fi.arcusys.koku.util.Constants.ATTR_ORDER_TYPE;
+import static fi.arcusys.koku.util.Constants.ATTR_REQUEST_ID;
+import static fi.arcusys.koku.util.Constants.ATTR_RESPONSE_ID;
+import static fi.arcusys.koku.util.Constants.ATTR_TARGET_PERSON;
+import static fi.arcusys.koku.util.Constants.ATTR_TASK_TYPE;
+import static fi.arcusys.koku.util.Constants.ATTR_USERNAME;
+import static fi.arcusys.koku.util.Constants.JSON_RENDER_URL;
+import static fi.arcusys.koku.util.Constants.JSON_RESULT;
+import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_APPLICATION_KINDERGARTEN;
+import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_APPOINTMENT;
+import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_CONSENT;
+import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_REQUEST;
+import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_REQUEST_RESPONSE;
+import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_TIPY;
+import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_WARRANT;
+import static fi.arcusys.koku.util.Constants.RESPONSE;
+import static fi.arcusys.koku.util.Constants.RESPONSE_OK;
+import static fi.arcusys.koku.util.Constants.SUGGESTION_APPLICATION_KINDERGARTEN;
+import static fi.arcusys.koku.util.Constants.SUGGESTION_CONSENT;
+import static fi.arcusys.koku.util.Constants.SUGGESTION_WARRANT;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -29,11 +56,8 @@ import fi.arcusys.koku.av.AvCitizenServiceHandle;
 import fi.arcusys.koku.av.AvEmployeeServiceHandle;
 import fi.arcusys.koku.hak.model.HakServiceHandle;
 import fi.arcusys.koku.kv.message.MessageHandle;
-import fi.arcusys.koku.kv.request.citizen.CitizenRequestHandle;
-import fi.arcusys.koku.kv.request.employee.EmployeeRequestHandle;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
-import fi.arcusys.koku.tiva.tietopyynto.employee.KokuEmployeeTietopyyntoServiceHandle;
 import fi.arcusys.koku.tiva.warrant.citizens.KokuCitizenWarrantHandle;
 import fi.arcusys.koku.tiva.warrant.employee.KokuEmployeeWarrantHandle;
 import fi.arcusys.koku.users.KokuUser;
@@ -41,8 +65,11 @@ import fi.arcusys.koku.users.KokuUserService;
 import fi.arcusys.koku.users.UserIdResolver;
 import fi.arcusys.koku.util.PortalRole;
 import fi.arcusys.koku.util.Properties;
+import fi.arcusys.koku.web.util.QueryProcess;
+import fi.arcusys.koku.web.util.impl.QueryProcessDummyImpl;
+import fi.arcusys.koku.web.util.impl.QueryProcessCitizenImpl;
+import fi.arcusys.koku.web.util.impl.QueryProcessEmployeeImpl;
 import fi.koku.portlet.filter.userinfo.UserInfo;
-import fi.koku.portlet.filter.userinfo.VetumaUserInfo;
 
 /**
  * Hanldes ajax request from portlet and returns the response with json string
@@ -54,7 +81,6 @@ import fi.koku.portlet.filter.userinfo.VetumaUserInfo;
 @RequestMapping(value = "VIEW")
 public class AjaxController extends AbstractController {
 	
-	private static final String TASKS = "tasks";	
 	private static final int MAX_SUGGESTION_RESULTS = 5;
 		
 	@Resource
@@ -99,7 +125,19 @@ public class AjaxController extends AbstractController {
 		} catch (Exception e) {
 			LOG.error("Error while trying to resolve userId. See following error msg: "+ e);
 		}
-		JSONObject jsonModel = getJsonModel(taskType, page, keyword, field, orderType, userId);
+		
+		QueryProcess query = null;
+		
+		if (Properties.IS_KUNPO_PORTAL) {
+			query = new QueryProcessCitizenImpl(messageSource);
+		} else if (Properties.IS_LOORA_PORTAL) {
+			query = new QueryProcessEmployeeImpl(messageSource);
+		} else {
+			query = new QueryProcessDummyImpl(messageSource);
+			LOG.error("PortalMode unknown! Only kunpo/loora portal modes are supported. Please check that properties file is properly configured.");
+		}	
+		
+		JSONObject jsonModel = query.getJsonModel(taskType, page, keyword, field, orderType, userId);
 		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}	
@@ -383,136 +421,6 @@ public class AjaxController extends AbstractController {
 	}
 	
 	
-	/**
-	 * Processes tasks query and get task list from web services
-	 * @param taskType type of requested task
-	 * @param page the page number
-	 * @param keyword keyword for filtering
-	 * @param field field for filtering
-	 * @param orderType order of tasks
-	 * @param userUid the user to which the tasks belong 
-	 * @return task information in Json format
-	 */
-	public JSONObject getJsonModel(String taskType, int page, String keyword, String field, String orderType, String userUid) {
-		JSONObject jsonModel = new JSONObject();
-		
-		LOG.debug("Ajax call");
-		
-		if (userUid == null) {
-			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_INVALID);
-			LOG.info("No logged in user");
-		} else {			
-			int numPerPage = PAGE_NUMBER;
-			int totalTasksNum = 0;
-			int totalPages;
-			int first = (page-1)*numPerPage + 1; // the start index of task
-			int max =  page*numPerPage; // max amount of tasks
-			Object tasks = Collections.EMPTY_LIST; // Returned tasks
-			
-			if (taskType.equals(TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE)) { // Asiointipalvelut - Selaa hakemuksia (päivähoito) - employee
-				HakServiceHandle reqHandle = new HakServiceHandle();
-				tasks = reqHandle.getApplicants(userUid, keyword, first, max);
-				totalTasksNum = reqHandle.getTotalRequestedApplicants(userUid, keyword);
-			} else if (taskType.equals(TASK_TYPE_REQUEST_VALID_EMPLOYEE)) { // for request (Pyynnöt) - employee Avoimet
-				EmployeeRequestHandle reqHandle = new EmployeeRequestHandle();
-				tasks = reqHandle.getRequests(userUid, "valid", "", first, max);
-				totalTasksNum = reqHandle.getTotalRequestsNum(userUid, "valid");
-			} else if (taskType.equals(TASK_TYPE_REQUEST_REPLIED)) { // Pyynnöt - vastatut
-				CitizenRequestHandle handle = new CitizenRequestHandle();
-				tasks = handle.getRepliedRequests(userUid, first, max);
-				totalTasksNum = handle.getTotalRepliedRequests(userUid);
-			}  else if (taskType.equals(TASK_TYPE_REQUEST_OLD)) { // Pyynnöt - vanhat
-				CitizenRequestHandle handle = new CitizenRequestHandle();
-				tasks = handle.getOldRequests(userUid, first, max);
-				totalTasksNum = handle.getTotalOldRequests(userUid);
-			} else if (taskType.equals(TASK_TYPE_REQUEST_DONE_EMPLOYEE)) { // Pyynnöt - vastatut/vanhat
-				// TODO: Need proper WS service
-				tasks = Collections.EMPTY_LIST;
-				totalTasksNum = 0;				
-			} else if (taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED)) { // Virkailija: Selaa vastaanotettuja tietopyyntöjä
-				KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
-				handle.setMessageSource(messageSource);
-				tasks = handle.getRepliedRequests(userUid, keyword, first, max);
-			} else if (taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_SENT)) { // Virkailija: Selaa lähetettyjä tietopyyntöjä
-				KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
-				handle.setMessageSource(messageSource);
-				tasks = handle.getSentRequests(userUid, keyword, first, max);
-			} else if (taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE)) { // ADMIN: Selaa tietopyyntöjä
-				KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
-				handle.setMessageSource(messageSource);
-				tasks = handle.getRequests(keyword, first, max);
-			} else if (taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_CITIZEN)
-					|| taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD)
-					|| taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)) {	// Tapaamiset - Vastausta odottavat / vastatut 
-				AvCitizenServiceHandle handle = new AvCitizenServiceHandle(userUid);
-				handle.setMessageSource(messageSource);
-				tasks = handle.getAppointments(userUid, first, max, taskType);
-				totalTasksNum = handle.getTotalAppointmentsNum(userUid, taskType);
-			} else if(taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE) || taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE)) { // Tapaamiset - Avoimet / Valmiit
-				AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
-				handle.setMessageSource(messageSource);
-				tasks = handle.getAppointments(userUid, first, max, taskType, keyword);
-				totalTasksNum = handle.getTotalAppointmentsNum(userUid, taskType, keyword);
-			} else if (taskType.equals(TASK_TYPE_CONSENT_ASSIGNED_CITIZEN)) { // consent (Valtakirja / Suostumus) Kansalaiselle saapuneet pyynnöt(/suostumukset) 
-				TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
-				tivaHandle.setMessageSource(messageSource);
-				tasks = tivaHandle.getAssignedConsents(userUid, first, max);
-				totalTasksNum = tivaHandle.getTotalAssignedConsents(userUid);
-			} else if(taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS)) { // consent (Valtakirja / Suostumus) Kansalaiselle vastatut pyynnöt(/suostumukset) 
-				TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
-				tivaHandle.setMessageSource(messageSource);
-				tasks = tivaHandle.getOwnConsents(userUid, first, max);
-				totalTasksNum = tivaHandle.getTotalOwnConsents(userUid);
-			} else if(taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD)) { // consent (Valtakirja / Suostumus) Kansalaiselle vastatut vanhentuneet pyynnöt(/suostumukset) 
-				TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle();
-				tivaHandle.setMessageSource(messageSource);
-				tasks = tivaHandle.getOwnOldConsents(userUid, first, max);
-				totalTasksNum = tivaHandle.getTotalOwnOldConsents(userUid);
-			} else if(taskType.equals(TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS)) { // Virkailijan lähetetyt suostumus pyynnöt
-				TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();
-				tivaHandle.setMessageSource(messageSource);
-				tasks = tivaHandle.getConsents(userUid, keyword, field, first, max);
-				totalTasksNum = tivaHandle.getTotalConsents(userUid, keyword, field);
-			} else if(taskType.equals(TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS)) {	// Virkailija: Selaa asiakkaan valtakirjoja TIVA-13
-				if (keyword != null && !keyword.isEmpty()) {
-					KokuEmployeeWarrantHandle warrantHandle = new KokuEmployeeWarrantHandle();
-					warrantHandle.setMessageSource(messageSource);
-					tasks = warrantHandle.getAuthorizationsByUserId(keyword, first, max);
-					totalTasksNum = warrantHandle.getUserRecievedWarrantCount(keyword);						
-				}
-			} else if(taskType.equals(TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS)) {	// Virkailija: Selaa asian valtakirjoja TIVA-14
-				if (keyword != null && !keyword.isEmpty()) {
-					KokuEmployeeWarrantHandle warrantHandle = new KokuEmployeeWarrantHandle();
-					warrantHandle.setMessageSource(messageSource);
-					tasks = warrantHandle.getAuthorizationsByTemplateId(keyword, first, max);
-					totalTasksNum = warrantHandle.getUserRecievedWarrantCount(keyword);
-				}
-			} else if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_RECEIEVED)) {	// Kuntalainen: Valtuuttajana TIVA-11
-				KokuCitizenWarrantHandle warrantHandle = new KokuCitizenWarrantHandle();
-				warrantHandle.setMessageSource(messageSource);
-				tasks = warrantHandle.getReceivedAuthorizations(userUid, first, max);
-				totalTasksNum = warrantHandle.getTotalReceivedAuthorizations(userUid);
-			} else if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_SENT)) {	// Kuntalainen: Valtuutettuna TIVA-11
-				KokuCitizenWarrantHandle warrantHandle = new KokuCitizenWarrantHandle();
-				warrantHandle.setMessageSource(messageSource);
-				tasks = warrantHandle.getSentWarrants(userUid, first, max);
-				totalTasksNum = warrantHandle.getTotalSentAuthorizations(userUid);
-			} else { // for message
-				MessageHandle msgHandle = new MessageHandle();
-				msgHandle.setMessageSource(messageSource);
-				tasks = msgHandle.getMessages(userUid, taskType, keyword, field, orderType, first, max);			
-				totalTasksNum = msgHandle.getTotalMessageNum(userUid, taskType, keyword, field);
-			}
-			
-			totalPages = (totalTasksNum == 0) ? 1:(int) Math.ceil((double)totalTasksNum/numPerPage);
-			jsonModel.put(TASKS, tasks);
-			jsonModel.put(JSON_TOTAL_ITEMS, totalTasksNum);
-			jsonModel.put(JSON_TOTAL_PAGES, totalPages);
-			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_VALID);
-		}		
-		return jsonModel;	
-	}
-
 	/**
 	 * Creates message render url mainly for gatein portal, and keeps the page
 	 * parameters such as page id, task type, keyword
@@ -914,5 +822,5 @@ public class AjaxController extends AbstractController {
 		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
-	}	
+	}
 }

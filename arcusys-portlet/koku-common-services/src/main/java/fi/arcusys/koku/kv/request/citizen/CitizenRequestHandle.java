@@ -68,7 +68,6 @@ public class CitizenRequestHandle extends AbstractHandle {
 			reqList.add(kokuSummary);
 		}
 		return reqList;
-
 	}
 	
 	/**

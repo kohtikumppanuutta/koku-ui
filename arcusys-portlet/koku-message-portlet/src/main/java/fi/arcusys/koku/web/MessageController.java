@@ -62,7 +62,7 @@ public class MessageController {
 		modelmap.addAttribute(ATTR_KEYWORD, keyword);
 		modelmap.addAttribute(ATTR_ORDER_TYPE, orderType);
 
-		return "message";
+		return VIEW_MESSAGE;
 	}
 
 	/**

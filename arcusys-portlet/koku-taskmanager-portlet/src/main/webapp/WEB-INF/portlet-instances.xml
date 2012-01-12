@@ -76,5 +76,45 @@
          </security-constraint>
       </instance>
    </deployment>
+   
+    <deployment>
+      <instance>
+         <instance-id>TaskMgrPyynnotSaapuneet</instance-id>
+         <portlet-ref>taskManager</portlet-ref>
+         <preferences>
+         
+          	<preference>
+				<name>taskFilter</name>
+				<value></value>
+			</preference>			
+			<preference>
+				<name>notifFilter</name>
+				<value></value>
+			</preference>
+           <preference>
+				<name>refreshDuration</name>
+				<value>60</value>
+			</preference>
+			<preference>
+				<name>defaultTaskType</name>
+				<value>task</value>
+			</preference>
+			<preference>
+				<name>openForm</name>
+				<value>1</value>
+			</preference>
+			<preference>
+				<name>editable</name>
+				<value>false</value>
+			</preference>
+		</preferences>
+         <security-constraint>
+            <policy-permission>
+               <action-name>view</action-name>
+               <unchecked/>
+            </policy-permission>
+         </security-constraint>
+      </instance>
+   </deployment>
       
 </deployments>

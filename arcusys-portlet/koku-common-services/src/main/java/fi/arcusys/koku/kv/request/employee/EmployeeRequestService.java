@@ -6,12 +6,12 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import fi.arcusys.koku.kv.message.MessageService;
-import fi.arcusys.koku.kv.messageservice.KokuMessageService_Service;
 import fi.arcusys.koku.kv.requestservice.KokuRequestService_Service;
 import fi.arcusys.koku.kv.requestservice.Request;
 import fi.arcusys.koku.kv.requestservice.RequestSummary;
 import fi.arcusys.koku.kv.requestservice.RequestType;
+import fi.arcusys.koku.kv.requestservice.ResponseDetail;
+import fi.arcusys.koku.kv.requestservice.ResponseSummary;
 import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
@@ -44,7 +44,8 @@ public class EmployeeRequestService {
 	}
 	
 	/**
-	 * Gets requests with parameters
+	 * Returns list of sent requests 
+	 * 
 	 * @param user user name
 	 * @param requestType request type
 	 * @param subQuery sub query string for querying in database
@@ -57,13 +58,50 @@ public class EmployeeRequestService {
 	}
 	
 	/**
-	 * Gets request in detail
+	 * Return list of replied Requests
+	 * 
+	 * @param userUid
+	 * @param startNum
+	 * @param maxNum
+	 * @return List of responses (summary)
+	 */
+	public List<ResponseSummary> getRepliedRequests(String userUid, int startNum, int maxNum) {
+		return rs.getKokuRequestServicePort().getRepliedRequests(userUid, startNum, maxNum);
+	}
+	
+	/**
+	 * Return list of old replied Requests?
+	 * 
+	 * @param userUid
+	 * @param startNum
+	 * @param maxNum
+	 * @return List of old requests (summary)
+	 */
+	public List<ResponseSummary> getOldRequests(String userUid, int startNum, int maxNum) {
+		return rs.getKokuRequestServicePort().getOldRequests(userUid, startNum, maxNum);
+	}
+	
+	/**
+	 * Returns request in detail
+	 * 
 	 * @param requestId
 	 * @return detailed request
 	 */
 	public Request getRequestById(long requestId) {
 		return rs.getKokuRequestServicePort().getRequestById(requestId);
 	}
+	
+	/**
+	 * Return response in detail (old/replied)
+	 * 
+	 * @param responseId
+	 * @return detailed response
+	 */
+	public ResponseDetail getResponseById(long responseId) {
+		return rs.getKokuRequestServicePort().getResponseDetail(responseId);
+	}
+	
+	
 	
 	/**
 	 * Gets total number of requests
@@ -74,5 +112,25 @@ public class EmployeeRequestService {
 	public int getTotalRequestNum(String user, RequestType requestType) {
 		return rs.getKokuRequestServicePort().getTotalRequests(user, requestType);
 	}
-
+	
+	/**
+	 * Gets total number of old responses
+	 * 
+	 * @param user userUid
+	 * @return the total number of old responses
+	 */
+	public int getTotalResponsesOldNum(String userUid) {
+		return rs.getKokuRequestServicePort().getTotalOldRequests(userUid);
+	}
+	
+	/**
+	 * Gets total number of replied responses
+	 * 
+	 * @param user userUid
+	 * @return the total number of replied responses
+	 */
+	public int getTotalResponsesRepliedNum(String userUid) {
+		return rs.getKokuRequestServicePort().getTotalRepliedRequests(userUid);
+	}
+	
 }

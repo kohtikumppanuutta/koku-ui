@@ -10,6 +10,32 @@ import fi.arcusys.koku.kv.requestservice.Question;
 import fi.arcusys.koku.kv.requestservice.ResponseDetail;
 
 public class KokuResponseDetail extends KokuResponseSummary {
+	
+	private static final Comparator<KokuQuestion> SORT_QUESTIONS_BY_QUESTION_NUMBER = new Comparator<KokuQuestion>() {
+			@Override
+			public int compare(KokuQuestion o1, KokuQuestion o2) {
+				if (o1.getNumber() > o2.getNumber()) {
+					return 1;
+				} else if (o1.getNumber() == o2.getNumber()) {
+					return 0;
+				} else {
+					return -1;
+				}
+			}				
+		};
+		
+	public static final Comparator<KokuAnswer> SORT_ANSWERS_BY_QUESTION_NUMBER = new Comparator<KokuAnswer>() {
+		@Override
+			public int compare(KokuAnswer o1, KokuAnswer o2) {
+				if (o1.getQuestionNumber() > o2.getQuestionNumber()) {
+					return 1;
+				} else if (o1.getQuestionNumber() == o2.getQuestionNumber()) {
+					return 0;
+				} else {
+					return -1;
+				}
+			}				
+		};
 
 	private List<KokuAnswer> answers;
 	private List<KokuQuestion> questions;
@@ -33,31 +59,8 @@ public class KokuResponseDetail extends KokuResponseSummary {
 				}
 			}
 			
-			Collections.sort(questions, new Comparator<KokuQuestion>() {
-				@Override
-				public int compare(KokuQuestion o1, KokuQuestion o2) {
-					if (o1.getNumber() > o2.getNumber()) {
-						return 1;
-					} else if (o1.getNumber() == o2.getNumber()) {
-						return 0;
-					} else {
-						return -1;
-					}
-				}				
-			});
-			
-			Collections.sort(answers, new Comparator<KokuAnswer>() {
-				@Override
-				public int compare(KokuAnswer o1, KokuAnswer o2) {
-					if (o1.getQuestionNumber() > o2.getQuestionNumber()) {
-						return 1;
-					} else if (o1.getQuestionNumber() == o2.getQuestionNumber()) {
-						return 0;
-					} else {
-						return -1;
-					}
-				}				
-			});
+			Collections.sort(questions,SORT_QUESTIONS_BY_QUESTION_NUMBER);			
+			Collections.sort(answers, SORT_ANSWERS_BY_QUESTION_NUMBER );
 			
 			for (int i=0; i < questions.size(); i++) {
 				questions.get(i).setAnswer(answers.get(i));

@@ -21,6 +21,10 @@ import fi.arcusys.koku.exceptions.IntalioAuthException;
 import fi.arcusys.koku.intalio.TaskHandle;
 import fi.arcusys.koku.kv.message.MessageHandle;
 import fi.arcusys.koku.kv.model.KokuFolderType;
+import fi.arcusys.koku.navi.util.QueryProcess;
+import fi.arcusys.koku.navi.util.impl.QueryProcessCitizenImpl;
+import fi.arcusys.koku.navi.util.impl.QueryProcessDummyImpl;
+import fi.arcusys.koku.navi.util.impl.QueryProcessEmployeeImpl;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.users.UserIdResolver;
 import fi.arcusys.koku.util.PortalRole;
@@ -87,7 +91,14 @@ public class AjaxController {
 			portalRole = PortalRole.fromValue(portal);		
 		}
 		
-		JSONObject jsonModel = getJsonModel(username, userId, token, portalRole);
+		QueryProcess query = null;
+		switch(getPortalRole()) {
+			case CITIZEN: query = new QueryProcessCitizenImpl(null); break;
+			case EMPLOYEE: query = new QueryProcessEmployeeImpl(null); break;
+			default: query = new QueryProcessDummyImpl(null); break;
+		}
+		
+		JSONObject jsonModel = query.getJsonModel(username, userId, token, portalRole);
 		modelmap.addAttribute(RESPONSE, jsonModel);
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
@@ -96,82 +107,7 @@ public class AjaxController {
 		TaskHandle handle = new TaskHandle();
 		// Magic password! Fix also TaskManagerController magic password when possible.
 		return handle.getTokenByUser(INTALIO_GROUP_PREFIX + userId, "test");
-	}
-
-	/**
-	 * Gets the amount of new messages of Inbox and Archive_Inbox and puts values to model
-	 * @param userId user that message belong to
-	 * @return Json object contains result
-	 */
-	public JSONObject getJsonModel(String username, String userId, String token, PortalRole role) {
-		JSONObject jsonModel = new JSONObject();
-		if (userId == null) {
-			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_INVALID);
-		} else {			
-			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_VALID);			
-			jsonModel.put(JSON_INBOX, String.valueOf(getNewMessageNum(userId, KokuFolderType.INBOX)));			
-			jsonModel.put(JSON_ARCHIVE_INBOX, String.valueOf(getNewMessageNum(userId, KokuFolderType.ARCHIVE_INBOX)));
-			if (role.equals(PortalRole.CITIZEN)) {				
-				jsonModel.put(JSON_CONSENTS_TOTAL, String.valueOf(getTotalAssignedConsents(userId)));
-				jsonModel.put(JSON_APPOINTMENT_TOTAL, String.valueOf(getTotalAssignedAppointments(userId)));
-				try {
-					jsonModel.put(JSON_REQUESTS_TOTAL, String.valueOf(getTotalRequests(userId, token)));
-				} catch (Exception e) {
-					LOGGER.error("Coulnd't get TotalRequests (Valtakirja yht.). See following errorMsg: "+e.getMessage());
-				}
-			}
-		}
-		return jsonModel;
-	}
-	
-	/**
-	 * Gets number of new messages in the given folder type from web services
-	 * 
-	 * @param userId
-	 * @param folderType
-	 * @return number of messages
-	 */
-	private int getNewMessageNum(String userId, KokuFolderType folderType) {
-		MessageHandle messageHandle = new MessageHandle();
-		return messageHandle.getUnreadMessages(userId, folderType);
-	}
-	
-	/**
-	 * Returns total amount of assigned consents (not just new ones)
-	 * 
-	 * @param userId
-	 * @return number of assigned consents
-	 */
-	private int getTotalAssignedConsents(String userId) {
-		TivaCitizenServiceHandle handle = new TivaCitizenServiceHandle();
-		return handle.getTotalAssignedConsents(userId);
-	}
-	
-	/**
-	 * Returns total amount of assigned appointments
-	 * 
-	 * @param userId
-	 * @return number of assigned appointments
-	 */
-	private int getTotalAssignedAppointments(String userId) {
-		AvCitizenServiceHandle handle = new AvCitizenServiceHandle(userId);
-		return handle.getTotalAppointmentsNum(userId, TASK_TYPE_APPOINTMENT_INBOX_CITIZEN);
-	}
-	
-	/**
-	 * Returns total amount of requests
-	 * 
-	 * @param userId
-	 * @return number or requests
-	 */
-	private int getTotalRequests(String username, String token) {
-		if (username != null && !username.isEmpty() && token != null && !token.isEmpty()) {
-			TaskHandle handle = new TaskHandle(token, username);
-			return handle.getRequestsTasksTotalNumber();			
-		} else {
-			return 0;
-		}
-	}
+	}	
 	
 	/**
 	 * Creates render url mainly for gatein portal container
