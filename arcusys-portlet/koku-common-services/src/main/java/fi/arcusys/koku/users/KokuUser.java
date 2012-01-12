@@ -36,6 +36,17 @@ public class KokuUser {
 		}
 	}
 
+	public KokuUser(fi.arcusys.koku.kv.messageservice.User user) {
+		if (user != null) {
+			setUid(user.getUid());
+			setFirstname(user.getFirstname());
+			setLastname(user.getLastname());
+			setDisplayname(user.getDisplayName());
+			setPhoneNumber(user.getPhoneNumber());
+			setEmail(user.getEmail());			
+		}
+	}
+
 	public String getUid() {
 		return uid;
 	}

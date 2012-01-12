@@ -18,8 +18,10 @@ import fi.arcusys.koku.kv.messageservice.MessageStatus;
 import fi.arcusys.koku.kv.messageservice.MessageSummary;
 import fi.arcusys.koku.kv.messageservice.OrderBy;
 import fi.arcusys.koku.kv.messageservice.Type;
+import fi.arcusys.koku.kv.messageservice.User;
 import fi.arcusys.koku.kv.model.KokuFolderType;
 import fi.arcusys.koku.kv.model.Message;
+import fi.arcusys.koku.users.KokuUser;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
@@ -171,7 +173,12 @@ public class MessageHandle extends AbstractHandle {
 		message.setContent(msg.getContent());
 		message.setMessageType(msg.getMessageType().toString());
 		message.setCreationDate(MessageUtil.formatTaskDate(msg.getCreationDate()));
-		message.setMessageStatus(localizeMsgStatus(msg.getMessageStatus()));	
+		message.setMessageStatus(localizeMsgStatus(msg.getMessageStatus()));
+		if (msg.getDeliveryFailedTo() != null) {
+			for (User user : msg.getDeliveryFailedTo()) {
+				message.getDeliveryFailedTo().add(new KokuUser(user));				
+			}
+		}
 		return message;
 	}
 	

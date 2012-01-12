@@ -1,5 +1,10 @@
 package fi.arcusys.koku.kv.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import fi.arcusys.koku.users.KokuUser;
+
 /**
  * Message data model
  * @author Jinhua Chen
@@ -15,6 +20,7 @@ public class Message {
 	private String creationDate;
 	private String messageType;
 	private String messageStatus;
+	private List<KokuUser> deliveryFailedTo;
 	
 	public long getMessageId() {
 		return messageId;
@@ -78,6 +84,13 @@ public class Message {
 	
 	public void setMessageStatus(String messageStatus) {
 		this.messageStatus = messageStatus;
+	}
+
+	public final List<KokuUser> getDeliveryFailedTo() {
+		if (deliveryFailedTo == null) {
+			deliveryFailedTo = new ArrayList<KokuUser>();
+		}
+		return deliveryFailedTo;
 	}
 
 }

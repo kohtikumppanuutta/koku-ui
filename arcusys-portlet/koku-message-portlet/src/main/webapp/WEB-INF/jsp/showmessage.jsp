@@ -1,5 +1,10 @@
+<%@ page import="net.sf.json.JSONArray"%>
 <%@ include file="init.jsp"%>
 <%@ page import="fi.arcusys.koku.kv.model.Message" %>
+<%@ page import="fi.arcusys.koku.users.KokuUser" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+
 <portlet:renderURL var="homeURL" windowState="<%= WindowState.NORMAL.toString() %>" >
 	<portlet:param name="myaction" value="home" />
 </portlet:renderURL>
@@ -47,6 +52,15 @@ public String htmlToCode(String s)
 	String subject = message.getSubject();
 	String type = message.getMessageType();
 	String content = htmlToCode(srcContent);
+	List<KokuUser> missingUsers = message.getDeliveryFailedTo();
+	List<String> missingUserNames = new ArrayList<String>();
+	if (!missingUsers.isEmpty()) {
+		for (KokuUser user : missingUsers) {
+			missingUserNames.add(user.getFullName());
+		}
+	}	
+	JSONArray usernameArray = JSONArray.fromObject(missingUserNames);
+	
 	Boolean isHtml = false;
 	if (srcContent != null) {
 		isHtml = srcContent.startsWith("<html");	
@@ -59,6 +73,18 @@ public String htmlToCode(String s)
 		var content = '<%= content %>';
 		content = content.replace(/&rsquo;/g, "'");
 		jQuery('#messageContent').html(content);
+		var missingUsers = <%= usernameArray.toString() %>;
+		
+		if (missingUsers.length >= 2) {
+			var persons = "";
+			for(var i in missingUsers) {
+				persons += missingUsers[i] + ", ";
+			}
+			persons = persons.substring(0, persons.length-2);
+			jQuery('#failedEmailDelivery').html("Huom! Viestiä ei voitu välittää sähköpostitse seuraaville henkilöille: "+persons);
+		} else if (missingUsers.length >= 1) {
+			jQuery('#failedEmailDelivery').html("Huom! Viestiä ei voitu välittää sähköpostitse seuraavalle henkilölle:  " + missingUsers[0]);
+		}
 	}
 	
 	
@@ -163,6 +189,7 @@ public String htmlToCode(String s)
 </script>
 <div id="task-manager-wrap" class="single">	
 	<div id="messageContent"></div>
+	<div id="failedEmailDelivery"></div>
 	<div id="task-manager-operation" class="task-manager-operation-part">
 		<input type="button" value="<spring:message code="page.return"/>" onclick="KokuMessage.util.returnMainPage()" />
 	</div>
