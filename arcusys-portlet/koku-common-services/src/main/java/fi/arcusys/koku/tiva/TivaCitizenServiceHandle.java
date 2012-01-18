@@ -323,9 +323,13 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 			case ELECTRONIC:
 				return getMessageSource().getMessage("ConsentType.Electronic", null, locale);
 			case EMAIL_BASED:
-				return getMessageSource().getMessage("ConsentType.PaperBased", null, locale);
-			case PAPER_BASED:
 				return getMessageSource().getMessage("ConsentType.EmailBased", null, locale);
+			case PAPER_BASED:
+				return getMessageSource().getMessage("ConsentType.PaperBased", null, locale);
+            case VERBAL:
+                return getMessageSource().getMessage("ConsentType.Verbal", null, locale);
+            case FAX:
+                return getMessageSource().getMessage("ConsentType.Fax", null, locale);
 			default:
 				return getMessageSource().getMessage("unknown", null, locale);
 			}
