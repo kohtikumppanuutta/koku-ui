@@ -24,11 +24,11 @@
 			<js-path>/js/jquery-1.5.2.min.js</js-path>
 			<js-priority>10</js-priority>
 		</param>
-		<param>
-			<js-module>main</js-module>
-			<js-path>/js/main.js</js-path>
-			<js-priority>10</js-priority>
-		</param>
+<!-- 		<param> -->
+<!-- 			<js-module>main</js-module> -->
+<!-- 			<js-path>/js/main.js</js-path> -->
+<!-- 			<js-priority>10</js-priority> -->
+<!-- 		</param> -->
 		<param>
 			<js-module>jquery.datepick-fi</js-module>
 			<js-path>/js/jquery.datepick-fi.js</js-path>

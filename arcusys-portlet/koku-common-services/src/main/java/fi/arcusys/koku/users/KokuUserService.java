@@ -29,7 +29,7 @@ public class KokuUserService {
 			LOG.info("UsersAndGroupsService WSDL location: " + KoKuPropertiesUtil.get("UsersAndGroupsService"));
 			USER_SERVICE_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("UsersAndGroupsService"));
 		} catch (MalformedURLException e) {
-			LOG.error("Failed to create UsersAndGroupsService WSDL url! Given URL address is not valid!");
+			LOG.error("Failed to create UsersAndGroupsService WSDL url! Given URL address is not valid! Address: '"+KoKuPropertiesUtil.get("UsersAndGroupsService")+"'");
 			throw new ExceptionInInitializerError(e);
 		}
 	}
@@ -131,11 +131,15 @@ public class KokuUserService {
 			kokuUsers.add(new KokuUser(user));
 		}
 		return kokuUsers;
-	}
-	
+	}	
 	
 	public KokuUser loginKunpo(String kunpoUsername, String hetu) {
-		User user = service.getUsersAndGroupsServicePort().loginByKunpoNameAndSsn(kunpoUsername, hetu);
+		User user = null;
+		try {
+			 user = service.getUsersAndGroupsServicePort().loginByKunpoNameAndSsn(kunpoUsername, hetu);
+		} catch (RuntimeException e) {
+			LOG.error("loginByKunpoNameAndSsn failed. kunpoUserName: '"+kunpoUsername+"' hetu: '"+hetu+"'", e);
+		}
 		if (user != null) {
 			return new KokuUser(user);
 		} else {
@@ -144,7 +148,12 @@ public class KokuUserService {
 	}
 	
 	public KokuUser loginLoora(String looraUsername, String hetu) {
-		User user = service.getUsersAndGroupsServicePort().loginByLooraNameAndSsn(looraUsername, hetu);
+		User user = null;
+		try {			
+			user = service.getUsersAndGroupsServicePort().loginByLooraNameAndSsn(looraUsername, hetu);
+		} catch (RuntimeException e) {
+			LOG.error("loginByLooraNameAndSsn failed. looraUserName: '"+looraUsername+"' hetu: '"+hetu+"'", e);
+		}
 		if (user != null) {
 			return new KokuUser(user);
 		} else {

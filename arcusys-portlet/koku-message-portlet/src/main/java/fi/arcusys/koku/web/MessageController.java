@@ -19,7 +19,7 @@ import static fi.arcusys.koku.util.Constants.*;
  */
 @Controller("messageController")
 @RequestMapping(value = "VIEW")
-public class MessageController {
+public class MessageController extends AbstractController {
 
 	private static final Logger LOG = Logger.getLogger(MessageController.class);
 	
@@ -32,8 +32,8 @@ public class MessageController {
 	 */
 	@RenderMapping
 	public String showPageView(RenderRequest request, RenderResponse response,
-			ModelMap modelmap) {		
-		return VIEW_MESSAGE;
+			ModelMap modelmap) {
+		return getView();
 	}
 
 	/**
@@ -62,9 +62,17 @@ public class MessageController {
 		modelmap.addAttribute(ATTR_KEYWORD, keyword);
 		modelmap.addAttribute(ATTR_ORDER_TYPE, orderType);
 
-		return VIEW_MESSAGE;
+		return getView();
 	}
 
+	private String getView() {
+		switch(getPortalRole()) {
+			case CITIZEN: return VIEW_MESSAGE_CITIZEN;
+			case EMPLOYEE: return VIEW_MESSAGE_EMPLOYEE;
+			default: return VIEW_ERROR;
+		}
+	}
+	
 	/**
 	 * Clears page parameters in session
 	 * @param request RenderRequest
@@ -79,8 +87,7 @@ public class MessageController {
 	
 	// -- @ModelAttribute here works as the referenceData method
 	@ModelAttribute(value = "loginStatus")
-	public String model(RenderRequest request) {
-		
+	public String model(RenderRequest request) {		
 		if (checkUserToken(request)) {
 			return "VALID";
 		} else {

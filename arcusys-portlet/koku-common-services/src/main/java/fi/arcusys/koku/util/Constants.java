@@ -124,8 +124,10 @@ public class Constants {
 	public static final String VIEW_SHOW_INFO_REQUEST						= "showtipy";
 	public static final String VIEW_SHOW_EMPLOYEE_APPOINTMENT				= "showemployeeappointment";
 	public static final String VIEW_SHOW_CITIZEN_APPOINTMENT				= "showcitizenappointment";
-	public static final String VIEW_MESSAGE									= "message";
 	public static final String VIEW_SHOW_APPLICATION_KINDERGARTEN			= "showkindergarten";
+	public static final String VIEW_MESSAGE_CITIZEN							= "messagecitizen";
+	public static final String VIEW_MESSAGE_EMPLOYEE						= "messageemployee";
+	public static final String VIEW_ERROR									= "error";
 	
 	/* JSON keys */
 	public static final String JSON_TOTAL_ITEMS 							= "totalItems";
@@ -188,5 +190,5 @@ public class Constants {
 	public static final String SUGGESTION_WARRANT							= "WarrantTemplateSuggestion";
 	public static final String SUGGESTION_BROWSE_ALL_CONSENTS				= "BrowseAllConsents";	
 	public static final String SUGGESTION_APPLICATION_KINDERGARTEN			= "KindergartenName";
-	
+	public static final String SUGGESTION_NO_TYPE							= "noSuggestType";
 }

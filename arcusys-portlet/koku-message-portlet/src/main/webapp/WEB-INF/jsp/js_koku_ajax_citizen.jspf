@@ -1,0 +1,140 @@
+
+/* 
+ * Koku Ajax Citizen class (Kunpo/GateIn)
+ *
+ * 
+ */
+KokuAjaxCitizen.prototype = new KokuAjax();
+KokuAjaxCitizen.constructor = KokuAjaxCitizen;
+
+function KokuAjaxCitizen(renderUrls) {
+	KokuAjax.call(this, renderUrls);
+};
+
+
+// Creates a renderURL by ajax, to show the detailed message page 
+KokuAjaxCitizen.prototype.showMessage = function(messageId) {
+	// var url="<%= messageRenderURL %>";
+	var url = this.renderUrls.messageRenderUrl;
+	url = this.formatUrl(url);
+	
+	jQuery.post(url, {messageId:messageId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+		keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+		var obj = eval('(' + data + ')');
+		var json = obj.response;
+		var renderUrl = json["renderUrl"];
+		window.location = renderUrl;
+	});
+};
+	
+//Creates a renderURL by ajax, to show the detailed request page
+KokuAjaxCitizen.prototype.showRequest = function(requestId) {
+	// var url = "<%= requestRenderURL %>";
+	var url = this.renderUrls.requestRenderUrl;
+	url = this.formatUrl(url);
+	
+	jQuery.post(url, {requestId:requestId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+		keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+		var obj = eval('(' + data + ')');
+		var json = obj.response;
+		var renderUrl = json["renderUrl"];
+		window.location = renderUrl;
+	});
+};
+
+//Creates a renderURL by ajax, to show the detailed request page
+KokuAjaxCitizen.prototype.showResponse = function(index) {
+	var task = pageObj.tasks[index];
+	var responseId = task["responseId"];
+
+	// var url = "<%= responseRenderURL %>";
+	var url = this.renderUrls.responseRenderUrl;
+	url = this.formatUrl(url);
+	
+	jQuery.post(url, {responseId:responseId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+		keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+		var obj = eval('(' + data + ')');
+		var json = obj.response;
+		var renderUrl = json["renderUrl"];
+		window.location = renderUrl;
+	});
+};
+
+//Creates a renderURL by ajax,to show the detailed appointment page
+KokuAjaxCitizen.prototype.showAppointment = function(index) {
+
+	var task = pageObj.tasks[index];
+	var appointmentId = task["appointmentId"];
+	var targetPerson = task['targetPersonUid'];
+	var url="";
+	
+	if (pageObj.taskType == "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE%>" 
+		|| pageObj.taskType == "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN%>"
+		|| pageObj.taskType == "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD%>") {
+		
+		//url = "<%= appointmentRenderURL %>";
+		url = this.renderUrls.appointmentRenderUrl;
+		url = this.formatUrl(url);
+		
+		jQuery.post(url, {appointmentId:appointmentId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+			keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType, targetPerson:targetPerson}, function(data) {
+			var obj = eval('(' + data + ')');
+			var json = obj.response;
+			var renderUrl = json["renderUrl"];
+			window.location = renderUrl;
+		});
+	} else if(pageObj.taskType == "app_inbox_employee") {
+		url = "<%= defaultPath %><%= NavigationPortletProperties.APPOINTMENTS_NEW_APPOINTMENT %>" + "?FormID=" + appointmentId;
+		window.location = url;
+	} else if(pageObj.taskType == "app_inbox_citizen") {
+		url = "<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_ANSWER_TO_CONSENT %>" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;	
+		window.location = url;
+	}
+};
+
+//Creates a renderURL by ajax,to show the detailed consent page
+KokuAjaxCitizen.prototype.showConsent = function(index) {
+
+	var url="";
+	var task = pageObj.tasks[index];	
+	var consentId = task['consentId'];	
+	if (pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS%>" && task['approvalStatus'] == 'Hyväksytty' && task['status'] != 'Mitätöity') { // edit mode
+		url = "<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT_TEMPLATE %>" + "?FormID=" + consentId;	
+		window.location = url;
+	} else if(pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS%>"
+				||pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD%>" 
+				||pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>") {
+		// url = "<%= consentRenderURL %>";
+		url = this.renderUrls.consentRenderUrl;
+		url = this.formatUrl(url);
+		
+		jQuery.post(url, {consentId:consentId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+			keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+			var obj = eval('(' + data + ')');
+			var json = obj.response;
+			var renderUrl = json["renderUrl"];
+			window.location = renderUrl;
+		});
+	} else if(pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>") {
+		url = "<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT %>" + "?FormID=" + consentId;
+		window.location = url;
+			
+	} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>") {
+		url = "<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT %>" + "?FormID=" + consentId;
+		window.location = url;			
+	}
+};
+
+KokuAjaxCitizen.prototype.showWarrant = function(index) {
+	var authorizationId = pageObj.tasks[index]['authorizationId'];	
+	// var url= "<%= warrantRenderURL %>";
+	url = this.renderUrls.warrantRenderUrl;
+	url = this.formatUrl(url);
+	jQuery.post(url, {authorizationId:authorizationId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+		keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+		var obj = eval('(' + data + ')');
+		var json = obj.response;
+		var renderUrl = json["renderUrl"];
+		window.location = renderUrl;
+	});
+};

@@ -26,11 +26,14 @@ import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_TIPY;
 import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_WARRANT;
 import static fi.arcusys.koku.util.Constants.RESPONSE;
 import static fi.arcusys.koku.util.Constants.RESPONSE_OK;
+import static fi.arcusys.koku.util.Constants.RESPONSE_FAIL;
 import static fi.arcusys.koku.util.Constants.SUGGESTION_APPLICATION_KINDERGARTEN;
 import static fi.arcusys.koku.util.Constants.SUGGESTION_CONSENT;
 import static fi.arcusys.koku.util.Constants.SUGGESTION_WARRANT;
+import static fi.arcusys.koku.util.Constants.SUGGESTION_NO_TYPE;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -175,7 +178,7 @@ public class AjaxController extends AbstractController {
     		user = userService.loginLoora(username, userInfo.getPic());
     	}
     	if (user == null) {
-    		// TODO: Remove if statement when Loora side implementation is ready
+    		// TODO: Remove if statement when Loora side implementation is ready, if ever..
     		if (Properties.IS_KUNPO_PORTAL) {
     			LOG.error("For some reason userService didn't find KokuUser. Username: '"+username+"' SSN: '"+userInfo.getPic()+"' ");
     		}
@@ -202,20 +205,24 @@ public class AjaxController extends AbstractController {
 			return authenticationFailed(modelmap, username);
 		}
 		
-		MessageHandle msghandle = new MessageHandle();		
-		List<Long> messageIds = new ArrayList<Long>();
-		
-		for(String msgId : messageList) {
-			try {
-				messageIds.add(Long.parseLong(msgId));				
-			} catch (NumberFormatException nfe) {
-				LOG.warn("Error while parsing messageIds. Username: '"+username+"'  MessageId is not valid number: '"+msgId+"'");
+		JSONObject jsonModel = new JSONObject();		
+		if (messageList == null) {
+			LOG.error("Archiving messages failed. MessageList is null. Username: '"+username+"'");
+			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
+		} else {	
+			MessageHandle msghandle = new MessageHandle();		
+			List<Long> messageIds = new ArrayList<Long>();
+			
+			for(String msgId : messageList) {
+				try {
+					messageIds.add(Long.parseLong(msgId));				
+				} catch (NumberFormatException nfe) {
+					LOG.warn("Error while parsing messageIds. Username: '"+username+"'  MessageId is not valid number: '"+msgId+"'");
+				}
+				String result = msghandle.archiveMessages(messageIds); // OK or FAIL
+				jsonModel.put(JSON_RESULT, result);
 			}
 		}
-		
-		String result = msghandle.archiveMessages(messageIds); // OK or FAIL
-		JSONObject jsonModel = new JSONObject();
-		jsonModel.put(JSON_RESULT, result);
 		modelmap.addAttribute(RESPONSE, jsonModel);
 		
 		return AjaxViewResolver.AJAX_PREFIX;
@@ -239,22 +246,25 @@ public class AjaxController extends AbstractController {
 			return authenticationFailed(modelmap, username);
 		}
 		
-		MessageHandle msghandle = new MessageHandle();		
-		List<Long> messageIds = new ArrayList<Long>();
-		
-		for(String msgId : messageList) {
-			try {
-				messageIds.add(Long.parseLong(msgId));
-			} catch (NumberFormatException nfe) {
-				LOG.warn("Couldn't delete message! Invalid messageId. Username: '"+ username + "' MessageId: '"+ msgId + "'");
+		JSONObject jsonModel = new JSONObject();		
+		if (messageList == null) {
+			LOG.error("Deleting messages failed. MessageList is null. Username: '"+username+"'");
+			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
+		} else {		
+			MessageHandle msghandle = new MessageHandle();		
+			List<Long> messageIds = new ArrayList<Long>();		
+			for(String msgId : messageList) {
+				try {
+					messageIds.add(Long.parseLong(msgId));
+				} catch (NumberFormatException nfe) {
+					LOG.warn("Couldn't delete message! Invalid messageId. Username: '"+ username + "' MessageId: '"+ msgId + "'");
+				}
 			}
+			String result = msghandle.deleteMessages(messageIds); // OK or FAIL
+			jsonModel.put(JSON_RESULT, result);
 		}
 		
-		String result = msghandle.deleteMessages(messageIds); // OK or FAIL
-		JSONObject jsonModel = new JSONObject();
-		jsonModel.put(JSON_RESULT, result);
 		modelmap.addAttribute(RESPONSE, jsonModel);
-		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -277,17 +287,22 @@ public class AjaxController extends AbstractController {
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
 
-		PortalRole role = getPortalRole();
-		TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle(userId);		
-		
-		for(String consentId : messageList) {
-			tivaHandle.revokeOwnConsent(consentId);
-		}
-		
-		JSONObject jsonModel = new JSONObject();
-		jsonModel.put(JSON_RESULT, RESPONSE_OK);
-		modelmap.addAttribute(RESPONSE, jsonModel);
-		
+		JSONObject jsonModel = new JSONObject();		
+		if (messageList == null) {
+			LOG.error("Revoking consents failed. MessageList is null. Username: '"+username+"'");
+			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
+		} else {
+			TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle(userId);
+			String responseResult = RESPONSE_OK;
+			for(String consentId : messageList) {
+				String revokingResult = tivaHandle.revokeOwnConsent(consentId);
+				if (revokingResult.equals(RESPONSE_FAIL)) {
+					responseResult = RESPONSE_FAIL;
+				}
+			}
+			jsonModel.put(JSON_RESULT, responseResult);
+		}	
+		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -315,20 +330,18 @@ public class AjaxController extends AbstractController {
 		String userId = resolver.getUserId(username, getPortalRole());
 
 		KokuCitizenWarrantHandle warrantHandle = new KokuCitizenWarrantHandle();		
+		JSONObject jsonModel = new JSONObject();
 		
 		for(String authorizationId : messageList) {
 			try {
 				long authId = Long.parseLong(authorizationId);
-				warrantHandle.revokeOwnAuthorization(authId, userId, comment);				
+				jsonModel.put(JSON_RESULT, warrantHandle.revokeOwnAuthorization(authId, userId, comment));				
 			} catch (NumberFormatException nfe) {
 				LOG.error("Couldn't revoke authorization! Invalid authorizationId. Username: "+ username + " UserId: "+ userId + " AuthorizationId: "+ authorizationId + "Comment: " + comment);
+				jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
 			}
-		}
-		
-		JSONObject jsonModel = new JSONObject();
-		jsonModel.put(JSON_RESULT, RESPONSE_OK);
-		modelmap.addAttribute(RESPONSE, jsonModel);
-		
+		}		
+		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -359,30 +372,33 @@ public class AjaxController extends AbstractController {
 			return authenticationFailed(modelmap, username);
 		}
 		
-		if(taskType.endsWith("citizen")) {
-			AvCitizenServiceHandle handle = new AvCitizenServiceHandle(userId);
-			String appointmentId;
-			String targetPerson;
-			
-			for(int i=0, l= messageList.length; i < l; i++) {
-				appointmentId = messageList[i];
-				targetPerson = targetPersons[i];
-				handle.cancelAppointments(appointmentId, targetPerson, comment);
-			}
-		}else if(taskType.endsWith("employee")) {
-			AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
-			String appointmentId;
-			
-			for(int i=0, l= messageList.length; i < l; i++) {
-				appointmentId = messageList[i];
-				handle.cancelAppointments(appointmentId, comment);
-			}
-		}
-					
 		JSONObject jsonModel = new JSONObject();
-		jsonModel.put(JSON_RESULT, RESPONSE_OK);
-		modelmap.addAttribute(RESPONSE, jsonModel);
-		
+		if (messageList == null || targetPersons == null || taskType == null) {
+			LOG.error("Failed to cancel appointment! Username: '"+username + "' messageList: '"+Arrays.toString(messageList) + "' targetPersons: '"+targetPersons + "' taskType: '"+taskType+"'");
+			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
+		} else {
+			if (taskType.endsWith("citizen")) {
+				AvCitizenServiceHandle handle = new AvCitizenServiceHandle(userId);
+				String appointmentId;
+				String targetPerson;
+				
+				for(int i=0, l= messageList.length; i < l; i++) {
+					appointmentId = messageList[i];
+					targetPerson = targetPersons[i];
+					handle.cancelAppointments(appointmentId, targetPerson, comment);
+				}
+			} else if (taskType.endsWith("employee")) {
+				AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
+				String appointmentId;
+				
+				for(int i=0, l= messageList.length; i < l; i++) {
+					appointmentId = messageList[i];
+					handle.cancelAppointments(appointmentId, comment);
+				}
+			}
+			jsonModel.put(JSON_RESULT, RESPONSE_OK);
+		}					
+		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -411,7 +427,10 @@ public class AjaxController extends AbstractController {
 		} else if (suggestionType.equals(SUGGESTION_APPLICATION_KINDERGARTEN)) {
 			HakServiceHandle handle = new HakServiceHandle();
 			resultList = handle.searchKindergartenByName(keyword, MAX_SUGGESTION_RESULTS);
-		} 
+		} else if (suggestionType.equals(SUGGESTION_NO_TYPE)) {
+			resultList = new ArrayList<String>();
+			LOG.warn("No sugguestion type! Possibly bug in system. User: "+username+" Keyword: "+keyword);
+		}
 		
 		JSONObject jsonModel = new JSONObject();
 		jsonModel.put(JSON_RESULT, resultList);

@@ -1,0 +1,184 @@
+ 
+/**
+ * Base class for Koku Table Navigation
+ *  
+ */ 
+function KokuTableNavigation(ajax) {
+	
+	/********************************************
+	 * Private variables
+		 	  
+
+	/********************************************
+	 * Public variables 
+	 */
+	this.kokuAjax = ajax;
+
+	/********************************************
+	 * Public methods
+	 */
+	var publicMethods = {
+		getTableNavigation : getTableNavigation,
+		archiveMessages : archiveMessages,
+		deleteMessages : deleteMessages,
+		cancelAppointments : cancelAppointments,
+		revokeConsents : revokeConsents
+	};
+
+
+	/********************************************
+	 * Private methods
+	 */
+
+	/**
+	 * Return navigation control
+	 */
+	function getTableNavigation(pageObj) {	 
+	 	 return '<li><a><img src="<%= request.getContextPath() %>/images/first.gif" onclick="pageObj.moveFirst()"/></a></li>'
+			 + '<li><a><img src="<%= request.getContextPath() %>/images/prev.gif" onclick="pageObj.movePre()"/></a></li>'
+			 + '<li><spring:message code="page.page"/> ' + pageObj.currentPage + '/' + pageObj.totalPages + '</li>'
+			 + '<li><a><img src="<%= request.getContextPath() %>/images/next.gif" onclick="pageObj.moveNext()"/></a></li>'
+			 + '<li><a><img src="<%= request.getContextPath() %>/images/last.gif" onclick="pageObj.moveLast()"/></a></li>'
+			 + '<li><spring:message code="page.displaying"/> ' + pageObj.createDisplayingTasksNum() + '</li>'
+			 + '</ul>';
+	 };
+	 
+	
+	/**
+	 * Archives a list of messages selected by user
+	 */
+	function archiveMessages() {			
+			var messageList = [];		
+			jQuery('input:checkbox[name="message"]:checked').each(function(){
+			    messageList.push(jQuery(this).val());
+			});
+			
+			if(messageList.length == 0) return; // no message selected
+			
+			this.kokuAjax.archiveMessages(messageList, function(result) {			
+				if(result == 'OK') {
+					jQuery.jGrowl("<spring:message code="notification.archive.message"/>");
+					this.kokuAjax.ajaxGetTasks(pageObj, presentTasks);
+				} else if (result == 'FAIL') {
+					jQuery.jGrowl("<spring:message code="notification.archive.message.failed"/>");
+					this.kokuAjax.ajaxGetTasks(pageObj, presentTasks);
+				} else {
+					var message = "<spring:message code="error.unLogin" />";
+					KokuUtil.errorMsg.showErrorMessage(message);
+				}
+			});
+	};
+		
+	/**
+	 * Deletes a list of messages selected by user
+	 */
+	function deleteMessages() {			
+	 	var messageList = [];		
+		jQuery('input:checkbox[name="message"]:checked').each(function(){
+		    messageList.push(jQuery(this).val());
+		});
+		
+		if(messageList.length == 0) return; // no message selected
+		
+		/* Ask user to confirm message deletion */
+		if (!confirm("<spring:message code="info.conformWarning"/>")) {
+			return;
+		}
+	
+		this.kokuAjax.deleteMessages(messageList, function(result) {			
+			if(result == 'OK') {
+				jQuery.jGrowl("<spring:message code="notification.delete.message"/>");
+				this.kokuAjax.ajaxGetTasks(pageObj, presentTasks);
+			} else if (result == 'FAIL') {
+				jQuery.jGrowl("<spring:message code="notification.delete.message.failed"/>");
+				this.kokuAjax.ajaxGetTasks(pageObj, presentTasks);
+			} else {
+				var message = "<spring:message code="error.unLogin" />";
+				KokuUtil.errorMsg.showErrorMessage(message);
+			}
+		});
+	};
+	
+	/**
+	 * Cancels a list of appointments selected by user
+	 */
+	function cancelAppointments() {		
+		var messageList = [];
+		var targetPersons = [];
+		
+		jQuery('input:checkbox[name="message"]:checked').each(function(){
+			var index =  jQuery(this).val();
+			var task = pageObj.tasks[index];
+			var appointmentId = task["appointmentId"];
+			var targetPerson = task['targetPersonUid'];
+			var status = task['status'];
+			
+			if(status != 'Peruutettu') { // check if cancelled or not
+				messageList.push(appointmentId);
+			    targetPersons.push(targetPerson);
+			}    
+		});
+		
+		if (messageList.length == 0) {
+			return; // no message selected
+		}
+		
+		var comment = prompt('<spring:message code="appointment.cancel"/>',"");
+		if(comment == null)	{
+			return;
+		}		
+		
+		this.kokuAjax.cancelAppointments(messageList, targetPersons, comment, pageObj.taskType, function(result) {			
+			if (result == 'OK') {
+				jQuery.jGrowl("<spring:message code="notification.canceled.appointment"/>");
+				this.kokuAjax.ajaxGetTasks(pageObj, presentTasks);
+			} else if (result == 'FAIL') {
+				jQuery.jGrowl("<spring:message code="notification.canceled.appointment.failed"/>");
+				this.kokuAjax.ajaxGetTasks(pageObj, presentTasks);
+			} else {
+				var message = "<spring:message code="error.unLogin" />";
+				KokuUtil.errorMsg.showErrorMessage(message);
+			}
+		});
+	}
+		
+	/**
+	 * Revokes a list of consents selected by user
+	 */
+	function revokeConsents() {		
+		var messageList = [];		
+		jQuery('input:checkbox[name="message"]:checked').each(function(){
+			var id = jQuery(this).val();
+			var consentId = pageObj.tasks[id]['consentId'];
+			var consentStatus = pageObj.tasks[id]['status'];
+			
+			if(consentStatus != 'Mitätöity') { // not revoked yet
+				messageList.push(consentId);
+			}    	
+		});
+		
+		if(messageList.length == 0) {
+			return; // no message selected
+		}
+		
+		if(!confirm("<spring:message code="info.conformRevokeWarning"/>"))	{
+			return;
+		}
+				
+		this.kokuAjax.revokeConsents(messageList, function(result) {			
+			if (result == 'OK') {
+				jQuery.jGrowl("<spring:message code="notification.revoke.consent"/>");
+				this.kokuAjax.ajaxGetTasks(pageObj, presentTasks);
+			} else if (result == 'FAIL') {
+				jQuery.jGrowl("<spring:message code="notification.revoke.consent.failed"/>");
+				this.kokuAjax.ajaxGetTasks(pageObj, presentTasks);
+			} else {
+				var message = "<spring:message code="error.unLogin" />";
+				KokuUtil.errorMsg.showErrorMessage(message);
+			}
+		});
+	}
+	
+	return publicMethods;
+}
+	

@@ -46,6 +46,7 @@ public class MessageHandle extends AbstractHandle {
 	
 	/**
 	 * Gets messages with filtering conditions
+	 * 
 	 * @param user user name
 	 * @param messageType type of messages
 	 * @param keyword keyword string for filtering
@@ -96,6 +97,7 @@ public class MessageHandle extends AbstractHandle {
 	
 	/**
 	 * Gets the total amount of messages with given filtering conditions
+	 * 
 	 * @param user username
 	 * @param messageType type of message
 	 * @param keyword keyword string for filtering
@@ -114,6 +116,7 @@ public class MessageHandle extends AbstractHandle {
 	/**
 	 * @deprecated
 	 * Gets user summary messages
+	 * 
 	 * @param user username 
 	 * @param messageType type of message
 	 * @param keyword keyword for filtering
@@ -151,6 +154,7 @@ public class MessageHandle extends AbstractHandle {
 	
 	/**
 	 * Gets detailed message with content
+	 * 
 	 * @param messageId message id
 	 * @return detailed message
 	 */
@@ -206,6 +210,7 @@ public class MessageHandle extends AbstractHandle {
 	
 	/**
 	 * Sets message status to read
+	 * 
 	 * @param messageId message id
 	 */
 	public void setMessageStatus(long messageId) {
@@ -216,27 +221,39 @@ public class MessageHandle extends AbstractHandle {
 	
 	/**
 	 * Archives messages
+	 * 
 	 * @param messageIds a list of message ids
 	 * @return operation response information
 	 */
 	public String archiveMessages(List<Long> messageIds) {		
-		
 		return ms.archiveMessages(messageIds);		
 	}
 	
 	/**
+	 * Archives old messages
+	 * 
+	 * @param userUid
+	 * @param folderType
+	 * @return operation response information
+	 */
+	public String archiveOldMessages(String userUid, FolderType folderType) {
+		return ms.archiveOldMessages(userUid, folderType);
+	}
+	
+	/**
 	 * Deletes messages
+	 * 
 	 * @param messageIds a list of message ids
 	 * @return operation response information
 	 */
-	public String deleteMessages(List<Long> messageIds) {		
-		
+	public String deleteMessages(List<Long> messageIds) {				
 		return ms.deleteMessages(messageIds);		
 	}
 	
 	/**
 	 * @deprecated
 	 * Gets the amount of messages
+	 * 
 	 * @param user username
 	 * @param messageType type of message
 	 * @param keyword keyword string for filtering
@@ -275,6 +292,7 @@ public class MessageHandle extends AbstractHandle {
 	
 	/**
 	 * Creates filtering criteria
+	 * 
 	 * @param keyword keyword string
 	 * @param field filed string
 	 * @return filtering criteria
@@ -302,10 +320,6 @@ public class MessageHandle extends AbstractHandle {
 				criteria.getFields().add(Fields.CONTENT);
 			}
 		}
-
 		return criteria;
 	}
-
-	
-	
 }
