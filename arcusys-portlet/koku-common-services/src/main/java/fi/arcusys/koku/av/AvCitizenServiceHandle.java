@@ -191,8 +191,7 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 		} catch (NumberFormatException nfe) {
 			LOG.warn("Invalid appointmentId. AppointmentId: '"+appointmentIdStr+"'");
 			return RESPONSE_FAIL;
-		}
-		
+		}		
 		try {
 			acs.cancelAppointment(appId, targetPerson, loginUserId, comment);
 			return RESPONSE_OK;

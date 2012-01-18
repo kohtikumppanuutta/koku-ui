@@ -1,0 +1,55 @@
+
+/* Koku utils JS */
+var KokuUtil = {
+	
+	timer : {
+		/**
+		 * Set auto refresh timer, which updates the task list automatically
+		 */
+		setRefreshTimer : function(kokuConfig, refreshFunction) {
+			var duration = parseInt(kokuConfig.refreshDuration) * 1000; // convert to ms
+			kokuConfig.refreshTimer = setInterval(function() {
+				kokuAjax.ajaxGetTasks(pageObj, presentTasks);
+			},
+			duration);
+		},
+		
+		/**
+		 * Remove the auto refresh timer
+		 */
+		removeRefreshTimer : function(kokuConfig) {
+			clearInterval(kokuConfig.refreshTimer);
+		},
+		
+		/**
+		 * Reset the auto refresh timer
+		 */
+		resetRefreshTimer : function(kokuConfig) {
+			this.removeRefreshTimer(kokuConfig);
+			this.setRefreshTimer(kokuConfig);
+		}
+	},
+	
+	errorMsg : {
+		showErrorMsgNoConsents : function () {
+		return "<div class='errorMsg noConsents'><spring:message code="consent.errorMsg.noWarrants2"/></div>";
+		},			
+		showErrorMsgYouDontHaveAnyConsents : function() {
+			return "<div class='errorMsg noConsents'><spring:message code="consent.errorMsg.noWarrants"/></div>";
+		},
+		showErrorMsg : function(msg) {
+			return "<div class='errorMsg noConsents'>"+msg+"</div>";
+		},
+		/**
+		 * Show error message to inform user
+		 */
+		showErrorMessage : function showErrorMessage(message) {
+			var msgHtml = '<div class="task-error-message" >' + message + '</div>';
+			jQuery('#task-manager-operation-page').html(msgHtml);
+		},
+		showErrorMsgYouDontHaveAnyTipys : function() {
+			return "<div class='errorMsg noConsents'><spring:message code="tipy.errorMsg.noData"/></div>";
+		}
+	}		
+};
+		

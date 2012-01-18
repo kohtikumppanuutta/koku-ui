@@ -1,0 +1,132 @@
+ 
+/**
+ * Base class for KokuAjax calls
+ *  
+ */ 
+function KokuAjax(renderUrls) {
+
+	/*************************************
+	 * Public properties
+	 */
+	this.renderUrls = renderUrls; 
+		 
+};
+
+KokuAjax.prototype.formatUrl = function(url) {
+	var newUrl;
+	newUrl = url.replace(/&quot;/g,'"');
+	newUrl = newUrl.replace(/&amp;/g,"&");
+	newUrl = newUrl.replace(/&lt;/g,"<");
+	newUrl =  newUrl.replace(/&gt;/g,">");
+	return newUrl;
+};
+
+KokuAjax.prototype.genericAjaxCall = function(messageList, callback, url) {	 
+ 	if (messageList.length == 0) {
+		callback("FAIL");
+		return;
+	}		
+ 	jQuery.post(url, {'messageList':messageList}, function(data) {
+			var obj = eval('(' + data + ')');
+			var json = obj.response;
+			var result = json["result"];
+			callback(result);		
+	});
+ };
+ 
+/**
+ * Archives a list of messages selected by user
+ */
+KokuAjax.prototype.archiveMessages = function(messageList, callback) {	
+	// var url="<%= archiveURL %>";
+	var url= this.renderUrls.archiveUrl;
+	url = this.formatUrl(url);
+	this.genericAjaxCall(messageList, callback, url);		
+};
+
+/**
+ * Deletes a list of messages selected by user
+ */
+KokuAjax.prototype.deleteMessages = function(messageList, callback) {	
+	var url="<%= deleteURL %>";
+	var url= this.renderUrls.deleteUrl;
+	url = this.formatUrl(url);
+	this.genericAjaxCall(messageList, callback, url);	
+};
+
+/**
+ * Revokes a list of consents selected by user
+ */
+KokuAjax.prototype.revokeConsents = function(messageList, callback) {	
+	// var url="<%= revokeURL %>";
+	var url = this.renderUrls.revokeUrl;
+	url = this.formatUrl(url);
+	this.genericAjaxCall(messageList, callback, url);
+};
+
+/**
+ * Cancels a list of appointments selected by user
+ */	
+KokuAjax.prototype.cancelAppointments = function(messageList, targetPersons, comment, taskType, callback) {
+	if (messageList.length == 0) {
+		callback("FAIL");
+		return;
+	}
+
+	// var url="<%= cancelURL %>";
+	var url = this.renderUrls.cancelUrl;
+	url = this.formatUrl(url);
+	
+	jQuery.post(url, {'messageList':messageList, 'targetPersons':targetPersons, 'comment':comment, 'taskType':taskType}, function(data) {
+		var obj = eval('(' + data + ')');
+		var json = obj.response;
+		var result = json["result"];
+		callback(result);
+	});
+};
+
+/**
+ * Execute ajax query in Post way, and parse the Json format response, and
+ * then create tasks in table and task page filed.
+ */
+KokuAjax.prototype.ajaxGetTasks = function(pageObj, presentTasks) {
+
+	if (pageObj === undefined || pageObj === null) {
+		console.error("Bug in code!! pageObj undefined or null");
+		return;
+	}
+	
+	if (presentTasks === undefined || presentTasks === null) {
+		console.error("Bug in code!! presentTasks undefined or null");
+		return;
+	}
+
+	if(pageObj.loginStatus != 'VALID') {
+		return;
+	}
+		
+	// var url="<%= ajaxURL %>";
+	var url = this.renderUrls.ajaxTaskUrl;
+	url = this.formatUrl(url);
+
+	pageObj.taskType = pageObj.getTaskTypeFromNavi();
+	
+	jQuery.post(url, {page:pageObj.currentPage, taskType:pageObj.taskType, 
+		keyword:pageObj.keyword, orderType:pageObj.orderType, field:pageObj.field}, function(data) {
+		var obj = eval('(' + data + ')');
+		var json = obj.response;
+		pageObj.loginStatus = json["loginStatus"];
+		
+		if (pageObj.loginStatus == 'VALID') {
+			pageObj.totalPages = json["totalPages"];
+			pageObj.totalItems = json["totalItems"];
+			var tasks = json["tasks"];
+			pageObj.tasks = tasks;
+			presentTasks(tasks);
+		} else {
+			var message = "<spring:message code="error.unLogin" />";
+			KokuUtil.errorMsg.showErrorMessage(message);
+		}
+	});
+};
+

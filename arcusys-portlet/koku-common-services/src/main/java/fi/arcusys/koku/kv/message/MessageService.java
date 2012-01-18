@@ -15,7 +15,6 @@ import fi.arcusys.koku.kv.messageservice.KokuMessageService_Service;
 import fi.arcusys.koku.kv.messageservice.MessageQuery;
 import fi.arcusys.koku.kv.messageservice.MessageStatus;
 import fi.arcusys.koku.kv.messageservice.MessageSummary;
-import fi.arcusys.koku.util.PropertiesUtil;
 import fi.koku.settings.KoKuPropertiesUtil;
 
 
@@ -40,7 +39,6 @@ public class MessageService {
 			throw new ExceptionInInitializerError(e);
 		}
 	}
-	
 	
 	/**
 	 * Constructor and initialization
@@ -133,6 +131,7 @@ public class MessageService {
 			ms.getKokuMessageServicePort().deleteMessages(messageIds);
 			return RESPONSE_OK;
 		} catch(RuntimeException e) {
+			LOG.error("ERROR while deleting message(s). See errorMsg: "+ e.getMessage(), e);
 			return RESPONSE_FAIL;
 		}
 	}
@@ -149,6 +148,7 @@ public class MessageService {
 			ms.getKokuMessageServicePort().setMessagesStatus(messageIds, messageStatus);
 			return RESPONSE_OK;
 		} catch(RuntimeException e) {
+			LOG.error("ERROR while setting message(s) status. See errorMsg: "+ e.getMessage(), e);
 			return RESPONSE_FAIL;
 		}
 		
@@ -160,13 +160,29 @@ public class MessageService {
 	 * @return Operation status
 	 */
 	public String archiveMessages(List<Long> messageIds){
-		
 		try {
 			ms.getKokuMessageServicePort().archiveMessages(messageIds);
 			return RESPONSE_OK;
 		} catch(RuntimeException e) {
+			LOG.error("ERROR while archiveMessages. See errorMsg: "+ e.getMessage(), e);
 			return RESPONSE_FAIL;
 		}
-		
 	}
+	
+	/**
+	 * Archives old messages
+	 * 
+	 * @param userUid
+	 * @param folderType
+	 */
+	public String archiveOldMessages(String userUid, FolderType folderType) {
+		try {
+			ms.getKokuMessageServicePort().archiveOldMessages(userUid, folderType);
+			return RESPONSE_OK;
+		} catch (RuntimeException e) {
+			LOG.error("ERROR while archiveOldMessages. See errorMsg: "+ e.getMessage(), e);
+			return RESPONSE_FAIL;
+		}
+	}
+	
 }

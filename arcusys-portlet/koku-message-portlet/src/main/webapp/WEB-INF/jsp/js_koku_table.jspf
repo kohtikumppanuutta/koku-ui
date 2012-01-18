@@ -1,0 +1,285 @@
+
+/* Koku utils JS */
+function KokuTable() {
+
+};
+
+/** 
+  *	Functions to generate table
+  */
+KokuTable.prototype.tableGenerator = {
+
+			/**
+			 * Generates table rows 
+			 *
+			 * @param {string] functionName
+			 * @oaram {Array[String]} columnNames.
+			 * @param {Object} tasks
+			 * @return {string} table 
+			 */
+			 generateTableContent : function(jsFunctionName, columnIds, tasks) {
+				var taskHtml = "";
+				for ( var i = 0; i < tasks.length; i++) {
+					taskHtml += this.generateRowTr(i);
+					taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
+					
+					/* Generate columns */
+					for (var j = 0; j < columnIds.length; j++)  {
+						taskHtml += '<td class="messageItem" onclick="'+ jsFunctionName + '(\''+ i + '\')" >' + tasks[i][columnIds[j]] + '</td>';
+					}
+					taskHtml +=	 '</tr>';
+				}
+				return taskHtml;
+			},
+							
+			/**
+			 * General use table generator
+			 *  
+			 * @param {string} jsFunctionName
+			 * @param {string} styleName for table
+			 * @param Array[String] columnNames (for spring)
+			 * @param Array[String] columnIds. ColumnIds.length < columnNames.length
+			 * @param {object} tasks
+			 */
+			 createTable : function(jsFunctionName, tableStyleName, columnNames, columnIds, tasks) {
+			
+				
+					var taskHtml = "";		
+				taskHtml = "<table class='task-manager-table "+ tableStyleName + "'>"
+						+ '<tr class="task-manager-table trheader">';
+										
+				for (var i = 0; i < columnNames.length; i++)  {
+					taskHtml += '<td>' + columnNames[i] + '</td>';
+				}
+						
+				taskHtml += '</tr>';
+				taskHtml += this.generateTableContent(jsFunctionName, columnIds, tasks);
+				taskHtml += '</table>';
+				return taskHtml;		
+			},
+			
+			/**
+			 * Generates tr-element with style "evenRow" if row is even 
+			 * and "oddRow" if row is odd.
+			 *
+			 * @param {number} row
+			 * @return {string} 
+			 */
+			generateRowTr : function(row) {
+				var taskHtml = "";
+				if((row+1)%2 == 0) {
+					taskHtml += '<tr class="evenRow">';	
+				}else {
+					taskHtml += '<tr class="oddRow">';
+				}
+				return taskHtml;
+			}			
+		}
+
+
+/*
+ * Viestit / Messages 
+ */
+KokuTable.prototype.createMessagesTable = function(tasks, taskType) {
+	/* Formats sender field */
+		function formatSender(taskType) {
+			
+			if(taskType == "msg_inbox" || taskType == "msg_archive_inbox")
+				return  "<spring:message code="message.from" />";
+			else 
+				return "<spring:message code="message.receiver" />";	
+		}
+		
+		/* Formats user field */
+		function formatUser(task, taskType) {			
+			if(taskType == "msg_inbox" ||taskType == "msg_archive_inbox")
+				return task["sender"];
+			else 
+				return task["recipients"];	
+		}
+		
+		/* Formats subject field */
+		function formatSubject(subject) {
+			if(subject == "")		
+				return  "<spring:message code="message.noSubject" />";
+			else
+				return subject;
+		}
+		
+		
+		var taskHtml = "";
+		var formLink = "";
+		
+		taskHtml = '<table class="task-manager-table">'
+				+ '<tr class="task-manager-table trheader">'
+				+ '<td class="choose"><spring:message code="message.choose" /></td>'
+				+ '<td>' + formatSender(taskType) + '</td>'
+				+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
+				+ '<td><spring:message code="message.received" /></td>'
+				+ '</tr>';
+				 
+		for ( var i = 0; i < tasks.length; i++) {
+			
+			if((i+1)%2 == 0) {
+				if (tasks[i]["messageStatus"] == 'unread') { // for new messages
+					taskHtml += '<tr class="evenRow new">';
+				} else {
+					taskHtml += '<tr class="evenRow">';
+				}	
+			} else {
+				if(tasks[i]["messageStatus"] == 'unread') {
+					taskHtml += '<tr class="new">';
+				} else {
+					taskHtml += '<tr>';
+				}
+			}
+			
+			taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["messageId"] + '" />' + '</td>'
+					 + '<td class="messageItem" onclick="kokuAjax.showMessage(\''+ tasks[i]["messageId"] + '\')" >' + formatUser(tasks[i], taskType) + '</td>'
+					 + '<td class="messageItem" onclick="kokuAjax.showMessage(\''+ tasks[i]["messageId"] + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
+					 + '<td class="messageItem" onclick="kokuAjax.showMessage(\''+ tasks[i]["messageId"] + '\')" >' + tasks[i]["creationDate"] + '</td>'
+					 + '</tr>';
+		}
+		
+		taskHtml += '</table>';
+		return taskHtml;
+};
+
+
+KokuTable.prototype.createAppoitmentsInboxCitizenTable = function(tasks) { 
+
+	/* Formats subject field */
+	function formatSubject(subject) {
+		if(subject == "")		
+			return  "<spring:message code="message.noSubject" />";
+		else
+			return subject;
+	}
+	
+	var taskHtml = "";
+	var formLink = "";
+	
+	taskHtml = '<table class="task-manager-table">'
+			+ '<tr class="task-manager-table trheader">'
+			+ '<td>' + '<spring:message code="message.from" />' + '</td>'
+			+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
+			+ '<td><spring:message code="message.description" /></td>'
+			+ '<td><spring:message code="message.status" /></td>'
+			+ '</tr>';
+			 
+	for ( var i = 0; i < tasks.length; i++) {
+		
+		taskHtml += this.tableGenerator.generateRowTr(i);			
+		taskHtml += '<td class="messageItem" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + tasks[i]["sender"] + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + tasks[i]["description"] + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + tasks[i]["status"] + '</td>'
+				 + '</tr>';
+	}	
+	taskHtml += '</table>';
+	return taskHtml;
+};
+
+KokuTable.prototype.createAppoitmentsTable = function(tasks) {
+
+	/* Formats subject field */
+	function formatSubject(subject) {
+		if(subject == "")		
+			return  "<spring:message code="message.noSubject" />";
+		else
+			return subject;
+	}
+	
+	var taskHtml = "";
+	var formLink = "";
+	
+	taskHtml = '<table class="task-manager-table">'
+			+ '<tr class="task-manager-table trheader">'
+			+ '<td class="choose"><spring:message code="message.choose" /></td>'
+			+ '<td>' + '<spring:message code="message.from" />' + '</td>'
+			+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
+			+ '<td><spring:message code="message.description" /></td>'
+			+ '<td><spring:message code="message.status" /></td>'
+			+ '</tr>';
+			 
+	for ( var i = 0; i < tasks.length; i++) {
+		
+		taskHtml += this.tableGenerator.generateRowTr(i);			
+		taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + tasks[i]["sender"] + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + tasks[i]["description"] + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + tasks[i]["status"] + '</td>'
+				 + '</tr>';
+	}
+
+	taskHtml += '</table>';
+	return taskHtml;
+};
+
+
+/**
+ * Create requests table in Html
+ */
+KokuTable.prototype.createRequestsEmployeeTable = function(tasks) { 
+	var taskHtml = "";
+
+	 taskHtml = '<table class="task-manager-table">'
+			+ '<tr class="task-manager-table trheader">'
+			+ '<td class="choose"><spring:message code="message.choose" /></td>'
+			+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
+			+ '<td>' + '<spring:message code="request.responded"/>' + '</td>'
+			+ '<td>' + '<spring:message code="request.missed"/>'+ '</td>'
+			+ '<td>' + '<spring:message code="request.start"/>'+ '</td>'
+			+ '<td>' + '<spring:message code="request.end"/>'+ '</td>'
+			+ '</tr>';
+			 
+	for ( var i = 0; i < tasks.length; i++) {
+		
+		if ((i+1)%2 == 0) {
+			taskHtml += '<tr class="evenRow">';	
+		} else {
+			taskHtml += '<tr>';
+		}
+		
+		taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["requestId"] + '" />' + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["subject"] + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["respondedAmount"] + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["missedAmount"] + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["creationDate"] + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["endDate"] + '</td>'
+				 + '</tr>';
+	}
+
+	taskHtml += '</table>';
+	return taskHtml;
+}
+
+
+KokuTable.prototype.createRequestReplied = function(tasks) { 
+	if (tasks == undefined || tasks == null || tasks.length == 0) {
+		return KokuUtil.errorMsg.showErrorMsgYouDontHaveAnyTipys();
+	}
+	
+	var columnNames = ["<spring:message code="message.choose"/>",
+	                   "<spring:message code="response.reciever"/>",
+	                   "<spring:message code="response.sender"/>",
+	                   "<spring:message code="response.subject"/>",
+	                   "<spring:message code="response.createdAt"/>",
+	                   "<spring:message code="response.endDate"/>"
+	                  ];
+	
+	var columnIds = ["replierName",
+	                 "sender",
+	                 "subject",
+	                 "creationDate",
+	                 "endDate"
+	                ];
+	this.flattenTasksRepliedTasks(tasks);
+	return this.tableGenerator.createTable("kokuAjax.showResponse", "browseRepliedRequests", columnNames, columnIds, tasks);
+};
+
+
+
+
+			

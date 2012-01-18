@@ -1,0 +1,200 @@
+/* 
+ * Koku Citizen Table 
+ * 
+ *
+ */
+KokuCitizenTable.prototype = new KokuTable();
+KokuCitizenTable.constructor = KokuCitizenTable;
+
+function KokuCitizenTable() {
+	this.flattenTasksContent = function(tasks) {
+		for (var i = 0; i < tasks.length; i++)  {			
+			tasks[i]["templateDescription"] = tasks[i].template.description;
+			tasks[i]["templateId"] = tasks[i].template.templateId;
+			tasks[i]["templateName"] = tasks[i].template.templateName;
+			tasks[i]["templateNameWithDescription"] = "<abbr class='valueWithDesc' title='"+ tasks[i].template.description +"' >" + tasks[i].template.templateName +"</abbr>";
+		}
+	};
+};
+
+/**
+ *  Pyynnöt Vastatut/vanhat / Requests recieved
+ */
+KokuCitizenTable.prototype.createRequestsTable = function(tasks) { 
+	function flattenTasksRepliedTasks(tasks) {
+		for (var i = 0; i < tasks.length; i++)  {			
+			tasks[i]["sender"] = tasks[i].request.sender;
+			tasks[i]["subject"] = tasks[i].request.subject;
+			tasks[i]["endDate"] = tasks[i].request.endDate;
+			tasks[i]["creationDate"] = tasks[i].request.creationDate;
+		}
+	};
+		
+	if (tasks == undefined || tasks == null || tasks.length == 0) {
+		return showErrorMsgYouDontHaveAnyTipys();
+	}
+	
+	var columnNames = ["<spring:message code="message.choose"/>",
+	                   "<spring:message code="response.reciever"/>",
+	                   "<spring:message code="response.sender"/>",
+	                   "<spring:message code="response.subject"/>",
+	                   "<spring:message code="response.createdAt"/>",
+	                   "<spring:message code="response.endDate"/>"
+	                  ];
+	
+	var columnIds = ["replierName",
+	                 "sender",
+	                 "subject",
+	                 "creationDate",
+	                 "endDate"
+	                ];
+	flattenTasksRepliedTasks(tasks);
+	return this.tableGenerator.createTable("kokuAjax.showResponse", "browseRepliedRequests", columnNames, columnIds, tasks);
+};
+
+
+/**
+ * Suostumukset / Valtakirjat
+ */
+KokuCitizenTable.prototype.createConsentsAssignedTable = function(tasks) { 
+	var taskHtml = '<table class="task-manager-table">'
+		+ '<tr class="task-manager-table trheader">'
+		+ '<td>' + '<spring:message code="consent.requester" />' + '</td>'
+		+ '<td>' + '<spring:message code="consent.templateName" />'+ '</td>'
+		+ '<td>' + '<spring:message code="consent.replyTill" />'+ '</td>'
+		+ '</tr>';
+		 
+	for ( var i = 0; i < tasks.length; i++) {
+	
+		if ((i+1)%2 == 0) {
+			taskHtml += '<tr class="evenRow" onclick="showConsent(\''+ i + '\')">';	
+		} else {
+			taskHtml += '<tr onclick="kokuAjax.showConsent(\''+ i + '\')">';
+		}
+	
+		taskHtml += '<td class="messageItem">' + tasks[i]["requester"] + '</td>'
+			 	 + '<td class="messageItem">' + tasks[i]["templateName"] + '</td>'
+			 	 + '<td class="messageItem">' + tasks[i]["replyTill"] + '</td>'
+			 	 + '</tr>';
+	}
+
+	taskHtml += '</table>';
+	return taskHtml;
+};
+
+/**
+ * Suostumukset / Valtakirjat
+ */
+KokuCitizenTable.prototype.createConsentsCurrentAndOldTable = function(tasks) { 
+	var taskHtml = '<table class="task-manager-table">'
+		+ '<tr class="task-manager-table trheader">'
+		+ '<td class="choose"><spring:message code="message.choose" /></td>'
+		+ '<td style="width:250px;">' + '<spring:message code="consent.templateName" />' + '</td>'
+		+ '<td>' + '<spring:message code="consent.status" />' + '</td>'
+		+ '<td>' + '<spring:message code="consent.approvalStatus" />' + '</td>'
+		+ '<td>' + '<spring:message code="consent.createType" />' + '</td>'
+		+ '<td>' + '<spring:message code="consent.givenDate" />' + '</td>'
+		+ '<td>' + '<spring:message code="consent.validDate" />' + '</td>'
+		+ '<td>' + '<spring:message code="consent.secondApprover" />' + '</td>'
+		+ '</tr>';
+		 
+	for ( var i = 0; i < tasks.length; i++) {
+	
+		taskHtml += this.tableGenerator.generateRowTr(i);			
+		taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
+			  	 + '<td class="messageItem" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + tasks[i]["templateName"] + '</td>'
+			  	 + '<td class="messageItem" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + tasks[i]["status"] + '</td>'
+			  	 + '<td class="messageItem" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + tasks[i]["approvalStatus"] + '</td>'
+			  	 + '<td class="messageItem" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + tasks[i]["createType"] + '</td>'
+			  	 + '<td class="messageItem" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + tasks[i]["assignedDate"] + '</td>'
+			  	 + '<td class="messageItem" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + tasks[i]["validDate"] + '</td>'
+			  	 + '<td class="messageItem" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + tasks[i]["anotherPermitterUid"] + '</td>'
+			 	 + '</tr>';
+	}
+
+	taskHtml += '</table>';
+	return taskHtml;
+};
+
+/**
+ * Valtakirjat - Omat valtakirjat - Valtuutettuna?
+ */
+KokuCitizenTable.prototype.createBrowseWarrantsToMe = function(tasks) { 
+	if (tasks == undefined || tasks == null || tasks.length == 0) {
+		return KokuUtil.errorMsg.showErrorMsgYouDontHaveAnyConsents();
+	}
+	
+	var columnNames = ["<spring:message code="message.choose"/>",
+	                   "<spring:message code="warrant.templateName"/>",
+	                   "<spring:message code="warrant.status"/>",
+// 		               "<spring:message code="consent.approvalStatus"/>",
+// 		               "<spring:message code="consent.createType"/>",
+// 		               "<spring:message code="consent.givenDate"/>",
+// 		               "<spring:message code="consent.validDate"/>"
+	                   "<spring:message code="warrant.validTill.short"/>"
+	                  ];
+	
+	var columnIds = [
+	                 "templateNameWithDescription",
+	                 "localizedStatus",
+// 		             "approvalStatus",
+// 		             "createType",
+// 		             "assignedDate",
+// 		             "validDate"
+					 "validTill"
+	                 ];
+	
+	this.flattenTasksContent(tasks);
+	return this.tableGenerator.createTable("kokuAjax.showWarrant", "createBrowseWarrantsToMe" , columnNames, columnIds, tasks);
+}
+
+/**
+ * Valtakirjat - Vastaanotetut?
+ */
+KokuCitizenTable.prototype.createBrowseWarrantsFromMe = function(tasks) { 
+	function createEditConsentColumn(tasks) {
+		for (var i = 0; i < tasks.length; i++)  {
+			if (tasks[i].status != 'REVOKED') {
+ 				var url = "<%= defaultPath %>/ValtakirjaEditConsent?FormID="+ tasks[i].authorizationId; 
+				tasks[i]["editLink"] = "<a onclick='event.cancelBubble=true' class='editConsentLink' href="+url+" ><spring:message code="consent.edit"/></a>"; 
+			} else {
+				tasks[i]["editLink"] = "";
+			}
+		}
+	};
+	
+	if (tasks == undefined || tasks == null || tasks.length == 0) {
+		return KokuUtil.errorMsg.showErrorMsgYouDontHaveAnyConsents();
+	}
+	
+	var columnNames = ["<spring:message code="message.choose"/>",
+	                   "<spring:message code="warrant.templateName"/>",
+	                   "<spring:message code="warrant.status"/>",
+// 		               "<spring:message code="consent.approvalStatus"/>",
+// 		               "<spring:message code="consent.createType"/>",
+// 		               "<spring:message code="consent.givenDate"/>",
+// 		               "<spring:message code="consent.accepted"/>",
+// 		               "<spring:message code="consent.validDate"/>",
+	                   "<spring:message code="warrant.validTill.short"/>",
+	                   "<spring:message code="warrant.edit"/>"
+	                  ];
+	
+	var columnIds = [
+	                 "templateNameWithDescription",
+	                 "localizedStatus",
+// 		                 "approvalStatus",
+// 		                 "createType",
+// 		                 "assignedDate",
+// 		                 "acceptedDate",
+// 		                 "validDate",
+					 "validTill",
+	                 "editLink"
+	                 ];
+	this.flattenTasksContent(tasks);
+	createEditConsentColumn(tasks);
+
+	return this.tableGenerator.createTable("kokuAjax.showWarrant", "createBrowseWarrantsFromMe", columnNames, columnIds, tasks);
+}
+
+
+		

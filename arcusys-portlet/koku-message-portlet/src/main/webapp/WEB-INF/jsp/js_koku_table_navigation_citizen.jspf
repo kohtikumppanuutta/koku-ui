@@ -1,0 +1,112 @@
+ 
+/**
+ * Koku Table Navigation for Citizen
+ *  
+ */ 
+ 
+KokuTableNavigationCitizen.prototype = new KokuTableNavigation();
+KokuTableNavigationCitizen.constructor =  KokuTableNavigationCitizen; 
+ 
+function KokuTableNavigationCitizen(ajax) {
+	 this.kokuAjax = ajax;	 	  
+};
+
+/**
+ * Create task manager operation part including changing page number and search field
+ */
+KokuTableNavigationCitizen.prototype.createTasksPage = function(pageObj) {
+	var pageHtml = '<ul>';
+		
+		if (pageObj.taskType.indexOf('msg') > -1
+				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS %>') > -1
+				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>') > -1) {
+			pageHtml += '<li><input type="button" value="<spring:message code="message.search"/>"  onclick="kokuTableNavigation.showSearchUI()" /></li>';
+		}
+		
+		if (pageObj.taskType == 'msg_inbox' || pageObj.taskType == 'msg_outbox') {
+			pageHtml += '<li><input type="button" value="<spring:message code="page.archive"/>"  onclick="kokuTableNavigation.archiveMessages()" /></li>';
+		}
+		
+		if (pageObj.taskType == '<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS %>') {
+			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="kokuTableNavigation.revokeConsents()" /></li>';
+		} else if (pageObj.taskType.indexOf('msg') > -1) {
+			pageHtml += '<li><input type="button" value="<spring:message code="page.removeSelected"/>"  onclick="kokuTableNavigation.deleteMessages()" /></li>';
+		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN %>') {
+			pageHtml += '<li><input type="button" value="<spring:message code="consent.cancel"/>"  onclick="kokuTableNavigation.cancelAppointments()" /></li>';
+		}
+	pageHtml += this.getTableNavigation(pageObj);
+	
+	return pageHtml;
+};
+
+/**
+ * Show/hide search user interface
+ */
+KokuTableNavigationCitizen.prototype.showSearchUI = function() {
+	if(pageObj.taskType.indexOf('msg') > -1) { // for message
+		jQuery('#message-search').show();
+		jQuery('#consent-search').hide();
+	} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS %>') {
+		jQuery('#warrants-search-citizens').show();
+		jQuery('#message-search').hide();
+	} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>') {
+		jQuery('#warrants-search-warrants').show();
+		jQuery('#message-search').hide();
+	} else if(pageObj.taskType.indexOf('cst') > -1) { // for consent
+		jQuery('#consent-search').show();
+		jQuery('#message-search').hide();
+	} else {
+		return;
+	}	
+	jQuery('#task-manager-search').toggle('fast');
+};
+
+/**
+ * Reset the search result and clear the keyword
+ */
+KokuTableNavigationCitizen.prototype.resetSearch = function() {
+	jQuery("input#keyword").val('');
+	jQuery("input#recipient").val('');
+	jQuery("input#customer").val('');
+			
+	jQuery('input:checkbox[name="field"]').attr('checked', true);
+	pageObj.keyword = '';
+	this.kokuAjax.ajaxGetTasks();
+};
+
+/**
+ * Perform search tasks
+ */
+KokuTableNavigationCitizen.prototype.searchTasks = function() {
+	var keyword = jQuery("input#keyword").val();
+	pageObj.keyword = keyword;	
+	var field = '';
+	jQuery('input:checkbox[name="field"]:checked').each(function(){
+		field += jQuery(this).val() + '_';
+	});
+	/* get rid of the last space letter*/
+	if(field.length > 0)  field = field.substring(0, field.length-1);
+	else return false;
+	
+	pageObj.field = field;	
+	this.kokuAjax.ajaxGetTasks();	
+	return false;
+};
+
+KokuTableNavigationCitizen.prototype.searchConsents = function() {
+	var keyword = jQuery("input#recipient").val();
+	var templateName = jQuery("input#templateName").val();
+	
+	pageObj.field = '';
+	
+	if (consentTemplates.length == 0 && templateName != '') {
+		pageObj.field = -1;	
+	} else if(consentTemplates.length > 0 && currentNum != -1) {
+		var templateId = consentTemplates[currentNum]['suostumuspohjaId'];
+		pageObj.field = templateId;
+	}
+	
+	pageObj.keyword = keyword;			
+	this.kokuAjax.ajaxGetTasks();	
+	return false;
+};

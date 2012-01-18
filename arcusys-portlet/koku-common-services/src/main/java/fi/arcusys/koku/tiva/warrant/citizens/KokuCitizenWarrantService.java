@@ -10,7 +10,7 @@ import fi.arcusys.koku.tiva.TivaEmployeeService;
 import fi.arcusys.koku.tiva.warrant.citizenwarrantservice.AuthorizationShortSummary;
 import fi.arcusys.koku.tiva.warrant.citizenwarrantservice.AuthorizationSummary;
 import fi.arcusys.koku.tiva.warrant.citizenwarrantservice.KokuKunpoValtakirjaService_Service;
-import fi.arcusys.koku.util.PropertiesUtil;
+import static fi.arcusys.koku.util.Constants.*;
 import fi.koku.settings.KoKuPropertiesUtil;
 
 
@@ -57,8 +57,15 @@ public class KokuCitizenWarrantService {
 		return service.getKokuKunpoValtakirjaServicePort().getTotalReceivedAuthorizations(userId);
 	}
 	
-	public void revokeOwnAuthorization(long authorizationId, String user, String comment) {
-		service.getKokuKunpoValtakirjaServicePort().revokeOwnAuthorization(authorizationId, user, comment);
+	public String revokeOwnAuthorization(long authorizationId, String user, String comment) {
+		try {
+			service.getKokuKunpoValtakirjaServicePort().revokeOwnAuthorization(authorizationId, user, comment);
+			return RESPONSE_OK;
+		} catch (RuntimeException e) {
+			LOG.error("Warrant revoking authorization failed. authorizationId: '"+authorizationId
+					+ "' user: '"+user+"' comment: '"+comment+"'");
+			return RESPONSE_FAIL;
+		}
 	}
 }
 
