@@ -331,10 +331,7 @@
 </div>
 
   
-<script type="text/javascript"
-	src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
-<script type="text/javascript"
-	src="http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.4.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.5.2.min.js"></script>
 <script type="text/javascript">
 
 window.onload = function() { 

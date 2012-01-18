@@ -6,6 +6,7 @@
         <portlet-name>KKS</portlet-name>
         <header-content>
             <link type="text/css" rel="stylesheet" href="/css/kks.css" />
+            <script type="text/javascript" src="/js/jquery-1.5.2.min.js" />
         </header-content>
     </portlet>
 </portlet-app>
