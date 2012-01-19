@@ -135,10 +135,10 @@ KokuTableNavigationEmployee.prototype.searchConsents = function() {
 	
 	pageObj.field = '';
 	
-	if(consentTemplates.length == 0 && templateName != '') {
+	if(kokuSuggestionBox.consentTemplates.length == 0 && templateName != '') {
 		pageObj.field = -1;	
-	}else if(consentTemplates.length > 0 && currentNum != -1) {
-		var templateId = consentTemplates[currentNum]['suostumuspohjaId'];
+	}else if(kokuSuggestionBox.consentTemplates.length > 0 && currentNum != -1) {
+		var templateId = kokuSuggestionBox.consentTemplates[currentNum]['suostumuspohjaId'];
 		pageObj.field = templateId;
 	}
 	
@@ -158,10 +158,10 @@ KokuTableNavigationEmployee.prototype.searchWarrantsByCitizen = function() {
 	
 	pageObj.field = '';
 	
-	if (consentTemplates.length == 0 && templateName != '') {
+	if (kokuSuggestionBox.consentTemplates.length == 0 && templateName != '') {
 		pageObj.field = -1;	
-	} else if(consentTemplates.length > 0 && currentNum != -1) {
-		var templateId = consentTemplates[currentNum]['suostumuspohjaId'];
+	} else if(kokuSuggestionBox.consentTemplates.length > 0 && currentNum != -1) {
+		var templateId = kokuSuggestionBox.consentTemplates[currentNum]['suostumuspohjaId'];
 		pageObj.field = templateId;
 	}
 	
@@ -179,10 +179,10 @@ KokuTableNavigationEmployee.prototype.searchWarrantsByTemplate = function() {
 	
 	pageObj.field = '';
 	
-	if (consentTemplates.length == 0 && templateName != '') {
+	if (kokuSuggestionBox.consentTemplates.length == 0 && templateName != '') {
 		pageObj.field = -1;	
-	} else if(consentTemplates.length > 0 && currentNum != -1) {
-		var templateId = consentTemplates[currentNum]['templateId'];
+	} else if(kokuSuggestionBox.consentTemplates.length > 0 && currentNum != -1) {
+		var templateId = kokuSuggestionBox.consentTemplates[currentNum]['templateId'];
 		pageObj.field = templateId;
 	}
 	
@@ -226,10 +226,10 @@ KokuTableNavigationEmployee.prototype.searchInfoRequests = function() {
 	
 	pageObj.field = '';
 	
-	if (consentTemplates.length == 0 && templateName != '') {
+	if (kokuSuggestionBox.consentTemplates.length == 0 && templateName != '') {
 		pageObj.field = -1;	
-	} else if (consentTemplates.length > 0 && currentNum != -1) {
-		var templateId = consentTemplates[currentNum]['templateId'];
+	} else if (kokuSuggestionBox.consentTemplates.length > 0 && currentNum != -1) {
+		var templateId = kokuSuggestionBox.consentTemplates[currentNum]['templateId'];
 		pageObj.field = templateId;
 	}
 	
@@ -257,6 +257,4 @@ KokuTableNavigationEmployee.prototype.switchSearchTimeMode = function() {
 		jQuery('span#tipyReplyTime').show();
 	}
 };
-
-
 

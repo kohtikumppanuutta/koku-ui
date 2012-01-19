@@ -41,7 +41,8 @@ function SuggestionBox(ajaxUrls) {
     	hiddenDiv : hiddenDiv,
     	getCandiKeywords: getCandiKeywords,
     	setSuggestType : setSuggestType,
-    	getSuggestType : getSuggestType
+    	getSuggestType : getSuggestType,
+    	consentTemplates : consentTemplates
 	};
 	
 	

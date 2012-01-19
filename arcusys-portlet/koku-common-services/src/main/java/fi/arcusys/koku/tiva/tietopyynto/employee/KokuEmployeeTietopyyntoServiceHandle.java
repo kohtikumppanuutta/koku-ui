@@ -127,16 +127,62 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 		return details;
 	}
 	
+	/**
+	 * Returns total replied requests count 
+	 * 
+	 * @param receiverUid
+	 * @return replied requests count
+	 */
+	public int getTotalRepliedRequests(String receiverUid) {
+		return service.getTotalRepliedRequests(receiverUid, new InformationRequestCriteria());
+	}
+	
+	/**
+	 * Returns requests total
+	 * 
+	 * @param receiverUid
+	 * @return request count
+	 */
+	public int getTotalRequests(String receiverUid) {
+		return service.getTotalRequests(new InformationRequestCriteria());
+	}
+	
+	/**
+	 * Return sent requests count
+	 * 
+	 * @param senderUid
+	 * @return sent requests count
+	 */
+	public int getTotalSentRequests(String senderUid) {
+		return service.getTotalSentRequests(senderUid, new InformationRequestCriteria());
+	}
+	
+	
 	private List<KokuInformationRequestSummary> getRepliedRequests(String userId, InformationRequestCriteria criteria, int startNum, int maxNum) {
-		 return createLocalPojos(service.getRepliedRequests(userId, getInformationReqQuery(criteria, startNum, maxNum)));
+		try {
+			return createLocalPojos(service.getRepliedRequests(userId, getInformationReqQuery(criteria, startNum, maxNum)));			
+		} catch (RuntimeException e) {
+			LOG.error("Request: getRepliedRequests has failed", e);
+			return new ArrayList<KokuInformationRequestSummary>();
+		}
 	}
 	
 	private List<KokuInformationRequestSummary> getSentRequests(String userId, InformationRequestCriteria criteria, int startNum, int maxNum) {
-		return createLocalPojos(service.getSentRequests(userId, getInformationReqQuery(criteria, startNum, maxNum)));
+		try {
+			return createLocalPojos(service.getSentRequests(userId, getInformationReqQuery(criteria, startNum, maxNum)));
+		} catch (RuntimeException e) {
+			LOG.error("Request: getSentRequests has failed", e);
+			return new ArrayList<KokuInformationRequestSummary>();
+		}
 	}
 	
 	private List<KokuInformationRequestSummary> getRequests(InformationRequestCriteria criteria, int startNum, int maxNum) {
-		return createLocalPojos(service.getRequests(getInformationReqQuery(criteria, startNum, maxNum)));
+		try {
+			return createLocalPojos(service.getRequests(getInformationReqQuery(criteria, startNum, maxNum)));
+		} catch (RuntimeException e) {
+			LOG.error("Request: getRequests has failed", e);
+			return new ArrayList<KokuInformationRequestSummary>();
+		}
 	}
 
 	private InformationRequestCriteria createCriteria(Map<String, String> searchMap) {
@@ -148,11 +194,10 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 		criteria.setTargetPersonUid(searchMap.get(TARGET_PERSON_UID));
 		criteria.setReceiverUid(searchMap.get(RECIEVER_UID));
 		criteria.setSenderUid(searchMap.get(SENDER_UID));
-		// TODO: FreeText search missing
-		// TODO: Tietosisältö search missing
+		criteria.setFreeText(searchMap.get(FREE_TEXT_SEARCH));
+		criteria.setInformationContent(searchMap.get(INFORMATION));
 		return criteria;
 	}
-	
 
 	/** 
 	 * Parses string dates on finnish time format 
@@ -176,15 +221,12 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	}
 	
 	private Map<String, String> getSearchMap(String keyword) {
-		if (keyword == null) {
+		if (keyword == null || keyword.isEmpty()) {
 			return null;
 		}
-		
-		Map<String, String> searchMap = new HashMap<String, String>(MAP_INIT_SIZE);
-		
+		Map<String, String> searchMap = new HashMap<String, String>(MAP_INIT_SIZE);		
 		try {
-			JSONObject json = new JSONObject(keyword);			
-			
+			JSONObject json = new JSONObject(keyword);						
 			addToMap(searchMap, CREATED_FROM, json.getString("createdFrom"));
 			addToMap(searchMap, CREATED_TO, json.getString("createdTo"));
 			addToMap(searchMap, REPLIED_FROM, json.getString("repliedFrom")); 
@@ -193,19 +235,20 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 			final String reciever = json.getString("reciever");
 			final String targetPerson = json.getString("targetPerson");
 			if (sender != null && !sender.isEmpty()) {
-				addToMap(searchMap, SENDER_UID, userService.getLooraUserUidByUsername(sender));				
+				//addToMap(searchMap, SENDER_UID, userService.getLooraUserUidByUsername(sender));				
+				addToMap(searchMap, SENDER_UID, sender);
 			}
 			if (reciever != null && !reciever.isEmpty()) {
-				addToMap(searchMap, RECIEVER_UID, userService.getLooraUserUidByUsername(reciever));				
+				//addToMap(searchMap, RECIEVER_UID, userService.getLooraUserUidByUsername(reciever));
+				addToMap(searchMap, RECIEVER_UID, reciever);
 			}
 			if (targetPerson != null && !targetPerson.isEmpty()) {
 				addToMap(searchMap, TARGET_PERSON_UID, targetPerson);		
 			}
 			addToMap(searchMap, INFORMATION, json.getString("information"));
 			addToMap(searchMap, FREE_TEXT_SEARCH, json.getString("freeTextSearch"));
-			
 		} catch (JSONException e) {
-			// TODO Do something!
+			LOG.warn("Failed parse JSON. Can't create searchMap for Tietopyyntö. keyword: '"+keyword+"'");
 		}
 		return searchMap;
 	}
