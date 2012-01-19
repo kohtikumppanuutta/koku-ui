@@ -221,10 +221,10 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	}
 	
 	private Map<String, String> getSearchMap(String keyword) {
-		if (keyword == null || keyword.isEmpty()) {
-			return null;
-		}
 		Map<String, String> searchMap = new HashMap<String, String>(MAP_INIT_SIZE);		
+		if (keyword == null || keyword.isEmpty()) {
+			return searchMap;
+		}
 		try {
 			JSONObject json = new JSONObject(keyword);						
 			addToMap(searchMap, CREATED_FROM, json.getString("createdFrom"));
