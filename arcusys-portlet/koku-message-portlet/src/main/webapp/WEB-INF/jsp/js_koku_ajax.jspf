@@ -45,6 +45,20 @@ KokuAjax.prototype.archiveMessages = function(messageList, callback) {
 };
 
 /**
+ * Archives a old messages by given folder
+ */
+KokuAjax.prototype.archiveMessagesOld = function(folderType, callback) {	
+	var url= this.renderUrls.archiveOldUrl;
+	url = this.formatUrl(url);
+	jQuery.post(url, {'folderType':folderType}, function(data) {
+			var obj = eval('(' + data + ')');
+			var json = obj.response;
+			var result = json["result"];
+			callback(result);
+	});
+};
+
+/**
  * Deletes a list of messages selected by user
  */
 KokuAjax.prototype.deleteMessages = function(messageList, callback) {	

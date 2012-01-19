@@ -208,6 +208,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 			tcs.revokeOwnConsent(consentId, this.userId);
 			return RESPONSE_OK;
 		} catch(RuntimeException e) {
+			LOG.error("Failed to revoke consent. ConsentId: '"+consentIdStr+"'");
 			return RESPONSE_FAIL;
 		}
 	}

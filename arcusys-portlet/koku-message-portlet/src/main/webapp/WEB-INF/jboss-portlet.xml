@@ -11,7 +11,6 @@
 				
 <!-- 			Removed because jquery will cause conflict with navi jquery (plugins won't work) -->
 			<script type="text/javascript" src="/js/jquery-1.5.2.min.js" />
-<!-- 			<script type="text/javascript" src="/js/main.js" /> -->
 		</header-content>
 	</portlet>
 </portlet-app>

@@ -391,15 +391,7 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	 * @param comment
 	 * @return
 	 */
-	public String cancelAppointments(String appointmentIdStr, String comment) {
-		long  appId = 0;
-		try {
-			appId = (long) Long.parseLong(appointmentIdStr);
-		} catch (NumberFormatException nfe) {
-			LOG.warn("Invalid AppointmentId. AppointmentId: '"+appointmentIdStr+"'");
-			return RESPONSE_FAIL;
-		}
-		
+	public String cancelAppointments(long appId, String comment) {		
 		try {
 			aes.cancelAppointment(appId, comment);
 			return RESPONSE_OK;
