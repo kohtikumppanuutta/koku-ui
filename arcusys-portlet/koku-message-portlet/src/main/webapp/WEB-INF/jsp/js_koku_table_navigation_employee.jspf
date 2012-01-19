@@ -235,7 +235,7 @@ KokuTableNavigationEmployee.prototype.searchInfoRequests = function() {
 	
 	pageObj.keyword = JSON.stringify(keywordObject);
 	kokuAjax.ajaxGetTasks(pageObj, presentTasks);
-	return false;	
+	return false;
 };
 
 KokuTableNavigationEmployee.prototype.searchKindergartenApplications = function() {

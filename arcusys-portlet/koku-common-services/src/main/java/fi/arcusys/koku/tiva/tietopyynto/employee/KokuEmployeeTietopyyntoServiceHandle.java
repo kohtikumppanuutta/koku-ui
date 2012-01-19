@@ -57,10 +57,6 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	 */
 	public List<KokuInformationRequestSummary> getRepliedRequests(String userId, String keyword, int startNum, int maxNum) {
 		Map<String, String> searchMap = getSearchMap(keyword);
-		if (searchMap == null) {
-			return new ArrayList<KokuInformationRequestSummary>();
-		};		
-		
 		return getRepliedRequests(
 				userId, 
 				createCriteria(searchMap),
@@ -79,10 +75,6 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	 */	
 	public List<KokuInformationRequestSummary> getSentRequests(String userId, String keyword, int startNum, int maxNum) {
 		Map<String, String> searchMap = getSearchMap(keyword);
-		if (searchMap == null) {
-			return new ArrayList<KokuInformationRequestSummary>();
-		};
-		
 		return getSentRequests(
 				userId, 
 				createCriteria(searchMap),
@@ -100,11 +92,7 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	 * @return List of KokuInformationRequestSummaries
 	 */	
 	public List<KokuInformationRequestSummary> getRequests(String keyword, int startNum, int maxNum) {
-		Map<String, String> searchMap = getSearchMap(keyword);
-		if (searchMap == null) {
-			return new ArrayList<KokuInformationRequestSummary>();
-		};
-		
+		Map<String, String> searchMap = getSearchMap(keyword);		
 		return getRequests(
 				createCriteria(searchMap),
 				startNum,
@@ -133,8 +121,9 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	 * @param receiverUid
 	 * @return replied requests count
 	 */
-	public int getTotalRepliedRequests(String receiverUid) {
-		return service.getTotalRepliedRequests(receiverUid, new InformationRequestCriteria());
+	public int getTotalRepliedRequests(String receiverUid, String keyword) {
+		Map<String, String> searchMap = getSearchMap(keyword);		
+		return service.getTotalRepliedRequests(receiverUid, createCriteria(searchMap));
 	}
 	
 	/**
@@ -143,8 +132,9 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	 * @param receiverUid
 	 * @return request count
 	 */
-	public int getTotalRequests(String receiverUid) {
-		return service.getTotalRequests(new InformationRequestCriteria());
+	public int getTotalRequests(String keyword) {
+		Map<String, String> searchMap = getSearchMap(keyword);		
+		return service.getTotalRequests(createCriteria(searchMap));
 	}
 	
 	/**
@@ -153,8 +143,9 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	 * @param senderUid
 	 * @return sent requests count
 	 */
-	public int getTotalSentRequests(String senderUid) {
-		return service.getTotalSentRequests(senderUid, new InformationRequestCriteria());
+	public int getTotalSentRequests(String senderUid, String keyword) {
+		Map<String, String> searchMap = getSearchMap(keyword);
+		return service.getTotalSentRequests(senderUid, createCriteria(searchMap));
 	}
 	
 	
