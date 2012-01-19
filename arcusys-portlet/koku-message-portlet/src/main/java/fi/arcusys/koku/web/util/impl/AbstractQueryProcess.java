@@ -7,9 +7,9 @@ import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.springframework.context.MessageSource;
 
-import fi.arcusys.koku.web.util.QueryProcess;
+import fi.arcusys.koku.web.util.KokuTaskQueryProcess;
 
-public abstract class AbstractQueryProcess implements QueryProcess {
+public abstract class AbstractQueryProcess implements KokuTaskQueryProcess {
 	
 	private static final Logger LOG = Logger.getLogger(AbstractQueryProcess.class);
 	private MessageSource messageSource;

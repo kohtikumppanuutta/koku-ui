@@ -156,6 +156,7 @@ public class MessageService {
 	
 	/**
 	 * Archives messages
+	 * 
 	 * @param messageIds a list of message ids
 	 * @return Operation status
 	 */
@@ -170,7 +171,7 @@ public class MessageService {
 	}
 	
 	/**
-	 * Archives old messages
+	 * Archives old messages (more than 3 months older)
 	 * 
 	 * @param userUid
 	 * @param folderType

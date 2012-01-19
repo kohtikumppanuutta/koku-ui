@@ -179,21 +179,14 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 	
 	/**
 	 * Cancels appointments
-	 * @param appointmentIdStr
+	 * @param appointmentId
 	 * @param targetPerson
 	 * @param comment
 	 * @return operation response
 	 */
-	public String cancelAppointments(String appointmentIdStr, String targetPerson, String comment) {
-		long  appId = 0;
+	public String cancelAppointments(long appointmentId, String targetPerson, String comment) {
 		try {
-			appId = (long) Long.parseLong(appointmentIdStr);
-		} catch (NumberFormatException nfe) {
-			LOG.warn("Invalid appointmentId. AppointmentId: '"+appointmentIdStr+"'");
-			return RESPONSE_FAIL;
-		}		
-		try {
-			acs.cancelAppointment(appId, targetPerson, loginUserId, comment);
+			acs.cancelAppointment(appointmentId, targetPerson, loginUserId, comment);
 			return RESPONSE_OK;
 		} catch(RuntimeException e) {
 			return RESPONSE_FAIL;

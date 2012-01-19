@@ -271,7 +271,10 @@
 #task-manager-operation ul li {
 	font-weight: bold;
 	display: inline;
-	padding: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 0px;
+	padding-right: 0px;
 }
 
 #task-manager-operation ul li img {
@@ -287,6 +290,15 @@
 	padding: 5px;
 	background-color: #FFB6C1;
 	border: 1px solid #FF3333; /* table background color */
+}
+
+ul#kokuTableNavigation {
+	margin-left: 10px;
+	float: right;	
+}
+
+#kokuTableNavigation li {
+	margin: 5px;
 }
 
 .request-c-1 {

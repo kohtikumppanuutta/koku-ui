@@ -1,0 +1,115 @@
+package fi.arcusys.koku.web.util.impl;
+
+import static fi.arcusys.koku.util.Constants.RESPONSE_FAIL;
+
+import java.util.Arrays;
+
+import org.apache.log4j.Logger;
+
+import fi.arcusys.koku.av.AvCitizenServiceHandle;
+import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
+import fi.arcusys.koku.tiva.warrant.citizens.KokuCitizenWarrantHandle;
+import fi.arcusys.koku.web.util.exception.KokuActionProcessException;
+
+public class KokuActionProcessCitizenImpl extends AbstractKokuActionProcess {
+	
+	private static final Logger LOG = Logger.getLogger(KokuActionProcessCitizenImpl.class);
+	
+	/* Lazily initialized */
+	private AvCitizenServiceHandle avCitizenServiceHandle = null;
+	private KokuCitizenWarrantHandle warrantHandle = null;	
+	private TivaCitizenServiceHandle tivaHandle = null;
+
+	
+	
+
+	public KokuActionProcessCitizenImpl(String userId) {
+		super(userId);
+	}
+
+	@Override
+	public void cancelAppointments(String[] appointmentIds, String[] targetPersons, String comment) throws KokuActionProcessException {
+		
+		if (appointmentIds == null || targetPersons == null) {
+			throw new KokuActionProcessException("AppoimentsId or targetPersons parameter(s) are null");
+		}
+		
+		/* Lazy services loading */
+		if (avCitizenServiceHandle == null) {
+			avCitizenServiceHandle = new AvCitizenServiceHandle(getUserId());
+		}
+
+		final int appointments = appointmentIds.length;
+		final int targetPersonCount = targetPersons.length;
+		
+		if (appointments != targetPersonCount) {
+			throw new KokuActionProcessException("Appointments and targetPerson count doesn't match! appointments: '"+
+					Arrays.toString(appointmentIds)+"' targetPersons: '"+Arrays.toString(targetPersons)+"'");
+		}
+		
+		String appointmentId;
+		String targetPerson;
+		for (int i=0; i > appointments; i++ ) {
+			appointmentId = appointmentIds[i];
+			targetPerson = targetPersons[i];
+			long  appId = 0;
+			try {
+				appId = (long) Long.parseLong(appointmentId);
+			} catch (NumberFormatException nfe) {
+				LOG.error("Invalid appointmentId. AppointmentId: '"+appointmentId+"' targetPerson: '"+targetPerson+"' comment: '"+comment+"'");
+				throw new KokuActionProcessException("Invalid appointmentId.", nfe);
+			}
+			String actionResult = avCitizenServiceHandle.cancelAppointments(appId, targetPerson, comment);
+			if (actionResult.equals(RESPONSE_FAIL)) {
+				throw new KokuActionProcessException("Failed to cancelAppointment! appoimentId: '" + 
+						appointmentId + "' targetPerson: '" + targetPerson + "' comment: '" + comment + "'");
+			}
+		}		
+	}
+
+	@Override
+	public void revokeWarrants(String[] warrantIds, String comment)
+			throws KokuActionProcessException {
+		
+
+		if (warrantIds == null) {
+			throw new KokuActionProcessException("warrantIds parameter is null");
+		}
+		
+		/* Lazy initialization */
+		if (warrantHandle == null) {
+			warrantHandle = new KokuCitizenWarrantHandle();				
+		}
+		
+		for(String authorizationId : warrantIds) {
+			try {
+				long authId = Long.parseLong(authorizationId);
+				String revokeResult = warrantHandle.revokeOwnAuthorization(authId, getUserId(), comment);
+				if (revokeResult.equals(RESPONSE_FAIL)) {
+					throw new KokuActionProcessException("Revoking warrant failed! authId: '"+authId+"' userId: '"+getUserId()+"' comment:'"+comment+"'");
+				}
+			} catch (NumberFormatException nfe) {
+				throw new KokuActionProcessException("Couldn't revoke warrant! Invalid authorizationId. UserId: "+ getUserId() + " AuthorizationId: "+ authorizationId + "Comment: " + comment);
+			}
+		}		
+	}
+
+	@Override
+	public void revokeConsents(String[] consentIds)
+			throws KokuActionProcessException {
+
+		if (consentIds == null) {
+			throw new KokuActionProcessException("consentIds parameter is null");
+		}
+		
+		tivaHandle = new TivaCitizenServiceHandle(getUserId());
+		for(String consentId : consentIds) {
+			String revokingResult = tivaHandle.revokeOwnConsent(consentId);
+			if (revokingResult.equals(RESPONSE_FAIL)) {
+				throw new KokuActionProcessException("Failed to revoke consent. consentId: '"+consentId+"'");
+			}
+		}
+	}
+
+	
+}

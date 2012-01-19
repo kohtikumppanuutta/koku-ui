@@ -22,7 +22,8 @@ function KokuTableNavigation(ajax) {
 		archiveMessages : archiveMessages,
 		deleteMessages : deleteMessages,
 		cancelAppointments : cancelAppointments,
-		revokeConsents : revokeConsents
+		revokeConsents : revokeConsents,
+		archiveOldMessages : archiveOldMessages
 	};
 
 
@@ -34,7 +35,7 @@ function KokuTableNavigation(ajax) {
 	 * Return navigation control
 	 */
 	function getTableNavigation(pageObj) {	 
-	 	 return '<li><a><img src="<%= request.getContextPath() %>/images/first.gif" onclick="pageObj.moveFirst()"/></a></li>'
+	 	 return '<ul id="kokuTableNavigation"><li><a><img src="<%= request.getContextPath() %>/images/first.gif" onclick="pageObj.moveFirst()"/></a></li>'
 			 + '<li><a><img src="<%= request.getContextPath() %>/images/prev.gif" onclick="pageObj.movePre()"/></a></li>'
 			 + '<li><spring:message code="page.page"/> ' + pageObj.currentPage + '/' + pageObj.totalPages + '</li>'
 			 + '<li><a><img src="<%= request.getContextPath() %>/images/next.gif" onclick="pageObj.moveNext()"/></a></li>'
@@ -43,6 +44,30 @@ function KokuTableNavigation(ajax) {
 			 + '</ul>';
 	 };
 	 
+	/**
+	 * Archives old messages
+	 */
+	
+	function archiveOldMessages() {
+		var folderType = "folderTypeMissing";
+		if (pageObj.taskType === "msg_inbox") {
+			folderType = "<%= KokuFolderType.INBOX.value() %>";
+		} else if (pageObj.taskType === "msg_outbox") {
+			folderType = "<%= KokuFolderType.OUTBOX.value() %>";
+		}
+		
+		this.kokuAjax.archiveMessagesOld(folderType, function(result) {			
+			if(result == 'OK') {
+				jQuery.jGrowl("<spring:message code="notification.archiveOld.message"/>");
+				this.kokuAjax.ajaxGetTasks(pageObj, presentTasks);
+			} else if (result == 'FAIL') {
+				jQuery.jGrowl("<spring:message code="notification.archiveOld.message.failed"/>");
+				this.kokuAjax.ajaxGetTasks(pageObj, presentTasks);
+			} else {
+				KokuUtil.errorMsg.showErrorMessage("<spring:message code="error.unLogin" />");
+			}
+		});
+	};
 	
 	/**
 	 * Archives a list of messages selected by user
@@ -63,8 +88,7 @@ function KokuTableNavigation(ajax) {
 					jQuery.jGrowl("<spring:message code="notification.archive.message.failed"/>");
 					this.kokuAjax.ajaxGetTasks(pageObj, presentTasks);
 				} else {
-					var message = "<spring:message code="error.unLogin" />";
-					KokuUtil.errorMsg.showErrorMessage(message);
+					KokuUtil.errorMsg.showErrorMessage("<spring:message code="error.unLogin" />");
 				}
 			});
 	};
@@ -93,8 +117,7 @@ function KokuTableNavigation(ajax) {
 				jQuery.jGrowl("<spring:message code="notification.delete.message.failed"/>");
 				this.kokuAjax.ajaxGetTasks(pageObj, presentTasks);
 			} else {
-				var message = "<spring:message code="error.unLogin" />";
-				KokuUtil.errorMsg.showErrorMessage(message);
+				KokuUtil.errorMsg.showErrorMessage("<spring:message code="error.unLogin" />");
 			}
 		});
 	};
@@ -136,8 +159,7 @@ function KokuTableNavigation(ajax) {
 				jQuery.jGrowl("<spring:message code="notification.canceled.appointment.failed"/>");
 				this.kokuAjax.ajaxGetTasks(pageObj, presentTasks);
 			} else {
-				var message = "<spring:message code="error.unLogin" />";
-				KokuUtil.errorMsg.showErrorMessage(message);
+				KokuUtil.errorMsg.showErrorMessage("<spring:message code="error.unLogin" />");
 			}
 		});
 	}
@@ -173,8 +195,7 @@ function KokuTableNavigation(ajax) {
 				jQuery.jGrowl("<spring:message code="notification.revoke.consent.failed"/>");
 				this.kokuAjax.ajaxGetTasks(pageObj, presentTasks);
 			} else {
-				var message = "<spring:message code="error.unLogin" />";
-				KokuUtil.errorMsg.showErrorMessage(message);
+				KokuUtil.errorMsg.showErrorMessage("<spring:message code="error.unLogin" />");
 			}
 		});
 	}

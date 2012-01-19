@@ -9,6 +9,9 @@
 <portlet:resourceURL var="archiveURL" id="archiveMessage">
 </portlet:resourceURL>
 
+<portlet:resourceURL var="archiveOldURL" id="archiveMessageOld">
+</portlet:resourceURL>
+
 <portlet:resourceURL var="deleteURL" id="deleteMessage">
 </portlet:resourceURL>
 
@@ -70,6 +73,7 @@
 	 	ajaxTaskUrl : "<%= ajaxURL %>",
 		suggestUrl : "<%= suggestURL %>",
 		archiveUrl : "<%= archiveURL %>",
+		archiveOldUrl : "<%= archiveOldURL %>",
 		deleteUrl : "<%= deleteURL %>", 
 		revokeUrl : "<%=  revokeURL %>",
 		revokeWarrantUrl : "<%= revokeWarrantURL %>", 

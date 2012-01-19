@@ -11,10 +11,10 @@ import net.sf.json.JSONObject;
  * @author Toni Turunen
  *
  */
-public interface QueryProcess {
+public interface KokuTaskQueryProcess {
 	
 	JSONObject getJsonModel(String taskType, int page, String keyword, String field, String orderType, String userUid);
-	
+		
 	void setMessageSource(MessageSource messages);
 	MessageSource getMessageSource();
 

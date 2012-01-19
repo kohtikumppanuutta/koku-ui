@@ -59,6 +59,7 @@ import fi.arcusys.koku.av.AvCitizenServiceHandle;
 import fi.arcusys.koku.av.AvEmployeeServiceHandle;
 import fi.arcusys.koku.hak.model.HakServiceHandle;
 import fi.arcusys.koku.kv.message.MessageHandle;
+import fi.arcusys.koku.kv.model.KokuFolderType;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
 import fi.arcusys.koku.tiva.warrant.citizens.KokuCitizenWarrantHandle;
@@ -68,10 +69,16 @@ import fi.arcusys.koku.users.KokuUserService;
 import fi.arcusys.koku.users.UserIdResolver;
 import fi.arcusys.koku.util.PortalRole;
 import fi.arcusys.koku.util.Properties;
-import fi.arcusys.koku.web.util.QueryProcess;
+import fi.arcusys.koku.web.util.KokuActionProcess;
+import fi.arcusys.koku.web.util.KokuTaskQueryProcess;
+import fi.arcusys.koku.web.util.exception.KokuActionProcessException;
+import fi.arcusys.koku.web.util.impl.KokuActionProcessCitizenImpl;
+import fi.arcusys.koku.web.util.impl.KokuActionProcessDummyImpl;
+import fi.arcusys.koku.web.util.impl.KokuActionProcessEmployeeImpl;
 import fi.arcusys.koku.web.util.impl.QueryProcessDummyImpl;
 import fi.arcusys.koku.web.util.impl.QueryProcessCitizenImpl;
 import fi.arcusys.koku.web.util.impl.QueryProcessEmployeeImpl;
+import fi.arcusys.tampere.hrsoa.ldap.GetUserByEmployeeId;
 import fi.koku.portlet.filter.userinfo.UserInfo;
 
 /**
@@ -129,7 +136,7 @@ public class AjaxController extends AbstractController {
 			LOG.error("Error while trying to resolve userId. See following error msg: "+ e);
 		}
 		
-		QueryProcess query = null;
+		KokuTaskQueryProcess query = null;
 		
 		if (Properties.IS_KUNPO_PORTAL) {
 			query = new QueryProcessCitizenImpl(messageSource);
@@ -173,9 +180,12 @@ public class AjaxController extends AbstractController {
     	if (Properties.IS_KUNPO_PORTAL) {
     		// Kunpo
     		user = userService.loginKunpo(username, userInfo.getPic());
-    	} else {
+    	} else if (Properties.IS_LOORA_PORTAL) {
     		// Loora
     		user = userService.loginLoora(username, userInfo.getPic());
+    	} else {
+    		LOG.error("Can't register user to WS! Portlet doesn't have information if portal is Citizen/Employee mode! username: '"+username+"'");
+    		return;
     	}
     	if (user == null) {
     		// TODO: Remove if statement when Loora side implementation is ready, if ever..
@@ -187,8 +197,50 @@ public class AjaxController extends AbstractController {
     	portletSession.setAttribute(ATTR_KOKU_USER, user);	    	
 	}
 	
+	
+	/**
+	 * Archive old messages (more than 3 month old)
+	 * 
+	 * @param folderType folder which messages should archive
+	 * @param modelmap ModelMap
+	 * @param request PortletRequest
+	 * @param response PortletResponse
+	 * @return action response 'OK' or 'FAIL'
+	 */
+	@ResourceMapping(value = "archiveMessageOld")
+	public String doArchiveOld(@RequestParam(value = "folderType") String folderType,
+			ModelMap modelmap, PortletRequest request, PortletResponse response) {
+		
+		PortletSession portletSession = request.getPortletSession();		
+		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+		if (isInvalidStrongAuthentication(portletSession)) {
+			return authenticationFailed(modelmap, username);
+		}
+		
+		UserIdResolver resolver = new UserIdResolver();
+		String userId = resolver.getUserId(username, getPortalRole());
+		
+		JSONObject jsonModel = new JSONObject();
+		KokuActionProcess actionProcess = null;
+		try {
+			switch (getPortalRole()) {
+				case CITIZEN: actionProcess = new KokuActionProcessCitizenImpl(userId); break;
+				case EMPLOYEE: actionProcess = new KokuActionProcessEmployeeImpl(userId); break;
+				default: actionProcess = new KokuActionProcessDummyImpl(null); break;
+			}		
+			actionProcess.archiveOldMessages(folderType);
+			jsonModel.put(JSON_RESULT, RESPONSE_OK);
+		} catch (KokuActionProcessException kape) {
+			LOG.error("Failed to archive old messages. Username: '"+ username+"'", kape);
+			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
+		}
+		modelmap.addAttribute(RESPONSE, jsonModel);
+		return AjaxViewResolver.AJAX_PREFIX;
+	}
+	
 	/**
 	 * Archives the messages
+	 * 
 	 * @param messageList a list of message ids to be archived
 	 * @param modelmap ModelMap
 	 * @param request PortletRequest
@@ -205,26 +257,24 @@ public class AjaxController extends AbstractController {
 			return authenticationFailed(modelmap, username);
 		}
 		
-		JSONObject jsonModel = new JSONObject();		
-		if (messageList == null) {
-			LOG.error("Archiving messages failed. MessageList is null. Username: '"+username+"'");
+		UserIdResolver resolver = new UserIdResolver();
+		String userId = resolver.getUserId(username, getPortalRole());
+		
+		JSONObject jsonModel = new JSONObject();
+		KokuActionProcess actionProcess = null;
+		try {
+			switch (getPortalRole()) {
+				case CITIZEN: actionProcess = new KokuActionProcessCitizenImpl(userId); break;
+				case EMPLOYEE: actionProcess = new KokuActionProcessEmployeeImpl(userId); break;
+				default: actionProcess = new KokuActionProcessDummyImpl(null); break;
+			}		
+			actionProcess.archiveMessages(messageList);
+			jsonModel.put(JSON_RESULT, RESPONSE_OK);
+		} catch (KokuActionProcessException kape) {
+			LOG.error("Failed to archive message(s). Username: '"+ username+"'", kape);
 			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
-		} else {	
-			MessageHandle msghandle = new MessageHandle();		
-			List<Long> messageIds = new ArrayList<Long>();
-			
-			for(String msgId : messageList) {
-				try {
-					messageIds.add(Long.parseLong(msgId));				
-				} catch (NumberFormatException nfe) {
-					LOG.warn("Error while parsing messageIds. Username: '"+username+"'  MessageId is not valid number: '"+msgId+"'");
-				}
-				String result = msghandle.archiveMessages(messageIds); // OK or FAIL
-				jsonModel.put(JSON_RESULT, result);
-			}
 		}
 		modelmap.addAttribute(RESPONSE, jsonModel);
-		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -246,24 +296,23 @@ public class AjaxController extends AbstractController {
 			return authenticationFailed(modelmap, username);
 		}
 		
+		UserIdResolver resolver = new UserIdResolver();
+		String userId = resolver.getUserId(username, getPortalRole());
+
 		JSONObject jsonModel = new JSONObject();		
-		if (messageList == null) {
-			LOG.error("Deleting messages failed. MessageList is null. Username: '"+username+"'");
+		KokuActionProcess actionProcess = null;
+		try {
+			switch (getPortalRole()) {
+				case CITIZEN: actionProcess = new KokuActionProcessCitizenImpl(userId); break;
+				case EMPLOYEE: actionProcess = new KokuActionProcessEmployeeImpl(userId); break;
+				default: actionProcess = new KokuActionProcessDummyImpl(null); break;
+			}		
+			actionProcess.deleteMessages(messageList);
+			jsonModel.put(JSON_RESULT, RESPONSE_OK);
+		} catch (KokuActionProcessException kape) {
+			LOG.error("Failed to delete message. Username: '"+ username+"'", kape);
 			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
-		} else {		
-			MessageHandle msghandle = new MessageHandle();		
-			List<Long> messageIds = new ArrayList<Long>();		
-			for(String msgId : messageList) {
-				try {
-					messageIds.add(Long.parseLong(msgId));
-				} catch (NumberFormatException nfe) {
-					LOG.warn("Couldn't delete message! Invalid messageId. Username: '"+ username + "' MessageId: '"+ msgId + "'");
-				}
-			}
-			String result = msghandle.deleteMessages(messageIds); // OK or FAIL
-			jsonModel.put(JSON_RESULT, result);
 		}
-		
 		modelmap.addAttribute(RESPONSE, jsonModel);
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
@@ -284,24 +333,25 @@ public class AjaxController extends AbstractController {
 		if (isInvalidStrongAuthentication(portletSession)) {
 			return authenticationFailed(modelmap, username);
 		}
+		
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
 
-		JSONObject jsonModel = new JSONObject();		
-		if (messageList == null) {
-			LOG.error("Revoking consents failed. MessageList is null. Username: '"+username+"'");
+		JSONObject jsonModel = new JSONObject();
+		
+		KokuActionProcess actionProcess = null;
+		try {
+			switch (getPortalRole()) {
+				case CITIZEN: actionProcess = new KokuActionProcessCitizenImpl(userId); break;
+				case EMPLOYEE: actionProcess = new KokuActionProcessEmployeeImpl(userId); break;
+				default: actionProcess = new KokuActionProcessDummyImpl(null); break;
+			}		
+			actionProcess.revokeConsents(messageList);
+			jsonModel.put(JSON_RESULT, RESPONSE_OK);
+		} catch (KokuActionProcessException kape) {
+			LOG.error("Failed to revoke consent. Username: '"+ username+"'", kape);
 			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
-		} else {
-			TivaCitizenServiceHandle tivaHandle = new TivaCitizenServiceHandle(userId);
-			String responseResult = RESPONSE_OK;
-			for(String consentId : messageList) {
-				String revokingResult = tivaHandle.revokeOwnConsent(consentId);
-				if (revokingResult.equals(RESPONSE_FAIL)) {
-					responseResult = RESPONSE_FAIL;
-				}
-			}
-			jsonModel.put(JSON_RESULT, responseResult);
-		}	
+		}
 		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
@@ -328,19 +378,22 @@ public class AjaxController extends AbstractController {
 		}
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
-
-		KokuCitizenWarrantHandle warrantHandle = new KokuCitizenWarrantHandle();		
-		JSONObject jsonModel = new JSONObject();
 		
-		for(String authorizationId : messageList) {
-			try {
-				long authId = Long.parseLong(authorizationId);
-				jsonModel.put(JSON_RESULT, warrantHandle.revokeOwnAuthorization(authId, userId, comment));				
-			} catch (NumberFormatException nfe) {
-				LOG.error("Couldn't revoke authorization! Invalid authorizationId. Username: "+ username + " UserId: "+ userId + " AuthorizationId: "+ authorizationId + "Comment: " + comment);
-				jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
+		JSONObject jsonModel = new JSONObject();		
+		KokuActionProcess actionProcess = null;
+		try {
+			switch (getPortalRole()) {
+				case CITIZEN: actionProcess = new KokuActionProcessCitizenImpl(userId); break;
+				case EMPLOYEE: actionProcess = new KokuActionProcessEmployeeImpl(userId); break;
+				default: actionProcess = new KokuActionProcessDummyImpl(null); break;
 			}
-		}		
+			actionProcess.revokeWarrants(messageList, comment);
+			jsonModel.put(JSON_RESULT, RESPONSE_OK);
+		} catch (KokuActionProcessException kape) {
+			LOG.error("Failed to revoke warrant. Username: '"+ username+"'", kape);
+			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
+		}
+			
 		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
@@ -373,31 +426,26 @@ public class AjaxController extends AbstractController {
 		}
 		
 		JSONObject jsonModel = new JSONObject();
-		if (messageList == null || targetPersons == null || taskType == null) {
-			LOG.error("Failed to cancel appointment! Username: '"+username + "' messageList: '"+Arrays.toString(messageList) + "' targetPersons: '"+targetPersons + "' taskType: '"+taskType+"'");
+		KokuActionProcess actionProcess = null;
+		if (taskType == null || taskType.isEmpty()) {
 			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
-		} else {
-			if (taskType.endsWith("citizen")) {
-				AvCitizenServiceHandle handle = new AvCitizenServiceHandle(userId);
-				String appointmentId;
-				String targetPerson;
-				
-				for(int i=0, l= messageList.length; i < l; i++) {
-					appointmentId = messageList[i];
-					targetPerson = targetPersons[i];
-					handle.cancelAppointments(appointmentId, targetPerson, comment);
+		} else {			
+			try {
+				if (taskType.endsWith("citizen")) {
+					actionProcess = new KokuActionProcessCitizenImpl(userId);
+				} else if (taskType.endsWith("employee")) {
+					actionProcess = new KokuActionProcessEmployeeImpl(null);
+				} else {
+					actionProcess = new KokuActionProcessDummyImpl(null);
 				}
-			} else if (taskType.endsWith("employee")) {
-				AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
-				String appointmentId;
-				
-				for(int i=0, l= messageList.length; i < l; i++) {
-					appointmentId = messageList[i];
-					handle.cancelAppointments(appointmentId, comment);
-				}
+				actionProcess.cancelAppointments(messageList, targetPersons, comment);
+				jsonModel.put(JSON_RESULT, RESPONSE_OK);
+			} catch (KokuActionProcessException kape) {
+				LOG.error("Failed to cancelAppointment", kape);
+				jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
 			}
-			jsonModel.put(JSON_RESULT, RESPONSE_OK);
-		}					
+		}
+		
 		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
