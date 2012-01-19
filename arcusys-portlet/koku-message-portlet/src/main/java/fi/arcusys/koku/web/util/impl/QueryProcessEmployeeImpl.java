@@ -76,14 +76,17 @@ public class QueryProcessEmployeeImpl extends AbstractQueryProcess {
 			KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
 			handle.setMessageSource(getMessageSource());
 			tasks = handle.getRepliedRequests(userUid, keyword, first, max);
+			totalTasksNum = handle.getTotalRepliedRequests(userUid, keyword);
 		} else if (taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_SENT)) { // Virkailija: Selaa lähetettyjä tietopyyntöjä
 			KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
 			handle.setMessageSource(getMessageSource());
 			tasks = handle.getSentRequests(userUid, keyword, first, max);
+			totalTasksNum = handle.getTotalSentRequests(userUid, keyword);
 		} else if (taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE)) { // ADMIN: Selaa tietopyyntöjä
 			KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
 			handle.setMessageSource(getMessageSource());
 			tasks = handle.getRequests(keyword, first, max);
+			totalTasksNum = handle.getTotalRequests(keyword);
 		} else if(taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE) || taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE)) { // Tapaamiset - Avoimet / Valmiit
 			AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
 			handle.setMessageSource(getMessageSource());
