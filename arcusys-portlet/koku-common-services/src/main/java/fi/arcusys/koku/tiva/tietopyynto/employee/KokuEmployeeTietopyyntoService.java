@@ -11,8 +11,6 @@ import fi.arcusys.koku.tiva.tietopyynto.employee.InformationRequestDetail;
 import fi.arcusys.koku.tiva.tietopyynto.employee.InformationRequestQuery;
 import fi.arcusys.koku.tiva.tietopyynto.employee.InformationRequestSummary;
 import fi.arcusys.koku.tiva.tietopyynto.employee.KokuLooraTietopyyntoService_Service;
-import fi.arcusys.koku.tiva.warrant.employee.KokuEmployeeWarrantService;
-import fi.arcusys.koku.util.PropertiesUtil;
 import fi.koku.settings.KoKuPropertiesUtil;
 
 public class KokuEmployeeTietopyyntoService {
@@ -64,4 +62,5 @@ public class KokuEmployeeTietopyyntoService {
 	public int getTotalSentRequests(String senderUid, InformationRequestCriteria criteria) {
 		return service.getKokuLooraTietopyyntoServicePort().getTotalSentRequests(senderUid, criteria);
 	}
+	
 }
