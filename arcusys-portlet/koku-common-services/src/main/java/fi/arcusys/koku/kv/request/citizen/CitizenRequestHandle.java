@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import fi.arcusys.koku.AbstractHandle;
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.model.KokuResponseDetail;
 import fi.arcusys.koku.kv.model.KokuResponseSummary;
 import fi.arcusys.koku.kv.requestservice.ResponseDetail;
@@ -41,7 +42,7 @@ public class CitizenRequestHandle extends AbstractHandle {
 	 * @param maxNum maximum number of requests
 	 * @return a list of requests
 	 */
-	public List<KokuResponseSummary> getRepliedRequests(String userUid, int startNum, int maxNum) {		
+	public List<KokuResponseSummary> getRepliedRequests(String userUid, int startNum, int maxNum) throws KokuServiceException {		
 		return getResponseList(rs.getRepliedRequests(userUid, startNum, maxNum));
 	}
 	
@@ -54,7 +55,7 @@ public class CitizenRequestHandle extends AbstractHandle {
 	 * @param maxNum maximum number of requests
 	 * @return a list of requests
 	 */
-	public List<KokuResponseSummary> getOldRequests(String userUid, int startNum, int maxNum) {
+	public List<KokuResponseSummary> getOldRequests(String userUid, int startNum, int maxNum) throws KokuServiceException {
 		return getResponseList(rs.getOldRequests(userUid, startNum, maxNum));
 	}
 	
@@ -75,7 +76,7 @@ public class CitizenRequestHandle extends AbstractHandle {
 	 * @param requestId request id
 	 * @return detailed request
 	 */
-	public KokuResponseDetail getResponseById(String requestId) {
+	public KokuResponseDetail getResponseById(String requestId) throws KokuServiceException {
 		long reqId = 0;
 		try {
 			reqId = (long) Long.parseLong(requestId);			
@@ -97,7 +98,7 @@ public class CitizenRequestHandle extends AbstractHandle {
 	 * @param requestTypeStr request type string
 	 * @return the total number of requests
 	 */
-	public int getTotalOldRequests(String userUid) {
+	public int getTotalOldRequests(String userUid) throws KokuServiceException {
 		return rs.getTotalOldRequests(userUid);
 	}
 	
@@ -107,7 +108,7 @@ public class CitizenRequestHandle extends AbstractHandle {
 	 * @param requestTypeStr request type string
 	 * @return the total number of requests
 	 */
-	public int getTotalRepliedRequests(String userUid) {
+	public int getTotalRepliedRequests(String userUid) throws KokuServiceException {
 		return rs.getTotalRepliedRequests(userUid);
 	}
 

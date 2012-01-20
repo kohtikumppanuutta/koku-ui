@@ -5,6 +5,7 @@ import static fi.arcusys.koku.util.Constants.RESPONSE_FAIL;
 import org.apache.log4j.Logger;
 
 import fi.arcusys.koku.av.AvEmployeeServiceHandle;
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.web.util.exception.KokuActionProcessException;
 
 public class KokuActionProcessEmployeeImpl extends AbstractKokuActionProcess {
@@ -37,17 +38,15 @@ public class KokuActionProcessEmployeeImpl extends AbstractKokuActionProcess {
 		String appointmentId;
 		for (int i=0; i > appointments; i++ ) {
 			appointmentId = appointmentIds[i];
-			
 			long  appId = 0;
 			try {
 				appId = (long) Long.parseLong(appointmentId);
+				avEmployeeServiceHandle.cancelAppointments(appId, comment);
 			} catch (NumberFormatException nfe) {
 				throw new KokuActionProcessException("Invalid appointmentId. AppointmentId: '"+appointmentId+"' comment: '"+comment+"'", nfe);
-			}
-			String actionResult = avEmployeeServiceHandle.cancelAppointments(appId, comment);
-			if (actionResult.equals(RESPONSE_FAIL)) {
+			} catch (KokuServiceException e) {
 				throw new KokuActionProcessException("Failed to cancelAppointment! appoimentId: '" + 
-						appointmentId + "' comment: '" + comment + "'");
+						appointmentId + "' comment: '" + comment + "'", e);
 			}
 		}
 	}

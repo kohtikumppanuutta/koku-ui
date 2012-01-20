@@ -1,6 +1,14 @@
 package fi.arcusys.koku.web;
 
-import java.util.Locale;
+import static fi.arcusys.koku.util.Constants.ATTR_CURRENT_PAGE;
+import static fi.arcusys.koku.util.Constants.ATTR_KEYWORD;
+import static fi.arcusys.koku.util.Constants.ATTR_ORDER_TYPE;
+import static fi.arcusys.koku.util.Constants.ATTR_TASK_TYPE;
+import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN;
+import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD;
+import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE;
+import static fi.arcusys.koku.util.Constants.VIEW_SHOW_CITIZEN_APPOINTMENT;
+import static fi.arcusys.koku.util.Constants.VIEW_SHOW_EMPLOYEE_APPOINTMENT;
 
 import javax.annotation.Resource;
 import javax.portlet.PortletSession;
@@ -8,7 +16,6 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import org.apache.log4j.Logger;
-import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,7 +26,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import fi.arcusys.koku.av.AvCitizenServiceHandle;
 import fi.arcusys.koku.av.AvEmployeeServiceHandle;
 import fi.arcusys.koku.av.KokuAppointment;
-import static fi.arcusys.koku.util.Constants.*;
+import fi.arcusys.koku.exceptions.KokuServiceException;
 
 
 /**
@@ -68,9 +75,12 @@ public class ShowAppointmentController {
 	 * @return appointment data model
 	 */
 	@ModelAttribute(value = "appointment")
-	public KokuAppointment model(@RequestParam String appointmentId,
-			@RequestParam String currentPage,@RequestParam String taskType, 
-			@RequestParam String keyword, @RequestParam String orderType,
+	public KokuAppointment model(
+			@RequestParam String appointmentId,
+			@RequestParam String currentPage,
+			@RequestParam String taskType, 
+			@RequestParam String keyword, 
+			@RequestParam String orderType,
 			@RequestParam(value = "targetPerson", required = false) String targetPerson, RenderRequest request) {
 	
 		// store parameters in session for returning page from form page	
@@ -81,15 +91,21 @@ public class ShowAppointmentController {
 		
 		KokuAppointment app = null;
 		
-		if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)
-				|| taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD)) {
-			AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
-			handle.setMessageSource(messageSource);
-			app = handle.getAppointmentById(appointmentId, targetPerson);
-		} else if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE)) {
-			AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
-			handle.setMessageSource(messageSource);
-			app = handle.getAppointmentById(appointmentId);
+		try {
+			if (taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)
+					|| taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD)) {
+				AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
+				handle.setMessageSource(messageSource);
+					app = handle.getAppointmentById(appointmentId, targetPerson);
+			} else if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE)) {
+				AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
+				handle.setMessageSource(messageSource);
+				app = handle.getAppointmentById(appointmentId);
+			}
+		} catch (KokuServiceException e) {
+			LOG.error("Failed to show appointment details. appointmentId: '"+appointmentId + 
+					"' username: '"+request.getUserPrincipal().getName()+" taskType: '"+taskType + 
+					"' keyword: '" + keyword + "'", e);
 		}
 		return app;
 	}	

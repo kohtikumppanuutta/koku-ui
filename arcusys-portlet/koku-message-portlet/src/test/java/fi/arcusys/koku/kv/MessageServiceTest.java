@@ -10,8 +10,8 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.junit.Test;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.message.MessageHandle;
 import fi.arcusys.koku.kv.message.MessageService;
 import fi.arcusys.koku.kv.messageservice.Criteria;
@@ -73,7 +73,12 @@ public class MessageServiceTest {
 		orderby.setType(Type.DESC);		
 		messageQuery.getOrderBy().add(orderby);
 		
-		List<MessageSummary> messageList = tester.getMessages(user, folderType, messageQuery);
+		List<MessageSummary> messageList;
+		try {
+			messageList = tester.getMessages(user, folderType, messageQuery);
+		} catch (KokuServiceException e) {
+			throw new AssertionError(e);
+		}
 		int expected = 5;
 		int actual = messageList.size();
 		assertEquals("createTask first creation date failed", expected, actual);	
@@ -92,7 +97,11 @@ public class MessageServiceTest {
 		String field = "1_2_3_4";
 		MessageHandle handle = new MessageHandle();
 		Criteria criteria = handle.createCriteria(keyword, field);
-		int num = tester.getTotalMessageNum(user, folderType, criteria);
+		int num;
+		try {
+			num = tester.getTotalMessageNum(user, folderType, criteria);
+		} catch (KokuServiceException e) {
+			throw new AssertionError(e);		}
 		
 		System.out.println("total number: " + num);
 		

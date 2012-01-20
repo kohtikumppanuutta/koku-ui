@@ -10,12 +10,14 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.model.KokuResponseDetail;
 import fi.arcusys.koku.kv.request.citizen.CitizenRequestHandle;
 import fi.arcusys.koku.util.Constants;
@@ -29,6 +31,8 @@ import fi.arcusys.koku.util.Constants;
 @Controller("singleResponseController")
 @RequestMapping(value = "VIEW")
 public class ShowResponseController {
+	
+	private static final Logger LOG = Logger.getLogger(ShowResponseController.class);
 	
 	/**
 	 * Shows request page
@@ -51,9 +55,12 @@ public class ShowResponseController {
 	 * @return request data model
 	 */
 	@ModelAttribute(value = "response")
-	public KokuResponseDetail model(@RequestParam String responseId,
-			@RequestParam String currentPage,@RequestParam String taskType, 
-			@RequestParam String keyword, @RequestParam String orderType,
+	public KokuResponseDetail model(
+			@RequestParam String responseId,
+			@RequestParam String currentPage,
+			@RequestParam String taskType, 
+			@RequestParam String keyword, 
+			@RequestParam String orderType,
 			RenderRequest request) {
 
 		// store parameters in session for returning page from form page	
@@ -63,9 +70,15 @@ public class ShowResponseController {
 		request.getPortletSession().setAttribute(ATTR_ORDER_TYPE, orderType, PortletSession.APPLICATION_SCOPE);
 		
 		KokuResponseDetail details = null;
-		if (taskType.equals(Constants.TASK_TYPE_REQUEST_REPLIED) || taskType.equals(Constants.TASK_TYPE_REQUEST_OLD)) {
-			CitizenRequestHandle handle = new CitizenRequestHandle();
-			details = handle.getResponseById(responseId);
+		try {
+			if (taskType.equals(Constants.TASK_TYPE_REQUEST_REPLIED) || taskType.equals(Constants.TASK_TYPE_REQUEST_OLD)) {
+				CitizenRequestHandle handle = new CitizenRequestHandle();
+				details = handle.getResponseById(responseId);
+			}
+		} catch (KokuServiceException kse) {
+			LOG.error("Failed to show response details. responseId: '"+responseId + 
+					"' username: '"+request.getUserPrincipal().getName()+" taskType: '"+taskType + 
+					"' keyword: '" + keyword + "'", kse);
 		}
 		return details;
 	}

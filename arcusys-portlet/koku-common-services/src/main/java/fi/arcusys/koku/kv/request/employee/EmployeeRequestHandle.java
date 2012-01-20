@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import fi.arcusys.koku.AbstractHandle;
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.model.KokuRequest;
 import fi.arcusys.koku.kv.model.KokuResponseDetail;
 import fi.arcusys.koku.kv.model.KokuResponseSummary;
@@ -45,7 +46,7 @@ public class EmployeeRequestHandle extends AbstractHandle {
 	 * @param maxNum maximum number of requests
 	 * @return a list of requests
 	 */
-	public List<KokuRequest> getRequests(String userId, String requestTypeStr, String subQuery, int startNum, int maxNum) {
+	public List<KokuRequest> getRequests(String userId, String requestTypeStr, String subQuery, int startNum, int maxNum)  throws KokuServiceException {
 		RequestType requestType;
 		
 		if (requestTypeStr.equals("valid")) {
@@ -69,7 +70,7 @@ public class EmployeeRequestHandle extends AbstractHandle {
 	 * @param maxNum
 	 * @return a list of replied responses
 	 */
-	public List<KokuResponseSummary> getRepliedResponseSummaries(String userUid, int startNum, int maxNum) {
+	public List<KokuResponseSummary> getRepliedResponseSummaries(String userUid, int startNum, int maxNum) throws KokuServiceException {
 		return rawToViewModel(rs.getRepliedRequests(userUid, startNum, maxNum));
 	}
 	
@@ -81,7 +82,7 @@ public class EmployeeRequestHandle extends AbstractHandle {
 	 * @param maxNum
 	 * @return a list of old requests
 	 */
-	public List<KokuResponseSummary> getOldResponseSummaries(String userUid, int startNum, int maxNum) {
+	public List<KokuResponseSummary> getOldResponseSummaries(String userUid, int startNum, int maxNum) throws KokuServiceException {
 		return rawToViewModel(rs.getOldRequests(userUid, startNum, maxNum));
 	}
 	
@@ -103,7 +104,7 @@ public class EmployeeRequestHandle extends AbstractHandle {
 	 * @param requestId request id
 	 * @return detailed request
 	 */
-	public KokuRequest getKokuRequestById(String requestId) {
+	public KokuRequest getKokuRequestById(String requestId) throws KokuServiceException {
 		long  reqId = 0;
 		try {
 			reqId = (long) Long.parseLong(requestId);			
@@ -120,7 +121,7 @@ public class EmployeeRequestHandle extends AbstractHandle {
 	 * @param requestId request id
 	 * @return detailed request
 	 */
-	public KokuRequest getKokuRequestById(long requestId) {
+	public KokuRequest getKokuRequestById(long requestId) throws KokuServiceException {
 		return new KokuRequest(rs.getRequestById(requestId));
 	}
 	
@@ -130,7 +131,7 @@ public class EmployeeRequestHandle extends AbstractHandle {
 	 * @param responseId
 	 * @return detailed response
 	 */
-	public KokuResponseDetail getKokuResponseById(long responseId) {
+	public KokuResponseDetail getKokuResponseById(long responseId) throws KokuServiceException {
 		return new KokuResponseDetail(rs.getResponseById(responseId));
 	}	
 	
@@ -141,7 +142,7 @@ public class EmployeeRequestHandle extends AbstractHandle {
 	 * @param requestTypeStr request type string
 	 * @return the total number of requests
 	 */
-	public int getTotalRequestsNum(String userId, String requestTypeStr) {
+	public int getTotalRequestsNum(String userId, String requestTypeStr) throws KokuServiceException {
 		RequestType requestType;		
 		if (requestTypeStr.equals("valid")) {
 			requestType = RequestType.VALID;
@@ -157,7 +158,7 @@ public class EmployeeRequestHandle extends AbstractHandle {
 	 * @param userUid
 	 * @return the total number of old responses
 	 */
-	public int getTotalResponsesOldNum(String userUid) {
+	public int getTotalResponsesOldNum(String userUid) throws KokuServiceException {
 		return rs.getTotalResponsesOldNum(userUid);
 	}
 	
@@ -167,7 +168,7 @@ public class EmployeeRequestHandle extends AbstractHandle {
 	 * @param userUid
 	 * @return the total number of old responses
 	 */
-	public int getTotalResponsesRepliedNum(String userUid) {
+	public int getTotalResponsesRepliedNum(String userUid) throws KokuServiceException {
 		return rs.getTotalResponsesRepliedNum(userUid);
 	}
 	

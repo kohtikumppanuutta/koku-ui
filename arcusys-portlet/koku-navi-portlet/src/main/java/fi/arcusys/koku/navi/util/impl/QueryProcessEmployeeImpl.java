@@ -10,12 +10,13 @@ import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.springframework.context.MessageSource;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.model.KokuFolderType;
 import fi.arcusys.koku.util.PortalRole;
 
 public class QueryProcessEmployeeImpl extends AbstractQueryProcess {
 	
-	private static final Logger LOGGER = Logger.getLogger(QueryProcessEmployeeImpl.class);	
+	private static final Logger LOG = Logger.getLogger(QueryProcessEmployeeImpl.class);	
 
 	public QueryProcessEmployeeImpl(MessageSource messages) {
 		super(messages);
@@ -26,10 +27,16 @@ public class QueryProcessEmployeeImpl extends AbstractQueryProcess {
 		JSONObject jsonModel = new JSONObject();
 		if (userId == null) {
 			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_INVALID);
-		} else {			
-			jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_VALID);			
-			jsonModel.put(JSON_INBOX, String.valueOf(getNewMessageNum(userId, KokuFolderType.INBOX)));			
-			jsonModel.put(JSON_ARCHIVE_INBOX, String.valueOf(getNewMessageNum(userId, KokuFolderType.ARCHIVE_INBOX)));
+		} else {
+			try {					
+				jsonModel.put(JSON_LOGIN_STATUS, TOKEN_STATUS_VALID);			
+				jsonModel.put(JSON_INBOX, String.valueOf(getNewMessageNum(userId, KokuFolderType.INBOX)));			
+				jsonModel.put(JSON_ARCHIVE_INBOX, String.valueOf(getNewMessageNum(userId, KokuFolderType.ARCHIVE_INBOX)));
+			} catch (KokuServiceException kse) {
+				LOG.error("Failed to get count(s) (message/archive/consensts/appointments. ", kse);
+				jsonModel.put(JSON_INBOX, "0");
+				jsonModel.put(JSON_ARCHIVE_INBOX, "0");
+			}			
 		}
 		return jsonModel;
 	}

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import org.apache.log4j.Logger;
 
 import fi.arcusys.koku.av.AvCitizenServiceHandle;
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.tiva.warrant.citizens.KokuCitizenWarrantHandle;
 import fi.arcusys.koku.web.util.exception.KokuActionProcessException;
@@ -59,18 +60,18 @@ public class KokuActionProcessCitizenImpl extends AbstractKokuActionProcess {
 				LOG.error("Invalid appointmentId. AppointmentId: '"+appointmentId+"' targetPerson: '"+targetPerson+"' comment: '"+comment+"'");
 				throw new KokuActionProcessException("Invalid appointmentId.", nfe);
 			}
-			String actionResult = avCitizenServiceHandle.cancelAppointments(appId, targetPerson, comment);
-			if (actionResult.equals(RESPONSE_FAIL)) {
+			try {
+				avCitizenServiceHandle.cancelAppointments(appId, targetPerson, comment);
+			} catch (KokuServiceException e) {
 				throw new KokuActionProcessException("Failed to cancelAppointment! appoimentId: '" + 
-						appointmentId + "' targetPerson: '" + targetPerson + "' comment: '" + comment + "'");
+						appointmentId + "' targetPerson: '" + targetPerson + "' comment: '" + comment + "'", e);
 			}
-		}		
+		}
 	}
 
 	@Override
 	public void revokeWarrants(String[] warrantIds, String comment)
 			throws KokuActionProcessException {
-		
 
 		if (warrantIds == null) {
 			throw new KokuActionProcessException("warrantIds parameter is null");
@@ -103,13 +104,16 @@ public class KokuActionProcessCitizenImpl extends AbstractKokuActionProcess {
 		}
 		
 		tivaHandle = new TivaCitizenServiceHandle(getUserId());
-		for(String consentId : consentIds) {
-			String revokingResult = tivaHandle.revokeOwnConsent(consentId);
-			if (revokingResult.equals(RESPONSE_FAIL)) {
-				throw new KokuActionProcessException("Failed to revoke consent. consentId: '"+consentId+"'");
+		try {
+			for(String consentId : consentIds) {
+				String revokingResult;
+					revokingResult = tivaHandle.revokeOwnConsent(consentId);
+				if (revokingResult.equals(RESPONSE_FAIL)) {
+					throw new KokuActionProcessException("Failed to revoke consent. consentId: '"+consentId+"'");
+				}
 			}
+		} catch (KokuServiceException e) {
+			throw new KokuActionProcessException("Failed to revoke consent(s).", e);
 		}
-	}
-
-	
+	}	
 }

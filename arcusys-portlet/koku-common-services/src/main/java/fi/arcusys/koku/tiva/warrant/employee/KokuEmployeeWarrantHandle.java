@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.warrant.AbstractWarrantHandle;
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationCriteria;
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationQuery;
@@ -39,7 +40,7 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 		userService = new KokuUserService();
 	}
 	
-	public List<KokuAuthorizationSummary> getAuthorizations(long authorizationTemplateId, String receipientUid, String senderUid, int startNum, int maxNum) {
+	public List<KokuAuthorizationSummary> getAuthorizations(long authorizationTemplateId, String receipientUid, String senderUid, int startNum, int maxNum) throws KokuServiceException {
 		AuthorizationQuery query = new AuthorizationQuery();
 		AuthorizationCriteria criteria = new AuthorizationCriteria();
 		criteria.setAuthorizationTemplateId(authorizationTemplateId);
@@ -65,7 +66,7 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 	 * @param maxNum how many results will be returned
 	 * @return List of KokuValtakirjapohjas
 	 */
-	public List<KokuValtakirjapohja> searchWarrantTemplates(String keyword, int maxNum) {
+	public List<KokuValtakirjapohja> searchWarrantTemplates(String keyword, int maxNum) throws KokuServiceException {
 		List<Valtakirjapohja> warrantTemplates = service.searchAuthorizationTemplates(keyword, maxNum);
 		List<KokuValtakirjapohja> kokuWarrantTemplates = new ArrayList<KokuValtakirjapohja>();
 		for (Valtakirjapohja warrantTemplate : warrantTemplates) {
@@ -82,7 +83,7 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 	 * @param maxNum
 	 * @return List of Authorizations
 	 */
-	public List<KokuAuthorizationSummary> getAuthorizationsByUserId(String keyword, int startNum, int maxNum) {
+	public List<KokuAuthorizationSummary> getAuthorizationsByUserId(String keyword, int startNum, int maxNum) throws KokuServiceException {
 		AuthorizationQuery query = new AuthorizationQuery();
 		AuthorizationCriteria criteria = new AuthorizationCriteria();
 		Map<String, String> searchMap = createSearchCitizenSearchMap(keyword);
@@ -139,13 +140,13 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 		return searchMap;
 	}
 	
-	public int getUserRecievedWarrantCount(String recipientUserId) {
+	public int getUserRecievedWarrantCount(String recipientUserId) throws KokuServiceException {
 		AuthorizationCriteria criteria = new AuthorizationCriteria();
 		criteria.setReceipientUid(recipientUserId);
 		return service.getTotalAuthorizations(criteria);
 	}
 	
-	public int getTotalAuthorizations(long authorizationTemplateId, String receipientUid, String senderUid) {
+	public int getTotalAuthorizations(long authorizationTemplateId, String receipientUid, String senderUid) throws KokuServiceException {
 		AuthorizationCriteria criteria = new AuthorizationCriteria();
 		criteria.setAuthorizationTemplateId(authorizationTemplateId);
 		criteria.setReceipientUid(receipientUid);
@@ -153,20 +154,20 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 		return service.getTotalAuthorizations(criteria);
 	}
 
-	public KokuAuthorizationSummary getAuthorizationDetails(int valtakirjaId) {
+	public KokuAuthorizationSummary getAuthorizationDetails(int valtakirjaId) throws KokuServiceException {
 		KokuAuthorizationSummary kokuSummary = new KokuAuthorizationSummary(service.getAuthorizationDetails(valtakirjaId));
 		localize(kokuSummary);
 		return kokuSummary;
 	}
 	
-	private void localize(KokuAuthorizationSummary kokuSummary) {
+	private void localize(KokuAuthorizationSummary kokuSummary) throws KokuServiceException {
 		kokuSummary.setRecieverName(userService.getKunpoNameByUserUid(kokuSummary.getReceiverUid()));
 		kokuSummary.setSenderName(userService.getKunpoNameByUserUid(kokuSummary.getSenderUid()));
 		kokuSummary.setLocalizedStatus(getLocalizedAuthStatus(kokuSummary.getStatus()));
 		kokuSummary.setTargetPersonName(userService.getKunpoNameByUserUid(kokuSummary.getTargetPersonUid()));
 	}
 
-	public List<KokuValtakirjapohja> searchAuthorizationTemplates(String searchString, int limit) {
+	public List<KokuValtakirjapohja> searchAuthorizationTemplates(String searchString, int limit) throws KokuServiceException {
 		List<KokuValtakirjapohja> valtakirjas = new ArrayList<KokuValtakirjapohja>();
 		List<fi.arcusys.koku.tiva.warrant.employeewarrantservice.Valtakirjapohja> valtakirjasFromService = service.searchAuthorizationTemplates(searchString, limit);
 		for (fi.arcusys.koku.tiva.warrant.employeewarrantservice.Valtakirjapohja valtakirjapohja : valtakirjasFromService) {
@@ -175,7 +176,7 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 		return valtakirjas;
 	}
 
-	public List<KokuAuthorizationSummary> getAuthorizationsByTemplateId(String keyword, int startNum, int maxNum) {
+	public List<KokuAuthorizationSummary> getAuthorizationsByTemplateId(String keyword, int startNum, int maxNum) throws KokuServiceException {
 		Map<String, String> searchMap = createTemplateSearchMap(keyword);
 		if (searchMap == null) {
 			return new ArrayList<KokuAuthorizationSummary>();

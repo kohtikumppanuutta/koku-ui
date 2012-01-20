@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.model.KokuAnswer;
 import fi.arcusys.koku.kv.model.KokuQuestion;
 import fi.arcusys.koku.kv.model.KokuRequest;
@@ -69,7 +70,12 @@ public class ExportFileController {
 			ResourceRequest resourceRequest, ResourceResponse response) {
 		response.setContentType("text/csv; charset=utf-8");
 		EmployeeRequestHandle reqhandle = new EmployeeRequestHandle();
-		KokuRequest kokuRequest = reqhandle.getKokuRequestById(requestId);
+		KokuRequest kokuRequest = null;
+		try {
+			kokuRequest = reqhandle.getKokuRequestById(requestId);
+		} catch (KokuServiceException kse) {
+			LOG.error("Error when trying to create CSV export. WS doesn't work properly. requestId: '"+requestId+"'", kse);
+		}
 		String requestSubject = kokuRequest.getSubject();
 		if (requestSubject == null || requestSubject.isEmpty()) {
 			requestSubject = "vastaus";

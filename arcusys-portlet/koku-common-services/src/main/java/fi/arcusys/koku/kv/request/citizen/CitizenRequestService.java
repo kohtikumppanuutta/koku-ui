@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.requestservice.KokuKunpoRequestService_Service;
 import fi.arcusys.koku.kv.requestservice.ResponseDetail;
 import fi.arcusys.koku.kv.requestservice.ResponseSummary;
@@ -48,8 +49,12 @@ public class CitizenRequestService {
 	 * @param maxNum maximum number of requests
 	 * @return a list of requests
 	 */
-	public List<ResponseSummary> getRepliedRequests(String userUid, int startNum, int maxNum) {		
-		return rs.getKokuKunpoRequestServicePort().getRepliedRequests(userUid, startNum, maxNum);
+	public List<ResponseSummary> getRepliedRequests(String userUid, int startNum, int maxNum) throws KokuServiceException {	
+		try {
+			return rs.getKokuKunpoRequestServicePort().getRepliedRequests(userUid, startNum, maxNum);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getRepliedRequests failed. userUid: '"+userUid+"'", e);
+		}
 	}
 	
 	/**
@@ -59,8 +64,12 @@ public class CitizenRequestService {
 	 * @param maxNum maximum number of requests
 	 * @return a list of requests
 	 */
-	public List<ResponseSummary> getOldRequests(String userUid, int startNum, int maxNum) {
-		return rs.getKokuKunpoRequestServicePort().getOldRequests(userUid, startNum, maxNum);
+	public List<ResponseSummary> getOldRequests(String userUid, int startNum, int maxNum) throws KokuServiceException {
+		try {
+			return rs.getKokuKunpoRequestServicePort().getOldRequests(userUid, startNum, maxNum);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getOldRequests failed. userUid: '"+userUid+"'", e);
+		}
 	}
 	
 	/**
@@ -68,8 +77,12 @@ public class CitizenRequestService {
 	 * @param requestId
 	 * @return detailed request
 	 */
-	public ResponseDetail getResponseDetail(long responseId) {
-		return rs.getKokuKunpoRequestServicePort().getResponseDetail(responseId);
+	public ResponseDetail getResponseDetail(long responseId) throws KokuServiceException {
+		try {
+			return rs.getKokuKunpoRequestServicePort().getResponseDetail(responseId);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getOldRequests failed. responseId: '"+responseId+"'", e);
+		}
 	}
 	
 	/**
@@ -77,8 +90,12 @@ public class CitizenRequestService {
 	 * @param user user name
 	 * @return the total number of requests
 	 */
-	public int getTotalRepliedRequests(String userUid) {
-		return rs.getKokuKunpoRequestServicePort().getTotalRepliedRequests(userUid);
+	public int getTotalRepliedRequests(String userUid) throws KokuServiceException {
+		try {
+			return rs.getKokuKunpoRequestServicePort().getTotalRepliedRequests(userUid);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getTotalRepliedRequests failed. userUid: '"+userUid+"'", e);
+		}
 	}
 	
 	/**
@@ -86,7 +103,11 @@ public class CitizenRequestService {
 	 * @param user user name
 	 * @return the total number of requests
 	 */
-	public int getTotalOldRequests(String userUid) {
-		return rs.getKokuKunpoRequestServicePort().getTotalOldRequests(userUid);
+	public int getTotalOldRequests(String userUid) throws KokuServiceException {
+		try {
+			return rs.getKokuKunpoRequestServicePort().getTotalOldRequests(userUid);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getTotalOldRequests failed. userUid: '"+userUid+"'", e);
+		}
 	}
 }

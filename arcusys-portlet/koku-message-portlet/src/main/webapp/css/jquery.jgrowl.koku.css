@@ -1,0 +1,17 @@
+
+div.jGrowl div.serverErrorWarningMsg {
+	background-color: #F00 !important;
+}
+
+
+div.jGrowl div.serverErrorWarningMsg div.serverErrorMsg {
+	padding-top: 5px;	
+}
+
+div.jGrowl div.serverErrorWarningMsg div.serverErrorUuidMsg {
+	padding-top: 5px;	
+}
+
+div.jGrowl div.serverErrorWarningMsg span.failureUuid {
+	font-weight: bold;	
+}

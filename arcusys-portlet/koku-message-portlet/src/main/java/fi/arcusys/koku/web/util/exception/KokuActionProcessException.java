@@ -10,10 +10,6 @@ public class KokuActionProcessException extends KokuProcessException {
 
 	private static final long serialVersionUID = 1L;
 
-	public KokuActionProcessException() {
-		super();
-	}
-
 	public KokuActionProcessException(String message, Throwable cause) {
 		super(message, cause);
 	}
@@ -22,8 +18,8 @@ public class KokuActionProcessException extends KokuProcessException {
 		super(message);
 	}
 
-	public KokuActionProcessException(Throwable cause) {
-		super(cause);
+	public KokuActionProcessException() {
+		super();
 	}
 	
 }

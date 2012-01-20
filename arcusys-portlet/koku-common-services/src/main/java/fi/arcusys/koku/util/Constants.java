@@ -138,6 +138,7 @@ public class Constants {
 	public static final String JSON_EDITABLE 								= "editable";
 	public static final String JSON_RENDER_URL								= "renderUrl";
 	public static final String JSON_RESULT									= "result";
+	public static final String JSON_FAILURE_UUID							= "failureUuid";
 	public static final String JSON_LOGIN_STATUS							= "loginStatus";
 	public static final String JSON_INBOX									= "inbox";
 	public static final String JSON_ARCHIVE_INBOX							= "archive_inbox";

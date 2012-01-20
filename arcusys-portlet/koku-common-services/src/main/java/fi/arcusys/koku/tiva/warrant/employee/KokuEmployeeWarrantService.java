@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationCriteria;
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationQuery;
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationShortSummary;
@@ -39,20 +40,43 @@ public class KokuEmployeeWarrantService {
 		service = new KokuLooraValtakirjaService_Service(WARRANT_SERVICE_WSDL_LOCATION);
 	}
 	
-	public int getTotalAuthorizations(AuthorizationCriteria criteria) {
-		return service.getKokuLooraValtakirjaServicePort().getTotalAuthorizations(criteria);
+	public int getTotalAuthorizations(AuthorizationCriteria criteria) throws KokuServiceException {
+		try {
+			return service.getKokuLooraValtakirjaServicePort().getTotalAuthorizations(criteria);
+		} catch(RuntimeException e) {
+			if (criteria != null) {
+				throw new KokuServiceException("getTotalAuthorizations failed. " +
+						"receipientUid: '"+	criteria.getReceipientUid()+
+						"' senderUid: '"+ criteria.getSenderUid() +
+						"' targetPersonUid: '"+ criteria.getTargetPersonUid()+"'", e);
+			} else {
+				throw new KokuServiceException("getTotalAuthorizations failed. criteria: null", e);
+			}
+		}
 	}
 	
-	public List<AuthorizationShortSummary> getAuthorizations(AuthorizationQuery query) {
-		return service.getKokuLooraValtakirjaServicePort().getAuthorizations(query);
+	public List<AuthorizationShortSummary> getAuthorizations(AuthorizationQuery query) throws KokuServiceException {
+		try {
+			return service.getKokuLooraValtakirjaServicePort().getAuthorizations(query);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getAuthorizations failed. query: '"+query+"'", e);
+		}
 	}
 	
-	public AuthorizationSummary getAuthorizationDetails(int valtakirjaId) {
-		return service.getKokuLooraValtakirjaServicePort().getAuthorizationDetails(valtakirjaId);
+	public AuthorizationSummary getAuthorizationDetails(int valtakirjaId) throws KokuServiceException {
+		try {
+			return service.getKokuLooraValtakirjaServicePort().getAuthorizationDetails(valtakirjaId);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getAuthorizationDetails failed. valtakirjaId: '"+valtakirjaId+"'", e);
+		}
 	}
 	
-	public List<Valtakirjapohja> searchAuthorizationTemplates(String searchString, int limit) {
-		return service.getKokuLooraValtakirjaServicePort().searchAuthorizationTemplates(searchString, limit);
+	public List<Valtakirjapohja> searchAuthorizationTemplates(String searchString, int limit) throws KokuServiceException {
+		try {
+			return service.getKokuLooraValtakirjaServicePort().searchAuthorizationTemplates(searchString, limit);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("searchAuthorizationTemplates failed. searchString: '"+searchString+"'", e);
+		}
 	}
 	
 }

@@ -4,12 +4,14 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.model.KokuRequest;
 import fi.arcusys.koku.kv.request.citizen.CitizenRequestHandle;
 import fi.arcusys.koku.kv.request.employee.EmployeeRequestHandle;
@@ -25,6 +27,9 @@ import static fi.arcusys.koku.util.Constants.*;
 @Controller("singleRequestController")
 @RequestMapping(value = "VIEW")
 public class ShowRequestController {
+	
+	private static final Logger LOG = Logger.getLogger(ShowRequestController.class);
+
 	
 	/**
 	 * Shows request page
@@ -61,10 +66,16 @@ public class ShowRequestController {
 		
 		
 		KokuRequest kokuRequest = null;
-		if (taskType.equals(Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE)) {
-			EmployeeRequestHandle reqhandle = new EmployeeRequestHandle();
-			kokuRequest = reqhandle.getKokuRequestById(requestId);			
-		} 	
+		try {
+			if (taskType.equals(Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE)) {
+				EmployeeRequestHandle reqhandle = new EmployeeRequestHandle();
+				kokuRequest = reqhandle.getKokuRequestById(requestId);			
+			}		
+		} catch (KokuServiceException kse) {
+			LOG.error("Failed to show request details. requestId: '"+requestId + 
+					"' username: '"+request.getUserPrincipal().getName()+" taskType: '"+taskType + 
+					"' keyword: '" + keyword + "'", kse);
+		}
 		
 		return kokuRequest;
 	}

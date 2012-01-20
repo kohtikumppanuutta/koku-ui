@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import fi.arcusys.koku.av.citizenservice.AppointmentRespondedTO;
 import fi.arcusys.koku.av.citizenservice.AppointmentWithTarget;
 import fi.arcusys.koku.av.citizenservice.KokuKunpoAppointmentService_Service;
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.koku.settings.KoKuPropertiesUtil;
 
 /**
@@ -47,8 +48,12 @@ public class AvCitizenService {
 	 * @param maxNum the maximum number
 	 * @return a list of summary of appointments
 	 */
-	public List<AppointmentWithTarget> getAssignedAppointments(String user, int startNum, int maxNum) {
-		return as.getKokuKunpoAppointmentServicePort().getAssignedAppointments(user, startNum, maxNum);
+	public List<AppointmentWithTarget> getAssignedAppointments(String user, int startNum, int maxNum) throws KokuServiceException {
+		try {
+			return as.getKokuKunpoAppointmentServicePort().getAssignedAppointments(user, startNum, maxNum);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getAssignedAppointments failed. messageId: user: '"+user+"'", e);
+		}
 	}
 	
 	/**
@@ -58,8 +63,12 @@ public class AvCitizenService {
 	 * @param maxNum the maximum number
 	 * @return a list of summary of appointments
 	 */
-	public List<AppointmentWithTarget> getRespondedAppointments(String user, int startNum, int maxNum) {
-		return as.getKokuKunpoAppointmentServicePort().getRespondedAppointments(user, startNum, maxNum);
+	public List<AppointmentWithTarget> getRespondedAppointments(String user, int startNum, int maxNum) throws KokuServiceException {
+		try {
+			return as.getKokuKunpoAppointmentServicePort().getRespondedAppointments(user, startNum, maxNum);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getRespondedAppointments failed. messageId: user: '"+user+"'", e);
+		}
 	}
 	
 	/**
@@ -70,8 +79,12 @@ public class AvCitizenService {
 	 * @param maxNum
 	 * @return a list of summary of appointments
 	 */
-	public List<AppointmentWithTarget>  getOldAppointments(String userId, int startNum, int maxNum) {
-		return as.getKokuKunpoAppointmentServicePort().getOldAppointments(userId, startNum, maxNum);
+	public List<AppointmentWithTarget>  getOldAppointments(String userId, int startNum, int maxNum) throws KokuServiceException {
+		try {
+			return as.getKokuKunpoAppointmentServicePort().getOldAppointments(userId, startNum, maxNum);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getOldAppointments failed. messageId: userId: '"+userId+"'", e);
+		}
 	}
 	
 	
@@ -80,8 +93,12 @@ public class AvCitizenService {
 	 * @param user user name
 	 * @return the number of assigned appointments
 	 */
-	public int getTotalAssignedAppointmentNum(String user) {
-		return as.getKokuKunpoAppointmentServicePort().getTotalAssignedAppointments(user);
+	public int getTotalAssignedAppointmentNum(String user) throws KokuServiceException {
+		try {
+			return as.getKokuKunpoAppointmentServicePort().getTotalAssignedAppointments(user);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getTotalAssignedAppointmentNum failed. messageId: user: '"+user+"'", e);
+		}
 	}
 	
 	/**
@@ -89,8 +106,12 @@ public class AvCitizenService {
 	 * @param user user name
 	 * @return the number of responded appointments
 	 */
-	public int getTotalRespondedAppointmentNum(String user) {
-		return as.getKokuKunpoAppointmentServicePort().getTotalRespondedAppointments(user);
+	public int getTotalRespondedAppointmentNum(String user) throws KokuServiceException {
+		try {
+			return as.getKokuKunpoAppointmentServicePort().getTotalRespondedAppointments(user);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getTotalRespondedAppointmentNum failed. messageId: user: '"+user+"'", e);
+		}
 	}
 	
 	/**
@@ -98,8 +119,12 @@ public class AvCitizenService {
 	 * @param user user name
 	 * @return the number of old appointments
 	 */
-	public int getTotalOldAppointments(String userId) {
-		return as.getKokuKunpoAppointmentServicePort().getTotalOldAppointments(userId);
+	public int getTotalOldAppointments(String userId) throws KokuServiceException {
+		try {
+			return as.getKokuKunpoAppointmentServicePort().getTotalOldAppointments(userId);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getTotalOldAppointments failed. messageId: userId: '"+userId+"'", e);
+		}
 	}
 	
 	/**
@@ -107,8 +132,12 @@ public class AvCitizenService {
 	 * @param appointmentId appointment id
 	 * @return detailed appointment
 	 */
-	public AppointmentRespondedTO getAppointmentRespondedById(long appointmentId, String targetUser) {
-		return as.getKokuKunpoAppointmentServicePort().getAppointmentRespondedById(appointmentId, targetUser);
+	public AppointmentRespondedTO getAppointmentRespondedById(long appointmentId, String targetUser) throws KokuServiceException {
+		try {
+			return as.getKokuKunpoAppointmentServicePort().getAppointmentRespondedById(appointmentId, targetUser);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getAppointmentRespondedById failed. messageId: appointmentId: '"+appointmentId+"' targetUser: '"+targetUser+"'", e);
+		}
 	}
 	
 	/**
@@ -118,8 +147,12 @@ public class AvCitizenService {
 	 * @param user
 	 * @param comment
 	 */
-	public void cancelAppointment(long appointmentId, String targetUser, String user, String comment) {
-		as.getKokuKunpoAppointmentServicePort().cancelRespondedAppointment(appointmentId, targetUser, user, comment);
+	public void cancelAppointment(long appointmentId, String targetUser, String user, String comment) throws KokuServiceException {
+		try {
+			as.getKokuKunpoAppointmentServicePort().cancelRespondedAppointment(appointmentId, targetUser, user, comment);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("cancelAppointment failed. messageId: appointmentId: '"+appointmentId+"' targetUser: '"+targetUser+"' user: '"+user+"' comment: '"+comment+"'", e);
+		}
 	}
 	
 

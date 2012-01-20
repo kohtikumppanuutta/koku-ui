@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.tietopyynto.employee.KokuEmployeeTietopyyntoServiceHandle;
 import fi.arcusys.koku.tiva.tietopyynto.model.KokuInformationRequestDetail;
 import fi.arcusys.koku.users.UserIdResolver;
@@ -90,12 +91,18 @@ public class ShowTipyController extends AbstractController {
 			return null;
 		}
 		
-		if(taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED) 
-		   || taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_SENT)
-		   || taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE)) {
-			KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
-			handle.setMessageSource(messageSource);
-			info = handle.getRequestDetails(reqId);
+		try {
+			if(taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED) 
+			   || taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_SENT)
+			   || taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE)) {
+				KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
+				handle.setMessageSource(messageSource);
+				info = handle.getRequestDetails(reqId);
+			}
+		} catch (KokuServiceException kse) {
+			LOG.error("Failed to show infoRequest details. infoRequestId: '"+requestId + 
+					"' username: '"+request.getUserPrincipal().getName()+" taskType: '"+taskType + 
+					"' keyword: '" + keyword + "'", kse);
 		}
 		return info;
 	}

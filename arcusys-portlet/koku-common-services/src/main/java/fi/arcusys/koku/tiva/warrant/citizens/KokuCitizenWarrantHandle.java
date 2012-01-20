@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.warrant.AbstractWarrantHandle;
 import fi.arcusys.koku.tiva.warrant.citizenwarrantservice.AuthorizationShortSummary;
 import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationSummary;
@@ -26,7 +27,7 @@ public class KokuCitizenWarrantHandle extends AbstractWarrantHandle {
 		userService = new KokuUserService();
 	}
 
-	public List<KokuAuthorizationSummary> getSentWarrants(String userId, int startNum, int maxNum) {
+	public List<KokuAuthorizationSummary> getSentWarrants(String userId, int startNum, int maxNum) throws KokuServiceException {
 		 List<AuthorizationShortSummary> summaries = service.getSentAuthorizations(userId, startNum, maxNum);
 		 List<KokuAuthorizationSummary> summariesModels = new ArrayList<KokuAuthorizationSummary>();
 		 for (AuthorizationShortSummary summary : summaries) {
@@ -37,7 +38,7 @@ public class KokuCitizenWarrantHandle extends AbstractWarrantHandle {
 		 return summariesModels;
 	}
 	
-	public List<KokuAuthorizationSummary> getReceivedAuthorizations(String userId, int startNum, int maxNum) {
+	public List<KokuAuthorizationSummary> getReceivedAuthorizations(String userId, int startNum, int maxNum) throws KokuServiceException {
 		 List<AuthorizationShortSummary> summaries = service.getReceivedAuthorizations(userId, startNum, maxNum);
 		 List<KokuAuthorizationSummary> summariesModels = new ArrayList<KokuAuthorizationSummary>();
 		 for (AuthorizationShortSummary summary : summaries) {
@@ -48,7 +49,7 @@ public class KokuCitizenWarrantHandle extends AbstractWarrantHandle {
 		 return summariesModels;	
 	}
 	
-	public KokuAuthorizationSummary getAuthorizationSummaryById(long authorizationId, String userId) {
+	public KokuAuthorizationSummary getAuthorizationSummaryById(long authorizationId, String userId) throws KokuServiceException {
 		
 		KokuAuthorizationSummary summary = new KokuAuthorizationSummary(service.getAuthorizationSummaryById(authorizationId, userId));
 		if (summary.getStatus() != null) {
@@ -65,11 +66,11 @@ public class KokuCitizenWarrantHandle extends AbstractWarrantHandle {
 		return summary;
 	}
 	
-	public int getTotalSentAuthorizations(String userId) {
+	public int getTotalSentAuthorizations(String userId) throws KokuServiceException {
 		return service.getTotalSentAuthorizations(userId);
 	}
 	
-	public int getTotalReceivedAuthorizations(String userId) {
+	public int getTotalReceivedAuthorizations(String userId) throws KokuServiceException {
 		return service.getTotalReceivedAuthorizations(userId);
 	}
 	

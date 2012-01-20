@@ -1,0 +1,6 @@
+
+function navigateToPage(naviType) {		
+	var url = "<%= defaultPath %><%= actionParam %>" + '&naviType=' + naviType;	
+	window.location = url;
+};
+
