@@ -1,0 +1,138 @@
+
+	/* 
+	var pageList = {
+		'NewMessage': '#msg_new',
+		'NewRequest': '#req_new',
+		'ValidRequest': '#req_valid_request',
+		'NewAppointment': '#app_new',
+		'NewKindergarten': '#kid_new',
+		'NewConsent': '#cst_new',
+		'FillConsent': '#cst_new',
+		'SendConsent': '#cst_new',
+		'SelaaValtakirjoja': '#cst_new',
+		'Ilmoitukset': '#cst_new',
+		'Message': '#msg_inbox'
+	}
+	*/ 
+
+/**
+ * Finds the current item in navigation list and decorates the item, e.g. bold font 
+ */
+function focusCurrentItem() {
+
+	function getNaviType() {
+		var naviType = koku_navi_type;		
+		var global_url = document.URL;
+		var index = global_url.lastIndexOf("NAVI_TYPE=");
+		if(index > 0) {
+			naviType = global_url.substring(index+10);
+			koku_navi_type = naviType;
+		}		
+		return naviType;
+	}
+
+	function bold(elementId) {
+		jQuery(elementId).css("font-weight", "bold");		
+	};
+
+	/* Oh gosh.. this part really needs refactoring */
+
+	var currentPage = "<%= currentPage %>";	
+	switch(currentPage) {
+		case '<%= defaultPage %>':		
+			var naviType = getNaviType();
+			if(naviType != "") {
+				bold("#"+naviType);				
+			} else {
+				bold('#msg_inbox'); 
+			}
+			break;		
+		case 'NewMessage' : bold('#msg_new'); break;
+		case 'NewRequest' : bold('#req_new'); break;		
+		case 'ValidRequest' : bold('#req_valid_request'); break;
+		case 'NewAppointment' : bold('#app_new'); break;
+		case 'NewKindergarten' : bold('#kid_new'); break;
+		case 'ConfirmApplications' : bold('#applicationsConfirm'); break;
+		case 'NewConsent' : bold('#cst_new'); break;
+		case 'FillConsent' : bold('#fillconsent'); break;
+		case 'SendConsent' : bold('#sendconsent'); break;	
+		case 'SelaaValtakirjoja' : bold('#selaaOmiaValtakirjoja'); break;
+		case 'Ilmoitukset' : bold('#info_request_open'); break;
+		default: bold("#" + currentPage.toLowerCase()); break;
+	}
+};
+
+
+
+/**
+ * Execute ajax query in Post way, and parse the Json format response, and
+ * then create tasks in table and task page filed.
+ */
+function ajaxUpdate() {
+
+	/* Formats url mainly for gatein epp*/
+	function formatUrl(url) {
+		var newUrl;
+		newUrl = url.replace(/&quot;/g,'"');
+		newUrl = newUrl.replace(/&amp;/g,"&");
+		newUrl = newUrl.replace(/&lt;/g,"<");
+		newUrl =  newUrl.replace(/&gt;/g,">");
+		return newUrl;
+	};
+	
+	/**
+	 * Updates the new message number to indicate user
+	 */
+	function updateMessageNum(inboxNum, archiveInboxNum, consentsTotal, appointmentsTotal, requestsTotal) {	
+		
+		function updateMsgCounter(elementId, count) {
+			element = jQuery(elementId);
+			if (count !== undefined && count != 0) {
+				element.html('(' + count + ')');			
+			} else {
+				element.html("");
+			}
+		};
+		
+		updateMsgCounter('#inbox_num', inboxNum);
+		updateMsgCounter('#archive_inbox_num', archiveInboxNum);
+		updateMsgCounter('#consents_num', consentsTotal);
+		updateMsgCounter('#appointments_num', appointmentsTotal);
+		updateMsgCounter('#requests_num', requestsTotal);
+	};
+	
+	
+	var url="<%= ajaxURL %>";
+	url = formatUrl(url);
+	
+	jQuery.ajax({
+		  type: 'POST',
+		  url: url,
+		  global:false,
+		  data: {number:"0"},
+		  success: function(data) {
+				var obj = eval('(' + data + ')');
+				var json = obj.response;
+				var navi_login_status = json["<%=Constants.JSON_LOGIN_STATUS %>"];
+				
+				if(navi_login_status == '<%=Constants.TOKEN_STATUS_VALID %>') {
+					updateMessageNum(
+							json["<%=Constants.JSON_INBOX %>"],
+							json["<%=Constants.JSON_ARCHIVE_INBOX %>"],
+							json["<%=Constants.JSON_CONSENTS_TOTAL %>"],
+							json["<%=Constants.JSON_APPOINTMENT_TOTAL %>"],
+							json["<%=Constants.JSON_REQUESTS_TOTAL %>"]								
+						);
+				}
+				naviRefreshTimer = setTimeout('ajaxUpdate()', 30000);		
+		  }
+		});
+};
+
+
+/**
+ * Shows/hides search user interface
+ */
+function showArchiveUI() {
+	jQuery('#archive-part').toggle('fast');
+}

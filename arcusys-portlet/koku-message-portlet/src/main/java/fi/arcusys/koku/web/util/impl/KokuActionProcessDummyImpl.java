@@ -36,7 +36,7 @@ public class KokuActionProcessDummyImpl extends AbstractKokuActionProcess {
 	@Override
 	public void archiveMessages(String[] messageIds)
 			throws KokuActionProcessException {
-		throw new KokuActionProcessException();		
+		throw new KokuActionProcessException();	
 	}
 
 	@Override

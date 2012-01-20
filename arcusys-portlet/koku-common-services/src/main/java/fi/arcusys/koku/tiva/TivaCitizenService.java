@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.citizenservice.ConsentShortSummary;
 import fi.arcusys.koku.tiva.citizenservice.ConsentSummary;
 import fi.arcusys.koku.tiva.citizenservice.ConsentTO;
@@ -48,8 +49,12 @@ public class TivaCitizenService {
 	 * @param maxNum maximum number of consents
 	 * @return a list of summary consents
 	 */
-	public List<ConsentShortSummary> getAssignedConsents(String user, int startNum, int maxNum) {
-		return kks.getKokuKunpoSuostumusServicePort().getAssignedConsents(user, startNum, maxNum);
+	public List<ConsentShortSummary> getAssignedConsents(String user, int startNum, int maxNum) throws KokuServiceException {
+		try {
+			return kks.getKokuKunpoSuostumusServicePort().getAssignedConsents(user, startNum, maxNum);			
+		} catch (RuntimeException re) {
+			throw new KokuServiceException("getAssignedConsents failed. User: '"+user+"'", re);
+		}
 	}
 	
 	/**
@@ -57,8 +62,12 @@ public class TivaCitizenService {
 	 * @param consentId consent id
 	 * @return detailed consent
 	 */
-	public ConsentTO getConsentById(long consentId, String user) {
-		return kks.getKokuKunpoSuostumusServicePort().getConsentById(consentId, user);
+	public ConsentTO getConsentById(long consentId, String user) throws KokuServiceException {
+		try {
+			return kks.getKokuKunpoSuostumusServicePort().getConsentById(consentId, user);
+		} catch (RuntimeException re) {
+			throw new KokuServiceException("getConsentById failed. User: '"+user+"' consentId: '"+consentId + "'", re);
+		}
 	}
 	
 	/**
@@ -68,8 +77,12 @@ public class TivaCitizenService {
 	 * @param maxNum maximum number of consents
 	 * @return a list of consents
 	 */
-	public List<ConsentSummary> getOwnConsents(String user, int startNum, int maxNum) {
-		return kks.getKokuKunpoSuostumusServicePort().getOwnConsents(user, startNum, maxNum);
+	public List<ConsentSummary> getOwnConsents(String user, int startNum, int maxNum) throws KokuServiceException {
+		try {
+			return kks.getKokuKunpoSuostumusServicePort().getOwnConsents(user, startNum, maxNum);
+		} catch (RuntimeException re) {
+			throw new KokuServiceException("getOwnConsents failed. User: '"+user+"'", re);
+		}
 	}
 	
 	/**
@@ -80,8 +93,12 @@ public class TivaCitizenService {
 	 * @param maxNum
 	 * @return a list of consents
 	 */
-	public List<ConsentSummary> getOldConsents(String userId, int startNum, int maxNum) {
-		return kks.getKokuKunpoSuostumusServicePort().getOldConsents(userId, startNum, maxNum);
+	public List<ConsentSummary> getOldConsents(String userId, int startNum, int maxNum) throws KokuServiceException {
+		try {
+			return kks.getKokuKunpoSuostumusServicePort().getOldConsents(userId, startNum, maxNum);
+		} catch (RuntimeException re) {
+			throw new KokuServiceException("getOldConsents failed. UserId: '"+userId+"'", re);
+		}
 	}
 	
 	
@@ -90,8 +107,12 @@ public class TivaCitizenService {
 	 * @param user user name
 	 * @return the total number of assigned consents
 	 */
-	public int getTotalAssignedConsents(String user) {
-		return kks.getKokuKunpoSuostumusServicePort().getTotalAssignedConsents(user);
+	public int getTotalAssignedConsents(String user) throws KokuServiceException {
+		try {
+			return kks.getKokuKunpoSuostumusServicePort().getTotalAssignedConsents(user);
+		} catch (RuntimeException re) {
+			throw new KokuServiceException("getTotalAssignedConsents failed. UserId: '"+user+"'", re);
+		}
 	}
 	
 	/**
@@ -99,8 +120,12 @@ public class TivaCitizenService {
 	 * @param user user name
 	 * @return the total number of own consents
 	 */
-	public int getTotalOwnConsents(String user) {
-		return kks.getKokuKunpoSuostumusServicePort().getTotalOwnConsents(user);
+	public int getTotalOwnConsents(String user) throws KokuServiceException {
+		try {
+			return kks.getKokuKunpoSuostumusServicePort().getTotalOwnConsents(user);
+		} catch (RuntimeException re) {
+			throw new KokuServiceException("getTotalOwnConsents failed. UserId: '"+user+"'", re);
+		}
 	}
 	
 	/**
@@ -108,19 +133,24 @@ public class TivaCitizenService {
 	 * @param user user name
 	 * @return the total number of own consents
 	 */
-	public int getTotalOldConsents(String user) {
-		return kks.getKokuKunpoSuostumusServicePort().getTotalOldConsents(user);
+	public int getTotalOldConsents(String user) throws KokuServiceException {
+		try {
+			return kks.getKokuKunpoSuostumusServicePort().getTotalOldConsents(user);
+		} catch (RuntimeException re) {
+			throw new KokuServiceException("getTotalOldConsents failed. UserId: '"+user+"'", re);
+		}
 	}
 	
 	/**
 	 * Revokes consent
 	 * @param consentId consent id
 	 */
-	public void revokeOwnConsent(long consentId, String user) {
-		kks.getKokuKunpoSuostumusServicePort().revokeOwnConsent(consentId, user);
+	public void revokeOwnConsent(long consentId, String user) throws KokuServiceException {
+		try {
+			kks.getKokuKunpoSuostumusServicePort().revokeOwnConsent(consentId, user);
+		} catch (RuntimeException re) {
+			throw new KokuServiceException("getTotalOldConsents failed. UserId: '"+user+"' consentId: '"+consentId+"'", re);
+		}
 	}
-	
-	
-	
 	
 }

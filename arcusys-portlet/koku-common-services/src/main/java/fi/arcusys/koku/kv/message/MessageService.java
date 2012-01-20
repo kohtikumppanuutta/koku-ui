@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.messageservice.Criteria;
 import fi.arcusys.koku.kv.messageservice.FolderType;
 import fi.arcusys.koku.kv.messageservice.KokuMessageService_Service;
@@ -54,9 +55,12 @@ public class MessageService {
 	 * @param messageQuery query for filtering messages
 	 * @return a list of messages
 	 */
-	public List<MessageSummary> getMessages(String user, FolderType folderType, MessageQuery messageQuery) {
-
-		return ms.getKokuMessageServicePort().getMessages(user, folderType, messageQuery);
+	public List<MessageSummary> getMessages(String user, FolderType folderType, MessageQuery messageQuery) throws KokuServiceException {
+		try {
+			return ms.getKokuMessageServicePort().getMessages(user, folderType, messageQuery);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getMessages failed. user: '"+user+"' folderType: '"+folderType+"'", e);
+		}
 	}
 	
 	/**
@@ -66,9 +70,12 @@ public class MessageService {
 	 * @param criteria criteria for filtering messages
 	 * @return the amount of messages
 	 */
-	public int getTotalMessageNum(String user, FolderType folderType, Criteria criteria) {
-		
-		return ms.getKokuMessageServicePort().getTotalMessages(user, folderType, criteria);
+	public int getTotalMessageNum(String user, FolderType folderType, Criteria criteria) throws KokuServiceException {
+		try {
+			return ms.getKokuMessageServicePort().getTotalMessages(user, folderType, criteria);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getTotalMessageNum failed. user: '"+user+"' folderType: '"+folderType+"'", e);
+		}
 	}
 
 	/**
@@ -81,9 +88,12 @@ public class MessageService {
 	 * @param maxNum The maximum amount of messages that fulfills the condition
 	 * @return List of messages
 	 */
-	public List<MessageSummary> getMessagesOld(String user, FolderType folderType, String subQuery, int startNum, int maxNum) {
-		
-		return ms.getKokuMessageServicePort().getMessagesOld(user, folderType, subQuery, startNum, maxNum);
+	public List<MessageSummary> getMessagesOld(String user, FolderType folderType, String subQuery, int startNum, int maxNum) throws KokuServiceException {
+		try {
+			return ms.getKokuMessageServicePort().getMessagesOld(user, folderType, subQuery, startNum, maxNum);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getMessagesOld failed. user: '"+user+"' folderType: '"+folderType+"'", e);
+		}
 	}
 	
 	/**
@@ -91,9 +101,12 @@ public class MessageService {
 	 * @param messageId
 	 * @return The detailed message
 	 */
-	public fi.arcusys.koku.kv.messageservice.Message getMessageById(long messageId) {
-		
-		return ms.getKokuMessageServicePort().getMessageById(messageId);
+	public fi.arcusys.koku.kv.messageservice.Message getMessageById(long messageId) throws KokuServiceException {
+		try {
+			return ms.getKokuMessageServicePort().getMessageById(messageId);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getMessageById failed. messageId: '"+messageId+"'", e);
+		}
 	}
 	
 	/**
@@ -104,9 +117,12 @@ public class MessageService {
 	 * @param subQuery Basic query for the message, such as 'message_subject like %keyword%' , 'ORDER BY message_creationDate'
 	 * @return The number of messages
 	 */
-	public int getTotalMessageNumOld(String user, FolderType folderType, String subQuery) {
-		
-		return ms.getKokuMessageServicePort().getTotalMessagesOld(user, folderType, subQuery);
+	public int getTotalMessageNumOld(String user, FolderType folderType, String subQuery) throws KokuServiceException {
+		try {
+			return ms.getKokuMessageServicePort().getTotalMessagesOld(user, folderType, subQuery);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getTotalMessageNumOld failed. messageId: user: '"+user+"' folderType: '"+folderType+"' subQuery: '"+subQuery+"'", e);
+		}
 	}
 	
 	/**
@@ -115,9 +131,12 @@ public class MessageService {
 	 * @param FolderType Message folder type such as inbox, outbox and archive
 	 * @return Unread messages
 	 */
-	public int getUnreadMessageNum(String user, FolderType folderType) {
-		
-		return ms.getKokuMessageServicePort().getUnreadMessages(user, folderType);
+	public int getUnreadMessageNum(String user, FolderType folderType) throws KokuServiceException {
+		try {
+			return ms.getKokuMessageServicePort().getUnreadMessages(user, folderType);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getUnreadMessageNum failed. messageId: user: '"+user+"' folderType: '"+folderType+"'", e);
+		}
 	}
 	
 	/**

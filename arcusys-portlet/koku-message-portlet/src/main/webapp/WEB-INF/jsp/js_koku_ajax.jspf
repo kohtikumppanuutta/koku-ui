@@ -131,6 +131,20 @@ KokuAjax.prototype.ajaxGetTasks = function(pageObj, presentTasks) {
 		var json = obj.response;
 		pageObj.loginStatus = json["loginStatus"];
 		
+		/* Show error message to user if something goes wrong in server */
+		if (json["result"] === "FAIL") {
+			// show errorMsg
+			var options = { 
+				sticky: true,
+				theme : "serverErrorWarningMsg",
+				header: "Oops!",
+				closer: true,
+				position: "center"				
+			};
+			var msg = "<div class=\"serverErrorMsg\"><spring:message code="notification.serverError.msg" /></div><div class=\"serverErrorUuidMsg\"><spring:message code="notification.serverError.uuidMsg" /><span class=\"failureUuid\">" + json["failureUuid"] + "</span></div>";
+			jQuery.jGrowl(msg, options);			
+		}
+		
 		if (pageObj.loginStatus == 'VALID') {
 			pageObj.totalPages = json["totalPages"];
 			pageObj.totalItems = json["totalItems"];

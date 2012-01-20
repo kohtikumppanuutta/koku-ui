@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.NoSuchMessageException;
 
 import fi.arcusys.koku.AbstractHandle;
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.employeeservice.ActionRequestStatus;
 import fi.arcusys.koku.tiva.employeeservice.ActionRequestSummary;
 import fi.arcusys.koku.tiva.employeeservice.ConsentApprovalStatus;
@@ -47,7 +48,7 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 	 * @param maxNum maximum number of consents
 	 * @return
 	 */
-	public List<KokuConsent> getConsents(String userId, String keyword, String field, int startNum, int maxNum) {
+	public List<KokuConsent> getConsents(String userId, String keyword, String field, int startNum, int maxNum) throws KokuServiceException {
 		if (userId == null) {
 			throw new IllegalArgumentException("userId can't be null");
 		}
@@ -93,7 +94,7 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 	 * @param keyword keyword for filtering
 	 * @return the total number of consents
 	 */
-	public int getTotalConsents(String user, String keyword, String field) {
+	public int getTotalConsents(String user, String keyword, String field) throws KokuServiceException {
 		ConsentQuery query = new ConsentQuery();	
 		ConsentCriteria criteria = createCriteria(keyword, field);	
 		query.setCriteria(criteria);
@@ -106,7 +107,7 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 	 * @param consentIdStr consent id string
 	 * @return detailed consent
 	 */
-	public KokuConsent getConsentDetails(String consentIdStr) {
+	public KokuConsent getConsentDetails(String consentIdStr) throws KokuServiceException {
 		long  consentId = 0;
 		try {
 			consentId = (long) Long.parseLong(consentIdStr);
@@ -138,7 +139,7 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 	 * @param limit limited number of results
 	 * @return a list of templates
 	 */
-	public List<SuostumuspohjaShort> searchConsentTemplates(String searchStr, int limit) {
+	public List<SuostumuspohjaShort> searchConsentTemplates(String searchStr, int limit) throws KokuServiceException {
 		
 		return tes.searchConsentTemplates(searchStr, limit);
 	}

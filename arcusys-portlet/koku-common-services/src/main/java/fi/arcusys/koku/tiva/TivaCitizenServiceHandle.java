@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.NoSuchMessageException;
 
 import fi.arcusys.koku.AbstractHandle;
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.citizenservice.ActionRequestStatus;
 import fi.arcusys.koku.tiva.citizenservice.ActionRequestSummary;
 import fi.arcusys.koku.tiva.citizenservice.ConsentApprovalStatus;
@@ -57,7 +58,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	 * @param maxNum maximum number of consents
 	 * @return a list of assigned consents
 	 */
-	public List<KokuConsent> getAssignedConsents(String userId, int startNum, int maxNum) {
+	public List<KokuConsent> getAssignedConsents(String userId, int startNum, int maxNum) throws KokuServiceException {
 		List<ConsentShortSummary> consentSummary = tcs.getAssignedConsents(userId, startNum, maxNum);
 		List<KokuConsent> consentList = new ArrayList<KokuConsent>();
 		KokuConsent kokuConsent;		
@@ -82,7 +83,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	 * @param consentIdStr consent id string
 	 * @return detailed consent
 	 */
-	public KokuConsent getConsentById(String consentIdStr) {
+	public KokuConsent getConsentById(String consentIdStr) throws KokuServiceException {
 		long  consentId = 0;
 		try {
 			consentId = (long) Long.parseLong(consentIdStr);			
@@ -119,7 +120,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	 * @param maxNum maximum number of consents
 	 * @return a list of consents
 	 */
-	public List<KokuConsent> getOwnConsents(String userId, int startNum, int maxNum) {
+	public List<KokuConsent> getOwnConsents(String userId, int startNum, int maxNum) throws KokuServiceException {
 		return convertConsentsToKokuConsents(tcs.getOwnConsents(userId, startNum, maxNum));
 	}
 	
@@ -130,7 +131,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	 * @param maxNum maximum number of consents
 	 * @return a list of consents
 	 */
-	public List<KokuConsent> getOwnOldConsents(String userId, int startNum, int maxNum) {
+	public List<KokuConsent> getOwnOldConsents(String userId, int startNum, int maxNum) throws KokuServiceException {
 		return convertConsentsToKokuConsents(tcs.getOldConsents(userId, startNum, maxNum));
 	}
 	
@@ -168,7 +169,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	 * @param user user name
 	 * @return the total number of assigned consents
 	 */
-	public int getTotalAssignedConsents(String userId) {
+	public int getTotalAssignedConsents(String userId) throws KokuServiceException {
 		return tcs.getTotalAssignedConsents(userId);
 	}
 	
@@ -177,7 +178,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	 * @param user user name
 	 * @return the total number of own consents
 	 */
-	public int getTotalOwnConsents(String userId) {
+	public int getTotalOwnConsents(String userId) throws KokuServiceException {
 		return tcs.getTotalOwnConsents(userId);
 	}
 	
@@ -186,7 +187,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	 * @param user user name
 	 * @return the total number of old own consents
 	 */
-	public int getTotalOwnOldConsents(String userId) {
+	public int getTotalOwnOldConsents(String userId) throws KokuServiceException {
 		return tcs.getTotalOldConsents(userId);
 	}
 	
@@ -195,7 +196,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 	 * @param consentIdStr consent id string
 	 * @return operation response
 	 */
-	public String revokeOwnConsent(String consentIdStr) {
+	public String revokeOwnConsent(String consentIdStr) throws KokuServiceException {
 		long consentId = 0;		
 		try {
 			consentId = (long) Long.parseLong(consentIdStr);

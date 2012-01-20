@@ -2,8 +2,8 @@ package fi.arcusys.koku.users;
 
 import org.apache.log4j.Logger;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.util.PortalRole;
-
 
 public class UserIdResolver {
 	
@@ -28,16 +28,20 @@ public class UserIdResolver {
 			return null;
 		}
 	
-		switch (role) {
-		case CITIZEN:
-			userId = userService.getUserUidByKunpoName(username);
-			break;
-		case EMPLOYEE:
-			userId = userService.getUserUidByLooraName(username);
-			break;
-		default:
-			userId = null;
-			break;
+		try {
+			switch (role) {
+			case CITIZEN:
+				userId = userService.getUserUidByKunpoName(username);
+				break;
+			case EMPLOYEE:
+				userId = userService.getUserUidByLooraName(username);
+				break;
+			default:
+				userId = null;
+				break;
+			}
+		} catch (KokuServiceException e) {
+			LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+role+"'",e);
 		}
 		
 		if (userId == null) {
@@ -45,5 +49,4 @@ public class UserIdResolver {
 		}
 		return userId;
 	}
-
 }

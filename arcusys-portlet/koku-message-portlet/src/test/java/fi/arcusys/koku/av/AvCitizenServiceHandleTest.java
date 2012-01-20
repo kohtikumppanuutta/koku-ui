@@ -12,6 +12,8 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
+
 public class AvCitizenServiceHandleTest {
 
 	AvCitizenServiceHandle tester;
@@ -41,7 +43,12 @@ public class AvCitizenServiceHandleTest {
 		int maxNum = 5;
 		String taskType = "app_response_employee";
 		
-		List<KokuAppointment> apps = tester.getAppointments(user, startNum, maxNum, taskType);
+		List<KokuAppointment> apps;
+		try {
+			apps = tester.getAppointments(user, startNum, maxNum, taskType);
+		} catch (KokuServiceException e) {
+			throw new AssertionError(e);
+		}
 		int expected = 1;
 		int actual = apps.size();
 		assertEquals("createTask first creation date failed", expected, actual);

@@ -5,6 +5,7 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.message.MessageHandle;
 import fi.arcusys.koku.kv.model.Message;
 import static fi.arcusys.koku.util.Constants.*;
@@ -24,6 +26,8 @@ import static fi.arcusys.koku.util.Constants.*;
 @Controller("singleMessageController")
 @RequestMapping(value = "VIEW")
 public class ShowMessageController {
+	private static final Logger LOG = Logger.getLogger(ShowMessageController.class);
+
 	
 	@Resource
 	private ResourceBundleMessageSource messageSource;
@@ -50,9 +54,12 @@ public class ShowMessageController {
 	 * @return message data model
 	 */
 	@ModelAttribute(value = "message")
-	public Message model(@RequestParam String messageId,
-			@RequestParam String currentPage,@RequestParam String taskType, 
-			@RequestParam String keyword, @RequestParam String orderType,
+	public Message model(
+			@RequestParam String messageId,
+			@RequestParam String currentPage,
+			@RequestParam String taskType, 
+			@RequestParam String keyword,
+			@RequestParam String orderType,
 			RenderRequest request) {
 
 		// store parameters in session for returning page from form page	
@@ -61,10 +68,16 @@ public class ShowMessageController {
 		request.getPortletSession().setAttribute(ATTR_KEYWORD, keyword, PortletSession.APPLICATION_SCOPE);
 		request.getPortletSession().setAttribute(ATTR_ORDER_TYPE, orderType, PortletSession.APPLICATION_SCOPE);
 		
-		MessageHandle msghandle = new MessageHandle();
-		msghandle.setMessageSource(messageSource);
-		Message message = msghandle.getMessageById(messageId);
-		
+		Message message = null;
+		try {
+			MessageHandle msghandle = new MessageHandle();
+			msghandle.setMessageSource(messageSource);
+			message = msghandle.getMessageById(messageId);
+		} catch (KokuServiceException kse) {
+			LOG.error("Failed to show message details. messageId: '"+messageId + 
+					"' username: '"+request.getUserPrincipal().getName()+" taskType: '"+taskType + 
+					"' keyword: '" + keyword + "'", kse);
+		}		
 		return message;
 	}
 

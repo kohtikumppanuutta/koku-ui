@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.employeeservice.ConsentCriteria;
 import fi.arcusys.koku.tiva.employeeservice.ConsentQuery;
 import fi.arcusys.koku.tiva.employeeservice.ConsentSummary;
@@ -49,11 +50,11 @@ public class TivaEmployeeService {
 	 * @param query query for filtering consents
 	 * @return a list of summary consents
 	 */
-	public List<ConsentSummary> getConsents(String user, ConsentQuery query) {
+	public List<ConsentSummary> getConsents(String user, ConsentQuery query) throws KokuServiceException {
 		try {
 			return kls.getKokuLooraSuostumusServicePort().getConsents(user, query);
 		} catch(RuntimeException e) {
-			return null;
+			throw new KokuServiceException("getConsents failed. User: '"+user+"'", e);
 		}
 	}
 	
@@ -62,8 +63,12 @@ public class TivaEmployeeService {
 	 * @param consentId consent id
 	 * @return detailed consent
 	 */
-	public ConsentTO getConsentDetails(long consentId) {
-		return kls.getKokuLooraSuostumusServicePort().getConsentDetails(consentId);
+	public ConsentTO getConsentDetails(long consentId) throws KokuServiceException {
+		try {
+			return kls.getKokuLooraSuostumusServicePort().getConsentDetails(consentId);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getConsentDetails failed. consentId: '"+consentId+"'", e);
+		}
 	}
 	
 	/**
@@ -72,8 +77,12 @@ public class TivaEmployeeService {
 	 * @param query query for filtering consents
 	 * @return the total number of consents
 	 */
-	public int getTotalConsents(String user, ConsentCriteria criteria) {
-		return kls.getKokuLooraSuostumusServicePort().getTotalConsents(user, criteria);
+	public int getTotalConsents(String user, ConsentCriteria criteria) throws KokuServiceException {
+		try {
+			return kls.getKokuLooraSuostumusServicePort().getTotalConsents(user, criteria);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getTotalConsents failed. User: '"+user+"'", e);
+		}
 	}
 	
 	/**
@@ -82,7 +91,11 @@ public class TivaEmployeeService {
 	 * @param limit limited number of results
 	 * @return a list of templates
 	 */
-	public List<SuostumuspohjaShort> searchConsentTemplates(String searchString, int limit) {
-		return kls.getKokuLooraSuostumusServicePort().searchConsentTemplates(searchString, limit);
+	public List<SuostumuspohjaShort> searchConsentTemplates(String searchString, int limit) throws KokuServiceException {
+		try {
+			return kls.getKokuLooraSuostumusServicePort().searchConsentTemplates(searchString, limit);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("searchConsentTemplates failed. User: '"+searchString+"' limit: '"+limit+"'", e);
+		}
 	}
 }

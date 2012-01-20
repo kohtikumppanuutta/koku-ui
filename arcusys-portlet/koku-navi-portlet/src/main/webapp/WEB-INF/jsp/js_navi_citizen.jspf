@@ -1,0 +1,15 @@
+
+function navigateToPage(naviType) {
+	var url = "<%= naviRenderURL %>";	
+	url = formatUrl(url);
+	
+	jQuery.post(url, {'newNaviType':naviType}, function(data) {
+		var obj = eval('(' + data + ')');
+		var json = obj.response;
+		var renderUrl = json["renderUrl"];
+		var temp = renderUrl.split("?");
+		var naviUrl = "<%= defaultPath %>" + "?" + temp[1] + "&NAVI_TYPE=" + naviType;
+		window.location = naviUrl;
+	});
+};
+

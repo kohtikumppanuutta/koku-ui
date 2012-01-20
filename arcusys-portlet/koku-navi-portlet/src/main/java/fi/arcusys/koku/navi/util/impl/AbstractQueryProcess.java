@@ -2,6 +2,7 @@ package fi.arcusys.koku.navi.util.impl;
 
 import org.springframework.context.MessageSource;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.intalio.TaskHandle;
 import fi.arcusys.koku.kv.message.MessageHandle;
 import fi.arcusys.koku.kv.model.KokuFolderType;
@@ -15,12 +16,12 @@ public abstract class AbstractQueryProcess implements QueryProcess {
 		this.messageSource = messages;
 	}
 	
-	@Override
+	
 	public final void setMessageSource(MessageSource messages) {
 		this.messageSource = messages;
 	}
 
-	@Override
+	
 	public final MessageSource getMessageSource() {
 		return messageSource;
 	}
@@ -32,8 +33,9 @@ public abstract class AbstractQueryProcess implements QueryProcess {
 	 * @param userId
 	 * @param folderType
 	 * @return number of messages
+	 * @throws KokuServiceException 
 	 */
-	protected int getNewMessageNum(String userId, KokuFolderType folderType) {
+	protected int getNewMessageNum(String userId, KokuFolderType folderType) throws KokuServiceException {
 		MessageHandle messageHandle = new MessageHandle();
 		return messageHandle.getUnreadMessages(userId, folderType);
 	}

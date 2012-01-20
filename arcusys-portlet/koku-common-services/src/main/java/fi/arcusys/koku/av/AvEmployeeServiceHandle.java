@@ -28,6 +28,7 @@ import fi.arcusys.koku.av.employeeservice.AppointmentSummary;
 import fi.arcusys.koku.av.employeeservice.AppointmentSummaryStatus;
 import fi.arcusys.koku.av.employeeservice.AppointmentUserRejected;
 import fi.arcusys.koku.av.employeeservice.User;
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.util.MessageUtil;
 
 
@@ -57,7 +58,7 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	 * @param taskType task type requested
 	 * @return a list of summary appointments
 	 */
-	public List<KokuAppointment> getAppointments(String userId, int startNum, int maxNum, String taskType, String keyword) {		
+	public List<KokuAppointment> getAppointments(String userId, int startNum, int maxNum, String taskType, String keyword) throws KokuServiceException {		
 		
 		String targetPersonSsn = keyword;
 		
@@ -71,11 +72,11 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	}
 	
 	
-	public List<KokuAppointment> getCreatedAppointments(String userId, String targetPersonSsn, int startNum, int maxNum) {
+	public List<KokuAppointment> getCreatedAppointments(String userId, String targetPersonSsn, int startNum, int maxNum) throws KokuServiceException {
 		return getAppointmentList(aes.getCreatedAppointments(userId,  createAppointmentCriteria(targetPersonSsn), startNum, maxNum));
 	}
 		
-	public List<KokuAppointment> getProcessedAppointment(String userId, String targetPersonSsn, int startNum, int maxNum) {
+	public List<KokuAppointment> getProcessedAppointment(String userId, String targetPersonSsn, int startNum, int maxNum) throws KokuServiceException {
 		return getAppointmentList(aes.getProcessedAppointments(userId, createAppointmentCriteria(targetPersonSsn), startNum, maxNum));
 	}
 	
@@ -116,7 +117,7 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	 * @param appointmentId appointment id
 	 * @return detailed appointment for employee
 	 */
-	public EmployeeAppointment getAppointmentById(String appointmentId) {
+	public EmployeeAppointment getAppointmentById(String appointmentId) throws KokuServiceException {
 		 
 		long  appId = 0;
 		try {
@@ -161,7 +162,7 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	 * @param taskType task type requested
 	 * @return the number of appointments
 	 */
-	public int getTotalAppointmentsNum(String userId, String taskType, String keyword) {
+	public int getTotalAppointmentsNum(String userId, String taskType, String keyword) throws KokuServiceException {
 		if(taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE)) {	// for employee
 			return aes.getTotalCreatedAppointmentNum(userId, createAppointmentCriteria(keyword));
 		} else if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE)) {
@@ -389,15 +390,9 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	 * Cancels appointment
 	 * @param appointmentIdStr
 	 * @param comment
-	 * @return
 	 */
-	public String cancelAppointments(long appId, String comment) {		
-		try {
+	public void cancelAppointments(long appId, String comment) throws KokuServiceException {		
 			aes.cancelAppointment(appId, comment);
-			return RESPONSE_OK;
-		} catch(RuntimeException e) {
-			return RESPONSE_FAIL;
-		}
 	}
 	
 	private String localizeActionRequestStatus(AppointmentSummaryStatus appointmentStatus) {

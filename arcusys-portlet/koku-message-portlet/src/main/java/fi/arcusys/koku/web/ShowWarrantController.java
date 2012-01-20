@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.warrant.citizens.KokuCitizenWarrantHandle;
 import fi.arcusys.koku.tiva.warrant.employee.KokuEmployeeWarrantHandle;
 import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationSummary;
@@ -83,22 +84,28 @@ public class ShowWarrantController extends AbstractController {
 			return null;
 		}
 		
-		if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_RECEIEVED)) {
-			KokuCitizenWarrantHandle handle = new KokuCitizenWarrantHandle();
-			handle.setMessageSource(messageSource);
-			warrant = handle.getAuthorizationSummaryById(authId, userId);
-		} else if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_SENT)) {
-			KokuCitizenWarrantHandle handle = new KokuCitizenWarrantHandle();
-			handle.setMessageSource(messageSource);
-			warrant = handle.getAuthorizationSummaryById(authId, userId);
-		} else if (taskType.equals(TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS) || taskType.equals(TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS)) {
-			KokuEmployeeWarrantHandle handle = new KokuEmployeeWarrantHandle();
-			handle.setMessageSource(messageSource);
-			try {
-				warrant = handle.getAuthorizationDetails(Integer.valueOf(authorizationId));					
-			} catch (NumberFormatException nfe) {
-				LOG.error("AuthorizationID is not valid! Username: " + username + " UserId: " + userId + " AuthorizationId: "+ authorizationId);
+		try {			
+			if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_RECEIEVED)) {
+				KokuCitizenWarrantHandle handle = new KokuCitizenWarrantHandle();
+				handle.setMessageSource(messageSource);
+				warrant = handle.getAuthorizationSummaryById(authId, userId);
+			} else if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_SENT)) {
+				KokuCitizenWarrantHandle handle = new KokuCitizenWarrantHandle();
+				handle.setMessageSource(messageSource);
+				warrant = handle.getAuthorizationSummaryById(authId, userId);
+			} else if (taskType.equals(TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS) || taskType.equals(TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS)) {
+				KokuEmployeeWarrantHandle handle = new KokuEmployeeWarrantHandle();
+				handle.setMessageSource(messageSource);
+				try {
+					warrant = handle.getAuthorizationDetails(Integer.valueOf(authorizationId));					
+				} catch (NumberFormatException nfe) {
+					LOG.error("AuthorizationID is not valid! Username: " + username + " UserId: " + userId + " AuthorizationId: "+ authorizationId);
+				}
 			}
+		} catch (KokuServiceException kse) {
+			LOG.error("Failed to show warrant details. authorizationId: '"+authorizationId + 
+					"' username: '"+request.getUserPrincipal().getName()+" taskType: '"+taskType + 
+					"' keyword: '" + keyword + "'", kse);
 		}
 		return warrant;
 	}

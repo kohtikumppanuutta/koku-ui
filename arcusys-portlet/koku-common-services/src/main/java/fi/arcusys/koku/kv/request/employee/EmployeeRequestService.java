@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.requestservice.KokuRequestService_Service;
 import fi.arcusys.koku.kv.requestservice.Request;
 import fi.arcusys.koku.kv.requestservice.RequestSummary;
@@ -53,8 +54,12 @@ public class EmployeeRequestService {
 	 * @param maxNum maximum number of requests
 	 * @return a list of requests
 	 */
-	public List<RequestSummary> getRequests(String user, RequestType requestType, String subQuery, int startNum, int maxNum) {		
-		return rs.getKokuRequestServicePort().getRequests(user, requestType, subQuery, startNum, maxNum);
+	public List<RequestSummary> getRequests(String user, RequestType requestType, String subQuery, int startNum, int maxNum) throws KokuServiceException {
+		try {
+			return rs.getKokuRequestServicePort().getRequests(user, requestType, subQuery, startNum, maxNum);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getRequests failed. user: '"+user+"' requestType: '"+requestType+"' subQuery: '"+subQuery+"'", e);
+		}
 	}
 	
 	/**
@@ -65,8 +70,12 @@ public class EmployeeRequestService {
 	 * @param maxNum
 	 * @return List of responses (summary)
 	 */
-	public List<ResponseSummary> getRepliedRequests(String userUid, int startNum, int maxNum) {
-		return rs.getKokuRequestServicePort().getRepliedRequests(userUid, startNum, maxNum);
+	public List<ResponseSummary> getRepliedRequests(String userUid, int startNum, int maxNum) throws KokuServiceException {
+		try {
+			return rs.getKokuRequestServicePort().getRepliedRequests(userUid, startNum, maxNum);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getRepliedRequests failed. userUid: '"+userUid+"'", e);
+		}
 	}
 	
 	/**
@@ -77,8 +86,12 @@ public class EmployeeRequestService {
 	 * @param maxNum
 	 * @return List of old requests (summary)
 	 */
-	public List<ResponseSummary> getOldRequests(String userUid, int startNum, int maxNum) {
-		return rs.getKokuRequestServicePort().getOldRequests(userUid, startNum, maxNum);
+	public List<ResponseSummary> getOldRequests(String userUid, int startNum, int maxNum) throws KokuServiceException {
+		try {
+			return rs.getKokuRequestServicePort().getOldRequests(userUid, startNum, maxNum);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getOldRequests failed. userUid: '"+userUid+"'", e);
+		}
 	}
 	
 	/**
@@ -87,8 +100,12 @@ public class EmployeeRequestService {
 	 * @param requestId
 	 * @return detailed request
 	 */
-	public Request getRequestById(long requestId) {
-		return rs.getKokuRequestServicePort().getRequestById(requestId);
+	public Request getRequestById(long requestId) throws KokuServiceException {
+		try {
+			return rs.getKokuRequestServicePort().getRequestById(requestId);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getRequestById failed. requestId: '"+requestId+"'", e);
+		}
 	}
 	
 	/**
@@ -97,8 +114,12 @@ public class EmployeeRequestService {
 	 * @param responseId
 	 * @return detailed response
 	 */
-	public ResponseDetail getResponseById(long responseId) {
-		return rs.getKokuRequestServicePort().getResponseDetail(responseId);
+	public ResponseDetail getResponseById(long responseId) throws KokuServiceException {
+		try {
+			return rs.getKokuRequestServicePort().getResponseDetail(responseId);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getResponseById failed. responseId: '"+responseId+"'", e);
+		}
 	}
 	
 	
@@ -109,8 +130,12 @@ public class EmployeeRequestService {
 	 * @param requestType request type
 	 * @return the total number of requests
 	 */
-	public int getTotalRequestNum(String user, RequestType requestType) {
-		return rs.getKokuRequestServicePort().getTotalRequests(user, requestType);
+	public int getTotalRequestNum(String user, RequestType requestType) throws KokuServiceException {
+		try {
+			return rs.getKokuRequestServicePort().getTotalRequests(user, requestType);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getTotalRequestNum failed. user: '"+user+"' requestType: '"+requestType+"'", e);
+		}
 	}
 	
 	/**
@@ -119,8 +144,12 @@ public class EmployeeRequestService {
 	 * @param user userUid
 	 * @return the total number of old responses
 	 */
-	public int getTotalResponsesOldNum(String userUid) {
-		return rs.getKokuRequestServicePort().getTotalOldRequests(userUid);
+	public int getTotalResponsesOldNum(String userUid) throws KokuServiceException {
+		try {
+			return rs.getKokuRequestServicePort().getTotalOldRequests(userUid);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getTotalResponsesOldNum failed. userUid: '"+userUid+"'", e);
+		}
 	}
 	
 	/**
@@ -129,8 +158,12 @@ public class EmployeeRequestService {
 	 * @param user userUid
 	 * @return the total number of replied responses
 	 */
-	public int getTotalResponsesRepliedNum(String userUid) {
-		return rs.getKokuRequestServicePort().getTotalRepliedRequests(userUid);
+	public int getTotalResponsesRepliedNum(String userUid) throws KokuServiceException {
+		try {
+			return rs.getKokuRequestServicePort().getTotalRepliedRequests(userUid);
+		} catch(RuntimeException e) {
+			throw new KokuServiceException("getTotalResponsesRepliedNum failed. userUid: '"+userUid+"'", e);
+		}
 	}
 	
 }

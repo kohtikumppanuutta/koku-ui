@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.KokuConsent;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
@@ -80,16 +81,21 @@ public class ShowConsentController extends AbstractController {
 			LOG.error("UserId is null. Can't show consent details! Given username: "+username);
 			return consent;
 		}
-		
-		if(taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS) || taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD)) {
-			TivaCitizenServiceHandle handle = new TivaCitizenServiceHandle(userId);
-			handle.setMessageSource(messageSource);
-			consent = handle.getConsentById(consentId);
-		} else if(taskType.equals(TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS)) {
-			TivaEmployeeServiceHandle handle = new TivaEmployeeServiceHandle();
-			handle.setMessageSource(messageSource);
-			consent = handle.getConsentDetails(consentId);
-		} 
+		try {			
+			if(taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS) || taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD)) {
+				TivaCitizenServiceHandle handle = new TivaCitizenServiceHandle(userId);
+				handle.setMessageSource(messageSource);
+				consent = handle.getConsentById(consentId);
+			} else if(taskType.equals(TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS)) {
+				TivaEmployeeServiceHandle handle = new TivaEmployeeServiceHandle();
+				handle.setMessageSource(messageSource);
+				consent = handle.getConsentDetails(consentId);
+			} 
+		} catch (KokuServiceException kse) {
+			LOG.error("Failed to show consent details. consentId: '"+consentId + 
+					"' username: '"+request.getUserPrincipal().getName()+" taskType: '"+taskType + 
+					"' keyword: '" + keyword + "'", kse);
+		}
 //		else if (taskType.equals(TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS)) {
 //			// TODO: Need some logic here? 
 //			// REMOVE ME?

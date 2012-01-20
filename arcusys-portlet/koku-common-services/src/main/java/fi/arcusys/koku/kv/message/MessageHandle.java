@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.NoSuchMessageException;
 
 import fi.arcusys.koku.AbstractHandle;
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.messageservice.Criteria;
 import fi.arcusys.koku.kv.messageservice.Fields;
 import fi.arcusys.koku.kv.messageservice.FolderType;
@@ -39,7 +40,7 @@ public class MessageHandle extends AbstractHandle {
 		ms = new MessageService();
 	}
 	
-	public int getUnreadMessages(String username, KokuFolderType folderType) {
+	public int getUnreadMessages(String username, KokuFolderType folderType) throws KokuServiceException {
 		FolderType type = FolderType.valueOf(folderType.toString());
 		return ms.getUnreadMessageNum(username, type);
 	}	
@@ -56,7 +57,7 @@ public class MessageHandle extends AbstractHandle {
 	 * @param max maximum amount of messages
 	 * @return a list of messages
 	 */
-	public List<Message> getMessages(String userId, String messageType, String keyword, String field, String orderType, int start, int max) {
+	public List<Message> getMessages(String userId, String messageType, String keyword, String field, String orderType, int start, int max) throws KokuServiceException {
 		FolderType folderType = MessageUtil.getFolderType(messageType);
 		MessageQuery messageQuery = new MessageQuery();
 		messageQuery.setStartNum(start);
@@ -104,7 +105,7 @@ public class MessageHandle extends AbstractHandle {
 	 * @param field field string for filtering
 	 * @return number of messages
 	 */
-	public int getTotalMessageNum(String userId, String messageType, String keyword, String field) {
+	public int getTotalMessageNum(String userId, String messageType, String keyword, String field) throws KokuServiceException {
 
 		FolderType folderType = MessageUtil.getFolderType(messageType);
 		/* sets the criteria for searching including keyword for each field, default is searching all fields */
@@ -125,7 +126,7 @@ public class MessageHandle extends AbstractHandle {
 	 * @param max maximum amount of messages
 	 * @return a list of messages
 	 */
-	public List<Message> getMessagesOld(String userId, String messageType, String keyword, String orderType, int start, int max) {
+	public List<Message> getMessagesOld(String userId, String messageType, String keyword, String orderType, int start, int max) throws KokuServiceException {
 
 		FolderType folderType = MessageUtil.getFolderType(messageType);
 		String subQuery = "";
@@ -158,7 +159,7 @@ public class MessageHandle extends AbstractHandle {
 	 * @param messageId message id
 	 * @return detailed message
 	 */
-	public Message getMessageById(String messageId) {
+	public Message getMessageById(String messageId) throws KokuServiceException {
 		long  msgId = 0;
 		try {
 			 msgId = (long) Long.parseLong(messageId);			
@@ -260,7 +261,7 @@ public class MessageHandle extends AbstractHandle {
 	 * @param orderType type of message order
 	 * @return the amount of messages
 	 */
-	public int getTotalMessageNumOld(String user, String messageType, String keyword, String orderType) {
+	public int getTotalMessageNumOld(String user, String messageType, String keyword, String orderType) throws KokuServiceException {
 		FolderType folderType = MessageUtil.getFolderType(messageType);
 		String subQuery = "";
 		

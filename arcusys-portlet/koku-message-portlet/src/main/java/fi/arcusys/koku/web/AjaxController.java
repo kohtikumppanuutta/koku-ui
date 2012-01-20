@@ -57,6 +57,7 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import fi.arcusys.koku.av.AvCitizenServiceHandle;
 import fi.arcusys.koku.av.AvEmployeeServiceHandle;
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.hak.model.HakServiceHandle;
 import fi.arcusys.koku.kv.message.MessageHandle;
 import fi.arcusys.koku.kv.model.KokuFolderType;
@@ -177,16 +178,22 @@ public class AjaxController extends AbstractController {
     	
 		final KokuUserService userService = new KokuUserService();
 		KokuUser user = null;
-    	if (Properties.IS_KUNPO_PORTAL) {
-    		// Kunpo
-    		user = userService.loginKunpo(username, userInfo.getPic());
-    	} else if (Properties.IS_LOORA_PORTAL) {
-    		// Loora
-    		user = userService.loginLoora(username, userInfo.getPic());
-    	} else {
-    		LOG.error("Can't register user to WS! Portlet doesn't have information if portal is Citizen/Employee mode! username: '"+username+"'");
-    		return;
+		
+		try {
+	    	if (Properties.IS_KUNPO_PORTAL) {
+	    		// Kunpo
+	    		user = userService.loginKunpo(username, userInfo.getPic());
+	    	} else if (Properties.IS_LOORA_PORTAL) {
+	    		// Loora
+	    		user = userService.loginLoora(username, userInfo.getPic());
+	    	} else {
+	    		LOG.error("Can't register user to WS! Portlet doesn't have information if portal is Citizen/Employee mode! username: '"+username+"'");
+	    		return;
+	    	}
+    	} catch (KokuServiceException kse) {
+    		LOG.error("Failed register user to WS.",kse);    		
     	}
+    	
     	if (user == null) {
     		// TODO: Remove if statement when Loora side implementation is ready, if ever..
     		if (Properties.IS_KUNPO_PORTAL) {
@@ -466,18 +473,23 @@ public class AjaxController extends AbstractController {
 		
 		@SuppressWarnings("rawtypes")
 		List resultList = null;
-		if (suggestionType.equals(SUGGESTION_CONSENT)) {
-			TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();					
-			resultList = tivaHandle.searchConsentTemplates(keyword, MAX_SUGGESTION_RESULTS);
-		} else if (suggestionType.equals(SUGGESTION_WARRANT)) {
-			KokuEmployeeWarrantHandle handle = new KokuEmployeeWarrantHandle();
-			resultList = handle.searchWarrantTemplates(keyword, MAX_SUGGESTION_RESULTS);
-		} else if (suggestionType.equals(SUGGESTION_APPLICATION_KINDERGARTEN)) {
-			HakServiceHandle handle = new HakServiceHandle();
-			resultList = handle.searchKindergartenByName(keyword, MAX_SUGGESTION_RESULTS);
-		} else if (suggestionType.equals(SUGGESTION_NO_TYPE)) {
+		try {
+			if (suggestionType.equals(SUGGESTION_CONSENT)) {
+				TivaEmployeeServiceHandle tivaHandle = new TivaEmployeeServiceHandle();					
+				resultList = tivaHandle.searchConsentTemplates(keyword, MAX_SUGGESTION_RESULTS);
+			} else if (suggestionType.equals(SUGGESTION_WARRANT)) {
+				KokuEmployeeWarrantHandle handle = new KokuEmployeeWarrantHandle();
+				resultList = handle.searchWarrantTemplates(keyword, MAX_SUGGESTION_RESULTS);
+			} else if (suggestionType.equals(SUGGESTION_APPLICATION_KINDERGARTEN)) {
+				HakServiceHandle handle = new HakServiceHandle();
+				resultList = handle.searchKindergartenByName(keyword, MAX_SUGGESTION_RESULTS);
+			} else if (suggestionType.equals(SUGGESTION_NO_TYPE)) {
+				resultList = new ArrayList<String>();
+				LOG.warn("No sugguestion type! Possibly bug in system. User: "+username+" Keyword: "+keyword);
+			}
+		} catch (KokuServiceException kse) {
+			LOG.error("Failed to get suggestion. keyword: '"+keyword+"' suggestionType: '"+suggestionType+"'", kse);
 			resultList = new ArrayList<String>();
-			LOG.warn("No sugguestion type! Possibly bug in system. User: "+username+" Keyword: "+keyword);
 		}
 		
 		JSONObject jsonModel = new JSONObject();

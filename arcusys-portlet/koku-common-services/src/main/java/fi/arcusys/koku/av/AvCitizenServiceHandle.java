@@ -22,6 +22,7 @@ import fi.arcusys.koku.av.citizenservice.AppointmentSlot;
 import fi.arcusys.koku.av.citizenservice.AppointmentSummaryStatus;
 import fi.arcusys.koku.av.citizenservice.AppointmentWithTarget;
 import fi.arcusys.koku.av.citizenservice.User;
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.util.MessageUtil;
 
 
@@ -57,7 +58,7 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 	 * @param taskType task type requested
 	 * @return a list of appointments
 	 */
-	public List<KokuAppointment> getAppointments(String userId, int startNum, int maxNum, String taskType) {
+	public List<KokuAppointment> getAppointments(String userId, int startNum, int maxNum, String taskType) throws KokuServiceException {
 		List<AppointmentWithTarget> appSummaryList = null;
 		List<KokuAppointment> appList = new ArrayList<KokuAppointment>();
 		
@@ -85,8 +86,7 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 			kokuAppointment.setTargetPersonDisplayName(getDisplayName(appSummary.getTargetPersonUserInfo()));
 			kokuAppointment.setStatus(localizeActionRequestStatus(appSummary.getStatus()));
 			appList.add(kokuAppointment);		
-		}
-		
+		}		
 		return appList;
 	}
 
@@ -102,7 +102,7 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 	 * @param appointmentId appointment id
 	 * @return detailed citizen appointment
 	 */
-	public CitizenAppointment getAppointmentById(String appointmentId, String targetUser) {
+	public CitizenAppointment getAppointmentById(String appointmentId, String targetUser) throws KokuServiceException {
 		long  appId = 0;
 		try {
 			appId = (long) Long.parseLong(appointmentId);
@@ -148,7 +148,7 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 	 * @param taskType task type requested 
 	 * @return the total number of appointments
 	 */
-	public int getTotalAppointmentsNum(String userId, String taskType) {
+	public int getTotalAppointmentsNum(String userId, String taskType) throws KokuServiceException {
 
 		if (taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_CITIZEN)) {// for citizen
 			return acs.getTotalAssignedAppointmentNum(userId);
@@ -184,13 +184,8 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 	 * @param comment
 	 * @return operation response
 	 */
-	public String cancelAppointments(long appointmentId, String targetPerson, String comment) {
-		try {
-			acs.cancelAppointment(appointmentId, targetPerson, loginUserId, comment);
-			return RESPONSE_OK;
-		} catch(RuntimeException e) {
-			return RESPONSE_FAIL;
-		}		
+	public void cancelAppointments(long appointmentId, String targetPerson, String comment) throws KokuServiceException {
+		acs.cancelAppointment(appointmentId, targetPerson, loginUserId, comment);
 	}
 	
 	private String localizeActionRequestStatus(AppointmentSummaryStatus appointmentStatus) {

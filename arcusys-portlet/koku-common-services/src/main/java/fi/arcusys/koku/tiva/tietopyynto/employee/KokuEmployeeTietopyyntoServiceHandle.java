@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.tietopyynto.AbstractTietopyyntoHandle;
 import fi.arcusys.koku.tiva.tietopyynto.model.KokuInformationRequestDetail;
 import fi.arcusys.koku.tiva.tietopyynto.model.KokuInformationRequestSummary;
@@ -55,7 +56,7 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	 * @param maxNum
 	 * @return List of KokuInformationRequestSummaries
 	 */
-	public List<KokuInformationRequestSummary> getRepliedRequests(String userId, String keyword, int startNum, int maxNum) {
+	public List<KokuInformationRequestSummary> getRepliedRequests(String userId, String keyword, int startNum, int maxNum) throws KokuServiceException {
 		Map<String, String> searchMap = getSearchMap(keyword);
 		return getRepliedRequests(
 				userId, 
@@ -73,7 +74,7 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	 * @param maxNum
 	 * @return List of KokuInformationRequestSummaries
 	 */	
-	public List<KokuInformationRequestSummary> getSentRequests(String userId, String keyword, int startNum, int maxNum) {
+	public List<KokuInformationRequestSummary> getSentRequests(String userId, String keyword, int startNum, int maxNum) throws KokuServiceException {
 		Map<String, String> searchMap = getSearchMap(keyword);
 		return getSentRequests(
 				userId, 
@@ -91,7 +92,7 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	 * @param maxNum
 	 * @return List of KokuInformationRequestSummaries
 	 */	
-	public List<KokuInformationRequestSummary> getRequests(String keyword, int startNum, int maxNum) {
+	public List<KokuInformationRequestSummary> getRequests(String keyword, int startNum, int maxNum) throws KokuServiceException {
 		Map<String, String> searchMap = getSearchMap(keyword);		
 		return getRequests(
 				createCriteria(searchMap),
@@ -106,7 +107,7 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	 * @param requestId
 	 * @return Detailed info
 	 */
-	public KokuInformationRequestDetail getRequestDetails(long requestId) {
+	public KokuInformationRequestDetail getRequestDetails(long requestId) throws KokuServiceException {
 		KokuInformationRequestDetail details =  new KokuInformationRequestDetail(service.getRequestDetails(requestId));
 		if (details.getAccessType() != null) {
 			details.setLocalizedAccessType(getLocalizedInfoAccessType(details.getAccessType()));			
@@ -121,7 +122,7 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	 * @param receiverUid
 	 * @return replied requests count
 	 */
-	public int getTotalRepliedRequests(String receiverUid, String keyword) {
+	public int getTotalRepliedRequests(String receiverUid, String keyword) throws KokuServiceException {
 		Map<String, String> searchMap = getSearchMap(keyword);		
 		return service.getTotalRepliedRequests(receiverUid, createCriteria(searchMap));
 	}
@@ -132,7 +133,7 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	 * @param receiverUid
 	 * @return request count
 	 */
-	public int getTotalRequests(String keyword) {
+	public int getTotalRequests(String keyword) throws KokuServiceException {
 		Map<String, String> searchMap = getSearchMap(keyword);		
 		return service.getTotalRequests(createCriteria(searchMap));
 	}
@@ -143,13 +144,13 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	 * @param senderUid
 	 * @return sent requests count
 	 */
-	public int getTotalSentRequests(String senderUid, String keyword) {
+	public int getTotalSentRequests(String senderUid, String keyword) throws KokuServiceException {
 		Map<String, String> searchMap = getSearchMap(keyword);
 		return service.getTotalSentRequests(senderUid, createCriteria(searchMap));
 	}
 	
 	
-	private List<KokuInformationRequestSummary> getRepliedRequests(String userId, InformationRequestCriteria criteria, int startNum, int maxNum) {
+	private List<KokuInformationRequestSummary> getRepliedRequests(String userId, InformationRequestCriteria criteria, int startNum, int maxNum) throws KokuServiceException {
 		try {
 			return createLocalPojos(service.getRepliedRequests(userId, getInformationReqQuery(criteria, startNum, maxNum)));			
 		} catch (RuntimeException e) {
@@ -158,7 +159,7 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 		}
 	}
 	
-	private List<KokuInformationRequestSummary> getSentRequests(String userId, InformationRequestCriteria criteria, int startNum, int maxNum) {
+	private List<KokuInformationRequestSummary> getSentRequests(String userId, InformationRequestCriteria criteria, int startNum, int maxNum) throws KokuServiceException {
 		try {
 			return createLocalPojos(service.getSentRequests(userId, getInformationReqQuery(criteria, startNum, maxNum)));
 		} catch (RuntimeException e) {
@@ -167,7 +168,7 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 		}
 	}
 	
-	private List<KokuInformationRequestSummary> getRequests(InformationRequestCriteria criteria, int startNum, int maxNum) {
+	private List<KokuInformationRequestSummary> getRequests(InformationRequestCriteria criteria, int startNum, int maxNum) throws KokuServiceException {
 		try {
 			return createLocalPojos(service.getRequests(getInformationReqQuery(criteria, startNum, maxNum)));
 		} catch (RuntimeException e) {
@@ -253,7 +254,7 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 		}
 	}
 	
-	private List<KokuInformationRequestSummary> createLocalPojos(List<InformationRequestSummary> summaries) {
+	private List<KokuInformationRequestSummary> createLocalPojos(List<InformationRequestSummary> summaries) throws KokuServiceException {
 		List<KokuInformationRequestSummary> kokuSummaries = new ArrayList<KokuInformationRequestSummary>();
 		for (InformationRequestSummary summary : summaries) {
 			KokuInformationRequestSummary kokuSummary = new KokuInformationRequestSummary(summary);
@@ -271,14 +272,14 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 		return query;
 	}
 	
-	private void localizeDetails(KokuInformationRequestDetail kokuSummary) {
+	private void localizeDetails(KokuInformationRequestDetail kokuSummary) throws KokuServiceException {
 		localizeSummary(kokuSummary);
 		if (kokuSummary.getTargetPersonUid() != null) {
 			kokuSummary.setTargetPersonName(userService.getKunpoNameByUserUid(kokuSummary.getTargetPersonUid()));
 		}
 	}
 	
-	private void localizeSummary(KokuInformationRequestSummary kokuSummary) {
+	private void localizeSummary(KokuInformationRequestSummary kokuSummary) throws KokuServiceException {
 		if (kokuSummary.getStatus() != null) {
 			kokuSummary.setLocalizedStatus(getLocalizedInformationRequestSummary(kokuSummary.getStatus()));
 		}
