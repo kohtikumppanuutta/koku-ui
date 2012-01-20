@@ -1,5 +1,6 @@
 package fi.arcusys.koku.web.util.impl;
 
+import static fi.arcusys.koku.util.Constants.JSON_FAILURE_UUID;
 import static fi.arcusys.koku.util.Constants.JSON_LOGIN_STATUS;
 import static fi.arcusys.koku.util.Constants.JSON_RESULT;
 import static fi.arcusys.koku.util.Constants.RESPONSE_OK;
@@ -104,6 +105,7 @@ public class QueryProcessCitizenImpl extends AbstractQueryProcess {
 		} catch (KokuServiceException kse) {
 			LOG.error("Koku WS query failed", kse);
 			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
+			jsonModel.put(JSON_FAILURE_UUID, kse.getUuid());
 		}
 		
 		totalPages = (totalTasksNum == 0) ? 1:(int) Math.ceil((double)totalTasksNum/numPerPage);
