@@ -166,7 +166,7 @@ public String htmlToCode(String s)
 			 */
 			returnMainPage: function() {
 				var url = "<%= homeURL %>";
-				url = formatUrl(url);
+				url = this.formatUrl(url);
 				window.location = url;
 			}
 		}
