@@ -32,9 +32,7 @@ jQuery(document).ready(function(){
 			
 			loadingTimes += 1;
 		});
-	}
-	
-							
+	}		
 });
 
 /**

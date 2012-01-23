@@ -1,6 +1,26 @@
 package fi.koku.taskmanager.controller;
 
-import static fi.arcusys.koku.util.Constants.*;
+import static fi.arcusys.koku.util.Constants.ATTR_CURRENT_PAGE;
+import static fi.arcusys.koku.util.Constants.ATTR_KEYWORD;
+import static fi.arcusys.koku.util.Constants.ATTR_MY_ACTION;
+import static fi.arcusys.koku.util.Constants.ATTR_ORDER_TYPE;
+import static fi.arcusys.koku.util.Constants.ATTR_TASK_LINK;
+import static fi.arcusys.koku.util.Constants.ATTR_TASK_TYPE;
+import static fi.arcusys.koku.util.Constants.ATTR_TOKEN;
+import static fi.arcusys.koku.util.Constants.ATTR_USERNAME;
+import static fi.arcusys.koku.util.Constants.JSON_EDITABLE;
+import static fi.arcusys.koku.util.Constants.JSON_LOGIN_STATUS;
+import static fi.arcusys.koku.util.Constants.JSON_RENDER_URL;
+import static fi.arcusys.koku.util.Constants.JSON_TASKS;
+import static fi.arcusys.koku.util.Constants.JSON_TASK_STATE;
+import static fi.arcusys.koku.util.Constants.JSON_TOKEN_STATUS;
+import static fi.arcusys.koku.util.Constants.JSON_TOTAL_ITEMS;
+import static fi.arcusys.koku.util.Constants.JSON_TOTAL_PAGES;
+import static fi.arcusys.koku.util.Constants.MY_ACTION_TASKFORM;
+import static fi.arcusys.koku.util.Constants.PREF_EDITABLE;
+import static fi.arcusys.koku.util.Constants.RESPONSE;
+import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_INVALID;
+import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_VALID;
 import static fi.arcusys.koku.util.Properties.IS_KUNPO_PORTAL;
 import static fi.arcusys.koku.util.Properties.VETUMA_ENABLED;
 
@@ -31,6 +51,7 @@ import fi.arcusys.koku.util.TaskUtil;
 
 /**
  * Handles ajax request from web and returns the data with json string
+ * 
  * @author Jinhua Chen
  * May 11, 2011
  */
@@ -42,6 +63,7 @@ public class AjaxController {
 
 	/**
 	 * Shows ajax for retrieving intalio tasks
+	 * 
 	 * @param page page id
 	 * @param taskTypeStr intalio task type
 	 * @param keyword keyword for searching/filtering
@@ -52,13 +74,16 @@ public class AjaxController {
 	 * @return ajax view with intalio tasks and related information in json format
 	 */
 	@ResourceMapping(value = "getTask")
-	public String showAjax(@RequestParam(value = "page") int page,
+	public String showAjax(
+			@RequestParam(value = "page") int page,
 			@RequestParam(value = "taskType") String taskTypeStr,
 			@RequestParam(value = "keyword") String keyword,
 			@RequestParam(value = "orderType") String orderType,
-			ModelMap modelmap, PortletRequest request, PortletResponse response) {
+			ModelMap modelmap, 
+			PortletRequest request, 
+			PortletResponse response) {
 		
-		PortletSession portletSession = request.getPortletSession();				
+		final PortletSession portletSession = request.getPortletSession();				
 		final String token = (String) portletSession.getAttribute(ATTR_TOKEN);
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		
@@ -79,6 +104,7 @@ public class AjaxController {
 	
 	/**
 	 * Gets the task state
+	 * 
 	 * @param taskId intalio task id
 	 * @param modelmap
 	 * @param request
@@ -86,10 +112,13 @@ public class AjaxController {
 	 * @return ajax view with task state in json format
 	 */
 	@ResourceMapping(value = "getState")
-	public String getTaskState(@RequestParam(value = "taskId") String taskId,
-			ModelMap modelmap, PortletRequest request, PortletResponse response) {
+	public String getTaskState(
+			@RequestParam(value = "taskId") String taskId,
+			ModelMap modelmap, 
+			PortletRequest request, 
+			PortletResponse response) {
 		
-		PortletSession portletSession = request.getPortletSession();				
+		final PortletSession portletSession = request.getPortletSession();				
 		final String token = (String) portletSession.getAttribute(ATTR_TOKEN);
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		if (isInvalidStrongAuthentication(portletSession)) {
@@ -112,6 +141,7 @@ public class AjaxController {
 	
 	/**
 	 * Processes task query and gets task list
+	 * 
 	 * @param taskType task type
 	 * @param page page id
 	 * @param keyword keyword for searching/filtering
@@ -120,7 +150,13 @@ public class AjaxController {
 	 * @param username user name
 	 * @return task information in Json format
 	 */
-	public JSONObject getJsonModel(int taskType, int page, String keyword, String orderType, String token, String username) {
+	public JSONObject getJsonModel(
+			int taskType, 
+			int page, 
+			String keyword, 
+			String orderType, 
+			String token, 
+			String username) {
 		JSONObject jsonModel = new JSONObject();
 		
 		if (token == null) {
@@ -147,6 +183,7 @@ public class AjaxController {
 	
 	/**
 	 * Converts task type string to integer
+	 * 
 	 * @param taskTypeStr task type string
 	 * @return task type
 	 */
@@ -163,6 +200,19 @@ public class AjaxController {
 		}
 	}
 	
+	/**
+	 * Returns createForm renderUrl
+	 * 
+	 * @param taskLink
+	 * @param currentPage
+	 * @param taskType
+	 * @param keyword
+	 * @param orderType
+	 * @param modelmap
+	 * @param request
+	 * @param response
+	 * @return returns jsonData
+	 */
 	@ResourceMapping(value = "createFormRenderUrl")
 	public String createFormRenderUrl(
 			@RequestParam(value = "tasklink") String taskLink,
@@ -170,15 +220,17 @@ public class AjaxController {
 			@RequestParam(value = "taskType") String taskType,
 			@RequestParam(value = "keyword") String keyword,
 			@RequestParam(value = "orderType") String orderType,
-			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
+			ModelMap modelmap, 
+			PortletRequest request, 
+			ResourceResponse response) {
 		
-		PortletSession portletSession = request.getPortletSession();				
+		final PortletSession portletSession = request.getPortletSession();				
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		if (isInvalidStrongAuthentication(portletSession)) {
 			return authenticationFailed(modelmap, username);
 		}
 		
-		PortletURL renderUrlObj = response.createRenderURL();
+		final PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_TASKFORM);
 		renderUrlObj.setParameter( ATTR_TASK_LINK, taskLink);
 		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
@@ -199,18 +251,27 @@ public class AjaxController {
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 
+	/**
+	 * Returns popupRenderUrl
+	 * 
+	 * @param taskLink
+	 * @param modelmap
+	 * @param request
+	 * @param response
+	 * @return returns jsonData
+	 */
 	@ResourceMapping(value = "createPopupRenderUrl")
 	public String createPopupRenderUrl(
 			@RequestParam(value = "tasklink") String taskLink,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 		
-		PortletSession portletSession = request.getPortletSession();				
+		final PortletSession portletSession = request.getPortletSession();				
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		if (isInvalidStrongAuthentication(portletSession)) {
 			return authenticationFailed(modelmap, username);
 		}
 		
-		PortletURL renderUrlObj = response.createRenderURL();
+		final PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_TASKFORM);
 		renderUrlObj.setParameter( ATTR_TASK_LINK, taskLink);
 		try {
@@ -245,6 +306,13 @@ public class AjaxController {
 		}
 	}
 	
+	/**
+	 * Creates authentication failed JSON response
+	 * 
+	 * @param modelMap
+	 * @param username
+	 * @return jsondata
+	 */
 	protected String authenticationFailed(ModelMap modelMap, String username){
 		LOG.error("Strong authentication required! User '"+username+"' is not Vetuma authenticated!");	
 		JSONObject jsonModel = new JSONObject();
