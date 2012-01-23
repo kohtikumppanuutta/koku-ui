@@ -16,6 +16,10 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.message.MessageHandle;
 import fi.arcusys.koku.kv.model.Message;
+import fi.arcusys.koku.kv.request.employee.EmployeeRequestService;
+import fi.arcusys.koku.web.util.ModelWrapper;
+import fi.arcusys.koku.web.util.ResponseStatus;
+import fi.arcusys.koku.web.util.impl.ModelWrapperMessageImpl;
 import static fi.arcusys.koku.util.Constants.*;
 
 /**
@@ -51,10 +55,11 @@ public class ShowMessageController {
 	 * @param keyword page parameter keyword
 	 * @param orderType page parameter order type
 	 * @param request RenderRequest
+	 * @return 
 	 * @return message data model
 	 */
 	@ModelAttribute(value = "message")
-	public Message model(
+	public ModelWrapper<Message> ModelWrapperMessageImplmodel(
 			@RequestParam String messageId,
 			@RequestParam String currentPage,
 			@RequestParam String taskType, 
@@ -68,17 +73,20 @@ public class ShowMessageController {
 		request.getPortletSession().setAttribute(ATTR_KEYWORD, keyword, PortletSession.APPLICATION_SCOPE);
 		request.getPortletSession().setAttribute(ATTR_ORDER_TYPE, orderType, PortletSession.APPLICATION_SCOPE);
 		
+		ModelWrapper<Message> modelWrapper = null;
 		Message message = null;
 		try {
 			MessageHandle msghandle = new MessageHandle();
 			msghandle.setMessageSource(messageSource);
 			message = msghandle.getMessageById(messageId);
+			modelWrapper = new ModelWrapperMessageImpl(message, ResponseStatus.OK);			
 		} catch (KokuServiceException kse) {
 			LOG.error("Failed to show message details. messageId: '"+messageId + 
 					"' username: '"+request.getUserPrincipal().getName()+" taskType: '"+taskType + 
 					"' keyword: '" + keyword + "'", kse);
-		}		
-		return message;
+			modelWrapper = new ModelWrapperMessageImpl(null, ResponseStatus.FAIL, kse.getUuid());
+		}
+		return modelWrapper;
 	}
 
 }

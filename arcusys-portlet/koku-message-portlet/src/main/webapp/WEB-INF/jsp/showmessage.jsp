@@ -1,9 +1,14 @@
+<%@page import="fi.arcusys.koku.web.util.ResponseStatus"%>
+<%@page import="fi.arcusys.koku.web.util.ModelWrapper"%>
+<%@page import="java.util.Collections"%>
 <%@ page import="net.sf.json.JSONArray"%>
 <%@ include file="init.jsp"%>
 <%@ page import="fi.arcusys.koku.kv.model.Message" %>
 <%@ page import="fi.arcusys.koku.users.KokuUser" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Enumeration" %>
+
 
 <portlet:renderURL var="homeURL" windowState="<%= WindowState.NORMAL.toString() %>" >
 	<portlet:param name="myaction" value="home" />
@@ -42,51 +47,69 @@ public String htmlToCode(String s)
 	}
 } 
 
-%>
 
-<%
-	Message message = (Message) request.getAttribute("message");
-	String srcContent = message.getContent();
-	String sender = message.getSender();
-	String recipients = message.getRecipients();
-	String subject = message.getSubject();
-	String type = message.getMessageType();
-	String content = htmlToCode(srcContent);
-	List<KokuUser> missingUsers = message.getDeliveryFailedTo();
-	List<String> missingUserNames = new ArrayList<String>();
-	if (!missingUsers.isEmpty()) {
-		for (KokuUser user : missingUsers) {
-			missingUserNames.add(user.getFullName());
-		}
-	}	
-	JSONArray usernameArray = JSONArray.fromObject(missingUserNames);
+	ResponseStatus responseResult = ResponseStatus.FAIL;
+	ModelWrapper<Message> messageModel = (ModelWrapper<Message>) request.getAttribute("message");
+	responseResult = messageModel.getResponseStatus();
 	
-	Boolean isHtml = false;
-	if (srcContent != null) {
-		isHtml = srcContent.startsWith("<html");	
+	List<String> missingUserNames = new ArrayList<String>();
+	String content = null;
+	JSONArray usernameArray = JSONArray.fromObject(missingUserNames);
+	if (responseResult.equals(ResponseStatus.OK)) {		
+		Message message = messageModel.getModel();
+		String srcContent = message.getContent();
+		content = htmlToCode(srcContent);
+		List<KokuUser> missingUsers = message.getDeliveryFailedTo();
+		
+		if (!missingUsers.isEmpty()) {
+			for (KokuUser user : missingUsers) {
+				missingUserNames.add(user.getFullName());
+			}
+		}
+		usernameArray = JSONArray.fromObject(missingUserNames);
+		
+		Boolean isHtml = false;
+		if (srcContent != null) {
+			isHtml = srcContent.startsWith("<html");	
+		}
 	}
 
 %>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.jgrowl_minimized.js"></script>
 <script type="text/javascript"> 
 	
 	window.onload = function() {
-		var content = '<%= content %>';
-		content = content.replace(/&rsquo;/g, "'");
-		jQuery('#messageContent').html(content);
-		var missingUsers = <%= usernameArray.toString() %>;
-		
-		if (missingUsers.length >= 2) {
-			var persons = "";
-			for(var i in missingUsers) {
-				persons += missingUsers[i] + ", ";
+		if ('<%= responseResult %>' == '<%= ResponseStatus.FAIL%>') {
+			// show errorMsg
+			var options = { 
+				sticky: true,
+				theme : "serverErrorWarningMsg",
+				header: "Oops!",
+				closer: true,
+				position: "center"	
+			};
+			var msg = "<div class=\"serverErrorMsg\"><spring:message code="notification.serverError.msg" /></div>";
+			msg += "<div class=\"serverErrorUuidMsg\"><spring:message code="notification.serverError.uuidMsg" />";
+			msg += "<span class=\"failureUuid\"><%= messageModel.getErrorCode() %></span></div>";
+			jQuery.jGrowl(msg, options);
+		} else {		
+			var content = '<%= content %>';
+			content = content.replace(/&rsquo;/g, "'");
+			jQuery('#messageContent').html(content);
+			var missingUsers = <%= usernameArray.toString() %>;
+			
+			if (missingUsers.length >= 2) {
+				var persons = "";
+				for(var i in missingUsers) {
+					persons += missingUsers[i] + ", ";
+				}
+				persons = persons.substring(0, persons.length-2);
+				jQuery('#failedEmailDelivery').html("Huom! Viestiä ei voitu välittää sähköpostitse seuraaville henkilöille: "+persons);
+			} else if (missingUsers.length >= 1) {
+				jQuery('#failedEmailDelivery').html("Huom! Viestiä ei voitu välittää sähköpostitse seuraavalle henkilölle:  " + missingUsers[0]);
 			}
-			persons = persons.substring(0, persons.length-2);
-			jQuery('#failedEmailDelivery').html("Huom! Viestiä ei voitu välittää sähköpostitse seuraaville henkilöille: "+persons);
-		} else if (missingUsers.length >= 1) {
-			jQuery('#failedEmailDelivery').html("Huom! Viestiä ei voitu välittää sähköpostitse seuraavalle henkilölle:  " + missingUsers[0]);
 		}
-	}
-	
+	}	
 	
 	var KokuMessage = {
 			
