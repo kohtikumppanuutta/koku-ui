@@ -1,5 +1,13 @@
 package fi.koku.taskmanager.controller;
 
+import static fi.arcusys.koku.util.Constants.PREF_DEFAULT_TASK_TYPE;
+import static fi.arcusys.koku.util.Constants.PREF_EDITABLE;
+import static fi.arcusys.koku.util.Constants.PREF_NOTIFICATION_FILTER;
+import static fi.arcusys.koku.util.Constants.PREF_OPEN_FORM;
+import static fi.arcusys.koku.util.Constants.PREF_REFRESH_DURATION;
+import static fi.arcusys.koku.util.Constants.PREF_TASK_FILTER;
+import static fi.arcusys.koku.util.Constants.VIEW_CONFIG;
+
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletMode;
@@ -14,10 +22,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
-import static fi.arcusys.koku.util.Constants.*;
 
 /**
  * Configuration/edit mode of portlet
+ * 
  * @author Jinhua Chen
  * May 11, 2011
  */
@@ -26,11 +34,26 @@ import static fi.arcusys.koku.util.Constants.*;
 public class ConfigController {
 
 	private static final Logger LOG = Logger.getLogger(ConfigController.class);
+	
+	/**
+	 * Returns configuration view
+	 * 
+	 * @param request
+	 * @param response
+	 * @param modelmap
+	 * @return configuration view
+	 */
 	@RenderMapping
 	public String showConfig(RenderRequest request, RenderResponse response, ModelMap modelmap) {	
 		return VIEW_CONFIG;
 	}
 	
+	/**
+	 * Save taskmanager configuration settings (Works only Kunpo(GateIn side)
+	 * 
+	 * @param request
+	 * @param response
+	 */
 	@ActionMapping(params="myaction=config")
 	public void doConfig(ActionRequest request, ActionResponse response)  {
 		 

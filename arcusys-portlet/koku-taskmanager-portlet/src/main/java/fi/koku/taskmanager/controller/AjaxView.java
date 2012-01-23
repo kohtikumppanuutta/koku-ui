@@ -4,14 +4,17 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.servlet.view.AbstractView;
 
 /**
  * Implements ajax view for ajax response in json format
+ * 
  * @author Jinhua Chen
  * May 11, 2011
  */
