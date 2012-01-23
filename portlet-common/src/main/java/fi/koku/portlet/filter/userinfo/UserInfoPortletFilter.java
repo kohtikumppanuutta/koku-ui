@@ -174,7 +174,7 @@ public class UserInfoPortletFilter implements RenderFilter, ActionFilter, EventF
       return;
     }
 
-    if (userInfo.isStrongAuthenticationEnabled() && !userInfo.hasStrongAuthentication()) {
+    if (userInfo.isStrongAuthenticationEnabled()/* && !userInfo.hasStrongAuthentication()*/) {
 
       if (log.isDebugEnabled()) {
         log.debug("User does not have strongly authenticated session.");
@@ -239,7 +239,7 @@ public class UserInfoPortletFilter implements RenderFilter, ActionFilter, EventF
     // Fetch userinfo from session or from remote service
 
     UserInfo ui = (UserInfo) request.getPortletSession(true).getAttribute(UserInfo.KEY_USER_INFO);
-
+//    UserInfo ui = null;
     if (ui == null) {
 
       String uid = request.getRemoteUser();
