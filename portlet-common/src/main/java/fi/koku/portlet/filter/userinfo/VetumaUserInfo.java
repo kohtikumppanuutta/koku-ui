@@ -29,9 +29,4 @@ public class VetumaUserInfo extends UserInfo {
     return true;
   }
 
-  @Override
-  void setStrongAuthentication(boolean strongAuthentication) {
-    this.strongAuthentication = strongAuthentication;
-  }
-
 }

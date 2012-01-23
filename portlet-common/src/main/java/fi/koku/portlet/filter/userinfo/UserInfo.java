@@ -83,7 +83,6 @@ public abstract class UserInfo {
   }
 
   public abstract boolean isStrongAuthenticationEnabled();
-  abstract void setStrongAuthentication(boolean strongAuthentication);
   public abstract boolean hasStrongAuthentication();
 
 }

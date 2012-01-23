@@ -90,6 +90,10 @@ public class UserInfoPortletFilter implements RenderFilter, ActionFilter, EventF
           public String getAuthenticationURL(RenderResponse response, String id) {
             return null;
           }
+
+          public boolean hasStrongAuthentication(PortletRequest request, String pic) {
+            return false;
+          }
         };
 
       }
@@ -174,26 +178,8 @@ public class UserInfoPortletFilter implements RenderFilter, ActionFilter, EventF
       return;
     }
 
-    if (userInfo.isStrongAuthenticationEnabled()/* && !userInfo.hasStrongAuthentication()*/) {
-
-      if (log.isDebugEnabled()) {
-        log.debug("User does not have strongly authenticated session.");
-      }
-
-      setStrongAuthentication(request, response, userInfo);
-    }
-
     request.getPortletSession().setAttribute(UserInfo.KEY_USER_INFO, userInfo);
 
-  }
-
-  private void setStrongAuthentication(PortletRequest request, PortletResponse response, UserInfo userInfo) {
-
-    if (authServiceClient.hasStrongAuthentication(request)) {
-      updateUserInfo(request, userInfo);
-    } else {
-      setAuthenticationURL(request, response, userInfo);
-    }
   }
 
   private void setAuthenticationURL(PortletRequest request, PortletResponse response, UserInfo userInfo) {
@@ -217,29 +203,11 @@ public class UserInfoPortletFilter implements RenderFilter, ActionFilter, EventF
     }
   }
 
-  private void updateUserInfo(PortletRequest request, UserInfo userInfo) {
-
-    VetumaUserInfo ticketString = authServiceClient.getVetumaUserInfo(request);
-
-    if (userInfo.getPic().equals(ticketString.getId())) {
-
-      userInfo.setStrongAuthentication(true);
-
-      if (log.isDebugEnabled()) {
-        log.debug("Strong authentication set for user " + userInfo);
-      }
-
-    } else {
-      log.warn("Pic from UserInfoService does not match Vetuma's id.");
-    }
-
-  }
-
   private UserInfo getUserInfo(PortletRequest request) {
     // Fetch userinfo from session or from remote service
 
     UserInfo ui = (UserInfo) request.getPortletSession(true).getAttribute(UserInfo.KEY_USER_INFO);
-//    UserInfo ui = null;
+
     if (ui == null) {
 
       String uid = request.getRemoteUser();
@@ -320,22 +288,29 @@ public class UserInfoPortletFilter implements RenderFilter, ActionFilter, EventF
 
   }
 
-  private boolean isLoggedIn(UserInfo ui) {
+  private boolean isLoggedIn(UserInfo ui, PortletRequest request, PortletResponse response) {
 
     if (ui == null) {
       return false;
     }
 
     if (ui.isStrongAuthenticationEnabled()) {
-      return ui.hasStrongAuthentication();
+      if (!authServiceClient.hasStrongAuthentication(request, ui.getPic())) {
+        setAuthenticationURL(request, response, ui);
+        return false;
+      }
+      return true;
     }
+    
     return StringUtils.isNotEmpty(ui.getPic());
   }
 
   private boolean isAuthorized(PortletRequest request, PortletResponse response) throws IOException,
   PortletException {
+    
     UserInfo ui = getUserInfo(request);
-    if (!isLoggedIn(ui)) {
+    
+    if (!isLoggedIn(ui, request, response)) {
    
       PortletRequestDispatcher prd = filterConfig.getPortletContext().getRequestDispatcher(
           "/WEB-INF/jsp/authenticate.jsp");
@@ -351,8 +326,10 @@ public class UserInfoPortletFilter implements RenderFilter, ActionFilter, EventF
       }
       
       prd.include(request, response);
+    
       return false;
     }
+    
     return true;
   }
 
