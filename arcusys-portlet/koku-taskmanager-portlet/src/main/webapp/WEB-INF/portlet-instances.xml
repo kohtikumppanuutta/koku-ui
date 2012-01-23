@@ -13,7 +13,7 @@
          <preferences>         
          	<preference>
 				<name>taskFilter</name>
-				<value></value>
+				<value>Uusi tietopyyntö:</value>
 			</preference>			
 			<preference>
 				<name>notifFilter</name>
@@ -25,7 +25,7 @@
 			</preference>
 			<preference>
 				<name>defaultTaskType</name>
-				<value>notification</value>
+				<value>task</value>
 			</preference>
 			<preference>
 				<name>openForm</name>
@@ -46,11 +46,10 @@
          <instance-id>TaskMgrTietopyyntoAvoimet</instance-id>
          <portlet-ref>taskManager</portlet-ref>
          <preferences>
-         
           	<preference>
 				<name>taskFilter</name>
 				<value></value>
-			</preference>			
+			</preference>
 			<preference>
 				<name>notifFilter</name>
 				<value></value>
@@ -85,7 +84,7 @@
          
           	<preference>
 				<name>taskFilter</name>
-				<value></value>
+				<value>Uusi pyyntö:</value>
 			</preference>			
 			<preference>
 				<name>notifFilter</name>
