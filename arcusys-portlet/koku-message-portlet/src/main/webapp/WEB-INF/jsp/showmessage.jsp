@@ -46,8 +46,9 @@ public String htmlToCode(String s)
 		return s;
 	}
 } 
+%>
 
-
+<%
 	ResponseStatus responseResult = ResponseStatus.FAIL;
 	ModelWrapper<Message> messageModel = (ModelWrapper<Message>) request.getAttribute("message");
 	responseResult = messageModel.getResponseStatus();
@@ -55,7 +56,7 @@ public String htmlToCode(String s)
 	List<String> missingUserNames = new ArrayList<String>();
 	String content = null;
 	JSONArray usernameArray = JSONArray.fromObject(missingUserNames);
-	if (responseResult.equals(ResponseStatus.OK)) {		
+	if (responseResult.equals(ResponseStatus.OK)) {
 		Message message = messageModel.getModel();
 		String srcContent = message.getContent();
 		content = htmlToCode(srcContent);
@@ -67,11 +68,6 @@ public String htmlToCode(String s)
 			}
 		}
 		usernameArray = JSONArray.fromObject(missingUserNames);
-		
-		Boolean isHtml = false;
-		if (srcContent != null) {
-			isHtml = srcContent.startsWith("<html");	
-		}
 	}
 
 %>
@@ -79,7 +75,7 @@ public String htmlToCode(String s)
 <script type="text/javascript"> 
 	
 	window.onload = function() {
-		if ('<%= responseResult %>' == '<%= ResponseStatus.FAIL%>') {
+		if ('<%= responseResult.toString() %>' == '<%= ResponseStatus.FAIL.toString() %>') {
 			// show errorMsg
 			var options = { 
 				sticky: true,
