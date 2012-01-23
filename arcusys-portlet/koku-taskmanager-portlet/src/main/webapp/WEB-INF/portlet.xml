@@ -34,6 +34,14 @@
 				<name>openForm</name>
 				<value>1</value>
 			</preference>
+			<preference>
+				<name>taskFilter</name>
+				<value></value>
+			</preference>
+			<preference>
+				<name>notifFilter</name>		
+				<value></value>
+			</preference>
 		</portlet-preferences>
 	</portlet>
 	
