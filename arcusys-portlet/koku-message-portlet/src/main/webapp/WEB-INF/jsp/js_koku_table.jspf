@@ -256,7 +256,17 @@ KokuTable.prototype.createRequestsEmployeeTable = function(tasks) {
 }
 
 
-KokuTable.prototype.createRequestReplied = function(tasks) { 
+KokuTable.prototype.createRequestReplied = function(tasks) {
+
+	function flattenTasksRepliedTasks(tasks) {
+		for (var i = 0; i < tasks.length; i++)  {			
+			tasks[i]["sender"] = tasks[i].request.sender;
+			tasks[i]["subject"] = tasks[i].request.subject;
+			tasks[i]["endDate"] = tasks[i].request.endDate;
+			tasks[i]["creationDate"] = tasks[i].request.creationDate;
+		}
+	};
+	
 	if (tasks == undefined || tasks == null || tasks.length == 0) {
 		return KokuUtil.errorMsg.showErrorMsgYouDontHaveAnyTipys();
 	}
@@ -275,11 +285,8 @@ KokuTable.prototype.createRequestReplied = function(tasks) {
 	                 "creationDate",
 	                 "endDate"
 	                ];
-	this.flattenTasksRepliedTasks(tasks);
+	flattenTasksRepliedTasks(tasks);
 	return this.tableGenerator.createTable("kokuAjax.showResponse", "browseRepliedRequests", columnNames, columnIds, tasks);
 };
-
-
-
 
 			
