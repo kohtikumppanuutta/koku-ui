@@ -103,8 +103,7 @@ public class MessageService {
 	 */
 	public fi.arcusys.koku.kv.messageservice.Message getMessageById(long messageId) throws KokuServiceException {
 		try {
-			throw new RuntimeException("KA BOOM!!");
-			//return ms.getKokuMessageServicePort().getMessageById(messageId);
+			return ms.getKokuMessageServicePort().getMessageById(messageId);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getMessageById failed. messageId: '"+messageId+"'", e);
 		}
