@@ -27,8 +27,4 @@ public class LooraUserInfo extends UserInfo {
     return false;
   }
 
-  @Override
-  void setStrongAuthentication(boolean strongAuthentication) {    
-  }
-
 }
