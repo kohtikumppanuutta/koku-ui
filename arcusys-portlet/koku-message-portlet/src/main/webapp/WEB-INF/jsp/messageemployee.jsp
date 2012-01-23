@@ -111,6 +111,7 @@
 	 	messageUrl : "<%= messageURL %>",
 	 	requestUrl :"<%= requestURL %>",
 	 	appointmentUrl : "<%= appointmentURL %>",
+	 	responseRenderUrl :  "<%= responseRenderURL %>",
 	 	consentUrl : "<%= consentURL %>",
 		citizenWarrantUrl : "<%= citizenWarrantURL %>",
 		tipyUrl : "<%= tipyURL %>",
