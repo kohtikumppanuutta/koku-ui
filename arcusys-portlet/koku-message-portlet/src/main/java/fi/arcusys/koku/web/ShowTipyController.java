@@ -108,7 +108,7 @@ public class ShowTipyController extends AbstractController {
 			LOG.error("Failed to show infoRequest details. infoRequestId: '"+requestId + 
 					"' username: '"+username+" taskType: '"+taskType + 
 					"' keyword: '" + keyword + "'", kse);
-			modelWrapper = new ModelWrapperImpl<KokuInformationRequestDetail>(null, ResponseStatus.FAIL, kse.getUuid());
+			modelWrapper = new ModelWrapperImpl<KokuInformationRequestDetail>(null, ResponseStatus.FAIL, kse.getErrorcode());
 		}
 		return modelWrapper;
 	}

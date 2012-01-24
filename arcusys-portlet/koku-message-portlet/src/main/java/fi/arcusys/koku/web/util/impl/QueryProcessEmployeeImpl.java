@@ -130,7 +130,7 @@ public class QueryProcessEmployeeImpl extends AbstractQueryProcess {
 		} catch (KokuServiceException kse) {
 			LOG.error("Koku WS query failed", kse);
 			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
-			jsonModel.put(JSON_FAILURE_UUID, kse.getUuid());
+			jsonModel.put(JSON_FAILURE_UUID, kse.getErrorcode());
 		}
 		
 		totalPages = (totalTasksNum == 0) ? 1:(int) Math.ceil((double)totalTasksNum/numPerPage);

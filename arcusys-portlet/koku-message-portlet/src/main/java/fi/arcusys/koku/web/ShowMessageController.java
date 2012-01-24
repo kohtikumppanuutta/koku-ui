@@ -88,7 +88,7 @@ public class ShowMessageController {
 			LOG.error("Failed to show message details. messageId: '"+messageId + 
 					"' username: '"+request.getUserPrincipal().getName()+" taskType: '"+taskType + 
 					"' keyword: '" + keyword + "'", kse);
-			modelWrapper = new ModelWrapperImpl<Message>(null, ResponseStatus.FAIL, kse.getUuid());
+			modelWrapper = new ModelWrapperImpl<Message>(null, ResponseStatus.FAIL, kse.getErrorcode());
 		}
 		return modelWrapper;
 	}
