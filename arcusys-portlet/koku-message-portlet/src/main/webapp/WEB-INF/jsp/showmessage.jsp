@@ -69,7 +69,6 @@ public String htmlToCode(String s)
 		}
 		usernameArray = JSONArray.fromObject(missingUserNames);
 	}
-
 %>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.jgrowl_minimized.js"></script>
 <script type="text/javascript"> 

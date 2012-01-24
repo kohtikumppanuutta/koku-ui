@@ -24,7 +24,6 @@ public class KokuUser {
 		}
 	}
 
-
 	public KokuUser(fi.arcusys.koku.kv.requestservice.User user) {
 		if (user != null) {
 			setUid(user.getUid());
@@ -47,69 +46,57 @@ public class KokuUser {
 		}
 	}
 
-	public String getUid() {
+	public final String getUid() {
 		return uid;
 	}
 
-
-	public void setUid(String uid) {
+	public final void setUid(String uid) {
 		this.uid = uid;
 	}
 
-
-	public String getFirstname() {
+	public final String getFirstname() {
 		return firstname;
 	}
 
-
-	public void setFirstname(String firstname) {
+	public final void setFirstname(String firstname) {
 		this.firstname = firstname;
 	}
 
-
-	public String getLastname() {
+	public final String getLastname() {
 		return lastname;
 	}
-
 
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
 
-
-	public String getDisplayname() {
+	public final String getDisplayname() {
 		return displayname;
 	}
 
-
-	public void setDisplayname(String displayname) {
+	public final void setDisplayname(String displayname) {
 		this.displayname = displayname;
 	}
 
-
-	public String getPhoneNumber() {
+	public final String getPhoneNumber() {
 		return phoneNumber;
 	}
 
-
-	public void setPhoneNumber(String phoneNumber) {
+	public final void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 
-
-	public String getEmail() {
+	public final String getEmail() {
 		return email;
 	}
 
-
-	public void setEmail(String email) {
+	public final void setEmail(String email) {
 		this.email = email;
 	}
 	
-	public String getFullName() {
+	public final String getFullName() {
 		return firstname + " " + lastname;
 	}
-
 
 	@Override
 	public String toString() {
@@ -117,7 +104,6 @@ public class KokuUser {
 				+ ", lastname=" + lastname + ", displayname=" + displayname
 				+ ", phoneNumber=" + phoneNumber + ", email=" + email + "]";
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -135,7 +121,6 @@ public class KokuUser {
 		result = prime * result + ((uid == null) ? 0 : uid.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {

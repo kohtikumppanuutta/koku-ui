@@ -59,7 +59,7 @@ public class ShowMessageController {
 	 * @return message data model
 	 */
 	@ModelAttribute(value = "message")
-	public ModelWrapper<Message> ModelWrapperMessageImplmodel(
+	public ModelWrapper<Message> model (
 			@RequestParam String messageId,
 			@RequestParam String currentPage,
 			@RequestParam String taskType, 
