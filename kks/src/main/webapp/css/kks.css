@@ -139,11 +139,11 @@
 	    background-image: none;
 	    background-color: #FFFFFF;
 	    float: none;
-	    margin: 0px;
-	    padding: 0%;
+	    margin: 5px;
+	    padding: 5px;
 	    width: auto;
 	    position: relative;
-	    top: -100px;
+	    top: 10px;
 	}
 	
 	.koku-kks .kks-no-print {visibility:hidden;}
