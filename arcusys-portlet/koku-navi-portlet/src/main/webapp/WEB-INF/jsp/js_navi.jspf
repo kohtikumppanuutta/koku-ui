@@ -62,15 +62,7 @@ function focusCurrentItem() {
 	}
 };
 
-
-
-/**
- * Execute ajax query in Post way, and parse the Json format response, and
- * then create tasks in table and task page filed.
- */
-function ajaxUpdate() {
-
-	/* Formats url mainly for gatein epp*/
+/* Formats url mainly for gatein epp*/
 	function formatUrl(url) {
 		var newUrl;
 		newUrl = url.replace(/&quot;/g,'"');
@@ -78,7 +70,13 @@ function ajaxUpdate() {
 		newUrl = newUrl.replace(/&lt;/g,"<");
 		newUrl =  newUrl.replace(/&gt;/g,">");
 		return newUrl;
-	};
+};
+
+/**
+ * Execute ajax query in Post way, and parse the Json format response, and
+ * then create tasks in table and task page filed.
+ */
+function ajaxUpdate() {	
 	
 	/**
 	 * Updates the new message number to indicate user
