@@ -32,7 +32,7 @@ public class KokuServiceException extends Exception {
 		return getErrorCode() + super.getMessage();
 	}
 	
-	public final String getUuid() {
+	public final String getErrorcode() {
 		return uuid;
 	}	
 }
