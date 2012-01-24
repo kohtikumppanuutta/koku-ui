@@ -6,10 +6,10 @@ import static fi.arcusys.koku.util.Constants.ATTR_KEYWORD;
 import static fi.arcusys.koku.util.Constants.ATTR_ORDER_TYPE;
 import static fi.arcusys.koku.util.Constants.ATTR_TASK_TYPE;
 import static fi.arcusys.koku.util.Constants.ATTR_USERNAME;
+import static fi.arcusys.koku.util.Constants.TASK_TYPE_INFO_REQUEST_BROWSE;
 import static fi.arcusys.koku.util.Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED;
 import static fi.arcusys.koku.util.Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT;
 import static fi.arcusys.koku.util.Constants.VIEW_SHOW_INFO_REQUEST;
-import static fi.arcusys.koku.util.Constants.TASK_TYPE_INFO_REQUEST_BROWSE;
 
 import javax.annotation.Resource;
 import javax.portlet.PortletSession;
@@ -30,7 +30,7 @@ import fi.arcusys.koku.tiva.tietopyynto.model.KokuInformationRequestDetail;
 import fi.arcusys.koku.users.UserIdResolver;
 import fi.arcusys.koku.web.util.ModelWrapper;
 import fi.arcusys.koku.web.util.ResponseStatus;
-import fi.arcusys.koku.web.util.impl.ModelWrapperTipyImpl;
+import fi.arcusys.koku.web.util.impl.ModelWrapperImpl;
 
 /**
  * Shows Tietopyyntö form page and store the current query information on the jsp page
@@ -102,13 +102,13 @@ public class ShowTipyController extends AbstractController {
 				KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
 				handle.setMessageSource(messageSource);
 				info = handle.getRequestDetails(reqId);
-				modelWrapper = new ModelWrapperTipyImpl(info);
+				modelWrapper = new ModelWrapperImpl<KokuInformationRequestDetail>(info);
 			}
 		} catch (KokuServiceException kse) {
 			LOG.error("Failed to show infoRequest details. infoRequestId: '"+requestId + 
 					"' username: '"+username+" taskType: '"+taskType + 
 					"' keyword: '" + keyword + "'", kse);
-			modelWrapper = new ModelWrapperTipyImpl(null, ResponseStatus.FAIL, kse.getUuid());
+			modelWrapper = new ModelWrapperImpl<KokuInformationRequestDetail>(null, ResponseStatus.FAIL, kse.getUuid());
 		}
 		return modelWrapper;
 	}

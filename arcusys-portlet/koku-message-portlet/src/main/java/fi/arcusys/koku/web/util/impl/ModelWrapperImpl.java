@@ -10,7 +10,7 @@ import fi.arcusys.koku.web.util.ResponseStatus;
  *
  * @param <T>
  */
-public abstract class AbstractModelWrapper<T> implements ModelWrapper<T> {
+public class ModelWrapperImpl<T> implements ModelWrapper<T> {
 
 	private final T model;
 	private final ResponseStatus responseStatus;
@@ -22,7 +22,7 @@ public abstract class AbstractModelWrapper<T> implements ModelWrapper<T> {
 	 * 
 	 * @param message
 	 */
-	public AbstractModelWrapper(T model) {
+	public ModelWrapperImpl(T model) {
 		this(model, ResponseStatus.OK, null);		
 	}
 	
@@ -33,7 +33,7 @@ public abstract class AbstractModelWrapper<T> implements ModelWrapper<T> {
 	 * @param message
 	 * @param responseStatus
 	 */
-	public AbstractModelWrapper(T model, ResponseStatus responseStatus) {
+	public ModelWrapperImpl(T model, ResponseStatus responseStatus) {
 		this(model, responseStatus, null);
 	}
 	
@@ -45,7 +45,7 @@ public abstract class AbstractModelWrapper<T> implements ModelWrapper<T> {
 	 * @param responseStatus
 	 * @param errorCode
 	 */
-	public AbstractModelWrapper(T model, ResponseStatus responseStatus, String errorCode) {
+	public ModelWrapperImpl(T model, ResponseStatus responseStatus, String errorCode) {
 		this.model = model;
 		this.errorCode = errorCode;
 		if (model != null && responseStatus != null) {			
