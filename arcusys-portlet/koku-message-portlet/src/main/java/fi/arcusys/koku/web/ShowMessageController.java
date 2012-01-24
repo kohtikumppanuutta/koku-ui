@@ -1,5 +1,11 @@
 package fi.arcusys.koku.web;
 
+import static fi.arcusys.koku.util.Constants.ATTR_CURRENT_PAGE;
+import static fi.arcusys.koku.util.Constants.ATTR_KEYWORD;
+import static fi.arcusys.koku.util.Constants.ATTR_ORDER_TYPE;
+import static fi.arcusys.koku.util.Constants.ATTR_TASK_TYPE;
+import static fi.arcusys.koku.util.Constants.VIEW_SHOW_MESSAGE;
+
 import javax.annotation.Resource;
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
@@ -16,11 +22,9 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.message.MessageHandle;
 import fi.arcusys.koku.kv.model.Message;
-import fi.arcusys.koku.kv.request.employee.EmployeeRequestService;
 import fi.arcusys.koku.web.util.ModelWrapper;
 import fi.arcusys.koku.web.util.ResponseStatus;
-import fi.arcusys.koku.web.util.impl.ModelWrapperMessageImpl;
-import static fi.arcusys.koku.util.Constants.*;
+import fi.arcusys.koku.web.util.impl.ModelWrapperImpl;
 
 /**
  * Shows message details page and store the current query information on the jsp page
@@ -79,12 +83,12 @@ public class ShowMessageController {
 			MessageHandle msghandle = new MessageHandle();
 			msghandle.setMessageSource(messageSource);
 			message = msghandle.getMessageById(messageId);
-			modelWrapper = new ModelWrapperMessageImpl(message, ResponseStatus.OK);			
+			modelWrapper = new ModelWrapperImpl<Message>(message, ResponseStatus.OK);			
 		} catch (KokuServiceException kse) {
 			LOG.error("Failed to show message details. messageId: '"+messageId + 
 					"' username: '"+request.getUserPrincipal().getName()+" taskType: '"+taskType + 
 					"' keyword: '" + keyword + "'", kse);
-			modelWrapper = new ModelWrapperMessageImpl(null, ResponseStatus.FAIL, kse.getUuid());
+			modelWrapper = new ModelWrapperImpl<Message>(null, ResponseStatus.FAIL, kse.getUuid());
 		}
 		return modelWrapper;
 	}
