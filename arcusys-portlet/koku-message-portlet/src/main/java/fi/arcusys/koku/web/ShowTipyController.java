@@ -28,6 +28,9 @@ import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.tietopyynto.employee.KokuEmployeeTietopyyntoServiceHandle;
 import fi.arcusys.koku.tiva.tietopyynto.model.KokuInformationRequestDetail;
 import fi.arcusys.koku.users.UserIdResolver;
+import fi.arcusys.koku.web.util.ModelWrapper;
+import fi.arcusys.koku.web.util.ResponseStatus;
+import fi.arcusys.koku.web.util.impl.ModelWrapperTipyImpl;
 
 /**
  * Shows Tietopyyntö form page and store the current query information on the jsp page
@@ -63,7 +66,7 @@ public class ShowTipyController extends AbstractController {
 	 * @return KokuAuthorizationSummary data model
 	 */
 	@ModelAttribute(value = "tipy")
-	public KokuInformationRequestDetail model(
+	public ModelWrapper<KokuInformationRequestDetail> model(
 			@RequestParam String requestId,
 			@RequestParam String currentPage,
 			@RequestParam String taskType, 
@@ -77,33 +80,36 @@ public class ShowTipyController extends AbstractController {
 		request.getPortletSession().setAttribute(ATTR_KEYWORD, keyword, PortletSession.APPLICATION_SCOPE);
 		request.getPortletSession().setAttribute(ATTR_ORDER_TYPE, orderType, PortletSession.APPLICATION_SCOPE);
 		
-		KokuInformationRequestDetail  info = null;
+		ModelWrapper<KokuInformationRequestDetail> modelWrapper = null;
 		
 		PortletSession portletSession = request.getPortletSession();
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
-		long reqId = -1; 
-		try {
-			reqId  = Long.valueOf(requestId);
-		} catch (NumberFormatException nfe) {
-			LOG.error("AuthorizationID is not valid! Username: " + username + " UserId: " + userId + " AuthorizationId: "+ requestId);
-			return null;
-		}
 		
 		try {
+			long reqId = -1; 
+			try {
+				reqId  = Long.valueOf(requestId);
+			} catch (NumberFormatException nfe) {
+				throw new KokuServiceException("AuthorizationID is not valid! Username: " + username + " UserId: " + userId + " AuthorizationId: "+ requestId, nfe);
+			}
+			
+			KokuInformationRequestDetail info = null;
 			if(taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED) 
 			   || taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_SENT)
 			   || taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE)) {
 				KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
 				handle.setMessageSource(messageSource);
 				info = handle.getRequestDetails(reqId);
+				modelWrapper = new ModelWrapperTipyImpl(info);
 			}
 		} catch (KokuServiceException kse) {
 			LOG.error("Failed to show infoRequest details. infoRequestId: '"+requestId + 
-					"' username: '"+request.getUserPrincipal().getName()+" taskType: '"+taskType + 
+					"' username: '"+username+" taskType: '"+taskType + 
 					"' keyword: '" + keyword + "'", kse);
+			modelWrapper = new ModelWrapperTipyImpl(null, ResponseStatus.FAIL, kse.getUuid());
 		}
-		return info;
+		return modelWrapper;
 	}
 }
