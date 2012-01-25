@@ -19,6 +19,9 @@ import fi.arcusys.koku.tiva.KokuConsent;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
 import fi.arcusys.koku.users.UserIdResolver;
+import fi.arcusys.koku.web.util.ModelWrapper;
+import fi.arcusys.koku.web.util.ResponseStatus;
+import fi.arcusys.koku.web.util.impl.ModelWrapperImpl;
 import static fi.arcusys.koku.util.Constants.*;
 
 /**
@@ -56,7 +59,7 @@ public class ShowConsentController extends AbstractController {
 	 * @return consent data model
 	 */
 	@ModelAttribute(value = "consent")
-	public KokuConsent model(
+	public ModelWrapper<KokuConsent> model(
 			@RequestParam(value="consentId", required=false) String consentId,
 			@RequestParam String currentPage,
 			@RequestParam String taskType, 
@@ -70,6 +73,7 @@ public class ShowConsentController extends AbstractController {
 		request.getPortletSession().setAttribute(ATTR_KEYWORD, keyword, PortletSession.APPLICATION_SCOPE);
 		request.getPortletSession().setAttribute(ATTR_ORDER_TYPE, orderType, PortletSession.APPLICATION_SCOPE);
 		
+		ModelWrapper<KokuConsent> model = null;
 		KokuConsent consent = null;
 		
 		PortletSession portletSession = request.getPortletSession();
@@ -77,11 +81,10 @@ public class ShowConsentController extends AbstractController {
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
 		
-		if (userId == null) {
-			LOG.error("UserId is null. Can't show consent details! Given username: "+username);
-			return consent;
-		}
 		try {			
+			if (userId == null) {
+				throw new KokuServiceException("UserId is null. Can't show consent details! username: '"+username+"'");
+			}
 			if(taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS) || taskType.equals(TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD)) {
 				TivaCitizenServiceHandle handle = new TivaCitizenServiceHandle(userId);
 				handle.setMessageSource(messageSource);
@@ -90,17 +93,19 @@ public class ShowConsentController extends AbstractController {
 				TivaEmployeeServiceHandle handle = new TivaEmployeeServiceHandle();
 				handle.setMessageSource(messageSource);
 				consent = handle.getConsentDetails(consentId);
-			} 
+			}
+	//		else if (taskType.equals(TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS)) {
+	//			// TODO: Need some logic here? 
+	//			// REMOVE ME?
+	//		}
+			model = new ModelWrapperImpl<KokuConsent>(consent);
 		} catch (KokuServiceException kse) {
 			LOG.error("Failed to show consent details. consentId: '"+consentId + 
-					"' username: '"+request.getUserPrincipal().getName()+" taskType: '"+taskType + 
+					"' username: '"+request.getUserPrincipal().getName()+"' taskType: '"+taskType + 
 					"' keyword: '" + keyword + "'", kse);
+			model = new ModelWrapperImpl<KokuConsent>(null, ResponseStatus.FAIL, kse.getErrorcode());
 		}
-//		else if (taskType.equals(TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS)) {
-//			// TODO: Need some logic here? 
-//			// REMOVE ME?
-//		}
-		return consent;
+		return model;
 	}
 	
 }

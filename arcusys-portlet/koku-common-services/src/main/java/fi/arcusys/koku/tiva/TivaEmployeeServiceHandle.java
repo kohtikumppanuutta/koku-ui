@@ -112,8 +112,7 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 		try {
 			consentId = (long) Long.parseLong(consentIdStr);
 		} catch (NumberFormatException nfe) {
-			LOG.warn("Invalid consentId. ConsentId: '"+consentIdStr+"'");
-			return null;
+			throw new KokuServiceException("Invalid consentId. ConsentId: '"+consentIdStr+"'", nfe);
 		}
 		KokuConsent kokuConsent = new KokuConsent();		
 		ConsentTO consent = tes.getConsentDetails(consentId);
