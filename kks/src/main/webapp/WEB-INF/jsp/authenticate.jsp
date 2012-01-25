@@ -4,7 +4,7 @@
  You should have received a copy of the license text along with this program.
  If not, please contact the copyright holder (http://www.ixonos.com/).
 --%>
-<%@ include file="kks\imports.jsp" %>
+<%@ include file="kks/imports.jsp" %>
 <%@ page language="java" import="java.util.*" %>
 <portlet:defineObjects />
 	
