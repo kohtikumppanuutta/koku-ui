@@ -4,7 +4,7 @@
  You should have received a copy of the license text along with this program.
  If not, please contact the copyright holder (http://www.ixonos.com/).
 --%>
-<%@ include file="pyh\imports.jsp" %>
+<%@ include file="pyh/imports.jsp" %>
 <%@ page language="java" import="java.util.*" %>
 <portlet:defineObjects />
 	
