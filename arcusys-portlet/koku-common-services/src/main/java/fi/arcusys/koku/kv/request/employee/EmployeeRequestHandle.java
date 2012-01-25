@@ -109,8 +109,7 @@ public class EmployeeRequestHandle extends AbstractHandle {
 		try {
 			reqId = (long) Long.parseLong(requestId);			
 		} catch (NumberFormatException nfe) {
-			LOG.warn("Given requestId invalid. RequestId: '"+requestId+"'");
-			return null;
+			throw new KokuServiceException("Given requestId invalid. RequestId: '"+requestId+"'", nfe);
 		}
 		return getKokuRequestById(reqId);
 	}	
