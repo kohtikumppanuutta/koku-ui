@@ -4,7 +4,7 @@ import fi.arcusys.koku.web.util.ModelWrapper;
 import fi.arcusys.koku.web.util.ResponseStatus;
 
 /**
- * Abstract ModelWrapper class
+ * ModelWrapper implementation
  * 
  * @author Toni Turunen
  *

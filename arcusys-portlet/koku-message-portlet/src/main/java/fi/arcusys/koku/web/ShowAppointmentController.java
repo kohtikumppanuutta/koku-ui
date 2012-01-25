@@ -27,6 +27,9 @@ import fi.arcusys.koku.av.AvCitizenServiceHandle;
 import fi.arcusys.koku.av.AvEmployeeServiceHandle;
 import fi.arcusys.koku.av.KokuAppointment;
 import fi.arcusys.koku.exceptions.KokuServiceException;
+import fi.arcusys.koku.web.util.ModelWrapper;
+import fi.arcusys.koku.web.util.ResponseStatus;
+import fi.arcusys.koku.web.util.impl.ModelWrapperImpl;
 
 
 /**
@@ -75,7 +78,7 @@ public class ShowAppointmentController {
 	 * @return appointment data model
 	 */
 	@ModelAttribute(value = "appointment")
-	public KokuAppointment model(
+	public ModelWrapper<KokuAppointment> model(
 			@RequestParam String appointmentId,
 			@RequestParam String currentPage,
 			@RequestParam String taskType, 
@@ -89,25 +92,27 @@ public class ShowAppointmentController {
 		request.getPortletSession().setAttribute(ATTR_KEYWORD, keyword, PortletSession.APPLICATION_SCOPE);
 		request.getPortletSession().setAttribute(ATTR_ORDER_TYPE, orderType, PortletSession.APPLICATION_SCOPE);
 		
+		ModelWrapper<KokuAppointment> model = null;		
 		KokuAppointment app = null;
-		
 		try {
 			if (taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN)
 					|| taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD)) {
 				AvCitizenServiceHandle handle = new AvCitizenServiceHandle();
 				handle.setMessageSource(messageSource);
-					app = handle.getAppointmentById(appointmentId, targetPerson);
+				app = handle.getAppointmentById(appointmentId, targetPerson);
 			} else if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE)) {
 				AvEmployeeServiceHandle handle = new AvEmployeeServiceHandle();
 				handle.setMessageSource(messageSource);
 				app = handle.getAppointmentById(appointmentId);
 			}
+			model = new ModelWrapperImpl<KokuAppointment>(app);
 		} catch (KokuServiceException e) {
 			LOG.error("Failed to show appointment details. appointmentId: '"+appointmentId + 
-					"' username: '"+request.getUserPrincipal().getName()+" taskType: '"+taskType + 
+					"' username: '"+request.getUserPrincipal().getName()+"' taskType: '"+taskType + 
 					"' keyword: '" + keyword + "'", e);
+			model = new ModelWrapperImpl<KokuAppointment>(null, ResponseStatus.FAIL, e.getErrorcode());
 		}
-		return app;
+		return model;
 	}	
 	
 }

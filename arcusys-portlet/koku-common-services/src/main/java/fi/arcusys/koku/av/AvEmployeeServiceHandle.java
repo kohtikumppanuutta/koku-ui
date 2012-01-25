@@ -123,8 +123,7 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		try {
 			appId = (long) Long.parseLong(appointmentId);
 		} catch (NumberFormatException nfe) {
-			LOG.warn("Invalid appointmentId. AppointmentId: '"+appointmentId+"'");
-			return null;
+			throw new KokuServiceException("Invalid appointmentId. AppointmentId: '"+appointmentId+"'", nfe);
 		}
 		EmployeeAppointment empAppointment = new EmployeeAppointment();
 		Appointment appointment = aes.getAppointmentById(appId);
