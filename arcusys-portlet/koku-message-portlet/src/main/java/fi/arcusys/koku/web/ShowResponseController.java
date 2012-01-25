@@ -21,6 +21,9 @@ import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.model.KokuResponseDetail;
 import fi.arcusys.koku.kv.request.citizen.CitizenRequestHandle;
 import fi.arcusys.koku.util.Constants;
+import fi.arcusys.koku.web.util.ModelWrapper;
+import fi.arcusys.koku.web.util.ResponseStatus;
+import fi.arcusys.koku.web.util.impl.ModelWrapperImpl;
 
 
 /**
@@ -55,7 +58,7 @@ public class ShowResponseController {
 	 * @return request data model
 	 */
 	@ModelAttribute(value = "response")
-	public KokuResponseDetail model(
+	public ModelWrapper<KokuResponseDetail> model(
 			@RequestParam String responseId,
 			@RequestParam String currentPage,
 			@RequestParam String taskType, 
@@ -69,17 +72,20 @@ public class ShowResponseController {
 		request.getPortletSession().setAttribute(ATTR_KEYWORD, keyword, PortletSession.APPLICATION_SCOPE);
 		request.getPortletSession().setAttribute(ATTR_ORDER_TYPE, orderType, PortletSession.APPLICATION_SCOPE);
 		
+		ModelWrapper<KokuResponseDetail> model = null;
 		KokuResponseDetail details = null;
 		try {
 			if (taskType.equals(Constants.TASK_TYPE_REQUEST_REPLIED) || taskType.equals(Constants.TASK_TYPE_REQUEST_OLD)) {
 				CitizenRequestHandle handle = new CitizenRequestHandle();
 				details = handle.getResponseById(responseId);
 			}
+			model = new ModelWrapperImpl<KokuResponseDetail>(details);
 		} catch (KokuServiceException kse) {
 			LOG.error("Failed to show response details. responseId: '"+responseId + 
 					"' username: '"+request.getUserPrincipal().getName()+" taskType: '"+taskType + 
 					"' keyword: '" + keyword + "'", kse);
+			model = new ModelWrapperImpl<KokuResponseDetail>(null, ResponseStatus.FAIL, kse.getErrorcode());
 		}
-		return details;
+		return model;
 	}
 }
