@@ -9,6 +9,7 @@
 		<portlet-name>koku-message-portlet</portlet-name>
 		<skin-name>SimpleSkin</skin-name>
 		<css-path>/css/main.css</css-path>
+		<overwrite>false</overwrite>
 	</portlet-skin>
 	
 	<portlet-skin>
@@ -16,6 +17,7 @@
 		<portlet-name>koku-message-portlet</portlet-name>
 		<skin-name>Default</skin-name>
 		<css-path>/css/main.css</css-path>
+		<overwrite>false</overwrite>
 	</portlet-skin>
 	
 	<javascript>
