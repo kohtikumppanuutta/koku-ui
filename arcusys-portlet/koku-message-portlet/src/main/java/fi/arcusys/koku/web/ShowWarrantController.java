@@ -21,6 +21,9 @@ import fi.arcusys.koku.tiva.warrant.citizens.KokuCitizenWarrantHandle;
 import fi.arcusys.koku.tiva.warrant.employee.KokuEmployeeWarrantHandle;
 import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationSummary;
 import fi.arcusys.koku.users.UserIdResolver;
+import fi.arcusys.koku.web.util.ModelWrapper;
+import fi.arcusys.koku.web.util.ResponseStatus;
+import fi.arcusys.koku.web.util.impl.ModelWrapperImpl;
 
 /**
  * Shows warrant form page and store the current query information on the jsp page
@@ -56,7 +59,7 @@ public class ShowWarrantController extends AbstractController {
 	 * @return KokuAuthorizationSummary data model
 	 */
 	@ModelAttribute(value = "warrant")
-	public KokuAuthorizationSummary model(
+	public ModelWrapper<KokuAuthorizationSummary> model(
 			@RequestParam String authorizationId,
 			@RequestParam String currentPage,
 			@RequestParam String taskType, 
@@ -70,21 +73,21 @@ public class ShowWarrantController extends AbstractController {
 		request.getPortletSession().setAttribute(ATTR_KEYWORD, keyword, PortletSession.APPLICATION_SCOPE);
 		request.getPortletSession().setAttribute(ATTR_ORDER_TYPE, orderType, PortletSession.APPLICATION_SCOPE);
 		
-		KokuAuthorizationSummary warrant = null;
+		ModelWrapper<KokuAuthorizationSummary> model = null;
 		
 		PortletSession portletSession = request.getPortletSession();
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
 		long authId = -1; 
-		try {
-			authId  = Long.valueOf(authorizationId);
-		} catch (NumberFormatException nfe) {
-			LOG.error("AuthorizationID is not valid! Username: " + username + " UserId: " + userId + " AuthorizationId: "+ authorizationId);
-			return null;
-		}
 		
+		KokuAuthorizationSummary warrant = null;
 		try {			
+			try {
+				authId  = Long.valueOf(authorizationId);
+			} catch (NumberFormatException nfe) {
+				throw new KokuServiceException("AuthorizationID is not valid! Username: '" + username + "' UserId: '" + userId + "' AuthorizationId: '"+ authorizationId+"'", nfe);
+			}
 			if(taskType.equals(TASK_TYPE_WARRANT_BROWSE_RECEIEVED)) {
 				KokuCitizenWarrantHandle handle = new KokuCitizenWarrantHandle();
 				handle.setMessageSource(messageSource);
@@ -99,15 +102,17 @@ public class ShowWarrantController extends AbstractController {
 				try {
 					warrant = handle.getAuthorizationDetails(Integer.valueOf(authorizationId));					
 				} catch (NumberFormatException nfe) {
-					LOG.error("AuthorizationID is not valid! Username: " + username + " UserId: " + userId + " AuthorizationId: "+ authorizationId);
+					throw new KokuServiceException("AuthorizationID is not valid! Username: '" + username + "' UserId: '" + userId + "' AuthorizationId: '"+ authorizationId+"'", nfe);
 				}
 			}
+			model = new ModelWrapperImpl<KokuAuthorizationSummary>(warrant);
 		} catch (KokuServiceException kse) {
 			LOG.error("Failed to show warrant details. authorizationId: '"+authorizationId + 
 					"' username: '"+request.getUserPrincipal().getName()+" taskType: '"+taskType + 
 					"' keyword: '" + keyword + "'", kse);
+			model = new ModelWrapperImpl<KokuAuthorizationSummary>(null, ResponseStatus.FAIL, kse.getErrorcode());
 		}
-		return warrant;
+		return model;
 	}
 	
 }
