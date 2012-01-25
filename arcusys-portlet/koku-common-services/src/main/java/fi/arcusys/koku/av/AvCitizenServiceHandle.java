@@ -107,8 +107,7 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 		try {
 			appId = (long) Long.parseLong(appointmentId);
 		} catch (NumberFormatException nfe) {
-			LOG.warn("Invalid appointmentId. AppointmentId: '"+appointmentId+"'");
-			return null;
+			throw new KokuServiceException("Invalid appointmentId. AppointmentId: '"+appointmentId+"'", nfe);
 		}
 		CitizenAppointment ctzAppointment = new CitizenAppointment();
 		AppointmentRespondedTO appointment = acs.getAppointmentRespondedById(appId, targetUser);
