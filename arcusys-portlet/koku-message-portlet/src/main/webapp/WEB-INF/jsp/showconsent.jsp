@@ -9,75 +9,61 @@
 
 <%
 	/* Parses the parent path url from the portlet ajaxURL */
-	
-// 	final int currentPathPosition = ajaxURL.indexOf("Message");
-// 	final String defaultPath = ajaxURL.substring(0, currentPathPosition+7);
 	final String defaultPath = portletPath;
-
 %>
 
-<script type="text/javascript"> 
+<%@ include file="js_koku_detail.jspf" %>
 
-/**
- * Returns to the main portlet page
- */
- 
-function returnMainPage() {
-	var url = "<%= homeURL %>";
-	url = formatUrl(url);
-	window.location = url;
-}
+<c:choose> 
+  <c:when test="${consent.responseStatus == 'FAIL'}" > 
+  	<script type="text/javascript"> 
+  			kokuErrorMsg += "<span class=\"failureUuid\">${consent.errorCode}</span></div>";
+			jQuery.jGrowl(kokuErrorMsg, kokuErrorMsgOptions);
+	</script>
+  </c:when> 
+  <c:when test="${consent.responseStatus == 'OK'}" >	   
 
-/* Formats url mainly for gatein epp*/
-function formatUrl(url) {
-	var newUrl;
-	newUrl = url.replace(/&quot;/g,'"');
-	newUrl = newUrl.replace(/&amp;/g,"&");
-	newUrl = newUrl.replace(/&lt;/g,"<");
-	newUrl =  newUrl.replace(/&gt;/g,">");
-	
-	return newUrl;
-}
+	<div id="task-manager-wrap" class="single">
+		<div id="show-message" style="padding:12px">
+		<span class="text-bold"><spring:message code="consent.requester" />: <c:out value="${consent.model.requester}" /> </span><br />
+		<span class="text-bold"><spring:message code="consent.templateName" />:</span> <c:out value="${consent.model.templateName}" /><br />
+		<span class="text-bold"><spring:message code="consent.templateTypeName" />:</span> <c:out value="${consent.model.templateTypeName}" /><br />
+		<span class="text-bold"><spring:message code="consent.status"/>:</span> <c:out value="${consent.model.status}" /><br />
+		<span class="text-bold"><spring:message code="consent.approvalStatus"/>:</span> <c:out value="${consent.model.approvalStatus}" /><br />
+		<span class="text-bold"><spring:message code="consent.createType"/>:</span> <c:out value="${consent.model.createType}" /><br />
+		<span class="text-bold"><spring:message code="consent.givenDate"/>:</span> <c:out value="${consent.model.assignedDate}" /><br />
+		<span class="text-bold"><spring:message code="consent.validDate"/>:</span> <c:out value="${consent.model.validDate}" /><br />
+		<c:if test="${consent.model.anotherPermitterUid != '' && consent.model.anotherPermitterUid != null}">
+		<span class="text-bold"><spring:message code="consent.secondApprover"/>:</span> <c:out value="${consent.model.anotherPermitterUid}" /><br />
+		</c:if>
+		<span class="text-bold"><spring:message code="consent.recipients"/>:</span> <c:out value="${consent.model.recipients}" /><br />
+		<span class="text-bold"><spring:message code="consent.comment"/>:</span> <c:out value="${consent.model.comment}" /><br />
+		
+		<% if (naviPortalMode.equals(Constants.PORTAL_MODE_KUNPO)) { %>
+		<span class="modifyConsentLink">
+			<a href="<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT %>?FormID=<c:out value="${consent.model.consentId}"/>"><spring:message code="consent.modifyConsentLink"/></a>
+		</span><br />
+		<% } %>
+		
+		
+	    <h3><spring:message code="consent.actionRequest"/></h3>
+	    <table class="request-table">
+	    	<tr>
+	    		<td class="head"><spring:message code="consent.name"/></td>
+	    		<td class="head"><spring:message code="consent.description"/></td>
+	    		<td class="head"><spring:message code="consent.status"/></td>
+	    	</tr>
+	    	<c:forEach var="request" items="${consent.model.actionRequests}" varStatus="loopStatus">
+	        <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
+	          <td>${request.name}</td>
+	          <td>${request.description}</td>
+	          <td style="min-width:60px">${request.status}</td>    
+	        </tr>
+	      	</c:forEach>
+	    </table>
+	</c:when> 
+</c:choose>
 
-</script>
-<div id="task-manager-wrap" class="single">
-	<div id="show-message" style="padding:12px">
-	<span class="text-bold"><spring:message code="consent.requester" />: <c:out value="${consent.requester}" /> </span><br />
-	<span class="text-bold"><spring:message code="consent.templateName" />:</span> <c:out value="${consent.templateName}" /><br />
-	<span class="text-bold"><spring:message code="consent.templateTypeName" />:</span> <c:out value="${consent.templateTypeName}" /><br />
-	<span class="text-bold"><spring:message code="consent.status"/>:</span> <c:out value="${consent.status}" /><br />
-	<span class="text-bold"><spring:message code="consent.approvalStatus"/>:</span> <c:out value="${consent.approvalStatus}" /><br />
-	<span class="text-bold"><spring:message code="consent.createType"/>:</span> <c:out value="${consent.createType}" /><br />
-	<span class="text-bold"><spring:message code="consent.givenDate"/>:</span> <c:out value="${consent.assignedDate}" /><br />
-	<span class="text-bold"><spring:message code="consent.validDate"/>:</span> <c:out value="${consent.validDate}" /><br />
-	<c:if test="${consent.anotherPermitterUid != '' && consent.anotherPermitterUid != null}">
-	<span class="text-bold"><spring:message code="consent.secondApprover"/>:</span> <c:out value="${consent.anotherPermitterUid}" /><br />
-	</c:if>
-	<span class="text-bold"><spring:message code="consent.recipients"/>:</span> <c:out value="${consent.recipients}" /><br />
-	<span class="text-bold"><spring:message code="consent.comment"/>:</span> <c:out value="${consent.comment}" /><br />
-	
-	<% if (naviPortalMode.equals(Constants.PORTAL_MODE_KUNPO)) { %>
-	<span class="modifyConsentLink">
-		<a href="<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT %>?FormID=<c:out value="${consent.consentId}"/>"><spring:message code="consent.modifyConsentLink"/></a>
-	</span><br />
-	<% } %>
-	
-	
-    <h3><spring:message code="consent.actionRequest"/></h3>
-    <table class="request-table">
-    	<tr>
-    		<td class="head"><spring:message code="consent.name"/></td>
-    		<td class="head"><spring:message code="consent.description"/></td>
-    		<td class="head"><spring:message code="consent.status"/></td>
-    	</tr>
-    	<c:forEach var="request" items="${consent.actionRequests}" varStatus="loopStatus">
-        <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
-          <td>${request.name}</td>
-          <td>${request.description}</td>
-          <td style="min-width:60px">${request.status}</td>    
-        </tr>
-      	</c:forEach>
-    </table>  
 
 	</div>
 	<div id="task-manager-operation" class="task-manager-operation-part">

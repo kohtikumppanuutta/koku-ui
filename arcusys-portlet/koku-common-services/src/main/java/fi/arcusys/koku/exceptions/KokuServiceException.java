@@ -17,6 +17,11 @@ public class KokuServiceException extends Exception {
 	}
 	
 	private final String uuid;
+	
+	public KokuServiceException(String message) {
+		super(message);
+		uuid = generateErrorCode();
+	}
 
 	public KokuServiceException(String message, Throwable cause) {
 		super(message, cause);
