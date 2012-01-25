@@ -81,8 +81,7 @@ public class CitizenRequestHandle extends AbstractHandle {
 		try {
 			reqId = (long) Long.parseLong(requestId);			
 		} catch (NumberFormatException nfe) {
-			LOG.error("RequestId is not valid. requestId: '"+requestId+"'");
-			return null;
+			throw new KokuServiceException("RequestId is not valid. requestId: '"+requestId+"'", nfe);
 		}
 		ResponseDetail req = rs.getResponseDetail(reqId);
 		KokuResponseDetail kokuReq = new KokuResponseDetail(req);

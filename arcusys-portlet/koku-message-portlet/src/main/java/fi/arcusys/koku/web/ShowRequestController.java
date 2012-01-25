@@ -16,6 +16,9 @@ import fi.arcusys.koku.kv.model.KokuRequest;
 import fi.arcusys.koku.kv.request.citizen.CitizenRequestHandle;
 import fi.arcusys.koku.kv.request.employee.EmployeeRequestHandle;
 import fi.arcusys.koku.util.Constants;
+import fi.arcusys.koku.web.util.ModelWrapper;
+import fi.arcusys.koku.web.util.ResponseStatus;
+import fi.arcusys.koku.web.util.impl.ModelWrapperImpl;
 import static fi.arcusys.koku.util.Constants.*;
 
 
@@ -53,7 +56,7 @@ public class ShowRequestController {
 	 * @return request data model
 	 */
 	@ModelAttribute(value = "request")
-	public KokuRequest model(@RequestParam String requestId,
+	public ModelWrapper<KokuRequest> model(@RequestParam String requestId,
 			@RequestParam String currentPage,@RequestParam String taskType, 
 			@RequestParam String keyword, @RequestParam String orderType,
 			RenderRequest request) {
@@ -64,20 +67,22 @@ public class ShowRequestController {
 		request.getPortletSession().setAttribute(ATTR_KEYWORD, keyword, PortletSession.APPLICATION_SCOPE);
 		request.getPortletSession().setAttribute(ATTR_ORDER_TYPE, orderType, PortletSession.APPLICATION_SCOPE);
 		
-		
+		ModelWrapper<KokuRequest> model = null;
 		KokuRequest kokuRequest = null;
 		try {
 			if (taskType.equals(Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE)) {
 				EmployeeRequestHandle reqhandle = new EmployeeRequestHandle();
 				kokuRequest = reqhandle.getKokuRequestById(requestId);			
-			}		
+			}
+			model = new ModelWrapperImpl<KokuRequest>(kokuRequest);
 		} catch (KokuServiceException kse) {
 			LOG.error("Failed to show request details. requestId: '"+requestId + 
 					"' username: '"+request.getUserPrincipal().getName()+" taskType: '"+taskType + 
 					"' keyword: '" + keyword + "'", kse);
+			model = new ModelWrapperImpl<KokuRequest>(null, ResponseStatus.FAIL, kse.getErrorcode());
 		}
 		
-		return kokuRequest;
+		return model;
 	}
 	
 
