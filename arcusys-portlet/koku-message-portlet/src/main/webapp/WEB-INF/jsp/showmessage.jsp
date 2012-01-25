@@ -48,6 +48,9 @@ public String htmlToCode(String s)
 } 
 %>
 
+<%@ include file="js_koku_detail.jspf" %>
+
+
 <%
 	ResponseStatus responseResult = ResponseStatus.FAIL;
 	ModelWrapper<Message> messageModel = (ModelWrapper<Message>) request.getAttribute("message");
@@ -70,23 +73,13 @@ public String htmlToCode(String s)
 		usernameArray = JSONArray.fromObject(missingUserNames);
 	}
 %>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.jgrowl_minimized.js"></script>
 <script type="text/javascript"> 
 	
 	window.onload = function() {
 		if ('<%= responseResult.toString() %>' == '<%= ResponseStatus.FAIL.toString() %>') {
-			// show errorMsg
-			var options = { 
-				sticky: true,
-				theme : "serverErrorWarningMsg",
-				header: "Oops!",
-				closer: true,
-				position: "center"	
-			};
-			var msg = "<div class=\"serverErrorMsg\"><spring:message code="notification.serverError.msg" /></div>";
-			msg += "<div class=\"serverErrorUuidMsg\"><spring:message code="notification.serverError.uuidMsg" />";
-			msg += "<span class=\"failureUuid\"><%= messageModel.getErrorCode() %></span></div>";
-			jQuery.jGrowl(msg, options);
+			// show errorMsg			
+			kokuErrorMsg += "<span class=\"failureUuid\"><%= messageModel.getErrorCode() %></span></div>";
+			jQuery.jGrowl(kokuErrorMsg, kokuErrorMsgOptions);
 		} else {		
 			var content = '<%= content %>';
 			content = content.replace(/&rsquo;/g, "'");

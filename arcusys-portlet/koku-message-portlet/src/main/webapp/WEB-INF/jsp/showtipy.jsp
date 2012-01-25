@@ -4,45 +4,13 @@
 	<portlet:param name="myaction" value="home" />
 </portlet:renderURL>
 
-<script type="text/javascript"> 
-
-/**
- * Returns to the main portlet page
- */
- 
-function returnMainPage() {
-	var url = "<%= homeURL %>";
-	url = formatUrl(url);
-	window.location = url;
-}
-
-/* Formats url mainly for gatein epp*/
-function formatUrl(url) {
-	var newUrl;
-	newUrl = url.replace(/&quot;/g,'"');
-	newUrl = newUrl.replace(/&amp;/g,"&");
-	newUrl = newUrl.replace(/&lt;/g,"<");
-	newUrl =  newUrl.replace(/&gt;/g,">");
-	
-	return newUrl;
-}
-</script>
+<%@ include file="js_koku_detail.jspf" %>
 
 <c:choose> 
   <c:when test="${tipy.responseStatus == 'FAIL'}" > 
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.jgrowl_minimized.js"></script>
   	<script type="text/javascript"> 
-  		var options = { 
-				sticky: true,
-				theme : "serverErrorWarningMsg",
-				header: "Oops!",
-				closer: true,
-				position: "center"	
-			};
-			var msg = "<div class=\"serverErrorMsg\"><spring:message code="notification.serverError.msg" /></div>";
-			msg += "<div class=\"serverErrorUuidMsg\"><spring:message code="notification.serverError.uuidMsg" />";
-			msg += "<span class=\"failureUuid\">${tipy.errorCode}</span></div>";
-			jQuery.jGrowl(msg, options);
+  			kokuErrorMsg += "<span class=\"failureUuid\">${tipy.errorCode}</span></div>";
+			jQuery.jGrowl(kokuErrorMsg, kokuErrorMsgOptions);
 	</script>
   </c:when> 
   
@@ -66,7 +34,6 @@ function formatUrl(url) {
 			<span class="text-bold"><spring:message code="tipy.details.accessType"/>:</span> <c:out value="${tipy.model.localizedAccessType}" /><br />
 			<span class="text-bold"><spring:message code="tipy.details.informationDetails"/>:</span> <c:out value="${tipy.model.informationDetails}" /><br />
 			
-		
 	    <h3><spring:message code="tipy.details.categoryHeader"/></h3>
 	    <table class="request-table">
 	    	<tr>
