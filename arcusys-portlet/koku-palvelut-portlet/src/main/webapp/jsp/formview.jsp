@@ -183,14 +183,17 @@
 	window.onload = function() {
 		var global_url = document.URL;
 
-		 if(global_url.indexOf("FormID=") > 0) {
+		 if (global_url.indexOf("FormID=") > 0) {
 			var newUrl = "${formholder.url}";
 			var temp = global_url.split("FormID=");
 			var param = temp[1];
 			newUrl += "&FormID=" + param;			
 			jQuery('#<portlet:namespace />xforms_iframe').attr('src', newUrl);
-		}else {
+			// jQuery('a#printLink').attr('href',newUrl);
+		} else {
 			jQuery('#<portlet:namespace />xforms_iframe').attr('src', "${formholder.url}");
+			// var link = jQuery('a#printLink');
+			// link.attr('href', "${formholder.url}");
 		}
 		
 		 /* Make sure that IFrame height is correct. We do not want to 
@@ -208,7 +211,13 @@
 	}
 
 	jQuery(document).ready( function() {window.setInterval(modifyButton, 5000);
- } );
+});
+	
+	function kokuIframePrint() {
+		var iframeElement = document.getElementById('<portlet:namespace />xforms_iframe');
+		iframeElement.focus();
+		iframeElement.contentWindow.print();
+	}
 	
 </script>
 
@@ -232,9 +241,10 @@
 </div>
 --%>
 
+<div id="intalioPrintingLink"><img title="Tulosta" src="${pageContext.request.contextPath}/images/print.png" /><a id="printLink" href="#" onclick="kokuIframePrint(); return false;">Tulosta</a></div>
 <div id="form_wrap" style="margin:5px; position:relative; min-width: 720px;">
-
-<iframe src="" id="<portlet:namespace />xforms_iframe" class="xforms_container_iframe" frameborder="0" scrolling="no" horizontalscrolling="no" style="height: 700px; width:100%; overflow-x: hidden;"></iframe>
+	<iframe src="" id="<portlet:namespace />xforms_iframe" class="xforms_container_iframe" frameborder="0" scrolling="no" horizontalscrolling="no" style="height: 700px; width:100%; overflow-x: hidden;"></iframe>
+</div>
 
 <script type="text/javascript">
 	startResizer();
