@@ -64,9 +64,16 @@
 		jQuery('#task-manager-wrap').parent().css('width', '100%');		
 	}
 	
+	function kokuIframePrint() {
+		var iframeElement = document.getElementById('taskform');
+		iframeElement.focus();
+		iframeElement.contentWindow.print();
+	}
+	
 </script>
 <div id="task-manager-wrap">
 	<div id="task-manager-tasklist">
+		<div id="intalioPrintingLink"><img title="Tulosta" src="${pageContext.request.contextPath}/images/print.png" /><a id="printLink" href="#" onclick="kokuIframePrint(); return false;">Tulosta</a></div>
 		<iframe src="<c:out value="${tasklink}" />" id="taskform" name="taskform" style="width:100%; height:100%" frameborder="0" scrolling="no" onload="checkForm()" ></iframe>
 		<script type="text/javascript">
 			startResizer("taskform");
