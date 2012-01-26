@@ -55,7 +55,7 @@ public abstract class FormHolderController
 			if (task.getDescription().equals(description)) {
 				String taskFormURL = getFormUrlByTask(request, token, task);
 				try {
-					String userName = MigrationUtil.getUser(request);
+					// String userName = MigrationUtil.getUser(request);
 					Scanner scanner = new Scanner(description);
 					scanner.useDelimiter(" ");
 					String action = "";
@@ -64,24 +64,16 @@ public abstract class FormHolderController
 					}
 					
 					// Does not work.. 
-					String actionString = action.substring(0, action.length());
-					String customerId = getPortletContext().getInitParameter(
-							"loggingCustomer");
-					String applicationId = getPortletContext()
-							.getInitParameter("loggingApplication");
-	
-					String message = customerId + " " + applicationId + " "
-							+ userName + " Käyttäjä_avasi_lomakkeen_"
-							+ actionString;
-					LOG.warn(message);
+					// String actionString = action.substring(0, action.length());
+					// String customerId = getPortletContext().getInitParameter("loggingCustomer");
+					// String applicationId = getPortletContext().getInitParameter("loggingApplication");
 				} catch (Exception e) {
-					LOG.error("Something went wrong" +e);
+					LOG.error("Something went wrong when parsing task description. Username: '"+request.getUserPrincipal().getName()+"' Description: '"+description+"'", e);
 				}
 				return new FormHolder(description, taskFormURL);
 			}
 		}
-		LOG.error("Didn't find any form!");
-	
+		LOG.error("Didn't find any form! Username: '"+request.getUserPrincipal().getName()+"'");	
 		return null;
 	}
 	
