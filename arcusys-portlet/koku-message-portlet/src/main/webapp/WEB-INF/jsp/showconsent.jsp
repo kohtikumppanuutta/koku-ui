@@ -33,10 +33,14 @@
 		<span class="text-bold"><spring:message code="consent.createType"/>:</span> <c:out value="${consent.model.createType}" /><br />
 		<span class="text-bold"><spring:message code="consent.givenDate"/>:</span> <c:out value="${consent.model.assignedDate}" /><br />
 		<span class="text-bold"><spring:message code="consent.validDate"/>:</span> <c:out value="${consent.model.validDate}" /><br />
-		<c:if test="${consent.model.anotherPermitterUid != '' && consent.model.anotherPermitterUid != null}">
+		<c:if test="${consent.model.anotherPermitterUid != null && consent.model.anotherPermitterUid != '' }">
 		<span class="text-bold"><spring:message code="consent.secondApprover"/>:</span> <c:out value="${consent.model.anotherPermitterUid}" /><br />
 		</c:if>
 		<span class="text-bold"><spring:message code="consent.recipients"/>:</span> <c:out value="${consent.model.recipients}" /><br />
+		<c:if test="${consent.model.targetPerson != null && consent.model.targetPerson != '' }">
+		<span class="text-bold"><spring:message code="consent.targetPerson"/>:</span> <c:out value="${consent.model.targetPerson.fullName}" /><br />
+		</c:if>
+		
 		<span class="text-bold"><spring:message code="consent.comment"/>:</span> <c:out value="${consent.model.comment}" /><br />
 		
 		<% if (naviPortalMode.equals(Constants.PORTAL_MODE_KUNPO)) { %>
