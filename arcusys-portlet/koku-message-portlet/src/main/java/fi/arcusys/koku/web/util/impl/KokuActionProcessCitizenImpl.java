@@ -50,18 +50,15 @@ public class KokuActionProcessCitizenImpl extends AbstractKokuActionProcess {
 		
 		String appointmentId;
 		String targetPerson;
-		for (int i=0; i > appointments; i++ ) {
+		for (int i=0; i < appointments; i++ ) {
 			appointmentId = appointmentIds[i];
 			targetPerson = targetPersons[i];
 			long  appId = 0;
 			try {
 				appId = (long) Long.parseLong(appointmentId);
-			} catch (NumberFormatException nfe) {
-				LOG.error("Invalid appointmentId. AppointmentId: '"+appointmentId+"' targetPerson: '"+targetPerson+"' comment: '"+comment+"'");
-				throw new KokuActionProcessException("Invalid appointmentId.", nfe);
-			}
-			try {
 				avCitizenServiceHandle.cancelAppointments(appId, targetPerson, comment);
+			} catch (NumberFormatException nfe) {
+				throw new KokuActionProcessException("Invalid appointmentId. AppointmentId: '"+appointmentId+"' targetPerson: '"+targetPerson+"' comment: '"+comment+"'", nfe);
 			} catch (KokuServiceException e) {
 				throw new KokuActionProcessException("Failed to cancelAppointment! appoimentId: '" + 
 						appointmentId + "' targetPerson: '" + targetPerson + "' comment: '" + comment + "'", e);
@@ -113,7 +110,7 @@ public class KokuActionProcessCitizenImpl extends AbstractKokuActionProcess {
 				}
 			}
 		} catch (KokuServiceException e) {
-			throw new KokuActionProcessException("Failed to revoke consent(s).", e);
+			throw new KokuActionProcessException("Failed to revoke consent(s). ConsentIds: '"+Arrays.toString(consentIds)+"'", e);
 		}
 	}	
 }
