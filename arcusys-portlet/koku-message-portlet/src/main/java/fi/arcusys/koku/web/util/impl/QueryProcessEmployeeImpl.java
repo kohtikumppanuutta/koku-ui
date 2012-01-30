@@ -36,6 +36,7 @@ import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.hak.model.HakServiceHandle;
 import fi.arcusys.koku.kv.message.MessageHandle;
 import fi.arcusys.koku.kv.request.employee.EmployeeRequestHandle;
+import fi.arcusys.koku.kv.requestservice.RequestType;
 import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
 import fi.arcusys.koku.tiva.tietopyynto.employee.KokuEmployeeTietopyyntoServiceHandle;
 import fi.arcusys.koku.tiva.warrant.employee.KokuEmployeeWarrantHandle;
@@ -67,8 +68,12 @@ public class QueryProcessEmployeeImpl extends AbstractQueryProcess {
 				totalTasksNum = reqHandle.getTotalRequestedApplicants(userUid, keyword);
 			} else if (taskType.equals(TASK_TYPE_REQUEST_VALID_EMPLOYEE)) { // for request (Pyynnöt) - employee Avoimet
 				EmployeeRequestHandle reqHandle = new EmployeeRequestHandle();
-				tasks = reqHandle.getRequests(userUid, "valid", "", first, max);
-				totalTasksNum = reqHandle.getTotalRequestsNum(userUid, "valid");
+				tasks = reqHandle.getRequests(userUid, RequestType.VALID, "", first, max);
+				totalTasksNum = reqHandle.getTotalRequestsNum(userUid, RequestType.VALID);
+			} else if (taskType.equals(TASK_TYPE_REQUEST_DONE_EMPLOYEE)) { // Pyynnöt - vastatut/vanhat
+				EmployeeRequestHandle reqHandle = new EmployeeRequestHandle();
+				tasks = reqHandle.getRequests(userUid, RequestType.OUTDATED, "", first, max);
+				totalTasksNum = reqHandle.getTotalRequestsNum(userUid, RequestType.OUTDATED);
 			} else if (taskType.equals(TASK_TYPE_REQUEST_REPLIED)) { // Pyynnöt - vastatut
 				EmployeeRequestHandle handle = new EmployeeRequestHandle();
 				tasks = handle.getRepliedResponseSummaries(userUid, first, max);
@@ -77,10 +82,6 @@ public class QueryProcessEmployeeImpl extends AbstractQueryProcess {
 				EmployeeRequestHandle handle = new EmployeeRequestHandle();
 				tasks = handle.getOldResponseSummaries(userUid, first, max);
 				totalTasksNum = handle.getTotalResponsesOldNum(userUid);
-			} else if (taskType.equals(TASK_TYPE_REQUEST_DONE_EMPLOYEE)) { // Pyynnöt - vastatut/vanhat
-				// TODO: Need proper WS service
-				tasks = Collections.EMPTY_LIST;
-				totalTasksNum = 0;
 			} else if (taskType.equals(TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED)) { // Virkailija: Selaa vastaanotettuja tietopyyntöjä
 				KokuEmployeeTietopyyntoServiceHandle handle = new KokuEmployeeTietopyyntoServiceHandle();
 				handle.setMessageSource(getMessageSource());
