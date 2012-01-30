@@ -46,14 +46,7 @@ public class EmployeeRequestHandle extends AbstractHandle {
 	 * @param maxNum maximum number of requests
 	 * @return a list of requests
 	 */
-	public List<KokuRequest> getRequests(String userId, String requestTypeStr, String subQuery, int startNum, int maxNum)  throws KokuServiceException {
-		RequestType requestType;
-		
-		if (requestTypeStr.equals("valid")) {
-			requestType = RequestType.VALID;
-		} else {
-			requestType = RequestType.OUTDATED;
-		}
+	public List<KokuRequest> getRequests(String userId, RequestType requestType, String subQuery, int startNum, int maxNum)  throws KokuServiceException {
 		List<KokuRequest> reqList = new ArrayList<KokuRequest>();
 		List<RequestSummary> reqs = rs.getRequests(userId, requestType, subQuery, startNum, maxNum);
 		for (RequestSummary summary : reqs) {
@@ -141,13 +134,7 @@ public class EmployeeRequestHandle extends AbstractHandle {
 	 * @param requestTypeStr request type string
 	 * @return the total number of requests
 	 */
-	public int getTotalRequestsNum(String userId, String requestTypeStr) throws KokuServiceException {
-		RequestType requestType;		
-		if (requestTypeStr.equals("valid")) {
-			requestType = RequestType.VALID;
-		} else {
-			requestType = RequestType.OUTDATED;
-		}		
+	public int getTotalRequestsNum(String userId, RequestType requestType) throws KokuServiceException {
 		return rs.getTotalRequestNum(userId, requestType);
 	}
 	
