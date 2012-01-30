@@ -1,7 +1,5 @@
 package fi.arcusys.koku.web.util.impl;
 
-import static fi.arcusys.koku.util.Constants.RESPONSE_FAIL;
-
 import org.apache.log4j.Logger;
 
 import fi.arcusys.koku.av.AvEmployeeServiceHandle;
@@ -36,7 +34,7 @@ public class KokuActionProcessEmployeeImpl extends AbstractKokuActionProcess {
 
 		final int appointments = appointmentIds.length;
 		String appointmentId;
-		for (int i=0; i > appointments; i++ ) {
+		for (int i=0; i < appointments; i++ ) {
 			appointmentId = appointmentIds[i];
 			long  appId = 0;
 			try {
