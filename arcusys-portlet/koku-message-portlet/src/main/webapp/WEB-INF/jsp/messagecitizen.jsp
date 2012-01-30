@@ -229,9 +229,7 @@ function presentTasks(tasks) {
 
 	var taskHtml = "";
 	if (pageObj.taskType.indexOf('req_') == 0) { // for request
-		if (pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE %>" || pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>") {
-			taskHtml += table.createRequestsEmployeeTable(tasks);
-		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_REPLIED %>" || pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_OLD %>") {
+		if (pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_REPLIED %>" || pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_OLD %>") {
 			taskHtml += table.createRequestReplied(tasks);
 		}
 	} else if(pageObj.taskType.indexOf('app_') == 0) { // for appointment
