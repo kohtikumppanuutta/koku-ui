@@ -2,6 +2,8 @@ package fi.arcusys.koku.tiva;
 
 import java.util.List;
 
+import fi.arcusys.koku.users.KokuUser;
+
 /**
  * Consent data model for citizen
  * @author Jinhua Chen
@@ -23,6 +25,7 @@ public class KokuConsent {
 	private String replyTill;
 	private String comment;
 	private String templateTypeName;
+	private KokuUser targetPerson;
 	
 	public long getConsentId() {
 		return consentId;
@@ -135,5 +138,15 @@ public class KokuConsent {
 	public String getTemplateTypeName() {
 		return templateTypeName;
 	}
+
+	public KokuUser getTargetPerson() {
+		return targetPerson;
+	}
+
+	public void setTargetPerson(KokuUser targetPerson) {
+		this.targetPerson = targetPerson;
+	}
+	
+	
 		
 }

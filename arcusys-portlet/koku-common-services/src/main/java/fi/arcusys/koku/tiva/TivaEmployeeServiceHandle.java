@@ -20,6 +20,7 @@ import fi.arcusys.koku.tiva.employeeservice.ConsentStatus;
 import fi.arcusys.koku.tiva.employeeservice.ConsentSummary;
 import fi.arcusys.koku.tiva.employeeservice.ConsentTO;
 import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
+import fi.arcusys.koku.users.KokuUser;
 import fi.arcusys.koku.util.MessageUtil;
 
 /**
@@ -129,6 +130,7 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 		kokuConsent.setRecipients(MessageUtil.formatRecipients(consent.getReceipients()));
 		kokuConsent.setComment(consent.getComment());
 		kokuConsent.setTemplateTypeName(consent.getTemplateTypeName());
+		kokuConsent.setTargetPerson(new KokuUser(consent.getTargetPersonUserInfo()));
 		return kokuConsent;
 	}
 	

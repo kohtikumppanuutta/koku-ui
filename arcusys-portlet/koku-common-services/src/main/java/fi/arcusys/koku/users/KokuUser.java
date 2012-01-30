@@ -46,6 +46,28 @@ public class KokuUser {
 		}
 	}
 
+	public KokuUser(fi.arcusys.koku.tiva.employeeservice.User user) {
+		if (user != null) {
+			setUid(user.getUid());
+			setFirstname(user.getFirstname());
+			setLastname(user.getLastname());
+			setDisplayname(user.getDisplayName());
+			setPhoneNumber(user.getPhoneNumber());
+			setEmail(user.getEmail());			
+		}
+	}
+
+	public KokuUser(fi.arcusys.koku.tiva.citizenservice.User user) {
+		if (user != null) {
+			setUid(user.getUid());
+			setFirstname(user.getFirstname());
+			setLastname(user.getLastname());
+			setDisplayname(user.getDisplayName());
+			setPhoneNumber(user.getPhoneNumber());
+			setEmail(user.getEmail());			
+		}
+	}
+
 	public final String getUid() {
 		return uid;
 	}

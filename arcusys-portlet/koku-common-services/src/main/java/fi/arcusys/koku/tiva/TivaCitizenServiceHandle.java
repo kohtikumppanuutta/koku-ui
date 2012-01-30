@@ -21,6 +21,7 @@ import fi.arcusys.koku.tiva.citizenservice.ConsentShortSummary;
 import fi.arcusys.koku.tiva.citizenservice.ConsentStatus;
 import fi.arcusys.koku.tiva.citizenservice.ConsentSummary;
 import fi.arcusys.koku.tiva.citizenservice.ConsentTO;
+import fi.arcusys.koku.users.KokuUser;
 import fi.arcusys.koku.util.MessageUtil;
 import fi.arcusys.koku.util.PortalRole;
 
@@ -107,6 +108,7 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 		kokuConsent.setReplyTill(MessageUtil.formatTaskDateByDay(consent.getReplyTill()));
 		kokuConsent.setComment(consent.getComment());
 		kokuConsent.setTemplateTypeName(consent.getTemplateTypeName());
+		kokuConsent.setTargetPerson(new KokuUser(consent.getTargetPersonUserInfo()));
 		return kokuConsent;
 	}
 	
