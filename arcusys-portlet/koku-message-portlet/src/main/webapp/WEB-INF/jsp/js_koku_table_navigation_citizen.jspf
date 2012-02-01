@@ -73,7 +73,7 @@ KokuTableNavigationCitizen.prototype.resetSearch = function() {
 			
 	jQuery('input:checkbox[name="field"]').attr('checked', true);
 	pageObj.keyword = '';
-	this.kokuAjax.ajaxGetTasks();
+	this.kokuAjax.ajaxGetTasks(pageObj, presentTasks);
 };
 
 /**
@@ -91,7 +91,7 @@ KokuTableNavigationCitizen.prototype.searchTasks = function() {
 	else return false;
 	
 	pageObj.field = field;	
-	this.kokuAjax.ajaxGetTasks();	
+	this.kokuAjax.ajaxGetTasks(pageObj, presentTasks);	
 	return false;
 };
 
@@ -109,6 +109,6 @@ KokuTableNavigationCitizen.prototype.searchConsents = function() {
 	}
 	
 	pageObj.keyword = keyword;			
-	this.kokuAjax.ajaxGetTasks();	
+	this.kokuAjax.ajaxGetTasks(pageObj, presentTasks);	
 	return false;
 };
