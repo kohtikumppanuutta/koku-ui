@@ -125,9 +125,9 @@ public class AjaxController extends AbstractController {
 		
 		registerUserToWS(portletSession);
 	    
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 				
 		String userId = null;
 		try {
@@ -220,9 +220,9 @@ public class AjaxController extends AbstractController {
 		
 		PortletSession portletSession = request.getPortletSession();		
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
@@ -260,9 +260,9 @@ public class AjaxController extends AbstractController {
 		
 		PortletSession portletSession = request.getPortletSession();		
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
@@ -299,9 +299,9 @@ public class AjaxController extends AbstractController {
 		
 		PortletSession portletSession = request.getPortletSession();		
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
@@ -337,9 +337,9 @@ public class AjaxController extends AbstractController {
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
@@ -380,9 +380,9 @@ public class AjaxController extends AbstractController {
 			PortletResponse response) {
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
 		
@@ -428,9 +428,9 @@ public class AjaxController extends AbstractController {
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		
 		JSONObject jsonModel = new JSONObject();
 		KokuActionProcess actionProcess = null;
@@ -467,9 +467,9 @@ public class AjaxController extends AbstractController {
 		
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		
 		@SuppressWarnings("rawtypes")
 		List resultList = null;
@@ -524,9 +524,9 @@ public class AjaxController extends AbstractController {
 		
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, "showMessage");
@@ -573,9 +573,9 @@ public class AjaxController extends AbstractController {
 		
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_REQUEST);
@@ -622,9 +622,9 @@ public class AjaxController extends AbstractController {
 		
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_REQUEST_RESPONSE);
@@ -672,9 +672,9 @@ public class AjaxController extends AbstractController {
 
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_APPOINTMENT);
@@ -724,9 +724,9 @@ public class AjaxController extends AbstractController {
 		
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_CONSENT);
@@ -774,9 +774,9 @@ public class AjaxController extends AbstractController {
 
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_WARRANT);
@@ -826,9 +826,9 @@ public class AjaxController extends AbstractController {
 
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_TIPY);
@@ -877,9 +877,9 @@ public class AjaxController extends AbstractController {
 
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_APPLICATION_KINDERGARTEN);
