@@ -248,11 +248,12 @@ public class ViewController extends FormHolderController {
 	 * @return 
 	 */
 	private boolean isInvalidStrongAuthentication(PortletSession portletSession) {
-		if (VETUMA_ENABLED && IS_KUNPO_PORTAL && !AuthenticationUtil.getUserInfoFromSession(portletSession).hasStrongAuthentication()) {
-			return true;
-		} else {
-			return false;
-		}
+		return false;
+//		if (VETUMA_ENABLED && IS_KUNPO_PORTAL && !AuthenticationUtil.getUserInfoFromSession(portletSession).hasStrongAuthentication()) {
+//			return true;
+//		} else {
+//			return false;
+//		}
 	}
 	
 	private ModelAndView authenticationFailed(RenderRequest request){
