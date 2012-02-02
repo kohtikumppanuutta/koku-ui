@@ -87,9 +87,9 @@ public class AjaxController {
 		final String token = (String) portletSession.getAttribute(ATTR_TOKEN);
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 
 		int taskType = getTaskType(taskTypeStr);
 		JSONObject jsonModel = getJsonModel(taskType, page, keyword, orderType, token, username);
@@ -121,9 +121,9 @@ public class AjaxController {
 		final PortletSession portletSession = request.getPortletSession();				
 		final String token = (String) portletSession.getAttribute(ATTR_TOKEN);
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		
 		JSONObject jsonModel = new JSONObject();
 		
@@ -226,9 +226,9 @@ public class AjaxController {
 		
 		final PortletSession portletSession = request.getPortletSession();				
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		
 		final PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_TASKFORM);
@@ -267,9 +267,9 @@ public class AjaxController {
 		
 		final PortletSession portletSession = request.getPortletSession();				
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(modelmap, username);
-		}
+//		if (isInvalidStrongAuthentication(portletSession)) {
+//			return authenticationFailed(modelmap, username);
+//		}
 		
 		final PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_TASKFORM);
@@ -298,13 +298,13 @@ public class AjaxController {
 	 * @param portletSession
 	 * @return 
 	 */
-	protected boolean isInvalidStrongAuthentication(PortletSession portletSession) {
-		if (VETUMA_ENABLED && IS_KUNPO_PORTAL && !AuthenticationUtil.getUserInfoFromSession(portletSession).hasStrongAuthentication()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+//	protected boolean isInvalidStrongAuthentication(PortletSession portletSession) {
+//		if (VETUMA_ENABLED && IS_KUNPO_PORTAL && !AuthenticationUtil.getUserInfoFromSession(portletSession).hasStrongAuthentication()) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
 	
 	/**
 	 * Creates authentication failed JSON response
