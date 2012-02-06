@@ -11,7 +11,8 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -34,7 +35,7 @@ import fi.arcusys.koku.web.util.impl.ModelWrapperImpl;
 @Controller("singleMessageController")
 @RequestMapping(value = "VIEW")
 public class ShowMessageController {
-	private static final Logger LOG = Logger.getLogger(ShowMessageController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ShowMessageController.class);
 
 	
 	@Resource
@@ -83,7 +84,7 @@ public class ShowMessageController {
 			MessageHandle msghandle = new MessageHandle();
 			msghandle.setMessageSource(messageSource);
 			message = msghandle.getMessageById(messageId);
-			modelWrapper = new ModelWrapperImpl<Message>(message, ResponseStatus.OK);			
+			modelWrapper = new ModelWrapperImpl<Message>(message, ResponseStatus.OK);
 		} catch (KokuServiceException kse) {
 			LOG.error("Failed to show message details. messageId: '"+messageId + 
 					"' username: '"+request.getUserPrincipal().getName()+" taskType: '"+taskType + 

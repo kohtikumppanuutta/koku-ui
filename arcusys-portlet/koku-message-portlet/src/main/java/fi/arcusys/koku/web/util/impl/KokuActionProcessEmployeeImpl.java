@@ -1,6 +1,7 @@
 package fi.arcusys.koku.web.util.impl;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fi.arcusys.koku.av.AvEmployeeServiceHandle;
 import fi.arcusys.koku.exceptions.KokuServiceException;
@@ -8,7 +9,7 @@ import fi.arcusys.koku.web.util.exception.KokuActionProcessException;
 
 public class KokuActionProcessEmployeeImpl extends AbstractKokuActionProcess {
 	
-	private static final Logger LOG = Logger.getLogger(KokuActionProcessEmployeeImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(KokuActionProcessEmployeeImpl.class);
 	
 	/* Lazily initialized */
 	private AvEmployeeServiceHandle avEmployeeServiceHandle = null;

@@ -25,7 +25,8 @@ import java.util.Collections;
 
 import net.sf.json.JSONObject;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
 import fi.arcusys.koku.av.AvCitizenServiceHandle;
@@ -37,7 +38,7 @@ import fi.arcusys.koku.tiva.warrant.citizens.KokuCitizenWarrantHandle;
 
 public class QueryProcessCitizenImpl extends AbstractQueryProcess {
 
-	private static final Logger LOG = Logger.getLogger(QueryProcessCitizenImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(QueryProcessCitizenImpl.class);
 	
 	public QueryProcessCitizenImpl(MessageSource messages) {
 		super(messages);

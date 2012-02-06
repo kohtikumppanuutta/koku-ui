@@ -10,7 +10,8 @@ import javax.annotation.Resource;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +36,7 @@ import fi.arcusys.koku.util.MessageUtil;
 @RequestMapping(value = "VIEW")
 public class ExportFileController {
 
-	private static final Logger LOG = Logger.getLogger(ExportFileController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ExportFileController.class);
 	
 	@Resource
 	private ResourceBundleMessageSource messageSource;

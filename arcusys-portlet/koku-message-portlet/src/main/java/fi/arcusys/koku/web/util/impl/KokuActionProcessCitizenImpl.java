@@ -4,7 +4,8 @@ import static fi.arcusys.koku.util.Constants.RESPONSE_FAIL;
 
 import java.util.Arrays;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fi.arcusys.koku.av.AvCitizenServiceHandle;
 import fi.arcusys.koku.exceptions.KokuServiceException;
@@ -13,9 +14,7 @@ import fi.arcusys.koku.tiva.warrant.citizens.KokuCitizenWarrantHandle;
 import fi.arcusys.koku.web.util.exception.KokuActionProcessException;
 
 public class KokuActionProcessCitizenImpl extends AbstractKokuActionProcess {
-	
-	private static final Logger LOG = Logger.getLogger(KokuActionProcessCitizenImpl.class);
-	
+		
 	/* Lazily initialized */
 	private AvCitizenServiceHandle avCitizenServiceHandle = null;
 	private KokuCitizenWarrantHandle warrantHandle = null;	

@@ -13,13 +13,14 @@ import javax.portlet.PortletSession;
 
 import net.sf.json.JSONObject;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ui.ModelMap;
 
 import fi.arcusys.koku.util.PortalRole;
 
 public class AbstractController {
-	private static final Logger LOG = Logger.getLogger(AbstractController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractController.class);
 
 	/**
 	 * Resolves which portalRole portal has

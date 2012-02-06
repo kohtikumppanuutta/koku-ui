@@ -13,7 +13,8 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -32,7 +33,7 @@ import fi.arcusys.koku.hak.model.KokuApplicationSummary;
 @Controller("singleKindergartenController")
 @RequestMapping(value = "VIEW")
 public class ShowKindergartenController extends AbstractController {
-	private static final Logger LOG = Logger.getLogger(ShowKindergartenController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ShowKindergartenController.class);
 
 	
 	@Resource

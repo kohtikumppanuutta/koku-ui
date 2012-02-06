@@ -15,7 +15,8 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -35,7 +36,7 @@ import fi.arcusys.koku.intalio.TaskHandle;
 @RequestMapping(value = "VIEW")
 public class TaskManagerController {
 
-	private static final Logger LOG = Logger.getLogger(TaskManagerController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(TaskManagerController.class);
 
 	/**
 	 * Handles the portlet request to show default page
