@@ -14,7 +14,6 @@
 
 	<properties>
 		<acj.version>0.9</acj.version>
-		<log4j.version>1.2.14</log4j.version>
 		<logback.version>0.9.21</logback.version>
 		<commons-lang.version>2.4</commons-lang.version>
 		<commons-codec.version>1.4</commons-codec.version>
@@ -97,11 +96,6 @@
 
 	<dependencies>
 
-<!-- 		<dependency> -->
-<!-- 			<groupId>log4j</groupId> -->
-<!-- 			<artifactId>log4j</artifactId> -->
-<!-- 			<version>${log4j.version}</version> -->
-<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.intalio.tempo</groupId>
 			<artifactId>tempo-tms-common</artifactId>
