@@ -8,7 +8,8 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.WindowState;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ import static fi.arcusys.koku.util.Constants.*;
 @RequestMapping(value = "EDIT")
 public class ConfigController {
 	
-	private static final Logger LOG = Logger.getLogger(ConfigController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ConfigController.class);
 	
 	@RenderMapping
 	public String showConfig(RenderRequest request, RenderResponse response, ModelMap modelmap) {	

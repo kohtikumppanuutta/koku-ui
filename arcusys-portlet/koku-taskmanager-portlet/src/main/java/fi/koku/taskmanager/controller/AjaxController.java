@@ -21,8 +21,6 @@ import static fi.arcusys.koku.util.Constants.PREF_EDITABLE;
 import static fi.arcusys.koku.util.Constants.RESPONSE;
 import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_INVALID;
 import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_VALID;
-import static fi.arcusys.koku.util.Properties.IS_KUNPO_PORTAL;
-import static fi.arcusys.koku.util.Properties.VETUMA_ENABLED;
 
 import java.util.List;
 
@@ -37,7 +35,8 @@ import javax.portlet.WindowStateException;
 
 import net.sf.json.JSONObject;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,7 +45,6 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import fi.arcusys.koku.intalio.Task;
 import fi.arcusys.koku.intalio.TaskHandle;
-import fi.arcusys.koku.util.AuthenticationUtil;
 import fi.arcusys.koku.util.TaskUtil;
 
 /**
@@ -59,7 +57,7 @@ import fi.arcusys.koku.util.TaskUtil;
 @RequestMapping(value = "VIEW")
 public class AjaxController {
 	
-	private static final Logger LOG = Logger.getLogger(AjaxController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AjaxController.class);
 
 	/**
 	 * Shows ajax for retrieving intalio tasks

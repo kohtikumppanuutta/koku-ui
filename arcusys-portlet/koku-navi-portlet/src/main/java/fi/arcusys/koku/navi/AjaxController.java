@@ -1,6 +1,16 @@
 package fi.arcusys.koku.navi;
 
-import static fi.arcusys.koku.util.Constants.*;
+import static fi.arcusys.koku.util.Constants.ATTR_MY_ACTION;
+import static fi.arcusys.koku.util.Constants.ATTR_NAVI_TYPE;
+import static fi.arcusys.koku.util.Constants.ATTR_PORTAL_ROLE;
+import static fi.arcusys.koku.util.Constants.ATTR_TOKEN;
+import static fi.arcusys.koku.util.Constants.INTALIO_GROUP_PREFIX;
+import static fi.arcusys.koku.util.Constants.JSON_RENDER_URL;
+import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_NAVI;
+import static fi.arcusys.koku.util.Constants.PORTAL_MODE_KUNPO;
+import static fi.arcusys.koku.util.Constants.PORTAL_MODE_LOORA;
+import static fi.arcusys.koku.util.Constants.RESPONSE;
+
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletSession;
@@ -9,23 +19,20 @@ import javax.portlet.ResourceResponse;
 
 import net.sf.json.JSONObject;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
-import fi.arcusys.koku.av.AvCitizenServiceHandle;
 import fi.arcusys.koku.exceptions.IntalioAuthException;
 import fi.arcusys.koku.intalio.TaskHandle;
-import fi.arcusys.koku.kv.message.MessageHandle;
-import fi.arcusys.koku.kv.model.KokuFolderType;
 import fi.arcusys.koku.navi.util.QueryProcess;
 import fi.arcusys.koku.navi.util.impl.QueryProcessCitizenImpl;
 import fi.arcusys.koku.navi.util.impl.QueryProcessDummyImpl;
 import fi.arcusys.koku.navi.util.impl.QueryProcessEmployeeImpl;
-import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.users.UserIdResolver;
 import fi.arcusys.koku.util.PortalRole;
 import fi.arcusys.koku.util.Properties;
@@ -39,8 +46,8 @@ import fi.arcusys.koku.util.Properties;
 @Controller("ajaxController")
 @RequestMapping(value = "VIEW")
 public class AjaxController {
-
-	private static final Logger LOGGER = Logger.getLogger(AjaxController.class);	
+	
+	private static final Logger LOG = LoggerFactory.getLogger(AjaxController.class);
 	
 	/**
 	 * Gets the amount of new unread messages for user
@@ -61,7 +68,7 @@ public class AjaxController {
 				userId = resolver.getUserId(username, getPortalRole());
 			}
 		} catch (Exception e) {
-			LOGGER.error("Error while trying to resolve userId. Usually WSDL location is wrong or server down. See following error msg: "+e.getMessage());
+			LOG.error("Error while trying to resolve userId. Usually WSDL location is wrong or server down. See following error msg: "+e.getMessage());
 		}
 		
 		PortletSession session = request.getPortletSession();
@@ -73,11 +80,11 @@ public class AjaxController {
 				token = resolveIntalioToken(session, username);
 				session.setAttribute(ATTR_TOKEN, token);
 			} catch (IntalioAuthException iae) {
-				LOGGER.error("Authentication exception. Invalid user. Username: '"+username+"' ErrorMsg: "+iae.getMessage());
+				LOG.error("Authentication exception. Invalid user. Username: '"+username+"' ErrorMsg: "+iae.getMessage());
 				session.setAttribute(ATTR_TOKEN, "No token");
 			} catch (Exception e) {
 				session.setAttribute(ATTR_TOKEN, "No token");
-				LOGGER.error("Error while trying to resolve Intalio token. Username: '"+username+"': ",e);
+				LOG.error("Error while trying to resolve Intalio token. Username: '"+username+"': ",e);
 			}
 		}
 		
