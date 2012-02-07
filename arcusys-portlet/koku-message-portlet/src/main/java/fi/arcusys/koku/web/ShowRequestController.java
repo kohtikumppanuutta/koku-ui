@@ -4,7 +4,8 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,7 @@ import static fi.arcusys.koku.util.Constants.*;
 @RequestMapping(value = "VIEW")
 public class ShowRequestController {
 	
-	private static final Logger LOG = Logger.getLogger(ShowRequestController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ShowRequestController.class);
 
 	
 	/**

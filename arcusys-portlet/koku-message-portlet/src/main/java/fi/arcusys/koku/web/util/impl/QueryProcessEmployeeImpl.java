@@ -28,7 +28,8 @@ import java.util.Collections;
 
 import net.sf.json.JSONObject;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
 import fi.arcusys.koku.av.AvEmployeeServiceHandle;
@@ -43,7 +44,7 @@ import fi.arcusys.koku.tiva.warrant.employee.KokuEmployeeWarrantHandle;
 
 public class QueryProcessEmployeeImpl extends AbstractQueryProcess {
 	
-	private static final Logger LOG = Logger.getLogger(QueryProcessEmployeeImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(QueryProcessEmployeeImpl.class);
 
 	public QueryProcessEmployeeImpl(MessageSource messages) {
 		super(messages);

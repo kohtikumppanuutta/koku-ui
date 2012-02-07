@@ -25,15 +25,14 @@ import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_REQUEST_RESPONSE;
 import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_TIPY;
 import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_WARRANT;
 import static fi.arcusys.koku.util.Constants.RESPONSE;
-import static fi.arcusys.koku.util.Constants.RESPONSE_OK;
 import static fi.arcusys.koku.util.Constants.RESPONSE_FAIL;
+import static fi.arcusys.koku.util.Constants.RESPONSE_OK;
 import static fi.arcusys.koku.util.Constants.SUGGESTION_APPLICATION_KINDERGARTEN;
 import static fi.arcusys.koku.util.Constants.SUGGESTION_CONSENT;
-import static fi.arcusys.koku.util.Constants.SUGGESTION_WARRANT;
 import static fi.arcusys.koku.util.Constants.SUGGESTION_NO_TYPE;
+import static fi.arcusys.koku.util.Constants.SUGGESTION_WARRANT;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -47,7 +46,8 @@ import javax.portlet.WindowStateException;
 
 import net.sf.json.JSONObject;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -55,20 +55,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
-import fi.arcusys.koku.av.AvCitizenServiceHandle;
-import fi.arcusys.koku.av.AvEmployeeServiceHandle;
 import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.hak.model.HakServiceHandle;
-import fi.arcusys.koku.kv.message.MessageHandle;
-import fi.arcusys.koku.kv.model.KokuFolderType;
-import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
 import fi.arcusys.koku.tiva.TivaEmployeeServiceHandle;
-import fi.arcusys.koku.tiva.warrant.citizens.KokuCitizenWarrantHandle;
 import fi.arcusys.koku.tiva.warrant.employee.KokuEmployeeWarrantHandle;
 import fi.arcusys.koku.users.KokuUser;
 import fi.arcusys.koku.users.KokuUserService;
 import fi.arcusys.koku.users.UserIdResolver;
-import fi.arcusys.koku.util.PortalRole;
 import fi.arcusys.koku.util.Properties;
 import fi.arcusys.koku.web.util.KokuActionProcess;
 import fi.arcusys.koku.web.util.KokuTaskQueryProcess;
@@ -76,10 +69,9 @@ import fi.arcusys.koku.web.util.exception.KokuActionProcessException;
 import fi.arcusys.koku.web.util.impl.KokuActionProcessCitizenImpl;
 import fi.arcusys.koku.web.util.impl.KokuActionProcessDummyImpl;
 import fi.arcusys.koku.web.util.impl.KokuActionProcessEmployeeImpl;
-import fi.arcusys.koku.web.util.impl.QueryProcessDummyImpl;
 import fi.arcusys.koku.web.util.impl.QueryProcessCitizenImpl;
+import fi.arcusys.koku.web.util.impl.QueryProcessDummyImpl;
 import fi.arcusys.koku.web.util.impl.QueryProcessEmployeeImpl;
-import fi.arcusys.tampere.hrsoa.ldap.GetUserByEmployeeId;
 import fi.koku.portlet.filter.userinfo.UserInfo;
 
 /**
@@ -97,7 +89,7 @@ public class AjaxController extends AbstractController {
 	@Resource
 	private ResourceBundleMessageSource messageSource;
 
-	private static final Logger LOG = Logger.getLogger(AjaxController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AjaxController.class);
 	
 	/**
 	 * Handles portlet ajax request of tasks such as messages, requests,

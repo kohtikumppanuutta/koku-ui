@@ -10,14 +10,15 @@ import java.util.UUID;
 
 import net.sf.json.JSONObject;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
 import fi.arcusys.koku.web.util.KokuTaskQueryProcess;
 
 public abstract class AbstractQueryProcess implements KokuTaskQueryProcess {
 	
-	private static final Logger LOG = Logger.getLogger(AbstractQueryProcess.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractQueryProcess.class);
 	private MessageSource messageSource;
 	
 	protected abstract void setJsonTasks(JSONObject jsonModel, String taskType, int page, String keyword, String field, String orderType, String userUid);

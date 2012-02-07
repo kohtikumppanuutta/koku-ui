@@ -1,10 +1,18 @@
 package fi.arcusys.koku.palvelut.controller;
 
+import static fi.arcusys.koku.util.Constants.ATTR_FORM_LIST;
+import static fi.arcusys.koku.util.Constants.ATTR_PORTAL_ID;
+import static fi.arcusys.koku.util.Constants.ATTR_PREFERENCES;
+import static fi.arcusys.koku.util.Constants.PORTAL_GATEIN;
+import static fi.arcusys.koku.util.Constants.PORTAL_JBOSS;
+import static fi.arcusys.koku.util.Constants.PREF_SHOW_ONLY_FORM_BY_DESCRIPTION;
+import static fi.arcusys.koku.util.Constants.PREF_SHOW_ONLY_FORM_BY_ID;
+import static fi.arcusys.koku.util.Constants.PREF_SHOW_TASKS_BY_ID;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import static fi.arcusys.koku.util.Constants.*;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;

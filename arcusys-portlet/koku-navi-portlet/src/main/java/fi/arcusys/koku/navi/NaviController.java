@@ -3,7 +3,8 @@ package fi.arcusys.koku.navi;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,7 +22,7 @@ import fi.arcusys.koku.util.Properties;
 @Controller("naviController")
 @RequestMapping(value = "VIEW")
 public class NaviController {
-	private static final Logger LOG = Logger.getLogger(NaviController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(NaviController.class);
 	
 	// maps the incoming portlet request to this method, returns the default page
 	@RenderMapping

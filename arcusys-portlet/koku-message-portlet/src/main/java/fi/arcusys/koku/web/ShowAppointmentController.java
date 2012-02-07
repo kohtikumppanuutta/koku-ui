@@ -15,7 +15,8 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -41,7 +42,7 @@ import fi.arcusys.koku.web.util.impl.ModelWrapperImpl;
 @RequestMapping(value = "VIEW")
 public class ShowAppointmentController {
 	
-	private static final Logger LOG = Logger.getLogger(ShowAppointmentController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ShowAppointmentController.class);
 	
 	@Resource
 	ResourceBundleMessageSource messageSource;
