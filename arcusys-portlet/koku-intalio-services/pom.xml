@@ -18,6 +18,10 @@
 			<resource>
 				<directory>src/main/wsdl</directory>
 			</resource>
+			<resource>
+                <directory>${project.build.directory}/generated/cxf</directory>
+                <filtering>false</filtering>
+            </resource>
 		</resources>
 		<plugins>
 			<plugin>
@@ -46,7 +50,7 @@
 						<id>generate-sources</id>
 						<phase>generate-sources</phase>
 						<configuration>
-							<sourceRoot>${basedir}/src/main/java</sourceRoot>
+							<sourceRoot>${project.build.directory}/generated/cxf</sourceRoot>
 							<wsdlOptions>
 								<wsdlOption>
 									<wsdl>${basedir}/src/main/wsdl/TaskManagement.wsdl</wsdl>
