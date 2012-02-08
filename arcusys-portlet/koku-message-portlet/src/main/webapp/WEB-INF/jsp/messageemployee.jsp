@@ -115,7 +115,7 @@
 	 	consentUrl : "<%= consentURL %>",
 		citizenWarrantUrl : "<%= citizenWarrantURL %>",
 		tipyUrl : "<%= tipyURL %>",
-		applicationKindergartenUrl : "<%= applicationKindergartenURL %>",
+		applicationKindergartenUrl : "<%= applicationKindergartenURL %>"
 	};
 	
 	
