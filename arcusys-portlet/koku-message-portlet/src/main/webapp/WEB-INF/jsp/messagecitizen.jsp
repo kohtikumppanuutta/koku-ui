@@ -85,7 +85,7 @@
 	 	responseRenderUrl :  "<%= responseRenderURL %>",
 	 	appointmentRenderUrl :  "<%= appointmentRenderURL %>",
 	 	consentRenderUrl : 	"<%= consentRenderURL %>",
-	 	warrantRenderUrl : "<%= warrantRenderURL %>",
+	 	warrantRenderUrl : "<%= warrantRenderURL %>"
 	};
 
 	<%-- Loading JS from separate jspf files instead of .js files. Thanks to "ugly" Gatein portal. --%>
