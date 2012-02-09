@@ -71,9 +71,11 @@ public class ShowRequestController {
 		ModelWrapper<KokuRequest> model = null;
 		KokuRequest kokuRequest = null;
 		try {
-			if (taskType.equals(Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE)) {
+			if (taskType.equals(Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE) || taskType.equals(Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE)) {
 				EmployeeRequestHandle reqhandle = new EmployeeRequestHandle();
 				kokuRequest = reqhandle.getKokuRequestById(requestId);			
+			} else {
+				throw new KokuServiceException("No operation for taskType: '"+taskType+"' username: '" + request.getUserPrincipal().getName() + "'");
 			}
 			model = new ModelWrapperImpl<KokuRequest>(kokuRequest);
 		} catch (KokuServiceException kse) {
