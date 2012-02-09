@@ -14,13 +14,12 @@ function KokuAjaxCitizen(renderUrls) {
 
 // Creates a renderURL by ajax, to show the detailed message page 
 KokuAjaxCitizen.prototype.showMessage = function(messageId) {
-	// var url="<%= messageRenderURL %>";
 	var url = this.renderUrls.messageRenderUrl;
 	url = this.formatUrl(url);
 	
 	jQuery.post(url, {messageId:messageId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
 		keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
-		var obj = eval('(' + data + ')');
+		var obj = jQuery.parseJSON(data);
 		var json = obj.response;
 		var renderUrl = json["renderUrl"];
 		window.location = renderUrl;
@@ -29,13 +28,12 @@ KokuAjaxCitizen.prototype.showMessage = function(messageId) {
 	
 //Creates a renderURL by ajax, to show the detailed request page
 KokuAjaxCitizen.prototype.showRequest = function(requestId) {
-	// var url = "<%= requestRenderURL %>";
 	var url = this.renderUrls.requestRenderUrl;
 	url = this.formatUrl(url);
 	
 	jQuery.post(url, {requestId:requestId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
 		keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
-		var obj = eval('(' + data + ')');
+		var obj = jQuery.parseJSON(data);
 		var json = obj.response;
 		var renderUrl = json["renderUrl"];
 		window.location = renderUrl;
@@ -47,13 +45,12 @@ KokuAjaxCitizen.prototype.showResponse = function(index) {
 	var task = pageObj.tasks[index];
 	var responseId = task["responseId"];
 
-	// var url = "<%= responseRenderURL %>";
 	var url = this.renderUrls.responseRenderUrl;
 	url = this.formatUrl(url);
 	
 	jQuery.post(url, {responseId:responseId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
 		keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
-		var obj = eval('(' + data + ')');
+		var obj = jQuery.parseJSON(data);
 		var json = obj.response;
 		var renderUrl = json["renderUrl"];
 		window.location = renderUrl;
@@ -72,13 +69,12 @@ KokuAjaxCitizen.prototype.showAppointment = function(index) {
 		|| pageObj.taskType == "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN%>"
 		|| pageObj.taskType == "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD%>") {
 		
-		//url = "<%= appointmentRenderURL %>";
 		url = this.renderUrls.appointmentRenderUrl;
 		url = this.formatUrl(url);
 		
 		jQuery.post(url, {appointmentId:appointmentId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
 			keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType, targetPerson:targetPerson}, function(data) {
-			var obj = eval('(' + data + ')');
+			var obj = jQuery.parseJSON(data);
 			var json = obj.response;
 			var renderUrl = json["renderUrl"];
 			window.location = renderUrl;
@@ -104,13 +100,12 @@ KokuAjaxCitizen.prototype.showConsent = function(index) {
 	} else if(pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS%>"
 				||pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD%>" 
 				||pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>") {
-		// url = "<%= consentRenderURL %>";
 		url = this.renderUrls.consentRenderUrl;
 		url = this.formatUrl(url);
 		
 		jQuery.post(url, {consentId:consentId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
 			keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
-			var obj = eval('(' + data + ')');
+			var obj = jQuery.parseJSON(data);
 			var json = obj.response;
 			var renderUrl = json["renderUrl"];
 			window.location = renderUrl;
@@ -127,12 +122,11 @@ KokuAjaxCitizen.prototype.showConsent = function(index) {
 
 KokuAjaxCitizen.prototype.showWarrant = function(index) {
 	var authorizationId = pageObj.tasks[index]['authorizationId'];	
-	// var url= "<%= warrantRenderURL %>";
 	url = this.renderUrls.warrantRenderUrl;
 	url = this.formatUrl(url);
 	jQuery.post(url, {authorizationId:authorizationId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
 		keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
-		var obj = eval('(' + data + ')');
+		var obj = jQuery.parseJSON(data);
 		var json = obj.response;
 		var renderUrl = json["renderUrl"];
 		window.location = renderUrl;

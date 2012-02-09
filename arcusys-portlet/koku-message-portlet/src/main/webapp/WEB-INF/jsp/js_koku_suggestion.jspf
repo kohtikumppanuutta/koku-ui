@@ -120,7 +120,7 @@ function SuggestionBox(ajaxUrls) {
 				  global:false,
 				  data: {'keyword':key, 'suggestType':suggestType},
 				  success: function(data) {
-					var obj = eval('(' + data + ')');
+					var obj = jQuery.parseJSON(data);
 					var json = obj.response;
 					consentTemplates = json["result"];
 					

@@ -27,10 +27,10 @@ KokuAjax.prototype.genericAjaxCall = function(messageList, callback, url) {
 		return;
 	}		
  	jQuery.post(url, {'messageList':messageList}, function(data) {
-			var obj = eval('(' + data + ')');
+			var obj = jQuery.parseJSON(data);
 			var json = obj.response;
 			var result = json["result"];
-			callback(result);		
+			callback(result);
 	});
  };
  
@@ -51,7 +51,7 @@ KokuAjax.prototype.archiveMessagesOld = function(folderType, callback) {
 	var url= this.renderUrls.archiveOldUrl;
 	url = this.formatUrl(url);
 	jQuery.post(url, {'folderType':folderType}, function(data) {
-			var obj = eval('(' + data + ')');
+			var obj = jQuery.parseJSON(data);
 			var json = obj.response;
 			var result = json["result"];
 			callback(result);
@@ -92,7 +92,7 @@ KokuAjax.prototype.cancelAppointments = function(messageList, targetPersons, com
 	url = this.formatUrl(url);
 	
 	jQuery.post(url, {'messageList':messageList, 'targetPersons':targetPersons, 'comment':comment, 'taskType':taskType}, function(data) {
-		var obj = eval('(' + data + ')');
+		var obj = jQuery.parseJSON(data);
 		var json = obj.response;
 		var result = json["result"];
 		callback(result);
@@ -127,7 +127,7 @@ KokuAjax.prototype.ajaxGetTasks = function(pageObj, presentTasks) {
 	
 	jQuery.post(url, {page:pageObj.currentPage, taskType:pageObj.taskType, 
 		keyword:pageObj.keyword, orderType:pageObj.orderType, field:pageObj.field}, function(data) {
-		var obj = eval('(' + data + ')');
+		var obj = jQuery.parseJSON(data);
 		var json = obj.response;
 		pageObj.loginStatus = json["loginStatus"];
 		

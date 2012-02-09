@@ -14,7 +14,6 @@ function KokuAjaxEmployee(renderUrls) {
 
 /* Shows detailed message page */
 KokuAjaxEmployee.prototype.showMessage = function(messageId) {
-	//var url = "<%= messageURL %>";
 	var url = this.renderUrls.messageUrl;
 	url += "&messageId=" + messageId
 		+ "&currentPage=" + pageObj.currentPage
@@ -26,7 +25,6 @@ KokuAjaxEmployee.prototype.showMessage = function(messageId) {
 	
 /* Shows detailed request page */
 KokuAjaxEmployee.prototype.showRequest = function(requestId) {
-	// var url = "<%= requestURL %>";
 	var url = this.renderUrls.requestUrl;
 	url += "&requestId=" + requestId
 		+ "&currentPage=" + pageObj.currentPage
@@ -45,7 +43,6 @@ KokuAjaxEmployee.prototype.showAppointment = function(index) {
 	var url="";
 	
 	if(pageObj.taskType == "app_response_employee" || pageObj.taskType == "app_response_citizen") {
-		// url = "<%= appointmentURL %>";
 		var url = this.renderUrls.appointmentUrl;			
 		url += "&appointmentId=" + appointmentId
 			+ "&currentPage=" + pageObj.currentPage
@@ -56,7 +53,7 @@ KokuAjaxEmployee.prototype.showAppointment = function(index) {
 		url = "<%= defaultPath %><%= NavigationPortletProperties.APPOINTMENTS_NEW_APPOINTMENT %>" + "?FormID=" + appointmentId;			
 	}else if(pageObj.taskType == "app_inbox_citizen") {
 		url = "<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_ANSWER_TO_CONSENT %>" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;				
-	}		
+	}
 	window.location = url;				
 };
 	
@@ -64,20 +61,17 @@ KokuAjaxEmployee.prototype.showAppointment = function(index) {
 KokuAjaxEmployee.prototype.showResponse = function(index) {
 	var task = pageObj.tasks[index];
 	var responseId = task["responseId"];
-
-	// var url = "<%= responseRenderURL %>";
-	var url = this.renderUrls.responseRenderUrl;
-	
+	var url = this.renderUrls.responseRenderUrl;	
 	url = this.formatUrl(url);
 	
 	jQuery.post(url, {responseId:responseId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
 		keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
-		var obj = eval('(' + data + ')');
+		var obj = jQuery.parseJSON(data);
 		var json = obj.response;
 		var renderUrl = json["renderUrl"];
 		window.location = renderUrl;
 	});
-};	
+};
 	
 /* Shows detailed consent page */
 KokuAjaxEmployee.prototype.showConsent = function(index) {
@@ -86,7 +80,6 @@ KokuAjaxEmployee.prototype.showConsent = function(index) {
 	var url="";
 	
 	if (pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS%>" || pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>") {
-		// url = "<%= consentURL %>";
 		var url = this.renderUrls.consentUrl;
 		url += "&consentId=" + consentId
 			+ "&currentPage=" + pageObj.currentPage
@@ -111,7 +104,6 @@ KokuAjaxEmployee.prototype.showConsent = function(index) {
 
 KokuAjaxEmployee.prototype.showWarrant = function(index) {	
 	var authorizationId = pageObj.tasks[index]['authorizationId'];	
-	// var url= "<%= citizenWarrantURL %>";
 	var url = this.renderUrls.citizenWarrantUrl;		
 	url += "&authorizationId=" + authorizationId
 		+ "&currentPage=" + pageObj.currentPage
@@ -123,7 +115,6 @@ KokuAjaxEmployee.prototype.showWarrant = function(index) {
 
 KokuAjaxEmployee.prototype.showTipy = function(index) {	
 	var requestId = pageObj.tasks[index]['requestId'];	
-	// var url= "<%= tipyURL %>";
 	var url = this.renderUrls.tipyUrl;
 	url += "&requestId=" + requestId
 		+ "&currentPage=" + pageObj.currentPage
@@ -135,7 +126,6 @@ KokuAjaxEmployee.prototype.showTipy = function(index) {
 
 KokuAjaxEmployee.prototype.showApplicationKindergarten = function(index) {	
 	var applicationId = pageObj.tasks[index]['applicationId'];	
-	//var url= "<%= applicationKindergartenURL %>";
 	var url = this.renderUrls.applicationKindergartenUrl;
 	
 	url += "&applicationId=" + applicationId
