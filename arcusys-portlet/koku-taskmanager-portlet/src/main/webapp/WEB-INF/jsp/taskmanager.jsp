@@ -29,9 +29,9 @@
 	String defaultPath = "";
 
 	int pos = ajaxURL.indexOf("default");
-	if(pos > -1) { // for Jboss portal
+	if (pos > -1) { // for Jboss portal
 		defaultPath = ajaxURL.substring(0, pos+7);		
-	}else { // for Gatein portal
+	} else { // for Gatein portal
 		int pos1 = ajaxURL.indexOf("classic");
 		defaultPath = ajaxURL.substring(0, pos1+7);
 	}
@@ -63,10 +63,10 @@
 		
 		//changeTasks();
 		/* User is logged in and participant token for intalio is valid */
-		if(tokenStatus == 'VALID') {
+		if (tokenStatus == 'VALID') {
 			ajaxGetTasks();		
 			resetRefreshTimer();
-		}else {
+		} else {
 			var message = "<spring:message code="error.invalidToken" />";
 			showErrorMessage(message);
 		}
@@ -118,6 +118,10 @@
 		pageObj.setTaskParams(type); // set taskType and related initialization		
 		ajaxGetTasks();
 	}
+	
+	function escapeHTML(value) {
+	    return value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+	}
 
 	/**
 	 * Execute ajax query in Post way, and parse the Json format response, and
@@ -133,11 +137,11 @@
 
 		jQuery.post(url, {page:pageObj.currentPage, taskType:pageObj.taskType, 
 			keyword:pageObj.keyword, orderType:pageObj.orderType}, function(data) {
-			var obj = eval('(' + data + ')');
+			var obj = jQuery.parseJSON(data);
 			var json = obj.response;
 			tokenStatus = json["tokenStatus"];
 			
-			if(tokenStatus == 'VALID') {
+			if (tokenStatus == 'VALID') {
 				pageObj.totalPages = json["totalPages"];
 				pageObj.totalItems = json["totalItems"];
 				var tasks = json["tasks"];
@@ -147,14 +151,11 @@
 				decorateTable();
 				var pageHtml = createTasksPage();
 				jQuery('#task-manager-operation-page').html(pageHtml);
-			}else {
+			} else {
 				var message = "<spring:message code="error.invalidToken" />";
 				showErrorMessage(message);
 			}
-			
-
-		});
-		
+		});		
 	}
 
 	/**
@@ -171,10 +172,6 @@
 		<c:if test="<%= Boolean.valueOf(editable) %>">
 			taskHtml += '<td><spring:message code="task.edit" /></td>';
 		</c:if>
-		/* process does not have state field */
-		<%-- if(pageObj.taskType != 'process') {
-			taskHtml += '<td><a href="javascript:void(0)" onclick="orderTask(\'state\')"><spring:message code="task.state" /></a></td>';
-		} --%>
 		
 		taskHtml += '<td><a href="javascript:void(0)" onclick="orderTask(\'creationDate\')"><spring:message code="task.creationDate" /></a></td>'								
 				 + '</tr> ';
@@ -183,22 +180,17 @@
 			formLink = createFormLink(tasks[i]["link"], tasks[i]["description"]);
 			
 			if((i+1)%2 == 0) {
-				taskHtml += '<tr class="evenRow">'
+				taskHtml += '<tr class="evenRow">';
 			}else {
-				taskHtml += '<tr>' 
+				taskHtml += '<tr>';
 			}
 			
 			taskHtml +=  '<td>' + formLink + '</td>';
 			if (editable == true) {
 				taskHtml += '<td><div><spring:message code="task.edit" /></div></td>';	
 			}
-			/* process does not have state field */
-			<%--if(pageObj.taskType != 'process') {
-				taskHtml += '<td>' + getTaskState(tasks[i]["state"]) + '</td>';
-			} --%>
 			
-			taskHtml += '<td>' + tasks[i]["creationDate"] + '</td>' 
-					 + '</tr>';
+			taskHtml += '<td>' + escapeHTML(tasks[i]["creationDate"]) + '</td> </tr>';
 		}
 
 		taskHtml += '</table>';
@@ -255,7 +247,6 @@
 		<c:if test="<%= Boolean.valueOf(editable) %>">
 			taskHtml += '<td><spring:message code="task.edit" /></td>';
 		</c:if>
-		<%-- taskHtml += '<td><spring:message code="task.state" /></td>' --%>
 		taskHtml += '<td><spring:message code="task.creationDate" /></td>'								
 				  + '</tr></table>';
 				
@@ -300,12 +291,11 @@
 			
 			jQuery.post(url, {tasklink:formLink, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
 				keyword:pageObj.keyword, orderType:pageObj.orderType}, function(data) {
-				var obj = eval('(' + data + ')');
+				var obj = jQuery.parseJSON(data);
 				var json = obj.response;
 				var renderUrl = json["renderUrl"];
 				window.location = renderUrl;
 			});
-				
 		}
 		
 		function popupTaskForm(formLink) {
@@ -318,7 +308,7 @@
 			
 			jQuery.post(url, {tasklink:formLink, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
 				keyword:pageObj.keyword, orderType:pageObj.orderType}, function(data) {
-				var obj = eval('(' + data + ')');
+				var obj = jQuery.parseJSON(data);
 				var json = obj.response;
 				var renderUrl = json["renderUrl"];
 				var pWindow = window.open(renderUrl, 'popwindow','scrollbars=no, resizable=yes, width='+w+', height='+h+', top='+top+', left='+left);
@@ -348,7 +338,7 @@
 			description = "<spring:message code="task.noDescription" />";
 		}
 		
-		linkHtml += description + '</a>';
+		linkHtml += escapeHTML(description) + '</a>';
 		
 		return linkHtml;
 	}
@@ -621,7 +611,7 @@
 	 * Show error message to inform user
 	 */
 	function showErrorMessage(message) {
-		var msgHtml = '<div class="task-error-message" >' + message + '</div>';
+		var msgHtml = '<div class="task-error-message" >' + escapeHTML(message) + '</div>';
 		jQuery('#task-manager-operation-page').html(msgHtml);
 	}
 	
@@ -705,7 +695,6 @@
 		newUrl = newUrl.replace(/&amp;/g,"&");
 		newUrl = newUrl.replace(/&lt;/g,"<");
 		newUrl =  newUrl.replace(/&gt;/g,">");
-		
 		return newUrl;
 	}
 </script>
