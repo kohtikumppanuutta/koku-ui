@@ -57,7 +57,7 @@ function ajaxGetTaskStatus() {
 	url = formatUrl(url);
 
 	jQuery.post(url, {taskId:taskId}, function(data) {
-		var obj = eval('(' + data + ')');
+		var obj = jQuery.parseJSON(data);
 		var json = obj.response;		
 		taskStatus = json["taskState"];
 		
