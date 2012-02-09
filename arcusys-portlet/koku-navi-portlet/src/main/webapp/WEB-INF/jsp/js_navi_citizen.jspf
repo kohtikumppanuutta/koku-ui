@@ -4,7 +4,7 @@ function navigateToPage(naviType) {
 	url = formatUrl(url);
 	
 	jQuery.post(url, {'newNaviType':naviType}, function(data) {
-		var obj = eval('(' + data + ')');
+		var obj = jQuery.parseJSON(data);
 		var json = obj.response;
 		var renderUrl = json["renderUrl"];
 		var temp = renderUrl.split("?");
