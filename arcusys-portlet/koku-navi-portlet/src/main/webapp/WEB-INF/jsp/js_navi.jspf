@@ -72,6 +72,10 @@ function focusCurrentItem() {
 		return newUrl;
 };
 
+function escapeHTML(value) {
+    return value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
 /**
  * Execute ajax query in Post way, and parse the Json format response, and
  * then create tasks in table and task page filed.
@@ -86,7 +90,7 @@ function ajaxUpdate() {
 		function updateMsgCounter(elementId, count) {
 			element = jQuery(elementId);
 			if (count !== undefined && count != 0) {
-				element.html('(' + count + ')');			
+				element.html('(' + escapeHTML(count) + ')');			
 			} else {
 				element.html("");
 			}
@@ -109,7 +113,7 @@ function ajaxUpdate() {
 		  global:false,
 		  data: {number:"0"},
 		  success: function(data) {
-				var obj = eval('(' + data + ')');
+				var obj = jQuery.parseJSON(data);
 				var json = obj.response;
 				var navi_login_status = json["<%=Constants.JSON_LOGIN_STATUS %>"];
 				
