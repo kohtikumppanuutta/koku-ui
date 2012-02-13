@@ -73,12 +73,12 @@ public String htmlToCode(String s)
 		usernameArray = JSONArray.fromObject(missingUserNames);
 	}
 %>
-<script type="text/javascript"> 
+<script type="text/javascript">
 	
 	window.onload = function() {
 		if ('<%= responseResult.toString() %>' == '<%= ResponseStatus.FAIL.toString() %>') {
 			// show errorMsg			
-			kokuErrorMsg += "<span class=\"failureUuid\"><%= messageModel.getErrorCode() %></span></div>";
+			kokuErrorMsg += "<span class=\"failureUuid\"><%= htmlToCode_old(messageModel.getErrorCode()) %></span></div>";
 			jQuery.jGrowl(kokuErrorMsg, kokuErrorMsgOptions);
 		} else {		
 			var content = '<%= content %>';
@@ -88,7 +88,7 @@ public String htmlToCode(String s)
 			
 			if (missingUsers.length >= 2) {
 				var persons = "";
-				for(var i in missingUsers) {
+				for(var i=0; i <= (missingUsers.length - 1); i++) {
 					persons += missingUsers[i] + ", ";
 				}
 				persons = persons.substring(0, persons.length-2);
