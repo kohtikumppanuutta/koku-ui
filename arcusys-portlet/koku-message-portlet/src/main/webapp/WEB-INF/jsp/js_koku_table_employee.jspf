@@ -13,7 +13,7 @@ function KokuEmployeeTable() {
 			tasks[i]["templateDescription"] = tasks[i].template.description;
 			tasks[i]["templateId"] = tasks[i].template.templateId;
 			tasks[i]["templateName"] = tasks[i].template.templateName;
-			tasks[i]["templateNameWithDescription"] = "<abbr class='valueWithDesc' title='"+ tasks[i].template.description +"' >" + tasks[i].template.templateName +"</abbr>";
+			tasks[i]["templateNameWithDescription"] = "<abbr class='valueWithDesc' title='"+ KokuUtil.escapeHTML(tasks[i].template.description) +"' >" + KokuUtil.escapeHTML(tasks[i].template.templateName) +"</abbr>";
 		}
 	};
 };
@@ -76,11 +76,11 @@ KokuEmployeeTable.prototype.createRequestsTable = function(tasks) {
 		}
 		
 		taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["requestId"] + '" />' + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["subject"] + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["respondedAmount"] + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["missedAmount"] + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["creationDate"] + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + tasks[i]["endDate"] + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ KokuUtil.escapeHTML(tasks[i]["requestId"]) + '\')" >' + KokuUtil.escapeHTML(tasks[i]["subject"]) + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ KokuUtil.escapeHTML(tasks[i]["requestId"]) + '\')" >' + KokuUtil.escapeHTML(tasks[i]["respondedAmount"]) + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ KokuUtil.escapeHTML(tasks[i]["requestId"]) + '\')" >' + KokuUtil.escapeHTML(tasks[i]["missedAmount"]) + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ KokuUtil.escapeHTML(tasks[i]["requestId"]) + '\')" >' + KokuUtil.escapeHTML(tasks[i]["creationDate"]) + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ KokuUtil.escapeHTML(tasks[i]["requestId"]) + '\')" >' + KokuUtil.escapeHTML(tasks[i]["endDate"]) + '</td>'
 				 + '</tr>';
 	}
 
@@ -136,7 +136,7 @@ KokuEmployeeTable.prototype.createBrowseEmployeeOwnConsents = function(tasks) {
 	};
 	
 	if (tasks == undefined || tasks == null || tasks.length == 0) {
-		return KokuUtil.errorMsg.showErrorMsgNoSendedConsents();
+		return KokuUtil.errorMsg.showErrorMsg("Ei suostumuspyyntöjä");
 	}
 	
 	var columnNames = ["<spring:message code="message.choose"/>",
@@ -169,10 +169,10 @@ KokuEmployeeTable.prototype.createBrowseUserWarrantsTable = function(tasks) {
 
 	function createPersonSearchLinks(tasks) {
 		for (var i = 0; i < tasks.length; i++)  {			
-// 			tasks[i]["senderName"] = '<a href="javascript:void(0)" class="personLink" onclick="searchPersonWarrantsByRecieverUserId(\'' + tasks[i]["senderUid"] + '\')">'+ tasks[i]["senderName"] +'</a>';
-// 			tasks[i]["recieverName"] = '<a href="javascript:void(0)" class="personLink" onclick="searchPersonWarrantsByRecieverUserId(\'' + tasks[i]["receiverUid"] + '\')">'+ tasks[i]["recieverName"] +'</a>';
-// 			tasks[i]["targetPersonName"] = '<a href="javascript:void(0)" class="personLink" onclick="searchPersonWarrantsByRecieverUserId(\'' + tasks[i]["targetPersonUid"] + '\')">'+ tasks[i]["targetPersonName"] +'</a>';
-			tasks[i]["templateNameWithDescription"] = '<abbr class="valueWithDesc" title=\''+ tasks[i].template.description +'\' >' + tasks[i].template.templateName +'</abbr>'; 
+// 			tasks[i]["senderName"] = '<a href="javascript:void(0)" class="personLink" onclick="searchPersonWarrantsByRecieverUserId(\'' + KokuUtil.escapeHTML(tasks[i]["senderUid"]) + '\')">'+ KokuUtil.escapeHTML(tasks[i]["senderName"]) +'</a>';
+// 			tasks[i]["recieverName"] = '<a href="javascript:void(0)" class="personLink" onclick="searchPersonWarrantsByRecieverUserId(\'' + KokuUtil.escapeHTML(tasks[i]["receiverUid"]) + '\')">'+ KokuUtil.escapeHTML(tasks[i]["recieverName"]) +'</a>';
+// 			tasks[i]["targetPersonName"] = '<a href="javascript:void(0)" class="personLink" onclick="searchPersonWarrantsByRecieverUserId(\'' + KokuUtil.escapeHTML(tasks[i]["targetPersonUid"]) + '\')">'+ KokuUtil.escapeHTML(tasks[i]["targetPersonName"]) +'</a>';
+			tasks[i]["templateNameWithDescription"] = '<abbr class="valueWithDesc" title=\''+ KokuUtil.escapeHTML(tasks[i].template.description) +'\' >' + KokuUtil.escapeHTML(tasks[i].template.templateName) +'</abbr>'; 
 		}
 	};
 	
