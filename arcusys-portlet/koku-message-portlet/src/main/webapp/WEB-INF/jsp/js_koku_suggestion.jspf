@@ -144,7 +144,7 @@ function SuggestionBox(ajaxUrls) {
 				        document.getElementById(suggestId).innerHTML="";
 				        for(var i=0;i <suggestions.length;i++) {
 				          if(suggestions[i]!="") {
-				            document.getElementById(suggestId).innerHTML+=" <div id='item" + i + "' class='itemBg' onmouseover='kokuSuggestionBox.beMouseOver(" + i +")' onmouseout='kokuSuggestionBox.beMouseOut(" + i + ")' onclick='kokuSuggestionBox.beClick(" + i + ")'>" + suggestions[i] + " </div>";
+				            document.getElementById(suggestId).innerHTML+=" <div id='item" + i + "' class='itemBg' onmouseover='kokuSuggestionBox.beMouseOver(" + i +")' onmouseout='kokuSuggestionBox.beMouseOut(" + i + ")' onclick='kokuSuggestionBox.beClick(" + i + ")'>" + KokuUtil.escapeHTML(suggestions[i]) + " </div>";
 				          }
 				        }
 				        document.getElementById(suggestId).innerHTML+=" <div class='item_button' onclick='kokuSuggestionBox.hiddenDiv();'> <font color='#0000ff'>close </font> </div>";
@@ -153,7 +153,7 @@ function SuggestionBox(ajaxUrls) {
 						document.getElementById(suggestId).style.display="none";
 					}
 				  }
-				});	
+				});
 	                    
 	    } else {
 	      document.getElementById(suggestId).style.display="none";

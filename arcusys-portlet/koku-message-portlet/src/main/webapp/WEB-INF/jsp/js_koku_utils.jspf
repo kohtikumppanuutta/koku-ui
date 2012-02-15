@@ -30,6 +30,14 @@ var KokuUtil = {
 		}
 	},
 	
+	escapeHTML : function(value) {
+		if (value !== null && value !== undefined && isNaN(value) && value.replace()) {
+			return value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+		} else {
+			return value;
+		}
+	},
+	
 	errorMsg : {
 		showErrorMsgNoConsents : function () {
 		return "<div class='errorMsg noConsents'><spring:message code="consent.errorMsg.noWarrants2"/></div>";

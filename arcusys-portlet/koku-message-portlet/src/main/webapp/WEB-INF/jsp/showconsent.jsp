@@ -57,11 +57,11 @@
 	    		<td class="head"><spring:message code="consent.description"/></td>
 	    		<td class="head"><spring:message code="consent.status"/></td>
 	    	</tr>
-	    	<c:forEach var="request" items="${consent.model.actionRequests}" varStatus="loopStatus">
+	    	<c:forEach var="request" items="<c:out value="${consent.model.actionRequests}" />" varStatus="loopStatus">
 	        <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
-	          <td>${request.name}</td>
-	          <td>${request.description}</td>
-	          <td style="min-width:60px">${request.status}</td>    
+	          <td><c:out value="${request.name}" /></td>
+	          <td><c:out value="${request.description}" /></td>
+	          <td style="min-width:60px"><c:out value="${request.status}" /></td>    
 	        </tr>
 	      	</c:forEach>
 	    </table>

@@ -9,7 +9,7 @@
 <c:choose> 
   <c:when test="${tipy.responseStatus == 'FAIL'}" > 
   	<script type="text/javascript"> 
-  			kokuErrorMsg += "<span class=\"failureUuid\">${tipy.errorCode}</span></div>";
+  			kokuErrorMsg += "<span class=\"failureUuid\"><c:out value="${tipy.errorCode}" /></span></div>";
 			jQuery.jGrowl(kokuErrorMsg, kokuErrorMsgOptions);
 	</script>
   </c:when> 
@@ -40,8 +40,8 @@
 	    		<td class="head"><spring:message code="tipy.details.categoryTableHeader"/></td>
 	    	</tr>
 	    	<c:forEach var="cat" items="${tipy.model.categories}" varStatus="loopStatus">
-		        <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
-		          <td>${cat}</td>
+		        <tr class="<c:out value="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}"/>">
+		          <td><c:out value="${cat}"/></td>
 		        </tr>
 	      	</c:forEach>
 	    </table>  
