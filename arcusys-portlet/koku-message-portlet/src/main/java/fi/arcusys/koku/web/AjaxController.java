@@ -85,11 +85,11 @@ import fi.koku.portlet.filter.userinfo.UserInfo;
 public class AjaxController extends AbstractController {
 	
 	private static final int MAX_SUGGESTION_RESULTS = 5;
+	private static final Logger LOG = LoggerFactory.getLogger(AjaxController.class);
 		
 	@Resource
 	private ResourceBundleMessageSource messageSource;
 
-	private static final Logger LOG = LoggerFactory.getLogger(AjaxController.class);
 	
 	/**
 	 * Handles portlet ajax request of tasks such as messages, requests,
@@ -114,13 +114,8 @@ public class AjaxController extends AbstractController {
 		
 		PortletSession portletSession = request.getPortletSession();		
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		
 		registerUserToWS(portletSession);
-	    
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
-				
+		
 		String userId = null;
 		try {
 			UserIdResolver resolver = new UserIdResolver();
@@ -138,12 +133,12 @@ public class AjaxController extends AbstractController {
 		} else {
 			query = new QueryProcessDummyImpl(messageSource);
 			LOG.error("PortalMode unknown! Only kunpo/loora portal modes are supported. Please check that properties file is properly configured.");
-		}	
+		}
 		
 		JSONObject jsonModel = query.getJsonModel(taskType, page, keyword, field, orderType, userId);
 		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
-	}	
+	}
 	
 	/**
 	 * KOKU-805
@@ -212,9 +207,6 @@ public class AjaxController extends AbstractController {
 		
 		PortletSession portletSession = request.getPortletSession();		
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
 		
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
@@ -252,9 +244,6 @@ public class AjaxController extends AbstractController {
 		
 		PortletSession portletSession = request.getPortletSession();		
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
 		
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
@@ -291,9 +280,6 @@ public class AjaxController extends AbstractController {
 		
 		PortletSession portletSession = request.getPortletSession();		
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
 		
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
@@ -327,31 +313,26 @@ public class AjaxController extends AbstractController {
 	@ResourceMapping(value = "revokeConsent")
 	public String revokeConsent(@RequestParam(value = "messageList[]") String[] messageList,
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
-		PortletSession portletSession = request.getPortletSession();				
-		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
 		
+		PortletSession portletSession = request.getPortletSession();
+		String username = (String) portletSession.getAttribute(ATTR_USERNAME);		
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
-
 		JSONObject jsonModel = new JSONObject();
-		
 		KokuActionProcess actionProcess = null;
 		try {
 			switch (getPortalRole()) {
 				case CITIZEN: actionProcess = new KokuActionProcessCitizenImpl(userId); break;
 				case EMPLOYEE: actionProcess = new KokuActionProcessEmployeeImpl(userId); break;
 				default: actionProcess = new KokuActionProcessDummyImpl(null); break;
-			}		
+			}
 			actionProcess.revokeConsents(messageList);
 			jsonModel.put(JSON_RESULT, RESPONSE_OK);
 		} catch (KokuActionProcessException kape) {
 			LOG.error("Failed to revoke consent. Username: '"+ username+"'", kape);
 			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
 		}
-		modelmap.addAttribute(RESPONSE, jsonModel);		
+		modelmap.addAttribute(RESPONSE, jsonModel);
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -372,9 +353,6 @@ public class AjaxController extends AbstractController {
 			PortletResponse response) {
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
 		
@@ -420,9 +398,6 @@ public class AjaxController extends AbstractController {
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		UserIdResolver resolver = new UserIdResolver();
 		String userId = resolver.getUserId(username, getPortalRole());
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
 		
 		JSONObject jsonModel = new JSONObject();
 		KokuActionProcess actionProcess = null;
@@ -459,9 +434,6 @@ public class AjaxController extends AbstractController {
 		
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
 		
 		@SuppressWarnings("rawtypes")
 		List resultList = null;
@@ -486,8 +458,7 @@ public class AjaxController extends AbstractController {
 		
 		JSONObject jsonModel = new JSONObject();
 		jsonModel.put(JSON_RESULT, resultList);
-		modelmap.addAttribute(RESPONSE, jsonModel);
-		
+		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -513,13 +484,7 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "keyword") String keyword,
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
-		
-		PortletSession portletSession = request.getPortletSession();				
-		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
-		
+				
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, "showMessage");
 		renderUrlObj.setParameter( ATTR_MESSAGE_ID, messageId);
@@ -532,12 +497,10 @@ public class AjaxController extends AbstractController {
 		} catch (WindowStateException e) {
 			LOG.error("Create message render url failed");
 		}
-		String renderUrlString = renderUrlObj.toString();
-		
+		String renderUrlString = renderUrlObj.toString();		
 		JSONObject jsonModel = new JSONObject();
 		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);
-		
+		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -563,12 +526,6 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 		
-		PortletSession portletSession = request.getPortletSession();				
-		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
-		
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_REQUEST);
 		renderUrlObj.setParameter( ATTR_REQUEST_ID, requestId);
@@ -581,12 +538,10 @@ public class AjaxController extends AbstractController {
 		} catch (WindowStateException e) {
 			LOG.error("Create request render url failed");
 		}
-		String renderUrlString = renderUrlObj.toString();
-		
+		String renderUrlString = renderUrlObj.toString();		
 		JSONObject jsonModel = new JSONObject();
 		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);
-		
+		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -611,13 +566,7 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "keyword") String keyword,
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
-		
-		PortletSession portletSession = request.getPortletSession();				
-		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
-		
+				
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_REQUEST_RESPONSE);
 		renderUrlObj.setParameter( ATTR_RESPONSE_ID, responseId);
@@ -630,12 +579,10 @@ public class AjaxController extends AbstractController {
 		} catch (WindowStateException e) {
 			LOG.error("Create request render url failed");
 		}
-		String renderUrlString = renderUrlObj.toString();
-		
+		String renderUrlString = renderUrlObj.toString();		
 		JSONObject jsonModel = new JSONObject();
 		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);
-		
+		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -659,14 +606,8 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "taskType") String taskType,
 			@RequestParam(value = "keyword") String keyword,
 			@RequestParam(value = "orderType") String orderType,
-			@RequestParam(value = "targetPerson") String targetPerson,
+			@RequestParam(value = "targetPerson", required=false) String targetPerson,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
-
-		PortletSession portletSession = request.getPortletSession();				
-		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
 		
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_APPOINTMENT);
@@ -681,12 +622,10 @@ public class AjaxController extends AbstractController {
 		} catch (WindowStateException e) {
 			LOG.error("Create appointment render url failed");
 		}
-		String renderUrlString = renderUrlObj.toString();
-		
+		String renderUrlString = renderUrlObj.toString();		
 		JSONObject jsonModel = new JSONObject();
 		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);
-		
+		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -712,13 +651,6 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "keyword") String keyword,
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
-
-		
-		PortletSession portletSession = request.getPortletSession();				
-		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
 		
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_CONSENT);
@@ -732,12 +664,10 @@ public class AjaxController extends AbstractController {
 		} catch (WindowStateException e) {
 			LOG.error("Create consent render url failed");
 		}
-		String renderUrlString = renderUrlObj.toString();
-		
+		String renderUrlString = renderUrlObj.toString();		
 		JSONObject jsonModel = new JSONObject();
 		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);
-		
+		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -764,12 +694,6 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 
-		PortletSession portletSession = request.getPortletSession();				
-		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
-		
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_WARRANT);
 		renderUrlObj.setParameter( ATTR_AUTHORIZATION_ID, authorizationId);
@@ -783,12 +707,10 @@ public class AjaxController extends AbstractController {
 		} catch (WindowStateException e) {
 			LOG.error("Create consent render url failed");
 		}
-		String renderUrlString = renderUrlObj.toString();
-		
+		String renderUrlString = renderUrlObj.toString();		
 		JSONObject jsonModel = new JSONObject();
 		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);
-		
+		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -815,16 +737,10 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "keyword") String keyword,
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
-
-		PortletSession portletSession = request.getPortletSession();				
-		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
 		
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_TIPY);
-		renderUrlObj.setParameter( ATTR_AUTHORIZATION_ID, requestId);
+		renderUrlObj.setParameter( ATTR_REQUEST_ID, requestId);
 		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
 		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
 		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
@@ -835,12 +751,10 @@ public class AjaxController extends AbstractController {
 		} catch (WindowStateException e) {
 			LOG.error("Create consent render url failed");
 		}
-		String renderUrlString = renderUrlObj.toString();
-		
+		String renderUrlString = renderUrlObj.toString();		
 		JSONObject jsonModel = new JSONObject();
 		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);
-		
+		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -866,12 +780,6 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "keyword") String keyword,
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
-
-		PortletSession portletSession = request.getPortletSession();				
-		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
 		
 		PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_APPLICATION_KINDERGARTEN);
@@ -886,12 +794,10 @@ public class AjaxController extends AbstractController {
 		} catch (WindowStateException e) {
 			LOG.error("Create consent render url failed");
 		}
-		String renderUrlString = renderUrlObj.toString();
-		
+		String renderUrlString = renderUrlObj.toString();		
 		JSONObject jsonModel = new JSONObject();
 		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);
-		
+		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 }
