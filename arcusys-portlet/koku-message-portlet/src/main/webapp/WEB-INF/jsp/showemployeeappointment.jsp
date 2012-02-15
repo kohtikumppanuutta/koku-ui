@@ -40,14 +40,14 @@
 	    		<td class="head"><spring:message code="appointment.recipients"/></td>
 	    	</tr>
 	    	<c:forEach var="slot" items="${appointment.model.approvedSlots}" varStatus="loopStatus">
-	        <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
-	          <td>${slot.date}</td>
-	          <td>${slot.startTime}</td>
-	          <td>${slot.endTime}</td>  
-	          <td>${slot.location}</td>
-	          <td>${slot.comment}</td>  
-	          <td>${slot.targetPerson}</td>
-	          <td>${slot.recipients}</td>  
+	        <tr class="<c:out value="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}" />">
+	          <td><c:out value="${slot.date}" /></td>
+	          <td><c:out value="${slot.startTime}" /></td>
+	          <td><c:out value="${slot.endTime}" /></td> 
+	          <td><c:out value="${slot.location}" /></td>
+	          <td><c:out value="${slot.comment}" /></td> 
+	          <td><c:out value="${slot.targetPerson}" /></td>
+	          <td><c:out value="${slot.recipients}" /></td>
 	        </tr>
 	      	</c:forEach>
 	    </table>  
@@ -63,13 +63,13 @@
 	    		<td class="head"><spring:message code="appointment.location"/></td>
 	    		<td class="head"><spring:message code="appointment.comment"/></td>
 	    	</tr>
-	    	<c:forEach var="slot" items="${appointment.model.unapprovedSlots}" varStatus="loopStatus">
-	        <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
-	          <td>${slot.date}</td>
-	          <td>${slot.startTime}</td>
-	          <td>${slot.endTime}</td>  
-	          <td>${slot.location}</td>
-	          <td>${slot.comment}</td>  
+	    	<c:forEach var="slot" items="<c:out value="${appointment.model.unapprovedSlots}" />" varStatus="loopStatus">
+	        <tr class="<c:out value="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}" />">
+	          <td><c:out value="${slot.date}" /></td>
+	          <td><c:out value="${slot.startTime}" /></td>
+	          <td><c:out value="${slot.endTime}" /></td>  
+	          <td><c:out value="${slot.location}" /></td>
+	          <td><c:out value="${slot.comment}" /></td>  
 	        </tr>
 	      	</c:forEach>
 	    </table>  
@@ -86,10 +86,10 @@
 	    		<td class="head"><spring:message code="appointment.recipients"/></td>
 	
 	    	</tr>
-	    	<c:forEach var="user" items="${appointment.model.unrespondedUsers}" varStatus="loopStatus">
-	        <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
-	          <td>${user.targetPerson}</td>
-	          <td>${user.recipients}</td>  
+	    	<c:forEach var="user" items="<c:out value="${appointment.model.unrespondedUsers}" />" varStatus="loopStatus">
+	        <tr class="<c:out value="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}" />">
+	          <td><c:out value="${user.targetPerson}" /></td>
+	          <td><c:out value="${user.recipients}" /></td>  
 	        </tr>
 	      	</c:forEach>
 	    </table>  
@@ -104,10 +104,10 @@
 	    		<td class="head"><spring:message code="appointment.targetPerson"/></td>
 	    		<td class="head"><spring:message code="appointment.recipients"/></td>
 	    	</tr>
-	    	<c:forEach var="user" items="${appointment.model.rejectedUsers}" varStatus="loopStatus">
-	        <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
-	          <td>${user.targetPerson}</td>
-	          <td>${user.recipients}</td>  
+	    	<c:forEach var="user" items="<c:out value="${appointment.model.rejectedUsers}" />" varStatus="loopStatus">
+	        <tr class="<c:out value="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}" />">
+	          <td><c:out value="${user.targetPerson}" /></td>
+	          <td><c:out value="${user.recipients}" /></td>  
 	        </tr>
 	      	</c:forEach>
 	    </table>  
@@ -121,10 +121,10 @@
 	    		<td class="head"><spring:message code="appointment.targetPerson"/></td>
 	    		<td class="head"><spring:message code="appointment.replierComment"/></td>
 	    	</tr>
-	    	<c:forEach var="reject" items="${appointment.model.usersRejected}" varStatus="loopStatus">
-	        <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
-	          <td>${reject.userDisplayName}</td>
-	          <td>${reject.rejectComment}</td>  
+	    	<c:forEach var="reject" items="<c:out value="${appointment.model.usersRejected}" />" varStatus="loopStatus">
+	        <tr class="<c:out value="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}" />">
+	          <td><c:out value="${reject.userDisplayName}" /></td>
+	          <td><c:out value="${reject.rejectComment}" /></td>  
 	        </tr>
 	      	</c:forEach>
 	    </table>  

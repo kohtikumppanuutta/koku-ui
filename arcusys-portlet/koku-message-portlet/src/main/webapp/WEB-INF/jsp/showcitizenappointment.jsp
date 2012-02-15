@@ -9,7 +9,7 @@
 <c:choose> 
   <c:when test="${appointment.responseStatus == 'FAIL'}" > 
   	<script type="text/javascript"> 
-  			kokuErrorMsg += "<span class=\"failureUuid\">${appointment.errorCode}</span></div>";
+  			kokuErrorMsg += "<span class=\"failureUuid\"><c:out value="${appointment.errorCode}" /></span></div>";
 			jQuery.jGrowl(kokuErrorMsg, kokuErrorMsgOptions);
 	</script>
   </c:when>
@@ -41,11 +41,11 @@
 	    		<td class="head"><spring:message code="appointment.comment"/></td>
 	    	</tr>
 	        <tr class="evenRow">
-	          <td>${appointment.model.slot.date}</td>
-	          <td>${appointment.model.slot.startTime}</td>
-	          <td>${appointment.model.slot.endTime}</td>  
-	          <td>${appointment.model.slot.location}</td>
-	          <td>${appointment.model.slot.comment}</td>  
+	          <td><c:out value="${appointment.model.slot.date}" /></td>
+	          <td><c:out value="${appointment.model.slot.startTime}" /></td>
+	          <td><c:out value="${appointment.model.slot.endTime}" /></td>
+	          <td><c:out value="${appointment.model.slot.location}" /></td>
+	          <td><c:out value="${appointment.model.slot.comment" />}</td>
 	        </tr>
 	    </table>  
 		</c:if>		

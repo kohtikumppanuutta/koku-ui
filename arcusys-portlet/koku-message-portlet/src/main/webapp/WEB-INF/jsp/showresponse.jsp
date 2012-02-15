@@ -9,7 +9,7 @@
 <c:choose> 
   <c:when test="${response.responseStatus == 'FAIL'}" > 
   	<script type="text/javascript"> 
-  			kokuErrorMsg += "<span class=\"failureUuid\">${response.errorCode}</span></div>";
+  			kokuErrorMsg += "<span class=\"failureUuid\"><c:out value="${response.errorCode}" /></span></div>";
 			jQuery.jGrowl(kokuErrorMsg, kokuErrorMsgOptions);
 	</script>
   </c:when> 
@@ -31,15 +31,15 @@
 		    		<td class="head"><spring:message code="response.tableheader.answer"/></td>
 		    	</tr>
 		    	<c:forEach var="question" items="${response.model.questions}" varStatus="loopStatus">
-			        <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
-			          <td>${question.number}</td>
-			          <td>${question.description}</td>
-			          <td>${question.answer.answer}</td>
+			        <tr class="<c:out value="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}"/>">
+			          <td><c:out value="${question.number}"/></td>
+			          <td><c:out value="${question.description}"/></td>
+			          <td><c:out value="${question.answer.answer}"/></td>
 			        </tr>
 		      	</c:forEach>
 		    </table>
 		    <h3><spring:message code="response.comment"/></h3>
-		    <div class="responseComment">${response.model.comment}</div>
+		    <div class="responseComment"><c:out value="${response.model.comment}"/></div>
     
 		</div>
 	</div>

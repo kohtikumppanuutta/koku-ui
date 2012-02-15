@@ -55,6 +55,11 @@ function KokuEmployeeTable() {
  *  (Pyynnöt) - employee Avoimet
  */
 KokuEmployeeTable.prototype.createRequestsTable = function(tasks) { 
+	
+	if (tasks == undefined || tasks == null || tasks.length == 0) {
+		return KokuUtil.errorMsg.showErrorMsgYouDontHaveAnyTipys();
+	}
+
 	var taskHtml = "";
 	var formLink = "";		
 	taskHtml = '<table class="task-manager-table">'
@@ -136,7 +141,7 @@ KokuEmployeeTable.prototype.createBrowseEmployeeOwnConsents = function(tasks) {
 	};
 	
 	if (tasks == undefined || tasks == null || tasks.length == 0) {
-		return KokuUtil.errorMsg.showErrorMsg("Ei suostumuspyyntöjä");
+		return KokuUtil.errorMsg.showErrorMsg("<spring:message code="consent.errorMsg.noConsents"/>");
 	}
 	
 	var columnNames = ["<spring:message code="message.choose"/>",
@@ -177,7 +182,7 @@ KokuEmployeeTable.prototype.createBrowseUserWarrantsTable = function(tasks) {
 	};
 	
 	if (tasks == undefined || tasks == null || tasks.length == 0) {
-		return KokuUtil.errorMsg.showErrorMsgNoConsents();
+		return KokuUtil.errorMsg.showErrorMsg("<spring:message code="warrant.errorMsg.noData"/>");
 	}
 	var columnNames = ["<spring:message code="message.choose"/>",
 	                   "<spring:message code="warrant.sender"/>",

@@ -21,6 +21,7 @@ KokuAjax.prototype.formatUrl = function(url) {
 	return newUrl;
 };
 
+
 KokuAjax.prototype.genericAjaxCall = function(messageList, callback, url) {	 
  	if (messageList.length == 0) {
 		callback("FAIL");
@@ -141,7 +142,7 @@ KokuAjax.prototype.ajaxGetTasks = function(pageObj, presentTasks) {
 				closer: true,
 				position: "center"				
 			};
-			var msg = "<div class=\"serverErrorMsg\"><spring:message code="notification.serverError.msg" /></div><div class=\"serverErrorUuidMsg\"><spring:message code="notification.serverError.uuidMsg" /><span class=\"failureUuid\">" + json["failureUuid"] + "</span></div>";
+			var msg = "<div class=\"serverErrorMsg\"><spring:message code="notification.serverError.msg" /></div><div class=\"serverErrorUuidMsg\"><spring:message code="notification.serverError.uuidMsg" /><span class=\"failureUuid\">" + KokuUtil.escapeHTML(json["failureUuid"]) + "</span></div>";
 			jQuery.jGrowl(msg, options);			
 		}
 		

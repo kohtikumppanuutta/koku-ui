@@ -45,7 +45,7 @@ public String htmlToCode(String s)
 <c:choose> 
   <c:when test="${request.responseStatus == 'FAIL'}" > 
   	<script type="text/javascript"> 
-  			kokuErrorMsg += "<span class=\"failureUuid\">${request.errorCode}</span></div>";
+  			kokuErrorMsg += "<span class=\"failureUuid\"><c:out value="${request.errorCode}" /></span></div>";
 			jQuery.jGrowl(kokuErrorMsg, kokuErrorMsgOptions);
 	</script>
   </c:when> 
@@ -118,7 +118,7 @@ public String htmlToCode(String s)
 	    	<tr>
 	    		<td rowspan=2 style="vertical-align: middle;" class="head"><spring:message code="request.respondent"/></td>
 	    		<c:forEach items="${request.model.questions}" varStatus="status" var="question" >
-	    			<td  class="head">${question.description}</td>
+	    			<td  class="head"><c:out value="${question.description}"/></td>
 	    		</c:forEach>
 	    		<td rowspan=2 style="vertical-align: middle;" class="head"><spring:message code="request.comment"/></td>
 	   		</tr>    		
@@ -128,12 +128,12 @@ public String htmlToCode(String s)
 	    	</c:forEach>
 	    	</tr>
 	    	<c:forEach var="response" items="${request.model.respondedList}" varStatus="loopStatus">
-	        <tr class="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}">
-	          <td>${response.name}</td>
+	        <tr class="<c:out value="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}"/>">
+	          <td><c:out value="${response.name}"/></td>
 	          <c:forEach var="answer" items="${response.answers}">
-	          <td>${answer.answer}</td>
+	          <td><c:out value="${answer.answer}"/></td>
 	          </c:forEach>
-	          <td>${response.comment}</td>
+	          <td><c:out value="${response.comment}"/></td>
 	        </tr>
 	      </c:forEach>
 	    </table>  
@@ -146,7 +146,7 @@ public String htmlToCode(String s)
 		  			<tr style="font-weight:bold;" ><td><spring:message code="request.name"/></td></tr>
 	      			<c:forEach var="unresponse" items="${request.model.unrespondedList}">
 	        		<tr>
-	          			<td>${unresponse.fullName}</td>
+	          			<td><c:out value="${unresponse.fullName}"/></td>
 	        		</tr>
 	      </c:forEach>
 	    </table>
