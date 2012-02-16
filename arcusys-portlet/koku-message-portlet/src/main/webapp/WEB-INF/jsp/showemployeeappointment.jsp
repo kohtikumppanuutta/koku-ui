@@ -9,7 +9,7 @@
 <c:choose> 
   <c:when test="${appointment.responseStatus == 'FAIL'}" > 
   	<script type="text/javascript"> 
-  			kokuErrorMsg += "<span class=\"failureUuid\">${appointment.errorCode}</span></div>";
+  			kokuErrorMsg += "<span class=\"failureUuid\"><c:out value="${appointment.errorCode}" /></span></div>";
 			jQuery.jGrowl(kokuErrorMsg, kokuErrorMsgOptions);
 	</script>
   </c:when>

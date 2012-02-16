@@ -17,7 +17,7 @@
 <c:choose> 
   <c:when test="${consent.responseStatus == 'FAIL'}" > 
   	<script type="text/javascript"> 
-  			kokuErrorMsg += "<span class=\"failureUuid\">${consent.errorCode}</span></div>";
+  			kokuErrorMsg += "<span class=\"failureUuid\"><c:out value="${consent.errorCode}" /></span></div>";
 			jQuery.jGrowl(kokuErrorMsg, kokuErrorMsgOptions);
 	</script>
   </c:when> 
