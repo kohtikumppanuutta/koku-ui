@@ -12,7 +12,7 @@ function KokuCitizenTable() {
 			tasks[i]["templateDescription"] = tasks[i].template.description;
 			tasks[i]["templateId"] = tasks[i].template.templateId;
 			tasks[i]["templateName"] = tasks[i].template.templateName;
-			tasks[i]["templateNameWithDescription"] = "<abbr class='valueWithDesc' title='"+ KokuUtil.escapeHTML(tasks[i].template.description) +"' >" + KokuUtil.escapeHTML(tasks[i].template.templateName) +"</abbr>";
+			tasks[i]["cleanHtmlTemplateNameWithDescription"] = "<abbr class='valueWithDesc' title='"+ KokuUtil.escapeHTML(tasks[i].template.description) +"' >" + KokuUtil.escapeHTML(tasks[i].template.templateName) +"</abbr>";
 		}
 	};
 };
@@ -146,7 +146,7 @@ KokuCitizenTable.prototype.createBrowseWarrantsToMe = function(tasks) {
 	                  ];
 	
 	var columnIds = [
-	                 "templateNameWithDescription",
+	                 "cleanHtmlTemplateNameWithDescription",
 	                 "localizedStatus",
 // 		             "approvalStatus",
 // 		             "createType",
@@ -167,9 +167,9 @@ KokuCitizenTable.prototype.createBrowseWarrantsFromMe = function(tasks) {
 		for (var i = 0; i < tasks.length; i++)  {
 			if (tasks[i].status != 'REVOKED') {
  				var url = "<%= defaultPath %>/ValtakirjaEditConsent?FormID="+ tasks[i].authorizationId; 
-				tasks[i]["editLink"] = "<a onclick='event.cancelBubble=true' class='editConsentLink' href="+url+" ><spring:message code="consent.edit"/></a>"; 
+				tasks[i]["cleanHtmlEditLink"] = "<a onclick='event.cancelBubble=true' class='editConsentLink' href="+url+" ><spring:message code="consent.edit"/></a>"; 
 			} else {
-				tasks[i]["editLink"] = "";
+				tasks[i]["cleanHtmlEditLink"] = "";
 			}
 		}
 	};
@@ -191,7 +191,7 @@ KokuCitizenTable.prototype.createBrowseWarrantsFromMe = function(tasks) {
 	                  ];
 	
 	var columnIds = [
-	                 "templateNameWithDescription",
+	                 "cleanHtmlTemplateNameWithDescription",
 	                 "localizedStatus",
 // 		                 "approvalStatus",
 // 		                 "createType",
@@ -199,7 +199,7 @@ KokuCitizenTable.prototype.createBrowseWarrantsFromMe = function(tasks) {
 // 		                 "acceptedDate",
 // 		                 "validDate",
 					 "validTill",
-	                 "editLink"
+	                 "cleanHtmlEditLink"
 	                 ];
 	this.flattenTasksContent(tasks);
 	createEditConsentColumn(tasks);

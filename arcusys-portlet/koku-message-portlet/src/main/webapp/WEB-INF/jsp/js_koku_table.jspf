@@ -25,7 +25,11 @@ KokuTable.prototype.tableGenerator = {
 					
 					/* Generate columns */
 					for (var j = 0; j < columnIds.length; j++)  {
-						taskHtml += '<td class="messageItem" onclick="'+ jsFunctionName + '(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i][columnIds[j]]) + '</td>';
+						if (columnIds[j].indexOf("cleanHtml") === 0) {
+							taskHtml += '<td class="messageItem" onclick="'+ jsFunctionName + '(\''+ i + '\')" >' + tasks[i][columnIds[j]] + '</td>';
+						} else {
+							taskHtml += '<td class="messageItem" onclick="'+ jsFunctionName + '(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i][columnIds[j]]) + '</td>';
+						}
 					}
 					taskHtml +=	 '</tr>';
 				}

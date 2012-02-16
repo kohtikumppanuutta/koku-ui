@@ -13,7 +13,7 @@ function KokuEmployeeTable() {
 			tasks[i]["templateDescription"] = tasks[i].template.description;
 			tasks[i]["templateId"] = tasks[i].template.templateId;
 			tasks[i]["templateName"] = tasks[i].template.templateName;
-			tasks[i]["templateNameWithDescription"] = "<abbr class='valueWithDesc' title='"+ KokuUtil.escapeHTML(tasks[i].template.description) +"' >" + KokuUtil.escapeHTML(tasks[i].template.templateName) +"</abbr>";
+			tasks[i]["cleanHtmlTemplateNameWithDescription"] = "<abbr class='valueWithDesc' title='"+ KokuUtil.escapeHTML(tasks[i].template.description) +"' >" + KokuUtil.escapeHTML(tasks[i].template.templateName) +"</abbr>";
 		}
 	};
 };
@@ -171,15 +171,6 @@ KokuEmployeeTable.prototype.createBrowseEmployeeOwnConsents = function(tasks) {
  * Listaa kansalaisen valtakirjat?
  */
 KokuEmployeeTable.prototype.createBrowseUserWarrantsTable = function(tasks) { 
-
-	function createPersonSearchLinks(tasks) {
-		for (var i = 0; i < tasks.length; i++)  {			
-// 			tasks[i]["senderName"] = '<a href="javascript:void(0)" class="personLink" onclick="searchPersonWarrantsByRecieverUserId(\'' + KokuUtil.escapeHTML(tasks[i]["senderUid"]) + '\')">'+ KokuUtil.escapeHTML(tasks[i]["senderName"]) +'</a>';
-// 			tasks[i]["recieverName"] = '<a href="javascript:void(0)" class="personLink" onclick="searchPersonWarrantsByRecieverUserId(\'' + KokuUtil.escapeHTML(tasks[i]["receiverUid"]) + '\')">'+ KokuUtil.escapeHTML(tasks[i]["recieverName"]) +'</a>';
-// 			tasks[i]["targetPersonName"] = '<a href="javascript:void(0)" class="personLink" onclick="searchPersonWarrantsByRecieverUserId(\'' + KokuUtil.escapeHTML(tasks[i]["targetPersonUid"]) + '\')">'+ KokuUtil.escapeHTML(tasks[i]["targetPersonName"]) +'</a>';
-			tasks[i]["templateNameWithDescription"] = '<abbr class="valueWithDesc" title=\''+ KokuUtil.escapeHTML(tasks[i].template.description) +'\' >' + KokuUtil.escapeHTML(tasks[i].template.templateName) +'</abbr>'; 
-		}
-	};
 	
 	if (tasks == undefined || tasks == null || tasks.length == 0) {
 		return KokuUtil.errorMsg.showErrorMsg("<spring:message code="warrant.errorMsg.noData"/>");
@@ -199,11 +190,10 @@ KokuEmployeeTable.prototype.createBrowseUserWarrantsTable = function(tasks) {
 	                 "recieverName",
 	                 "targetPersonName",
 	                 "localizedStatus",
-	                 "templateNameWithDescription",
+	                 "cleanHtmlTemplateNameWithDescription",
 	                 "givenAt",
 	                 "validTill"];
 	this.flattenTasksContent(tasks);
-	createPersonSearchLinks(tasks);
 	return this.tableGenerator.createTable("kokuAjax.showWarrant", "browseUserConsentsTable", columnNames, columnIds, tasks);
 }
 
