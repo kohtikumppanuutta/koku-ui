@@ -81,8 +81,16 @@ public class ExportFileController {
 		if (requestSubject == null || requestSubject.isEmpty()) {
 			requestSubject = "vastaus";
 		}
+		
+		/* Note: Do not change Pragma and Cache-Control values. Othervise IE doesn't recognize
+		 * CSV file properly when using HTTPS. See http://support.microsoft.com/kb/316431 for more details.
+		 * This is issue with IE5 - IE9 versions. */
+		response.setProperty("Pragma", "private");
+		response.setProperty("Cache-Control", "private, must-revalidate");
+
 		response.setProperty("Content-Disposition", "attachment; filename="+requestSubject+".csv");
 		response.setProperty("Content-Type", "text/xml, charset=UTF-8; encoding=UTF-8");
+
 
 		final String username = resourceRequest.getUserPrincipal().getName();
 		final Locale locale = MessageUtil.getLocale();		
