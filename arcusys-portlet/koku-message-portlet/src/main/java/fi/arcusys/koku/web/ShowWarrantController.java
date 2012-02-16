@@ -79,7 +79,13 @@ public class ShowWarrantController extends AbstractController {
 		PortletSession portletSession = request.getPortletSession();
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		UserIdResolver resolver = new UserIdResolver();
-		String userId = resolver.getUserId(username, getPortalRole());
+		String userId = null;
+		try {
+			userId = resolver.getUserId(username, getPortalRole());
+		} catch (KokuServiceException e) {
+			LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
+		}
+		
 		long authId = -1; 
 		
 		KokuAuthorizationSummary warrant = null;

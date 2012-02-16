@@ -120,6 +120,8 @@ public class AjaxController extends AbstractController {
 		try {
 			UserIdResolver resolver = new UserIdResolver();
 			userId = resolver.getUserId(username, getPortalRole());			
+		} catch (KokuServiceException e) {
+			LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
 		} catch (Exception e) {
 			LOG.error("Error while trying to resolve userId. See following error msg: "+ e);
 		}
@@ -209,11 +211,11 @@ public class AjaxController extends AbstractController {
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		
 		UserIdResolver resolver = new UserIdResolver();
-		String userId = resolver.getUserId(username, getPortalRole());
-		
+		String userId = null; 		
 		JSONObject jsonModel = new JSONObject();
 		KokuActionProcess actionProcess = null;
 		try {
+			resolver.getUserId(username, getPortalRole());
 			switch (getPortalRole()) {
 				case CITIZEN: actionProcess = new KokuActionProcessCitizenImpl(userId); break;
 				case EMPLOYEE: actionProcess = new KokuActionProcessEmployeeImpl(userId); break;
@@ -221,6 +223,8 @@ public class AjaxController extends AbstractController {
 			}		
 			actionProcess.archiveOldMessages(folderType);
 			jsonModel.put(JSON_RESULT, RESPONSE_OK);
+		} catch (KokuServiceException e) {
+			LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
 		} catch (KokuActionProcessException kape) {
 			LOG.error("Failed to archive old messages. Username: '"+ username+"'", kape);
 			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
@@ -246,11 +250,11 @@ public class AjaxController extends AbstractController {
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		
 		UserIdResolver resolver = new UserIdResolver();
-		String userId = resolver.getUserId(username, getPortalRole());
-		
+		String userId = null;
 		JSONObject jsonModel = new JSONObject();
 		KokuActionProcess actionProcess = null;
 		try {
+			userId = resolver.getUserId(username, getPortalRole());		
 			switch (getPortalRole()) {
 				case CITIZEN: actionProcess = new KokuActionProcessCitizenImpl(userId); break;
 				case EMPLOYEE: actionProcess = new KokuActionProcessEmployeeImpl(userId); break;
@@ -258,6 +262,8 @@ public class AjaxController extends AbstractController {
 			}		
 			actionProcess.archiveMessages(messageList);
 			jsonModel.put(JSON_RESULT, RESPONSE_OK);
+		} catch (KokuServiceException e) {
+			LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
 		} catch (KokuActionProcessException kape) {
 			LOG.error("Failed to archive message(s). Username: '"+ username+"'", kape);
 			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
@@ -282,11 +288,12 @@ public class AjaxController extends AbstractController {
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		
 		UserIdResolver resolver = new UserIdResolver();
-		String userId = resolver.getUserId(username, getPortalRole());
+		String userId = null;
 
 		JSONObject jsonModel = new JSONObject();		
 		KokuActionProcess actionProcess = null;
 		try {
+			userId = resolver.getUserId(username, getPortalRole());
 			switch (getPortalRole()) {
 				case CITIZEN: actionProcess = new KokuActionProcessCitizenImpl(userId); break;
 				case EMPLOYEE: actionProcess = new KokuActionProcessEmployeeImpl(userId); break;
@@ -294,6 +301,8 @@ public class AjaxController extends AbstractController {
 			}		
 			actionProcess.deleteMessages(messageList);
 			jsonModel.put(JSON_RESULT, RESPONSE_OK);
+		} catch (KokuServiceException e) {
+			LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
 		} catch (KokuActionProcessException kape) {
 			LOG.error("Failed to delete message. Username: '"+ username+"'", kape);
 			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
@@ -317,10 +326,11 @@ public class AjaxController extends AbstractController {
 		PortletSession portletSession = request.getPortletSession();
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);		
 		UserIdResolver resolver = new UserIdResolver();
-		String userId = resolver.getUserId(username, getPortalRole());
+		String userId = null;
 		JSONObject jsonModel = new JSONObject();
 		KokuActionProcess actionProcess = null;
 		try {
+			userId = resolver.getUserId(username, getPortalRole());
 			switch (getPortalRole()) {
 				case CITIZEN: actionProcess = new KokuActionProcessCitizenImpl(userId); break;
 				case EMPLOYEE: actionProcess = new KokuActionProcessEmployeeImpl(userId); break;
@@ -328,6 +338,8 @@ public class AjaxController extends AbstractController {
 			}
 			actionProcess.revokeConsents(messageList);
 			jsonModel.put(JSON_RESULT, RESPONSE_OK);
+		} catch (KokuServiceException e) {
+			LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
 		} catch (KokuActionProcessException kape) {
 			LOG.error("Failed to revoke consent. Username: '"+ username+"'", kape);
 			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
@@ -354,11 +366,12 @@ public class AjaxController extends AbstractController {
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		UserIdResolver resolver = new UserIdResolver();
-		String userId = resolver.getUserId(username, getPortalRole());
+		String userId = null;
 		
 		JSONObject jsonModel = new JSONObject();		
 		KokuActionProcess actionProcess = null;
 		try {
+			userId = resolver.getUserId(username, getPortalRole());
 			switch (getPortalRole()) {
 				case CITIZEN: actionProcess = new KokuActionProcessCitizenImpl(userId); break;
 				case EMPLOYEE: actionProcess = new KokuActionProcessEmployeeImpl(userId); break;
@@ -366,6 +379,8 @@ public class AjaxController extends AbstractController {
 			}
 			actionProcess.revokeWarrants(messageList, comment);
 			jsonModel.put(JSON_RESULT, RESPONSE_OK);
+		} catch (KokuServiceException e) {
+			LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
 		} catch (KokuActionProcessException kape) {
 			LOG.error("Failed to revoke warrant. Username: '"+ username+"'", kape);
 			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
@@ -397,7 +412,7 @@ public class AjaxController extends AbstractController {
 		PortletSession portletSession = request.getPortletSession();				
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		UserIdResolver resolver = new UserIdResolver();
-		String userId = resolver.getUserId(username, getPortalRole());
+		String userId = null;
 		
 		JSONObject jsonModel = new JSONObject();
 		KokuActionProcess actionProcess = null;
@@ -405,6 +420,7 @@ public class AjaxController extends AbstractController {
 			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
 		} else {			
 			try {
+				userId = resolver.getUserId(username, getPortalRole());
 				if (taskType.endsWith("citizen")) {
 					actionProcess = new KokuActionProcessCitizenImpl(userId);
 				} else if (taskType.endsWith("employee")) {
@@ -414,6 +430,8 @@ public class AjaxController extends AbstractController {
 				}
 				actionProcess.cancelAppointments(messageList, targetPersons, comment);
 				jsonModel.put(JSON_RESULT, RESPONSE_OK);
+			} catch (KokuServiceException e) {
+				LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
 			} catch (KokuActionProcessException kape) {
 				LOG.error("Failed to cancelAppointment", kape);
 				jsonModel.put(JSON_RESULT, RESPONSE_FAIL);

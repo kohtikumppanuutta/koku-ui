@@ -22,26 +22,22 @@ public class UserIdResolver {
 	 * @param username or null if user not found
 	 * @return userId
 	 */
-	public String getUserId(String username, PortalRole role) {
+	public String getUserId(String username, PortalRole role) throws KokuServiceException {
 		String userId = null;
 		if (username == null || username.isEmpty()) {
 			return null;
 		}
 	
-		try {
-			switch (role) {
-			case CITIZEN:
-				userId = userService.getUserUidByKunpoName(username);
-				break;
-			case EMPLOYEE:
-				userId = userService.getUserUidByLooraName(username);
-				break;
-			default:
-				userId = null;
-				break;
-			}
-		} catch (KokuServiceException e) {
-			LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+role+"'",e);
+		switch (role) {
+		case CITIZEN:
+			userId = userService.getUserUidByKunpoName(username);
+			break;
+		case EMPLOYEE:
+			userId = userService.getUserUidByLooraName(username);
+			break;
+		default:
+			userId = null;
+			break;
 		}
 		
 		if (userId == null) {

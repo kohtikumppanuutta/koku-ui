@@ -43,7 +43,7 @@ public class QueryProcessCitizenImpl extends AbstractQueryProcess {
 				try {
 					jsonModel.put(JSON_REQUESTS_TOTAL, String.valueOf(getTotalRequests(userId, token)));
 				} catch (Exception e) {
-					LOG.error("Coulnd't get TotalRequests (Valtakirja yht.). See following errorMsg: "+e.getMessage());
+					LOG.error("Coulnd't get TotalRequests (Valtakirja yht.). See following errorMsg: "+e.getMessage(), e);
 				}
 			} catch (KokuServiceException kse) {
 				LOG.error("Failed to get count(s) (message/archive/consensts/appointments. ", kse);
