@@ -42,13 +42,22 @@ function SuggestionBox(ajaxUrls) {
     	getCandiKeywords: getCandiKeywords,
     	setSuggestType : setSuggestType,
     	getSuggestType : getSuggestType,
-    	consentTemplates : consentTemplates
+    	consentTemplates : getConsentTemplates,
+    	currentNum : getCurrentNum
 	};
 	
 	
 	/**************************************************
 	 * Private methods 
 	 */
+	 
+	function getConsentTemplates() {
+		return consentTemplates;
+	}
+	
+	function getCurrentNum() {
+		return currentNum;
+	}
 	 
 	function setSuggestType(suggestionType) {
 		suggestType = suggestionType;

@@ -153,11 +153,16 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 	private ConsentCriteria createCriteria(String keyword, String field) {
 		ConsentCriteria criteria = new ConsentCriteria();
 		
-		criteria.setReceipientUid(keyword);
+		if (keyword != null && !keyword.isEmpty()) {
+			criteria.setReceipientUid(keyword);			
+		}
 
 		if(field.trim().length() > 0) {
 			try {
-				criteria.setConsentTemplateId(Long.parseLong(field));				
+				long value = Long.parseLong(field);
+				if (value >= 0) {
+					criteria.setConsentTemplateId(value);
+				}
 			} catch (NumberFormatException nfe) {
 				LOG.warn("Invalid field. Creating criteria for consent filtering failed. Field: '"+field+"'");
 				return null;
