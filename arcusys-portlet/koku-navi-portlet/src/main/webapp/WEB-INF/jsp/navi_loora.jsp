@@ -29,11 +29,11 @@
 		currentPage = currentPath.substring(pos3+1);
 	}
 	
-	System.out.println("------------------------------------------------------------------------------------------------------");
+// 	System.out.println("------------------------------------------------------------------------------------------------------");
 // 	System.out.println("defaultPath: '"+defaultPath+"' currentPage: '"+currentPage+"' actionParam: '"+actionParam+"' \n NaviURL: '"+naviURL+"'");
-	System.out.println("NAVI MODE: "+naviPortalMode);
-	System.out.println("portalInfo: "+portalInfo);
-	System.out.println("------------------------------------------------------------------------------------------------------");
+// 	System.out.println("NAVI MODE: "+naviPortalMode);
+// 	System.out.println("portalInfo: "+portalInfo);
+// 	System.out.println("------------------------------------------------------------------------------------------------------");
 			
 %>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/jquery-1.5.2.min.js"></script>
