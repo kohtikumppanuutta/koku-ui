@@ -140,10 +140,11 @@ KokuAjax.prototype.ajaxGetTasks = function(pageObj, presentTasks) {
 				theme : "serverErrorWarningMsg",
 				header: "Oops!",
 				closer: true,
-				position: "center"				
+				position: "center"		
 			};
 			var msg = "<div class=\"serverErrorMsg\"><spring:message code="notification.serverError.msg" /></div><div class=\"serverErrorUuidMsg\"><spring:message code="notification.serverError.uuidMsg" /><span class=\"failureUuid\">" + KokuUtil.escapeHTML(json["failureUuid"]) + "</span></div>";
-			jQuery.jGrowl(msg, options);			
+			jQuery.jGrowl(msg, options);
+			KokuUtil.timer.removeRefreshTimer(kokuConfig);
 		}
 		
 		if (pageObj.loginStatus == 'VALID') {
