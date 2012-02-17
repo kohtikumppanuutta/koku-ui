@@ -15,16 +15,25 @@
 	String currentPage = "";
 	String actionParam = "";	
 	
-	int pos1 = naviURL.lastIndexOf("/");
-	actionParam = naviURL.substring(pos1);
-	String currentPath = naviURL.substring(0, pos1);
-	int pos2 = currentPath.lastIndexOf("/");
-	currentPage = currentPath.substring(pos2+1);
-// 	System.out.println("------------------------------------------------------------------------------------------------------");
+	if (portalInfo.contains("JBoss Portal")) {
+		int pos1 = naviURL.lastIndexOf("/");
+		actionParam = naviURL.substring(pos1);
+		String currentPath = naviURL.substring(0, pos1);
+		int pos2 = currentPath.lastIndexOf("/");
+		currentPage = currentPath.substring(pos2+1);
+	} else {
+		/* EPP spesific */	
+		int pos2 = naviURL.indexOf("?");
+		String currentPath = naviURL.substring(0, pos2);
+		int pos3 = currentPath.lastIndexOf("/");
+		currentPage = currentPath.substring(pos3+1);
+	}
+	
+	System.out.println("------------------------------------------------------------------------------------------------------");
 // 	System.out.println("defaultPath: '"+defaultPath+"' currentPage: '"+currentPage+"' actionParam: '"+actionParam+"' \n NaviURL: '"+naviURL+"'");
-// 	System.out.println("NAVI MODE: "+naviPortalMode);
-// 	System.out.println("portalInfo: "+portalInfo);
-// 	System.out.println("------------------------------------------------------------------------------------------------------");
+	System.out.println("NAVI MODE: "+naviPortalMode);
+	System.out.println("portalInfo: "+portalInfo);
+	System.out.println("------------------------------------------------------------------------------------------------------");
 			
 %>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/jquery-1.5.2.min.js"></script>
@@ -45,8 +54,6 @@
 	});
 
 	<%@ include file="js_navi.jspf" %>
-	<%@ include file="js_navi_employee.jspf" %>
-	
 </script>
 
 

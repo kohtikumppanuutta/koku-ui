@@ -46,7 +46,6 @@
 	});
 
 	<%@ include file="js_navi.jspf" %>
-	<%@ include file="js_navi_citizen.jspf" %>
 </script>
 
 <div id="koku-navigation">
