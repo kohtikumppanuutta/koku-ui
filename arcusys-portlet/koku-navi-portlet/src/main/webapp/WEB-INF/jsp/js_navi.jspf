@@ -24,6 +24,11 @@ function focusCurrentItem() {
 		var naviType = koku_navi_type;		
 		var global_url = document.URL;
 		var index = global_url.lastIndexOf("NAVI_TYPE=");
+		/* Quick fix for Salo. Findout why param is different kunpo/loora sides */
+		if (index < 0) {
+			index = global_url.lastIndexOf("naviType=");
+			index = index - 1;
+		}		
 		if(index > 0) {
 			naviType = global_url.substring(index+10);
 			koku_navi_type = naviType;
@@ -138,3 +143,18 @@ function ajaxUpdate() {
 function showArchiveUI() {
 	jQuery('#archive-part').toggle('fast');
 }
+
+function navigateToPage(naviType) {
+	var url = "<%= naviRenderURL %>";	
+	url = formatUrl(url);
+	
+	jQuery.post(url, {'newNaviType':naviType}, function(data) {
+		var obj = jQuery.parseJSON(data);
+		var json = obj.response;
+		var renderUrl = json["renderUrl"];
+		var temp = renderUrl.split("?");
+		var naviUrl = "<%= defaultPath %>" + "?" + temp[1] + "&NAVI_TYPE=" + naviType;
+		window.location = naviUrl;
+	});
+};
+
