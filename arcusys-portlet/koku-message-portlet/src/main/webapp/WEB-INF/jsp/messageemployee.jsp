@@ -71,6 +71,13 @@
 <portlet:resourceURL var="warrantRenderURL" id="createWarrantRenderUrl">
 </portlet:resourceURL>
 
+<portlet:resourceURL var="tipyRenderURL" id="createTipyRenderUrl">
+</portlet:resourceURL>
+
+<portlet:resourceURL var="kindergartenRenderURL" id="createApplicationKindergartenRenderUrl">
+</portlet:resourceURL>
+
+
 
 <%
 	/* Parses the parent path url from the portlet ajaxURL */
@@ -115,7 +122,17 @@
 	 	consentUrl : "<%= consentURL %>",
 		citizenWarrantUrl : "<%= citizenWarrantURL %>",
 		tipyUrl : "<%= tipyURL %>",
-		applicationKindergartenUrl : "<%= applicationKindergartenURL %>"
+		applicationKindergartenUrl : "<%= applicationKindergartenURL %>",
+				
+		/* RenderUrls GateIn (portlet:renderURL) */
+	 	messageRenderUrl : "<%= messageRenderURL %>",
+	 	requestRenderUrl : "<%= requestRenderURL %>",
+	 	responseRenderUrl :  "<%= responseRenderURL %>",
+	 	appointmentRenderUrl :  "<%= appointmentRenderURL %>",
+	 	consentRenderUrl : 	"<%= consentRenderURL %>",
+	 	warrantRenderUrl : "<%= warrantRenderURL %>",
+		tipyRenderUrl : "<%= tipyRenderURL %>",
+		kindergartenRenderUrl : "<%= kindergartenRenderURL %>"
 	};
 	
 	

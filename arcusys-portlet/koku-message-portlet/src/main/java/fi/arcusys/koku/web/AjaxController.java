@@ -790,7 +790,7 @@ public class AjaxController extends AbstractController {
 	 * @param response ResourceResponse
 	 * @return Consent render url in Json format
 	 */
-	@ResourceMapping(value = "createTipyRenderUrl")
+	@ResourceMapping(value = "createApplicationKindergartenRenderUrl")
 	public String createApplicationKindergartenRenderUrl(
 			@RequestParam(value = "applicationId") String applicationId,
 			@RequestParam(value = "currentPage") String currentPage,
