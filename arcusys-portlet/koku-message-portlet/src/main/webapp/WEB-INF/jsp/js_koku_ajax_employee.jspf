@@ -1,9 +1,9 @@
-
 /*
  * Koku Ajax Employee class
  *
  * 
  */
+
 KokuAjaxEmployee.prototype = new KokuAjax(ajaxUrls);
 KokuAjaxEmployee.constructor = KokuAjaxEmployee;
 
@@ -11,27 +11,32 @@ function KokuAjaxEmployee(renderUrls) {
 	KokuAjax.call(this, renderUrls);
 };
 
-
 /* Shows detailed message page */
 KokuAjaxEmployee.prototype.showMessage = function(messageId) {
-	var url = this.renderUrls.messageUrl;
-	url += "&messageId=" + messageId
-		+ "&currentPage=" + pageObj.currentPage
-		+ "&taskType=" + pageObj.taskType
-		+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
-		+ "&orderType=" + pageObj.orderType;	
-	window.location = url;
-};
+	var url = this.renderUrls.messageRenderUrl;
+	url = this.formatUrl(url);
 	
+	jQuery.post(url, {messageId:messageId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+		keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+		var obj = jQuery.parseJSON(data);
+		var json = obj.response;
+		var renderUrl = json["renderUrl"];
+		window.location = renderUrl;
+	});
+};
+
 /* Shows detailed request page */
 KokuAjaxEmployee.prototype.showRequest = function(requestId) {
-	var url = this.renderUrls.requestUrl;
-	url += "&requestId=" + requestId
-		+ "&currentPage=" + pageObj.currentPage
-		+ "&taskType=" + pageObj.taskType
-		+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
-		+ "&orderType=" + pageObj.orderType;	
-	window.location = url;
+	var url = this.renderUrls.requestRenderUrl;
+	url = this.formatUrl(url);
+	
+	jQuery.post(url, {requestId:requestId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+		keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+		var obj = jQuery.parseJSON(data);
+		var json = obj.response;
+		var renderUrl = json["renderUrl"];
+		window.location = renderUrl;
+	});
 };
 	
 /* Shows detailed appointment page */
@@ -40,21 +45,29 @@ KokuAjaxEmployee.prototype.showAppointment = function(index) {
 	var task = pageObj.tasks[index];
 	var appointmentId = task["appointmentId"];
 	var targetPerson = task['targetPersonUid'];
+	if (targetPerson === undefined) {
+		targetPerson = "";
+	}	
 	var url="";
 	
-	if(pageObj.taskType == "app_response_employee" || pageObj.taskType == "app_response_citizen") {
-		var url = this.renderUrls.appointmentUrl;			
-		url += "&appointmentId=" + appointmentId
-			+ "&currentPage=" + pageObj.currentPage
-			+ "&taskType=" + pageObj.taskType
-			+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
-			+ "&orderType=" + pageObj.orderType;
-	}else if(pageObj.taskType == "app_inbox_employee"){
-		url = "<%= defaultPath %><%= NavigationPortletProperties.APPOINTMENTS_NEW_APPOINTMENT %>" + "?FormID=" + appointmentId;			
-	}else if(pageObj.taskType == "app_inbox_citizen") {
-		url = "<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_ANSWER_TO_CONSENT %>" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;				
-	}
-	window.location = url;				
+	if(pageObj.taskType == "app_response_employee" || pageObj.taskType == "app_response_citizen") {		
+		url = this.renderUrls.appointmentRenderUrl;
+		url = this.formatUrl(url);
+		
+		jQuery.post(url, {appointmentId:appointmentId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+			keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType, targetPerson:targetPerson}, function(data) {
+			var obj = jQuery.parseJSON(data);
+			var json = obj.response;
+			var renderUrl = json["renderUrl"];
+			window.location = renderUrl;
+		});
+	} else if(pageObj.taskType == "app_inbox_employee"){
+		url = "<%= defaultPath %><%= NavigationPortletProperties.APPOINTMENTS_NEW_APPOINTMENT %>" + "?FormID=" + appointmentId;
+		window.location = url;			
+	} else if(pageObj.taskType == "app_inbox_citizen") {
+		url = "<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_ANSWER_TO_CONSENT %>" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;
+		window.location = url;				
+	}					
 };
 	
 /* Creates a renderURL by ajax, to show the detailed request page */
@@ -75,65 +88,67 @@ KokuAjaxEmployee.prototype.showResponse = function(index) {
 	
 /* Shows detailed consent page */
 KokuAjaxEmployee.prototype.showConsent = function(index) {
-
 	var consentId = pageObj.tasks[index]['consentId'];
 	var url="";
 	
-	if (pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS%>" || pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>") {
-		var url = this.renderUrls.consentUrl;
-		url += "&consentId=" + consentId
-			+ "&currentPage=" + pageObj.currentPage
-			+ "&taskType=" + pageObj.taskType
-			+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
-			+ "&orderType=" + pageObj.orderType;
+	if (pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS%>" || pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>") {		 	
+		url = this.renderUrls.consentRenderUrl;
+		url = this.formatUrl(url);
+		
+		jQuery.post(url, {consentId:consentId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+			keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+			var obj = jQuery.parseJSON(data);
+			var json = obj.response;
+			var renderUrl = json["renderUrl"];
+			window.location = renderUrl;
+		});
+			
 	} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>") {
 		url = "<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT %>" + "?FormID=" + consentId;
+		window.location = url;
 	} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>") {
-		url = "<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT %>" + "?FormID=" + consentId;			
-		<%--  			
-		url = "<%= intalioFormURL %>";
-		url += "&consentId=" + consentId
-				+ "&currentPage=" + pageObj.currentPage
-				+ "&taskType=" + pageObj.taskType
-				+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
-				+ "&orderType=" + pageObj.orderType;
-		--%>
+		url = "<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT %>" + "?FormID=" + consentId;
+		window.location = url;			
 	}
-	window.location = url;
 };
 
 KokuAjaxEmployee.prototype.showWarrant = function(index) {	
-	var authorizationId = pageObj.tasks[index]['authorizationId'];	
-	var url = this.renderUrls.citizenWarrantUrl;		
-	url += "&authorizationId=" + authorizationId
-		+ "&currentPage=" + pageObj.currentPage
-		+ "&taskType=" + pageObj.taskType
-		+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
-		+ "&orderType=" + pageObj.orderType;						
-	window.location = url;		
+	var authorizationId = pageObj.tasks[index]['authorizationId'];		
+	var url = this.renderUrls.warrantRenderUrl;
+	url = this.formatUrl(url);
+	jQuery.post(url, {authorizationId:authorizationId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+		keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+		var obj = jQuery.parseJSON(data);
+		var json = obj.response;
+		var renderUrl = json["renderUrl"];
+		window.location = renderUrl;
+	});		
 };
 
 KokuAjaxEmployee.prototype.showTipy = function(index) {	
-	var requestId = pageObj.tasks[index]['requestId'];	
-	var url = this.renderUrls.tipyUrl;
-	url += "&requestId=" + requestId
-		+ "&currentPage=" + pageObj.currentPage
-		+ "&taskType=" + pageObj.taskType
-		+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
-		+ "&orderType=" + pageObj.orderType;						
-	window.location = url;
+	var requestId = pageObj.tasks[index]['requestId'];
+	var url = this.renderUrls.tipyRenderUrl;
+	url = this.formatUrl(url);
+	jQuery.post(url, {requestId:requestId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+		keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+		var obj = jQuery.parseJSON(data);
+		var json = obj.response;
+		var renderUrl = json["renderUrl"];
+		window.location = renderUrl;
+	});
 };
 
-KokuAjaxEmployee.prototype.showApplicationKindergarten = function(index) {	
-	var applicationId = pageObj.tasks[index]['applicationId'];	
-	var url = this.renderUrls.applicationKindergartenUrl;
-	
-	url += "&applicationId=" + applicationId
-		+ "&currentPage=" + pageObj.currentPage
-		+ "&taskType=" + pageObj.taskType
-		+ "&keyword=" + pageObj.keyword+'|'+pageObj.field
-		+ "&orderType=" + pageObj.orderType;						
-	window.location = url;
+KokuAjaxEmployee.prototype.showApplicationKindergarten = function(index) {		
+	var applicationId = pageObj.tasks[index]['applicationId'];
+	var url = this.renderUrls.kindergartenRenderUrl;
+	url = this.formatUrl(url);
+	jQuery.post(url, {applicationId:applicationId, currentPage:pageObj.currentPage, taskType:pageObj.taskType, 
+		keyword:pageObj.keyword+'|'+pageObj.field, orderType:pageObj.orderType}, function(data) {
+		var obj = jQuery.parseJSON(data);
+		var json = obj.response;
+		var renderUrl = json["renderUrl"];
+		window.location = renderUrl;
+	});
 };
 
 	
