@@ -155,6 +155,7 @@ KokuAjax.prototype.ajaxGetTasks = function(pageObj, presentTasks) {
 			presentTasks(tasks);
 			
 			/* Popup titles */
+			/* 
 			jQuery('span.jQueryToolTip').qtip({  
 				show: {
 				 delay: 10,
@@ -172,6 +173,7 @@ KokuAjax.prototype.ajaxGetTasks = function(pageObj, presentTasks) {
 					tip: true 
 				} 
 			});
+			/*
 				
 		} else {
 			var message = "<spring:message code="error.unLogin" />";
