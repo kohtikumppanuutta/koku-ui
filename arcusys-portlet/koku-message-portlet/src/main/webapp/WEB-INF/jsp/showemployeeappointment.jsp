@@ -18,14 +18,15 @@
 
 	<div id="task-manager-wrap" class="single">
 		<div id="show-message" style="padding:12px">
-		<span class="request-c-1"><spring:message code="message.from"/>: <c:out value="${appointment.model.sender}" /> </span><br />
+		<c:if test="${appointment.model.senderUser != null}">
+		<span class="request-c-1"><spring:message code="message.from"/>: <c:out value="${appointment.model.senderUser.fullName}" /> </span><br />
+		</c:if>
 		<span class="request-c-1"><spring:message code="message.subject"/>:</span> <c:out value="${appointment.model.subject}" /><br />
 		<span class="request-c-1"><spring:message code="message.description"/>:</span> <c:out value="${appointment.model.description}" /><br />
 		<span class="request-c-1"><spring:message code="message.status"/>:</span> <c:out value="${appointment.model.status}" /><br />
 		<c:if test="${appointment.model.cancellationComment != null}">
 		<span class="request-c-1"><spring:message code="appointment.cancellationComment"/>:</span> <c:out value="${appointment.model.cancellationComment}" /><br />
 		</c:if>
-		
 		
 		<c:if test="${fn:length(appointment.model.approvedSlots) > 0}">
 	    <h3><spring:message code="appointment.approvedSlots"/></h3>   

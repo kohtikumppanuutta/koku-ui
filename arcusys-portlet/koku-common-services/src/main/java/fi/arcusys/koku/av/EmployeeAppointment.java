@@ -5,6 +5,7 @@ import java.util.List;
 
 import fi.arcusys.koku.av.employeeservice.Appointment.AcceptedSlots;
 import fi.arcusys.koku.av.employeeservice.AppointmentReceipientTO;
+import fi.arcusys.koku.users.KokuUser;
 
 /**
  * Appointment data model for employee
@@ -83,8 +84,24 @@ public class EmployeeAppointment extends KokuAppointment {
 
 	public static class UserWithTarget {
 		private String targetPerson;
+		private KokuUser targetPersonUser;
 		private String recipients;
+		private List<KokuUser> recipientsUsers;
 		
+		/**
+		 * @return the targetPersonUser
+		 */
+		public final KokuUser getTargetPersonUser() {
+			return targetPersonUser;
+		}
+
+		/**
+		 * @param targetPersonUser the targetPersonUser to set
+		 */
+		public final void setTargetPersonUser(KokuUser targetPersonUser) {
+			this.targetPersonUser = targetPersonUser;
+		}
+
 		public String getTargetPerson() {
 			return targetPerson;
 		}
@@ -99,6 +116,13 @@ public class EmployeeAppointment extends KokuAppointment {
 		
 		public void setRecipients(String recipients) {
 			this.recipients = recipients;
+		}
+
+		public List<KokuUser> getRecipientUsers(KokuUser kokuUser) {
+			if (recipientsUsers == null) {
+				recipientsUsers = new ArrayList<KokuUser>();
+			}
+			return recipientsUsers;
 		}
 	}
 }

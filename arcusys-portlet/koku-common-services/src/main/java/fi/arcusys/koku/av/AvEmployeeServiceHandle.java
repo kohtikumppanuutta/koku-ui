@@ -29,6 +29,7 @@ import fi.arcusys.koku.av.employeeservice.AppointmentSummaryStatus;
 import fi.arcusys.koku.av.employeeservice.AppointmentUserRejected;
 import fi.arcusys.koku.av.employeeservice.User;
 import fi.arcusys.koku.exceptions.KokuServiceException;
+import fi.arcusys.koku.users.KokuUser;
 import fi.arcusys.koku.util.MessageUtil;
 
 
@@ -104,11 +105,12 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 			KokuAppointment kokuAppointment = new KokuAppointment();
 			kokuAppointment.setAppointmentId(appSummary.getAppointmentId());
 			kokuAppointment.setSender(getDisplayName(appSummary.getSenderUserInfo()));
+			kokuAppointment.setSenderUser(new KokuUser(appSummary.getSenderUserInfo()));
 			kokuAppointment.setSubject(appSummary.getSubject());
 			kokuAppointment.setDescription(appSummary.getDescription());
 			kokuAppointment.setStatus(localizeActionRequestStatus(appSummary.getStatus()));
 			appList.add(kokuAppointment);
-		}		
+		}
 		return appList;
 	}
 
@@ -129,6 +131,7 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		Appointment appointment = aes.getAppointmentById(appId);
 		empAppointment.setAppointmentId(appointment.getAppointmentId());
 		empAppointment.setSender(getDisplayName(appointment.getSenderUserInfo()));
+		empAppointment.setSenderUser(new KokuUser(appointment.getSenderUserInfo()));
 		empAppointment.setSubject(appointment.getSubject());
 		empAppointment.setDescription(appointment.getDescription());
 		empAppointment.setStatus(localizeActionRequestStatus(appointment.getStatus()));		
@@ -240,9 +243,9 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		
 		while(it.hasNext()) {
 			slot = it.next();
-			if(slot.getApproved() == true) {
+			if (slot.getApproved() == true) {
 				approvedSlots.add(slot);
-			}else {
+			} else {
 				unapprovedSlots.add(slot);
 			}
 		}
@@ -313,11 +316,14 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 			if(!hasTargetPerson(targetPerson, acceptedSlots, userRejected)) {
 				UserWithTarget user = new UserWithTarget();
 				user.setTargetPerson(targetPerson);
+				user.setTargetPersonUser(new KokuUser(app.getTargetPersonUserInfo()));
+				for (User recipientUser : app.getReceipientUserInfos()) {
+					user.getRecipientUsers(new KokuUser(recipientUser));					
+				}
 				user.setRecipients(MessageUtil.formatRecipients(getDisplayNames(app.getReceipientUserInfos())));
 				unrespondedUsers.add(user);
 			}
-		}
-		
+		}		
 		return unrespondedUsers;
 	}
 	
@@ -363,7 +369,6 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	 */
 	private boolean hasTargetPerson(String targetPerson, AcceptedSlots acceptedSlots, List<String> userRejected) {
 		Iterator<Entry> itEntry = acceptedSlots.getEntry().iterator();
-		
 		
 		while(itEntry.hasNext()) {
 			Entry entry = itEntry.next();
@@ -416,6 +421,4 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 			return appointmentStatus.toString();
 		}
 	}
-	
-	
 }
