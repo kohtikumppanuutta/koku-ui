@@ -25,7 +25,9 @@
 
 	<div id="task-manager-wrap" class="single">
 		<div id="show-message" style="padding:12px">
-		<span class="text-bold"><spring:message code="consent.requester" />: <c:out value="${consent.model.requester}" /> </span><br />
+		<c:if test="${consent.model.targetPerson != null}">
+		<span class="text-bold"><spring:message code="consent.requester" />: <c:out value="${consent.model.requesterUser.fullName}" /> </span><br />
+		</c:if>
 		<span class="text-bold"><spring:message code="consent.templateName" />:</span> <c:out value="${consent.model.templateName}" /><br />
 		<span class="text-bold"><spring:message code="consent.templateTypeName" />:</span> <c:out value="${consent.model.templateTypeName}" /><br />
 		<span class="text-bold"><spring:message code="consent.status"/>:</span> <c:out value="${consent.model.status}" /><br />
@@ -34,10 +36,15 @@
 		<span class="text-bold"><spring:message code="consent.givenDate"/>:</span> <c:out value="${consent.model.assignedDate}" /><br />
 		<span class="text-bold"><spring:message code="consent.validDate"/>:</span> <c:out value="${consent.model.validDate}" /><br />
 		<c:if test="${consent.model.anotherPermitterUid != null && consent.model.anotherPermitterUid != '' }">
-		<span class="text-bold"><spring:message code="consent.secondApprover"/>:</span> <c:out value="${consent.model.anotherPermitterUid}" /><br />
+		<span class="text-bold"><spring:message code="consent.secondApprover"/>:</span> <c:out value="${consent.model.anotherPermitterUser.fullName}" /><br />
 		</c:if>
-		<span class="text-bold"><spring:message code="consent.recipients"/>:</span> <c:out value="${consent.model.recipients}" /><br />
-		<c:if test="${consent.model.targetPerson != null && consent.model.targetPerson != '' }">
+		<span class="text-bold"><spring:message code="consent.recipients"/>:</span>
+		<c:forEach var="recipientUsers" items="${consent.model.recipientUsers}" varStatus="loopStatus">
+			<c:out value="${recipientUsers.fullName}" />,
+		</c:forEach>
+		<br />		
+		
+		<c:if test="${consent.model.targetPerson != null}">
 		<span class="text-bold"><spring:message code="consent.targetPerson"/>:</span> <c:out value="${consent.model.targetPerson.fullName}" /><br />
 		</c:if>
 		

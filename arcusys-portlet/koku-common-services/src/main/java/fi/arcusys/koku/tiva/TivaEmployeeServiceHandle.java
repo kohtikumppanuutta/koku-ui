@@ -8,6 +8,7 @@ import java.util.Locale;
 import org.apache.log4j.Logger;
 import org.springframework.context.NoSuchMessageException;
 
+import fi.arcusys.koku.tiva.employeeservice.User;
 import fi.arcusys.koku.AbstractHandle;
 import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.employeeservice.ActionRequestStatus;
@@ -73,7 +74,9 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 			kokuConsent = new KokuConsent();
 			kokuConsent.setConsentId(consent.getConsentId());
 			kokuConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
+			kokuConsent.setAnotherPermitterUser(new KokuUser(consent.getAnotherPermitterUserInfo()));
 			kokuConsent.setRequester(consent.getRequestor());
+			kokuConsent.setRequesterUser(new KokuUser(consent.getRequestorUserInfo()));
 			kokuConsent.setTemplateName(consent.getTemplateName());
 			kokuConsent.setCreateType(localizeConsentCreateType(consent.getCreateType()));
 			kokuConsent.setStatus(localizeConsentStatus(consent.getStatus()));
@@ -81,6 +84,9 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 			kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
 			kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
 			kokuConsent.setTemplateTypeName(consent.getTemplateTypeName());
+			for (User receipient : consent.getReceipientUserInfos()) {
+				kokuConsent.getRecipientUsers().add(new KokuUser(receipient));			
+			}
 			consentList.add(kokuConsent);
 		}
 		
@@ -119,7 +125,9 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 		ConsentTO consent = tes.getConsentDetails(consentId);
 		kokuConsent.setConsentId(consent.getConsentId());
 		kokuConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
+		kokuConsent.setAnotherPermitterUser(new KokuUser(consent.getAnotherPermitterUserInfo()));
 		kokuConsent.setRequester(consent.getRequestor());
+		kokuConsent.setRequesterUser(new KokuUser(consent.getRequestorUserInfo()));
 		kokuConsent.setTemplateName(consent.getTemplateName());
 		kokuConsent.setCreateType(localizeConsentCreateType(consent.getCreateType()));
 		kokuConsent.setStatus(localizeConsentStatus(consent.getStatus()));
@@ -128,6 +136,9 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 		kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
 		kokuConsent.setActionRequests(convertActionRequests(consent.getActionRequests()));
 		kokuConsent.setRecipients(MessageUtil.formatRecipients(consent.getReceipients()));
+		for (User receipient : consent.getReceipientUserInfos()) {
+			kokuConsent.getRecipientUsers().add(new KokuUser(receipient));			
+		}
 		kokuConsent.setComment(consent.getComment());
 		kokuConsent.setTemplateTypeName(consent.getTemplateTypeName());
 		kokuConsent.setTargetPerson(new KokuUser(consent.getTargetPersonUserInfo()));

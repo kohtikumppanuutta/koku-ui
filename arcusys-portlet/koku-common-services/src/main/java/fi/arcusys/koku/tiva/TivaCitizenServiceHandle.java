@@ -23,7 +23,6 @@ import fi.arcusys.koku.tiva.citizenservice.ConsentSummary;
 import fi.arcusys.koku.tiva.citizenservice.ConsentTO;
 import fi.arcusys.koku.users.KokuUser;
 import fi.arcusys.koku.util.MessageUtil;
-import fi.arcusys.koku.util.PortalRole;
 
 /**
  * Handles tiva consents related operations for citizen
@@ -70,7 +69,9 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 			kokuConsent = new KokuConsent();
 			kokuConsent.setConsentId(consent.getConsentId());
 			kokuConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
+			kokuConsent.setAnotherPermitterUser(new KokuUser(consent.getAnotherPermitterUserInfo()));
 			kokuConsent.setRequester(consent.getRequestor());
+			kokuConsent.setRequesterUser(new KokuUser(consent.getRequestorUserInfo()));
 			kokuConsent.setTemplateName(consent.getTemplateName());
 			kokuConsent.setTemplateTypeName(consent.getTemplateTypeName());
 			kokuConsent.setReplyTill(MessageUtil.formatTaskDateByDay(consent.getReplyTill()));
@@ -95,7 +96,9 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 		ConsentTO consent = tcs.getConsentById(consentId, this.userId);
 		kokuConsent.setConsentId(consent.getConsentId());
 		kokuConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
+		kokuConsent.setAnotherPermitterUser(new KokuUser(consent.getAnotherPermitterUserInfo()));
 		kokuConsent.setRequester(consent.getRequestor());
+		kokuConsent.setRequesterUser(new KokuUser(consent.getRequestorUserInfo()));
 		kokuConsent.setTemplateName(consent.getTemplateName());
 		kokuConsent.setCreateType(localizeConsentCreateType(consent.getCreateType()));
 		if(consent.getStatus() != null) {
@@ -111,8 +114,6 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 		kokuConsent.setTargetPerson(new KokuUser(consent.getTargetPersonUserInfo()));
 		return kokuConsent;
 	}
-	
-	
 	
 	/**
 	 * Gets own consents and generates koku consent data model for use
@@ -150,7 +151,9 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 		KokuConsent kokuConsent = new KokuConsent();
 		kokuConsent.setConsentId(consent.getConsentId());
 		kokuConsent.setAnotherPermitterUid(consent.getAnotherPermitterUid());
+		kokuConsent.setAnotherPermitterUser(new KokuUser(consent.getAnotherPermitterUserInfo()));
 		kokuConsent.setRequester(consent.getRequestor());
+		kokuConsent.setRequesterUser(new KokuUser(consent.getRequestorUserInfo()));
 		kokuConsent.setTemplateTypeName(consent.getTemplateTypeName());
 		kokuConsent.setTemplateName(consent.getTemplateName());
 		kokuConsent.setCreateType(localizeConsentCreateType(consent.getCreateType()));

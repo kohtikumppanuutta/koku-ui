@@ -82,7 +82,7 @@ public class ExportFileController {
 			requestSubject = "vastaus";
 		}
 		
-		/* Note: Do not change Pragma and Cache-Control values. Othervise IE doesn't recognize
+		/* Note: Do not change Pragma and Cache-Control values. Otherwise IE doesn't recognize
 		 * CSV file properly when using HTTPS. See http://support.microsoft.com/kb/316431 for more details.
 		 * This is issue with IE5 - IE9 versions. */
 		response.setProperty("Pragma", "private");
@@ -112,8 +112,7 @@ public class ExportFileController {
 				
 				/* Data */
 				for (KokuResponse res : kokuRequest.getRespondedList()) {
-					
-					writer.write(addQuote(res.getName())+SEPARATOR);					
+					writer.write(addQuote(res.getReplierUser().getFullName())+SEPARATOR);					
 					Collections.sort(res.getAnswers(), SORT_BY_ANSWER_NUMBER);
 					for (KokuAnswer answer : res.getAnswers()) {
 						if (answer != null) {

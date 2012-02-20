@@ -77,7 +77,7 @@ KokuCitizenTable.prototype.createConsentsAssignedTable = function(tasks) {
 			taskHtml += '<tr onclick="kokuAjax.showConsent(\''+ i + '\')">';
 		}
 	
-		taskHtml += '<td class="messageItem">' + KokuUtil.escapeHTML(tasks[i]["requester"]) + '</td>'
+		taskHtml += '<td class="messageItem">' + KokuUtil.escapeHTML(tasks[i]["requesterUser"]["fullName"]) + '</td>'
 			 	 + '<td class="messageItem">' + KokuUtil.escapeHTML(tasks[i]["templateName"]) + '</td>'
 			 	 + '<td class="messageItem">' + KokuUtil.escapeHTML(tasks[i]["replyTill"]) + '</td>'
 			 	 + '</tr>';
@@ -118,7 +118,7 @@ KokuCitizenTable.prototype.createConsentsCurrentAndOldTable = function(tasks) {
 			  	 + '<td class="messageItem" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["createType"]) + '</td>'
 			  	 + '<td class="messageItem" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["assignedDate"]) + '</td>'
 			  	 + '<td class="messageItem" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["validDate"]) + '</td>'
-			  	 + '<td class="messageItem" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["anotherPermitterUid"]) + '</td>'
+			  	 + '<td class="messageItem" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["anotherPermitterUser"]["fullName"]) + '</td>'
 			 	 + '</tr>';
 	}
 

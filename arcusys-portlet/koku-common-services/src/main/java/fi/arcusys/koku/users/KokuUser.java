@@ -1,5 +1,7 @@
 package fi.arcusys.koku.users;
 
+import java.util.List;
+
 public class KokuUser {
 	
 	private String firstname;
@@ -81,7 +83,6 @@ public class KokuUser {
 			setEmail(user.getEmail());
 		}
 	}
-
 
 	public final String getFirstname() {
 		return firstname;
