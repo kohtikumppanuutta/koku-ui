@@ -281,12 +281,14 @@ public class MessageHandle extends AbstractHandle {
 		while(it.hasNext()) {
 			recipient = it.next();
 			
-			if(recipient.trim().length() > 0)
-				recipientStr += recipient + ", ";		
+			if(recipient.trim().length() > 0) {
+				recipientStr += recipient + ", ";
+			}
 		}
 		
-		if(recipientStr.lastIndexOf(",") > 0)
+		if(recipientStr.lastIndexOf(",") > 0) {
 			recipientStr = recipientStr.substring(0, recipientStr.length()-2);
+		}
 		
 		return recipientStr;
 	}

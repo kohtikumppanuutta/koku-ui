@@ -38,7 +38,10 @@ public class KokuAnswer {
 		return "KokuAnswer [answer=" + answer + ", comment=" + comment
 				+ ", questionNumber=" + questionNumber + "]";
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -48,7 +51,10 @@ public class KokuAnswer {
 		result = prime * result + questionNumber;
 		return result;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -62,14 +68,16 @@ public class KokuAnswer {
 		}
 		KokuAnswer other = (KokuAnswer) obj;
 		if (answer == null) {
-			if (other.answer != null)
+			if (other.answer != null) {
 				return false;
+			}
 		} else if (!answer.equals(other.answer)) {
-			return false;			
+			return false;
 		}
 		if (comment == null) {
-			if (other.comment != null)
+			if (other.comment != null) {
 				return false;
+			}
 		} else if (!comment.equals(other.comment)) {
 			return false;
 		}
@@ -78,4 +86,6 @@ public class KokuAnswer {
 		}
 		return true;
 	}
+	
+	
 }

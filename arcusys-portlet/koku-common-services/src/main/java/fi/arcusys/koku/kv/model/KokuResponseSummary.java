@@ -54,6 +54,10 @@ public class KokuResponseSummary {
 				+ ", replierName=" + replierName + ", request=" + request
 				+ ", responseId=" + responseId + "]";
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -67,6 +71,10 @@ public class KokuResponseSummary {
 				+ ((responseId == null) ? 0 : responseId.hashCode());
 		return result;
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -80,8 +88,9 @@ public class KokuResponseSummary {
 		}
 		KokuResponseSummary other = (KokuResponseSummary) obj;
 		if (replierName == null) {
-			if (other.replierName != null)
+			if (other.replierName != null) {
 				return false;
+			}
 		} else if (!replierName.equals(other.replierName)) {
 			return false;
 		}
@@ -107,8 +116,5 @@ public class KokuResponseSummary {
 			return false;
 		}
 		return true;
-	}
-
-	
-	
+	}	
 }

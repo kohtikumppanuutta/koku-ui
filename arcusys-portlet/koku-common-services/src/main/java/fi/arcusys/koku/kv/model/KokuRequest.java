@@ -162,7 +162,10 @@ public class KokuRequest {
 				+ ", respondedList=" + respondedList + ", unrespondedList="
 				+ unrespondedList + ", questions=" + questions + "]";
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -186,13 +189,16 @@ public class KokuRequest {
 				+ ((unrespondedList == null) ? 0 : unrespondedList.hashCode());
 		return result;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj){
+		if (this == obj) {
 			return true;
 		}
-		if (obj == null){
+		if (obj == null) {
 			return false;
 		}
 		if (getClass() != obj.getClass()) {
@@ -200,20 +206,23 @@ public class KokuRequest {
 		}
 		KokuRequest other = (KokuRequest) obj;
 		if (content == null) {
-			if (other.content != null)
+			if (other.content != null) {
 				return false;
+			}
 		} else if (!content.equals(other.content)) {
 			return false;
 		}
 		if (creationDate == null) {
-			if (other.creationDate != null)
+			if (other.creationDate != null) {
 				return false;
+			}
 		} else if (!creationDate.equals(other.creationDate)) {
 			return false;
 		}
 		if (endDate == null) {
-			if (other.endDate != null)
+			if (other.endDate != null) {
 				return false;
+			}
 		} else if (!endDate.equals(other.endDate)) {
 			return false;
 		}
@@ -221,8 +230,9 @@ public class KokuRequest {
 			return false;
 		}
 		if (questions == null) {
-			if (other.questions != null)
+			if (other.questions != null) {
 				return false;
+			}
 		} else if (!questions.equals(other.questions)) {
 			return false;
 		}
@@ -230,8 +240,9 @@ public class KokuRequest {
 			return false;
 		}
 		if (requestType == null) {
-			if (other.requestType != null)
+			if (other.requestType != null) {
 				return false;
+			}
 		} else if (!requestType.equals(other.requestType)) {
 			return false;
 		}
@@ -239,30 +250,36 @@ public class KokuRequest {
 			return false;
 		}
 		if (respondedList == null) {
-			if (other.respondedList != null)
+			if (other.respondedList != null) {
 				return false;
+			}
 		} else if (!respondedList.equals(other.respondedList)) {
 			return false;
 		}
 		if (sender == null) {
-			if (other.sender != null)
+			if (other.sender != null) {
 				return false;
+			}
 		} else if (!sender.equals(other.sender)) {
 			return false;
 		}
 		if (subject == null) {
-			if (other.subject != null)
+			if (other.subject != null) {
 				return false;
+			}
 		} else if (!subject.equals(other.subject)) {
 			return false;
 		}
 		if (unrespondedList == null) {
-			if (other.unrespondedList != null)
+			if (other.unrespondedList != null) {
 				return false;
+			}
 		} else if (!unrespondedList.equals(other.unrespondedList)) {
 			return false;
 		}
 		return true;
 	}
+	
+	
 
 }

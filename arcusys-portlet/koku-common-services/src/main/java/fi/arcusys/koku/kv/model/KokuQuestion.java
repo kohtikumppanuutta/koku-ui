@@ -54,6 +54,9 @@ public class KokuQuestion {
 				+ number + ", type=" + type + ", answer=" + answer + "]";
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -66,6 +69,9 @@ public class KokuQuestion {
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -79,14 +85,16 @@ public class KokuQuestion {
 		}
 		KokuQuestion other = (KokuQuestion) obj;
 		if (answer == null) {
-			if (other.answer != null)
+			if (other.answer != null) {
 				return false;
+			}
 		} else if (!answer.equals(other.answer)) {
 			return false;
 		}
 		if (description == null) {
-			if (other.description != null)
+			if (other.description != null) {
 				return false;
+			}
 		} else if (!description.equals(other.description)) {
 			return false;
 		}
