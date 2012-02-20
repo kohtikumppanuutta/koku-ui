@@ -1,9 +1,12 @@
 package fi.arcusys.koku.util;
 
+import static fi.arcusys.koku.util.Constants.DATE;
+import static fi.arcusys.koku.util.Constants.DATE_FORMAT;
+import static fi.arcusys.koku.util.Constants.TIME_ZONE;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -13,14 +16,13 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import fi.arcusys.koku.kv.messageservice.FolderType;
-import static fi.arcusys.koku.util.Constants.*;
 
 /**
  * Utilities used in the message portlet
  * @author Jinhua Chen
  * Aug 4, 2011
  */
-public class MessageUtil {
+public final class MessageUtil {
 
 	private MessageUtil() {
         // prevents calls from subclass
