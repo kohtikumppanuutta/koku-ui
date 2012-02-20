@@ -12,7 +12,7 @@ import fi.arcusys.koku.util.MessageUtil;
 
 public class AbstractTietopyyntoHandle extends AbstractHandle {
 
-	private Logger LOG = Logger.getLogger(AbstractTietopyyntoHandle.class);
+	private static final Logger LOG = Logger.getLogger(AbstractTietopyyntoHandle.class);
 
 	protected String getLocalizedInformationRequestSummary(KokuInformationRequestStatus type) {
 		if (getMessageSource() == null) {

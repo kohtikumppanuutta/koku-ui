@@ -32,7 +32,7 @@ import fi.arcusys.koku.util.PortalRole;
  */
 public class TivaCitizenServiceHandle extends AbstractHandle {
 	
-	private Logger LOG = Logger.getLogger(TivaCitizenServiceHandle.class);
+	private static final Logger LOG = Logger.getLogger(TivaCitizenServiceHandle.class);
 	
 	private TivaCitizenService tcs;
 	private String userId;

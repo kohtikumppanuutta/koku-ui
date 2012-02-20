@@ -7,7 +7,7 @@ import fi.arcusys.koku.util.PortalRole;
 
 public class UserIdResolver {
 	
-	private static Logger LOG = Logger.getLogger(UserIdResolver.class);
+	private static final Logger LOG = Logger.getLogger(UserIdResolver.class);
 
 	private KokuUserService userService;
 	

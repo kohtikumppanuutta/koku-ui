@@ -29,7 +29,7 @@ public class TaskUtil {
 	public final static String LOGIN_USERNAME_VAR = "_58_login";
 	public final static String LOGIN_PASSWORD_VAR = "_58_password";
 	// store some values that can not be stored in session
-	private static Map<String, String> TASK_HASHMAP = new ConcurrentHashMap<String, String>();
+	private static final Map<String, String> TASK_HASHMAP = new ConcurrentHashMap<String, String>();
 
 	/**
 	 * Gets intalio task type string according to the integer task type
