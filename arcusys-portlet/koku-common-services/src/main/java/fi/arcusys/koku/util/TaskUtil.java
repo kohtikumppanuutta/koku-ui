@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Jinhua Chen
  * May 10, 2011
  */
-public class TaskUtil {
+public final class TaskUtil {
 	
 	private TaskUtil() {
         // prevents calls from subclass
