@@ -65,7 +65,10 @@ public class KokuRequestShortSummary {
 				+ getClass() + ", hashCode()=" + hashCode() + ", toString()="
 				+ super.toString() + "]";
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -78,6 +81,10 @@ public class KokuRequestShortSummary {
 		result = prime * result + ((subject == null) ? 0 : subject.hashCode());
 		return result;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -91,33 +98,39 @@ public class KokuRequestShortSummary {
 		}
 		KokuRequestShortSummary other = (KokuRequestShortSummary) obj;
 		if (creationDate == null) {
-			if (other.creationDate != null)
+			if (other.creationDate != null) {
 				return false;
+			}
 		} else if (!creationDate.equals(other.creationDate)) {
 			return false;
 		}
 		if (endDate == null) {
-			if (other.endDate != null)
+			if (other.endDate != null) {
 				return false;
+			}
 		} else if (!endDate.equals(other.endDate)) {
 			return false;
-		}	
+		}
 		if (requestId != other.requestId) {
 			return false;
 		}
 		if (sender == null) {
-			if (other.sender != null)
+			if (other.sender != null) {
 				return false;
+			}
 		} else if (!sender.equals(other.sender)) {
 			return false;
 		}
 		if (subject == null) {
-			if (other.subject != null)
+			if (other.subject != null) {
 				return false;
+			}
 		} else if (!subject.equals(other.subject)) {
 			return false;
 		}
 		return true;
 	}
+	
+	
     
 }
