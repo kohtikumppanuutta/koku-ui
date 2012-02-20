@@ -15,13 +15,13 @@ public class KokuGroup {
 	public String getGroupName() {
 		return groupName;
 	}
-	public void setGroupName(String groupName) {
+	public final void setGroupName(String groupName) {
 		this.groupName = groupName;
 	}
 	public String getGroupUid() {
 		return groupUid;
 	}
-	public void setGroupUid(String groupUid) {
+	public final void setGroupUid(String groupUid) {
 		this.groupUid = groupUid;
 	}
 	

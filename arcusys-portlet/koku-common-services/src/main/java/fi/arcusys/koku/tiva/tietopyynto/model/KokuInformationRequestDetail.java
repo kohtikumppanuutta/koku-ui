@@ -47,7 +47,7 @@ public class KokuInformationRequestDetail extends KokuInformationRequestSummary 
 		}
 	}
 	
-	private final void setAccessTypeAsString(String accessType) {
+	protected final void setAccessTypeAsString(String accessType) {
 		setAccessType(KokuInformationAccessType.fromValue(accessType));
 	}
 
@@ -63,7 +63,8 @@ public class KokuInformationRequestDetail extends KokuInformationRequestSummary 
 	public KokuInformationAccessType getAccessType() {
 		return accessType;
 	}
-	public void setAccessType(KokuInformationAccessType accessType) {
+	
+	public final void setAccessType(KokuInformationAccessType accessType) {
 		this.accessType = accessType;
 	}
 	public String getAdditionalInfo() {

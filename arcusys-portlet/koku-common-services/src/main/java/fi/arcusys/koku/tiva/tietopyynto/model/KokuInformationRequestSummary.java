@@ -30,7 +30,7 @@ public class KokuInformationRequestSummary {
 		this.validTill = MessageUtil.formatTaskDateByDay(summary.getValidTill());
 	}
 	
-	private final void setStatusAsString(String status) {
+	protected final void setStatusAsString(String status) {
 		setStatus(KokuInformationRequestStatus.fromValue(status));
 	}
 	
