@@ -173,7 +173,7 @@ KokuAjax.prototype.ajaxGetTasks = function(pageObj, presentTasks) {
 					tip: true 
 				} 
 			});
-			/*
+			*/
 				
 		} else {
 			var message = "<spring:message code="error.unLogin" />";
