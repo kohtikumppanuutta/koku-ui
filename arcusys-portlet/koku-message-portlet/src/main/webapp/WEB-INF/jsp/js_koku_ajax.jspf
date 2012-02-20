@@ -153,6 +153,26 @@ KokuAjax.prototype.ajaxGetTasks = function(pageObj, presentTasks) {
 			var tasks = json["tasks"];
 			pageObj.tasks = tasks;
 			presentTasks(tasks);
+			
+			/* Popup titles */
+			jQuery('span.jQueryToolTip').qtip({  
+				show: {
+				 delay: 10,
+				 when : {
+				 	event : 'mouseover'
+				 	},
+				 effect : {
+				 	type: 'fade',
+				 	length: 100
+				 	},
+				},
+				hide: 'mouseout',
+				style: { 
+					name: 'blue', 
+					tip: true 
+				} 
+			});
+				
 		} else {
 			var message = "<spring:message code="error.unLogin" />";
 			KokuUtil.errorMsg.showErrorMessage(message);

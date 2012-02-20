@@ -154,6 +154,8 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.datepick.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.datepick-fi.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.jgrowl_minimized.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.qtip.min.js"></script>
+
 
 <script type="text/javascript"> 
 /*
@@ -214,15 +216,16 @@ jQuery(document).ready(function() {
 	 	});		 	
 	};
 	jQuery.jGrowl.defaults.position = 'top-right';
-	
-	
+		
 	kokuConfig = new Config("<%= refreshDuration %>", "<%= messageType %>");
 	pageObj = new Paging();
 	kokuAjax = new KokuAjaxEmployee(ajaxUrls);
 	kokuSuggestionBox = new SuggestionBox(ajaxUrls);
 	kokuTableNavigation = new KokuTableNavigationEmployee(kokuAjax);
 	
-	datePickerInit();		
+	datePickerInit();
+	
+	
 	checkPageSession();
 	/* Ajax activity support call. Show the ajax loading icon */
     jQuery('#task-manager-operation-loading')

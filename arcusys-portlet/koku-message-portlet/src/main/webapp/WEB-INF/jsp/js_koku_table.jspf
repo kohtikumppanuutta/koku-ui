@@ -26,9 +26,9 @@ KokuTable.prototype.tableGenerator = {
 					/* Generate columns */
 					for (var j = 0; j < columnIds.length; j++)  {
 						if (columnIds[j].indexOf("cleanHtml") === 0) {
-							taskHtml += '<td class="messageItem" onclick="'+ jsFunctionName + '(\''+ i + '\')" >' + tasks[i][columnIds[j]] + '</td>';
+							taskHtml += '<td class="messageItem ' + columnIds[j] + '" onclick="'+ jsFunctionName + '(\''+ i + '\')" >' + tasks[i][columnIds[j]] + '</td>';
 						} else {
-							taskHtml += '<td class="messageItem" onclick="'+ jsFunctionName + '(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i][columnIds[j]]) + '</td>';
+							taskHtml += '<td class="messageItem ' + columnIds[j] + '" onclick="'+ jsFunctionName + '(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i][columnIds[j]]) + '</td>';
 						}
 					}
 					taskHtml +=	 '</tr>';
@@ -94,6 +94,17 @@ KokuTable.prototype.createMessagesTable = function(tasks, taskType) {
 				return "<spring:message code="message.receiver" />";	
 		}
 		
+		/* Function to shorten long texts */
+		function shorty(value) {
+			var maxLength = 22;
+			if (value === undefined || value === null || !isNaN(value) || value.length <= maxLength ) {
+				return value;
+			} else {
+				// return "<abbr class='valueWithDesc' title='"+ value +"' >" + value.substring(0,maxLength) +"...</abbr>";
+				return "<span class='jQueryToolTip' title='" + value + "'>" + value.substring(0,maxLength) +"...</span>";
+			}
+		}
+		
 		/* Formats user field */
 		function formatUser(task, taskType) {			
 			if(taskType == "msg_inbox" ||taskType == "msg_archive_inbox")
@@ -117,7 +128,7 @@ KokuTable.prototype.createMessagesTable = function(tasks, taskType) {
 		var taskHtml = "";
 		var formLink = "";
 		
-		taskHtml = '<table class="task-manager-table">'
+		taskHtml = '<table class="task-manager-table messageTable">'
 				+ '<tr class="task-manager-table trheader">'
 				+ '<td class="choose"><spring:message code="message.choose" /></td>'
 				+ '<td>' + formatSender(taskType) + '</td>'
@@ -142,9 +153,9 @@ KokuTable.prototype.createMessagesTable = function(tasks, taskType) {
 			}
 			
 			taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + KokuUtil.escapeHTML(tasks[i]["messageId"]) + '" />' + '</td>'
-					 + '<td class="messageItem" onclick="kokuAjax.showMessage(\''+ tasks[i]["messageId"] + '\')" >' + formatUser(tasks[i], taskType) + '</td>'
-					 + '<td class="messageItem" onclick="kokuAjax.showMessage(\''+ tasks[i]["messageId"] + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
-					 + '<td class="messageItem" onclick="kokuAjax.showMessage(\''+ tasks[i]["messageId"] + '\')" >' + KokuUtil.escapeHTML(tasks[i]["creationDate"]) + '</td>'
+					 + '<td class="messageItem msgReciever" onclick="kokuAjax.showMessage(\''+ tasks[i]["messageId"] + '\')" >' + formatUser(tasks[i], taskType) + '</td>'
+					 + '<td class="messageItem msgSubject" onclick="kokuAjax.showMessage(\''+ tasks[i]["messageId"] + '\')" >' + formatSubject(tasks[i]["subject"]) + '</td>'
+					 + '<td class="messageItem msgDate" onclick="kokuAjax.showMessage(\''+ tasks[i]["messageId"] + '\')" >' + KokuUtil.escapeHTML(tasks[i]["creationDate"]) + '</td>'
 					 + '</tr>';
 		}
 		
@@ -170,7 +181,7 @@ KokuTable.prototype.createAppoitmentsInboxCitizenTable = function(tasks) {
 	var taskHtml = "";
 	var formLink = "";
 	
-	taskHtml = '<table class="task-manager-table">'
+	taskHtml = '<table class="task-manager-table appointmentTable appoitmentsInboxCitizenTable">'
 			+ '<tr class="task-manager-table trheader">'
 			+ '<td>' + '<spring:message code="message.from" />' + '</td>'
 			+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
@@ -208,7 +219,7 @@ KokuTable.prototype.createAppoitmentsTable = function(tasks) {
 	var taskHtml = "";
 	var formLink = "";
 	
-	taskHtml = '<table class="task-manager-table">'
+	taskHtml = '<table class="task-manager-table appointmentTable appoitmentsTable">'
 			+ '<tr class="task-manager-table trheader">'
 			+ '<td class="choose"><spring:message code="message.choose" /></td>'
 			+ '<td>' + '<spring:message code="message.from" />' + '</td>'
@@ -221,10 +232,10 @@ KokuTable.prototype.createAppoitmentsTable = function(tasks) {
 		
 		taskHtml += this.tableGenerator.generateRowTr(i);			
 		taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["sender"]) + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(formatSubject(tasks[i]["subject"])) + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["description"]) + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["status"]) + '</td>'
+				 + '<td class="messageItem sender" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["sender"]) + '</td>'
+				 + '<td class="messageItem subject" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(formatSubject(tasks[i]["subject"])) + '</td>'
+				 + '<td class="messageItem description" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["description"]) + '</td>'
+				 + '<td class="messageItem status" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["status"]) + '</td>'
 				 + '</tr>';
 	}
 
@@ -243,7 +254,7 @@ KokuTable.prototype.createRequestsEmployeeTable = function(tasks) {
 	}
 
 	var taskHtml = "";
-	taskHtml = '<table class="task-manager-table">'
+	taskHtml = '<table class="task-manager-table requestsEmployeeTable">'
 			+ '<tr class="task-manager-table trheader">'
 			+ '<td class="choose"><spring:message code="message.choose" /></td>'
 			+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
@@ -262,11 +273,11 @@ KokuTable.prototype.createRequestsEmployeeTable = function(tasks) {
 		}
 		
 		taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["requestId"] + '" />' + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + KokuUtil.escapeHTML(tasks[i]["subject"]) + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + KokuUtil.escapeHTML(tasks[i]["respondedAmount"]) + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + KokuUtil.escapeHTML(tasks[i]["missedAmount"]) + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + KokuUtil.escapeHTML(tasks[i]["creationDate"]) + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + KokuUtil.escapeHTML(tasks[i]["endDate"]) + '</td>'
+				 + '<td class="messageItem subject" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + KokuUtil.escapeHTML(tasks[i]["subject"]) + '</td>'
+				 + '<td class="messageItem respondedAmount" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + KokuUtil.escapeHTML(tasks[i]["respondedAmount"]) + '</td>'
+				 + '<td class="messageItem missedAmount" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + KokuUtil.escapeHTML(tasks[i]["missedAmount"]) + '</td>'
+				 + '<td class="messageItem creationDate" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + KokuUtil.escapeHTML(tasks[i]["creationDate"]) + '</td>'
+				 + '<td class="messageItem endDate" onclick="kokuAjax.showRequest(\''+ tasks[i]["requestId"] + '\')" >' + KokuUtil.escapeHTML(tasks[i]["endDate"]) + '</td>'
 				 + '</tr>';
 	}
 
