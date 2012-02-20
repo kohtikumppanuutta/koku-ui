@@ -1,8 +1,6 @@
 package fi.arcusys.koku.av;
 
 import static fi.arcusys.koku.util.Constants.DATE;
-import static fi.arcusys.koku.util.Constants.RESPONSE_FAIL;
-import static fi.arcusys.koku.util.Constants.RESPONSE_OK;
 import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN;
 import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN;
 import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD;
@@ -23,6 +21,7 @@ import fi.arcusys.koku.av.citizenservice.AppointmentSummaryStatus;
 import fi.arcusys.koku.av.citizenservice.AppointmentWithTarget;
 import fi.arcusys.koku.av.citizenservice.User;
 import fi.arcusys.koku.exceptions.KokuServiceException;
+import fi.arcusys.koku.users.KokuUser;
 import fi.arcusys.koku.util.MessageUtil;
 
 
@@ -80,6 +79,7 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 			kokuAppointment = new CitizenAppointment();
 			kokuAppointment.setAppointmentId(appSummary.getAppointmentId());
 			kokuAppointment.setSender(getDisplayName(appSummary.getSenderUserInfo()));
+			kokuAppointment.setSenderUser(new KokuUser(appSummary.getSenderUserInfo()));
 			kokuAppointment.setSubject(appSummary.getSubject());
 			kokuAppointment.setDescription(appSummary.getDescription());
 			kokuAppointment.setTargetPersonUid(getUserUid(appSummary.getTargetPersonUserInfo()));
@@ -113,6 +113,7 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 		AppointmentRespondedTO appointment = acs.getAppointmentRespondedById(appId, targetUser);
 		ctzAppointment.setAppointmentId(appointment.getAppointmentId());
 		ctzAppointment.setSender(getDisplayName(appointment.getSenderUserInfo()));
+		ctzAppointment.setSenderUser(new KokuUser(appointment.getSenderUserInfo()));
 		ctzAppointment.setSubject(appointment.getSubject());
 		ctzAppointment.setDescription(appointment.getDescription());
 		if (appointment.getStatus() != null) {
@@ -122,8 +123,10 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 			ctzAppointment.setSlot(formatSlot(appointment.getApprovedSlot()));			
 		}
 		ctzAppointment.setReplier(getDisplayName(appointment.getReplierUserInfo()));
+		ctzAppointment.setReplierUser(new KokuUser(appointment.getReplierUserInfo()));
 		ctzAppointment.setReplierComment(appointment.getReplierComment());
         ctzAppointment.setTargetPersonUid(getUserUid(appointment.getTargetPersonUserInfo()));
+		ctzAppointment.setTargetPersonUser(new KokuUser(appointment.getTargetPersonUserInfo()));
 		ctzAppointment.setTargetPersonDisplayName(getDisplayName(appointment.getTargetPersonUserInfo()));
 		ctzAppointment.setCancellationComment(appointment.getEmployeesCancelComent());
 		

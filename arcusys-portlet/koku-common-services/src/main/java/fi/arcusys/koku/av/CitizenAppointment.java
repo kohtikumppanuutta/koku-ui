@@ -1,5 +1,7 @@
 package fi.arcusys.koku.av;
 
+import fi.arcusys.koku.users.KokuUser;
+
 /**
  * Appointment data model for citizen
  * @author Jinhua Chen
@@ -9,10 +11,41 @@ public class CitizenAppointment extends KokuAppointment{
 
 	private Slot slot;
 	private String replier;
+	private KokuUser replierUser;
 	private String replierComment;
 	private String targetPersonUid;
     private String targetPersonDisplayName;
+	private KokuUser targetPersonUser;
+
 	
+	/**
+	 * @return the targetPersonUser
+	 */
+	public final KokuUser getTargetPersonUser() {
+		return targetPersonUser;
+	}
+
+	/**
+	 * @param targetPersonUser the targetPersonUser to set
+	 */
+	public final void setTargetPersonUser(KokuUser targetPersonUser) {
+		this.targetPersonUser = targetPersonUser;
+	}
+
+	/**
+	 * @return the replierUser
+	 */
+	public final KokuUser getReplierUser() {
+		return replierUser;
+	}
+
+	/**
+	 * @param replierUser the replierUser to set
+	 */
+	public final void setReplierUser(KokuUser replierUser) {
+		this.replierUser = replierUser;
+	}
+
 	/**
      * @return the targetPersonUid
      */

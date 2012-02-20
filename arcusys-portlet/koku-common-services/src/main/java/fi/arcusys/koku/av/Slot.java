@@ -17,6 +17,8 @@ public class Slot {
     private boolean approved;
     private String targetPerson;
     private String recipients;
+    
+    
     /* getters */
     public long getAppointmentId() {
     	return appointmentId;

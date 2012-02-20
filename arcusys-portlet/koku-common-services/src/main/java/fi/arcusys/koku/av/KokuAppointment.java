@@ -1,5 +1,7 @@
 package fi.arcusys.koku.av;
 
+import fi.arcusys.koku.users.KokuUser;
+
 /**
  * Summary appointment data model
  * @author Jinhua Chen
@@ -9,11 +11,27 @@ public class KokuAppointment {
 
 	private long appointmentId;
 	private String sender;
+	private KokuUser senderUser;
 	private String subject;
 	private String description;
 	private String status;
 	private String cancellationComment;
 	
+	
+	/**
+	 * @return the senderUser
+	 */
+	public final KokuUser getSenderUser() {
+		return senderUser;
+	}
+
+	/**
+	 * @param senderUser the senderUser to set
+	 */
+	public final void setSenderUser(KokuUser senderUser) {
+		this.senderUser = senderUser;
+	}
+
 	/* getters */
 	public long getAppointmentId() {
 		return appointmentId;

@@ -19,14 +19,18 @@
 	</script>
 	<div id="task-manager-wrap" class="single">
 		<div id="show-message" style="padding:12px">
-		<span class="request-c-1"><spring:message code="message.from"/>: <c:out value="${appointment.model.sender}" /> </span><br />
+		<c:if test="${appointment.model.senderUser != null}">
+		<span class="request-c-1"><spring:message code="message.from"/>: <c:out value="${appointment.model.senderUser.fullName}" /> </span><br />
+		</c:if>		
 		<span class="request-c-1"><spring:message code="message.subject"/>:</span> <c:out value="${appointment.model.subject}" /><br />
 		<span class="request-c-1"><spring:message code="message.description"/>:</span> <c:out value="${appointment.model.description}" /><br />
 		<span class="request-c-1"><spring:message code="message.status"/>:</span> <c:out value="${appointment.model.status}" /><br />
 		<c:if test="${appointment.model.cancellationComment  != null}">
 		<span class="request-c-1"><spring:message code="appointment.cancellationComment"/>:</span> <c:out value="${appointment.model.cancellationComment}" /><br />
 		</c:if>
-		<span class="request-c-1"><spring:message code="appointment.targetPerson"/>:</span> <c:out value="${appointment.model.targetPersonDisplayName}" /><br />
+		<c:if test="${appointment.model.targetPersonUser != null}">
+		<span class="request-c-1"><spring:message code="appointment.targetPerson"/>:</span> <c:out value="${appointment.model.targetPersonUser.fullName}" /><br />
+		</c:if>
 		<span class="request-c-1"><spring:message code="appointment.replier"/>:</span> <c:out value="${appointment.model.replier}" /><br />
 		<span class="request-c-1"><spring:message code="appointment.replierComment"/>:</span> <c:out value="${appointment.model.replierComment}" /><br />
 		
@@ -45,7 +49,7 @@
 	          <td><c:out value="${appointment.model.slot.startTime}" /></td>
 	          <td><c:out value="${appointment.model.slot.endTime}" /></td>
 	          <td><c:out value="${appointment.model.slot.location}" /></td>
-	          <td><c:out value="${appointment.model.slot.comment" />}</td>
+	          <td><c:out value="${appointment.model.slot.comment}" /></td>
 	        </tr>
 	    </table>  
 		</c:if>		
