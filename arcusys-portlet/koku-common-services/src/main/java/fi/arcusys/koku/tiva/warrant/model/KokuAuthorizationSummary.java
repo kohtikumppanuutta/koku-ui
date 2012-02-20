@@ -72,19 +72,19 @@ public class KokuAuthorizationSummary {
 		setTypeAsString(authSummary.getType().toString());
 	}
 	
-	private final void setStatusAsString(String status) {
+	protected final void setStatusAsString(String status) {
 		setStatus(KokuAuthorizationStatus.valueOf(status));
 	}
 	
-	private final void setTypeAsString(String type) {
+	protected final void setTypeAsString(String type) {
 		setType(KokuAuthorizationCreateType.valueOf(type));
-	}	
+	}
 
-	private final void setTemplateEmployee(fi.arcusys.koku.tiva.warrant.employeewarrantservice.Valtakirjapohja template) {
+	protected final void setTemplateEmployee(fi.arcusys.koku.tiva.warrant.employeewarrantservice.Valtakirjapohja template) {
 		setTemplate(new KokuValtakirjapohja(template));
 	}
 
-	private final void setTemplateCitizen(fi.arcusys.koku.tiva.warrant.citizenwarrantservice.Valtakirjapohja template) {
+	protected final void setTemplateCitizen(fi.arcusys.koku.tiva.warrant.citizenwarrantservice.Valtakirjapohja template) {
 		setTemplate(new KokuValtakirjapohja(template));		
 	}
 	

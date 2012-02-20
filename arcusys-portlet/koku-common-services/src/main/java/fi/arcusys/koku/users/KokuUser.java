@@ -88,7 +88,7 @@ public class KokuUser {
 		return lastname;
 	}
 
-	public void setLastname(String lastname) {
+	public final void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
 
