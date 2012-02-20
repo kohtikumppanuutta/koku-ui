@@ -37,9 +37,7 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	private final static String TARGET_PERSON_UID 			= "targetPersonUid";
 	private final static String INFORMATION					= "searchFromTietosisalto";
 	private final static String FREE_TEXT_SEARCH			= "freeTextSearch";
-		
-	private final static String REGEX_DATE					= "\\.";
-	
+			
 	/**
 	 * Constructor and initialization
 	 */

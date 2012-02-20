@@ -3,8 +3,6 @@ package fi.arcusys.koku.kv.request.citizen;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import fi.arcusys.koku.AbstractHandle;
 import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.model.KokuResponseDetail;
@@ -19,9 +17,7 @@ import fi.arcusys.koku.users.KokuUserService;
  * Aug 22, 2011
  */
 public class CitizenRequestHandle extends AbstractHandle {
-	
-	private final static Logger LOG = Logger.getLogger(CitizenRequestHandle.class);
-	
+		
 	private CitizenRequestService rs;
 	private final KokuUserService userService;	
 

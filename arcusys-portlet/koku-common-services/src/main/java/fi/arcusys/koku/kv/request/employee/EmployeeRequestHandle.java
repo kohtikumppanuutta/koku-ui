@@ -21,9 +21,7 @@ import fi.arcusys.koku.users.KokuUserService;
  * Aug 22, 2011
  */
 public class EmployeeRequestHandle extends AbstractHandle {
-	
-	private final static Logger LOG = Logger.getLogger(EmployeeRequestHandle.class);
-	
+		
 	private EmployeeRequestService rs;
 	private final KokuUserService userService;	
 
