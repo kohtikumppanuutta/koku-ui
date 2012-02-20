@@ -46,6 +46,11 @@
 			<js-path>/js/jquery.jgrowl_minimized.js</js-path>
 			<js-priority>10</js-priority>
 		</param>
+		<param>
+			<js-module>jquery.qtip</js-module>
+			<js-path>/js/jquery.qtip.min.js</js-path>
+			<js-priority>10</js-priority>
+		</param>
 	</javascript>
 
 </gatein-resources>

@@ -247,7 +247,7 @@
 	}
 	
 	.task-manager-table td.choose {
-		width: 50px;
+		width: 20px;
 	}
 	
 	.task-manager-table td.from {
@@ -725,6 +725,54 @@
 		padding-left: 15px;
 		color: #F00;	
 	}
+	
+	
+	/* Viestit  */
+	table.task-manager-table.messageTable td.msgReciever,
+	table.task-manager-table.messageTable td.msgDate {
+		width: 150px;
+	}
+	
+	/* Pyynnöt - Lähetetyt - Avoimet */
+	table.task-manager-table.requestsEmployeeTable td.messageItem.creationDate,
+	table.task-manager-table.requestsEmployeeTable td.messageItem.endDate {
+		width: 150px;
+	}
+	table.task-manager-table.requestsEmployeeTable td.messageItem.respondedAmount,
+	table.task-manager-table.requestsEmployeeTable td.messageItem.missedAmount {
+		width: 50px;
+	}
+	
+	/* Tapaamiset - Avoimet */
+	table.task-manager-table.appoitmentsTable td.messageItem.status {
+		width: 75px;
+	}
+	table.task-manager-table.appoitmentsTable td.messageItem.sender {
+		width: 150px;
+	}
+	table.task-manager-table.appoitmentsTable td.messageItem.subject {
+		width: 200px;
+	}
+	
+	/* Suostumukset - Lähetetyt suostumuspyynnöt */
+	table.task-manager-table.createBrowseEmployeeOwnConsents td.messageItem.requester {
+		width: 120px;
+	}
+	table.task-manager-table.createBrowseEmployeeOwnConsents td.messageItem.approvalStatus,	
+	table.task-manager-table.createBrowseEmployeeOwnConsents td.messageItem.validDate,
+	table.task-manager-table.createBrowseEmployeeOwnConsents td.messageItem.assignedDate {
+		width: 75px;
+	}
+	
+	/* Valtakirjat */
+	table.task-manager-table.browseUserConsentsTable td.messageItem.validTill,
+	table.task-manager-table.browseUserConsentsTable td.messageItem.givenAt {
+		width: 75px;
+	}
+	table.task-manager-table.browseUserConsentsTable td.messageItem.localizedStatus {
+		width: 80px
+	}
+	
 	
 }
 	
