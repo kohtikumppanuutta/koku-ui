@@ -14,6 +14,8 @@ import fi.koku.settings.KoKuPropertiesUtil;
 public class Properties {
 	
 	private final static Logger LOG = Logger.getLogger(Properties.class);
+	
+	private Properties() { /* Not instantiable */ }
 
 	public static final boolean IS_KUNPO_PORTAL;
 	public static final boolean IS_LOORA_PORTAL;

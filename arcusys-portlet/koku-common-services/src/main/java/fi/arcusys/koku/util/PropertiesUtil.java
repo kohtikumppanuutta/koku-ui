@@ -22,6 +22,8 @@ import org.apache.log4j.Logger;
 
 public class PropertiesUtil {
 	
+	private PropertiesUtil() { /* Not instantiable */ }
+	
 	private final static Logger LOG = Logger.getLogger(PropertiesUtil.class);
 	private final static Properties PROPERTIES = new Properties();
 	private final static String FILENAME = "koku-portlets.properties";

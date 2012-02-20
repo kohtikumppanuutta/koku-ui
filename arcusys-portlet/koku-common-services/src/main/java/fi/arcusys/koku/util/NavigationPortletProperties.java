@@ -3,6 +3,8 @@ package fi.arcusys.koku.util;
 import fi.koku.settings.KoKuPropertiesUtil;
 
 public class NavigationPortletProperties {
+	
+	private NavigationPortletProperties() { /* Not instantiable */ }
 		
 	/**
 	 *  koku-settings.properties keys 
