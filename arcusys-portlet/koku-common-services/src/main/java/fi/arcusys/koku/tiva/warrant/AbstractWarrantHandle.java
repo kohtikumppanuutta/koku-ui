@@ -12,7 +12,7 @@ import fi.arcusys.koku.util.MessageUtil;
 
 public class AbstractWarrantHandle extends AbstractHandle {
 	
-	private Logger LOG = Logger.getLogger(AbstractWarrantHandle.class);
+	private static final Logger LOG = Logger.getLogger(AbstractWarrantHandle.class);
 
 	protected String getLocalizedAuthStatus(KokuAuthorizationStatus type) {
 		if (getMessageSource() == null) {

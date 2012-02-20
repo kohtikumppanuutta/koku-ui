@@ -30,7 +30,7 @@ import fi.arcusys.koku.util.MessageUtil;
  */
 public class TivaEmployeeServiceHandle extends AbstractHandle {
 	
-	private Logger LOG = Logger.getLogger(TivaEmployeeServiceHandle.class);
+	private static final Logger LOG = Logger.getLogger(TivaEmployeeServiceHandle.class);
 	
 	private TivaEmployeeService tes;
 	
