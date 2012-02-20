@@ -71,9 +71,7 @@ public class TaskHandle {
 		String taskTypeStr = TaskUtil.getTaskType(taskType);
 		String subQuery = "";				
 		subQuery = createTaskSubQuery(taskType, keyword, orderType);
-		tasks = getTasksFromServ(taskTypeStr, subQuery, first, max);
-		
-		return tasks;
+		return getTasksFromServ(taskTypeStr, subQuery, first, max);
 	}
 	
 	/**
@@ -88,9 +86,7 @@ public class TaskHandle {
 		List<Task> myTasklist = new ArrayList<Task>();
 		List<TaskMetadata> tasklist = taskMngServ.getAvailableTasks(participantToken, taskType, subQuery, 
         		first, max);
-		myTasklist = createTask(tasklist);
-		
-		return myTasklist;
+		return createTask(tasklist);
 	}
 	
 	public Task getTask(String taskId, String token) {
@@ -105,9 +101,7 @@ public class TaskHandle {
 	 */
 	public String getTaskStatus(String taskId) {
 		String status;
-		status = taskMngServ.getTask(taskId, participantToken).getMetadata().getTaskState();
-		
-		return status;
+		return taskMngServ.getTask(taskId, participantToken).getMetadata().getTaskState();
 	}
 	
 	/**
@@ -117,13 +111,11 @@ public class TaskHandle {
 	 */
 	public List<Task> createTask(List<TaskMetadata> tasklist) {
 		List<Task> myTasklist = new ArrayList<Task>();
-		Iterator<TaskMetadata> it = tasklist.iterator();
-		
+		Iterator<TaskMetadata> it = tasklist.iterator();		
 		while (it.hasNext()) {
 			TaskMetadata task = it.next();
 			myTasklist.add(createTask(task));
 		}
-
 		return myTasklist;
 	}
 	
@@ -154,8 +146,7 @@ public class TaskHandle {
 		Calendar cal = xmlGregorianCalendar.toGregorianCalendar();
 		SimpleDateFormat dataformat = new SimpleDateFormat(DATE_FORMAT);
 		dataformat.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
-		String dateStr = dataformat.format(cal.getTime());		
-		return dateStr;		
+		return dataformat.format(cal.getTime());
 	}
 	
 	/**
@@ -206,7 +197,6 @@ public class TaskHandle {
 		subQuery = createTotalNumSubQuery(taskType, keyword);
 		totalNumStr = taskMngServ.getTotalTasksNumber(participantToken, taskTypeStr, subQuery);
 		totalNum = Integer.parseInt(totalNumStr);
-		
 		return totalNum;		
 	}
 	
