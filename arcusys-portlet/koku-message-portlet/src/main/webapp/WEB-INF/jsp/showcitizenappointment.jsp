@@ -45,7 +45,7 @@
 	          <td><c:out value="${appointment.model.slot.startTime}" /></td>
 	          <td><c:out value="${appointment.model.slot.endTime}" /></td>
 	          <td><c:out value="${appointment.model.slot.location}" /></td>
-	          <td><c:out value="${appointment.model.slot.comment" />}</td>
+	          <td><c:out value="${appointment.model.slot.comment}" /></td>
 	        </tr>
 	    </table>  
 		</c:if>		
