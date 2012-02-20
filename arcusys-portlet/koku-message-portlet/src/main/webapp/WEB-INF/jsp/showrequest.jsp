@@ -107,12 +107,9 @@ public String htmlToCode(String s)
 		<span class="request-c-1"><spring:message code="request.createdAt"/>:</span> <c:out value="${request.model.creationDate}" />  <br />
 		<span class="request-c-1"><spring:message code="request.validTill"/>:</span> <c:out value="${request.model.endDate}" /> <br />
 		
+		<%--  Why iframe here?? --%>
 		<iframe id="msgFrame" name="msgFrame" style="width:100%;" frameborder="0" scrolling="no"></iframe>
-		<!--  
-		<span class="request-c-1">Questions:</span> <c:forEach var="question" items="${request.model.questions}" varStatus="status">
-	        <div><span class="request-c-1">Q"${status.count}":</span> ${question.description}</div>
-	      </c:forEach>
-	     --> 
+		
 	    <h3><spring:message code="request.responseSummary"/></h3>
 	    <table class="request-table">
 	    	<tr>
@@ -129,7 +126,7 @@ public String htmlToCode(String s)
 	    	</tr>
 	    	<c:forEach var="response" items="${request.model.respondedList}" varStatus="loopStatus">
 	        <tr class="<c:out value="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}"/>">
-	          <td><c:out value="${response.name}"/></td>
+	          <td><c:out value="${response.replierUser.fullName}"/></td>
 	          <c:forEach var="answer" items="${response.answers}">
 	          <td><c:out value="${answer.answer}"/></td>
 	          </c:forEach>

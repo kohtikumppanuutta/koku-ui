@@ -5,12 +5,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import fi.arcusys.koku.users.KokuUser;
+
 public class KokuResponse {
 	
 	private List<KokuAnswer> answers;
 	private String name;
+	private KokuUser replierUser;
 	private String comment;
-	
 	
 	public KokuResponse() {
 		
@@ -21,6 +23,7 @@ public class KokuResponse {
 			return;
 		}
 		name = response.getName();
+		replierUser = new KokuUser(response.getReplierUserInfo());
 		comment = response.getComment();
 		answers = new ArrayList<KokuAnswer>();
 		if (response.getAnswers() != null) {
@@ -41,6 +44,20 @@ public class KokuResponse {
 				}
 			}				
 		});
+	}
+	
+	/**
+	 * @return the replierUser
+	 */
+	public final KokuUser getReplierUser() {
+		return replierUser;
+	}
+
+	/**
+	 * @param replierUser the replierUser to set
+	 */
+	public final void setReplierUser(KokuUser replierUser) {
+		this.replierUser = replierUser;
 	}
 
 	public List<KokuAnswer> getAnswers() {
@@ -71,6 +88,9 @@ public class KokuResponse {
 				+ ", comment=" + comment + "]";
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -78,9 +98,14 @@ public class KokuResponse {
 		result = prime * result + ((answers == null) ? 0 : answers.hashCode());
 		result = prime * result + ((comment == null) ? 0 : comment.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((replierUser == null) ? 0 : replierUser.hashCode());
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -114,8 +139,14 @@ public class KokuResponse {
 		} else if (!name.equals(other.name)) {
 			return false;
 		}
+		if (replierUser == null) {
+			if (other.replierUser != null) {
+				return false;
+			}
+		} else if (!replierUser.equals(other.replierUser)) {
+			return false;
+		}
 		return true;
 	}
-
 	
 }
