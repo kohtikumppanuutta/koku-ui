@@ -62,7 +62,7 @@ public class Message {
 		this.sender = sender;
 	}
 	
-	public void SetRecipients(String recipients) {
+	public void setRecipients(String recipients) {
 		this.recipients = recipients;
 	}
 	

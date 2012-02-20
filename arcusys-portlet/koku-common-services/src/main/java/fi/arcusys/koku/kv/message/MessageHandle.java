@@ -84,7 +84,7 @@ public class MessageHandle extends AbstractHandle {
 			message = new Message();
 			message.setMessageId(msgSum.getMessageId());
 			message.setSender(msgSum.getSender());
-			message.SetRecipients(formatRecipients(msgSum.getRecipients()));
+			message.setRecipients(formatRecipients(msgSum.getRecipients()));
 			message.setSubject(msgSum.getSubject());
 			message.setCreationDate(MessageUtil.formatTaskDate(msgSum.getCreationDate()));
 			message.setMessageType(MessageUtil.getMessageType(msgSum.getMessageType()));
@@ -142,7 +142,7 @@ public class MessageHandle extends AbstractHandle {
 			message = new Message();
 			message.setMessageId(msgSum.getMessageId());
 			message.setSender(msgSum.getSender());
-			message.SetRecipients(formatRecipients(msgSum.getRecipients()));
+			message.setRecipients(formatRecipients(msgSum.getRecipients()));
 			message.setSubject(msgSum.getSubject());
 			message.setCreationDate(MessageUtil.formatTaskDate(msgSum.getCreationDate()));
 			message.setMessageType(MessageUtil.getMessageType(msgSum.getMessageType()));
@@ -173,7 +173,7 @@ public class MessageHandle extends AbstractHandle {
 		Message message = new Message();
 		message.setMessageId(msg.getMessageId());
 		message.setSender(msg.getSender());
-		message.SetRecipients(formatRecipients(msg.getRecipients()));
+		message.setRecipients(formatRecipients(msg.getRecipients()));
 		message.setSubject(msg.getSubject());
 		message.setContent(msg.getContent());
 		message.setMessageType(msg.getMessageType().toString());
