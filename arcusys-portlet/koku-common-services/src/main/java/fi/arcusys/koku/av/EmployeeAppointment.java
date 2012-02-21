@@ -14,13 +14,13 @@ import fi.arcusys.koku.users.KokuUser;
  */
 public class EmployeeAppointment extends KokuAppointment {
 
-	private List<Slot> approvedSlots;
-	private List<Slot> unapprovedSlots;
-	private List<AppointmentReceipientTO> recipients;
+	private final List<Slot> approvedSlots = new ArrayList<Slot>();
+	private final List<Slot> unapprovedSlots = new ArrayList<Slot>();
+	private final List<AppointmentReceipientTO> recipients = new ArrayList<AppointmentReceipientTO>();
 	private AcceptedSlots acceptedSlots;
-	private List<UserWithTarget> rejectedUsers;
-	private List<UserWithTarget> unrespondedUsers;
-	private List<KokuAppointmentUserRejected> usersRejected;
+	private final List<UserWithTarget> rejectedUsers = new ArrayList<UserWithTarget>();
+	private final List<UserWithTarget> unrespondedUsers = new ArrayList<UserWithTarget>();
+	private final List<KokuAppointmentUserRejected> usersRejected = new ArrayList<KokuAppointmentUserRejected>();
 	
 	/* getters */	
 	public List<AppointmentReceipientTO> getRecipients() {
@@ -43,49 +43,20 @@ public class EmployeeAppointment extends KokuAppointment {
 		return rejectedUsers;
 	}
 	
-	public List<UserWithTarget> getunrespondedUsers() {
+	public List<UserWithTarget> getUnrespondedUsers() {
 		return unrespondedUsers;
 	}
-	/* setters */	
-	public void setRecipients(List<AppointmentReceipientTO> recipients) {
-		this.recipients = recipients;
-	}
-	
-	public void setApprovedSlots(List<Slot> approvedSlots) {
-		this.approvedSlots = approvedSlots;
-	}
-	
-	public void setUnapprovedSlots(List<Slot> unapprovedSlots) {
-		this.unapprovedSlots = unapprovedSlots;
-	}
-	
+				
 	public void setAcceptedSlots(AcceptedSlots acceptedSlots) {
 		this.acceptedSlots = acceptedSlots;
 	}
-		
-	public void setRejectedUsers(List<UserWithTarget> rejectedUsers) {
-		this.rejectedUsers = rejectedUsers;
-	}
-	
-	public void setUnrespondedUsers(List<UserWithTarget> unrespondedUsers) {
-		this.unrespondedUsers = unrespondedUsers;
-	}
-	
+				
 	public final List<KokuAppointmentUserRejected> getUsersRejected() {
-		if (usersRejected == null) {
-			return new ArrayList<KokuAppointmentUserRejected>();
-		}
 		return usersRejected;
 	}
 
-	public final void setUserRejected(List<KokuAppointmentUserRejected> usersRejected) {
-		this.usersRejected = usersRejected;
-	}
-
 	public static class UserWithTarget {
-		private String targetPerson;
 		private KokuUser targetPersonUser;
-		private String recipients;
 		private List<KokuUser> recipientsUsers;
 		
 		/**
@@ -102,23 +73,7 @@ public class EmployeeAppointment extends KokuAppointment {
 			this.targetPersonUser = targetPersonUser;
 		}
 
-		public String getTargetPerson() {
-			return targetPerson;
-		}
-		
-		public String getRecipients() {
-			return recipients;
-		}
-		
-		public void setTargetPerson(String targetPerson) {
-			this.targetPerson = targetPerson;
-		}
-		
-		public void setRecipients(String recipients) {
-			this.recipients = recipients;
-		}
-
-		public List<KokuUser> getRecipientUsers(KokuUser kokuUser) {
+		public List<KokuUser> getRecipientUsers() {
 			if (recipientsUsers == null) {
 				recipientsUsers = new ArrayList<KokuUser>();
 			}

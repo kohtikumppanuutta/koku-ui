@@ -1,8 +1,6 @@
 package fi.arcusys.koku.av;
 
 import static fi.arcusys.koku.util.Constants.DATE;
-import static fi.arcusys.koku.util.Constants.RESPONSE_FAIL;
-import static fi.arcusys.koku.util.Constants.RESPONSE_OK;
 import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE;
 import static fi.arcusys.koku.util.Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE;
 import static fi.arcusys.koku.util.Constants.TIME;
@@ -104,7 +102,6 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		for (AppointmentSummary appSummary : appSummaryList) {
 			KokuAppointment kokuAppointment = new KokuAppointment();
 			kokuAppointment.setAppointmentId(appSummary.getAppointmentId());
-			kokuAppointment.setSender(getDisplayName(appSummary.getSenderUserInfo()));
 			kokuAppointment.setSenderUser(new KokuUser(appSummary.getSenderUserInfo()));
 			kokuAppointment.setSubject(appSummary.getSubject());
 			kokuAppointment.setDescription(appSummary.getDescription());
@@ -130,21 +127,19 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		EmployeeAppointment empAppointment = new EmployeeAppointment();
 		Appointment appointment = aes.getAppointmentById(appId);
 		empAppointment.setAppointmentId(appointment.getAppointmentId());
-		empAppointment.setSender(getDisplayName(appointment.getSenderUserInfo()));
 		empAppointment.setSenderUser(new KokuUser(appointment.getSenderUserInfo()));
 		empAppointment.setSubject(appointment.getSubject());
 		empAppointment.setDescription(appointment.getDescription());
 		empAppointment.setStatus(localizeActionRequestStatus(appointment.getStatus()));		
 		empAppointment.setAcceptedSlots(appointment.getAcceptedSlots());
-		empAppointment.setRecipients(appointment.getRecipients());
+		empAppointment.getRecipients().addAll(appointment.getRecipients());
 		empAppointment.setCancellationComment(appointment.getCancelComment());
-//		empAppointment.setUsersRejected(appointment.getUsersRejected());
-		empAppointment.setUserRejected(convertUserRejectedToKokuUserRejected(appointment.getUsersRejectedWithComments()));
-		empAppointment.setRejectedUsers(formatRejectedUsers(getDisplayNames(getUsers(appointment.getUsersRejectedWithComments())), appointment.getRecipients()));
-		empAppointment.setUnrespondedUsers(calcUnrespondedUsers(appointment));
+		empAppointment.getUsersRejected().addAll(convertUserRejectedToKokuUserRejected(appointment.getUsersRejectedWithComments()));
+		empAppointment.getRejectedUsers().addAll(formatRejectedUsers(getUsers(appointment.getUsersRejectedWithComments()), appointment.getRecipients()));
+		empAppointment.getUnrespondedUsers().addAll(calcUnrespondedUsers(appointment));
 		List<Slot> allSlots = formatSlots(appointment.getSlots(), appointment.getAcceptedSlots(), appointment.getRecipients());		
 		setSlots(empAppointment, allSlots);
-		return empAppointment;		
+		return empAppointment;
 	}
 	
 	private List<KokuAppointmentUserRejected> convertUserRejectedToKokuUserRejected(List<AppointmentUserRejected> rejectedUsers) {
@@ -184,37 +179,26 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	private List<Slot> formatSlots(List<AppointmentSlot> appSlots, AcceptedSlots acceptedSlots,
 			List<AppointmentReceipientTO> recipients) {
 		
-		List<Slot> slots = new ArrayList<Slot>();
-		Slot slot;
-		Iterator<AppointmentSlot> it = appSlots.iterator();
-		
-		while(it.hasNext()) {
-			slot = new Slot();
-			AppointmentSlot appSlot = it.next();
+		List<Slot> slots = new ArrayList<Slot>();		
+		for (AppointmentSlot appSlot : appSlots) {
+			Slot slot = new Slot();
 			slot.setSlotNumber(appSlot.getSlotNumber());
 			slot.setAppointmentDate(MessageUtil.formatDateByString(appSlot.getAppointmentDate(), DATE));
 			slot.setStartTime(MessageUtil.formatDateByString(appSlot.getStartTime(), TIME));
 			slot.setEndTime(MessageUtil.formatDateByString(appSlot.getEndTime(), TIME));
 			slot.setLocation(appSlot.getLocation());
-			slot.setComment(appSlot.getComment());
-			
+			slot.setComment(appSlot.getComment());			
 			slots.add(slot);
 		}
-		// go through the accepted slots and set related information
-		Iterator<Entry> itEntry = acceptedSlots.getEntry().iterator();
 		
-		while(itEntry.hasNext()) {
-			Entry entry = itEntry.next();
-			int slotId = entry.getKey();
-			String targetPerson;
-			
-			for(int i=0; i < slots.size(); i++) {
-				slot = slots.get(i);
-				if(slot.getSlotNumber() == slotId) {
+		// go through the accepted slots and set related information (O²)
+		for (Entry entry : acceptedSlots.getEntry()) {
+			for (Slot slot : slots) {
+				if(slot.getSlotNumber() == entry.getKey()) {
 					slot.setApproved(true);
-					targetPerson = getDisplayName(entry.getValue());
-					slot.setTargetPerson(targetPerson);
-					slot.setRecipients(mapRecipients(targetPerson, recipients));
+					KokuUser targetPerson = new KokuUser(entry.getValue());
+					slot.setTargetPersonUser(targetPerson);
+					slot.getRecipientUsers().addAll(mapRecipients(targetPerson, recipients));
 					break;
 				}
 			}
@@ -222,13 +206,6 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		
 		return slots;
 	}
-
-    private String getDisplayName(final User user) {
-        if (user == null) {
-            return null;
-        }
-        return user.getDisplayName();
-    }
     
 	/**
 	 * Finds the approved slots and unapproved slots and sets them afterwards
@@ -250,77 +227,67 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 			}
 		}
 		
-		empAppointment.setApprovedSlots(approvedSlots);
-		empAppointment.setUnapprovedSlots(unapprovedSlots);	
+		empAppointment.getApprovedSlots().addAll(approvedSlots);
+		empAppointment.getUnapprovedSlots().addAll(unapprovedSlots);	
 	}
 	/**
 	 * Maps the recipients with the given targetPerson and convert the
 	 * recipients list to string
+	 * 
 	 * @param targetPerson target person
 	 * @param recipients AppointmentReceipientTO recipients
 	 * @return recipients string corresponding target person 
 	 */
-	private String mapRecipients(String targetPerson, List<AppointmentReceipientTO> recipients) {
-		String recipientsStr = "";
-		Iterator<AppointmentReceipientTO> it = recipients.iterator();
-		AppointmentReceipientTO receipientTo;
-		
-		while(it.hasNext()) {
-			receipientTo = it.next();
-			if(getDisplayName(receipientTo.getTargetPersonUserInfo()).equals(targetPerson)) {
-				recipientsStr = MessageUtil.formatRecipients(getDisplayNames(receipientTo.getReceipientUserInfos()));
+	private List<KokuUser> mapRecipients(final KokuUser targetPerson, List<AppointmentReceipientTO> recipients) {
+		final List<KokuUser> kokuRecipients = new ArrayList<KokuUser>();		
+		for (AppointmentReceipientTO appReceipient : recipients) {
+			KokuUser appRecepientUser = new KokuUser(appReceipient.getTargetPersonUserInfo());
+			if (appRecepientUser.equals(targetPerson)) {
+				for (User receipientUser : appReceipient.getReceipientUserInfos()) {
+					kokuRecipients.add(new KokuUser(receipientUser));					
+				}
 				break;
 			}
 		}
-		
-		return recipientsStr;
+		return kokuRecipients;
 	}
 	
 	/**
 	 * Formats the rejected users with corresponding target person
+	 * 
 	 * @param userRejected user who rejected slot
 	 * @param recipients recipients list
 	 * @return a list of rejected users
 	 */
-	private List<UserWithTarget> formatRejectedUsers(List<String> userRejected, List<AppointmentReceipientTO> recipients) {
+	private List<UserWithTarget> formatRejectedUsers(List<KokuUser> userRejected, List<AppointmentReceipientTO> recipients) {
 		List<UserWithTarget> rejectedUsers = new ArrayList<UserWithTarget>();
-		UserWithTarget user;
-		Iterator<String> it = userRejected.iterator();
-		String targetPerson;
-		String recipientsStr;
 		
-		while(it.hasNext()) {
-			targetPerson = it.next();
-			recipientsStr = mapRecipients(targetPerson, recipients);
-			user = new UserWithTarget();
-			user.setTargetPerson(targetPerson);
-			user.setRecipients(recipientsStr);
+		for(KokuUser rejectedUser : userRejected) {
+			List<KokuUser> recipientsList = mapRecipients(rejectedUser, recipients);
+			UserWithTarget user = new UserWithTarget();
+			user.setTargetPersonUser(rejectedUser);
+			user.getRecipientUsers().addAll(recipientsList);
 			rejectedUsers.add(user);
 		}
-		
 		return rejectedUsers;
 	}
 	
 	private List<UserWithTarget> calcUnrespondedUsers(Appointment appointment) {
 		List<UserWithTarget> unrespondedUsers = new ArrayList<UserWithTarget>();
-		List<String> userRejected = getDisplayNames(getUsers(appointment.getUsersRejectedWithComments()));
-		List<AppointmentReceipientTO> recipients = appointment.getRecipients();
+		List<AppointmentUserRejected> userRejected = appointment.getUsersRejectedWithComments();
 		AcceptedSlots acceptedSlots = appointment.getAcceptedSlots();
-		
-		Iterator<AppointmentReceipientTO> itApp = recipients.iterator();
-		
-		while(itApp.hasNext()) {
-			AppointmentReceipientTO app = itApp.next();
-			String targetPerson = getDisplayName(app.getTargetPersonUserInfo());
+
+		for (AppointmentReceipientTO app : appointment.getRecipients()) {
+			
+			KokuUser targetPerson = new KokuUser(app.getTargetPersonUserInfo());
 			
 			if(!hasTargetPerson(targetPerson, acceptedSlots, userRejected)) {
 				UserWithTarget user = new UserWithTarget();
-				user.setTargetPerson(targetPerson);
+				user.setTargetPersonUser(targetPerson);
 				user.setTargetPersonUser(new KokuUser(app.getTargetPersonUserInfo()));
 				for (User recipientUser : app.getReceipientUserInfos()) {
-					user.getRecipientUsers(new KokuUser(recipientUser));					
+					user.getRecipientUsers().add(new KokuUser(recipientUser));					
 				}
-				user.setRecipients(MessageUtil.formatRecipients(getDisplayNames(app.getReceipientUserInfos())));
 				unrespondedUsers.add(user);
 			}
 		}		
@@ -331,32 +298,15 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
      * @param users
      * @return
      */
-    private List<User> getUsers(List<AppointmentUserRejected> users) {
+    private List<KokuUser> getUsers(List<AppointmentUserRejected> users) {
         if (users == null || users.isEmpty()) {
             return Collections.emptyList();
         }
         
-        final List<User> result = new ArrayList<User>(users.size());
+        final List<KokuUser> result = new ArrayList<KokuUser>(users.size());
         for (final AppointmentUserRejected user : users) {
-            result.add(user.getUserInfo());
+            result.add(new KokuUser(user.getUserInfo()));
         }
-        return result;
-    }
-
-    /**
-     * @param receipientUserInfos
-     * @return
-     */
-    private List<String> getDisplayNames(List<User> userInfos) {
-        if (userInfos == null || userInfos.isEmpty()) {
-            return Collections.emptyList();
-        }
-        
-        final List<String> result = new ArrayList<String>(userInfos.size());
-        for (final User user : userInfos) {
-            result.add(getDisplayName(user));
-        }
-        
         return result;
     }
 
@@ -367,26 +317,20 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	 * @param userRejected
 	 * @return true or false
 	 */
-	private boolean hasTargetPerson(String targetPerson, AcceptedSlots acceptedSlots, List<String> userRejected) {
-		Iterator<Entry> itEntry = acceptedSlots.getEntry().iterator();
-		
-		while(itEntry.hasNext()) {
-			Entry entry = itEntry.next();
-			String target = getDisplayName(entry.getValue());
-			
+	private boolean hasTargetPerson(final KokuUser targetPerson, final AcceptedSlots acceptedSlots, final List<AppointmentUserRejected> userRejected) {
+		for (Entry entry : acceptedSlots.getEntry()) {
+			KokuUser target = new KokuUser(entry.getValue());			
 			if(target.equals(targetPerson)) {
 				return true;
 			}
 		}
 		
-		Iterator<String> itRej = userRejected.iterator();
-		while(itRej.hasNext()) {
-			String user = itRej.next();
-			if(user.equals(targetPerson)) {
+		for (AppointmentUserRejected user : userRejected) {
+			KokuUser target = new KokuUser(user.getUserInfo());			
+			if(target.equals(targetPerson)) {
 				return true;
 			}
 		}
-		
 		return false;
 	}
 
