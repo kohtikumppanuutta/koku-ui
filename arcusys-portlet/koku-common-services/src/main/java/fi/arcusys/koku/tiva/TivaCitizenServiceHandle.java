@@ -21,6 +21,7 @@ import fi.arcusys.koku.tiva.citizenservice.ConsentShortSummary;
 import fi.arcusys.koku.tiva.citizenservice.ConsentStatus;
 import fi.arcusys.koku.tiva.citizenservice.ConsentSummary;
 import fi.arcusys.koku.tiva.citizenservice.ConsentTO;
+import fi.arcusys.koku.tiva.citizenservice.User;
 import fi.arcusys.koku.users.KokuUser;
 import fi.arcusys.koku.util.MessageUtil;
 
@@ -104,6 +105,9 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 		if(consent.getStatus() != null) {
 			kokuConsent.setStatus(localizeConsentStatus(consent.getStatus()));
 		}
+		for (User receipient : consent.getReceipientUserInfos()) {
+			kokuConsent.getRecipientUsers().add(new KokuUser(receipient));			
+		}
 		kokuConsent.setApprovalStatus(localizeApprovalConsentStatus(consent.getApprovalStatus()));		
 		kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
 		kokuConsent.setValidDate(MessageUtil.formatTaskDateByDay(consent.getValidTill()));
@@ -159,6 +163,9 @@ public class TivaCitizenServiceHandle extends AbstractHandle {
 		kokuConsent.setCreateType(localizeConsentCreateType(consent.getCreateType()));
 		if(consent.getStatus() != null) {
 			kokuConsent.setStatus(localizeConsentStatus(consent.getStatus()));
+		}
+		for (User receipient : consent.getReceipientUserInfos()) {
+			kokuConsent.getRecipientUsers().add(new KokuUser(receipient));			
 		}
 		kokuConsent.setApprovalStatus(localizeApprovalConsentStatus(consent.getApprovalStatus()));			
 		kokuConsent.setAssignedDate(MessageUtil.formatTaskDateByDay(consent.getGivenAt()));
