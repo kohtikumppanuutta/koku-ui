@@ -31,7 +31,7 @@
 		<c:if test="${appointment.model.targetPersonUser != null}">
 		<span class="request-c-1"><spring:message code="appointment.targetPerson"/>:</span> <c:out value="${appointment.model.targetPersonUser.fullName}" /><br />
 		</c:if>
-		<span class="request-c-1"><spring:message code="appointment.replier"/>:</span> <c:out value="${appointment.model.replier}" /><br />
+		<span class="request-c-1"><spring:message code="appointment.replier"/>:</span> <c:out value="${appointment.model.replierUser.fullName}" /><br />
 		<span class="request-c-1"><spring:message code="appointment.replierComment"/>:</span> <c:out value="${appointment.model.replierComment}" /><br />
 		
 		<c:if test="${appointment.model.slot != null}" >

@@ -62,7 +62,7 @@ KokuAjaxCitizen.prototype.showAppointment = function(index) {
 
 	var task = pageObj.tasks[index];
 	var appointmentId = task["appointmentId"];
-	var targetPerson = task['targetPersonUid'];
+	var targetPerson = task["targetPersonUser"]["uid"];
 	var url="";
 	
 	if (pageObj.taskType == "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE%>" 
