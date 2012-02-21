@@ -1,18 +1,17 @@
 package fi.arcusys.koku.tiva.warrant.model;
 
+import fi.arcusys.koku.users.KokuUser;
 import fi.arcusys.koku.util.MessageUtil;
 
 public class KokuAuthorizationSummary {
 	
-	private Long authorizationId;
-	private String receiverUid;
-    private String senderUid;
-    private String recieverName;
-    private String senderName;
+	private Long authorizationId;	
+	private KokuUser senderUser;
+	private KokuUser recieverUser;
+	private KokuUser targetPersonUser;
+	
     private KokuAuthorizationStatus status;
     private String localizedStatus;
-    private String targetPersonUid;
-    private String targetPersonName;
     private KokuValtakirjapohja template;
     
     private String validTill;
@@ -24,10 +23,10 @@ public class KokuAuthorizationSummary {
         
 	public KokuAuthorizationSummary(fi.arcusys.koku.tiva.warrant.citizenwarrantservice.AuthorizationShortSummary authShortSummary) {
 		authorizationId = authShortSummary.getAuthorizationId();
-		receiverUid = authShortSummary.getReceiverUid();
-		senderUid = authShortSummary.getSenderUid();
+		senderUser = new KokuUser(authShortSummary.getSenderUserInfo());
+		recieverUser = new KokuUser(authShortSummary.getReceiverUserInfo());
+		targetPersonUser = new KokuUser(authShortSummary.getTargetPersonUserInfo());
 		setStatusAsString(authShortSummary.getStatus().toString());
-		targetPersonUid = authShortSummary.getTargetPersonUid();
 		setTemplateCitizen(authShortSummary.getTemplate());
 		if (authShortSummary.getValidTill() != null) {
 			validTill = MessageUtil.formatTaskDateByDay(authShortSummary.getValidTill());
@@ -41,18 +40,16 @@ public class KokuAuthorizationSummary {
 		givenAt = MessageUtil.formatTaskDateByDay(authSummary.getGivenAt());
 		createdAt = MessageUtil.formatTaskDateByDay(authSummary.getCreatedAt());
 		validTill = MessageUtil.formatTaskDateByDay(authSummary.getValidTill());
-		receiverUid = authSummary.getReceiverUid();
-		senderUid = authSummary.getSenderUid();
 		setStatusAsString(authSummary.getStatus().toString());
 		setTypeAsString(authSummary.getType().toString());
 	}
 
 	public KokuAuthorizationSummary(fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationShortSummary authShortSummary) {
 		authorizationId = authShortSummary.getAuthorizationId();
-		receiverUid = authShortSummary.getReceiverUid();
-		senderUid = authShortSummary.getSenderUid();
+		senderUser = new KokuUser(authShortSummary.getSenderUserInfo());
+		recieverUser = new KokuUser(authShortSummary.getReceiverUserInfo());
+		targetPersonUser = new KokuUser(authShortSummary.getTargetPersonUserInfo());
 		setStatusAsString(authShortSummary.getStatus().toString());
-		targetPersonUid = authShortSummary.getTargetPersonUid();
 		setTemplateEmployee(authShortSummary.getTemplate());
 		if (authShortSummary.getValidTill() != null) {
 			validTill = MessageUtil.formatTaskDateByDay(authShortSummary.getValidTill());
@@ -66,12 +63,54 @@ public class KokuAuthorizationSummary {
 		givenAt = MessageUtil.formatTaskDateByDay(authSummary.getGivenAt());
 		createdAt = MessageUtil.formatTaskDateByDay(authSummary.getCreatedAt());
 		validTill = MessageUtil.formatTaskDateByDay(authSummary.getValidTill());
-		receiverUid = authSummary.getReceiverUid();
-		senderUid = authSummary.getSenderUid();
 		setStatusAsString(authSummary.getStatus().toString());
 		setTypeAsString(authSummary.getType().toString());
 	}
 	
+	
+	
+	/**
+	 * @return the senderUser
+	 */
+	public final KokuUser getSenderUser() {
+		return senderUser;
+	}
+
+	/**
+	 * @param senderUser the senderUser to set
+	 */
+	public final void setSenderUser(KokuUser senderUser) {
+		this.senderUser = senderUser;
+	}
+
+	/**
+	 * @return the recieverUser
+	 */
+	public final KokuUser getRecieverUser() {
+		return recieverUser;
+	}
+
+	/**
+	 * @param recieverUser the recieverUser to set
+	 */
+	public final void setRecieverUser(KokuUser recieverUser) {
+		this.recieverUser = recieverUser;
+	}
+
+	/**
+	 * @return the targetPersonUser
+	 */
+	public final KokuUser getTargetPersonUser() {
+		return targetPersonUser;
+	}
+
+	/**
+	 * @param targetPersonUser the targetPersonUser to set
+	 */
+	public final void setTargetPersonUser(KokuUser targetPersonUser) {
+		this.targetPersonUser = targetPersonUser;
+	}
+
 	protected final void setStatusAsString(String status) {
 		setStatus(KokuAuthorizationStatus.valueOf(status));
 	}
@@ -96,36 +135,12 @@ public class KokuAuthorizationSummary {
 		this.authorizationId = authorizationId;
 	}
 
-	public String getReceiverUid() {
-		return receiverUid;
-	}
-
-	public void setReceiverUid(String receiverUid) {
-		this.receiverUid = receiverUid;
-	}
-
-	public String getSenderUid() {
-		return senderUid;
-	}
-
-	public void setSenderUid(String senderUid) {
-		this.senderUid = senderUid;
-	}
-
 	public KokuAuthorizationStatus getStatus() {
 		return status;
 	}
 
 	public void setStatus(KokuAuthorizationStatus status) {
 		this.status = status;
-	}
-
-	public String getTargetPersonUid() {
-		return targetPersonUid;
-	}
-
-	public void setTargetPersonUid(String targetPersonUid) {
-		this.targetPersonUid = targetPersonUid;
 	}
 
 	public KokuValtakirjapohja getTemplate() {
@@ -176,22 +191,6 @@ public class KokuAuthorizationSummary {
 		this.type = type;
 	}
 
-	public String getRecieverName() {
-		return recieverName;
-	}
-
-	public void setRecieverName(String recieverName) {
-		this.recieverName = recieverName;
-	}
-
-	public String getSenderName() {
-		return senderName;
-	}
-
-	public void setSenderName(String senderName) {
-		this.senderName = senderName;
-	}
-
 	public String getLocalizedStatus() {
 		return localizedStatus;
 	}
@@ -208,25 +207,24 @@ public class KokuAuthorizationSummary {
 		this.localizedType = localizedType;
 	}
 
-	public String getTargetPersonName() {
-		return targetPersonName;
-	}
-
-	public void setTargetPersonName(String targetPersonName) {
-		this.targetPersonName = targetPersonName;
-	}
-
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "KokuAuthorizationSummary [authorizationId=" + authorizationId
-				+ ", receiverUid=" + receiverUid + ", senderUid=" + senderUid
-				+ ", recieverName=" + recieverName + ", senderName="
-				+ senderName + ", status=" + status + ", targetPersonUid="
-				+ targetPersonUid + ", template=" + template + ", validTill="
-				+ validTill + ", createdAt=" + createdAt + ", givenAt="
-				+ givenAt + ", replyTill=" + replyTill + ", type=" + type + "]";
+				+ ", senderUser=" + senderUser + ", recieverUser="
+				+ recieverUser + ", targetPersonUser=" + targetPersonUser
+				+ ", status=" + status + ", localizedStatus=" + localizedStatus
+				+ ", template=" + template + ", validTill=" + validTill
+				+ ", createdAt=" + createdAt + ", givenAt=" + givenAt
+				+ ", replyTill=" + replyTill + ", type=" + type
+				+ ", localizedType=" + localizedType + "]";
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -237,18 +235,19 @@ public class KokuAuthorizationSummary {
 				+ ((createdAt == null) ? 0 : createdAt.hashCode());
 		result = prime * result + ((givenAt == null) ? 0 : givenAt.hashCode());
 		result = prime * result
-				+ ((receiverUid == null) ? 0 : receiverUid.hashCode());
+				+ ((localizedStatus == null) ? 0 : localizedStatus.hashCode());
 		result = prime * result
-				+ ((recieverName == null) ? 0 : recieverName.hashCode());
+				+ ((localizedType == null) ? 0 : localizedType.hashCode());
+		result = prime * result
+				+ ((recieverUser == null) ? 0 : recieverUser.hashCode());
 		result = prime * result
 				+ ((replyTill == null) ? 0 : replyTill.hashCode());
 		result = prime * result
-				+ ((senderName == null) ? 0 : senderName.hashCode());
-		result = prime * result
-				+ ((senderUid == null) ? 0 : senderUid.hashCode());
+				+ ((senderUser == null) ? 0 : senderUser.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		result = prime * result
-				+ ((targetPersonUid == null) ? 0 : targetPersonUid.hashCode());
+		result = prime
+				* result
+				+ ((targetPersonUser == null) ? 0 : targetPersonUser.hashCode());
 		result = prime * result
 				+ ((template == null) ? 0 : template.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
@@ -257,6 +256,9 @@ public class KokuAuthorizationSummary {
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -269,7 +271,7 @@ public class KokuAuthorizationSummary {
 			return false;
 		}
 		KokuAuthorizationSummary other = (KokuAuthorizationSummary) obj;
-		if (authorizationId == null) { 
+		if (authorizationId == null) {
 			if (other.authorizationId != null) {
 				return false;
 			}
@@ -290,18 +292,25 @@ public class KokuAuthorizationSummary {
 		} else if (!givenAt.equals(other.givenAt)) {
 			return false;
 		}
-		if (receiverUid == null) {
-			if (other.receiverUid != null) {
+		if (localizedStatus == null) {
+			if (other.localizedStatus != null) {
 				return false;
 			}
-		} else if (!receiverUid.equals(other.receiverUid)) {
+		} else if (!localizedStatus.equals(other.localizedStatus)) {
 			return false;
 		}
-		if (recieverName == null) {
-			if (other.recieverName != null) {
+		if (localizedType == null) {
+			if (other.localizedType != null) {
 				return false;
 			}
-		} else if (!recieverName.equals(other.recieverName)) {
+		} else if (!localizedType.equals(other.localizedType)) {
+			return false;
+		}
+		if (recieverUser == null) {
+			if (other.recieverUser != null) {
+				return false;
+			}
+		} else if (!recieverUser.equals(other.recieverUser)) {
 			return false;
 		}
 		if (replyTill == null) {
@@ -311,28 +320,21 @@ public class KokuAuthorizationSummary {
 		} else if (!replyTill.equals(other.replyTill)) {
 			return false;
 		}
-		if (senderName == null) { 
-			if (other.senderName != null) {
+		if (senderUser == null) {
+			if (other.senderUser != null) {
 				return false;
 			}
-		} else if (!senderName.equals(other.senderName)) {
-			return false;
-		}
-		if (senderUid == null) {
-			if (other.senderUid != null) {
-				return false;
-			}
-		} else if (!senderUid.equals(other.senderUid)) {
+		} else if (!senderUser.equals(other.senderUser)) {
 			return false;
 		}
 		if (status != other.status) {
 			return false;
 		}
-		if (targetPersonUid == null) {
-			if (other.targetPersonUid != null) {
+		if (targetPersonUser == null) {
+			if (other.targetPersonUser != null) {
 				return false;
 			}
-		} else if (!targetPersonUid.equals(other.targetPersonUid)) {
+		} else if (!targetPersonUser.equals(other.targetPersonUser)) {
 			return false;
 		}
 		if (template == null) {
@@ -354,4 +356,6 @@ public class KokuAuthorizationSummary {
 		}
 		return true;
 	}
+
+	
 }

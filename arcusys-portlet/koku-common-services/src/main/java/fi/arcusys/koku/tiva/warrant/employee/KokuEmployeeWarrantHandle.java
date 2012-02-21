@@ -161,10 +161,7 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 	}
 	
 	private void localize(KokuAuthorizationSummary kokuSummary) throws KokuServiceException {
-		kokuSummary.setRecieverName(userService.getKunpoNameByUserUid(kokuSummary.getReceiverUid()));
-		kokuSummary.setSenderName(userService.getKunpoNameByUserUid(kokuSummary.getSenderUid()));
 		kokuSummary.setLocalizedStatus(getLocalizedAuthStatus(kokuSummary.getStatus()));
-		kokuSummary.setTargetPersonName(userService.getKunpoNameByUserUid(kokuSummary.getTargetPersonUid()));
 	}
 
 	public List<KokuValtakirjapohja> searchAuthorizationTemplates(String searchString, int limit) throws KokuServiceException {

@@ -17,9 +17,9 @@
 		<div id="show-message" style="padding:12px">
 		<span class="text-bold"><spring:message code="warrant.templateName" />:</span> <c:out value="${warrant.model.template.templateName}" /><br />
 		<span class="text-bold"><spring:message code="warrant.templateDescription" />:</span> <c:out value="${warrant.model.template.description}" /><br />
-		<span class="text-bold"><spring:message code="warrant.receiver"/>:</span> <c:out value="${warrant.model.recieverName}" /><br />
-		<span class="text-bold"><spring:message code="warrant.sender"/>:</span> <c:out value="${warrant.model.senderName}" /><br />
-		<span class="text-bold"><spring:message code="warrant.targetPersonName"/>:</span> <c:out value="${warrant.model.targetPersonName}" /><br />		
+		<span class="text-bold"><spring:message code="warrant.receiver"/>:</span> <c:out value="${warrant.model.recieverUser.fullName}" /><br />
+		<span class="text-bold"><spring:message code="warrant.sender"/>:</span> <c:out value="${warrant.model.senderUser.fullName}" /><br />
+		<span class="text-bold"><spring:message code="warrant.targetPersonName"/>:</span> <c:out value="${warrant.model.targetPersonUser.fullName}" /><br />		
 		<span class="text-bold"><spring:message code="warrant.status"/>:</span> <c:out value="${warrant.model.localizedStatus}" /><br />
 	<%-- 	<span class="text-bold"><spring:message code="warrant.createType"/>:</span> <c:out value="${warrant.model.localizedType}" /><br /> --%>
 		<span class="text-bold"><spring:message code="warrant.createdAt"/>:</span> <c:out value="${warrant.model.createdAt}" /><br />

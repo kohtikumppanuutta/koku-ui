@@ -92,6 +92,26 @@ public class KokuUser {
 		}
 	}
 	
+	public KokuUser(fi.arcusys.koku.tiva.warrant.citizenwarrantservice.User user) {
+		if (user != null) {
+			setFirstname(user.getFirstname());
+			setLastname(user.getLastname());
+			setDisplayname(user.getDisplayName());
+			setPhoneNumber(user.getPhoneNumber());
+			setEmail(user.getEmail());
+		}
+	}
+
+	public KokuUser(fi.arcusys.koku.tiva.warrant.employeewarrantservice.User user) {
+		if (user != null) {
+			setFirstname(user.getFirstname());
+			setLastname(user.getLastname());
+			setDisplayname(user.getDisplayName());
+			setPhoneNumber(user.getPhoneNumber());
+			setEmail(user.getEmail());
+		}
+	}
+
 	public final String getFirstname() {
 		return firstname;
 	}
