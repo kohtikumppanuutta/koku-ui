@@ -2,6 +2,7 @@ package fi.arcusys.koku.users;
 
 public class KokuUser {
 	
+	private String uid;
 	private String firstname;
 	private String lastname;
 	private String displayname;
@@ -111,6 +112,20 @@ public class KokuUser {
 			setEmail(user.getEmail());
 		}
 	}
+	
+		/**
+	 * @return the uid
+	 */
+	public final String getUid() {
+		return uid;
+	}
+
+	/**
+	 * @param uid the uid to set
+	 */
+	public final void setUid(String uid) {
+		this.uid = uid;
+	}
 
 	public final String getFirstname() {
 		return firstname;
@@ -160,13 +175,6 @@ public class KokuUser {
 		}
 	}
 
-	@Override
-	public String toString() {
-		return "KokuUser [firstname=" + firstname
-				+ ", lastname=" + lastname + ", displayname=" + displayname
-				+ ", phoneNumber=" + phoneNumber + ", email=" + email + "]";
-	}
-
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -183,6 +191,7 @@ public class KokuUser {
 				+ ((lastname == null) ? 0 : lastname.hashCode());
 		result = prime * result
 				+ ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
+		result = prime * result + ((uid == null) ? 0 : uid.hashCode());
 		return result;
 	}
 
@@ -236,7 +245,24 @@ public class KokuUser {
 		} else if (!phoneNumber.equals(other.phoneNumber)) {
 			return false;
 		}
+		if (uid == null) {
+			if (other.uid != null) {
+				return false;
+			}
+		} else if (!uid.equals(other.uid)) {
+			return false;
+		}
 		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "KokuUser [uid=" + uid + ", firstname=" + firstname
+				+ ", lastname=" + lastname + ", displayname=" + displayname
+				+ ", phoneNumber=" + phoneNumber + ", email=" + email + "]";
 	}
 	
 }

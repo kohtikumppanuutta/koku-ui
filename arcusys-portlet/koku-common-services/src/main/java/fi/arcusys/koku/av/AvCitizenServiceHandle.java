@@ -81,6 +81,7 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 			kokuAppointment.setSubject(appSummary.getSubject());
 			kokuAppointment.setDescription(appSummary.getDescription());
 			kokuAppointment.setTargetPersonUser(new KokuUser(appSummary.getTargetPersonUserInfo()));
+			kokuAppointment.getTargetPersonUser().setUid(appSummary.getTargetPersonUserInfo().getUid());
 			kokuAppointment.setStatus(localizeActionRequestStatus(appSummary.getStatus()));
 			appList.add(kokuAppointment);		
 		}		
