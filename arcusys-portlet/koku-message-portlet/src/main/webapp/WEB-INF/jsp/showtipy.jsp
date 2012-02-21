@@ -17,10 +17,10 @@
   <c:when test="${tipy.responseStatus == 'OK'}" >	   
 	<div id="task-manager-wrap" class="single">
 		<div id="show-message" style="padding:12px">
-			<span class="text-bold"><spring:message code="tipy.details.reciever" />:</span> <c:out value="${tipy.model.recieverName}" /><br />
-			<span class="text-bold"><spring:message code="tipy.details.sender" />:</span> <c:out value="${tipy.model.senderName}" /><br />
+			<span class="text-bold"><spring:message code="tipy.details.reciever" />:</span> <c:out value="${tipy.model.recieverUser.fullName}" /><br />
+			<span class="text-bold"><spring:message code="tipy.details.sender" />:</span> <c:out value="${tipy.model.senderUser.fullName}" /><br />
 			<span class="text-bold"><spring:message code="tipy.details.requestStatus" />:</span> <c:out value="${tipy.model.localizedStatus}" /><br />
-			<span class="text-bold"><spring:message code="tipy.details.targetPerson" />:</span> <c:out value="${tipy.model.targetPersonName}" /><br />
+			<span class="text-bold"><spring:message code="tipy.details.targetPerson" />:</span> <c:out value="${tipy.model.targetPersonUser.fullName}" /><br />
 			<span class="text-bold"><spring:message code="tipy.details.title" />:</span> <c:out value="${tipy.model.title}" /><br />
 			<span class="text-bold"><spring:message code="tipy.details.legislationinfo" />:</span> <c:out value="${tipy.model.legislationInfo}" /><br />
 			<span class="text-bold"><spring:message code="tipy.details.replyDescription" />:</span> <c:out value="${tipy.model.replyDescription}" /><br />

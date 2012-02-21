@@ -98,7 +98,28 @@ KokuEmployeeTable.prototype.createRequestsTable = function(tasks) {
  * Tietopyynnöt
  */
 KokuEmployeeTable.prototype.createInfoRequestsTable = function(tasks) { 
-	var taskHtml = "";
+
+	function getName(user) {
+		if (user["firstname"] === undefined || user["lastname"] === undefined
+			|| user["firstname"].length == 0 || user["lastname"].length == 0) {
+			return user["displayname"];	
+		} else {
+			return user["fullName"];
+		}			
+	}
+
+	function flattenTasksContent(tasks) {
+		for (var i = 0; i < tasks.length; i++)  {
+			if (tasks[i].recieverUser.displayname === undefined || tasks[i].recieverUser.displayname.length == 0) {
+				tasks[i]["recieverName"] = tasks[i].recieverRoleUid;
+			} else {
+				tasks[i]["recieverName"] = getName(tasks[i].recieverUser);		
+			}		
+			tasks[i]["senderName"] = getName(tasks[i].senderUser);
+			tasks[i]["targetPersonName"] = getName(tasks[i].targetPersonUser);
+		}
+	}
+
 	
 	if (tasks == undefined || tasks == null || tasks.length == 0) {
 		return KokuUtil.errorMsg.showErrorMsgYouDontHaveAnyTipys();
@@ -120,9 +141,8 @@ KokuEmployeeTable.prototype.createInfoRequestsTable = function(tasks) {
 	                 "localizedStatus"
 	                 // "validTill"
 	                 ];
-	
-	taskHtml += this.tableGenerator.createTable("kokuAjax.showTipy", "browseInfoRequests", columnNames, columnIds, tasks);		
-	return taskHtml;
+	flattenTasksContent(tasks);
+	return this.tableGenerator.createTable("kokuAjax.showTipy", "browseInfoRequests", columnNames, columnIds, tasks);		
 }
 
 

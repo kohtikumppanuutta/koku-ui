@@ -1,7 +1,5 @@
 package fi.arcusys.koku.users;
 
-import java.util.List;
-
 public class KokuUser {
 	
 	private String firstname;
@@ -84,6 +82,16 @@ public class KokuUser {
 		}
 	}
 
+	public KokuUser(fi.arcusys.koku.tiva.tietopyynto.employee.User user) {
+		if (user != null) {
+			setFirstname(user.getFirstname());
+			setLastname(user.getLastname());
+			setDisplayname(user.getDisplayName());
+			setPhoneNumber(user.getPhoneNumber());
+			setEmail(user.getEmail());
+		}
+	}
+	
 	public final String getFirstname() {
 		return firstname;
 	}
