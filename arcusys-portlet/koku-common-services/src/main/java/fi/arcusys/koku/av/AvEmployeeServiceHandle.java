@@ -59,8 +59,7 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	 */
 	public List<KokuAppointment> getAppointments(String userId, int startNum, int maxNum, String taskType, String keyword) throws KokuServiceException {		
 		
-		String targetPersonSsn = keyword;
-		
+		String targetPersonSsn = keyword;		
 		if(taskType.equals(TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE)) {
 			return getCreatedAppointments(userId, targetPersonSsn, startNum, maxNum);			
 		} else  if(taskType.equals(TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE)) {
@@ -68,8 +67,7 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		} else {
 			return new ArrayList<KokuAppointment>();
 		}
-	}
-	
+	}	
 	
 	public List<KokuAppointment> getCreatedAppointments(String userId, String targetPersonSsn, int startNum, int maxNum) throws KokuServiceException {
 		return getAppointmentList(aes.getCreatedAppointments(userId,  createAppointmentCriteria(targetPersonSsn), startNum, maxNum));
@@ -202,8 +200,7 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 					break;
 				}
 			}
-		}
-		
+		}		
 		return slots;
 	}
     
@@ -230,6 +227,7 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 		empAppointment.getApprovedSlots().addAll(approvedSlots);
 		empAppointment.getUnapprovedSlots().addAll(unapprovedSlots);	
 	}
+	
 	/**
 	 * Maps the recipients with the given targetPerson and convert the
 	 * recipients list to string
