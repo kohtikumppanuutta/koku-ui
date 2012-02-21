@@ -325,8 +325,8 @@ function presentTasks(tasks) {
 	} else if (pageObj.taskType.indexOf('application_') == 0) { // for applications (hakemukset)
 		kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_APPLICATION_KINDERGARTEN %>');
 		taskHtml += table.createApplicationsTable(tasks);	
-	} else {											// for message
-		taskHtml += table.createMessagesTable(tasks);
+	} else {													// for message
+		taskHtml += table.createMessagesTable(tasks, pageObj.taskType);
 	}
 	 
 	jQuery('#task-manager-tasklist').html(taskHtml);
