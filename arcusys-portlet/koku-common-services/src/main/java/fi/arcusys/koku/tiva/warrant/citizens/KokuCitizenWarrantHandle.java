@@ -3,26 +3,21 @@ package fi.arcusys.koku.tiva.warrant.citizens;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.warrant.AbstractWarrantHandle;
 import fi.arcusys.koku.tiva.warrant.citizenwarrantservice.AuthorizationShortSummary;
 import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationSummary;
-import fi.arcusys.koku.users.KokuUserService;
 
 
 public class KokuCitizenWarrantHandle extends AbstractWarrantHandle {
 
 	private final KokuCitizenWarrantService service;	
-	private final KokuUserService userService;	
 	
 	/**
 	 * Constructor and initialization
 	 */
 	public KokuCitizenWarrantHandle() {
 		service = new KokuCitizenWarrantService();
-		userService = new KokuUserService();
 	}
 
 	public List<KokuAuthorizationSummary> getSentWarrants(String userId, int startNum, int maxNum) throws KokuServiceException {
@@ -55,11 +50,6 @@ public class KokuCitizenWarrantHandle extends AbstractWarrantHandle {
 		}
 		if (summary.getType() != null) {
 			summary.setLocalizedType(getLocalizedWarrantCreateType(summary.getType()));
-		}
-		if (summary.getSenderUid() != null && summary.getReceiverUid() != null) {
-			summary.setSenderName(userService.getKunpoNameByUserUid(summary.getSenderUid()));
-			summary.setRecieverName(userService.getKunpoNameByUserUid(summary.getReceiverUid()));
-			summary.setTargetPersonName(userService.getKunpoNameByUserUid(summary.getTargetPersonUid()));
 		}
 		return summary;
 	}
