@@ -21,7 +21,8 @@ import fi.arcusys.koku.kv.messageservice.OrderBy;
 import fi.arcusys.koku.kv.messageservice.Type;
 import fi.arcusys.koku.kv.messageservice.User;
 import fi.arcusys.koku.kv.model.KokuFolderType;
-import fi.arcusys.koku.kv.model.Message;
+import fi.arcusys.koku.kv.model.KokuMessage;
+import fi.arcusys.koku.kv.messageservice.Message;
 import fi.arcusys.koku.users.KokuUser;
 import fi.arcusys.koku.util.MessageUtil;
 
@@ -57,7 +58,7 @@ public class MessageHandle extends AbstractHandle {
 	 * @param max maximum amount of messages
 	 * @return a list of messages
 	 */
-	public List<Message> getMessages(String userId, String messageType, String keyword, String field, String orderType, int start, int max) throws KokuServiceException {
+	public List<KokuMessage> getMessages(String userId, String messageType, String keyword, String field, String orderType, int start, int max) throws KokuServiceException {
 		FolderType folderType = MessageUtil.getFolderType(messageType);
 		MessageQuery messageQuery = new MessageQuery();
 		messageQuery.setStartNum(start);
@@ -75,24 +76,16 @@ public class MessageHandle extends AbstractHandle {
 		
 		List<MessageSummary> msgs;		
 		msgs = ms.getMessages(userId, folderType, messageQuery);
-		List<Message> msgList = new ArrayList<Message>();
-		Message message;		
+		List<KokuMessage> msgList = new ArrayList<KokuMessage>();
+		KokuMessage message;		
 		Iterator<MessageSummary> it = msgs.iterator();
 		
 		while(it.hasNext()) {
 			MessageSummary msgSum = it.next();
-			message = new Message();
-			message.setMessageId(msgSum.getMessageId());
-			message.setSender(msgSum.getSender());
-			message.setRecipients(formatRecipients(msgSum.getRecipients()));
-			message.setSubject(msgSum.getSubject());
-			message.setCreationDate(MessageUtil.formatTaskDate(msgSum.getCreationDate()));
-			message.setMessageType(MessageUtil.getMessageType(msgSum.getMessageType()));
-			message.setMessageStatus(msgSum.getMessageStatus().toString().toLowerCase());
-			
+			message = new KokuMessage();
+			convertMessageSummaryToKokuMessage(message, msgSum);
 			msgList.add(message);
-		}
-		
+		}		
 		return msgList;
 	}
 	
@@ -109,8 +102,7 @@ public class MessageHandle extends AbstractHandle {
 
 		FolderType folderType = MessageUtil.getFolderType(messageType);
 		/* sets the criteria for searching including keyword for each field, default is searching all fields */
-		Criteria criteria = createCriteria(keyword, field);		
-		
+		Criteria criteria = createCriteria(keyword, field);
 		return ms.getTotalMessageNum(userId, folderType, criteria);		
 	}
 	
@@ -126,27 +118,21 @@ public class MessageHandle extends AbstractHandle {
 	 * @param max maximum amount of messages
 	 * @return a list of messages
 	 */
-	public List<Message> getMessagesOld(String userId, String messageType, String keyword, String orderType, int start, int max) throws KokuServiceException {
+	public List<KokuMessage> getMessagesOld(String userId, String messageType, String keyword, String orderType, int start, int max) throws KokuServiceException {
 
 		FolderType folderType = MessageUtil.getFolderType(messageType);
 		String subQuery = "";
 		
 		List<MessageSummary> msgs;		
 		msgs = ms.getMessagesOld(userId, folderType, subQuery, start, max);
-		List<Message> msgList = new ArrayList<Message>();
-		Message message;		
+		List<KokuMessage> msgList = new ArrayList<KokuMessage>();
+		KokuMessage message;		
 		Iterator<MessageSummary> it = msgs.iterator();
 		
 		while(it.hasNext()) {
 			MessageSummary msgSum = it.next();
-			message = new Message();
-			message.setMessageId(msgSum.getMessageId());
-			message.setSender(msgSum.getSender());
-			message.setRecipients(formatRecipients(msgSum.getRecipients()));
-			message.setSubject(msgSum.getSubject());
-			message.setCreationDate(MessageUtil.formatTaskDate(msgSum.getCreationDate()));
-			message.setMessageType(MessageUtil.getMessageType(msgSum.getMessageType()));
-			message.setMessageStatus(localizeMsgStatus(msgSum.getMessageStatus()));
+			message = new KokuMessage();
+			convertMessageSummaryToKokuMessage(message, msgSum);
 			msgList.add(message);
 		}
 		
@@ -159,33 +145,43 @@ public class MessageHandle extends AbstractHandle {
 	 * @param messageId message id
 	 * @return detailed message
 	 */
-	public Message getMessageById(String messageId) throws KokuServiceException {
+	public KokuMessage getMessageById(String messageId) throws KokuServiceException {
 		long  msgId = 0;
 		try {
 			 msgId = (long) Long.parseLong(messageId);			
 		} catch (NumberFormatException nfe) {
 			LOG.error("Couldn't show message details, because messageId can't parse properly (must be long). Given MessageId: "+messageId, nfe);
-			return new Message();
+			return new KokuMessage();
 		}
-		setMessageStatus(msgId);
-		
-		fi.arcusys.koku.kv.messageservice.Message msg = ms.getMessageById(msgId);
-		Message message = new Message();
-		message.setMessageId(msg.getMessageId());
-		message.setSender(msg.getSender());
-		message.setRecipients(formatRecipients(msg.getRecipients()));
-		message.setSubject(msg.getSubject());
-		message.setContent(msg.getContent());
-		message.setMessageType(msg.getMessageType().toString());
-		message.setCreationDate(MessageUtil.formatTaskDate(msg.getCreationDate()));
-		message.setMessageStatus(localizeMsgStatus(msg.getMessageStatus()));
-		if (msg.getDeliveryFailedTo() != null) {
-			for (User user : msg.getDeliveryFailedTo()) {
-				message.getDeliveryFailedTo().add(new KokuUser(user));				
-			}
-		}
+		setMessageStatusRead(msgId);		
+		Message msg = ms.getMessageById(msgId);
+		KokuMessage message = new KokuMessage();
+		convertMessageToKokuMessage(message, msg);
 		return message;
 	}
+	
+	private void convertMessageSummaryToKokuMessage(KokuMessage kokuMessage, MessageSummary message) {
+		kokuMessage.setMessageId(message.getMessageId());
+		kokuMessage.setSubject(message.getSubject());
+		kokuMessage.setCreationDate(MessageUtil.formatTaskDate(message.getCreationDate()));
+		kokuMessage.setMessageType(MessageUtil.getMessageType(message.getMessageType()));
+		kokuMessage.setMessageStatus(localizeMsgStatus(message.getMessageStatus()));
+		for (User recipientUser : message.getRecipientUserInfos()) {
+			kokuMessage.getRecipientUsers().add(new KokuUser(recipientUser));
+		}
+		kokuMessage.setSenderUser(new KokuUser(message.getSenderUserInfo()));
+	}
+	
+	private void convertMessageToKokuMessage(KokuMessage kokuMessge, Message message) {
+		convertMessageSummaryToKokuMessage(kokuMessge, message);
+		if (message.getDeliveryFailedTo() != null) {
+			for (User user : message.getDeliveryFailedTo()) {
+				kokuMessge.getDeliveryFailedTo().add(new KokuUser(user));				
+			}
+		}
+		kokuMessge.setContent(message.getContent());
+	}
+	
 	
 	private String localizeMsgStatus(MessageStatus status ) {
 		if (getMessageSource() == null) {
@@ -214,7 +210,7 @@ public class MessageHandle extends AbstractHandle {
 	 * 
 	 * @param messageId message id
 	 */
-	public void setMessageStatus(long messageId) {
+	private void setMessageStatusRead(long messageId) {
 		List<Long> messageIds = new ArrayList<Long>();	
 		messageIds.add(messageId);	
 		ms.setMessageStatus(messageIds, MessageStatus.READ);
@@ -273,25 +269,25 @@ public class MessageHandle extends AbstractHandle {
 	 * @param recipients a list of recipients of message
 	 * @return recipient string to be presented
 	 */
-	public String formatRecipients(List<String> recipients) {
-		Iterator<String> it = recipients.iterator();
-		String recipientStr = "";
-		String recipient;
-		
-		while(it.hasNext()) {
-			recipient = it.next();
-			
-			if(recipient.trim().length() > 0) {
-				recipientStr += recipient + ", ";
-			}
-		}
-		
-		if(recipientStr.lastIndexOf(",") > 0) {
-			recipientStr = recipientStr.substring(0, recipientStr.length()-2);
-		}
-		
-		return recipientStr;
-	}
+//	public String formatRecipients(List<String> recipients) {
+//		Iterator<String> it = recipients.iterator();
+//		String recipientStr = "";
+//		String recipient;
+//		
+//		while(it.hasNext()) {
+//			recipient = it.next();
+//			
+//			if(recipient.trim().length() > 0) {
+//				recipientStr += recipient + ", ";
+//			}
+//		}
+//		
+//		if(recipientStr.lastIndexOf(",") > 0) {
+//			recipientStr = recipientStr.substring(0, recipientStr.length()-2);
+//		}
+//		
+//		return recipientStr;
+//	}
 	
 	/**
 	 * Creates filtering criteria

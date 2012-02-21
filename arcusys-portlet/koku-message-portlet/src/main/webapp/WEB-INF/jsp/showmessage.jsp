@@ -3,7 +3,7 @@
 <%@page import="java.util.Collections"%>
 <%@ page import="net.sf.json.JSONArray"%>
 <%@ include file="init.jsp"%>
-<%@ page import="fi.arcusys.koku.kv.model.Message" %>
+<%@ page import="fi.arcusys.koku.kv.model.KokuMessage" %>
 <%@ page import="fi.arcusys.koku.users.KokuUser" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
@@ -14,9 +14,7 @@
 	<portlet:param name="myaction" value="home" />
 </portlet:renderURL>
 
-<%!
-
-public String htmlToCode_old(String s)
+<%!public String htmlToCode_old(String s)
 {
 	if(s == null) {
 		return "";
@@ -45,30 +43,29 @@ public String htmlToCode(String s)
 		s = s.replace("'", "&rsquo;");
 		return s;
 	}
-} 
-%>
+}%>
 
 <%@ include file="js_koku_detail.jspf" %>
 
 
 <%
 	ResponseStatus responseResult = ResponseStatus.FAIL;
-	ModelWrapper<Message> messageModel = (ModelWrapper<Message>) request.getAttribute("message");
+	ModelWrapper<KokuMessage> messageModel = (ModelWrapper<KokuMessage>) request.getAttribute("message");
 	responseResult = messageModel.getResponseStatus();
 	
 	List<String> missingUserNames = new ArrayList<String>();
 	String content = null;
 	JSONArray usernameArray = JSONArray.fromObject(missingUserNames);
 	if (responseResult.equals(ResponseStatus.OK)) {
-		Message message = messageModel.getModel();
+		KokuMessage message = messageModel.getModel();
 		String srcContent = message.getContent();
 		content = htmlToCode(srcContent);
 		List<KokuUser> missingUsers = message.getDeliveryFailedTo();
 		
 		if (!missingUsers.isEmpty()) {
-			for (KokuUser user : missingUsers) {
-				missingUserNames.add(user.getFullName());
-			}
+	for (KokuUser user : missingUsers) {
+		missingUserNames.add(user.getFullName());
+	}
 		}
 		usernameArray = JSONArray.fromObject(missingUserNames);
 	}

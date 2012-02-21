@@ -125,7 +125,11 @@ public class KokuUser {
 	}
 	
 	public final String getFullName() {
-		return firstname + " " + lastname;
+		if (firstname == null || lastname == null) {
+			return null;
+		} else {
+			return firstname + " " + lastname;			
+		}
 	}
 
 	@Override
