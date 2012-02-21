@@ -14,7 +14,6 @@
 <xs:element name="getTotalRepliedRequestsResponse" type="tns:getTotalRepliedRequestsResponse" />
 <xs:element name="getTotalRequests" type="tns:getTotalRequests" />
 <xs:element name="getTotalRequestsResponse" type="tns:getTotalRequestsResponse" />
-
 <xs:element name="getTotalSentRequests" type="tns:getTotalSentRequests" />
 <xs:element name="getTotalSentRequestsResponse" type="tns:getTotalSentRequestsResponse" />
 <xs:complexType name="getSentRequests">
@@ -32,7 +31,6 @@
 </xs:complexType>
 <xs:complexType name="informationRequestCriteria">
 <xs:sequence>
-
 <xs:element minOccurs="0" name="createdFromDate" type="xs:date" />
 <xs:element minOccurs="0" name="createdToDate" type="xs:date" />
 <xs:element minOccurs="0" name="freeText" type="xs:string" />
@@ -50,7 +48,6 @@
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="informationRequestSummary">
-
 <xs:sequence>
 <xs:element minOccurs="0" name="receiverRoleUid" type="xs:string" />
 <xs:element minOccurs="0" name="receiverUid" type="xs:string" />
@@ -68,7 +65,6 @@
 <xs:complexType name="getRepliedRequests">
 <xs:sequence>
 <xs:element minOccurs="0" name="receiverUid" type="xs:string" />
-
 <xs:element minOccurs="0" name="query" type="tns:informationRequestQuery" />
 </xs:sequence>
 </xs:complexType>
@@ -86,7 +82,6 @@
 <xs:complexType name="getTotalRepliedRequestsResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:int" />
-
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getTotalRequests">
@@ -104,7 +99,6 @@
 <xs:element minOccurs="0" name="arg0" type="xs:string" />
 <xs:element minOccurs="0" name="criteria" type="tns:informationRequestCriteria" />
 </xs:sequence>
-
 </xs:complexType>
 <xs:complexType name="getTotalSentRequestsResponse">
 <xs:sequence>
@@ -122,7 +116,6 @@
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getRequestDetails">
-
 <xs:sequence>
 <xs:element name="requestId" type="xs:long" />
 </xs:sequence>
@@ -140,7 +133,6 @@
 <xs:element minOccurs="0" name="additionalInfo" type="xs:string" />
 <xs:element minOccurs="0" name="additionalReplyInfo" type="xs:string" />
 <xs:element minOccurs="0" name="attachmentURL" type="xs:string" />
-
 <xs:element maxOccurs="unbounded" minOccurs="0" name="categories" nillable="true" type="xs:string" />
 <xs:element minOccurs="0" name="createdDate" type="xs:date" />
 <xs:element minOccurs="0" name="description" type="xs:string" />
@@ -158,7 +150,6 @@
 <xs:enumeration value="Valid" />
 <xs:enumeration value="Expired" />
 <xs:enumeration value="Declined" />
-
 </xs:restriction>
 </xs:simpleType>
 <xs:simpleType name="informationAccessType">
@@ -176,7 +167,6 @@
 <xs:element minOccurs="0" name="displayName" type="xs:string" />
 <xs:element minOccurs="0" name="email" type="xs:string" />
 <xs:element minOccurs="0" name="firstname" type="xs:string" />
-
 <xs:element minOccurs="0" name="lastname" type="xs:string" />
 <xs:element minOccurs="0" name="phoneNumber" type="xs:string" />
 <xs:element minOccurs="0" name="uid" type="xs:string" />
@@ -192,7 +182,6 @@
   </wsdl:types>
   <wsdl:message name="getTotalSentRequestsResponse">
     <wsdl:part element="tns:getTotalSentRequestsResponse" name="parameters">
-
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getTotalRepliedRequestsResponse">
@@ -202,7 +191,6 @@
   <wsdl:message name="getRepliedRequests">
     <wsdl:part element="tns:getRepliedRequests" name="parameters">
     </wsdl:part>
-
   </wsdl:message>
   <wsdl:message name="getRequestDetails">
     <wsdl:part element="tns:getRequestDetails" name="parameters">
@@ -212,7 +200,6 @@
     <wsdl:part element="tns:getRequests" name="parameters">
     </wsdl:part>
   </wsdl:message>
-
   <wsdl:message name="getRepliedRequestsResponse">
     <wsdl:part element="tns:getRepliedRequestsResponse" name="parameters">
     </wsdl:part>
@@ -222,7 +209,6 @@
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getTotalRepliedRequests">
-
     <wsdl:part element="tns:getTotalRepliedRequests" name="parameters">
     </wsdl:part>
   </wsdl:message>
@@ -232,7 +218,6 @@
   </wsdl:message>
   <wsdl:message name="getSentRequestsResponse">
     <wsdl:part element="tns:getSentRequestsResponse" name="parameters">
-
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getTotalSentRequests">
@@ -242,7 +227,6 @@
   <wsdl:message name="getRequestsResponse">
     <wsdl:part element="tns:getRequestsResponse" name="parameters">
     </wsdl:part>
-
   </wsdl:message>
   <wsdl:message name="getTotalRequestsResponse">
     <wsdl:part element="tns:getTotalRequestsResponse" name="parameters">
@@ -252,7 +236,6 @@
     <wsdl:part element="tns:getSentRequests" name="parameters">
     </wsdl:part>
   </wsdl:message>
-
   <wsdl:portType name="KokuLooraTietopyyntoService">
     <wsdl:operation name="getSentRequests">
       <wsdl:input message="tns:getSentRequests" name="getSentRequests">
@@ -262,7 +245,6 @@
     </wsdl:operation>
     <wsdl:operation name="getRepliedRequests">
       <wsdl:input message="tns:getRepliedRequests" name="getRepliedRequests">
-
     </wsdl:input>
       <wsdl:output message="tns:getRepliedRequestsResponse" name="getRepliedRequestsResponse">
     </wsdl:output>
@@ -272,7 +254,6 @@
     </wsdl:input>
       <wsdl:output message="tns:getTotalRepliedRequestsResponse" name="getTotalRepliedRequestsResponse">
     </wsdl:output>
-
     </wsdl:operation>
     <wsdl:operation name="getTotalRequests">
       <wsdl:input message="tns:getTotalRequests" name="getTotalRequests">
@@ -282,7 +263,6 @@
     </wsdl:operation>
     <wsdl:operation name="getTotalSentRequests">
       <wsdl:input message="tns:getTotalSentRequests" name="getTotalSentRequests">
-
     </wsdl:input>
       <wsdl:output message="tns:getTotalSentRequestsResponse" name="getTotalSentRequestsResponse">
     </wsdl:output>
@@ -292,7 +272,6 @@
     </wsdl:input>
       <wsdl:output message="tns:getRequestsResponse" name="getRequestsResponse">
     </wsdl:output>
-
     </wsdl:operation>
     <wsdl:operation name="getRequestDetails">
       <wsdl:input message="tns:getRequestDetails" name="getRequestDetails">
@@ -302,7 +281,6 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="KokuLooraTietopyyntoServiceSoapBinding" type="tns:KokuLooraTietopyyntoService">
-
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="getSentRequests">
       <soap:operation soapAction="" style="document" />
@@ -312,7 +290,6 @@
       <wsdl:output name="getSentRequestsResponse">
         <soap:body use="literal" />
       </wsdl:output>
-
     </wsdl:operation>
     <wsdl:operation name="getRepliedRequests">
       <soap:operation soapAction="" style="document" />
@@ -322,7 +299,6 @@
       <wsdl:output name="getRepliedRequestsResponse">
         <soap:body use="literal" />
       </wsdl:output>
-
     </wsdl:operation>
     <wsdl:operation name="getTotalRepliedRequests">
       <soap:operation soapAction="" style="document" />
@@ -332,7 +308,6 @@
       <wsdl:output name="getTotalRepliedRequestsResponse">
         <soap:body use="literal" />
       </wsdl:output>
-
     </wsdl:operation>
     <wsdl:operation name="getTotalRequests">
       <soap:operation soapAction="" style="document" />
@@ -342,7 +317,6 @@
       <wsdl:output name="getTotalRequestsResponse">
         <soap:body use="literal" />
       </wsdl:output>
-
     </wsdl:operation>
     <wsdl:operation name="getTotalSentRequests">
       <soap:operation soapAction="" style="document" />
@@ -352,7 +326,6 @@
       <wsdl:output name="getTotalSentRequestsResponse">
         <soap:body use="literal" />
       </wsdl:output>
-
     </wsdl:operation>
     <wsdl:operation name="getRequests">
       <soap:operation soapAction="" style="document" />
@@ -362,7 +335,6 @@
       <wsdl:output name="getRequestsResponse">
         <soap:body use="literal" />
       </wsdl:output>
-
     </wsdl:operation>
     <wsdl:operation name="getRequestDetails">
       <soap:operation soapAction="" style="document" />
@@ -372,7 +344,6 @@
       <wsdl:output name="getRequestDetailsResponse">
         <soap:body use="literal" />
       </wsdl:output>
-
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="KokuLooraTietopyyntoService">

@@ -14,7 +14,6 @@
 <xs:element name="getResponseDetailResponse" type="tns:getResponseDetailResponse" />
 <xs:element name="getTotalOldRequests" type="tns:getTotalOldRequests" />
 <xs:element name="getTotalOldRequestsResponse" type="tns:getTotalOldRequestsResponse" />
-
 <xs:element name="getTotalRepliedRequests" type="tns:getTotalRepliedRequests" />
 <xs:element name="getTotalRepliedRequestsResponse" type="tns:getTotalRepliedRequestsResponse" />
 <xs:element name="getTotalRequests" type="tns:getTotalRequests" />
@@ -32,7 +31,6 @@
 <xs:complexType name="getResponseDetail">
 <xs:sequence>
 <xs:element name="arg0" type="xs:long" />
-
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getResponseDetailResponse">
@@ -50,7 +48,6 @@
 </xs:sequence>
 </xs:extension>
 </xs:complexContent>
-
 </xs:complexType>
 <xs:complexType name="responseSummary">
 <xs:sequence>
@@ -68,7 +65,6 @@
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="question">
-
 <xs:sequence>
 <xs:element minOccurs="0" name="description" type="xs:string" />
 <xs:element name="number" type="xs:int" />
@@ -86,7 +82,6 @@
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getRepliedRequests">
-
 <xs:sequence>
 <xs:element minOccurs="0" name="userUid" type="xs:string" />
 <xs:element name="startNum" type="xs:int" />
@@ -104,7 +99,6 @@
 <xs:element minOccurs="0" name="requestType" type="tns:requestType" />
 <xs:element minOccurs="0" name="subQuery" type="xs:string" />
 <xs:element name="startNum" type="xs:int" />
-
 <xs:element name="maxNum" type="xs:int" />
 </xs:sequence>
 </xs:complexType>
@@ -122,7 +116,6 @@
 </xs:sequence>
 </xs:extension>
 </xs:complexContent>
-
 </xs:complexType>
 <xs:complexType name="getTotalRequests">
 <xs:sequence>
@@ -140,7 +133,6 @@
 <xs:element name="requestId" type="xs:long" />
 </xs:sequence>
 </xs:complexType>
-
 <xs:complexType name="getRequestByIdResponse">
 <xs:sequence>
 <xs:element minOccurs="0" name="return" type="tns:request" />
@@ -158,7 +150,6 @@
 </xs:extension>
 </xs:complexContent>
 </xs:complexType>
-
 <xs:complexType name="response">
 <xs:sequence>
 <xs:element maxOccurs="unbounded" minOccurs="0" name="answers" nillable="true" type="tns:answer" />
@@ -176,7 +167,6 @@
 </xs:complexType>
 <xs:complexType name="getOldRequestsResponse">
 <xs:sequence>
-
 <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:responseSummary" />
 </xs:sequence>
 </xs:complexType>
@@ -194,7 +184,6 @@
 <xs:restriction base="xs:string">
 <xs:enumeration value="YES_NO" />
 <xs:enumeration value="FREE_TEXT" />
-
 <xs:enumeration value="MULTIPLE_CHOICE" />
 <xs:enumeration value="CALENDAR" />
 <xs:enumeration value="NUMBER" />
@@ -212,7 +201,6 @@
 <xs:element name="performResponse" type="tns:performResponse" />
 <xs:complexType name="user">
 <xs:sequence>
-
 <xs:element minOccurs="0" name="displayName" type="xs:string" />
 <xs:element minOccurs="0" name="email" type="xs:string" />
 <xs:element minOccurs="0" name="firstname" type="xs:string" />
@@ -229,7 +217,6 @@
 </xs:complexType>
 </xs:schema>
   </wsdl:types>
-
   <wsdl:message name="getOldRequests">
     <wsdl:part element="tns:getOldRequests" name="parameters">
     </wsdl:part>
@@ -239,7 +226,6 @@
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getTotalRequestsResponse">
-
     <wsdl:part element="tns:getTotalRequestsResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
@@ -249,7 +235,6 @@
   </wsdl:message>
   <wsdl:message name="getTotalRepliedRequests">
     <wsdl:part element="tns:getTotalRepliedRequests" name="parameters">
-
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getTotalRequests">
@@ -259,7 +244,6 @@
   <wsdl:message name="getRequestById">
     <wsdl:part element="tns:getRequestById" name="parameters">
     </wsdl:part>
-
   </wsdl:message>
   <wsdl:message name="getRequests">
     <wsdl:part element="tns:getRequests" name="parameters">
@@ -269,7 +253,6 @@
     <wsdl:part element="tns:getTotalRepliedRequestsResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-
   <wsdl:message name="getOldRequestsResponse">
     <wsdl:part element="tns:getOldRequestsResponse" name="parameters">
     </wsdl:part>
@@ -279,7 +262,6 @@
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getRequestByIdResponse">
-
     <wsdl:part element="tns:getRequestByIdResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
@@ -289,7 +271,6 @@
   </wsdl:message>
   <wsdl:message name="getTotalOldRequestsResponse">
     <wsdl:part element="tns:getTotalOldRequestsResponse" name="parameters">
-
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getResponseDetail">
@@ -299,7 +280,6 @@
   <wsdl:message name="getTotalOldRequests">
     <wsdl:part element="tns:getTotalOldRequests" name="parameters">
     </wsdl:part>
-
   </wsdl:message>
   <wsdl:portType name="KokuRequestService">
     <wsdl:operation name="getTotalOldRequests">
@@ -309,7 +289,6 @@
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getResponseDetail">
-
       <wsdl:input message="tns:getResponseDetail" name="getResponseDetail">
     </wsdl:input>
       <wsdl:output message="tns:getResponseDetailResponse" name="getResponseDetailResponse">
@@ -319,7 +298,6 @@
       <wsdl:input message="tns:getRepliedRequests" name="getRepliedRequests">
     </wsdl:input>
       <wsdl:output message="tns:getRepliedRequestsResponse" name="getRepliedRequestsResponse">
-
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getRequests">
@@ -329,7 +307,6 @@
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getTotalRequests">
-
       <wsdl:input message="tns:getTotalRequests" name="getTotalRequests">
     </wsdl:input>
       <wsdl:output message="tns:getTotalRequestsResponse" name="getTotalRequestsResponse">
@@ -339,7 +316,6 @@
       <wsdl:input message="tns:getRequestById" name="getRequestById">
     </wsdl:input>
       <wsdl:output message="tns:getRequestByIdResponse" name="getRequestByIdResponse">
-
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getOldRequests">
@@ -349,7 +325,6 @@
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getTotalRepliedRequests">
-
       <wsdl:input message="tns:getTotalRepliedRequests" name="getTotalRepliedRequests">
     </wsdl:input>
       <wsdl:output message="tns:getTotalRepliedRequestsResponse" name="getTotalRepliedRequestsResponse">
@@ -359,7 +334,6 @@
   <wsdl:binding name="KokuRequestServiceSoapBinding" type="tns:KokuRequestService">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="getTotalOldRequests">
-
       <soap:operation soapAction="" style="document" />
       <wsdl:input name="getTotalOldRequests">
         <soap:body use="literal" />
@@ -369,7 +343,6 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getResponseDetail">
-
       <soap:operation soapAction="" style="document" />
       <wsdl:input name="getResponseDetail">
         <soap:body use="literal" />
@@ -379,7 +352,6 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getRepliedRequests">
-
       <soap:operation soapAction="" style="document" />
       <wsdl:input name="getRepliedRequests">
         <soap:body use="literal" />
@@ -389,7 +361,6 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getRequests">
-
       <soap:operation soapAction="" style="document" />
       <wsdl:input name="getRequests">
         <soap:body use="literal" />
@@ -399,7 +370,6 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getRequestById">
-
       <soap:operation soapAction="" style="document" />
       <wsdl:input name="getRequestById">
         <soap:body use="literal" />
@@ -409,7 +379,6 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getTotalRequests">
-
       <soap:operation soapAction="" style="document" />
       <wsdl:input name="getTotalRequests">
         <soap:body use="literal" />
@@ -419,7 +388,6 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getOldRequests">
-
       <soap:operation soapAction="" style="document" />
       <wsdl:input name="getOldRequests">
         <soap:body use="literal" />
@@ -429,7 +397,6 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getTotalRepliedRequests">
-
       <soap:operation soapAction="" style="document" />
       <wsdl:input name="getTotalRepliedRequests">
         <soap:body use="literal" />
@@ -439,7 +406,6 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
-
   <wsdl:service name="KokuRequestService">
     <wsdl:port binding="tns:KokuRequestServiceSoapBinding" name="KokuRequestServicePort">
       <soap:address location="http://kohtikumppanuutta-dev.dmz:8180/arcusys-koku-0.1-SNAPSHOT-kv-model-0.1-SNAPSHOT/KokuRequestServiceImpl" />
