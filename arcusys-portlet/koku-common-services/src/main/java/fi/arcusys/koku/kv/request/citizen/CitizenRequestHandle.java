@@ -9,7 +9,6 @@ import fi.arcusys.koku.kv.model.KokuResponseDetail;
 import fi.arcusys.koku.kv.model.KokuResponseSummary;
 import fi.arcusys.koku.kv.requestservice.ResponseDetail;
 import fi.arcusys.koku.kv.requestservice.ResponseSummary;
-import fi.arcusys.koku.users.KokuUserService;
 
 /**
  * Handles request related operations
@@ -19,14 +18,12 @@ import fi.arcusys.koku.users.KokuUserService;
 public class CitizenRequestHandle extends AbstractHandle {
 		
 	private CitizenRequestService rs;
-	private final KokuUserService userService;	
 
 	/**
 	 * Constructor and initialization
 	 */
 	public CitizenRequestHandle() {
 		rs = new CitizenRequestService();
-		userService = new KokuUserService();
 	}
 	
 	/**
@@ -58,11 +55,7 @@ public class CitizenRequestHandle extends AbstractHandle {
 	private List<KokuResponseSummary> getResponseList(List<ResponseSummary> reqs) {
 		List<KokuResponseSummary> reqList = new ArrayList<KokuResponseSummary>();
 		for (ResponseSummary summary : reqs) {
-			KokuResponseSummary kokuSummary = new KokuResponseSummary(summary);
-			// TODO: SERVICES NEED TO UPDATE!
-//			kokuSummary.setReplierName(userService.getKunpoNameByUserUid(kokuSummary.getReplierUid()));
-			kokuSummary.setReplierName(kokuSummary.getReplierUid());
-			reqList.add(kokuSummary);
+			reqList.add(new KokuResponseSummary(summary));
 		}
 		return reqList;
 	}
@@ -81,9 +74,6 @@ public class CitizenRequestHandle extends AbstractHandle {
 		}
 		ResponseDetail req = rs.getResponseDetail(reqId);
 		KokuResponseDetail kokuReq = new KokuResponseDetail(req);
-		// FIXME: Pitää korjata kun WS päivittyy!
-//		kokuReq.setReplierName(userService.getKunpoNameByUserUid(kokuReq.getReplierUid()));
-		kokuReq.setReplierName(kokuReq.getReplierUid());
 		return kokuReq;
 	}
 	

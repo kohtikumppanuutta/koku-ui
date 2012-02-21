@@ -17,8 +17,8 @@
   <c:when test="${response.responseStatus == 'OK'}" >	   
 	<div id="task-manager-wrap" class="single">
 		<div id="show-message" style="padding:12px">
-			<span class="text-bold"><spring:message code="response.reciever" />:</span> <c:out value="${response.model.replierName}" /><br />
-			<span class="text-bold"><spring:message code="response.sender" />:</span> <c:out value="${response.model.request.sender}" /><br />
+			<span class="text-bold"><spring:message code="response.reciever" />:</span> <c:out value="${response.model.replierUser.fullName}" /><br />
+			<span class="text-bold"><spring:message code="response.sender" />:</span> <c:out value="${response.model.request.senderUser.fullName}" /><br />
 			<span class="text-bold"><spring:message code="response.subject" />:</span> <c:out value="${response.model.request.subject}" /><br />
 			<span class="text-bold"><spring:message code="response.createdAt" />:</span> <c:out value="${response.model.request.creationDate}" /><br />
 			<span class="text-bold"><spring:message code="response.endDate" />:</span> <c:out value="${response.model.request.endDate}" /><br />

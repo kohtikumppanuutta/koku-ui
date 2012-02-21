@@ -29,6 +29,7 @@ import fi.arcusys.koku.web.util.impl.ModelWrapperImpl;
 
 /**
  * Shows request details page and store the current query information on the jsp page
+ * 
  * @author Jinhua Chen
  * Jul 29, 2011
  */
