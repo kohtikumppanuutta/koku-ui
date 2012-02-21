@@ -16,7 +16,6 @@ import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.tietopyynto.AbstractTietopyyntoHandle;
 import fi.arcusys.koku.tiva.tietopyynto.model.KokuInformationRequestDetail;
 import fi.arcusys.koku.tiva.tietopyynto.model.KokuInformationRequestSummary;
-import fi.arcusys.koku.users.KokuUserService;
 import fi.arcusys.koku.util.MessageUtil;
 
 public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHandle {
@@ -24,7 +23,6 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	private final static Logger LOG = Logger.getLogger(KokuEmployeeTietopyyntoServiceHandle.class);
 
 	private final KokuEmployeeTietopyyntoService service;	
-	private final KokuUserService userService;	
 	
 	/* SearchMap key values */
 	private final static int MAP_INIT_SIZE					= 7;
@@ -43,7 +41,6 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	 */
 	public KokuEmployeeTietopyyntoServiceHandle() {
 		service = new KokuEmployeeTietopyyntoService();
-		userService = new KokuUserService();
 	}
 	
 	/**
@@ -248,7 +245,7 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 		if (trimmed.isEmpty()) {
 			map.put(key, null);
 		} else {
-			map.put(key, value);			
+			map.put(key, value);
 		}
 	}
 	
@@ -272,26 +269,11 @@ public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHan
 	
 	private void localizeDetails(KokuInformationRequestDetail kokuSummary) throws KokuServiceException {
 		localizeSummary(kokuSummary);
-		if (kokuSummary.getTargetPersonUid() != null) {
-			kokuSummary.setTargetPersonName(userService.getKunpoNameByUserUid(kokuSummary.getTargetPersonUid()));
-		}
 	}
 	
 	private void localizeSummary(KokuInformationRequestSummary kokuSummary) throws KokuServiceException {
 		if (kokuSummary.getStatus() != null) {
 			kokuSummary.setLocalizedStatus(getLocalizedInformationRequestSummary(kokuSummary.getStatus()));
-		}
-		if (kokuSummary.getSenderUid() != null ) {
-			kokuSummary.setSenderName(userService.getLooraNameByUserUid(kokuSummary.getSenderUid()));
-		}
-		if (kokuSummary.getReceiverUid() != null) {
-			kokuSummary.setRecieverName(userService.getLooraNameByUserUid(kokuSummary.getReceiverUid()));			
-		} else {
-			// NOTE: Small hack if ReceiverUid missing. This might change in future.
-			kokuSummary.setRecieverName(kokuSummary.getRecieverRoleUid());
-		}
-		if (kokuSummary.getTargetPersonUid() != null) {
-			kokuSummary.setTargetPersonName(userService.getKunpoNameByUserUid(kokuSummary.getTargetPersonUid()));
 		}
 	}
 	

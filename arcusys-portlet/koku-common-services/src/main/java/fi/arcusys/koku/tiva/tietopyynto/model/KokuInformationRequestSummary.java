@@ -1,68 +1,91 @@
 package fi.arcusys.koku.tiva.tietopyynto.model;
 
 import fi.arcusys.koku.tiva.tietopyynto.employee.InformationRequestSummary;
+import fi.arcusys.koku.users.KokuUser;
 import fi.arcusys.koku.util.MessageUtil;
 
 public class KokuInformationRequestSummary {
 	
 	private Long requestId;
-	private String receiverUid;
-	private String recieverName;
-    private String senderUid;
-    private String senderName;
+	private KokuUser recieverUser;
+	private KokuUser senderUser;
+	private KokuUser targetPersonUser;
     private KokuInformationRequestStatus status;
     private String localizedStatus;
-    private String targetPersonUid;
     private String recieverRoleUid;
-    private String targetPersonName;
     private String title;
     private String validTill;
-    
-    
+        
 	public KokuInformationRequestSummary(InformationRequestSummary summary) {
-		this.receiverUid = summary.getReceiverUid();
 		this.requestId = summary.getRequestId();
-		this.senderUid = summary.getSenderUid();
+		this.recieverUser = new KokuUser(summary.getReceiverUserInfo());
+		this.senderUser = new KokuUser(summary.getSenderUserInfo());
 		setStatusAsString(summary.getStatus().value());
-		this.targetPersonUid = summary.getTargetPersonUid();
+		this.targetPersonUser = new KokuUser(summary.getTargetPersonUserInfo());
 		this.title = summary.getTitle();
 		this.recieverRoleUid = summary.getReceiverRoleUid();
 		this.validTill = MessageUtil.formatTaskDateByDay(summary.getValidTill());
 	}
-	
+			
+	/**
+	 * @return the recieverUser
+	 */
+	public final KokuUser getRecieverUser() {
+		return recieverUser;
+	}
+
+	/**
+	 * @param recieverUser the recieverUser to set
+	 */
+	public final void setRecieverUser(KokuUser recieverUser) {
+		this.recieverUser = recieverUser;
+	}
+
+	/**
+	 * @return the senderUser
+	 */
+	public final KokuUser getSenderUser() {
+		return senderUser;
+	}
+
+	/**
+	 * @param senderUser the senderUser to set
+	 */
+	public final void setSenderUser(KokuUser senderUser) {
+		this.senderUser = senderUser;
+	}
+
+	/**
+	 * @return the targetPersonUser
+	 */
+	public final KokuUser getTargetPersonUser() {
+		return targetPersonUser;
+	}
+
+
+	/**
+	 * @param targetPersonUser the targetPersonUser to set
+	 */
+	public final void setTargetPersonUser(KokuUser targetPersonUser) {
+		this.targetPersonUser = targetPersonUser;
+	}
+
+
 	protected final void setStatusAsString(String status) {
 		setStatus(KokuInformationRequestStatus.fromValue(status));
 	}
 	
-	public String getReceiverUid() {
-		return receiverUid;
-	}
-	public void setReceiverUid(String receiverUid) {
-		this.receiverUid = receiverUid;
-	}
 	public Long getRequestId() {
 		return requestId;
 	}
 	public void setRequestId(Long requestId) {
 		this.requestId = requestId;
 	}
-	public String getSenderUid() {
-		return senderUid;
-	}
-	public void setSenderUid(String senderUid) {
-		this.senderUid = senderUid;
-	}
 	public KokuInformationRequestStatus getStatus() {
 		return status;
 	}
 	public void setStatus(KokuInformationRequestStatus kokuInformationRequestStatus) {
 		this.status = kokuInformationRequestStatus;
-	}
-	public String getTargetPersonUid() {
-		return targetPersonUid;
-	}
-	public void setTargetPersonUid(String targetPersonUid) {
-		this.targetPersonUid = targetPersonUid;
 	}
 	public String getTitle() {
 		return title;
@@ -77,22 +100,6 @@ public class KokuInformationRequestSummary {
 		this.validTill = validTill;
 	}
 
-	public String getRecieverName() {
-		return recieverName;
-	}
-
-	public void setRecieverName(String receiverName) {
-		this.recieverName = receiverName;
-	}
-
-	public String getSenderName() {
-		return senderName;
-	}
-
-	public void setSenderName(String senderName) {
-		this.senderName = senderName;
-	}
-
 	public String getLocalizedStatus() {
 		return localizedStatus;
 	}
@@ -101,36 +108,12 @@ public class KokuInformationRequestSummary {
 		this.localizedStatus = localizedStatus;
 	}
 
-	public String getTargetPersonName() {
-		return targetPersonName;
-	}
-
-	public void setTargetPersonName(String targetPersonName) {
-		this.targetPersonName = targetPersonName;
-	}
-
 	public String getRecieverRoleUid() {
 		return recieverRoleUid;
 	}
 
 	public void setRecieverRoleUid(String recieverRoleUid) {
 		this.recieverRoleUid = recieverRoleUid;
-	}
-	
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "KokuInformationRequestSummary [requestId=" + requestId
-				+ ", receiverUid=" + receiverUid + ", recieverName="
-				+ recieverName + ", senderUid=" + senderUid + ", senderName="
-				+ senderName + ", status=" + status + ", localizedStatus="
-				+ localizedStatus + ", targetPersonUid=" + targetPersonUid
-				+ ", recieverRoleUid=" + recieverRoleUid
-				+ ", targetPersonName=" + targetPersonName + ", title=" + title
-				+ ", validTill=" + validTill + "]";
 	}
 
 	/* (non-Javadoc)
@@ -143,23 +126,17 @@ public class KokuInformationRequestSummary {
 		result = prime * result
 				+ ((localizedStatus == null) ? 0 : localizedStatus.hashCode());
 		result = prime * result
-				+ ((receiverUid == null) ? 0 : receiverUid.hashCode());
-		result = prime * result
-				+ ((recieverName == null) ? 0 : recieverName.hashCode());
-		result = prime * result
 				+ ((recieverRoleUid == null) ? 0 : recieverRoleUid.hashCode());
+		result = prime * result
+				+ ((recieverUser == null) ? 0 : recieverUser.hashCode());
 		result = prime * result
 				+ ((requestId == null) ? 0 : requestId.hashCode());
 		result = prime * result
-				+ ((senderName == null) ? 0 : senderName.hashCode());
-		result = prime * result
-				+ ((senderUid == null) ? 0 : senderUid.hashCode());
+				+ ((senderUser == null) ? 0 : senderUser.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime
 				* result
-				+ ((targetPersonName == null) ? 0 : targetPersonName.hashCode());
-		result = prime * result
-				+ ((targetPersonUid == null) ? 0 : targetPersonUid.hashCode());
+				+ ((targetPersonUser == null) ? 0 : targetPersonUser.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		result = prime * result
 				+ ((validTill == null) ? 0 : validTill.hashCode());
@@ -188,25 +165,18 @@ public class KokuInformationRequestSummary {
 		} else if (!localizedStatus.equals(other.localizedStatus)) {
 			return false;
 		}
-		if (receiverUid == null) {
-			if (other.receiverUid != null) {
-				return false;
-			}
-		} else if (!receiverUid.equals(other.receiverUid)) {
-			return false;
-		}
-		if (recieverName == null) {
-			if (other.recieverName != null) {
-				return false;
-			}
-		} else if (!recieverName.equals(other.recieverName)) {
-			return false;
-		}
 		if (recieverRoleUid == null) {
 			if (other.recieverRoleUid != null) {
 				return false;
 			}
 		} else if (!recieverRoleUid.equals(other.recieverRoleUid)) {
+			return false;
+		}
+		if (recieverUser == null) {
+			if (other.recieverUser != null) {
+				return false;
+			}
+		} else if (!recieverUser.equals(other.recieverUser)) {
 			return false;
 		}
 		if (requestId == null) {
@@ -216,35 +186,21 @@ public class KokuInformationRequestSummary {
 		} else if (!requestId.equals(other.requestId)) {
 			return false;
 		}
-		if (senderName == null) {
-			if (other.senderName != null) {
+		if (senderUser == null) {
+			if (other.senderUser != null) {
 				return false;
 			}
-		} else if (!senderName.equals(other.senderName)) {
-			return false;
-		}
-		if (senderUid == null) {
-			if (other.senderUid != null) {
-				return false;
-			}
-		} else if (!senderUid.equals(other.senderUid)) {
+		} else if (!senderUser.equals(other.senderUser)) {
 			return false;
 		}
 		if (status != other.status) {
 			return false;
 		}
-		if (targetPersonName == null) {
-			if (other.targetPersonName != null) {
+		if (targetPersonUser == null) {
+			if (other.targetPersonUser != null) {
 				return false;
 			}
-		} else if (!targetPersonName.equals(other.targetPersonName)) {
-			return false;
-		}
-		if (targetPersonUid == null) {
-			if (other.targetPersonUid != null) {
-				return false;
-			}
-		} else if (!targetPersonUid.equals(other.targetPersonUid)) {
+		} else if (!targetPersonUser.equals(other.targetPersonUser)) {
 			return false;
 		}
 		if (title == null) {
@@ -263,5 +219,20 @@ public class KokuInformationRequestSummary {
 		}
 		return true;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "KokuInformationRequestSummary [requestId=" + requestId
+				+ ", recieverUser=" + recieverUser + ", senderUser="
+				+ senderUser + ", targetPersonUser=" + targetPersonUser
+				+ ", status=" + status + ", localizedStatus=" + localizedStatus
+				+ ", recieverRoleUid=" + recieverRoleUid + ", title=" + title
+				+ ", validTill=" + validTill + "]";
+	}
+
+
 	
 }

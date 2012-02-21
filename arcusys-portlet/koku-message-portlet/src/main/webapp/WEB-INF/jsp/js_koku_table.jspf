@@ -46,9 +46,7 @@ KokuTable.prototype.tableGenerator = {
 			 * @param {object} tasks
 			 */
 			 createTable : function(jsFunctionName, tableStyleName, columnNames, columnIds, tasks) {
-			
-				
-					var taskHtml = "";		
+				var taskHtml = "";		
 				taskHtml = "<table class='task-manager-table "+ tableStyleName + "'>"
 						+ '<tr class="task-manager-table trheader">';
 										
