@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="KokuKunpoRequestService" targetNamespace="http://soa.kv.koku.arcusys.fi/" xmlns:ns1="http://schemas.xmlsoap.org/wsdl/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://soa.kv.koku.arcusys.fi/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <wsdl:types>
-<xs:schema elementFormDefault="unqualified" targetNamespace="http://soa.kv.koku.arcusys.fi/" version="1.0" xmlns:tns="http://soa.kv.koku.arcusys.fi/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://soa.kv.koku.arcusys.fi/" xmlns:ns1="http://soa.common.koku.arcusys.fi/" xmlns:tns="http://soa.kv.koku.arcusys.fi/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:import namespace="http://soa.common.koku.arcusys.fi/" />
 <xs:element name="getOldRequests" type="tns:getOldRequests" />
 <xs:element name="getOldRequestsResponse" type="tns:getOldRequestsResponse" />
 <xs:element name="getRepliedRequests" type="tns:getRepliedRequests" />
@@ -14,7 +15,6 @@
 <xs:complexType name="getTotalOldRequests">
 <xs:sequence>
 <xs:element minOccurs="0" name="userUid" type="xs:string" />
-
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getTotalOldRequestsResponse">
@@ -32,7 +32,6 @@
 <xs:element minOccurs="0" name="return" type="tns:responseDetail" />
 </xs:sequence>
 </xs:complexType>
-
 <xs:complexType name="responseDetail">
 <xs:complexContent>
 <xs:extension base="tns:responseSummary">
@@ -47,10 +46,10 @@
 <xs:complexType name="responseSummary">
 <xs:sequence>
 <xs:element minOccurs="0" name="replierUid" type="xs:string" />
+<xs:element minOccurs="0" name="replierUserInfo" type="ns1:user" />
 <xs:element minOccurs="0" name="request" type="tns:requestShortSummary" />
 <xs:element minOccurs="0" name="responseId" type="xs:long" />
 </xs:sequence>
-
 </xs:complexType>
 <xs:complexType name="answer">
 <xs:sequence>
@@ -68,11 +67,11 @@
 </xs:complexType>
 <xs:complexType name="requestShortSummary">
 <xs:sequence>
-
 <xs:element minOccurs="0" name="creationDate" type="xs:dateTime" />
 <xs:element minOccurs="0" name="endDate" type="xs:dateTime" />
 <xs:element name="requestId" type="xs:long" />
 <xs:element minOccurs="0" name="sender" type="xs:string" />
+<xs:element minOccurs="0" name="senderUserInfo" type="ns1:user" />
 <xs:element minOccurs="0" name="subject" type="xs:string" />
 </xs:sequence>
 </xs:complexType>
@@ -86,7 +85,6 @@
 <xs:complexType name="getRepliedRequestsResponse">
 <xs:sequence>
 <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:responseSummary" />
-
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getOldRequests">
@@ -104,7 +102,6 @@
 <xs:complexType name="getTotalRepliedRequests">
 <xs:sequence>
 <xs:element minOccurs="0" name="userUid" type="xs:string" />
-
 </xs:sequence>
 </xs:complexType>
 <xs:complexType name="getTotalRepliedRequestsResponse">
@@ -118,11 +115,31 @@
 <xs:enumeration value="FREE_TEXT" />
 <xs:enumeration value="MULTIPLE_CHOICE" />
 <xs:enumeration value="CALENDAR" />
+<xs:enumeration value="NUMBER" />
 </xs:restriction>
 </xs:simpleType>
 </xs:schema>
+<xs:schema targetNamespace="http://soa.common.koku.arcusys.fi/" version="1.0" xmlns:tns="http://soa.common.koku.arcusys.fi/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="perform" type="tns:perform" />
+<xs:element name="performResponse" type="tns:performResponse" />
+<xs:complexType name="user">
+<xs:sequence>
+<xs:element minOccurs="0" name="displayName" type="xs:string" />
+<xs:element minOccurs="0" name="email" type="xs:string" />
+<xs:element minOccurs="0" name="firstname" type="xs:string" />
+<xs:element minOccurs="0" name="lastname" type="xs:string" />
+<xs:element minOccurs="0" name="phoneNumber" type="xs:string" />
+<xs:element minOccurs="0" name="uid" type="xs:string" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="performResponse">
+<xs:sequence />
+</xs:complexType>
+<xs:complexType name="perform">
+<xs:sequence />
+</xs:complexType>
+</xs:schema>
   </wsdl:types>
-
   <wsdl:message name="getOldRequests">
     <wsdl:part element="tns:getOldRequests" name="parameters">
     </wsdl:part>
@@ -132,7 +149,6 @@
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getOldRequestsResponse">
-
     <wsdl:part element="tns:getOldRequestsResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
@@ -142,7 +158,6 @@
   </wsdl:message>
   <wsdl:message name="getResponseDetailResponse">
     <wsdl:part element="tns:getResponseDetailResponse" name="parameters">
-
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getResponseDetail">
@@ -152,7 +167,6 @@
   <wsdl:message name="getTotalOldRequestsResponse">
     <wsdl:part element="tns:getTotalOldRequestsResponse" name="parameters">
     </wsdl:part>
-
   </wsdl:message>
   <wsdl:message name="getTotalOldRequests">
     <wsdl:part element="tns:getTotalOldRequests" name="parameters">
@@ -162,7 +176,6 @@
     <wsdl:part element="tns:getRepliedRequestsResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-
   <wsdl:message name="getTotalRepliedRequests">
     <wsdl:part element="tns:getTotalRepliedRequests" name="parameters">
     </wsdl:part>
@@ -172,7 +185,6 @@
       <wsdl:input message="tns:getTotalOldRequests" name="getTotalOldRequests">
     </wsdl:input>
       <wsdl:output message="tns:getTotalOldRequestsResponse" name="getTotalOldRequestsResponse">
-
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getResponseDetail">
@@ -182,7 +194,6 @@
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getRepliedRequests">
-
       <wsdl:input message="tns:getRepliedRequests" name="getRepliedRequests">
     </wsdl:input>
       <wsdl:output message="tns:getRepliedRequestsResponse" name="getRepliedRequestsResponse">
@@ -192,7 +203,6 @@
       <wsdl:input message="tns:getOldRequests" name="getOldRequests">
     </wsdl:input>
       <wsdl:output message="tns:getOldRequestsResponse" name="getOldRequestsResponse">
-
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getTotalRepliedRequests">
@@ -202,7 +212,6 @@
     </wsdl:output>
     </wsdl:operation>
   </wsdl:portType>
-
   <wsdl:binding name="KokuKunpoRequestServiceSoapBinding" type="tns:KokuKunpoRequestService">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="getTotalOldRequests">
@@ -212,7 +221,6 @@
       </wsdl:input>
       <wsdl:output name="getTotalOldRequestsResponse">
         <soap:body use="literal" />
-
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getResponseDetail">
@@ -222,7 +230,6 @@
       </wsdl:input>
       <wsdl:output name="getResponseDetailResponse">
         <soap:body use="literal" />
-
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getRepliedRequests">
@@ -232,7 +239,6 @@
       </wsdl:input>
       <wsdl:output name="getRepliedRequestsResponse">
         <soap:body use="literal" />
-
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getOldRequests">
@@ -242,7 +248,6 @@
       </wsdl:input>
       <wsdl:output name="getOldRequestsResponse">
         <soap:body use="literal" />
-
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getTotalRepliedRequests">
@@ -252,7 +257,6 @@
       </wsdl:input>
       <wsdl:output name="getTotalRepliedRequestsResponse">
         <soap:body use="literal" />
-
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
