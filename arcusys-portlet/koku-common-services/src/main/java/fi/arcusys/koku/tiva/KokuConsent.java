@@ -3,6 +3,7 @@ package fi.arcusys.koku.tiva;
 import java.util.ArrayList;
 import java.util.List;
 
+import fi.arcusys.koku.tiva.employeeservice.User;
 import fi.arcusys.koku.users.KokuUser;
 
 /**
@@ -13,9 +14,7 @@ import fi.arcusys.koku.users.KokuUser;
 public class KokuConsent {
 	 
 	private long consentId;
-	private String anotherPermitterUid;
 	private KokuUser anotherPermitterUser;
-	private String requester;
 	private KokuUser requesterUser;
 	private String templateName;
 	private String createType;
@@ -24,13 +23,29 @@ public class KokuConsent {
 	private String approvalStatus;
 	private String validDate;
 	private List<ActionRequest> actionRequests;
-	private String recipients;
 	private List<KokuUser> recipientUsers;
 	private String replyTill;
 	private String comment;
 	private String templateTypeName;
+	private String templateDescription;
 	private KokuUser targetPerson;
 	
+	
+	
+	/**
+	 * @return the templateDescription
+	 */
+	public final String getTemplateDescription() {
+		return templateDescription;
+	}
+
+	/**
+	 * @param templateDescription the templateDescription to set
+	 */
+	public final void setTemplateDescription(String templateDescription) {
+		this.templateDescription = templateDescription;
+	}
+
 	public long getConsentId() {
 		return consentId;
 	}
@@ -38,23 +53,7 @@ public class KokuConsent {
 	public void setConsentId(long consentId) {
 		this.consentId = consentId;
 	}
-	
-	public String getAnotherPermitterUid() {
-		return anotherPermitterUid;
-	}
-	
-	public void setAnotherPermitterUid(String anotherPermitterUid) {
-		this.anotherPermitterUid = anotherPermitterUid;
-	}
-	
-	public String getRequester() {
-		return requester;
-	}
-	
-	public void setRequester(String requestor) {
-		this.requester = requestor;
-	}
-	
+			
 	public String getTemplateName() {
 		return templateName;
 	}
@@ -109,14 +108,6 @@ public class KokuConsent {
 	
 	public void setActionRequests(List<ActionRequest> actionRequests) {
 		this.actionRequests = actionRequests;
-	}
-	
-	public String getRecipients() {
-		return recipients;
-	}
-	
-	public void setRecipients(String recipients) {
-		this.recipients = recipients;
 	}
 
 	public String getReplyTill() {
@@ -188,8 +179,7 @@ public class KokuConsent {
 		}
 		return recipientUsers;
 	}
-	
-	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -199,10 +189,6 @@ public class KokuConsent {
 		int result = 1;
 		result = prime * result
 				+ ((actionRequests == null) ? 0 : actionRequests.hashCode());
-		result = prime
-				* result
-				+ ((anotherPermitterUid == null) ? 0 : anotherPermitterUid
-						.hashCode());
 		result = prime
 				* result
 				+ ((anotherPermitterUser == null) ? 0 : anotherPermitterUser
@@ -216,11 +202,9 @@ public class KokuConsent {
 		result = prime * result
 				+ ((createType == null) ? 0 : createType.hashCode());
 		result = prime * result
-				+ ((recipients == null) ? 0 : recipients.hashCode());
+				+ ((recipientUsers == null) ? 0 : recipientUsers.hashCode());
 		result = prime * result
 				+ ((replyTill == null) ? 0 : replyTill.hashCode());
-		result = prime * result
-				+ ((requester == null) ? 0 : requester.hashCode());
 		result = prime * result
 				+ ((requesterUser == null) ? 0 : requesterUser.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
@@ -256,13 +240,6 @@ public class KokuConsent {
 				return false;
 			}
 		} else if (!actionRequests.equals(other.actionRequests)) {
-			return false;
-		}
-		if (anotherPermitterUid == null) {
-			if (other.anotherPermitterUid != null) {
-				return false;
-			}
-		} else if (!anotherPermitterUid.equals(other.anotherPermitterUid)) {
 			return false;
 		}
 		if (anotherPermitterUser == null) {
@@ -303,11 +280,11 @@ public class KokuConsent {
 		} else if (!createType.equals(other.createType)) {
 			return false;
 		}
-		if (recipients == null) {
-			if (other.recipients != null) {
+		if (recipientUsers == null) {
+			if (other.recipientUsers != null) {
 				return false;
 			}
-		} else if (!recipients.equals(other.recipients)) {
+		} else if (!recipientUsers.equals(other.recipientUsers)) {
 			return false;
 		}
 		if (replyTill == null) {
@@ -315,13 +292,6 @@ public class KokuConsent {
 				return false;
 			}
 		} else if (!replyTill.equals(other.replyTill)) {
-			return false;
-		}
-		if (requester == null) {
-			if (other.requester != null) {
-				return false;
-			}
-		} else if (!requester.equals(other.requester)) {
 			return false;
 		}
 		if (requesterUser == null) {
@@ -368,5 +338,8 @@ public class KokuConsent {
 		}
 		return true;
 	}
+	
+	
+	
 		
 }

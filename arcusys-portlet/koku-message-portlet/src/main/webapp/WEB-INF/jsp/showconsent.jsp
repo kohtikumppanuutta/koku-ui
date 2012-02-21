@@ -35,14 +35,12 @@
 		<span class="text-bold"><spring:message code="consent.createType"/>:</span> <c:out value="${consent.model.createType}" /><br />
 		<span class="text-bold"><spring:message code="consent.givenDate"/>:</span> <c:out value="${consent.model.assignedDate}" /><br />
 		<span class="text-bold"><spring:message code="consent.validDate"/>:</span> <c:out value="${consent.model.validDate}" /><br />
-		<c:if test="${consent.model.anotherPermitterUid != null && consent.model.anotherPermitterUid != '' }">
 		<span class="text-bold"><spring:message code="consent.secondApprover"/>:</span> <c:out value="${consent.model.anotherPermitterUser.fullName}" /><br />
-		</c:if>
 		<span class="text-bold"><spring:message code="consent.recipients"/>:</span>
 		<c:forEach var="recipientUsers" items="${consent.model.recipientUsers}" varStatus="loopStatus">
 			<c:out value="${recipientUsers.fullName}" />,
 		</c:forEach>
-		<br />		
+		<br />
 		
 		<c:if test="${consent.model.targetPerson != null}">
 		<span class="text-bold"><spring:message code="consent.targetPerson"/>:</span> <c:out value="${consent.model.targetPerson.fullName}" /><br />
