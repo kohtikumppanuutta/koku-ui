@@ -310,7 +310,8 @@ KokuTable.prototype.createRequestReplied = function(tasks) {
 
 	function flattenTasksRepliedTasks(tasks) {
 		for (var i = 0; i < tasks.length; i++)  {			
-			tasks[i]["sender"] = tasks[i].request.sender;
+			tasks[i]["replierName"] = tasks[i].replierUser.fullName;
+			tasks[i]["sender"] = tasks[i].request.senderUser.fullName;
 			tasks[i]["subject"] = tasks[i].request.subject;
 			tasks[i]["endDate"] = tasks[i].request.endDate;
 			tasks[i]["creationDate"] = tasks[i].request.creationDate;

@@ -1,6 +1,7 @@
 package fi.arcusys.koku.kv.model;
 
 import fi.arcusys.koku.kv.requestservice.RequestShortSummary;
+import fi.arcusys.koku.users.KokuUser;
 import fi.arcusys.koku.util.MessageUtil;
 
 public class KokuRequestShortSummary {
@@ -8,7 +9,7 @@ public class KokuRequestShortSummary {
     private String creationDate;
     private String endDate;
     private long requestId;
-    private String sender;
+    private KokuUser senderUser;
     private String subject;
     
     
@@ -17,11 +18,25 @@ public class KokuRequestShortSummary {
 			creationDate = MessageUtil.formatTaskDateByDay(request.getCreationDate());
 			endDate = MessageUtil.formatTaskDateByDay(request.getEndDate());
 			requestId = request.getRequestId();
-			sender = request.getSender();
+			senderUser = new KokuUser(request.getSenderUserInfo());
 			subject = request.getSubject();
 		}
-	}	
+	}
 	
+	/**
+	 * @return the senderUser
+	 */
+	public final KokuUser getSenderUser() {
+		return senderUser;
+	}
+
+	/**
+	 * @param senderUser the senderUser to set
+	 */
+	public final void setSenderUser(KokuUser senderUser) {
+		this.senderUser = senderUser;
+	}
+
 	public String getCreationDate() {
 		return creationDate;
 	}
@@ -40,30 +55,21 @@ public class KokuRequestShortSummary {
 	public void setRequestId(long requestId) {
 		this.requestId = requestId;
 	}
-	public String getSender() {
-		return sender;
-	}
-	public void setSender(String sender) {
-		this.sender = sender;
-	}
 	public String getSubject() {
 		return subject;
 	}
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "KokuRequestShortSummary [creationDate=" + creationDate
 				+ ", endDate=" + endDate + ", requestId=" + requestId
-				+ ", sender=" + sender + ", subject=" + subject
-				+ ", getCreationDate()=" + getCreationDate()
-				+ ", getEndDate()=" + getEndDate() + ", getRequestId()="
-				+ getRequestId() + ", getSender()=" + getSender()
-				+ ", getSubject()=" + getSubject() + ", getClass()="
-				+ getClass() + ", hashCode()=" + hashCode() + ", toString()="
-				+ super.toString() + "]";
+				+ ", senderUser=" + senderUser + ", subject=" + subject + "]";
 	}
 
 	/* (non-Javadoc)
@@ -77,7 +83,8 @@ public class KokuRequestShortSummary {
 				+ ((creationDate == null) ? 0 : creationDate.hashCode());
 		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
 		result = prime * result + (int) (requestId ^ (requestId >>> 32));
-		result = prime * result + ((sender == null) ? 0 : sender.hashCode());
+		result = prime * result
+				+ ((senderUser == null) ? 0 : senderUser.hashCode());
 		result = prime * result + ((subject == null) ? 0 : subject.hashCode());
 		return result;
 	}
@@ -114,11 +121,11 @@ public class KokuRequestShortSummary {
 		if (requestId != other.requestId) {
 			return false;
 		}
-		if (sender == null) {
-			if (other.sender != null) {
+		if (senderUser == null) {
+			if (other.senderUser != null) {
 				return false;
 			}
-		} else if (!sender.equals(other.sender)) {
+		} else if (!senderUser.equals(other.senderUser)) {
 			return false;
 		}
 		if (subject == null) {
@@ -131,6 +138,4 @@ public class KokuRequestShortSummary {
 		return true;
 	}
 	
-	
-    
 }

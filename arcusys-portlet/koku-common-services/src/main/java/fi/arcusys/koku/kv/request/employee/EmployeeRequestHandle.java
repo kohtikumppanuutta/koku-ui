@@ -3,8 +3,6 @@ package fi.arcusys.koku.kv.request.employee;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import fi.arcusys.koku.AbstractHandle;
 import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.model.KokuRequest;
@@ -13,7 +11,6 @@ import fi.arcusys.koku.kv.model.KokuResponseSummary;
 import fi.arcusys.koku.kv.requestservice.RequestSummary;
 import fi.arcusys.koku.kv.requestservice.RequestType;
 import fi.arcusys.koku.kv.requestservice.ResponseSummary;
-import fi.arcusys.koku.users.KokuUserService;
 
 /**
  * Handles request related operations
@@ -23,15 +20,12 @@ import fi.arcusys.koku.users.KokuUserService;
 public class EmployeeRequestHandle extends AbstractHandle {
 		
 	private EmployeeRequestService rs;
-	private final KokuUserService userService;	
 
 	/**
 	 * Constructor and initialization
 	 */
 	public EmployeeRequestHandle() {
 		rs = new EmployeeRequestService();
-		userService = new KokuUserService();
-
 	}
 	
 	/**
@@ -80,11 +74,7 @@ public class EmployeeRequestHandle extends AbstractHandle {
 	private List<KokuResponseSummary> rawToViewModel(List<ResponseSummary> responses) {
 		List<KokuResponseSummary> resultList = new ArrayList<KokuResponseSummary>();
 		for (ResponseSummary summary : responses) {
-			KokuResponseSummary kokuSummary = new KokuResponseSummary(summary);
-			// TODO: SERVICES NEED TO UPDATE!
-//			kokuSummary.setReplierName(userService.getLooraNameByUserUid(kokuSummary.getReplierUid()));
-			kokuSummary.setReplierName(kokuSummary.getReplierUid());			
-			resultList.add(kokuSummary);
+			resultList.add(new KokuResponseSummary(summary));
 		}
 		return resultList;
 	}
@@ -155,6 +145,4 @@ public class EmployeeRequestHandle extends AbstractHandle {
 	public int getTotalResponsesRepliedNum(String userUid) throws KokuServiceException {
 		return rs.getTotalResponsesRepliedNum(userUid);
 	}
-	
-
 }
