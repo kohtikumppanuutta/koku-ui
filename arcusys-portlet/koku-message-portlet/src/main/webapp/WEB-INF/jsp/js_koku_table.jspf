@@ -210,10 +210,10 @@ KokuTable.prototype.createAppoitmentsInboxCitizenTable = function(tasks) {
 	for ( var i = 0; i < tasks.length; i++) {
 		
 		taskHtml += this.tableGenerator.generateRowTr(i);			
-		taskHtml += '<td class="messageItem" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["senderUser"]["fullName"]) + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(formatSubject(tasks[i]["subject"])) + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["description"]) + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["status"]) + '</td>'
+		taskHtml += '<td class="messageItem senderUser" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["senderUser"]["fullName"]) + '</td>'
+				 + '<td class="messageItem subject" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(formatSubject(tasks[i]["subject"])) + '</td>'
+				 + '<td class="messageItem description" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["description"]) + '</td>'
+				 + '<td class="messageItem status" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["status"]) + '</td>'
 				 + '</tr>';
 	}	
 	taskHtml += '</table>';

@@ -782,3 +782,22 @@
 	table.task-manager-table.consentAssignedTable td.messageItem.requesterUser {
 		width: 120px;
 	}
+	
+	table.task-manager-table.consentsCurrentAndOldTable td.messageItem.anotherPermitterUser {
+		width: 120px;
+	}
+	table.task-manager-table.consentsCurrentAndOldTable td.messageItem.approvalStatus,	
+	table.task-manager-table.consentsCurrentAndOldTable td.messageItem.createType,
+	table.task-manager-table.consentsCurrentAndOldTable td.messageItem.validDate,
+	table.task-manager-table.consentsCurrentAndOldTable td.messageItem.assignedDate {
+		width: 75px;
+	}
+	
+	
+	/* Tapamiset - Vastausta odottavat */
+	table.task-manager-table.appoitmentsInboxCitizenTable td.senderUser {
+		width: 120px;
+	}
+	table.task-manager-table.appoitmentsInboxCitizenTable td.status {
+		width: 80px;
+	}
