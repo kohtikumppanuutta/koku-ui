@@ -72,7 +72,7 @@ KokuCitizenTable.prototype.createConsentsAssignedTable = function(tasks) {
 	for ( var i = 0; i < tasks.length; i++) {
 	
 		if ((i+1)%2 == 0) {
-			taskHtml += '<tr class="evenRow" onclick="showConsent(\''+ i + '\')">';	
+			taskHtml += '<tr class="evenRow" onclick="kokuAjax.showConsent(\''+ i + '\')">';	
 		} else {
 			taskHtml += '<tr onclick="kokuAjax.showConsent(\''+ i + '\')">';
 		}
