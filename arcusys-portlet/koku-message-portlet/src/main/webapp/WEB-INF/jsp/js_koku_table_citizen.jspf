@@ -62,7 +62,7 @@ KokuCitizenTable.prototype.createConsentsAssignedTable = function(tasks) {
 		return KokuUtil.errorMsg.showErrorMsg("<spring:message code="consent.errorMsg.noConsents"/>");
 	}
 
-	var taskHtml = '<table class="task-manager-table">'
+	var taskHtml = '<table class="task-manager-table consentAssignedTable">'
 		+ '<tr class="task-manager-table trheader">'
 		+ '<td>' + '<spring:message code="consent.requester" />' + '</td>'
 		+ '<td>' + '<spring:message code="consent.templateName" />'+ '</td>'
@@ -77,9 +77,9 @@ KokuCitizenTable.prototype.createConsentsAssignedTable = function(tasks) {
 			taskHtml += '<tr onclick="kokuAjax.showConsent(\''+ i + '\')">';
 		}
 	
-		taskHtml += '<td class="messageItem">' + KokuUtil.escapeHTML(tasks[i]["requesterUser"]["fullName"]) + '</td>'
-			 	 + '<td class="messageItem">' + KokuUtil.escapeHTML(tasks[i]["templateName"]) + '</td>'
-			 	 + '<td class="messageItem">' + KokuUtil.escapeHTML(tasks[i]["replyTill"]) + '</td>'
+		taskHtml += '<td class="messageItem requesterUser">' + KokuUtil.escapeHTML(tasks[i]["requesterUser"]["fullName"]) + '</td>'
+			 	 + '<td class="messageItem templateName">' + KokuUtil.escapeHTML(tasks[i]["templateName"]) + '</td>'
+			 	 + '<td class="messageItem replyTill">' + KokuUtil.escapeHTML(tasks[i]["replyTill"]) + '</td>'
 			 	 + '</tr>';
 	}
 

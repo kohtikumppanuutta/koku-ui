@@ -733,6 +733,7 @@
 		width: 150px;
 	}
 	
+	/* Työntekijä */
 	/* Pyynnöt - Lähetetyt - Avoimet */
 	table.task-manager-table.requestsEmployeeTable td.messageItem.creationDate,
 	table.task-manager-table.requestsEmployeeTable td.messageItem.endDate {
@@ -773,7 +774,11 @@
 		width: 80px
 	}
 	
-	
-}
-	
-
+	/* Kuntalainen */
+	/* Suostumukset - Saapuneet  */
+	table.task-manager-table.consentAssignedTable td.messageItem.replyTill {
+		width: 85px;
+	}
+	table.task-manager-table.consentAssignedTable td.messageItem.requesterUser {
+		width: 120px;
+	}
