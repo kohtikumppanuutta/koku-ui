@@ -20,9 +20,8 @@ public class KokuMessage {
 	private String creationDate;
 	private String messageType;
 	private String messageStatus;
+	private String messageStatusLocalized;
 	private List<KokuUser> deliveryFailedTo;
-	
-	
 	
 	/**
 	 * @return the senderUser
@@ -94,6 +93,20 @@ public class KokuMessage {
 	
 	public void setMessageStatus(String messageStatus) {
 		this.messageStatus = messageStatus;
+	}
+	
+	/**
+	 * @return the messageStatusLocalized
+	 */
+	public final String getMessageStatusLocalized() {
+		return messageStatusLocalized;
+	}
+
+	/**
+	 * @param messageStatusLocalized the messageStatusLocalized to set
+	 */
+	public final void setMessageStatusLocalized(String messageStatusLocalized) {
+		this.messageStatusLocalized = messageStatusLocalized;
 	}
 
 	public final List<KokuUser> getDeliveryFailedTo() {
