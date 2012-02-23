@@ -157,13 +157,13 @@ KokuTable.prototype.createMessagesTable = function(tasks, taskType) {
 		for ( var i = 0; i < tasks.length; i++) {
 			
 			if((i+1)%2 == 0) {
-				if (tasks[i]["messageStatus"] == 'unread') { // for new messages
+				if (tasks[i]["messageStatus"] == 'Unread') { // for new messages
 					taskHtml += '<tr class="evenRow new">';
 				} else {
 					taskHtml += '<tr class="evenRow">';
 				}	
 			} else {
-				if(tasks[i]["messageStatus"] == 'unread') {
+				if(tasks[i]["messageStatus"] == 'Unread') {
 					taskHtml += '<tr class="new">';
 				} else {
 					taskHtml += '<tr>';
