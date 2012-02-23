@@ -165,7 +165,8 @@ public class MessageHandle extends AbstractHandle {
 		kokuMessage.setSubject(message.getSubject());
 		kokuMessage.setCreationDate(MessageUtil.formatTaskDate(message.getCreationDate()));
 		kokuMessage.setMessageType(MessageUtil.getMessageType(message.getMessageType()));
-		kokuMessage.setMessageStatus(localizeMsgStatus(message.getMessageStatus()));
+		kokuMessage.setMessageStatus(message.getMessageStatus().value());
+		kokuMessage.setMessageStatusLocalized(localizeMsgStatus(message.getMessageStatus()));
 		for (User recipientUser : message.getRecipientUserInfos()) {
 			kokuMessage.getRecipientUsers().add(new KokuUser(recipientUser));
 		}
