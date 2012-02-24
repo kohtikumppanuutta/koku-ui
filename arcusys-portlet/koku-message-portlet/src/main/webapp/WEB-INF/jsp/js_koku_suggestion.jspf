@@ -123,6 +123,7 @@ function SuggestionBox(ajaxUrls) {
 	    if (key.length>0) {
 	    	// var url = CONSENT_SUGGESTION_URL;
 	    	var url = ajaxUrls.suggestUrl;
+	    	url = kokuAjax.formatUrl(url);
 			jQuery.ajax({
 				  type: 'POST',
 				  url: url,
