@@ -3,32 +3,14 @@
 	<portlet:param name="myaction" value="home" />
 </portlet:renderURL>
 
+<%@ include file="js_koku_navigation_helper.jspf" %>
+
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/taskManagerResizer.js"></script>
 <script type="text/javascript"> 
 	/* the times that iframe loads different srcs */
 	var loadingTimes = 0;
 	/* the source url that iframe loads at first time */
 	var firstUrl = "";	
-	
-	/**
-	 * Returns to the main portlet page
-	 */
-	function returnMainPage() {
-		var url = "<%= homeURL %>";
-		url = formatUrl(url);
-		window.location = url;
-	}
-	
-	/* Formats url mainly for gatein epp*/
-	function formatUrl(url) {
-		var newUrl;
-		newUrl = url.replace(/&quot;/g,'"');
-		newUrl = newUrl.replace(/&amp;/g,"&");
-		newUrl = newUrl.replace(/&lt;/g,"<");
-		newUrl =  newUrl.replace(/&gt;/g,">");
-		
-		return newUrl;
-	}
 	
 	/**
 	 * Checks the operation of forms finished or not. Usually the form operation is
@@ -82,7 +64,7 @@
 		</script>
 	</div>
 	<div id="task-manager-operation" class="task-manager-operation-part">
-		<input type="button" value="<spring:message code="task.return"/>" onclick="returnMainPage()" />
+		<input type="button" value="<spring:message code="task.return"/>" onclick="kokuNavigationHelper.returnMainPage()" />
 	</div>
 </div>
 

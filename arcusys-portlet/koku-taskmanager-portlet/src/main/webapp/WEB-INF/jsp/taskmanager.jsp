@@ -23,6 +23,10 @@
 <portlet:resourceURL var="popupRenderURL" id="createPopupRenderUrl">
 </portlet:resourceURL>
 
+<portlet:renderURL var="homeURL" windowState="<%= WindowState.NORMAL.toString() %>" >
+	<portlet:param name="myaction" value="home" />
+</portlet:renderURL>
+
 <%
 	/* Parses the parent path url from the portlet ajaxURL */
 	
@@ -37,6 +41,7 @@
 	}
 %>
 
+<%@ include file="js_koku_navigation_helper.jspf" %>
 
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/jquery-1.5.2.min.js"></script>
 <script type="text/javascript"> 

@@ -28,7 +28,7 @@
 			},
 			/* Returns type of kokuNavigationHelper */
 			getHelperIdentifier : function() {
-				return "MessagePortlet";
+				return "TaskManagerPortlet";
 			}
 	};
 </script>

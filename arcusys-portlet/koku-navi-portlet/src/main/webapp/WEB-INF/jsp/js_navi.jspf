@@ -148,11 +148,24 @@ function navigateToPage(naviType) {
 		console.error("Bug in code!! kokuNavigationHelper object is missing!");
 		return;
 	}
+	if (typeof kokuNavigationHelper.getHelperIdentifier() === "undefined") {
+		console.error("Bug in code!! kokuNavigationHelper.getHelperIdentifier() is not defined!");
+		return;
+	}
 	
 	/* Update current position in navigation to server (session)  */
 	var url = formatUrl("<%= naviRenderURL %>");	
 	jQuery.post(url, {'newNaviType':naviType}, function(data) {
-		window.location = kokuNavigationHelper.getReturnMainPageLink() + "&NAVI_TYPE=" + naviType;;
+		
+		switch(kokuNavigationHelper.getHelperIdentifier()) {
+			case "MessagePortlet":
+				window.location = kokuNavigationHelper.getReturnMainPageLink() + "&NAVI_TYPE=" + naviType;
+				break;
+			default:
+				window.location = "<%= defaultPath %>" + "&NAVI_TYPE=" + naviType;
+				break;
+		}
+		
 	});
 }
 
