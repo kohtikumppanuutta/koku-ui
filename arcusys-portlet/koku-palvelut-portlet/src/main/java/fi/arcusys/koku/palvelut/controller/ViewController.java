@@ -1,16 +1,11 @@
 package fi.arcusys.koku.palvelut.controller;
 
 import static fi.arcusys.koku.util.Constants.ATTR_PREFERENCES;
-import static fi.arcusys.koku.util.Constants.JSON_LOGIN_STATUS;
 import static fi.arcusys.koku.util.Constants.JSON_RESULT;
-import static fi.arcusys.koku.util.Constants.PORTAL_GATEIN;
 import static fi.arcusys.koku.util.Constants.PREF_SHOW_ONLY_FORM_BY_DESCRIPTION;
 import static fi.arcusys.koku.util.Constants.PREF_SHOW_ONLY_FORM_BY_ID;
 import static fi.arcusys.koku.util.Constants.PREF_SHOW_TASKS_BY_ID;
 import static fi.arcusys.koku.util.Constants.RESPONSE;
-import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_INVALID;
-import static fi.arcusys.koku.util.Properties.IS_KUNPO_PORTAL;
-import static fi.arcusys.koku.util.Properties.VETUMA_ENABLED;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -48,7 +43,6 @@ import fi.arcusys.koku.palvelut.util.OperationsValidatorImpl;
 import fi.arcusys.koku.palvelut.util.TaskUtil;
 import fi.arcusys.koku.palvelut.util.TokenResolver;
 import fi.arcusys.koku.palvelut.util.XmlProxy;
-import fi.arcusys.koku.util.AuthenticationUtil;
 import fi.arcusys.koku.util.KokuWebServicesJS;
 import fi.koku.settings.KoKuPropertiesUtil;
 
