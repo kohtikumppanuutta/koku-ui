@@ -9,7 +9,8 @@ import net.sf.json.JSONObject;
 public interface QueryProcess {
 	
 	/**
-	 * Gets the amount of new messages of Inbox and Archive_Inbox and puts values to model
+	 * Returns the amount of new messages of Inbox and Archive_Inbox and puts values to model
+	 * 
 	 * @param userId user that message belong to
 	 * @return Json object contains result
 	 */

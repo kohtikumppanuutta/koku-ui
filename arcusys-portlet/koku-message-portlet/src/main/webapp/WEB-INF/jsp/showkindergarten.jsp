@@ -7,39 +7,9 @@
 <portlet:resourceURL var="ajaxURL" id="getTask">
 </portlet:resourceURL>
 
-<script type="text/javascript"> 
+<%@ include file="js_koku_detail.jspf" %>
+<%@ include file="js_koku_navigation_helper.jspf" %>
 
-<%
-/* Parses the parent path url from the portlet ajaxURL */
-
-// 	final int currentPathPosition = ajaxURL.indexOf("Message");
-// 	final String defaultPath = ajaxURL.substring(0, currentPathPosition+7);
-	final String defaultPath = portletPath;
-
-%>
-
-/**
- * Returns to the main portlet page
- */
- 
-function returnMainPage() {
-	var url = "<%= homeURL %>";
-	url = formatUrl(url);
-	window.location = url;
-}
-
-/* Formats url mainly for gatein epp*/
-function formatUrl(url) {
-	var newUrl;
-	newUrl = url.replace(/&quot;/g,'"');
-	newUrl = newUrl.replace(/&amp;/g,"&");
-	newUrl = newUrl.replace(/&lt;/g,"<");
-	newUrl =  newUrl.replace(/&gt;/g,">");
-	
-	return newUrl;
-}
-
-</script>
 <div id="task-manager-wrap" class="single">
 	<div id="show-message" style="padding:12px">
 		<span class="text-bold"><spring:message code="application.kindergarten.name" />:</span> <c:out value="${application.kindergartenName}" /><br />
@@ -51,12 +21,12 @@ function formatUrl(url) {
 		<span class="text-bold"><spring:message code="application.kindergarten.decision" />:</span> <c:out value="${application.answeredAt}" /><br />
 		<span class="text-bold"><spring:message code="application.kindergarten.needForCareDate"/>:</span> <c:out value="${application.inEffectAt}" /><br />	
 		<span class="modifyConsentLink">
-		<a href="<%= defaultPath %>/EditKindergarten?FormID=<c:out value="${application.applicationId}"/>"><spring:message code="application.kindergarten.details.sendConfirmation"/></a>
+		<a href="<%= portletPath %>/EditKindergarten?FormID=<c:out value="${application.applicationId}"/>"><spring:message code="application.kindergarten.details.sendConfirmation"/></a>
 	</span><br />
 	
 	</div>
 	<div id="task-manager-operation" class="task-manager-operation-part">
-		<input type="button" value="<spring:message code="page.return"/>" onclick="returnMainPage()" />
+		<input type="button" value="<spring:message code="page.return"/>" onclick="kokuNavigationHelper.returnMainPage()" />
 	</div>
 </div>
 

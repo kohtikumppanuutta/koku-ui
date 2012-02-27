@@ -48,14 +48,10 @@ public class MessageController extends AbstractController {
 	public String showHome(RenderRequest request, RenderResponse response,
 			ModelMap modelmap) {
 		// get parameters from session
-		String currentPage = (String) request.getPortletSession().getAttribute(
-				ATTR_CURRENT_PAGE, PortletSession.APPLICATION_SCOPE);
-		String taskType = (String) request.getPortletSession().getAttribute(
-				ATTR_TASK_TYPE, PortletSession.APPLICATION_SCOPE);
-		String keyword = (String) request.getPortletSession().getAttribute(
-				ATTR_KEYWORD, PortletSession.APPLICATION_SCOPE);
-		String orderType = (String) request.getPortletSession().getAttribute(
-				ATTR_ORDER_TYPE, PortletSession.APPLICATION_SCOPE);
+		String currentPage = (String) request.getPortletSession().getAttribute(ATTR_CURRENT_PAGE, PortletSession.APPLICATION_SCOPE);
+		String taskType = (String) request.getPortletSession().getAttribute(ATTR_TASK_TYPE, PortletSession.APPLICATION_SCOPE);
+		String keyword = (String) request.getPortletSession().getAttribute(ATTR_KEYWORD, PortletSession.APPLICATION_SCOPE);
+		String orderType = (String) request.getPortletSession().getAttribute(ATTR_ORDER_TYPE, PortletSession.APPLICATION_SCOPE);
 		clearSession(request); // clear session since it's used only once
 		
 		modelmap.addAttribute(ATTR_CURRENT_PAGE, currentPage);

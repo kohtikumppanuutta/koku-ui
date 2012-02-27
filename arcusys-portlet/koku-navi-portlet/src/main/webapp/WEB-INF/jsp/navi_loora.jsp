@@ -29,6 +29,7 @@
 		currentPage = currentPath.substring(pos3+1);
 	}
 	
+	
 // 	System.out.println("------------------------------------------------------------------------------------------------------");
 // 	System.out.println("defaultPath: '"+defaultPath+"' currentPage: '"+currentPage+"' actionParam: '"+actionParam+"' \n NaviURL: '"+naviURL+"'");
 // 	System.out.println("NAVI MODE: "+naviPortalMode);
@@ -43,7 +44,8 @@
  * Handle action message navigation
  * @Author: Jinhua Chen
  */
- 	var koku_navi_type = "${naviType}";
+	// var koku_navi_type = "${naviType}";
+	var koku_navi_type = "<%= navigationType %>";
  	var defaultPath = "<%= defaultPath %>";
  	var naviRefreshTimer;
  	

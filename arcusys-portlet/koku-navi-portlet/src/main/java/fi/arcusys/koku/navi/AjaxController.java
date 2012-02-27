@@ -1,12 +1,9 @@
 package fi.arcusys.koku.navi;
 
-import static fi.arcusys.koku.util.Constants.ATTR_MY_ACTION;
-import static fi.arcusys.koku.util.Constants.ATTR_NAVI_TYPE;
+import static fi.arcusys.koku.util.Constants.*;
 import static fi.arcusys.koku.util.Constants.ATTR_PORTAL_ROLE;
 import static fi.arcusys.koku.util.Constants.ATTR_TOKEN;
 import static fi.arcusys.koku.util.Constants.INTALIO_GROUP_PREFIX;
-import static fi.arcusys.koku.util.Constants.JSON_RENDER_URL;
-import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_NAVI;
 import static fi.arcusys.koku.util.Constants.PORTAL_MODE_KUNPO;
 import static fi.arcusys.koku.util.Constants.PORTAL_MODE_LOORA;
 import static fi.arcusys.koku.util.Constants.RESPONSE;
@@ -121,6 +118,7 @@ public class AjaxController {
 	
 	/**
 	 * Creates render url mainly for gatein portal container
+	 * 
 	 * @param newNaviType navigation tab name
 	 * @param modelmap ModelMap
 	 * @param request PortletRequest
@@ -130,23 +128,17 @@ public class AjaxController {
 	@ResourceMapping(value = "createNaviRenderUrl")
 	public String createNaviRenderUrl(
 			@RequestParam(value = "newNaviType") String newNaviType,
-			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
-		PortletURL renderUrlObj = response.createRenderURL();
-		renderUrlObj.setParameter(ATTR_MY_ACTION, MY_ACTION_SHOW_NAVI);
-		renderUrlObj.setParameter(ATTR_NAVI_TYPE, newNaviType);
-		String renderUrlString = renderUrlObj.toString();
-		JSONObject jsonModel = new JSONObject();
-		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);
+			ModelMap modelmap, 
+			PortletRequest request, 
+			ResourceResponse response) {
+		
+		request.getPortletSession().setAttribute(ATTR_NAVI_TYPE, newNaviType);
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
 	/**
 	 * Resolves which portalRole portal has
-	 * 
-	 * FIXME: Super stupid portalRole resolving. For now
-	 * we determine if portal is citizen or employee only by portal name. 
-	 * 
+	 *  
 	 * @param request PortletRequest
 	 * @return PortalRole
 	 */
@@ -156,7 +148,7 @@ public class AjaxController {
 		} else if (Properties.PORTAL_MODE.contains(PORTAL_MODE_LOORA)) {
 			return PortalRole.EMPLOYEE;
 		} else {
-			throw new IllegalArgumentException("PortalMode not supported: "+ Properties.PORTAL_MODE);
+			throw new IllegalStateException("PortalMode not supported: "+ Properties.PORTAL_MODE);
 		}
 	}
 }

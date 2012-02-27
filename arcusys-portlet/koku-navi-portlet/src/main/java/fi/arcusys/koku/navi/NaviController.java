@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.arcusys.koku.util.Properties;
@@ -40,22 +39,6 @@ public class NaviController {
 			LOG.info("no logged in user");
 			return "INVALID";
 		}			
-	}
-	
-	/**
-	 * Shows navigation page according to portlet request and stores the navigation type
-	 * @param naviType page name in navigation
-	 * @param request RenderRequest
-	 * @param response RenderResponse
-	 * @param modelmap ModelMap
-	 * @return navigation page with navigation type
-	 */
-	@RenderMapping(params = "myaction=showNavi")
-	public String showNavi(@RequestParam(value = "naviType", required = false) String naviType,
-			RenderRequest request, RenderResponse response, ModelMap modelmap) {
-		modelmap.addAttribute("naviType", naviType);
-		
-		return selectJsp();
 	}
 	
 	private String selectJsp() {		

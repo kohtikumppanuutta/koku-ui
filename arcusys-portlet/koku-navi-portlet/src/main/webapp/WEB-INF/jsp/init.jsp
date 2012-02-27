@@ -29,5 +29,9 @@
 	final String defaultPage = defaultPath.substring(defaultPath.lastIndexOf('/')+1, defaultPath.length());
 	final String naviPortalMode = Properties.PORTAL_MODE;
 	request.setAttribute("naviPortalMode", naviPortalMode);	
-	final String portalInfo = renderRequest.getPortalContext().getPortalInfo();
+	final String portalInfo = renderRequest.getPortalContext().getPortalInfo();	
+	
+	/* Current position in navigation */
+	final String navigationType = (String) renderRequest.getPortletSession().getAttribute("naviType");
+	
 %>
