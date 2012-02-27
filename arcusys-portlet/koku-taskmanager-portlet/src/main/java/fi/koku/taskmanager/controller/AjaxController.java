@@ -85,10 +85,6 @@ public class AjaxController {
 		final String token = (String) portletSession.getAttribute(ATTR_TOKEN);
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
-
 		int taskType = getTaskType(taskTypeStr);
 		JSONObject jsonModel = getJsonModel(taskType, page, keyword, orderType, token, username);
 				
@@ -96,7 +92,6 @@ public class AjaxController {
 		Boolean editableForm = Boolean.valueOf(pref.getValue(PREF_EDITABLE, Boolean.FALSE.toString()));
 		jsonModel.put(JSON_EDITABLE, editableForm.toString());
 		modelmap.addAttribute(RESPONSE, jsonModel);
-		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -119,9 +114,6 @@ public class AjaxController {
 		final PortletSession portletSession = request.getPortletSession();				
 		final String token = (String) portletSession.getAttribute(ATTR_TOKEN);
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
 		
 		JSONObject jsonModel = new JSONObject();
 		
@@ -176,7 +168,7 @@ public class AjaxController {
 			jsonModel.put(JSON_TASKS, tasks);
 			jsonModel.put(JSON_TOKEN_STATUS, TOKEN_STATUS_VALID);
 		}		
-		return jsonModel;	
+		return jsonModel;
 	}
 	
 	/**
@@ -221,13 +213,7 @@ public class AjaxController {
 			ModelMap modelmap, 
 			PortletRequest request, 
 			ResourceResponse response) {
-		
-		final PortletSession portletSession = request.getPortletSession();				
-		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
-		
+				
 		final PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_TASKFORM);
 		renderUrlObj.setParameter( ATTR_TASK_LINK, taskLink);
@@ -244,8 +230,7 @@ public class AjaxController {
 		
 		JSONObject jsonModel = new JSONObject();
 		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);
-		
+		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 
@@ -262,13 +247,7 @@ public class AjaxController {
 	public String createPopupRenderUrl(
 			@RequestParam(value = "tasklink") String taskLink,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
-		
-		final PortletSession portletSession = request.getPortletSession();				
-		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-//		if (isInvalidStrongAuthentication(portletSession)) {
-//			return authenticationFailed(modelmap, username);
-//		}
-		
+				
 		final PortletURL renderUrlObj = response.createRenderURL();
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_TASKFORM);
 		renderUrlObj.setParameter( ATTR_TASK_LINK, taskLink);
@@ -285,24 +264,6 @@ public class AjaxController {
 		
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
-	
-	/**
-	 * Returns true when following conditions are true:
-	 * <ul>
-	 * <li>Vetuma is enabled (vetuma.authentication=true)</li>
-	 * <li>User is _NOT_ authenticated by using strong authentication (Vetuma)</li>
-	 * <li>Portal is Kunpo (enviroment.name=kunpo)</li>
-	 * </ul>
-	 * @param portletSession
-	 * @return 
-	 */
-//	protected boolean isInvalidStrongAuthentication(PortletSession portletSession) {
-//		if (VETUMA_ENABLED && IS_KUNPO_PORTAL && !AuthenticationUtil.getUserInfoFromSession(portletSession).hasStrongAuthentication()) {
-//			return true;
-//		} else {
-//			return false;
-//		}
-//	}
 	
 	/**
 	 * Creates authentication failed JSON response
