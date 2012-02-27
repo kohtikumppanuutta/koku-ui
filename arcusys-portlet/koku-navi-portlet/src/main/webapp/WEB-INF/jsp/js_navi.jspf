@@ -162,7 +162,7 @@ function navigateToPage(naviType) {
 				window.location = kokuNavigationHelper.getReturnMainPageLink() + "&NAVI_TYPE=" + naviType;
 				break;
 			default:
-				window.location = "<%= defaultPath %>" + "&NAVI_TYPE=" + naviType;
+				window.location = "<%= defaultPath %>" + "?NAVI_TYPE=" + naviType;
 				break;
 		}
 		
