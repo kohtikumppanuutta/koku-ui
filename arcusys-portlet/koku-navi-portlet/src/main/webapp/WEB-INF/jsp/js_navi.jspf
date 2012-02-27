@@ -21,7 +21,8 @@
 function focusCurrentItem() {
 
 	function getNaviType() {
-		var naviType = koku_navi_type;		
+		// var naviType = koku_navi_type;
+		var naviType = readKokuCookie();		
 		var global_url = document.URL;
 		var index = global_url.lastIndexOf("NAVI_TYPE=");
 		/* Quick fix for Salo. Findout why param is different kunpo/loora sides */
@@ -45,7 +46,9 @@ function focusCurrentItem() {
 	var currentPage = "<%= currentPage %>";	
 	switch(currentPage) {
 		case '<%= defaultPage %>':		
-			var naviType = getNaviType();
+			// var naviType = getNaviType();
+			console.info("Cookie value:" + readKokuCookie());
+			var naviType = readKokuCookie();
 			if(naviType != "") {
 				bold("#"+naviType);				
 			} else {
@@ -153,6 +156,8 @@ function navigateToPage(naviType) {
 		return;
 	}
 	
+	createKokuCookie(naviType);
+	
 	/* Update current position in navigation to server (session)  */
 	var url = formatUrl("<%= naviRenderURL %>");	
 	jQuery.post(url, {'newNaviType':naviType}, function(data) {
@@ -168,4 +173,49 @@ function navigateToPage(naviType) {
 		
 	});
 }
+
+
+function createKokuCookie(value) {
+	if (!value) {
+		console. error("Bug in code! KokuCookie value missing.");
+	} 
+	var date = new Date();
+	date.setTime(date.getTime()+(1*24*60*60*1000));
+	var expires = "; expires="+date.toGMTString();
+	document.cookie = "kokuNavigationState="+value+expires+"; path=/";
+}
+
+function readKokuCookie() {
+	var nameEQ = "kokuNavigationState=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+}
+
+function resetKokuCookie() {
+	document.cookie = "kokuNavigationState="+value+"; path=/";
+}
+
+<!-- function setKokuCookie(c_name,value,exdays) { -->
+<!-- 	var exdate=new Date(); -->
+<!-- 	exdate.setDate(exdate.getDate() + exdays); -->
+<!-- 	var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString()); -->
+<!-- 	document.cookie=c_name + "=" + c_value; -->
+<!-- } -->
+
+<!-- function getKokuCookie(c_name) { -->
+<!-- 	var i,x,y,ARRcookies=document.cookie.split(";"); -->
+<!-- 	for (i=0;i<ARRcookies.length;i++) { -->
+<!-- 	  x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("=")); -->
+<!-- 	  y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1); -->
+<!-- 	  x=x.replace(/^\s+|\s+$/g,""); -->
+<!-- 	  if (x==c_name) { -->
+<!-- 	    return unescape(y); -->
+<!-- 	  } -->
+<!-- 	} -->
+<!-- } -->
 

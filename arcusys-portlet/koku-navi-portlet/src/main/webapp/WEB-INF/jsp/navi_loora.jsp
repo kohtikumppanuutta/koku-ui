@@ -49,7 +49,11 @@
  	var defaultPath = "<%= defaultPath %>";
  	var naviRefreshTimer;
  	
-	jQuery(document).ready(function(){
+	jQuery(document).ready(function() {
+		var koku_navitype2 = readKokuCookie();
+	 	if (koku_navitype2 !== null && koku_navitype2 !== koku_navi_type) {
+	 		navigateToPage(koku_navitype2);
+	 	}
 		focusCurrentItem();	
 		ajaxUpdate();		
 		clearInterval(naviRefreshTimer);
