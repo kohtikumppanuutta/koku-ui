@@ -4,9 +4,15 @@
 <portlet:resourceURL var="ajax" id="intalioAjax"></portlet:resourceURL>
 <portlet:resourceURL var="services" id="servicesAjax"></portlet:resourceURL>
 
+<portlet:renderURL var="homeURL" windowState="<%= WindowState.NORMAL.toString() %>" >
+	<portlet:param name="myaction" value="home" />
+</portlet:renderURL>
+
+
 <%-- Load jQuery --%>
 <%-- This just temporary fix, because jQuery should be made available from theme or by portal not in portlet. --%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.5.2.min.js"></script>
+<%@ include file="js_koku_navigation_helper.jspf" %>
 <script type="text/javascript">
 
 	var timerOn = 0;
@@ -132,7 +138,6 @@
 		var result = getKokuServicesEndpoints();
 		jQuery(".test2").append("<div><pre>"+result+"</pre></div>");
 	}
---%>
 	
 	/**
 	 * Simple function to send some example ajax data 
@@ -155,6 +160,7 @@
 			async: false 
 		}).responseText;
 	}
+		--%>
 		
 	function getKokuServices() {
 		var url="<%= services %>";
