@@ -24,6 +24,11 @@
 <portlet:resourceURL var="cancelURL" id="cancelAppointment">
 </portlet:resourceURL>
 
+<portlet:renderURL var="homeURL" windowState="<%= WindowState.NORMAL.toString() %>" >
+	<portlet:param name="myaction" value="home" />
+</portlet:renderURL>
+
+
 <!-- For gatein Portal -->
 <portlet:resourceURL var="messageRenderURL" id="createMessageRenderUrl">
 </portlet:resourceURL>
