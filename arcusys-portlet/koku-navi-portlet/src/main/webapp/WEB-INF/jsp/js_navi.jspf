@@ -128,14 +128,13 @@ function ajaxUpdate() {
 							json["<%=Constants.JSON_ARCHIVE_INBOX %>"],
 							json["<%=Constants.JSON_CONSENTS_TOTAL %>"],
 							json["<%=Constants.JSON_APPOINTMENT_TOTAL %>"],
-							json["<%=Constants.JSON_REQUESTS_TOTAL %>"]								
+							json["<%=Constants.JSON_REQUESTS_TOTAL %>"]
 						);
 				}
 				naviRefreshTimer = setTimeout('ajaxUpdate()', 30000);		
 		  }
 		});
 };
-
 
 /**
  * Shows/hides search user interface
@@ -145,16 +144,15 @@ function showArchiveUI() {
 }
 
 function navigateToPage(naviType) {
-	var url = "<%= naviRenderURL %>";	
-	url = formatUrl(url);
+	if (typeof kokuNavigationHelper === "undefined" || kokuNavigationHelper === null) {
+		console.error("Bug in code!! kokuNavigationHelper object is missing!");
+		return;
+	}
 	
+	/* Update current position in navigation to server (session)  */
+	var url = formatUrl("<%= naviRenderURL %>");	
 	jQuery.post(url, {'newNaviType':naviType}, function(data) {
-		var obj = jQuery.parseJSON(data);
-		var json = obj.response;
-		var renderUrl = json["renderUrl"];
-		var temp = renderUrl.split("?");
-		var naviUrl = "<%= defaultPath %>" + "?" + temp[1] + "&NAVI_TYPE=" + naviType;
-		window.location = naviUrl;
+		window.location = kokuNavigationHelper.getReturnMainPageLink() + "&NAVI_TYPE=" + naviType;;
 	});
-};
+}
 

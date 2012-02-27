@@ -1,0 +1,30 @@
+<script type="text/javascript">
+
+	/*
+	 * Navigation helper object for koku-message-portlet
+	 */
+	var kokuNavigationHelper = {
+			/**
+			 * Returns to the main portlet page
+			 */	 
+			returnMainPage : function() {
+				window.location = this.formatUrl("<%= homeURL %>");
+			},			
+			/* 
+			 * Returns link to main page. Navigation portlet needs this.
+			 */
+			getReturnMainPageLink : function() {
+				return this.formatUrl("<%= homeURL %>");
+			},			
+			/* Formats url mainly for gatein epp */
+			formatUrl : function (url) {
+				var newUrl;
+				newUrl = url.replace(/&quot;/g,'"');
+				newUrl = newUrl.replace(/&amp;/g,"&");
+				newUrl = newUrl.replace(/&lt;/g,"<");
+				newUrl =  newUrl.replace(/&gt;/g,">");
+				
+				return newUrl;
+			}
+	};
+</script>

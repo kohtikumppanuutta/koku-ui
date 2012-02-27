@@ -28,7 +28,7 @@ public abstract class AbstractQueryProcess implements QueryProcess {
 	
 
 	/**
-	 * Gets number of new messages in the given folder type from web services
+	 * Returns number of new messages in the given folder type from web services
 	 * 
 	 * @param userId
 	 * @param folderType

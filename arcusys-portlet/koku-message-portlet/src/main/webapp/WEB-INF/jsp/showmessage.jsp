@@ -46,7 +46,7 @@ public String htmlToCode(String s)
 }%>
 
 <%@ include file="js_koku_detail.jspf" %>
-
+<%@ include file="js_koku_navigation_helper.jspf" %>
 
 <%
 	ResponseStatus responseResult = ResponseStatus.FAIL;
@@ -156,7 +156,8 @@ public String htmlToCode(String s)
 				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS %>");
 			}
 		},
-			
+		
+		/* Keep these just in case (for backwards compability) */
 		util : {			
 			returnToMainPage: function() {			
 				window.location = KokuMessage.formatUrl("<%= homeURL %>");
@@ -199,7 +200,7 @@ public String htmlToCode(String s)
 	<div id="messageContent"></div>
 	<div id="failedEmailDelivery"></div>
 	<div id="task-manager-operation" class="task-manager-operation-part">
-		<input type="button" value="<spring:message code="page.return"/>" onclick="KokuMessage.util.returnMainPage()" />
+		<input type="button" value="<spring:message code="page.return"/>" onclick="kokuNavigationHelper.returnMainPage()" />
 	</div>
 </div>
 

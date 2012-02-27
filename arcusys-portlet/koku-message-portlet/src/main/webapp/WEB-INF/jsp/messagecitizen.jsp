@@ -54,6 +54,9 @@
 	final String defaultPath = portletPath;
 %>
 
+<%-- Do not move navigation helper inside <script> tags --%>
+<%@ include file="js_koku_navigation_helper.jspf" %>
+
 <script type="text/javascript">
 	
 	/* Global objects */
@@ -71,6 +74,7 @@
 
 		/* Actions or somethings? (portlet:resourceURL)*/
 	 	ajaxTaskUrl : "<%= ajaxURL %>",
+	 	homeUrl : "<%= homeURL %>",
 		suggestUrl : "<%= suggestURL %>",
 		archiveUrl : "<%= archiveURL %>",
 		archiveOldUrl : "<%= archiveOldURL %>",

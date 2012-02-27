@@ -24,6 +24,10 @@
 <portlet:resourceURL var="cancelURL" id="cancelAppointment">
 </portlet:resourceURL>
 
+<portlet:renderURL var="homeURL" windowState="<%= WindowState.NORMAL.toString() %>" >
+	<portlet:param name="myaction" value="home" />
+</portlet:renderURL>
+
 <portlet:renderURL var="messageURL" windowState="<%= WindowState.NORMAL.toString() %>" >
 	<portlet:param name="myaction" value="showMessage" />
 </portlet:renderURL>
@@ -80,12 +84,14 @@
 
 
 <%
-	/* Parses the parent path url from the portlet ajaxURL */
-	
+	/* Parses the parent path url from the portlet ajaxURL */	
 // 	final int currentPathPosition = ajaxURL.indexOf("Message");
 // 	final String defaultPath = ajaxURL.substring(0, currentPathPosition+7);
 	final String defaultPath = portletPath;
 %>
+
+<%-- Do not move navigation helper inside <script> tags --%>
+<%@ include file="js_koku_navigation_helper.jspf" %>
 
 <script type="text/javascript">
 
@@ -96,7 +102,6 @@
 	var kokuSuggestionBox = null;
 	var kokuTableNavigation = null;
 	
-	
 	/**
 	 *	URLs for ajaxCalls
 	 */
@@ -106,6 +111,7 @@
 
 		/* Actions or somethings? (portlet:resourceURL)*/
 	 	ajaxTaskUrl : "<%= ajaxURL %>",
+	 	homeUrl : "<%= homeURL %>",
 		suggestUrl : "<%= suggestURL %>",
 		archiveUrl : "<%= archiveURL %>",
 		archiveOldUrl : "<%= archiveOldURL %>",

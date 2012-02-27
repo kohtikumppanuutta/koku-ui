@@ -5,6 +5,7 @@
 </portlet:renderURL>
 
 <%@ include file="js_koku_detail.jspf" %>
+<%@ include file="js_koku_navigation_helper.jspf" %>
 
 <c:choose> 
   <c:when test="${tipy.responseStatus == 'FAIL'}" > 
@@ -50,7 +51,7 @@
 
 	</div>
 	<div id="task-manager-operation" class="task-manager-operation-part">
-		<input type="button" value="<spring:message code="page.return"/>" onclick="returnMainPage()" />
+		<input type="button" value="<spring:message code="page.return"/>" onclick="kokuNavigationHelper.returnMainPage()" />
 	</div>
 </div>
 
