@@ -35,7 +35,8 @@
  * Handle action message navigation
  * @Author: Jinhua Chen
  */
- 	var koku_navi_type = "<%= navigationType %>";
+ <%-- 	// var koku_navi_type = "<%= navigationType %>"; --%>
+	var koku_navi_type = readKokuCookie();
  	var defaultPath = "<%= defaultPath %>";
  	var naviRefreshTimer;
  	
