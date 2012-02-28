@@ -1,0 +1,11 @@
+<script type="text/javascript">
+	
+// jQuery(document).ready(function() {
+	var pageUrl = document.URL;
+	var result = pageUrl.lastIndexOf("resetView=true")
+	if (result > 0) {
+		kokuNavigationHelper.returnMainPage();
+	}
+// });
+	 
+</script>

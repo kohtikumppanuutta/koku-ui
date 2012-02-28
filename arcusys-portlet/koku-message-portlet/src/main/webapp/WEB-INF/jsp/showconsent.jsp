@@ -14,6 +14,8 @@
 
 <%@ include file="js_koku_detail.jspf" %>
 <%@ include file="js_koku_navigation_helper.jspf" %>
+<%@ include file="js_koku_reset_view.jspf" %>
+
 <c:choose> 
   <c:when test="${consent.responseStatus == 'FAIL'}" > 
   	<script type="text/javascript"> 
