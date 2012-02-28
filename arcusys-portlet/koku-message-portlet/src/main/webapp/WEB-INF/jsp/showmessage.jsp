@@ -170,7 +170,7 @@ public String htmlToCode(String s)
 				newUrl = newUrl.replace(/&lt;/g,"<");
 				newUrl =  newUrl.replace(/&gt;/g,">");			
 				return newUrl;
-			},			
+			},
 			/**
 			 * Returns to the main portlet page
 			 */
