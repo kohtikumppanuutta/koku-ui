@@ -115,31 +115,31 @@ public String htmlToCode(String s)
 				window.location = "<%= NavigationPortletProperties.NAVIGATION_PORTLET_PATH %><%= NavigationPortletProperties.REQUESTS_RECIEVED_REQUESTS %>";
 			},
 			redirectToRequestsReplied: function() {
-				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_REQUEST_REPLIED %>");
+				navigateToPage("<%= Constants.TASK_TYPE_REQUEST_REPLIED %>");
 			},
 			redirectToAppointmentsRecieved: function() {
-				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN %>");
+				navigateToPage("<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN %>");
 			},
 			redirectToAppointmentsOld: function() {
-				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD %>");
+				navigateToPage("<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD %>");
 			},
 			redirectToConsentsRecieved: function() {
-				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN %>");
+				navigateToPage("<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN %>");
 			}
 		},
 		
 		employee: {	
 			redirectToRequestOpen: function() {
-				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>");
+				navigateToPage("<%= Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>");
 			},
 			redirectToRequestReady: function() {
-				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE %>");
+				navigateToPage("<%= Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE %>");
 			},			
 			redirectToAppointmentsOpen: function() {
-				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE %>");
+				navigateToPage("<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE %>");
 			},
 			redirectToAppointmentsReady: function() {
-				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE %>");
+				navigateToPage("<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE %>");
 			},
 			redirectToInfoRequestsRecieved: function() {
 				window.location = "<%= NavigationPortletProperties.NAVIGATION_PORTLET_PATH %><%= NavigationPortletProperties.INFO_REQ_RECIEVED_INFO_REQS %>";
@@ -148,13 +148,13 @@ public String htmlToCode(String s)
 				window.location = "<%= NavigationPortletProperties.NAVIGATION_PORTLET_PATH %><%= NavigationPortletProperties.WARRANTS_BROWSE_WARRANTS %>";
 			},
 			redirectToKindergartenApplicationBrowsing: function() {
-				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE %>");
+				navigateToPage("<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE %>");
 			},
 			redirectToKindergartenApplication: function(formId) {
 				window.location = "<%= NavigationPortletProperties.NAVIGATION_PORTLET_PATH %>/EditKindergarten?FormID="+formId;
 			},
 			redirectToSentConsents: function() {
-				window.location = KokuMessage.util.formatUrl("<%= homeURL %>&NAVI_TYPE=<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS %>");
+				navigateToPage("<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS %>");
 			}
 		},
 		
