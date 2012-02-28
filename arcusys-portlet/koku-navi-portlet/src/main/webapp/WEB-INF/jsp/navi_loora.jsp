@@ -44,15 +44,15 @@
  * Handle action message navigation
  * @Author: Jinhua Chen
  */
-	// var koku_navi_type = "${naviType}";
-	var koku_navi_type = "<%= navigationType %>";
+// 	var koku_navi_type = "${naviType}"; 
+<%-- 	// var koku_navi_type = "<%= navigationType %>"; --%>
+	var koku_navi_type = readKokuCookie();
  	var defaultPath = "<%= defaultPath %>";
  	var naviRefreshTimer;
  	
 	jQuery(document).ready(function() {
-		var koku_navitype2 = readKokuCookie();
-	 	if (koku_navitype2 !== null && koku_navitype2 !== koku_navi_type) {
-	 		navigateToPage(koku_navitype2);
+	 	if (typeof koku_navi_type === "undefined" || koku_navi_type === null) {
+	 		navigateToPage("msg_inbox");
 	 	}
 		focusCurrentItem();	
 		ajaxUpdate();		

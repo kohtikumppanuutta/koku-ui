@@ -32,6 +32,6 @@
 	final String portalInfo = renderRequest.getPortalContext().getPortalInfo();	
 	
 	/* Current position in navigation */
-	final String navigationType = (String) renderRequest.getPortletSession().getAttribute("naviType");
+	// final String navigationType = (String) renderRequest.getPortletSession().getAttribute("naviType");
 	
 %>

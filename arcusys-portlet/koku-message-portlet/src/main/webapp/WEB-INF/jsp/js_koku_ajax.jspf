@@ -39,7 +39,6 @@ KokuAjax.prototype.genericAjaxCall = function(messageList, callback, url) {
  * Archives a list of messages selected by user
  */
 KokuAjax.prototype.archiveMessages = function(messageList, callback) {	
-	// var url="<%= archiveURL %>";
 	var url= this.renderUrls.archiveUrl;
 	url = this.formatUrl(url);
 	this.genericAjaxCall(messageList, callback, url);		
@@ -63,7 +62,6 @@ KokuAjax.prototype.archiveMessagesOld = function(folderType, callback) {
  * Deletes a list of messages selected by user
  */
 KokuAjax.prototype.deleteMessages = function(messageList, callback) {	
-	var url="<%= deleteURL %>";
 	var url= this.renderUrls.deleteUrl;
 	url = this.formatUrl(url);
 	this.genericAjaxCall(messageList, callback, url);	
@@ -73,7 +71,6 @@ KokuAjax.prototype.deleteMessages = function(messageList, callback) {
  * Revokes a list of consents selected by user
  */
 KokuAjax.prototype.revokeConsents = function(messageList, callback) {	
-	// var url="<%= revokeURL %>";
 	var url = this.renderUrls.revokeUrl;
 	url = this.formatUrl(url);
 	this.genericAjaxCall(messageList, callback, url);

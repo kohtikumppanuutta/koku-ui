@@ -11,5 +11,4 @@
 			},			
 			kokuErrorMsg : "<div class=\"serverErrorMsg\"><spring:message code="notification.serverError.msg" /></div><div class=\"serverErrorUuidMsg\"><spring:message code="notification.serverError.uuidMsg" />"
 	};
-
 </script>

@@ -1,5 +1,7 @@
 <script type="text/javascript">
 
+
+
 	/*
 	 * Navigation helper object for koku-message-portlet
 	 */
@@ -31,4 +33,12 @@
 				return "MessagePortlet";
 			}
 	};
+	
+	/* jQuery(document).ready(function() {
+		var pageUrl = document.URL;
+		if (pageUrl.lastIndexOf("resetView=true")) {
+			kokuNavigationHelper.returnMainPage();
+		}
+	});
+	*/ 
 </script>
