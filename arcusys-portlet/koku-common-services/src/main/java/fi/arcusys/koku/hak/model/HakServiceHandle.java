@@ -59,11 +59,12 @@ public class HakServiceHandle extends AbstractHandle {
 	
 	
 	public List<KokuApplicationSummary> getApplicants(String userId, String keyword, int startNum, int maxNum) {		
-		return applicants;
+		// return applicants;
+		return new ArrayList<KokuApplicationSummary>();
 	}
 	
 	public int getTotalRequestedApplicants(String userId, String keyword) {
-		return 2;
+		return 0;
 	}
 
 	public List<KokuApplicationSummary> searchKindergartenByName(String keyword, int maxSuggestionResults) {
@@ -73,7 +74,8 @@ public class HakServiceHandle extends AbstractHandle {
 				results.add(applicant);
 			}
 		}
-		return results;
+		// return results;
+		return new ArrayList<KokuApplicationSummary>();
 	}
 
 	public KokuApplicationSummary getApplicantDetails(String applicationId) {
@@ -84,7 +86,5 @@ public class HakServiceHandle extends AbstractHandle {
 			}
 		}
 		return null;
-	}	
-	
-
+	}
 }
