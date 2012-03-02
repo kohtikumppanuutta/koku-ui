@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>koku-ui</artifactId>
+    <groupId>kohti-kumppanuutta</groupId>
+    <version>0.0.2</version>
+  </parent>
+  <groupId>kohti-kumppanuutta</groupId>
+  <artifactId>koku-signin-portlet</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>koku-signin-portlet</name>
+    <dependencies>
+        <dependency>
+      <groupId>kohti-kumppanuutta</groupId>
+      <artifactId>koku-common-lib</artifactId>
+      <version>0.2.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.organization.api</artifactId>
+      <version>2.3.0-GA</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.webui.portal</artifactId>
+      <version>3.1.0-GA</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <!-- causes problems with vetuma controllers -->
+          <artifactId>exo.portal.component.portal</artifactId>
+          <groupId>org.exoplatform.portal</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    </dependencies>
+</project>
