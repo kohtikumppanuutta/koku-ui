@@ -1,0 +1,27 @@
+@charset "UTF-8";
+
+.koku-signin .koku-signin-main  {
+	padding: 5px; 
+	padding-top: 10px; 
+	padding-bottom: 10px;
+}
+
+.koku-signin .koku-signin-main a:hover {
+   cursor: pointer;
+}
+
+.koku-signin .koku-signin-main a {
+}
+
+
+.koku-signin .koku-signin-reset-floating {
+    clear: both;
+}
+.koku-signin .koku-signin-right {
+    float: right;
+}
+.koku-signin .koku-signin-read-only-text {
+    display: block;
+    padding: 5px;
+    padding-bottom: 10px
+}

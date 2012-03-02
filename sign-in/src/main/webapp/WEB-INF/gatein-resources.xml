@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_0 http://www.gatein.org/xml/ns/gatein_resources_1_0"
+	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_0">
+	
+	<portlet-skin>
+		<application-name>koku-signin-portlet-0.0.1-SNAPSHOT</application-name>
+		<portlet-name>koku-signin</portlet-name>
+		<skin-name>Default</skin-name>
+		<css-path>/css/koku-signin.css</css-path>
+	</portlet-skin>
+
+	<javascript>
+		<param>
+			<js-module>jQuery</js-module>
+			<js-path>/js/jquery-1.5.2.min.js</js-path>
+			<js-priority>10</js-priority>
+		</param>
+	</javascript>
+</gatein-resources>
