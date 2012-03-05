@@ -56,6 +56,7 @@
 					<span class="form-static-parameter">${pic}</span>
 
 					<form:input type="hidden" path="pic" value="${pic}" />
+					<form:input type="hidden" path="picType" value="${picType}" />
 
 					<!--TODO:  TÄHÄN VETOVALIKKO, JOSSA MAHDOLLISET ARVOT -->
 
@@ -74,9 +75,12 @@
 							code="koku.common.endTime" /> </span>
 					<form:input path="to" value="${endDate}" maxlength="10" size="10" />
 
+ 
+
 					<input type="submit"
 						value="<spring:message code="koku.lok.search"/>">
 				</form:form>
+				
 				<c:if test="${not empty limit}">
 					<br>
 					<div class="error">
@@ -107,8 +111,9 @@
 									-
 									<fmt:formatDate pattern="dd.MM.yyyy" value="${searchParams.to}" />
 								</h2>
-								<table class="portlet-table-body" width="100%" border="0">
-
+								
+								<table id=kuntalaishaku class="portlet-table-body" width="100%" border="0">
+								  <thead>
 									<tr>
 										<%-- TODO! when using <th> the text won't align to left, that's why we use <td> and <b> here now.
 This should be changed! --%>
@@ -130,6 +135,8 @@ This should be changed! --%>
 													code="koku.lok.service" /> </b>
 										</th>
 									</tr>
+								  </thead>
+								  <tbody>
 									<c:forEach var="e" items="${entries}">
 										<tr>
 											<td width=20%><fmt:formatDate
@@ -145,6 +152,7 @@ This should be changed! --%>
 											</td>
 										</tr>
 									</c:forEach>
+								  </tbody>	
 								</table>
 							</c:if>
 						</c:if>
@@ -198,3 +206,24 @@ This should be changed! --%>
 	</div>
 </div>
 <!-- end of koku-lok-div -->
+
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.5.2.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+		$(document).ready(function() {			
+			$('#kuntalaishaku').dataTable({
+				"bJQueryUI": true,
+				"sPaginationType": "full_numbers",
+				"oLanguage": {
+					"sSearch": "Haku",
+					"sProcessing": "Odota...",
+					"sZeroRecords": "Ei löytynyt tuloksia."
+				  },
+				 "aaSorting": [[ 0, "desc" ]],
+				 "bPaginate": false,
+			     "bLengthChange": false,
+			     "bInfo": false			     			     
+			});			
+			$("div#kuntalaishaku_filter input").attr("title","Haku rajaa vain taulukon tuloksia");			
+		});		
+</script>

@@ -188,8 +188,20 @@ public class LogSearchController {
 
       LogQueryCriteriaType criteriatype = new LogQueryCriteriaType();
 
+      //set criteria for searching custome or user pic
+      if( searchCriteria.getPicType().contentEquals("customerPic"))
+      {
+    	  criteriatype.setCustomerPic(searchCriteria.getPic());
+      }
+      else if( searchCriteria.getPicType().contentEquals("userPic"))
+      {
+    	  criteriatype.setUserPic(searchCriteria.getPic());    	  
+      }
+      criteriatype.setPicType(searchCriteria.getPicType());
+      
       // set the criteria
-      criteriatype.setCustomerPic(searchCriteria.getPic());
+      
+      //criteriatype.setCustomerPic(searchCriteria.getPic());
    
       // The From and To fields are not allowed to be null.
       // These have been null-checked earlier.
@@ -200,7 +212,7 @@ public class LogSearchController {
       criteriatype.setDataItemType(searchCriteria.getConcept());
       // log type: loki, lokin seurantaloki
       criteriatype.setLogType(LogConstants.LOG_NORMAL);
-
+      
       // call to log database
       AuditInfoType audit = new AuditInfoType();
       audit.setComponent(LogConstants.COMPONENT_LOK); 

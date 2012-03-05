@@ -23,6 +23,7 @@
 <portlet:renderURL var="showLogSearchFormURL">
 	<portlet:param name="action" value="searchLog" />
 	<portlet:param name="pic" value="${foundPic}" />
+	<portlet:param name="picType" value="${picType}" />
 </portlet:renderURL>
 
 <div class="koku-lok">
@@ -51,17 +52,33 @@
 				</div>
 
 				<div class="portlet-form-field-label">
-					<spring:message code="koku.lok.search.user" />
-				</div>
+		<%--			<spring:message code="koku.lok.search" />
+		 		</div> --%>
 
-				<form name="searchUserParams" method="post"
+				<form name="searchUserParams" method="post" commandname="picSelection"
 					action="${searchUserParamsURL}">
-					<span class="portlet-form-field-label"><spring:message
-							code="koku.common.pic" />: </span> <span
+					
+					<span class="portlet-form-field-label">
+					<spring:message code="koku.lok.search" /> </span>
+					
+					
+					<span class="portlet-form-field-label">
+					<select title="Haetaan lokitietoja, jotka kohdistuvat annetun asiakkaan tietoihin tai operaatioita tehneen käyttäjän perusteella" name="picSelection">
+					 <option title="Haetaan lokitietoja, jotka kohdistuvat annetun asiakkaan tietoihin" value="customerPic"><spring:message code="koku.lok.select.customer" /></option>
+					 <option title="Haetaan lokitietoja operaatioita tehneen käyttäjän perusteella" value="userPic"><spring:message code="koku.lok.select.user" /></option>  					 
+					</select>
+										
+			        <spring:message code="koku.lok.select.pic"/>: </span>
+					
+
+					 <span
 						class="portlet-form-input-field"> <input type="text"
 						name="pic" /> </span> <input class="portlet-form-button" type="submit"
 						value="<spring:message code="koku.lok.seek"/>" />
+					
+						
 				</form>
+          </div>
 
 				<p>
 					<c:choose>
