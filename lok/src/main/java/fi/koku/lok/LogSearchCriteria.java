@@ -19,6 +19,8 @@ public class LogSearchCriteria {
   private String concept;
   private Date from;
   private Date to;
+  private String picType;
+  
 
   public LogSearchCriteria() {
   }
@@ -29,12 +31,13 @@ public class LogSearchCriteria {
     this.to = to;
   }
   
-  public LogSearchCriteria(String pic, String concept, Date from, Date to) {
+  public LogSearchCriteria(String pic, String concept, Date from, Date to, String picType) {
     super();
     this.pic = pic;
     this.concept = concept;
     this.from = from;
     this.to = to;
+    this.picType = picType;
   }
 
   public String getPic() {
@@ -61,4 +64,10 @@ public class LogSearchCriteria {
   public void setTo(Date to) {
     this.to = to;
   }
+  public String getPicType() {
+	return picType;
+ }
+ public void setPicType(String picType) {
+    this.picType = picType;
+ }
 }

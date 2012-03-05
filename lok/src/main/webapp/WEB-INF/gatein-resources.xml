@@ -10,4 +10,20 @@
 		<css-path>/css/lok.css</css-path>
 	</portlet-skin>
 
+	<javascript>
+		<param>
+			<js-module>jQuery</js-module>
+			<js-path>/js/jquery-1.5.2.min.js</js-path>
+			<js-priority>10</js-priority>
+		</param>		
+	</javascript>
+
+	<javascript>
+		<param>
+			<js-module>jQueryDataTables</js-module>
+			<js-path>/js/jquery.dataTables.min.js</js-path>
+			<js-priority>10</js-priority>
+		</param>
+	</javascript>
+
 </gatein-resources>

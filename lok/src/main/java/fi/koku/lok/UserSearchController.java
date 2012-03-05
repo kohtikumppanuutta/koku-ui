@@ -80,25 +80,34 @@ public class UserSearchController {
   }
 
   @ActionMapping(params = "action=searchUserWithParams")
-  public void searchUserWithParams(ActionResponse response, @RequestParam(value = "pic", required = false) String pic,
+  public void searchUserWithParams(ActionResponse response, @RequestParam(value = "pic", required = false) String pic,@RequestParam(value = "picSelection", required = false) String picSelection,
       Model model) {
 
     // Form sending required to use ActionURL and now there parameters are send
     // forward to render method
-    response.setRenderParameter("pic", pic);
+	
+	response.setRenderParameter("pic", pic);	
+    response.setRenderParameter("picSelection", picSelection);
     response.setRenderParameter("action", "searchUserParams");
   }
 
+
+
+  
   @RenderMapping(params = "action=searchUserParams")
-  public String renderParams(PortletSession session, @RequestParam(value = "pic", required = false) String pic,
+  public String renderParams(PortletSession session, @RequestParam(value = "pic", required = false) String pic, @RequestParam(value = "picSelection", required = false) String picSelection,
       RenderRequest req, RenderResponse res, Model model) {
 
     User customer = null;
 
+    // add logging mode for LOK to model
+    //model.addAttribute("lokOperation", lokOperation);
+    boolean picCheck= false;
+    
     // get user pic and role
-    String userPic = LogUtils.getPicFromSession(session);
+    String userSessionPic = LogUtils.getPicFromSession(session);
 
-    List<Role> userRoles = authorizationInfoService.getUsersRoles(LogConstants.COMPONENT_LOK, userPic);
+    List<Role> userRoles = authorizationInfoService.getUsersRoles(LogConstants.COMPONENT_LOK, userSessionPic);
 
     // add a flag for allowing this user to see the operations on page
     // search.jsp
@@ -106,12 +115,25 @@ public class UserSearchController {
       model.addAttribute("allowedToView", true);
     }
     
-    // see http://fi.wikipedia.org/wiki/Henkil%C3%B6tunnus#Tunnuksen_muoto
+ // see http://fi.wikipedia.org/wiki/Henkil%C3%B6tunnus#Tunnuksen_muoto
     if (pic != null && pic.length() == 11 &&
-       (pic.charAt(6) == '-' || pic.charAt(6) == '+' || pic.charAt(6) == 'A')) {
-      // pic is well formed
-      try {
-        customer = findUser(pic, userPic);
+    	 	   (pic.charAt(6) == '-' || pic.charAt(6) == '+' || pic.charAt(6) == 'A') && picSelection.contentEquals("customerPic")) {
+    	        // pic is well formed
+    	       model.addAttribute("picType" ,picSelection);
+    	       picCheck = true;
+    	   }
+    else if
+    		 (pic != null && pic.length() == 11 &&
+    		 (pic.charAt(6) == '-' || pic.charAt(6) == '+' || pic.charAt(6) == 'A') && picSelection.contentEquals("userPic")) {
+    		  // pic is well formed
+    	      model.addAttribute("picType" ,picSelection);
+    		  picCheck = true;
+    		  }
+    
+    if (picCheck)
+    {
+    try {
+        customer = findUser(pic, userSessionPic);
       } catch (ServiceFault fault) {
         if (fault.getMessage().equalsIgnoreCase("Customer not found.")) {
           model.addAttribute("error", "koku.lok.no.user.results");
