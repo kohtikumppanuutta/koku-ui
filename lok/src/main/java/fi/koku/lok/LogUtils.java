@@ -23,6 +23,12 @@ import org.slf4j.LoggerFactory;
 
 import fi.koku.calendar.CalendarUtil;
 import fi.koku.portlet.filter.userinfo.UserInfo;
+import fi.koku.services.entity.customer.v1.CustomerQueryCriteriaType;
+import fi.koku.services.entity.customer.v1.CustomerServicePortType;
+import fi.koku.services.entity.customer.v1.CustomerType;
+import fi.koku.services.entity.customer.v1.CustomersType;
+import fi.koku.services.entity.customer.v1.PicsType;
+import fi.koku.services.entity.customer.v1.ServiceFault;
 import fi.koku.services.entity.person.v1.Person;
 import fi.koku.services.entity.person.v1.PersonConstants;
 import fi.koku.services.entity.person.v1.PersonService;
@@ -188,6 +194,51 @@ public class LogUtils {
     return (UserInfo) session.getAttribute(UserInfo.KEY_USER_INFO);
   }
 
+  
+  public void changePicsToNames(List<LogEntry> entries, String portletUserPic, CustomerServicePortType customerService) {
+    
+    
+    try {
+    List<String> picList = new ArrayList<String>();
+
+    // collect all different pics found in entries in a local list
+    for (LogEntry entry : entries) {
+      String pic = entry.getChild();
+      if (!picList.contains(pic)) {
+        picList.add(pic);
+      }
+    }
+   
+
+      CustomerQueryCriteriaType criteria = new CustomerQueryCriteriaType();
+      PicsType pt = new PicsType();
+      pt.getPic().addAll(picList);
+      criteria.setPics(pt);
+      CustomersType customers = customerService.opQueryCustomers(criteria, getCustomerAuditInfo(portletUserPic));
+      
+      Map<String, CustomerType> picToPerson = new HashMap<String, CustomerType>();
+      for (CustomerType customer : customers.getCustomer()) {
+        picToPerson.put(customer.getHenkiloTunnus(), customer);
+      }
+      
+      for (LogEntry entry : entries) {
+        CustomerType t = picToPerson.get(entry.getChild() );
+        entry.setChild(t.getEtuNimi() + " " + t.getSukuNimi());
+      }
+      
+    } catch (ServiceFault e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+  
+  public static fi.koku.services.entity.customer.v1.AuditInfoType getCustomerAuditInfo(String user) {
+    fi.koku.services.entity.customer.v1.AuditInfoType a = new fi.koku.services.entity.customer.v1.AuditInfoType();
+    a.setComponent(LogConstants.COMPONENT_LOK);
+    a.setUserId(user);
+    return a;
+  }
+  
   /**
    * Helper method that changes the pic value in every entry to the user's name,
    * read from PersonService.
@@ -196,13 +247,13 @@ public class LogUtils {
    * @return
    */
   public void changePicsToNames(List<LogEntry> entries, String portletUserPic, PersonService personService) {
-    String pic = null;
+   
     List<Person> list = null;
     List<String> picList = new ArrayList<String>();
 
     // collect all different pics found in entries in a local list
     for (LogEntry entry : entries) {
-      pic = entry.getUser();
+      String pic = entry.getUser();
       if (!picList.contains(pic)) {
         picList.add(pic);
       }
@@ -267,6 +318,8 @@ public class LogUtils {
       }
     }
   } 
+  
+  
   
   
   /**
