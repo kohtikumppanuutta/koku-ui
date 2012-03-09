@@ -34,6 +34,7 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import fi.koku.calendar.CalendarUtil;
+import fi.koku.services.entity.customer.v1.CustomerServicePortType;
 import fi.koku.services.entity.person.v1.PersonService;
 import fi.koku.services.utility.authorizationinfo.util.AuthUtils;
 import fi.koku.services.utility.authorizationinfo.v1.AuthorizationInfoService;
@@ -58,6 +59,8 @@ public class LogSearchController {
   private static final Logger log = LoggerFactory.getLogger(LogSearchController.class);
 
   private AuthorizationInfoService authorizationInfoService;
+  // use customer service:
+  private CustomerServicePortType customerService;
   private PersonService personService;
   
   // Use log service
@@ -70,6 +73,7 @@ public class LogSearchController {
   public LogSearchController() {
     ServiceFactory f = new ServiceFactory();
     logService = f.getLogservice();
+    customerService = f.getCustomerService();
     authorizationInfoService = f.getAuthorizationInfoService();
     personService = new PersonService();
   }
@@ -136,7 +140,12 @@ public class LogSearchController {
 
             // The user's name (not pic as in the database) should be shown, 
             // so change pics to names
-            lu.changePicsToNames(entries, userPic, personService);
+            
+           
+              lu.changePicsToNames(entries, userPic, personService);
+              if (criteria.getPicType().equals("userPic")) {
+                lu.changePicsToNames(entries, userPic, customerService );
+              }
             
             model.addAttribute("entries", entries);
          
