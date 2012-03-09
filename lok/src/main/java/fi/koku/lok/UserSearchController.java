@@ -7,6 +7,7 @@
  */
 package fi.koku.lok;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.ActionResponse;
@@ -33,6 +34,9 @@ import fi.koku.services.entity.customer.v1.CustomerServiceFactory;
 import fi.koku.services.entity.customer.v1.CustomerServicePortType;
 import fi.koku.services.entity.customer.v1.CustomerType;
 import fi.koku.services.entity.customer.v1.ServiceFault;
+import fi.koku.services.entity.person.v1.Person;
+import fi.koku.services.entity.person.v1.PersonConstants;
+import fi.koku.services.entity.person.v1.PersonService;
 
 /**
  * Controller for user search (LOK). This relates to LOK-3.
@@ -48,9 +52,11 @@ import fi.koku.services.entity.customer.v1.ServiceFault;
 public class UserSearchController {
 
   private static final Logger log = LoggerFactory.getLogger(UserSearchController.class);
+  private static final String DEFAULT_PIC ="customerPic";
 
   // use customer service:
   private CustomerServicePortType customerService;
+  private PersonService personService;
 
   private AuthorizationInfoService authorizationInfoService;
 
@@ -58,6 +64,7 @@ public class UserSearchController {
     ServiceFactory f = new ServiceFactory();
     authorizationInfoService = f.getAuthorizationInfoService();
     customerService = f.getCustomerService();
+    personService = new PersonService();
   }
 
   @RenderMapping(params = "action=searchUser")
@@ -67,6 +74,8 @@ public class UserSearchController {
     String userPic = LogUtils.getPicFromSession(session);
 
     List<Role> userRoles = authorizationInfoService.getUsersRoles(LogConstants.COMPONENT_LOK, userPic);
+    
+    model.addAttribute("picType" ,DEFAULT_PIC );
 
     // add a flag for allowing this user to see the operations on page
     // search.jsp
@@ -115,25 +124,21 @@ public class UserSearchController {
       model.addAttribute("allowedToView", true);
     }
     
+    model.addAttribute("picType" ,picSelection == null ? DEFAULT_PIC : picSelection );
+    
  // see http://fi.wikipedia.org/wiki/Henkil%C3%B6tunnus#Tunnuksen_muoto
     if (pic != null && pic.length() == 11 &&
-    	 	   (pic.charAt(6) == '-' || pic.charAt(6) == '+' || pic.charAt(6) == 'A') && picSelection.contentEquals("customerPic")) {
+    	 	   (pic.charAt(6) == '-' || pic.charAt(6) == '+' || pic.charAt(6) == 'A') ) {
     	        // pic is well formed
-    	       model.addAttribute("picType" ,picSelection);
+    	       
     	       picCheck = true;
     	   }
-    else if
-    		 (pic != null && pic.length() == 11 &&
-    		 (pic.charAt(6) == '-' || pic.charAt(6) == '+' || pic.charAt(6) == 'A') && picSelection.contentEquals("userPic")) {
-    		  // pic is well formed
-    	      model.addAttribute("picType" ,picSelection);
-    		  picCheck = true;
-    		  }
+    
     
     if (picCheck)
     {
     try {
-        customer = findUser(pic, userSessionPic);
+        customer = findUser(pic, userSessionPic, picSelection != null && picSelection.equals("customerPic"));
       } catch (ServiceFault fault) {
         if (fault.getMessage().equalsIgnoreCase("Customer not found.")) {
           model.addAttribute("error", "koku.lok.no.user.results");
@@ -151,6 +156,8 @@ public class UserSearchController {
         model.addAttribute("searchedUsers", customer);
         model.addAttribute("foundName", customer.getSname() + " " + customer.getFname());
         model.addAttribute("foundPic", customer.getPic());
+      } else {
+        model.addAttribute("error", "koku.lok.no.user.results");
       }
     } else {
       // pic is not well formed
@@ -166,25 +173,44 @@ public class UserSearchController {
    * Finds a user in the customer database by pic. There can be only one
    * matching user!
    */
-  public User findUser(String pic, String userPic) throws ServiceFault, SOAPFaultException {
+  public User findUser(String pic, String userPic, boolean searchCustomer) throws ServiceFault, SOAPFaultException {
 
-    log.info("Try to find user with pic=" + pic);
+    User user = null;
+    if (searchCustomer) {
+      log.info("Try to find customer with pic=" + pic);
 
-    CustomerType customer = null;
+      CustomerType customer = null;
 
-    fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
-    customerAuditInfoType.setComponent(LogConstants.COMPONENT_LOK);
-    customerAuditInfoType.setUserId(userPic);
+      fi.koku.services.entity.customer.v1.AuditInfoType customerAuditInfoType = new fi.koku.services.entity.customer.v1.AuditInfoType();
+      customerAuditInfoType.setComponent(LogConstants.COMPONENT_LOK);
+      customerAuditInfoType.setUserId(userPic);
 
-    User cust = null;
+      customer = customerService.opGetCustomer(pic, customerAuditInfoType);
 
-    customer = customerService.opGetCustomer(pic, customerAuditInfoType);
+      if (customer != null) {
+        // the User instance is needed so that the full name can be shown
+        user = new User(customer.getHenkiloTunnus(), customer.getId(), customer.getEtunimetNimi(),
+            customer.getSukuNimi());
+        log.debug(user.getFname() + ", " + user.getSname() + ", " + user.getPic());
+      }
+    } else {
+      log.info("Try to find employee with pic=" + pic);
+      List<String> picList = new ArrayList<String>();
+      picList.add(pic);
+      // call the Person service to get the persons
+      List<Person> personlist = personService.getPersonsByPics(picList, PersonConstants.PERSON_SERVICE_DOMAIN_OFFICER,
+          userPic, LogConstants.COMPONENT_LOK);
 
-    if (customer != null) {  
-      // the User instance is needed so that the full name can be shown
-      cust = new User(customer.getHenkiloTunnus(), customer.getId(), customer.getEtunimetNimi(), customer.getSukuNimi());
-      log.debug(cust.getFname() + ", " + cust.getSname() + ", " + cust.getPic());
+      if (personlist.size() > 0) {
+        Person p = personlist.get(0);
+        
+        if ( p.getPic() != null ) {
+          user = new User(p.getPic(), p.getUid(), p.getFname(), p.getSname());
+          log.debug(user.getFname() + ", " + user.getSname() + ", " + user.getPic());
+        }
+      }
     }
-    return cust;
+
+    return user;
   }
 }

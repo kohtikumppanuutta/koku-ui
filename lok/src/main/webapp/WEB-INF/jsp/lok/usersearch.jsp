@@ -61,13 +61,25 @@
 					<span class="portlet-form-field-label">
 					<spring:message code="koku.lok.search" /> </span>
 					
-					
-					<span class="portlet-form-field-label">
-					<select title="Haetaan lokitietoja, jotka kohdistuvat annetun asiakkaan tietoihin tai operaatioita tehneen käyttäjän perusteella" name="picSelection">
-					 <option title="Haetaan lokitietoja, jotka kohdistuvat annetun asiakkaan tietoihin" value="customerPic"><spring:message code="koku.lok.select.customer" /></option>
-					 <option title="Haetaan lokitietoja operaatioita tehneen käyttäjän perusteella" value="userPic"><spring:message code="koku.lok.select.user" /></option>  					 
-					</select>
-										
+					<span id="picType" class="portlet-form-field-label">
+					<select title="Haetaan lokitietoja, jotka kohdistuvat annetun asiakkaan tietoihin tai operaatioita tehneen käyttäjän perusteella" name="picSelection" va>
+					 
+					 <c:choose>
+					 	<c:when test="${picType eq 'userPic' }">
+					 		<option title="Haetaan lokitietoja, jotka kohdistuvat annetun asiakkaan tietoihin" value="customerPic"><spring:message code="koku.lok.select.customer" /></option>
+						 	<option selected="selected" title="Haetaan lokitietoja operaatioita tehneen käyttäjän perusteella" value="userPic"><spring:message code="koku.lok.select.user" /></option>
+						 				 	
+					 	</c:when>
+					 	<c:otherwise>
+						 	<option selected="selected" title="Haetaan lokitietoja, jotka kohdistuvat annetun asiakkaan tietoihin" value="customerPic"><spring:message code="koku.lok.select.customer" /></option>
+							 <option title="Haetaan lokitietoja operaatioita tehneen käyttäjän perusteella" value="userPic"><spring:message code="koku.lok.select.user" /></option>
+					  				 	
+					 	</c:otherwise>
+					 
+					 </c:choose>
+
+					 </select>
+					 					
 			        <spring:message code="koku.lok.select.pic"/>: </span>
 					
 
@@ -121,13 +133,7 @@
 		</c:choose>
 	</div>
 
-	<script type="text/javascript"
-		src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
-	<script type="text/javascript"
-		src="http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.4.js"></script>
-	<script type="text/javascript" language="JavaScript">
 
-</script>
 
 </div>
 <!-- end of koku-lok-div -->
