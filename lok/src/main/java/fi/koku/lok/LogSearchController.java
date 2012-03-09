@@ -196,8 +196,7 @@ public class LogSearchController {
       else if( searchCriteria.getPicType().contentEquals("userPic"))
       {
     	  criteriatype.setUserPic(searchCriteria.getPic());    	  
-      }
-      criteriatype.setPicType(searchCriteria.getPicType());
+      }      
       
       // set the criteria
       
