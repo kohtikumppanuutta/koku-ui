@@ -59,20 +59,21 @@
 					action="${searchUserParamsURL}">
 					
 					<span class="portlet-form-field-label">
+					
 					<spring:message code="koku.lok.search" /> </span>
 					
 					<span id="picType" class="portlet-form-field-label">
-					<select title="Haetaan lokitietoja, jotka kohdistuvat annetun asiakkaan tietoihin tai operaatioita tehneen käyttäjän perusteella" name="picSelection" va>
+					<select title="<spring:message code="koku.lok.select.operation" />" name="picSelection">
 					 
-					 <c:choose>
+					<c:choose>
 					 	<c:when test="${picType eq 'userPic' }">
-					 		<option title="Haetaan lokitietoja, jotka kohdistuvat annetun asiakkaan tietoihin" value="customerPic"><spring:message code="koku.lok.select.customer" /></option>
-						 	<option selected="selected" title="Haetaan lokitietoja operaatioita tehneen käyttäjän perusteella" value="userPic"><spring:message code="koku.lok.select.user" /></option>
+					 		<option title="<spring:message code="koku.lok.select.title" />" value="customerPic"><spring:message code="koku.lok.select.customer" /></option>
+						 	<option selected="selected" title=<spring:message code="koku.lok.select.option.user" /> value="userPic"><spring:message code="koku.lok.select.user" /></option>
 						 				 	
 					 	</c:when>
 					 	<c:otherwise>
-						 	<option selected="selected" title="Haetaan lokitietoja, jotka kohdistuvat annetun asiakkaan tietoihin" value="customerPic"><spring:message code="koku.lok.select.customer" /></option>
-							 <option title="Haetaan lokitietoja operaatioita tehneen käyttäjän perusteella" value="userPic"><spring:message code="koku.lok.select.user" /></option>
+						 	<option selected="selected" title="<spring:message code="koku.lok.select.title" />" value="customerPic"><spring:message code="koku.lok.select.customer" /></option>
+							 <option title="<spring:message code="koku.lok.select.option.customer" />" value="userPic"><spring:message code="koku.lok.select.user" /></option>
 					  				 	
 					 	</c:otherwise>
 					 
