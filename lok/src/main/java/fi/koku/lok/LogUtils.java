@@ -100,17 +100,6 @@ public class LogUtils {
       error[1] = "koku.lok.search.null.to";
     }
 
-    if (LogConstants.LOG_NORMAL.equalsIgnoreCase(logtype)) {
-      if (criteria.getConcept() == null || criteria.getConcept().isEmpty()) {
-        error[2] = "koku.lok.search.null.concept";
-      } 
-      // check that the concept is at least 4 characters long
-      else if(criteria.getConcept().length() < LogConstants.CONCEPT_MIN_LENGTH){
-        error[2] = "koku.lok.error.concept.too.short";
-      }
-    }
-  
-
     // check that start date is before end date
     if (criteria.getFrom() != null && criteria.getTo() != null) {
       Calendar from = dateToCalendar(criteria.getFrom());
@@ -223,7 +212,10 @@ public class LogUtils {
       
       for (LogEntry entry : entries) {
         CustomerType t = picToPerson.get(entry.getChild() );
+        if( t != null) //children has pic defined
+        {
         entry.setChild(t.getEtuNimi() + " " + t.getSukuNimi());
+        }
       }
       
     } catch (ServiceFault e) {

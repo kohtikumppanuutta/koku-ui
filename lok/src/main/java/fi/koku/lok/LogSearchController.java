@@ -143,9 +143,8 @@ public class LogSearchController {
             
            
               lu.changePicsToNames(entries, userPic, personService);
-              if (criteria.getPicType().equals("userPic")) {
                 lu.changePicsToNames(entries, userPic, customerService );
-              }
+              
             
             model.addAttribute("entries", entries);
          

@@ -99,8 +99,13 @@
 
 						<c:if test="${not empty entries}">
 							<c:if test="${not empty visited}">
-								<h2 class="portlet-section-subheader">									
-									<spring:message code="koku.common.searchResults" />
+								<h2 class="portlet-section-subheader">
+									<c:if test="${searchParams.picType eq 'userPic'}">
+									<spring:message code="koku.common.userSearchResults" />
+									</c:if>
+									<c:if test="${searchParams.picType eq 'customerPic'}">
+									<spring:message code="koku.common.customerSearchResults" />
+									</c:if>							
 									<c:out value=" "/>
 									<c:out value="${searchParams.pic}" />,
 									<c:out value=" "/>									
@@ -126,11 +131,6 @@ This should be changed! --%>
 												<b><spring:message
 													code="koku.lok.end.user" /> </b>											
 										</th>
-										
-										
-											<c:choose>
-												<c:when test="${picType eq userPic}">
-												
 													<th width=5% scope="col"><b><spring:message
 													code="koku.lok.operation" /> </b>
 													</th>
@@ -140,19 +140,6 @@ This should be changed! --%>
 													<th width=30% scope="col"><b><spring:message
 													code="koku.lok.data.item.type" /> </b>
 													</th>
-																				
-												</c:when>
-												<c:otherwise>
-													<th width=10% scope="col"><b><spring:message
-													code="koku.lok.operation" /> </b>
-													</th>
-													<th width=40% scope="col"><b><spring:message
-													code="koku.lok.data.item.type" /> </b>
-													</th>
-												</c:otherwise>
-											</c:choose>
-											
-										
 										<th width=10% scope="col"><b><spring:message
 													code="koku.lok.service" /> </b>
 										</th>
@@ -166,26 +153,12 @@ This should be changed! --%>
 											</td>
 											<td width=20%><c:out value="${e.user}" />
 											</td>
-											
-											<c:choose>
-												<c:when test="${picType eq userPic}">
-												
 													<td width=5%><c:out value="${e.operation}" />
 													</td>
 													<td width=15%><c:out value="${e.child}" />
 													</td>
 													<td width=30%><c:out value="${e.message}" />
 													</td>
-																				
-												</c:when>
-												<c:otherwise>
-													<td width=10%><c:out value="${e.operation}" />
-													</td>
-													<td width=40%><c:out value="${e.message}" />
-													</td>
-												</c:otherwise>
-											</c:choose>
-											
 											<td width=10%><c:out value="${e.clientSystemId}" />
 											</td>
 										</tr>

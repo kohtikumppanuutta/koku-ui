@@ -110,7 +110,6 @@ public class UserSearchController {
     User customer = null;
 
     // add logging mode for LOK to model
-    //model.addAttribute("lokOperation", lokOperation);
     boolean picCheck= false;
     
     // get user pic and role
