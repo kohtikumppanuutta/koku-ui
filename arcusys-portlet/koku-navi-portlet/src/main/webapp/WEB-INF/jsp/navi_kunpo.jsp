@@ -66,7 +66,7 @@
 %>		
 		
 		<!--  VIESTIT -->
-		<li><a href="<%= frontPagePath %>">Etusivu</a></li>
+<%-- 		<li><a href="<%= frontPagePath %>">Etusivu</a></li>  --%>
 		<li id="kks"><a href="<%= kksPath %>">Sopimukset ja suunnitelmat</a>
 		<li id="pyh"><a href="<%= pyhPath %>">Omat tiedot</a></li>
 		
@@ -74,11 +74,9 @@
 		<li><span class="naviLinkHeaderNonLink">Viestit</span>
 			<ul class="child">
 				<li id="msg_inbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_inbox')">Saapuneet</a><span id="inbox_num" class="message_num"></span></li>
-				<li id="msg_outbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_outbox')">Lähetetyt</a></li>
 				<li><a href="javascript:void(0)" onclick="showArchiveUI()">Arkistoidut</a>
 					<ul id="archive-part">
 						<li id="msg_archive_inbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_archive_inbox')">Saapuneet</span></a><span id="archive_inbox_num" class="message_num"></span></li>
-						<li id="msg_archive_outbox"><a href="javascript:void(0)" onclick="navigateToPage('msg_archive_outbox')">Lähetetyt</a></li>
 					</ul>
 				</li>
 			</ul>
