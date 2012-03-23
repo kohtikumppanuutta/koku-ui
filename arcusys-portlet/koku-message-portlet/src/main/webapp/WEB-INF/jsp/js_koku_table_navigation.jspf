@@ -133,7 +133,7 @@ function KokuTableNavigation(ajax) {
 			var index =  jQuery(this).val();
 			var task = pageObj.tasks[index];
 			var appointmentId = task["appointmentId"];
-			var targetPerson = task['targetPersonUid'];
+			var targetPerson = task['targetPersonUser']['uid'];
 			var status = task['status'];
 			
 			if(status != 'Peruutettu') { // check if cancelled or not
