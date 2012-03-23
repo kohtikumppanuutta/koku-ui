@@ -4,9 +4,6 @@ import static fi.arcusys.koku.util.Constants.RESPONSE_FAIL;
 
 import java.util.Arrays;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fi.arcusys.koku.av.AvCitizenServiceHandle;
 import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.TivaCitizenServiceHandle;
@@ -19,9 +16,6 @@ public class KokuActionProcessCitizenImpl extends AbstractKokuActionProcess {
 	private AvCitizenServiceHandle avCitizenServiceHandle = null;
 	private KokuCitizenWarrantHandle warrantHandle = null;	
 	private TivaCitizenServiceHandle tivaHandle = null;
-
-	
-	
 
 	public KokuActionProcessCitizenImpl(String userId) {
 		super(userId);
