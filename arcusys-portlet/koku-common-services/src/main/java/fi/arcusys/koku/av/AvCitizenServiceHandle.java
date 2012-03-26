@@ -149,9 +149,9 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 		final TimeZone timeZone = TimeZone.getTimeZone("GMT+0:00");
 		Slot slot = new Slot();
 		slot.setSlotNumber(appSlot.getSlotNumber());
-		slot.setAppointmentDate(MessageUtil.formatDateByString(appSlot.getAppointmentDate(), DATE), timeZone);
-		slot.setStartTime(MessageUtil.formatDateByString(appSlot.getStartTime(), TIME), timeZone);
-		slot.setEndTime(MessageUtil.formatDateByString(appSlot.getEndTime(), TIME), timeZone);
+		slot.setAppointmentDate(MessageUtil.formatDateByString(appSlot.getAppointmentDate(), DATE, timeZone));
+		slot.setStartTime(MessageUtil.formatDateByString(appSlot.getStartTime(), TIME, timeZone));
+		slot.setEndTime(MessageUtil.formatDateByString(appSlot.getEndTime(), TIME, timeZone));
 		slot.setLocation(appSlot.getLocation());
 		slot.setComment(appSlot.getComment());
 		return slot;
