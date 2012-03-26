@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.NoSuchMessageException;
@@ -177,13 +178,15 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 	private List<Slot> formatSlots(List<AppointmentSlot> appSlots, AcceptedSlots acceptedSlots,
 			List<AppointmentReceipientTO> recipients) {
 		
-		List<Slot> slots = new ArrayList<Slot>();		
+		List<Slot> slots = new ArrayList<Slot>();
+		/* Why GMT0? See issue KOKU-1210 - Ajanvarauksessa tapaamisten ajat muuttuvat */
+		final TimeZone timeZone = TimeZone.getTimeZone("GMT+0:00");
 		for (AppointmentSlot appSlot : appSlots) {
 			Slot slot = new Slot();
 			slot.setSlotNumber(appSlot.getSlotNumber());
-			slot.setAppointmentDate(MessageUtil.formatDateByString(appSlot.getAppointmentDate(), DATE));
-			slot.setStartTime(MessageUtil.formatDateByString(appSlot.getStartTime(), TIME));
-			slot.setEndTime(MessageUtil.formatDateByString(appSlot.getEndTime(), TIME));
+			slot.setAppointmentDate(MessageUtil.formatDateByString(appSlot.getAppointmentDate(), DATE, timeZone));
+			slot.setStartTime(MessageUtil.formatDateByString(appSlot.getStartTime(), TIME, timeZone));
+			slot.setEndTime(MessageUtil.formatDateByString(appSlot.getEndTime(), TIME, timeZone));
 			slot.setLocation(appSlot.getLocation());
 			slot.setComment(appSlot.getComment());			
 			slots.add(slot);
