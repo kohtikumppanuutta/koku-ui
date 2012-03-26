@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.NoSuchMessageException;
@@ -145,11 +146,12 @@ public class AvCitizenServiceHandle extends AbstractHandle {
 	 * @return formatted slot data model
 	 */
 	private Slot formatSlot(AppointmentSlot appSlot) {
+		final TimeZone timeZone = TimeZone.getTimeZone("GMT+0:00");
 		Slot slot = new Slot();
 		slot.setSlotNumber(appSlot.getSlotNumber());
-		slot.setAppointmentDate(MessageUtil.formatDateByString(appSlot.getAppointmentDate(), DATE));
-		slot.setStartTime(MessageUtil.formatDateByString(appSlot.getStartTime(), TIME));
-		slot.setEndTime(MessageUtil.formatDateByString(appSlot.getEndTime(), TIME));
+		slot.setAppointmentDate(MessageUtil.formatDateByString(appSlot.getAppointmentDate(), DATE), timeZone);
+		slot.setStartTime(MessageUtil.formatDateByString(appSlot.getStartTime(), TIME), timeZone);
+		slot.setEndTime(MessageUtil.formatDateByString(appSlot.getEndTime(), TIME), timeZone);
 		slot.setLocation(appSlot.getLocation());
 		slot.setComment(appSlot.getComment());
 		return slot;
