@@ -125,10 +125,21 @@ public final class MessageUtil {
 	 * @return formatted date string
 	 */
 	public static String formatDateByString(XMLGregorianCalendar xmlGregorianCalendar, String formatString) {
+		return formatDateByString(xmlGregorianCalendar, formatString, TimeZone.getTimeZone(TIME_ZONE));
+	}		
+		
+	/**
+	 * Formats the date with given format with given format string
+	 * @param xmlGregorianCalendar
+	 * @param formatString
+	 * @param timeZone
+	 * @return formatted date string
+	 */
+	public static String formatDateByString(XMLGregorianCalendar xmlGregorianCalendar, String formatString, TimeZone timeZone) {
 		if(xmlGregorianCalendar != null ) {
 			Calendar cal = xmlGregorianCalendar.toGregorianCalendar();
 			SimpleDateFormat dateformat = new SimpleDateFormat(formatString);
-			dateformat.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
+			dateformat.setTimeZone(timeZone);
 			// dateformat.setTimeZone(TimeZone.getTimeZone("GMT+3:00"));
  			return dateformat.format(cal.getTime());
 		} else {
