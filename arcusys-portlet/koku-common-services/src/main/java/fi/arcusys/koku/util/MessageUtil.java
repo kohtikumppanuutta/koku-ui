@@ -127,9 +127,10 @@ public final class MessageUtil {
 	public static String formatDateByString(XMLGregorianCalendar xmlGregorianCalendar, String formatString) {
 		if(xmlGregorianCalendar != null ) {
 			Calendar cal = xmlGregorianCalendar.toGregorianCalendar();
-			SimpleDateFormat dateformat = new SimpleDateFormat(formatString);	
-			dateformat.setTimeZone(TimeZone.getTimeZone("GMT+3:00"));
-// 			dateformat.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
+			SimpleDateFormat dateformat = new SimpleDateFormat(formatString);
+			dateformat.setTimeZone(TimeZone.getTimeZone("GMT+0:00"));
+			// dateformat.setTimeZone(TimeZone.getTimeZone("GMT+3:00"));
+ 			// dateformat.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
 			return dateformat.format(cal.getTime());
 		} else {
 			return "";
