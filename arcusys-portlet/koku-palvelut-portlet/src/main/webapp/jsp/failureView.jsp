@@ -5,8 +5,13 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page import="fi.arcusys.koku.palvelut.controller.ViewController"%>
 
+<portlet:renderURL var="homeURL" windowState="<%= WindowState.NORMAL.toString() %>" >
+	<portlet:param name="myaction" value="home" />
+</portlet:renderURL>
+
 
 <%@page import="javax.portlet.PortletPreferences"%>
+<%@ include file="js_koku_navigation_helper.jspf" %>
 
 <div class="portlet-linkit-container">		
 	<div class="portlet-header">
