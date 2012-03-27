@@ -18,6 +18,79 @@ function KokuEmployeeTable() {
 	};
 };
 
+
+
+KokuTable.prototype.createAppoitmentsTable = function() {
+
+	var taskHtml = "";
+	var formLink = "";
+
+	/***************
+	 * Public methods
+	 */
+	 var public = {
+	 	open : createOpenAppointmentsTable,
+	 	ready : createReadyAppointmentsTable
+	 };
+
+	/*******************
+	 * Private methods
+	 */
+	 
+	function createOpenAppointmentsTable(tasks) {
+		
+		if (tasks == undefined || tasks == null || tasks.length == 0) {
+			return KokuUtil.errorMsg.showErrorMsg("<spring:message code="errorMsg.noContent"/>");
+		}
+		
+		var columnNames = [
+					   "<spring:message code="message.choose" />",
+	                   "<spring:message code="message.to" />",
+	                   "<spring:message code="message.subject" />",
+	                   "<spring:message code="message.description" />",
+	                  ];
+	
+		var columnIds = [
+						 "receivingUser",
+		                 "cleanHtmlsubject",
+		                 "cleanHtmldescription",
+		                ];
+		                
+		KokuTable.prototype.createAppoitmentsTableUtils.shortenMsg(tasks);
+		                
+		return KokuTable.prototype.tableGenerator.createTable("kokuAjax.showAppointment", "appointmentsTable", columnNames, columnIds, tasks);                
+	};
+	
+	function createReadyAppointmentsTable(tasks) {
+		
+		if (tasks == undefined || tasks == null || tasks.length == 0) {
+			return KokuUtil.errorMsg.showErrorMsg("<spring:message code="errorMsg.noContent"/>");
+		}		
+		
+		var columnNames = [
+					   "<spring:message code="message.choose" />",
+	                   "<spring:message code="message.to" />",
+	                   "<spring:message code="message.subject" />",
+	                   "<spring:message code="message.description" />",
+	                   "<spring:message code="message.status" />"
+	                  ];
+	
+		var columnIds = [
+						 "receivingUser",
+		                 "cleanHtmlsubject",
+		                 "cleanHtmldescription",
+		                 "status"
+		                ];
+		                
+		KokuTable.prototype.createAppoitmentsTableUtils.shortenMsg(tasks);		
+		return KokuTable.prototype.tableGenerator.createTable("kokuAjax.showAppointment", "appointmentsTable", columnNames, columnIds, tasks);                
+	};
+	
+	return public;
+};
+
+
+
 /**
  * Create application table
  */ 
@@ -81,7 +154,7 @@ KokuEmployeeTable.prototype.createRequestsTable = function(tasks) {
 		}
 		
 		taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["requestId"] + '" />' + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ KokuUtil.escapeHTML(tasks[i]["requestId"]) + '\')" >' + KokuUtil.escapeHTML(tasks[i]["subject"]) + '</td>'
+				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ KokuUtil.escapeHTML(tasks[i]["requestId"]) + '\')" >' + KokuUtil.shorty(KokuUtil.escapeHTML(tasks[i]["subject"]),40) + '</td>'
 				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ KokuUtil.escapeHTML(tasks[i]["requestId"]) + '\')" >' + KokuUtil.escapeHTML(tasks[i]["respondedAmount"]) + '</td>'
 				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ KokuUtil.escapeHTML(tasks[i]["requestId"]) + '\')" >' + KokuUtil.escapeHTML(tasks[i]["missedAmount"]) + '</td>'
 				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ KokuUtil.escapeHTML(tasks[i]["requestId"]) + '\')" >' + KokuUtil.escapeHTML(tasks[i]["creationDate"]) + '</td>'

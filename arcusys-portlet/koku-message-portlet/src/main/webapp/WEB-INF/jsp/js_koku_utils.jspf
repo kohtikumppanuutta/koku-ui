@@ -30,6 +30,18 @@ var KokuUtil = {
 		}
 	},
 	
+	shorty : function(value, maxLength) {
+		if (maxLength === undefined || maxLength === null || isNaN(maxLength)) {
+			maxLength = 22;		
+		}
+		if (value === undefined || value === null || !isNaN(value) || value.length <= maxLength ) {
+			return value;
+		} else {
+			// return "<abbr class='valueWithDesc' title='"+ value +"' >" + value.substring(0,maxLength) +"...</abbr>";
+			return "<span class='jQueryToolTip' title='" + value + "'>" + value.substring(0,maxLength) +"...</span>";
+		}
+	},
+	
 	escapeHTML : function(value) {
 		if (value !== null && value !== undefined && isNaN(value) && value.replace()) {
 			return value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');

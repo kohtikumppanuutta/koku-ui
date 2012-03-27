@@ -102,6 +102,8 @@ public class AvEmployeeServiceHandle extends AbstractHandle {
 			KokuAppointment kokuAppointment = new KokuAppointment();
 			kokuAppointment.setAppointmentId(appSummary.getAppointmentId());
 			kokuAppointment.setSenderUser(new KokuUser(appSummary.getSenderUserInfo()));
+			// KOKU-1234 - 'Tapaamiset'-listauksiin tarvitaan tieto kenelle viesti on lähetetty (Työntekijän puoli)
+			kokuAppointment.setReceivingUser(new KokuUser());
 			kokuAppointment.setSubject(appSummary.getSubject());
 			kokuAppointment.setDescription(appSummary.getDescription());
 			kokuAppointment.setStatus(localizeActionRequestStatus(appSummary.getStatus()));
