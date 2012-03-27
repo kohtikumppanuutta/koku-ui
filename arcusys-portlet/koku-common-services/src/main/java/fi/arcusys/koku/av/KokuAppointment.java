@@ -11,11 +11,11 @@ public class KokuAppointment {
 
 	private long appointmentId;
 	private KokuUser senderUser;
+	private KokuUser receivingUser;
 	private String subject;
 	private String description;
 	private String status;
 	private String cancellationComment;
-	
 	
 	/**
 	 * @return the senderUser
@@ -73,6 +73,20 @@ public class KokuAppointment {
 		this.cancellationComment = cancellationComment;
 	}
 
+	/**
+	 * @return the receivingUser
+	 */
+	public KokuUser getReceivingUser() {
+		return receivingUser;
+	}
+
+	/**
+	 * @param receivingUser the receivingUser to set
+	 */
+	public void setReceivingUser(KokuUser receivingUser) {
+		this.receivingUser = receivingUser;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -88,6 +102,8 @@ public class KokuAppointment {
 						.hashCode());
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
+		result = prime * result
+				+ ((receivingUser == null) ? 0 : receivingUser.hashCode());
 		result = prime * result
 				+ ((senderUser == null) ? 0 : senderUser.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
@@ -127,6 +143,13 @@ public class KokuAppointment {
 		} else if (!description.equals(other.description)) {
 			return false;
 		}
+		if (receivingUser == null) {
+			if (other.receivingUser != null) {
+				return false;
+			}
+		} else if (!receivingUser.equals(other.receivingUser)) {
+			return false;
+		}
 		if (senderUser == null) {
 			if (other.senderUser != null) {
 				return false;
@@ -150,18 +173,6 @@ public class KokuAppointment {
 		}
 		return true;
 	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "KokuAppointment [appointmentId=" + appointmentId
-				+ ", senderUser=" + senderUser + ", subject=" + subject
-				+ ", description=" + description + ", status=" + status
-				+ ", cancellationComment=" + cancellationComment + "]";
-	}
-	
 	
 }
 

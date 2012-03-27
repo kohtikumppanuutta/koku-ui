@@ -152,7 +152,6 @@ KokuAjax.prototype.ajaxGetTasks = function(pageObj, presentTasks) {
 			presentTasks(tasks);
 			
 			/* Popup titles */
-			/* 
 			jQuery('span.jQueryToolTip').qtip({  
 				show: {
 				 delay: 10,
@@ -166,11 +165,20 @@ KokuAjax.prototype.ajaxGetTasks = function(pageObj, presentTasks) {
 				},
 				hide: 'mouseout',
 				style: { 
+					width: 200,
+					padding: 5,
+					background: '#EFEFEF',
+					color: 'black',
+					textAlign: 'center',
+					border: {
+					   width: 1,
+					   radius: 5,
+					   color: '#CCC'
+					},
 					name: 'blue', 
 					tip: true 
-				} 
-			});
-			*/
+				}
+			});			
 				
 		} else {
 			var message = "<spring:message code="error.unLogin" />";

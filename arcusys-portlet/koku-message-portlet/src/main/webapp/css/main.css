@@ -744,15 +744,15 @@
 		width: 50px;
 	}
 	
-	/* Tapaamiset - Avoimet */
-	table.task-manager-table.appoitmentsTable td.messageItem.status {
+	/* Tapaamiset - Avoimet/Valmiit */
+	table.task-manager-table.appointmentsTable td.messageItem.status {
 		width: 75px;
 	}
-	table.task-manager-table.appoitmentsTable td.messageItem.sender {
-		width: 150px;
+	table.task-manager-table.appointmentsTable td.messageItem.senderUser {
+		width: 130px;
 	}
-	table.task-manager-table.appoitmentsTable td.messageItem.subject {
-		width: 200px;
+	table.task-manager-table.appointmentsTable td.messageItem.cleanHtmlsubject {
+		width: 270px;
 	}
 	
 	/* Suostumukset - Lähetetyt suostumuspyynnöt */

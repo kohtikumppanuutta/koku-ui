@@ -112,6 +112,8 @@
 </script>
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.jgrowl_minimized.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.qtip.min.js"></script>
+
 
 <script type="text/javascript"> 
 /*
@@ -242,23 +244,39 @@ function presentTasks(tasks) {
 			taskHtml += table.createRequestReplied(tasks);
 		}
 	} else if(pageObj.taskType.indexOf('app_') == 0) { // for appointment
-		// taskHtml += table.createAppoitmentsTable(tasks);
-		if (pageObj.taskType == "<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN%>") {
-			taskHtml +=  table.createAppoitmentsInboxCitizenTable(tasks);
-		} else {
-			taskHtml +=  table.createAppoitmentsTable(tasks);
+		switch(pageObj.taskType) {
+		case "<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN %>" :
+			// taskHtml +=  table.createAppoitmentsInboxCitizenTable(tasks);
+			taskHtml +=  table.createAppoitmentsTable().unanswered(tasks);
+
+			break;
+		case "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN %>" :
+		case "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD %>" :	
+			taskHtml +=  table.createAppoitmentsTable().ready(tasks);			
+			break;
+		default:
+			/* TODO */
+			break;
 		}
-	} else if(pageObj.taskType.indexOf('cst_') == 0) { // for consent		
-		if(pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN %>") {
-			taskHtml = table.createConsentsAssignedTable(tasks);		
-		} else if(pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS %>" || pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD %>") {
+	} else if(pageObj.taskType.indexOf('cst_') == 0) { // for consent
+		switch(pageObj.taskType) {
+		case "<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN %>" : 
+			taskHtml = table.createConsentsAssignedTable(tasks);
+			break;
+		case "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS %>" :
+		case "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD %>" :
 			taskHtml = table.createConsentsCurrentAndOldTable(tasks);
-		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED %>") {
+			break;
+		case "<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED %>" :
 			taskHtml += table.createBrowseWarrantsToMe(tasks);
-		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT %>") {
+			break;
+		case "<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT %>" :
 			taskHtml += table.createBrowseWarrantsFromMe(tasks);
-		} 		
-	
+			break;
+		default:
+			/* TODO */
+			break;
+		}	
 	} else if (pageObj.taskType.indexOf('application_') == 0) { // for applications (hakemukset)
 		taskHtml += table.createApplicationsTable(tasks);		
 	} else {											// for message

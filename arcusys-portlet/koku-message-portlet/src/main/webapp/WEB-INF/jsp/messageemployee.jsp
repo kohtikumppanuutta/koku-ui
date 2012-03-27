@@ -303,28 +303,51 @@ function presentTasks(tasks) {
 
 	var taskHtml = "";
 	if (pageObj.taskType.indexOf('req_') == 0) { // for request
-		if (pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE %>" || pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>") {
-			taskHtml += table.createRequestsEmployeeTable(tasks);
-		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_REPLIED %>" || pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_OLD %>") {
+		switch(pageObj.taskType) {
+		case "<%= Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE %>" :
+		case "<%= Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>" :
+			taskHtml += table.createRequestsEmployeeTable(tasks);			
+			break;
+		case "<%= Constants.TASK_TYPE_REQUEST_REPLIED %>" :
+		case "<%= Constants.TASK_TYPE_REQUEST_OLD %>" :
 			taskHtml += table.createRequestReplied(tasks);
-		}		
-	} else if(pageObj.taskType.indexOf('app_') == 0) { // for appointment
-		// taskHtml += table.createAppoitmentsTable(tasks);
-		if (pageObj.taskType == "<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN%>") {
-			taskHtml +=  table.createAppoitmentsInboxCitizenTable(tasks);		
-		} else {
-			taskHtml +=  table.createAppoitmentsTable(tasks);	
+			break;
+		default: 
+			/* TODO */
+			break;		
 		}
+	} else if(pageObj.taskType.indexOf('app_') == 0) { // for appointment
+			switch(pageObj.taskType) {			
+			case "<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN %>" :
+				taskHtml +=  table.createAppoitmentsInboxCitizenTable(tasks);
+				break;
+			case "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE %>" :
+				taskHtml += table.createAppoitmentsTable().ready(tasks);
+				break;
+			case "<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE %>" :
+				taskHtml += table.createAppoitmentsTable().open(tasks);
+				break;
+			default:
+				/* TODO */
+				break;
+			}
 	} else if(pageObj.taskType.indexOf('cst_') == 0) { // for consent
-		if (pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>") {			
+		switch(pageObj.taskType) {		
+		case "<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>" :		
 			kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_CONSENT %>');
 			taskHtml += table.createBrowseEmployeeOwnConsents(tasks);
-		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>") {
+			break;
+		case "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>" :
 			taskHtml += table.createBrowseUserWarrantsTable(tasks);
-		} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS%>") {
+			break;
+		case "<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS%>" :
 			// suggestType = '<%= Constants.SUGGESTION_WARRANT %>';
 			kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_WARRANT %>');
-			taskHtml += table.createBrowseUserWarrantsTable(tasks);
+			taskHtml += table.createBrowseUserWarrantsTable(tasks);			
+			break;
+		default:
+			/* TODO */
+			break;
 		}
 	} else if (pageObj.taskType.indexOf('info_req_') == 0) { // for infoRequests (tietopyyntö)
 		taskHtml += table.createInfoRequestsTable(tasks);		
