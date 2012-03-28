@@ -268,7 +268,7 @@ KokuCitizenTable.prototype.createBrowseWarrantsToMe = function(tasks) {
 		return KokuUtil.errorMsg.showErrorMsgYouDontHaveAnyConsents();
 	}
 	
-	var columnNames = ["<spring:message code="message.choose"/>",
+	var columnNames = [
 	                   "<spring:message code="warrant.templateName"/>",
 	                   "<spring:message code="warrant.status"/>",
 	                   "<spring:message code="warrant.validTill.short"/>"
@@ -281,7 +281,7 @@ KokuCitizenTable.prototype.createBrowseWarrantsToMe = function(tasks) {
 	                 ];
 	
 	this.flattenTasksContent(tasks);
-	return this.tableGenerator.createTable("kokuAjax.showWarrant", "createBrowseWarrantsToMe" , columnNames, columnIds, tasks);
+	return this.tableGenerator.createTable("kokuAjax.showWarrant", "createBrowseWarrantsToMe" , columnNames, columnIds, tasks, false);
 }
 
 /**
@@ -303,7 +303,7 @@ KokuCitizenTable.prototype.createBrowseWarrantsFromMe = function(tasks) {
 		return KokuUtil.errorMsg.showErrorMsgYouDontHaveAnyConsents();
 	}
 	
-	var columnNames = ["<spring:message code="message.choose"/>",
+	var columnNames = [
 	                   "<spring:message code="warrant.templateName"/>",
 	                   "<spring:message code="warrant.status"/>",
 	                   "<spring:message code="warrant.validTill.short"/>",
@@ -319,7 +319,7 @@ KokuCitizenTable.prototype.createBrowseWarrantsFromMe = function(tasks) {
 	this.flattenTasksContent(tasks);
 	createEditConsentColumn(tasks);
 
-	return this.tableGenerator.createTable("kokuAjax.showWarrant", "createBrowseWarrantsFromMe", columnNames, columnIds, tasks);
+	return this.tableGenerator.createTable("kokuAjax.showWarrant", "createBrowseWarrantsFromMe", columnNames, columnIds, tasks, false);
 }
 
 

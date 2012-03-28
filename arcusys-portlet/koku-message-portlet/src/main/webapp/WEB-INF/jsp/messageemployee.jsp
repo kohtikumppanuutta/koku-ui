@@ -296,7 +296,6 @@ function presentTasks(tasks) {
 	var taskHtml = "";
 	
 	switch(pageObj.taskType) {
-
 		case "<%= Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE %>" :
 		case "<%= Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>" :
 			taskHtml += table.createRequestsEmployeeTable(tasks);			
