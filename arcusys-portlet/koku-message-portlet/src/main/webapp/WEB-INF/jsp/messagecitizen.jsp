@@ -49,16 +49,6 @@
 </portlet:resourceURL>
 
 
-<!-- For gatein Portal ends-->
-
-<%
-	/* Parses the parent path url from the portlet ajaxURL */
-	
-// 	final int currentPathPosition = ajaxURL.indexOf("Message");
-// 	final String defaultPath = ajaxURL.substring(0, currentPathPosition+7);
-	final String defaultPath = portletPath;
-%>
-
 <%-- Do not move navigation helper inside <script> tags --%>
 <%@ include file="js_koku_navigation_helper.jspf" %>
 
@@ -75,7 +65,7 @@
 	  *	URLs for ajaxCalls
 	  */
 	 var ajaxUrls = {	 	
-	 	defaultUrl : "<%= defaultPath %>",
+	 	defaultUrl : "<%= portletPath %>",
 
 		/* Actions or somethings? (portlet:resourceURL)*/
 	 	ajaxTaskUrl : "<%= ajaxURL %>",
@@ -239,33 +229,29 @@ function presentTasks(tasks) {
 	kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_NO_TYPE %>');
 
 	var taskHtml = "";
-	if (pageObj.taskType.indexOf('req_') == 0) { // for request
-		if (pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_REPLIED %>" || pageObj.taskType == "<%= Constants.TASK_TYPE_REQUEST_OLD %>") {
-			taskHtml += table.createRequestReplied(tasks);
-		}
-	} else if(pageObj.taskType.indexOf('app_') == 0) { // for appointment
-		switch(pageObj.taskType) {
+	
+	switch(pageObj.taskType) {
+		case "<%= Constants.TASK_TYPE_REQUEST_REPLIED %>" : 
+		case "<%= Constants.TASK_TYPE_REQUEST_OLD %>" :
+			taskHtml += table.createRequestsTable(tasks);
+			break;	
 		case "<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN %>" :
-			// taskHtml +=  table.createAppoitmentsInboxCitizenTable(tasks);
 			taskHtml +=  table.createAppoitmentsTable().unanswered(tasks);
-
 			break;
 		case "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN %>" :
+			taskHtml +=  table.createAppoitmentsTable().open(tasks);			
+			break;
 		case "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD %>" :	
-			taskHtml +=  table.createAppoitmentsTable().ready(tasks);			
+			taskHtml +=  table.createAppoitmentsTable().ready(tasks);		
 			break;
-		default:
-			/* TODO */
-			break;
-		}
-	} else if(pageObj.taskType.indexOf('cst_') == 0) { // for consent
-		switch(pageObj.taskType) {
 		case "<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN %>" : 
 			taskHtml = table.createConsentsAssignedTable(tasks);
 			break;
 		case "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS %>" :
+			taskHtml = table.createConsentsCurrentTable(tasks);
+			break;
 		case "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD %>" :
-			taskHtml = table.createConsentsCurrentAndOldTable(tasks);
+			taskHtml = table.createConsentsOldTable(tasks);
 			break;
 		case "<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED %>" :
 			taskHtml += table.createBrowseWarrantsToMe(tasks);
@@ -273,14 +259,12 @@ function presentTasks(tasks) {
 		case "<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT %>" :
 			taskHtml += table.createBrowseWarrantsFromMe(tasks);
 			break;
-		default:
-			/* TODO */
+		case "<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE%>" :
+			taskHtml += table.createApplicationsTable(tasks);		
 			break;
-		}	
-	} else if (pageObj.taskType.indexOf('application_') == 0) { // for applications (hakemukset)
-		taskHtml += table.createApplicationsTable(tasks);		
-	} else {											// for message
-		taskHtml += table.createMessagesTable(tasks, pageObj.taskType);
+		default:											// for message
+			taskHtml += table.createMessagesTable(tasks, pageObj.taskType);		
+			break;
 	}
 	 
 	jQuery('#task-manager-tasklist').html(taskHtml);

@@ -80,10 +80,10 @@ KokuAjaxCitizen.prototype.showAppointment = function(index) {
 			window.location = renderUrl;
 		});
 	} else if(pageObj.taskType == "app_inbox_employee") {
-		url = "<%= defaultPath %><%= NavigationPortletProperties.APPOINTMENTS_NEW_APPOINTMENT %>" + "?FormID=" + appointmentId;
+		url = "<%= portletPath %><%= NavigationPortletProperties.APPOINTMENTS_NEW_APPOINTMENT %>" + "?FormID=" + appointmentId;
 		window.location = url;
 	} else if(pageObj.taskType == "app_inbox_citizen") {
-		url = "<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_ANSWER_TO_CONSENT %>" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;	
+		url = "<%= portletPath %><%= NavigationPortletProperties.CONSENTS_ANSWER_TO_CONSENT %>" + "?FormID=" + appointmentId + "&arg1=" + targetPerson;	
 		window.location = url;
 	}
 };
@@ -95,7 +95,7 @@ KokuAjaxCitizen.prototype.showConsent = function(index) {
 	var task = pageObj.tasks[index];	
 	var consentId = task['consentId'];	
 	if (pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS%>" && task['approvalStatus'] == 'Hyväksytty' && task['status'] != 'Mitätöity') { // edit mode
-		url = "<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT_TEMPLATE %>" + "?FormID=" + consentId;	
+		url = "<%= portletPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT_TEMPLATE %>" + "?FormID=" + consentId;	
 		window.location = url;
 	} else if(pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS%>"
 				||pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD%>" 
@@ -111,11 +111,11 @@ KokuAjaxCitizen.prototype.showConsent = function(index) {
 			window.location = renderUrl;
 		});
 	} else if(pageObj.taskType == "<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN%>") {
-		url = "<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT %>" + "?FormID=" + consentId;
+		url = "<%= portletPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT %>" + "?FormID=" + consentId;
 		window.location = url;
 			
 	} else if (pageObj.taskType == "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>") {
-		url = "<%= defaultPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT %>" + "?FormID=" + consentId;
+		url = "<%= portletPath %><%= NavigationPortletProperties.CONSENTS_NEW_CONSENT %>" + "?FormID=" + consentId;
 		window.location = url;			
 	}
 };

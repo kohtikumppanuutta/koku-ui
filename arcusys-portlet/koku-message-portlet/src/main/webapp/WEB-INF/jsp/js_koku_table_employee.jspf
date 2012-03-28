@@ -128,42 +128,34 @@ KokuTable.prototype.createAppoitmentsTable = function() {
  *  (Pyynnöt) - employee Avoimet
  */
 KokuEmployeeTable.prototype.createRequestsTable = function(tasks) { 
+
+	function flatten(tasks) {
+		for (var i = 0; i < tasks.length; i++)  {
+			tasks[i]["cleanHtmlSubject"] = KokuUtil.shorty(KokuUtil.escapeHTML(tasks[i]["subject"]),40);
+		}
+	}
 	
 	if (tasks == undefined || tasks == null || tasks.length == 0) {
 		return KokuUtil.errorMsg.showErrorMsgYouDontHaveAnyTipys();
 	}
 
-	var taskHtml = "";
-	var formLink = "";		
-	taskHtml = '<table class="task-manager-table">'
-			+ '<tr class="task-manager-table trheader">'
-			+ '<td class="choose"><spring:message code="message.choose" /></td>'
-			+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
-			+ '<td>' + '<spring:message code="request.responded"/>' + '</td>'
-			+ '<td>' + '<spring:message code="request.missed"/>'+ '</td>'
-			+ '<td>' + '<spring:message code="request.start"/>'+ '</td>'
-			+ '<td>' + '<spring:message code="request.end"/>'+ '</td>'
-			+ '</tr>';
-			 
-	for ( var i = 0; i < tasks.length; i++) {
-		
-		if ((i+1)%2 == 0) {
-			taskHtml += '<tr class="evenRow">';	
-		} else {
-			taskHtml += '<tr>';
-		}
-		
-		taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + tasks[i]["requestId"] + '" />' + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ KokuUtil.escapeHTML(tasks[i]["requestId"]) + '\')" >' + KokuUtil.shorty(KokuUtil.escapeHTML(tasks[i]["subject"]),40) + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ KokuUtil.escapeHTML(tasks[i]["requestId"]) + '\')" >' + KokuUtil.escapeHTML(tasks[i]["respondedAmount"]) + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ KokuUtil.escapeHTML(tasks[i]["requestId"]) + '\')" >' + KokuUtil.escapeHTML(tasks[i]["missedAmount"]) + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ KokuUtil.escapeHTML(tasks[i]["requestId"]) + '\')" >' + KokuUtil.escapeHTML(tasks[i]["creationDate"]) + '</td>'
-				 + '<td class="messageItem" onclick="kokuAjax.showRequest(\''+ KokuUtil.escapeHTML(tasks[i]["requestId"]) + '\')" >' + KokuUtil.escapeHTML(tasks[i]["endDate"]) + '</td>'
-				 + '</tr>';
-	}
-
-	taskHtml += '</table>';
-	return taskHtml;
+	var columnNames = [
+	                   "<spring:message code="message.subject"/>",
+	                   "<spring:message code="request.responded"/>",
+	                   "<spring:message code="request.responded"/>",
+	                   "<spring:message code="request.missed"/>",
+	                   "<spring:message code="request.start"/>",
+	                   "<spring:message code="request.end"/>"
+	                  ];
+	
+	var columnIds = ["cleanHtmlSubject",
+	                 "respondedAmount",
+	                 "missedAmount",
+	                 "creationDate",
+	                 "endDate"
+	                ];
+	flatten(tasks);	                
+	return this.tableGenerator.createTable("kokuAjax.showRequest", "requestsTableOpen", columnNames, columnIds, tasks, false);
 };
 
 
@@ -172,16 +164,17 @@ KokuEmployeeTable.prototype.createRequestsTable = function(tasks) {
  */
 KokuEmployeeTable.prototype.createInfoRequestsTable = function(tasks) { 
 
-	function getName(user) {
-		if (user["firstname"] === undefined || user["lastname"] === undefined
-			|| user["firstname"].length == 0 || user["lastname"].length == 0) {
-			return user["displayname"];	
-		} else {
-			return user["fullName"];
-		}			
-	}
-
 	function flattenTasksContent(tasks) {
+		
+		function getName(user) {
+			if (user["firstname"] === undefined || user["lastname"] === undefined
+				|| user["firstname"].length == 0 || user["lastname"].length == 0) {
+				return user["displayname"];	
+			} else {
+				return user["fullName"];
+			}			
+		};
+		
 		for (var i = 0; i < tasks.length; i++)  {
 			if (tasks[i].recieverUser.displayname === undefined || tasks[i].recieverUser.displayname.length == 0) {
 				tasks[i]["recieverName"] = tasks[i].recieverRoleUid;
@@ -204,7 +197,6 @@ KokuEmployeeTable.prototype.createInfoRequestsTable = function(tasks) {
 	                   "<spring:message code="tipy.targetPerson"/>",
 	                   "<spring:message code="tipy.title"/>",
 	                   "<spring:message code="tipy.status"/>"
-	                   // "<spring:message code="tipy.validTill.short"/>"
 	                  ];
 	
 	var columnIds = ["recieverName",
@@ -212,7 +204,6 @@ KokuEmployeeTable.prototype.createInfoRequestsTable = function(tasks) {
 	                 "targetPersonName",
 	                 "title",
 	                 "localizedStatus"
-	                 // "validTill"
 	                 ];
 	flattenTasksContent(tasks);
 	return this.tableGenerator.createTable("kokuAjax.showTipy", "browseInfoRequests", columnNames, columnIds, tasks);		
@@ -224,24 +215,25 @@ KokuEmployeeTable.prototype.createInfoRequestsTable = function(tasks) {
  */
 KokuEmployeeTable.prototype.createBrowseEmployeeOwnConsents = function(tasks) {
 
-	function checkIfConsentHaveAnotherPermitter(tasks) {
+	function flatTasks(tasks) {
+		/* Request sender fullname */
+		/* Request reciever fullnames */
 		for (var i = 0; i < tasks.length; i++)  {
-			if (tasks[i]["anotherPermitterUid"] !== undefined || tasks[i]["anotherPermitterUid"] !== null) {
-				tasks[i]["anotherPermitter"] = 'Kyllä';
+			tasks[i]["anotherPermitter"] = (tasks[i]["anotherPermitterUid"]) ? 'Kyllä' : 'Ei';
+			/* Request sender fullname */
+			tasks[i]["requesterFullName"] = (tasks[i]["requesterUser"]) ?  tasks[i]["requesterUser"]["fullName"] : '?';
+			/* Request recievers fullnames */
+			if (tasks[i]["recipientUsers"]) {
+				var recipients = tasks[i]["recipientUsers"];
+				var recipientList = "";
+				for (var user = 0; user < recipients.length; user++)  {
+					recipientList += recipients[user]["fullName"] + ", ";
+				}
+				tasks[i]["cleanHtmlrecipientsFullNames"] = KokuUtil.shorty(recipientList.substring(0, recipientList.length-2), 20);
 			} else {
-				tasks[i]["anotherPermitter"] = 'Ei';
+				tasks[i]["cleanHtmlrecipientsFullNames"] = '?';
 			}
 		}
-		
-		/* get fullname */
-		for (var i = 0; i < tasks.length; i++)  {
-			if (tasks[i]["requesterUser"] !== undefined || tasks[i]["requesterUser"] !== null) {
-				tasks[i]["requesterFullName"] = tasks[i]["requesterUser"]["fullName"];
-			} else {
-				tasks[i]["anotherPermitter"] = '?';
-			}
-		}
-		
 	};
 	
 	if (tasks == undefined || tasks == null || tasks.length == 0) {
@@ -249,7 +241,7 @@ KokuEmployeeTable.prototype.createBrowseEmployeeOwnConsents = function(tasks) {
 	}
 	
 	var columnNames = ["<spring:message code="message.choose"/>",
-	                   "<spring:message code="consent.requester"/>",
+	                   "<spring:message code="consent.reciever"/>",
 	                   "<spring:message code="consent.templateName"/>",
 	                   "<spring:message code="consent.status"/>",
 	                   "<spring:message code="consent.approvalStatus"/>",
@@ -259,7 +251,7 @@ KokuEmployeeTable.prototype.createBrowseEmployeeOwnConsents = function(tasks) {
 	                   "<spring:message code="consent.validDate"/>"
 	                  ];
 	
-	var columnIds = ["requesterFullName",
+	var columnIds = ["cleanHtmlrecipientsFullNames",
 	                 "templateName",
 	                 "status",
 	                 "approvalStatus",
@@ -267,7 +259,7 @@ KokuEmployeeTable.prototype.createBrowseEmployeeOwnConsents = function(tasks) {
 	                 "createType",
 	                 "assignedDate",
 	                 "validDate"];
-	checkIfConsentHaveAnotherPermitter(tasks);
+	flatTasks(tasks);
 	return this.tableGenerator.createTable("kokuAjax.showConsent", "createBrowseEmployeeOwnConsents", columnNames, columnIds, tasks);
 }
 

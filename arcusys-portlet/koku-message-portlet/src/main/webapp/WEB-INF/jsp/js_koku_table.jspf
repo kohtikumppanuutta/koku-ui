@@ -22,17 +22,15 @@ KokuTable.prototype.tableGenerator = {
 				var taskHtml = "";
 				for ( var i = 0; i < tasks.length; i++) {
 					taskHtml += this.generateRowTr(i);
-					if (generateCheckBox === undefined || generateCheckBox === true || generateCheckBox === null) {
+					if (generateCheckBox !== false) {
 						taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
 					}
 					
 					/* Generate columns */
 					for (var j = 0; j < columnIds.length; j++)  {
-						if (columnIds[j].indexOf("cleanHtml") === 0) {
-							taskHtml += '<td class="messageItem ' + columnIds[j] + '" onclick="'+ jsFunctionName + '(\''+ i + '\')" >' + tasks[i][columnIds[j]] + '</td>';
-						} else {
-							taskHtml += '<td class="messageItem ' + columnIds[j] + '" onclick="'+ jsFunctionName + '(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i][columnIds[j]]) + '</td>';
-						}
+						var value = (columnIds[j] && columnIds[j].indexOf("cleanHtml") === 0) ? tasks[i][columnIds[j]] : KokuUtil.escapeHTML(tasks[i][columnIds[j]]);
+						value = (value) ? value : "";
+						taskHtml += '<td class="messageItem ' + columnIds[j] + '" onclick="'+ jsFunctionName + '(\''+ i + '\')" >' + value + '</td>';
 					}
 					taskHtml +=	 '</tr>';
 				}
@@ -46,9 +44,10 @@ KokuTable.prototype.tableGenerator = {
 			 * @param {string} styleName for table
 			 * @param Array[String] columnNames (for spring)
 			 * @param Array[String] columnIds. ColumnIds.length < columnNames.length
-			 * @param {object} tasks
+			 * @param {boolean} generateCheckBox Show checkbox (default is true)
+			 * @param {string} tasksTable
 			 */
-			 createTable : function(jsFunctionName, tableStyleName, columnNames, columnIds, tasks) {
+			 createTable : function(jsFunctionName, tableStyleName, columnNames, columnIds, tasks, generateCheckBox) {
 				var taskHtml = "";		
 				taskHtml = "<table class='task-manager-table "+ tableStyleName + "'>"
 						+ '<tr class="task-manager-table trheader">';
@@ -58,7 +57,7 @@ KokuTable.prototype.tableGenerator = {
 				}
 						
 				taskHtml += '</tr>';
-				taskHtml += this.generateTableContent(jsFunctionName, columnIds, tasks);
+				taskHtml += this.generateTableContent(jsFunctionName, columnIds, tasks, generateCheckBox);
 				taskHtml += '</table>';
 				return taskHtml;		
 			},
