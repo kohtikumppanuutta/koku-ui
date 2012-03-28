@@ -29,19 +29,18 @@ KokuTable.prototype.createAppoitmentsTable = function() {
 	 var public = {
 	 	open : createOpenAppointmentsTable,
 	 	ready : createReadyAppointmentsTable,
-	 	unanswered: createAppoitmentsInboxCitizenTable
+	 	unanswered: createUnansweredAppoitmentsTable
 	 };
 
 	/*******************
 	 * Private methods
 	 */
 	
-	function createAppoitmentsInboxCitizenTable(tasks) {
+	function createUnansweredAppoitmentsTable(tasks) {
 		if (tasks == undefined || tasks == null || tasks.length == 0) {
 			return KokuUtil.errorMsg.showErrorMsg("<spring:message code="errorMsg.noContent"/>");
 		}
 			var columnNames = [
-					   "<spring:message code="message.choose" />",
 	                   "<spring:message code="message.from" />",
 	                   "<spring:message code="message.subject" />",
 	                   "<spring:message code="message.description" />",
@@ -54,29 +53,7 @@ KokuTable.prototype.createAppoitmentsTable = function() {
 		                ];
 		                
 		KokuTable.prototype.createAppoitmentsTableUtils.shortenMsg(tasks);		                
-		return KokuTable.prototype.tableGenerator.createTable("kokuAjax.showAppointment", "appointmentsTable", columnNames, columnIds, tasks); 
-		
-		<%-- 
-		taskHtml = '<table class="task-manager-table appointmentTable appoitmentsInboxCitizenTable">'
-				+ '<tr class="task-manager-table trheader">'
-				+ '<td>' + '<spring:message code="message.from" />' + '</td>'
-				+ '<td>' + '<spring:message code="message.subject" />' + '</td>'
-				+ '<td><spring:message code="message.description" /></td>'
-				+ '<td><spring:message code="message.status" /></td>'
-				+ '</tr>';
-				 
-		for ( var i = 0; i < tasks.length; i++) {
-			
-			taskHtml += KokuTable.prototype.tableGenerator.generateRowTr(i);			
-			taskHtml += '<td class="messageItem senderUser" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["senderUser"]["fullName"]) + '</td>'
-					 + '<td class="messageItem subject" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.shorty(KokuUtil.escapeHTML(formatSubject(tasks[i]["subject"]))) + '</td>'
-					 + '<td class="messageItem description" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.shorty(KokuUtil.escapeHTML(tasks[i]["description"])) + '</td>'
-					 + '<td class="messageItem status" onclick="kokuAjax.showAppointment(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["status"]) + '</td>'
-					 + '</tr>';
-		}	
-		taskHtml += '</table>';
-		return taskHtml;
-		 --%>
+		return KokuTable.prototype.tableGenerator.createTable("kokuAjax.showAppointment", "appointmentsTable", columnNames, columnIds, tasks, false);
 	};
 	
 	 
@@ -112,7 +89,6 @@ KokuTable.prototype.createAppoitmentsTable = function() {
 		
 		
 		var columnNames = [
-					   "<spring:message code="message.choose" />",
 	                   "<spring:message code="message.from" />",
 	                   "<spring:message code="message.subject" />",
 	                   "<spring:message code="message.description" />",
@@ -128,7 +104,7 @@ KokuTable.prototype.createAppoitmentsTable = function() {
 		                
 		KokuTable.prototype.createAppoitmentsTableUtils.shortenMsg(tasks);
 		
-		return KokuTable.prototype.tableGenerator.createTable("kokuAjax.showAppointment", "appointmentsTable", columnNames, columnIds, tasks);                
+		return KokuTable.prototype.tableGenerator.createTable("kokuAjax.showAppointment", "appointmentsTable", columnNames, columnIds, tasks, false);                
 	};
 	
 	return public;
@@ -139,10 +115,11 @@ KokuTable.prototype.createAppoitmentsTable = function() {
  *  Pyynnöt Vastatut/vanhat / Requests recieved
  */
 KokuCitizenTable.prototype.createRequestsTable = function(tasks) { 
-	function flattenTasksRepliedTasks(tasks) {
+	function flatten(tasks) {
 		for (var i = 0; i < tasks.length; i++)  {			
-			tasks[i]["sender"] = tasks[i].request.sender;
-			tasks[i]["subject"] = tasks[i].request.subject;
+			tasks[i]["replierName"] = tasks[i].replierUser.fullName;
+			tasks[i]["sender"] = tasks[i].request.senderUser.fullName;
+			tasks[i]["cleanHtmlsubject"] = KokuUtil.shorty(tasks[i].request.subject, 40);
 			tasks[i]["endDate"] = tasks[i].request.endDate;
 			tasks[i]["creationDate"] = tasks[i].request.creationDate;
 		}
@@ -152,7 +129,7 @@ KokuCitizenTable.prototype.createRequestsTable = function(tasks) {
 		return showErrorMsgYouDontHaveAnyTipys();
 	}
 	
-	var columnNames = ["<spring:message code="message.choose"/>",
+	var columnNames = [
 	                   "<spring:message code="response.reciever"/>",
 	                   "<spring:message code="response.sender"/>",
 	                   "<spring:message code="response.subject"/>",
@@ -160,89 +137,127 @@ KokuCitizenTable.prototype.createRequestsTable = function(tasks) {
 	                   "<spring:message code="response.endDate"/>"
 	                  ];
 	
-	var columnIds = ["replierName",
+	var columnIds = [
+					 "replierName",
 	                 "sender",
-	                 "subject",
+	                 "cleanHtmlsubject",
 	                 "creationDate",
 	                 "endDate"
 	                ];
-	flattenTasksRepliedTasks(tasks);
-	return this.tableGenerator.createTable("kokuAjax.showResponse", "browseRepliedRequests", columnNames, columnIds, tasks);
+	flatten(tasks);
+	return this.tableGenerator.createTable("kokuAjax.showResponse", "browseRepliedRequests", columnNames, columnIds, tasks, false);
 };
 
 
 /**
- * Suostumukset / Valtakirjat
+ * Suostumukset / Saapuneet
  */
 KokuCitizenTable.prototype.createConsentsAssignedTable = function(tasks) { 
 
+	function flatten(tasks) {
+		for (var i = 0; i < tasks.length; i++)  {
+			tasks[i]["requesterFullName"] = (tasks[i]["requesterUser"]) ? tasks[i]["requesterUser"]["fullName"] : "";
+			tasks[i]["cleanHtmlTemplateName"] = KokuUtil.shorty(tasks[i]["templateName"], 50);			
+		}
+	}
+	
 	if (tasks == undefined || tasks == null || tasks.length == 0) {
 		return KokuUtil.errorMsg.showErrorMsg("<spring:message code="consent.errorMsg.noConsents"/>");
-	}
-
-	var taskHtml = '<table class="task-manager-table consentAssignedTable">'
-		+ '<tr class="task-manager-table trheader">'
-		+ '<td>' + '<spring:message code="consent.requester" />' + '</td>'
-		+ '<td>' + '<spring:message code="consent.templateName" />'+ '</td>'
-		+ '<td>' + '<spring:message code="consent.replyTill" />'+ '</td>'
-		+ '</tr>';
-		 
-	for ( var i = 0; i < tasks.length; i++) {
+	}	
 	
-		if ((i+1)%2 == 0) {
-			taskHtml += '<tr class="evenRow" onclick="kokuAjax.showConsent(\''+ i + '\')">';	
-		} else {
-			taskHtml += '<tr onclick="kokuAjax.showConsent(\''+ i + '\')">';
-		}
+	var columnNames = [
+	                   "<spring:message code="consent.requester"/>",
+	                   "<spring:message code="consent.templateName"/>",
+	                   "<spring:message code="consent.replyTill"/>"
+	                  ];
 	
-		taskHtml += '<td class="messageItem requesterUser">' + KokuUtil.escapeHTML(tasks[i]["requesterUser"]["fullName"]) + '</td>'
-			 	 + '<td class="messageItem templateName">' + KokuUtil.escapeHTML(tasks[i]["templateName"]) + '</td>'
-			 	 + '<td class="messageItem replyTill">' + KokuUtil.escapeHTML(tasks[i]["replyTill"]) + '</td>'
-			 	 + '</tr>';
-	}
-
-	taskHtml += '</table>';
-	return taskHtml;
+	var columnIds = ["requesterFullName",
+	                 "cleanHtmlTemplateName",
+	                 "replyTill"
+	                ];
+	flatten(tasks);
+	return this.tableGenerator.createTable("kokuAjax.showConsent", "browseRepliedRequests", columnNames, columnIds, tasks, false);
 };
 
 /**
- * Suostumukset / Valtakirjat
+ * Suostumukset / Vastatut 
  */
-KokuCitizenTable.prototype.createConsentsCurrentAndOldTable = function(tasks) {
+KokuCitizenTable.prototype.createConsentsCurrentTable = function(tasks) {
+
+	function flatten(tasks) {
+		for (var i = 0; i < tasks.length; i++)  {
+			tasks[i]["anotherPermitterUserFullName"] = (tasks[i]["anotherPermitterUser"]) ? tasks[i]["anotherPermitterUser"]["fullName"] : "";
+			tasks[i]["cleanHtmlTemplateName"] = KokuUtil.shorty(tasks[i]["templateName"], 40);			
+		}
+	}
+
+	if (tasks == undefined || tasks == null || tasks.length == 0) {
+		return KokuUtil.errorMsg.showErrorMsg("<spring:message code="consent.errorMsg.noConsents"/>");
+	}
+		
+		
+	var columnNames = ["<spring:message code="message.choose"/>",
+	                   "<spring:message code="consent.templateName"/>",
+	                   "<spring:message code="consent.status"/>",
+	                   "<spring:message code="consent.approvalStatus"/>",
+	                   "<spring:message code="consent.createType"/>",
+	                   "<spring:message code="consent.givenDate"/>",
+	                   "<spring:message code="consent.validDate"/>",
+	                   "<spring:message code="consent.secondApprover"/>"
+	                  ];
+	
+	var columnIds = ["cleanHtmlTemplateName",
+	                 "status",
+	                 "approvalStatus",
+	                 "createType",
+	                 "assignedDate",
+	                 "validDate",
+	                 "anotherPermitterUserFullName",
+	                ];
+	flatten(tasks);
+	return this.tableGenerator.createTable("kokuAjax.showConsent", "consentsCurrentTable", columnNames, columnIds, tasks, true);
+};
+
+/**
+ * Suostumukset / Vanhat 
+ */
+KokuCitizenTable.prototype.createConsentsOldTable = function(tasks) {
+
+	function flatten(tasks) {
+		for (var i = 0; i < tasks.length; i++)  {
+			tasks[i]["anotherPermitterUserFullName"] = (tasks[i]["anotherPermitterUser"]) ? tasks[i]["anotherPermitterUser"]["fullName"] : "";
+			tasks[i]["cleanHtmlTemplateName"] = KokuUtil.shorty(tasks[i]["templateName"], 50);			
+		}
+	}
 
 	if (tasks == undefined || tasks == null || tasks.length == 0) {
 		return KokuUtil.errorMsg.showErrorMsg("<spring:message code="consent.errorMsg.noConsents"/>");
 	}
 	
-	var taskHtml = '<table class="task-manager-table consentsCurrentAndOldTable">'
-		+ '<tr class="task-manager-table trheader">'
-		+ '<td class="choose"><spring:message code="message.choose" /></td>'
-		+ '<td style="width:250px;">' + '<spring:message code="consent.templateName" />' + '</td>'
-		+ '<td>' + '<spring:message code="consent.status" />' + '</td>'
-		+ '<td>' + '<spring:message code="consent.approvalStatus" />' + '</td>'
-		+ '<td>' + '<spring:message code="consent.createType" />' + '</td>'
-		+ '<td>' + '<spring:message code="consent.givenDate" />' + '</td>'
-		+ '<td>' + '<spring:message code="consent.validDate" />' + '</td>'
-		+ '<td>' + '<spring:message code="consent.secondApprover" />' + '</td>'
-		+ '</tr>';
-		 
-	for ( var i = 0; i < tasks.length; i++) {
+		
+	var columnNames = [
+	                   "<spring:message code="consent.templateName"/>",
+	                   "<spring:message code="consent.status"/>",
+	                   "<spring:message code="consent.approvalStatus"/>",
+	                   "<spring:message code="consent.createType"/>",
+	                   "<spring:message code="consent.givenDate"/>",
+	                   "<spring:message code="consent.validDate"/>",
+	                   "<spring:message code="consent.secondApprover"/>"
+	                  ];
 	
-		taskHtml += this.tableGenerator.generateRowTr(i);			
-		taskHtml += '<td class="choose">' + '<input type="checkbox" name="message" value="' + i + '" />' + '</td>'
-			  	 + '<td class="messageItem templateName" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["templateName"]) + '</td>'
-			  	 + '<td class="messageItem status" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["status"]) + '</td>'
-			  	 + '<td class="messageItem approvalStatus" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["approvalStatus"]) + '</td>'
-			  	 + '<td class="messageItem createType" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["createType"]) + '</td>'
-			  	 + '<td class="messageItem assignedDate" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["assignedDate"]) + '</td>'
-			  	 + '<td class="messageItem validDate" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["validDate"]) + '</td>'
-			  	 + '<td class="messageItem anotherPermitterUser" onclick="kokuAjax.showConsent(\''+ i + '\')" >' + KokuUtil.escapeHTML(tasks[i]["anotherPermitterUser"]["fullName"]) + '</td>'
-			 	 + '</tr>';
-	}
-
-	taskHtml += '</table>';
-	return taskHtml;
+	var columnIds = ["cleanHtmlTemplateName",
+	                 "status",
+	                 "approvalStatus",
+	                 "createType",
+	                 "assignedDate",
+	                 "validDate",
+	                 "anotherPermitterUserFullName",
+	                ];
+	flatten(tasks);
+	return this.tableGenerator.createTable("kokuAjax.showConsent", "consentsOldTable", columnNames, columnIds, tasks, false);
 };
+
+
 
 /**
  * Valtakirjat - Omat valtakirjat - Valtuutettuna?
@@ -256,20 +271,12 @@ KokuCitizenTable.prototype.createBrowseWarrantsToMe = function(tasks) {
 	var columnNames = ["<spring:message code="message.choose"/>",
 	                   "<spring:message code="warrant.templateName"/>",
 	                   "<spring:message code="warrant.status"/>",
-// 		               "<spring:message code="consent.approvalStatus"/>",
-// 		               "<spring:message code="consent.createType"/>",
-// 		               "<spring:message code="consent.givenDate"/>",
-// 		               "<spring:message code="consent.validDate"/>"
 	                   "<spring:message code="warrant.validTill.short"/>"
 	                  ];
 	
 	var columnIds = [
 	                 "cleanHtmlTemplateNameWithDescription",
 	                 "localizedStatus",
-// 		             "approvalStatus",
-// 		             "createType",
-// 		             "assignedDate",
-// 		             "validDate"
 					 "validTill"
 	                 ];
 	
@@ -284,7 +291,7 @@ KokuCitizenTable.prototype.createBrowseWarrantsFromMe = function(tasks) {
 	function createEditConsentColumn(tasks) {
 		for (var i = 0; i < tasks.length; i++)  {
 			if (tasks[i].status != 'REVOKED') {
- 				var url = "<%= defaultPath %>/ValtakirjaEditConsent?FormID="+ tasks[i].authorizationId; 
+ 				var url = "<%= portletPath %>/ValtakirjaEditConsent?FormID="+ tasks[i].authorizationId; 
 				tasks[i]["cleanHtmlEditLink"] = "<a onclick='event.cancelBubble=true' class='editConsentLink' href="+url+" ><spring:message code="consent.edit"/></a>"; 
 			} else {
 				tasks[i]["cleanHtmlEditLink"] = "";
@@ -299,11 +306,6 @@ KokuCitizenTable.prototype.createBrowseWarrantsFromMe = function(tasks) {
 	var columnNames = ["<spring:message code="message.choose"/>",
 	                   "<spring:message code="warrant.templateName"/>",
 	                   "<spring:message code="warrant.status"/>",
-// 		               "<spring:message code="consent.approvalStatus"/>",
-// 		               "<spring:message code="consent.createType"/>",
-// 		               "<spring:message code="consent.givenDate"/>",
-// 		               "<spring:message code="consent.accepted"/>",
-// 		               "<spring:message code="consent.validDate"/>",
 	                   "<spring:message code="warrant.validTill.short"/>",
 	                   "<spring:message code="warrant.edit"/>"
 	                  ];
@@ -311,11 +313,6 @@ KokuCitizenTable.prototype.createBrowseWarrantsFromMe = function(tasks) {
 	var columnIds = [
 	                 "cleanHtmlTemplateNameWithDescription",
 	                 "localizedStatus",
-// 		                 "approvalStatus",
-// 		                 "createType",
-// 		                 "assignedDate",
-// 		                 "acceptedDate",
-// 		                 "validDate",
 					 "validTill",
 	                 "cleanHtmlEditLink"
 	                 ];

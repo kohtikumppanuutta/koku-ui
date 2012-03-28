@@ -24,15 +24,8 @@ function Paging() {
 	this.totalItems;
 	this.tasks;
 	this.getTaskTypeFromNavi = function() {
-		var type;
-		
-		if (typeof koku_navi_type == 'undefined' || koku_navi_type == ''){
-			type = "msg_inbox"; // default is inbox
-		} else {
-			type = koku_navi_type;
-		}		
-		return type;
-	}		
+		return (koku_navi_type) ? koku_navi_type : "msg_inbox";		
+	}
 	this.taskType = this.getTaskTypeFromNavi();
 	/* keywords for searching and filter fields */
 	this.keyword = '';

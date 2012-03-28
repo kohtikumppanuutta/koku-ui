@@ -7,7 +7,7 @@ package fi.arcusys.koku.util;
  * @author Toni Turunen
  *
  */
-public class Constants {
+public final class Constants {
 
 	private Constants() { /* Non instantiable */  }
 	

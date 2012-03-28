@@ -82,14 +82,6 @@
 </portlet:resourceURL>
 
 
-
-<%
-	/* Parses the parent path url from the portlet ajaxURL */	
-// 	final int currentPathPosition = ajaxURL.indexOf("Message");
-// 	final String defaultPath = ajaxURL.substring(0, currentPathPosition+7);
-	final String defaultPath = portletPath;
-%>
-
 <%-- Do not move navigation helper inside <script> tags --%>
 <%@ include file="js_koku_navigation_helper.jspf" %>
 
@@ -107,7 +99,7 @@
 	 */
 	var ajaxUrls = {
 	 	
-	 	defaultUrl : "<%= defaultPath %>",
+	 	defaultUrl : "<%= portletPath %>",
 
 		/* Actions or somethings? (portlet:resourceURL)*/
 	 	ajaxTaskUrl : "<%= ajaxURL %>",
@@ -143,7 +135,7 @@
 	
 	
 	
-	<%-- Loading JS from separate jspf files. Thanks to "ugly" Gatein portal. --%>
+	<%-- Loading JS from separate jspf files. --%>
 	<%-- Note that loading order in here is important! --%>
 	<%@ include file="js_koku_config.jspf" %>
 	<%@ include file="js_koku_utils.jspf" %>
@@ -302,8 +294,9 @@ function presentTasks(tasks) {
 	kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_NO_TYPE %>');
 
 	var taskHtml = "";
-	if (pageObj.taskType.indexOf('req_') == 0) { // for request
-		switch(pageObj.taskType) {
+	
+	switch(pageObj.taskType) {
+
 		case "<%= Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE %>" :
 		case "<%= Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>" :
 			taskHtml += table.createRequestsEmployeeTable(tasks);			
@@ -312,27 +305,15 @@ function presentTasks(tasks) {
 		case "<%= Constants.TASK_TYPE_REQUEST_OLD %>" :
 			taskHtml += table.createRequestReplied(tasks);
 			break;
-		default: 
-			/* TODO */
-			break;		
-		}
-	} else if(pageObj.taskType.indexOf('app_') == 0) { // for appointment
-			switch(pageObj.taskType) {			
-			case "<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN %>" :
-				taskHtml +=  table.createAppoitmentsInboxCitizenTable(tasks);
-				break;
-			case "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE %>" :
-				taskHtml += table.createAppoitmentsTable().ready(tasks);
-				break;
-			case "<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE %>" :
-				taskHtml += table.createAppoitmentsTable().open(tasks);
-				break;
-			default:
-				/* TODO */
-				break;
-			}
-	} else if(pageObj.taskType.indexOf('cst_') == 0) { // for consent
-		switch(pageObj.taskType) {		
+		case "<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN %>" :
+			taskHtml +=  table.createAppoitmentsInboxCitizenTable(tasks);
+			break;
+		case "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE %>" :
+			taskHtml += table.createAppoitmentsTable().ready(tasks);
+			break;
+		case "<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE %>" :
+			taskHtml += table.createAppoitmentsTable().open(tasks);
+			break;
 		case "<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>" :		
 			kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_CONSENT %>');
 			taskHtml += table.createBrowseEmployeeOwnConsents(tasks);
@@ -340,27 +321,26 @@ function presentTasks(tasks) {
 		case "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>" :
 			taskHtml += table.createBrowseUserWarrantsTable(tasks);
 			break;
-		case "<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS%>" :
-			// suggestType = '<%= Constants.SUGGESTION_WARRANT %>';
+		case "<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>" :
 			kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_WARRANT %>');
 			taskHtml += table.createBrowseUserWarrantsTable(tasks);			
 			break;
-		default:
-			/* TODO */
+		case "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE %>" :
+		case "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT %>" :
+		case "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>" :
+			taskHtml += table.createInfoRequestsTable(tasks);
 			break;
-		}
-	} else if (pageObj.taskType.indexOf('info_req_') == 0) { // for infoRequests (tietopyyntö)
-		taskHtml += table.createInfoRequestsTable(tasks);		
-	} else if (pageObj.taskType.indexOf('application_') == 0) { // for applications (hakemukset)
-		kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_APPLICATION_KINDERGARTEN %>');
-		taskHtml += table.createApplicationsTable(tasks);	
-	} else {													// for message
-		taskHtml += table.createMessagesTable(tasks, pageObj.taskType);
+		case "<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE %>" :
+			kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_APPLICATION_KINDERGARTEN %>');
+			taskHtml += table.createApplicationsTable(tasks);
+			break;
+		default: // for message
+			taskHtml += table.createMessagesTable(tasks, pageObj.taskType);
+			break;
 	}
 	 
 	jQuery('#task-manager-tasklist').html(taskHtml);
 	decorateTable();
-	// var pageHtml = createTasksPage(pageObj);
 	var pageHtml = kokuTableNavigation.createTasksPage(pageObj);
 	jQuery('#task-manager-operation-page').html(pageHtml);
 }
