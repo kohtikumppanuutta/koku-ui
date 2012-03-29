@@ -33,7 +33,7 @@ import fi.koku.kks.ui.common.utils.Utils;
 import fi.koku.services.entity.kks.v1.ServiceFault;
 
 /**
- * Controller for child info
+ * Controller for child info.
  * 
  * @author tuomape
  * 
@@ -45,6 +45,7 @@ public class ChildController {
   @Autowired
   @Qualifier("kksService")
   private KksService kksService;
+  private int test = 0;
 
   private static final Logger LOG = LoggerFactory.getLogger(ChildController.class);
 
