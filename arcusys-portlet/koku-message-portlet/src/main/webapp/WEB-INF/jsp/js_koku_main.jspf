@@ -1,0 +1,162 @@
+
+
+<script type="text/javascript"> 
+/*
+ *	Portlet starting point 
+ */		
+jQuery(document).ready(function() {
+		
+	/**
+	 * Get the parameters stored in session when returns from the task form page,
+	 * which is in order to keep the page unchanged 
+	 */
+	function checkPageSession() {
+		
+		/**
+		 * extract keyword from keyword string, which consists of keyword and field in session, e.g. 'test|1 2 3 4' 
+		 */
+		function extractKeyword(keywordStr) {
+			var temp = keywordStr.split("|");
+			var keyword = temp[0];				
+			return keyword;
+		}
+		
+		/**
+		 * extract keyword from keyword string, which consists of keyword and field in session, e.g. 'test|1 2 3 4' 
+		 */
+		function extractField(keywordStr) {
+			var temp = keywordStr.split("|");
+			var field = temp[1];
+			var fields = field.split('_');
+			jQuery('input:checkbox[name="field"]').attr('checked', false);
+			for(var i=0; i < fields.length; i++) {
+				jQuery('input:checkbox[name="field"][value="' + fields[i] + '"]').attr('checked', true);
+			}		
+			return field;
+		}
+		
+		var currentPage = "${currentPage}";
+		var taskType = "${taskType}";
+		var keyword = "${keyword}";
+		var orderType = "${orderType}";
+		
+		if(currentPage != '' && currentPage != 'null') {
+			pageObj.currentPage = parseInt(currentPage);
+			pageObj.taskType = taskType;
+			pageObj.keyword = extractKeyword(keyword);
+			pageObj.field = extractField(keyword);
+			pageObj.orderType = orderType;
+		}	
+	}
+	
+	function datePickerInit() {
+		/* Attach datepickers */
+		jQuery.datepick.setDefaults($.datepick.regional['fi']);			
+	 	jQuery(function() {
+	 		jQuery('input#tipyTimeRangeFrom').datepick({showTrigger: '#calImg'});
+	 		jQuery('input#tipyTimeRangeTo').datepick({showTrigger: '#calImg'});
+	 	});		 	
+	};
+	
+ 	jQuery.jGrowl.defaults.position = 'top-right';
+	
+	kokuConfig = new Config("<%= refreshDuration %>", "<%= messageType %>");
+	pageObj = new Paging();
+	kokuAjax = new KokuAjaxCitizen(ajaxUrls);
+	kokuSuggestionBox = new SuggestionBox(ajaxUrls);
+	kokuTableNavigation = new KokuTableNavigationCitizen(kokuAjax);
+	
+	datePickerInit();	
+	checkPageSession();
+	/* Ajax activity support call. Show the ajax loading icon */
+    jQuery('#task-manager-operation-loading')
+	    .hide()  // hide it initially
+	    .ajaxStart(function() {
+			jQuery(this).show();
+	    })
+	    .ajaxStop(function() {
+	    	jQuery(this).hide();
+	    });
+	
+	/* User is logged in and participant token for intalio is valid */
+	if (pageObj.loginStatus == 'VALID') {
+		kokuAjax.ajaxGetTasks(pageObj, presentTasks);
+		KokuUtil.timer.resetRefreshTimer(kokuConfig);
+	} else {
+		var message = "<spring:message code="error.unLogin" />";
+		KokuUtil.errorMsg.showErrorMessage(message);
+	}
+	
+	/* remove the timer when user is operating on the page */
+	jQuery('#task-manager-wrap').click(function(){
+		KokuUtil.timer.resetRefreshTimer(kokuConfig);
+    });
+});
+		
+/**
+ * Represents the tasks in table list view and creates page operatonal part
+ */
+function presentTasks(tasks) {
+	
+	/**
+	 * Decorate the table by adding background class when mousemove, mouseout, etc
+	 */
+	function decorateTable() {
+		
+		function inputFieldEvent(eventObject) {
+			
+			function checkboxesSelected() {
+				var checked = false;
+				var checkboxes = jQuery('.task-manager-table tr input:checkbox');			
+				for (var i = 0; i < checkboxes.length; i++)  {
+					if (checkboxes[i].checked && checked === false) {
+						checked = true;
+						break;
+					}
+				}
+				return checked;
+			}		
+		
+			
+			if (this.checked) {
+				jQuery(this).parent().parent().addClass('clickRow');
+			} else {
+				jQuery(this).parent().parent().removeClass('clickRow');
+			}
+			
+			if (checkboxesSelected()) {
+				kokuTableNavigation.enableActionButtons();
+			} else {
+				kokuTableNavigation.disableActionButtons();
+			};			
+		};
+		
+		var tr = jQuery('.task-manager-table tr');
+		for ( var i = 1; i < tr.length; i++) {			
+			tr[i].onmousemove = function() {
+				jQuery(this).addClass('focusRow');
+			}
+
+			tr[i].onmouseout = function() {			
+				jQuery(this).removeClass('focusRow');
+			}
+			/*
+			tr[i].onclick = function() {
+				tr.removeClass('clickRow');
+				jQuery(this).addClass('clickRow');
+			}
+			*/
+		}
+		
+		var checkboxes = jQuery('.task-manager-table tr input:checkbox');			
+		checkboxes.click(checkboxes, inputFieldEvent);
+	};
+	 
+	jQuery('#task-manager-tasklist').html(kokuConfig.getTable(pageObj.taskType, tasks));
+	decorateTable();
+	var pageHtml = kokuTableNavigation.createTasksPage(pageObj);
+	
+	jQuery('#task-manager-operation-page').html(pageHtml);
+}
+
+</script>

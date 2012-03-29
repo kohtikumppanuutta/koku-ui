@@ -1,4 +1,19 @@
 
+
+var koku_navi_type = readKokuCookie();
+if (!koku_navi_type) {
+	createKokuCookie('<%= Constants.TASK_TYPE_MESSAGE_INBOX %>');
+	koku_navi_type = readKokuCookie();
+}
+var defaultPath = "<%= defaultPath %>";
+	var naviRefreshTimer;
+	
+jQuery(document).ready(function() {
+	focusCurrentItem();	
+	ajaxUpdate();		
+	clearInterval(naviRefreshTimer);
+});
+
 	/* 
 	var pageList = {
 		'NewMessage': '#msg_new',
@@ -148,7 +163,8 @@ function showArchiveUI() {
 
 function navigateToPage(naviType) {
 	if (typeof kokuNavigationHelper === "undefined" || kokuNavigationHelper === null) {
-		console.error("Bug in code!! kokuNavigationHelper object is missing!");
+		createKokuCookie(naviType);
+		window.location = "<%= defaultPath %>" + "?resetView=true&NAVI_TYPE=" + naviType;
 		return;
 	}
 	if (typeof kokuNavigationHelper.getHelperIdentifier() === "undefined") {
@@ -159,11 +175,6 @@ function navigateToPage(naviType) {
 	createKokuCookie(naviType);
 	
 	/* Update current position in navigation to server (session)  */
-<%-- 	var url = formatUrl("<%= naviRenderURL %>");	 --%>
-<!-- 	jQuery.post(url, {'newNaviType':naviType}, function(data) { -->
-		
-		
-<!-- 	}); -->
 		switch(kokuNavigationHelper.getHelperIdentifier()) {
 			case "MessagePortlet":
 				window.location = kokuNavigationHelper.getReturnMainPageLink() + "&NAVI_TYPE=" + naviType;
