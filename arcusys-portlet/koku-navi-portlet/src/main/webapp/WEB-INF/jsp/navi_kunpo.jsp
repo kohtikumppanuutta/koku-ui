@@ -30,27 +30,6 @@
 %>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/jquery-1.5.2.min.js"></script>
 <script type="text/javascript">
-
-/*
- * Handle action message navigation
- * @Author: Jinhua Chen
- */
- <%-- 	// var koku_navi_type = "<%= navigationType %>"; --%>
-	var koku_navi_type = readKokuCookie();
- 	var defaultPath = "<%= defaultPath %>";
- 	var naviRefreshTimer;
- 	
- 	
-	jQuery(document).ready(function() {
-	 	var koku_navitype2 = readKokuCookie();
-	 	if (koku_navitype2 !== null && koku_navitype2 !== koku_navi_type) {
-	 		navigateToPage(koku_navitype2);
-	 	}
-		focusCurrentItem();	
-		ajaxUpdate();		
-		clearInterval(naviRefreshTimer);
-	});
-
 	<%@ include file="js_navi.jspf" %>
 </script>
 
