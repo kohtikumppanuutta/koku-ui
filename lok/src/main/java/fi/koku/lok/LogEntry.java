@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
  * @author aspluma
  */
 public class LogEntry {
-	bamboo build test
   
   private static final Logger logger = LoggerFactory.getLogger(LogEntry.class);
   
