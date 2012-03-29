@@ -1,4 +1,19 @@
 
+
+var koku_navi_type = readKokuCookie();
+if (!koku_navi_type) {
+	createKokuCookie('<%= Constants.TASK_TYPE_MESSAGE_INBOX %>');
+	koku_navi_type = readKokuCookie();
+}
+var defaultPath = "<%= defaultPath %>";
+	var naviRefreshTimer;
+	
+jQuery(document).ready(function() {
+	focusCurrentItem();	
+	ajaxUpdate();		
+	clearInterval(naviRefreshTimer);
+});
+
 	/* 
 	var pageList = {
 		'NewMessage': '#msg_new',
