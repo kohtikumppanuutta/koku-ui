@@ -23,13 +23,32 @@ function KokuTableNavigation(ajax) {
 		deleteMessages : deleteMessages,
 		cancelAppointments : cancelAppointments,
 		revokeConsents : revokeConsents,
-		archiveOldMessages : archiveOldMessages
+		archiveOldMessages : archiveOldMessages,
+		disableActionButtons : disableActionButtons,
+		enableActionButtons : enableActionButtons
 	};
 
 
 	/********************************************
 	 * Private methods
 	 */
+
+	function disableActionButtons() {
+		jQuery('input[id=kokuMsgArchiveButton]').attr('disabled', 'disabled');
+		jQuery('input[id=kokuMsgArchiveOldButton]').attr('disabled', 'disabled');
+		jQuery('input[id=kokuRevokeButton]').attr('disabled', 'disabled');
+		jQuery('input[id=kokuRemoveButton]').attr('disabled', 'disabled');
+		jQuery('input[id=kokuCancelButton]').attr('disabled', 'disabled');
+	}
+		
+	function enableActionButtons() {				
+		jQuery('input[id=kokuMsgArchiveButton]').removeAttr('disabled');
+		jQuery('input[id=kokuMsgArchiveOldButton]').removeAttr('disabled');
+		jQuery('input[id=kokuRevokeButton]').removeAttr('disabled');
+		jQuery('input[id=kokuRemoveButton]').removeAttr('disabled');
+		jQuery('input[id=kokuCancelButton]').removeAttr('disabled');
+	}
+
 
 	/**
 	 * Return navigation control

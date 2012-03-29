@@ -20,24 +20,23 @@ KokuTableNavigationCitizen.prototype.createTasksPage = function(pageObj) {
 		if (pageObj.taskType.indexOf('msg') > -1
 				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS %>') > -1
 				|| pageObj.taskType.indexOf('<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>') > -1) {
-			pageHtml += '<li><input type="button" value="<spring:message code="message.search"/>"  onclick="kokuTableNavigation.showSearchUI()" /></li>';
+			pageHtml += '<li><input id="kokuSearch" type="button" value="<spring:message code="message.search"/>"  onclick="kokuTableNavigation.showSearchUI()" /></li>';
 		}
 		
-		if (pageObj.taskType == 'msg_inbox' || pageObj.taskType == 'msg_outbox') {
-			pageHtml += '<li><input type="button" value="<spring:message code="page.archive"/>"  onclick="kokuTableNavigation.archiveMessages()" /></li>';
-			pageHtml += '<li><input type="button" title="<spring:message code="page.archiveOld.tooltip"/>" value="<spring:message code="page.archiveOld"/>"  onclick="kokuTableNavigation.archiveOldMessages()" /></li>';
+		if (pageObj.taskType === '<%= Constants.TASK_TYPE_MESSAGE_INBOX %>' || pageObj.taskType === '<%= Constants.TASK_TYPE_MESSAGE_OUTBOX %>') {
+			pageHtml += '<li><input id="kokuMsgArchiveButton" disabled="disabled" type="button" value="<spring:message code="page.archive"/>"  onclick="kokuTableNavigation.archiveMessages()" /></li>';
+			pageHtml += '<li><input id="kokuMsgArchiveOldButton" disabled="disable" type="button" title="<spring:message code="page.archiveOld.tooltip"/>" value="<spring:message code="page.archiveOld"/>"  onclick="kokuTableNavigation.archiveOldMessages()" /></li>';
 		}
 		
 		if (pageObj.taskType == '<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS %>') {
-			pageHtml += '<li><input type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="kokuTableNavigation.revokeConsents()" /></li>';
+			pageHtml += '<li><input id="kokuRevokeButton" disabled="disabled" type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="kokuTableNavigation.revokeConsents()" /></li>';
 		} else if (pageObj.taskType.indexOf('msg') > -1) {
-			pageHtml += '<li><input type="button" title="<spring:message code="page.removeSelected.tooltip"/>" value="<spring:message code="page.removeSelected"/>"  onclick="kokuTableNavigation.deleteMessages()" /></li>';
-
+			pageHtml += '<li><input id="kokuRemoveButton" disabled="disabled" type="button" title="<spring:message code="page.removeSelected.tooltip"/>" value="<spring:message code="page.removeSelected"/>"  onclick="kokuTableNavigation.deleteMessages()" /></li>';
 		} else if (pageObj.taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN %>') {
-			pageHtml += '<li><input type="button" value="<spring:message code="consent.cancel"/>"  onclick="kokuTableNavigation.cancelAppointments()" /></li>';
+			pageHtml += '<li><input id="kokuCancelButton" disabled="disabled" type="button" value="<spring:message code="consent.cancel"/>"  onclick="kokuTableNavigation.cancelAppointments()" /></li>';
 		}
 	pageHtml += this.getTableNavigation(pageObj);
-	
+		
 	return pageHtml;
 };
 

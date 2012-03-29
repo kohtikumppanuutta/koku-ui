@@ -92,188 +92,22 @@
 	<%@ include file="js_koku_config.jspf" %>
 	<%@ include file="js_koku_utils.jspf" %>
 	<%@ include file="js_koku_table.jspf" %>
-	<%@ include file="js_koku_table_citizen.jspf" %>
+	<%@ include file="citizen/js_koku_table_citizen.jspf" %>
 	<%@ include file="js_koku_ajax.jspf" %>
-	<%@ include file="js_koku_ajax_citizen.jspf" %> 
+	<%@ include file="citizen/js_koku_ajax_citizen.jspf" %> 
 	<%@ include file="js_koku_suggestion.jspf" %>
 	<%@ include file="js_koku_table_navigation.jspf" %>
-	<%@ include file="js_koku_table_navigation_citizen.jspf" %>
+	<%@ include file="citizen/js_koku_table_navigation_citizen.jspf" %>
+	<%@ include file="citizen/js_koku_table_selector_citizen.jspf" %>
 
 </script>
-
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.datepick.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.datepick-fi.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.jgrowl_minimized.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.qtip.min.js"></script>
 
+	<%@ include file="js_koku_main.jspf" %>
 
-<script type="text/javascript"> 
-/*
- * Handle action for task manager
- * @Author: Jinhua Chen
- */		
-jQuery(document).ready(function() {
-		
-	/**
-	 * Get the parameters stored in session when returns from the task form page,
-	 * which is in order to keep the page unchanged 
-	 */
-	function checkPageSession() {
-		
-		/**
-		 * extract keyword from keyword string, which consists of keyword and field in session, e.g. 'test|1 2 3 4' 
-		 */
-		function extractKeyword(keywordStr) {
-			var temp = keywordStr.split("|");
-			var keyword = temp[0];				
-			return keyword;
-		}
-		
-		/**
-		 * extract keyword from keyword string, which consists of keyword and field in session, e.g. 'test|1 2 3 4' 
-		 */
-		function extractField(keywordStr) {
-			var temp = keywordStr.split("|");
-			var field = temp[1];
-			var fields = field.split('_');
-			jQuery('input:checkbox[name="field"]').attr('checked', false);
-			for(var i=0; i < fields.length; i++) {
-				jQuery('input:checkbox[name="field"][value="' + fields[i] + '"]').attr('checked', true);
-			}		
-			return field;
-		}
-		
-		var currentPage = "${currentPage}";
-		var taskType = "${taskType}";
-		var keyword = "${keyword}";
-		var orderType = "${orderType}";
-		
-		if(currentPage != '' && currentPage != 'null') {
-			pageObj.currentPage = parseInt(currentPage);
-			pageObj.taskType = taskType;
-			pageObj.keyword = extractKeyword(keyword);
-			pageObj.field = extractField(keyword);
-			pageObj.orderType = orderType;
-		}	
-	}
-	
- 	jQuery.jGrowl.defaults.position = 'top-right';
-	
-	kokuConfig = new Config("<%= refreshDuration %>", "<%= messageType %>");
-	pageObj = new Paging();
-	kokuAjax = new KokuAjaxCitizen(ajaxUrls);
-	kokuSuggestionBox = new SuggestionBox(ajaxUrls);
-	kokuTableNavigation = new KokuTableNavigationCitizen(kokuAjax);
-
-	
-	checkPageSession();
-	/* Ajax activity support call. Show the ajax loading icon */
-    jQuery('#task-manager-operation-loading')
-	    .hide()  // hide it initially
-	    .ajaxStart(function() {
-			jQuery(this).show();
-	    })
-	    .ajaxStop(function() {
-	    	jQuery(this).hide();
-	    });
-	
-	/* User is logged in and participant token for intalio is valid */
-	if (pageObj.loginStatus == 'VALID') {
-		kokuAjax.ajaxGetTasks(pageObj, presentTasks);
-		KokuUtil.timer.resetRefreshTimer(kokuConfig);
-	} else {
-		var message = "<spring:message code="error.unLogin" />";
-		KokuUtil.errorMsg.showErrorMessage(message);
-	}
-	
-	/* remove the timer when user is operating on the page */
-	jQuery('#task-manager-wrap').click(function(){
-		KokuUtil.timer.resetRefreshTimer(kokuConfig);
-    });
-});
-		
-/**
- * Represents the tasks in table list view and creates page operatonal part
- */
-function presentTasks(tasks) {
-	
-	/**
-	 * Decorate the table by adding background class when mousemove, mouseout, etc
-	 */
-	function decorateTable() {
-		
-		var tr = jQuery('.task-manager-table tr');
-		for ( var i = 1; i < tr.length; i++) {			
-			tr[i].onmousemove = function() {
-				jQuery(this).addClass('focusRow');
-			}
-
-			tr[i].onmouseout = function() {			
-				jQuery(this).removeClass('focusRow');
-			}
-			/*
-			tr[i].onclick = function() {
-				tr.removeClass('clickRow');
-				jQuery(this).addClass('clickRow');
-			}
-			*/
-		}			
-		var checkboxes = jQuery('.task-manager-table tr input:checkbox');			
-		checkboxes.click(function(){
-			if(this.checked)
-				jQuery(this).parent().parent().addClass('clickRow');
-			else
-				jQuery(this).parent().parent().removeClass('clickRow');
-		});
-	};
-	
-	var table = new KokuCitizenTable();
-	kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_NO_TYPE %>');
-
-	var taskHtml = "";
-	
-	switch(pageObj.taskType) {
-		case "<%= Constants.TASK_TYPE_REQUEST_REPLIED %>" : 
-		case "<%= Constants.TASK_TYPE_REQUEST_OLD %>" :
-			taskHtml += table.createRequestsTable(tasks);
-			break;	
-		case "<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN %>" :
-			taskHtml +=  table.createAppoitmentsTable().unanswered(tasks);
-			break;
-		case "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN %>" :
-			taskHtml +=  table.createAppoitmentsTable().open(tasks);			
-			break;
-		case "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN_OLD %>" :	
-			taskHtml +=  table.createAppoitmentsTable().ready(tasks);		
-			break;
-		case "<%= Constants.TASK_TYPE_CONSENT_ASSIGNED_CITIZEN %>" : 
-			taskHtml = table.createConsentsAssignedTable(tasks);
-			break;
-		case "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS %>" :
-			taskHtml = table.createConsentsCurrentTable(tasks);
-			break;
-		case "<%= Constants.TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD %>" :
-			taskHtml = table.createConsentsOldTable(tasks);
-			break;
-		case "<%= Constants.TASK_TYPE_WARRANT_BROWSE_RECEIEVED %>" :
-			taskHtml += table.createBrowseWarrantsToMe(tasks);
-			break;
-		case "<%= Constants.TASK_TYPE_WARRANT_BROWSE_SENT %>" :
-			taskHtml += table.createBrowseWarrantsFromMe(tasks);
-			break;
-		case "<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE%>" :
-			taskHtml += table.createApplicationsTable(tasks);		
-			break;
-		default:											// for message
-			taskHtml += table.createMessagesTable(tasks, pageObj.taskType);		
-			break;
-	}
-	 
-	jQuery('#task-manager-tasklist').html(taskHtml);
-	decorateTable();
-	var pageHtml = kokuTableNavigation.createTasksPage(pageObj);
-	jQuery('#task-manager-operation-page').html(pageHtml);
-}	
-	
-</script>
 <div id="task-manager-outer-wrap">
 	<div id="task-manager-wrap">
 		<div id="task-manager-tasklist">
@@ -295,7 +129,7 @@ function presentTasks(tasks) {
 							<input type="checkbox" checked="checked" name="field" value="2" /><spring:message code="message.to" />
 							<input type="checkbox" checked="checked" name="field" value="3" /><spring:message code="message.subject" />
 							<input type="checkbox" checked="checked" name="field" value="4" /><spring:message code="message.content" />
-						</span>	
+						</span>
 					</form>
 				</div>
 				
