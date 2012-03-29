@@ -33,7 +33,7 @@ import fi.koku.kks.ui.common.utils.Utils;
 import fi.koku.services.entity.kks.v1.ServiceFault;
 
 /**
- * Controller for child info. Git test
+ * Controller for child info.
  * 
  * @author tuomape
  * 
