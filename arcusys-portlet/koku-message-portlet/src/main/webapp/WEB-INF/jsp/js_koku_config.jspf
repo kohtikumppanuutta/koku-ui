@@ -24,7 +24,7 @@ function Paging() {
 	this.totalItems;
 	this.tasks;
 	this.getTaskTypeFromNavi = function() {
-		return (koku_navi_type) ? koku_navi_type : "msg_inbox";		
+		return (koku_navi_type) ? koku_navi_type : '<%= Constants.TASK_TYPE_MESSAGE_INBOX %>';
 	}
 	this.taskType = this.getTaskTypeFromNavi();
 	/* keywords for searching and filter fields */
@@ -33,12 +33,11 @@ function Paging() {
 		this.field = '1_2_3_4';
 	} else {
 		this.field = '';
-	}		
+	}
 	/* 6 types: by description_desc, by description_asc, by state_desc, 
 	by state_asc, by creationDate_desc, by creationDate_asc */
 	this.orderType = 'creationDate_desc';
 	this.loginStatus = "${loginStatus}";
-
 };
 
 /**
