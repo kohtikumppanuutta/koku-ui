@@ -1,0 +1,55 @@
+
+
+/**
+ *	Returns table dependeing taskType and populates it by given tasks.
+ *
+ */
+Config.prototype.getTable = function(taskType, tasks) {
+	var table = new KokuCitizenTable();
+	var taskHtml = "";
+	kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_NO_TYPE %>');
+	
+	switch(taskType) {
+		case "<%= Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE %>" :
+		case "<%= Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>" :
+			taskHtml += table.createRequestsEmployeeTable(tasks);			
+			break;
+		case "<%= Constants.TASK_TYPE_REQUEST_REPLIED %>" :
+		case "<%= Constants.TASK_TYPE_REQUEST_OLD %>" :
+			taskHtml += table.createRequestReplied(tasks);
+			break;
+		case "<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN %>" :
+			taskHtml +=  table.createAppoitmentsInboxCitizenTable(tasks);
+			break;
+		case "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE %>" :
+			taskHtml += table.createAppoitmentsTable().ready(tasks);
+			break;
+		case "<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE %>" :
+			taskHtml += table.createAppoitmentsTable().open(tasks);
+			break;
+		case "<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>" :		
+			kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_CONSENT %>');
+			taskHtml += table.createBrowseEmployeeOwnConsents(tasks);
+			break;
+		case "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>" :
+			taskHtml += table.createBrowseUserWarrantsTable(tasks);
+			break;
+		case "<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>" :
+			kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_WARRANT %>');
+			taskHtml += table.createBrowseUserWarrantsTable(tasks);			
+			break;
+		case "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE %>" :
+		case "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT %>" :
+		case "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>" :
+			taskHtml += table.createInfoRequestsTable(tasks);
+			break;
+		case "<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE %>" :
+			kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_APPLICATION_KINDERGARTEN %>');
+			taskHtml += table.createApplicationsTable(tasks);
+			break;
+		default: // for message
+			taskHtml += table.createMessagesTable(tasks, pageObj.taskType);
+			break;
+	}	
+	return taskHtml;
+}

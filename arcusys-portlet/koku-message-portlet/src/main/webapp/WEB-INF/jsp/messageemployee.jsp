@@ -84,6 +84,10 @@
 
 <%-- Do not move navigation helper inside <script> tags --%>
 <%@ include file="js_koku_navigation_helper.jspf" %>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.datepick.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.datepick-fi.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.jgrowl_minimized.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.qtip.min.js"></script>
 
 <script type="text/javascript">
 
@@ -133,219 +137,25 @@
 		kindergartenRenderUrl : "<%= kindergartenRenderURL %>"
 	};
 	
-	
-	
 	<%-- Loading JS from separate jspf files. --%>
 	<%-- Note that loading order in here is important! --%>
 	<%@ include file="js_koku_config.jspf" %>
 	<%@ include file="js_koku_utils.jspf" %>
 	<%@ include file="js_koku_table.jspf" %>
-	<%@ include file="js_koku_table_employee.jspf" %>
+	<%@ include file="employee/js_koku_table_employee.jspf" %>
 	<%@ include file="js_koku_ajax.jspf" %>
-	<%@ include file="js_koku_ajax_employee.jspf" %>
+	<%@ include file="employee/js_koku_ajax_employee.jspf" %>
 	<%@ include file="js_koku_suggestion.jspf" %>
 	<%@ include file="js_koku_table_navigation.jspf" %>
-	<%@ include file="js_koku_table_navigation_employee.jspf" %>
-
+	<%@ include file="employee/js_koku_table_navigation_employee.jspf" %>
+	<%@ include file="employee/js_koku_table_selector_employee.jspf" %>
+	
+	// Luo oliot t‰‰ll‰! tai jotain
 </script>
 
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.datepick.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.datepick-fi.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.jgrowl_minimized.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.qtip.min.js"></script>
 
+<%@ include file="js_koku_main.jspf" %>
 
-<script type="text/javascript"> 
-/*
- * Handle action for task manager
- * @Author: Jinhua Chen
- */		
-jQuery(document).ready(function() {
-	
-	/**
-	 * Get the parameters stored in session when returns from the task form page,
-	 * which is in order to keep the page unchanged 
-	 */
-	function checkPageSession() {
-		
-		/**
-		 * extract keyword from keyword string, which consists of keyword and field in session, e.g. 'test|1 2 3 4' 
-		 */
-		function extractKeyword(keywordStr) {
-			var temp = keywordStr.split("|");
-			var keyword = temp[0];				
-			return keyword;
-		}
-		
-		/**
-		 * extract keyword from keyword string, which consists of keyword and field in session, e.g. 'test|1 2 3 4' 
-		 */
-		function extractField(keywordStr) {
-			var temp = keywordStr.split("|");
-			var field = temp[1];
-			var fields = field.split('_');
-			jQuery('input:checkbox[name="field"]').attr('checked', false);
-			for(var i=0; i < fields.length; i++) {
-				jQuery('input:checkbox[name="field"][value="' + fields[i] + '"]').attr('checked', true);
-			}		
-			return field;
-		}
-		
-		var currentPage = "${currentPage}";
-		var taskType = "${taskType}";
-		var keyword = "${keyword}";
-		var orderType = "${orderType}";
-		
-		if(currentPage != '' && currentPage != 'null') {
-			pageObj.currentPage = parseInt(currentPage);
-			pageObj.taskType = taskType;
-			pageObj.keyword = extractKeyword(keyword);
-			pageObj.field = extractField(keyword);
-			pageObj.orderType = orderType;
-		}
-	};
-	
-	function datePickerInit() {
-		/* Attach datepickers */
-		jQuery.datepick.setDefaults($.datepick.regional['fi']);			
-	 	jQuery(function() {
-	 		jQuery('input#tipyTimeRangeFrom').datepick({showTrigger: '#calImg'});
-	 		jQuery('input#tipyTimeRangeTo').datepick({showTrigger: '#calImg'});
-	 	});		 	
-	};
-	jQuery.jGrowl.defaults.position = 'top-right';
-		
-	kokuConfig = new Config("<%= refreshDuration %>", "<%= messageType %>");
-	pageObj = new Paging();
-	kokuAjax = new KokuAjaxEmployee(ajaxUrls);
-	kokuSuggestionBox = new SuggestionBox(ajaxUrls);
-	kokuTableNavigation = new KokuTableNavigationEmployee(kokuAjax);
-	
-	datePickerInit();
-	
-	
-	checkPageSession();
-	/* Ajax activity support call. Show the ajax loading icon */
-    jQuery('#task-manager-operation-loading')
-	    .hide()  // hide it initially
-	    .ajaxStart(function() {
-			jQuery(this).show();
-	    })
-	    .ajaxStop(function() {
-	    	jQuery(this).hide();
-	    });
-	
-	/* User is logged in and participant token for intalio is valid */
-	if (pageObj.loginStatus == 'VALID') {
-		kokuAjax.ajaxGetTasks(pageObj, presentTasks);
-		KokuUtil.timer.resetRefreshTimer(kokuConfig);
-	} else {
-		var message = "<spring:message code="error.unLogin" />";
-		KokuUtil.errorMsg.showErrorMessage(message);
-	}
-	
-	/* remove the timer when user is operating on the page */
-	jQuery('#task-manager-wrap').click(function(){
-		KokuUtil.timer.resetRefreshTimer(kokuConfig);
-    });
-			
-});
-
-/**
- * Represents the tasks in table list view and creates page operatonal part
- */
-function presentTasks(tasks) {
-	
-	/**
-	 * Decorate the table by adding background class when mousemove, mouseout, etc
-	 */
-	function decorateTable() {
-		
-		var tr = jQuery('.task-manager-table tr');
-
-		for ( var i = 1; i < tr.length; i++) {			
-			tr[i].onmousemove = function() {
-				jQuery(this).addClass('focusRow');
-			}
-
-			tr[i].onmouseout = function() {			
-				jQuery(this).removeClass('focusRow');
-			}
-			/*
-			tr[i].onclick = function() {
-				tr.removeClass('clickRow');
-				jQuery(this).addClass('clickRow');
-			}
-			*/
-		}
-		
-		var checkboxes = jQuery('.task-manager-table tr input:checkbox');
-		
-		checkboxes.click(function(){
-			if(this.checked)
-				jQuery(this).parent().parent().addClass('clickRow');
-			else
-				jQuery(this).parent().parent().removeClass('clickRow');
-		});
-
-	}
-	
-	var table = new KokuEmployeeTable();
-	kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_NO_TYPE %>');
-
-	var taskHtml = "";
-	
-	switch(pageObj.taskType) {
-		case "<%= Constants.TASK_TYPE_REQUEST_DONE_EMPLOYEE %>" :
-		case "<%= Constants.TASK_TYPE_REQUEST_VALID_EMPLOYEE %>" :
-			taskHtml += table.createRequestsEmployeeTable(tasks);			
-			break;
-		case "<%= Constants.TASK_TYPE_REQUEST_REPLIED %>" :
-		case "<%= Constants.TASK_TYPE_REQUEST_OLD %>" :
-			taskHtml += table.createRequestReplied(tasks);
-			break;
-		case "<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN %>" :
-			taskHtml +=  table.createAppoitmentsInboxCitizenTable(tasks);
-			break;
-		case "<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE %>" :
-			taskHtml += table.createAppoitmentsTable().ready(tasks);
-			break;
-		case "<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE %>" :
-			taskHtml += table.createAppoitmentsTable().open(tasks);
-			break;
-		case "<%= Constants.TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS%>" :		
-			kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_CONSENT %>');
-			taskHtml += table.createBrowseEmployeeOwnConsents(tasks);
-			break;
-		case "<%= Constants.TASK_TYPE_WARRANT_LIST_CITIZEN_CONSENTS%>" :
-			taskHtml += table.createBrowseUserWarrantsTable(tasks);
-			break;
-		case "<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>" :
-			kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_WARRANT %>');
-			taskHtml += table.createBrowseUserWarrantsTable(tasks);			
-			break;
-		case "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE %>" :
-		case "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT %>" :
-		case "<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED %>" :
-			taskHtml += table.createInfoRequestsTable(tasks);
-			break;
-		case "<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE %>" :
-			kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_APPLICATION_KINDERGARTEN %>');
-			taskHtml += table.createApplicationsTable(tasks);
-			break;
-		default: // for message
-			taskHtml += table.createMessagesTable(tasks, pageObj.taskType);
-			break;
-	}
-	 
-	jQuery('#task-manager-tasklist').html(taskHtml);
-	decorateTable();
-	var pageHtml = kokuTableNavigation.createTasksPage(pageObj);
-	jQuery('#task-manager-operation-page').html(pageHtml);
-}
- 	
-	
-</script>
 <div id="task-manager-outer-wrap">
 	<div id="task-manager-wrap">
 		<div id="task-manager-tasklist">
