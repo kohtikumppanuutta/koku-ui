@@ -14,6 +14,7 @@ package fi.koku.portlet.filter.userinfo;
  */
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -58,6 +59,7 @@ public class UserInfoPortletFilter implements RenderFilter, ActionFilter, EventF
   private FilterConfig filterConfig;
 
   private AuthenticationServiceClient authServiceClient = null;
+  private boolean VETUMA_PROVIDES_INFO = Boolean.valueOf(KoKuPropertiesUtil.get("koku.vetuma.provides.info"));
 
   /**
    * Initialize portlet filter.
@@ -74,7 +76,7 @@ public class UserInfoPortletFilter implements RenderFilter, ActionFilter, EventF
 
       String context = KoKuPropertiesUtil.get("environment.name");
 
-      if ("kunpo".equals(context)) {
+      if ("kunpo".equals(context) || VETUMA_PROVIDES_INFO  ) {
         authServiceClient = AuthenticationServiceClientImpl.instance();
       } else {
         authServiceClient = new AuthenticationServiceClient() {
@@ -214,7 +216,21 @@ public class UserInfoPortletFilter implements RenderFilter, ActionFilter, EventF
 
       if (uid != null) {
 
-        ui = userInfoService.getUserInfoById(uid);
+    	if ( VETUMA_PROVIDES_INFO  ) {
+        	VetumaUserInfo vetuma = authServiceClient.getVetumaUserInfo(request);
+        	if ( vetuma != null ) {
+        		ui = userInfoService.getUserInfoById( vetuma.getId() );        		
+        		if ( ui != null ) {
+        			ui.setUid(uid);
+        		}        		
+        		
+        		if (log.isDebugEnabled()) {
+        	          log.debug("Fetched userinfo " + ui + " from vetuma service.");
+        	    }
+        	}
+        } else if (ui == null ) {
+        	ui = userInfoService.getUserInfoById(uid);
+        }
 
         if (log.isDebugEnabled()) {
           log.debug("Fetched userinfo " + ui + " from remote service.");
