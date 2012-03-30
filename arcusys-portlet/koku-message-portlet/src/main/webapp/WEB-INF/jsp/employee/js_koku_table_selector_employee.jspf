@@ -5,7 +5,7 @@
  *
  */
 Config.prototype.getTable = function(taskType, tasks) {
-	var table = new KokuCitizenTable();
+	var table = new KokuEmployeeTable();
 	var taskHtml = "";
 	kokuSuggestionBox.setSuggestType('<%= Constants.SUGGESTION_NO_TYPE %>');
 	

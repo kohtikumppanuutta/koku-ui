@@ -100,6 +100,16 @@
 	<%@ include file="citizen/js_koku_table_navigation_citizen.jspf" %>
 	<%@ include file="citizen/js_koku_table_selector_citizen.jspf" %>
 
+	/* Quick fix */
+	function kokuInit() {		
+		kokuConfig = new Config("<%= refreshDuration %>", "<%= messageType %>");
+		pageObj = new Paging();
+		kokuAjax = new KokuAjaxCitizen(ajaxUrls);
+		kokuSuggestionBox = new SuggestionBox(ajaxUrls);
+		kokuTableNavigation = new KokuTableNavigationCitizen(kokuAjax);		
+	}
+	
+	
 </script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.datepick.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.datepick-fi.js"></script>

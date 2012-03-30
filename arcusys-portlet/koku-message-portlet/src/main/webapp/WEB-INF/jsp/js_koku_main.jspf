@@ -60,11 +60,15 @@ jQuery(document).ready(function() {
 	
  	jQuery.jGrowl.defaults.position = 'top-right';
 	
+ 	
+ 	kokuInit();
+	<%-- 
 	kokuConfig = new Config("<%= refreshDuration %>", "<%= messageType %>");
 	pageObj = new Paging();
 	kokuAjax = new KokuAjaxCitizen(ajaxUrls);
 	kokuSuggestionBox = new SuggestionBox(ajaxUrls);
 	kokuTableNavigation = new KokuTableNavigationCitizen(kokuAjax);
+	--%>
 	
 	datePickerInit();	
 	checkPageSession();

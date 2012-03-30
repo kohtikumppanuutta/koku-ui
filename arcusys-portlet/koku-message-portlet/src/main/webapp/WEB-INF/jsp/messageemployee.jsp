@@ -150,7 +150,14 @@
 	<%@ include file="employee/js_koku_table_navigation_employee.jspf" %>
 	<%@ include file="employee/js_koku_table_selector_employee.jspf" %>
 	
-	// Luo oliot t‰‰ll‰! tai jotain
+	/* Quick fix */
+	function kokuInit() {		
+		kokuConfig = new Config("<%= refreshDuration %>", "<%= messageType %>");
+		pageObj = new Paging();
+		kokuAjax = new KokuAjaxEmployee(ajaxUrls);
+		kokuSuggestionBox = new SuggestionBox(ajaxUrls);
+		kokuTableNavigation = new KokuTableNavigationEmployee(kokuAjax);		
+	}
 </script>
 
 
