@@ -45,13 +45,13 @@ KokuTable.prototype.createAppoitmentsTable = function() {
 					   "<spring:message code="message.choose" />",
 	                   "<spring:message code="message.to" />",
 	                   "<spring:message code="message.subject" />",
-	                   "<spring:message code="message.description" />",
+	                   "<spring:message code="message.description" />"
 	                  ];
 	
 		var columnIds = [
 						 "receivingUser",
 		                 "cleanHtmlsubject",
-		                 "cleanHtmldescription",
+		                 "cleanHtmldescription"
 		                ];
 		                
 		KokuTable.prototype.createAppoitmentsTableUtils.shortenMsg(tasks);
@@ -294,7 +294,8 @@ KokuEmployeeTable.prototype.createBrowseEmployeeOwnConsents = function(tasks) {
 	                 "anotherPermitter",
 	                 "createType",
 	                 "assignedDate",
-	                 "validDate"];
+	                 "validDate"
+	                ];
 	flatTasks(tasks);
 	return this.tableGenerator.createTable("kokuAjax.showConsent", "createBrowseEmployeeOwnConsents", columnNames, columnIds, tasks);
 }
@@ -346,7 +347,8 @@ KokuEmployeeTable.prototype.createBrowseUserWarrantsTable = function(tasks) {
 	                 "localizedStatus",
 	                 "cleanHtmlTemplateNameWithDescription",
 	                 "givenAt",
-	                 "validTill"];
+	                 "validTill"
+	                ];
 	                 
 	this.flattenTasksContent(tasks);
 	flattenUsers(tasks);

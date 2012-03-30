@@ -1,0 +1,144 @@
+/*
+ * Koku config JS
+ * 
+ */
+
+/**
+ * Config object to handle parameters in configuration mode
+ *
+ */	
+function Config(refDuration, msgType) {
+	this.refreshDuration = refDuration;
+	/* outbox, inbox, archive */
+	this.messageType = msgType;
+	this.refreshTimer;
+};
+ 
+/**
+ * Paging object to handle page operations
+ *
+ */
+function Paging() {
+	this.currentPage = 1;
+	this.totalPages = 1;
+	this.totalItems;
+	this.tasks;
+	this.getTaskTypeFromNavi = function() {
+<<<<<<< HEAD
+		var type;
+		
+		if (typeof koku_navi_type == 'undefined' || koku_navi_type == ''){
+			type = "msg_inbox"; // default is inbox
+		} else {
+			type = koku_navi_type;
+		}		
+		return type;
+	}		
+=======
+		return (koku_navi_type) ? koku_navi_type : '<%= Constants.TASK_TYPE_MESSAGE_INBOX %>';
+	}
+>>>>>>> b433494... Issue KOKU-1237 - Sivustolle kirjautuessa sivustolle Saapuneet osio ei
+	this.taskType = this.getTaskTypeFromNavi();
+	/* keywords for searching and filter fields */
+	this.keyword = '';
+	if (this.taskType.indexOf('msg') > -1) {
+		this.field = '1_2_3_4';
+	} else {
+		this.field = '';
+	}
+	/* 6 types: by description_desc, by description_asc, by state_desc, 
+	by state_asc, by creationDate_desc, by creationDate_asc */
+	this.orderType = 'creationDate_desc';
+	this.loginStatus = "${loginStatus}";
+};
+
+/**
+ * Create task statistics information
+ */
+Paging.prototype.createDisplayingTasksNum = function() {
+	var displayTask;
+	var startid, endid;
+	var numPerPage = 10;	
+	
+	if(parseInt(this.totalItems) == 0) {
+		return "<spring:message code="page.noItems"/>";
+	}		
+	startid = (this.currentPage-1)*numPerPage + 1;		
+	if (this.currentPage < this.totalPages) {
+		endid = startid + 9;
+	} else {
+		endid = startid + this.totalItems - (this.currentPage-1)* numPerPage -1;
+	}		
+	displayTask = startid + '-' + endid + '/' + this.totalItems;		
+	return displayTask;
+};
+
+/** 
+ * Set process order type. Since process does not have state field, set 
+ * default order type creationDate_desc for process if current order type
+ * is related to state
+ */
+Paging.prototype.setProcessOrderType = function() {
+	if(this.orderType == 'state_desc' || this.orderType == 'state_asc') {
+		this.orderType = 'creationDate_desc';
+	}
+};
+
+
+/* get the first page number */
+Paging.prototype.getFirstPage = function() {
+	var firstPage = this.currentPage != 1 ? 1 : null;
+	return firstPage;
+};
+/* get the previous page number */
+Paging.prototype.getPrePage = function() {
+	var prePage = this.currentPage > 1 ? this.currentPage - 1 : null;
+	return prePage;
+};
+/* get the next page number */
+Paging.prototype.getNextPage = function() {
+	var nextPage = this.currentPage < this.totalPages ? this.currentPage + 1 : null;
+	return nextPage;
+};
+/* get the last page number */
+Paging.prototype.getLastPage = function() {
+	var lastPage = this.currentPage != this.totalPages ? this.totalPages : null;
+	return lastPage;
+};
+
+/* move to the the first page */
+Paging.prototype.moveFirst = function() {
+	var firstPage = this.getFirstPage();
+	
+	if(firstPage != null) {
+		this.currentPage = firstPage;
+		kokuAjax.ajaxGetTasks(this, presentTasks);
+	}
+};
+/* move to the the previous page */
+Paging.prototype.movePre = function() {
+	var prePage = this.getPrePage();
+	
+	if(prePage != null) {
+		this.currentPage = prePage;
+		kokuAjax.ajaxGetTasks(this, presentTasks);
+	}
+};
+/* move to the the next page */
+Paging.prototype.moveNext = function() {
+	var nextPage = this.getNextPage();
+	
+	if(nextPage != null) {
+		this.currentPage = nextPage;
+		kokuAjax.ajaxGetTasks(this, presentTasks);
+	}
+};
+/* move to the the last page */
+Paging.prototype.moveLast = function() {
+	var lastPage = this.getLastPage();
+	
+	if(lastPage != null) {
+		this.currentPage = lastPage;
+		kokuAjax.ajaxGetTasks(this, presentTasks);
+	}
+};

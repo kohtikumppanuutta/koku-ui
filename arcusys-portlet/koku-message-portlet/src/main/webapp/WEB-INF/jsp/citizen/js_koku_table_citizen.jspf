@@ -43,13 +43,13 @@ KokuTable.prototype.createAppoitmentsTable = function() {
 			var columnNames = [
 	                   "<spring:message code="message.from" />",
 	                   "<spring:message code="message.subject" />",
-	                   "<spring:message code="message.description" />",
+	                   "<spring:message code="message.description" />"
 	                  ];
 	
 		var columnIds = [
 						 "senderUser",
 		                 "cleanHtmlsubject",
-		                 "cleanHtmldescription",
+		                 "cleanHtmldescription"
 		                ];
 		                
 		KokuTable.prototype.createAppoitmentsTableUtils.shortenMsg(tasks);		                
@@ -67,13 +67,13 @@ KokuTable.prototype.createAppoitmentsTable = function() {
 					   "<spring:message code="message.choose" />",
 	                   "<spring:message code="message.from" />",
 	                   "<spring:message code="message.subject" />",
-	                   "<spring:message code="message.description" />",
+	                   "<spring:message code="message.description" />"
 	                  ];
 	
 		var columnIds = [
 						 "senderUser",
 		                 "cleanHtmlsubject",
-		                 "cleanHtmldescription",
+		                 "cleanHtmldescription"
 		                ];
 		                
 		KokuTable.prototype.createAppoitmentsTableUtils.shortenMsg(tasks);
@@ -212,7 +212,7 @@ KokuCitizenTable.prototype.createConsentsCurrentTable = function(tasks) {
 	                 "createType",
 	                 "assignedDate",
 	                 "validDate",
-	                 "anotherPermitterUserFullName",
+	                 "anotherPermitterUserFullName"
 	                ];
 	flatten(tasks);
 	return this.tableGenerator.createTable("kokuAjax.showConsent", "consentsCurrentTable", columnNames, columnIds, tasks, true);
@@ -251,7 +251,7 @@ KokuCitizenTable.prototype.createConsentsOldTable = function(tasks) {
 	                 "createType",
 	                 "assignedDate",
 	                 "validDate",
-	                 "anotherPermitterUserFullName",
+	                 "anotherPermitterUserFullName"
 	                ];
 	flatten(tasks);
 	return this.tableGenerator.createTable("kokuAjax.showConsent", "consentsOldTable", columnNames, columnIds, tasks, false);
