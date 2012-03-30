@@ -6,7 +6,7 @@ if (!koku_navi_type) {
 	koku_navi_type = readKokuCookie();
 }
 var defaultPath = "<%= defaultPath %>";
-	var naviRefreshTimer;
+var naviRefreshTimer;
 	
 jQuery(document).ready(function() {
 	focusCurrentItem();	
@@ -62,7 +62,7 @@ function focusCurrentItem() {
 	switch(currentPage) {
 		case '<%= defaultPage %>':		
 			// var naviType = getNaviType();
-			console.info("Cookie value:" + readKokuCookie());
+			// console.info("Cookie value:" + readKokuCookie());
 			var naviType = readKokuCookie();
 			if(naviType != "") {
 				bold("#"+naviType);				
@@ -175,14 +175,14 @@ function navigateToPage(naviType) {
 	createKokuCookie(naviType);
 	
 	/* Update current position in navigation to server (session)  */
-		switch(kokuNavigationHelper.getHelperIdentifier()) {
-			case "MessagePortlet":
-				window.location = kokuNavigationHelper.getReturnMainPageLink() + "&NAVI_TYPE=" + naviType;
-				break;
-			default:
-				window.location = "<%= defaultPath %>" + "?resetView=true&NAVI_TYPE=" + naviType;
-				break;
-		}
+	switch(kokuNavigationHelper.getHelperIdentifier()) {
+		case "MessagePortlet":
+			window.location = kokuNavigationHelper.getReturnMainPageLink() + "&NAVI_TYPE=" + naviType;
+			break;
+		default:
+			window.location = "<%= defaultPath %>" + "?resetView=true&NAVI_TYPE=" + naviType;
+			break;
+	}
 }
 
 
