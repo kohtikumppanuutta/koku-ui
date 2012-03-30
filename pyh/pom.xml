@@ -13,7 +13,7 @@
   <properties>
     <lokservice-api.version>0.0.20</lokservice-api.version>
     <customerservice-api.version>0.0.26</customerservice-api.version>
-    <portlet-common.version>0.0.29</portlet-common.version>    
+    <portlet-common.version>0.0.30</portlet-common.version>    
   </properties>
 
   <dependencies>
