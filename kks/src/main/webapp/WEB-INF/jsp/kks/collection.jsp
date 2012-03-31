@@ -192,7 +192,7 @@
                         
                         <c:if test="${not empty childGroup.description}">
 	                        <div class="portlet-section-text">
-	                             <span class="kks-read-only-description"><c:out value="${childGroup.description}"/></span>
+	                             <span class="kks-read-only-description">${childGroup.description}</span>
 	                        </div>
                     	</c:if>
                     	<c:set var="block_guardian" value="${ parent && not (guardian.name eq childGroup.accountable) }" />
