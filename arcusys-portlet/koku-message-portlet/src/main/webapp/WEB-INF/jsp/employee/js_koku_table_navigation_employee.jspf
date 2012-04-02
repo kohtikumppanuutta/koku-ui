@@ -26,21 +26,21 @@ KokuTableNavigationEmployee.prototype.createTasksPage = function(pageObj) {
 			|| taskType.indexOf('<%= Constants.TASK_TYPE_INFO_REQUEST_BROWSE %>') > -1
 			|| taskType.indexOf('<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE %>') > -1
 			|| taskType.indexOf('<%= Constants.TASK_TYPE_WARRANT_LIST_SUBJECT_CONSENTS %>') > -1) {
-		pageHtml += '<li><input type="button" value="<spring:message code="message.search"/>"  onclick="kokuTableNavigation.showSearchUI()" /></li>';
+		pageHtml += '<li>' + this.getButtons().searchButton + '</li>';
 	}
 	
 	if (taskType == 'msg_inbox' || taskType == 'msg_outbox') {
-		pageHtml += '<li><input id="kokuMsgArchiveButton" disabled="disabled" type="button" value="<spring:message code="page.archive"/>"  onclick="kokuTableNavigation.archiveMessages()" /></li>';
-		pageHtml += '<li><input id="kokuMsgArchiveOldButton" disabled="disable" type="button"  title="<spring:message code="page.archiveOld.tooltip"/>" value="<spring:message code="page.archiveOld"/>"  onclick="kokuTableNavigation.archiveOldMessages()" /></li>';		
+		pageHtml += '<li>' + this.getButtons().archiveButton + '</li>';
+		pageHtml += '<li>' + this.getButtons().archiveOldButton + '</li>';		
 	}
 	
 	if (taskType.indexOf('msg') > -1) {
-		pageHtml += '<li><input id="kokuRemoveButton" disabled="disabled" type="button" title="<spring:message code="page.removeSelected.tooltip"/>" value="<spring:message code="page.removeSelected"/>"  onclick="kokuTableNavigation.deleteMessages()" /></li>';
+		pageHtml += '<li>' + this.getButtons().removeButton + '</li>';
 	} else if (taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_CITIZEN %>') {
-		pageHtml += '<li><input id="kokuCancelButton" disabled="disabled" type="button" value="<spring:message code="consent.cancel"/>"  onclick="kokuTableNavigation.cancelAppointments()" /></li>';
+		pageHtml += '<li>' + this.getButtons().cancelButton + '</li>';
 	} else if (taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_EMPLOYEE %>' 
 			|| taskType == '<%= Constants.TASK_TYPE_APPOINTMENT_RESPONSE_EMPLOYEE %>') {
-		pageHtml += '<li><input type="button" value="<spring:message code="message.search"/>"  onclick="kokuTableNavigation.showSearchUI()" /><input type="button" value="<spring:message code="consent.cancel"/>"  onclick="kokuTableNavigation.cancelAppointments()" /></li>';
+		pageHtml += '<li>' + this.getButtons().searchButton + this.getButtons().cancelButton + '</li>';
 	}	
 	pageHtml += this.getTableNavigation(pageObj);	
 	return pageHtml;

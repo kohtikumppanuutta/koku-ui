@@ -24,14 +24,27 @@ function KokuTableNavigation(ajax) {
 		cancelAppointments : cancelAppointments,
 		revokeConsents : revokeConsents,
 		archiveOldMessages : archiveOldMessages,
+		
 		disableActionButtons : disableActionButtons,
-		enableActionButtons : enableActionButtons
+		enableActionButtons : enableActionButtons,		
+		getButtons : getButtons
 	};
 
 
 	/********************************************
 	 * Private methods
 	 */
+	 
+	 function getButtons() {
+	 	return {
+	 		searchButton : '<input id="kokuSearch" type="button" value="<spring:message code="message.search"/>"  onclick="kokuTableNavigation.showSearchUI()" />',
+	 		cancelButton : '<input id="kokuCancelButton" disabled="disabled" type="button" value="<spring:message code="consent.cancel"/>"  onclick="kokuTableNavigation.cancelAppointments()" />',
+	 		removeButton : '<input id="kokuRemoveButton" disabled="disabled" type="button" title="<spring:message code="page.removeSelected.tooltip"/>" value="<spring:message code="page.removeSelected"/>"  onclick="kokuTableNavigation.deleteMessages()" />',
+	 		revokeButton : '<input id="kokuRevokeButton" disabled="disabled" type="button" value="<spring:message code="consent.revokeSelected"/>"  onclick="kokuTableNavigation.revokeConsents()" />',
+	 		archiveButton  : '<input id="kokuMsgArchiveButton" disabled="disabled" type="button" value="<spring:message code="page.archive"/>"  onclick="kokuTableNavigation.archiveMessages()" />',
+	 		archiveOldButton : '<input id="kokuMsgArchiveOldButton" disabled="disable" type="button"  title="<spring:message code="page.archiveOld.tooltip"/>" value="<spring:message code="page.archiveOld"/>"  onclick="kokuTableNavigation.archiveOldMessages()" />'
+	 	}
+	 }
 
 	function disableActionButtons() {
 		jQuery('input[id=kokuMsgArchiveButton]').attr('disabled', 'disabled');

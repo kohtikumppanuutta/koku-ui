@@ -755,6 +755,12 @@
 		width: 270px;
 	}
 	
+	
+	/* Suostumukset - Saapuneet */
+	table.task-manager-table.browseRepliedRequests td.messageItem.replyTill {
+		widdth: 75px;
+	}
+	
 	/* Suostumukset - Lähetetyt suostumuspyynnöt */
 	table.task-manager-table.createBrowseEmployeeOwnConsents td.messageItem.requester {
 		width: 120px;
