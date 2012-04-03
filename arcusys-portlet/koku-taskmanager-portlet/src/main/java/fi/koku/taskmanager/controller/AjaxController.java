@@ -18,6 +18,7 @@ import static fi.arcusys.koku.util.Constants.JSON_TOTAL_ITEMS;
 import static fi.arcusys.koku.util.Constants.JSON_TOTAL_PAGES;
 import static fi.arcusys.koku.util.Constants.MY_ACTION_TASKFORM;
 import static fi.arcusys.koku.util.Constants.PREF_EDITABLE;
+import static fi.arcusys.koku.util.Constants.PREF_TASK_FILTER;
 import static fi.arcusys.koku.util.Constants.RESPONSE;
 import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_INVALID;
 import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_VALID;
@@ -84,11 +85,13 @@ public class AjaxController {
 		final PortletSession portletSession = request.getPortletSession();				
 		final String token = (String) portletSession.getAttribute(ATTR_TOKEN);
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+		final PortletPreferences pref = request.getPreferences();
 		
-		int taskType = getTaskType(taskTypeStr);
-		JSONObject jsonModel = getJsonModel(taskType, page, keyword, orderType, token, username);
-				
-		PortletPreferences pref = request.getPreferences();
+		final int taskType = getTaskType(taskTypeStr);
+		final String taskFilter = pref.getValue(PREF_TASK_FILTER, "");		
+		final String filteredKeyword = taskFilter + '%' + ((taskFilter.equals(keyword)) ? "" : keyword);
+		JSONObject jsonModel = getJsonModel(taskType, page, filteredKeyword, orderType, token, username);
+		
 		Boolean editableForm = Boolean.valueOf(pref.getValue(PREF_EDITABLE, Boolean.FALSE.toString()));
 		jsonModel.put(JSON_EDITABLE, editableForm.toString());
 		modelmap.addAttribute(RESPONSE, jsonModel);
@@ -140,7 +143,7 @@ public class AjaxController {
 	 * @param username user name
 	 * @return task information in Json format
 	 */
-	public JSONObject getJsonModel(
+	private JSONObject getJsonModel(
 			int taskType, 
 			int page, 
 			String keyword, 
