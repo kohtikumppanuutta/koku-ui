@@ -200,9 +200,14 @@ public class TaskHandle {
 		return totalNum;		
 	}
 	
+	public int getTasksTotalNumber(final String keywordFilter) {
+		final String filter = (keywordFilter != null) ? keywordFilter : ""; 
+		return Integer.valueOf(taskMngServ.getTotalTasksNumber(participantToken, TaskUtil.TASK_TYPE, createTotalNumSubQuery(TaskUtil.TASK, filter)));
+	}
+	
 	public int getRequestsTasksTotalNumber() {
-		int taskType = 1;
-		return Integer.valueOf(taskMngServ.getTotalTasksNumber(participantToken, TaskUtil.TASK_TYPE, createTotalNumSubQuery(taskType, TASKMGR_REQUESTS_FILTER)));
+		return getTasksTotalNumber("");
+		// return Integer.valueOf(taskMngServ.getTotalTasksNumber(participantToken, TaskUtil.TASK_TYPE, createTotalNumSubQuery(TaskUtil.TASK, TASKMGR_REQUESTS_FILTER)));
 	}
 	
 	/**
@@ -213,9 +218,7 @@ public class TaskHandle {
 	 */
 	public String createTotalNumSubQuery(int taskType, String keyword) {
 		String subQuery;
-
 		switch (taskType) {
-
 		case TaskUtil.TASK:
 			subQuery = "(T._state = TaskState.READY OR T._state = TaskState.CLAIMED)" + " AND T._description like '%" + keyword + "%'";
 			break;			
@@ -229,9 +232,7 @@ public class TaskHandle {
 			subQuery = "";
 			break;
 		}
-
 		return subQuery;
-
 	}
 	
 	/**
