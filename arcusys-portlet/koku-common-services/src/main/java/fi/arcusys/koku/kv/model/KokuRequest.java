@@ -39,8 +39,8 @@ public class KokuRequest {
 		subject = reqSum.getSubject();
 		respondedAmount = reqSum.getRespondedAmount();
 		missedAmount = reqSum.getMissedAmout();
-		creationDate = MessageUtil.formatTaskDate(reqSum.getCreationDate());
-		endDate = MessageUtil.formatTaskDate(reqSum.getEndDate());
+		creationDate = MessageUtil.formatTaskDateByDay(reqSum.getCreationDate());
+		endDate = MessageUtil.formatTaskDateByDay(reqSum.getEndDate());
 	}
 
 	public KokuRequest(fi.arcusys.koku.kv.requestservice.Request req) {

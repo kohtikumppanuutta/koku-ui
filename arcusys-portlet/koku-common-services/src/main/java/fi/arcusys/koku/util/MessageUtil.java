@@ -94,7 +94,7 @@ public final class MessageUtil {
 	/**
 	 * Formats the date with given format and Helsinki timezone
 	 * @param xmlGregorianCalendar
-	 * @return formatted date string
+	 * @return formatted date string with time
 	 */	
 	public static String formatTaskDate(XMLGregorianCalendar xmlGregorianCalendar) {
 		

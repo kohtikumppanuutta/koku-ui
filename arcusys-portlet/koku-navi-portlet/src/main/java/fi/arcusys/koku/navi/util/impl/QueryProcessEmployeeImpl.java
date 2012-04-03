@@ -2,7 +2,9 @@ package fi.arcusys.koku.navi.util.impl;
 
 import static fi.arcusys.koku.util.Constants.JSON_ARCHIVE_INBOX;
 import static fi.arcusys.koku.util.Constants.JSON_INBOX;
+import static fi.arcusys.koku.util.Constants.JSON_INFO_REQUESTS_TOTAL;
 import static fi.arcusys.koku.util.Constants.JSON_LOGIN_STATUS;
+import static fi.arcusys.koku.util.Constants.JSON_REQUESTS_TOTAL;
 import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_INVALID;
 import static fi.arcusys.koku.util.Constants.TOKEN_STATUS_VALID;
 import net.sf.json.JSONObject;
@@ -36,9 +38,20 @@ public class QueryProcessEmployeeImpl extends AbstractQueryProcess {
 				LOG.error("Failed to get count(s) (message/archive/consensts/appointments. ", kse);
 				jsonModel.put(JSON_INBOX, "0");
 				jsonModel.put(JSON_ARCHIVE_INBOX, "0");
-			}			
+			}
+			
+			try {				
+				jsonModel.put(JSON_INFO_REQUESTS_TOTAL, getTotalTasks(username, token, RECEIVED_INFO_REQUESTS_FILTER));
+				jsonModel.put(JSON_REQUESTS_TOTAL, String.valueOf(getTotalTasks(userId, token, RECEIVED_REQUESTS_FILTER)));
+			} catch (Exception e) {
+				LOG.error("Coulnd't get TotalRequests (Saapuneet pyynnöt / Tietopyynnöt). See following errorMsg: "+e.getMessage(), e);
+				jsonModel.put(JSON_INFO_REQUESTS_TOTAL, "0");
+				jsonModel.put(JSON_REQUESTS_TOTAL, "0");
+			}
 		}
 		return jsonModel;
 	}
+	
+	
 
 }

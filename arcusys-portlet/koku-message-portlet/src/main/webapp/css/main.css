@@ -737,7 +737,7 @@
 	/* Pyynnöt - Lähetetyt - Avoimet */
 	table.task-manager-table.requestsEmployeeTable td.messageItem.creationDate,
 	table.task-manager-table.requestsEmployeeTable td.messageItem.endDate {
-		width: 150px;
+		width: 75px;
 	}
 	table.task-manager-table.requestsEmployeeTable td.messageItem.respondedAmount,
 	table.task-manager-table.requestsEmployeeTable td.messageItem.missedAmount {
@@ -758,7 +758,7 @@
 	
 	/* Suostumukset - Saapuneet */
 	table.task-manager-table.browseRepliedRequests td.messageItem.replyTill {
-		widdth: 75px;
+		width: 75px;
 	}
 	
 	/* Suostumukset - Lähetetyt suostumuspyynnöt */

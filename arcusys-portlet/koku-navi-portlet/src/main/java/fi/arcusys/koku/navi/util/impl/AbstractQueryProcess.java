@@ -61,17 +61,19 @@ public abstract class AbstractQueryProcess implements QueryProcess {
 		MessageHandle messageHandle = new MessageHandle();
 		return messageHandle.getUnreadMessages(userId, folderType);
 	}
-
-	/**
-	 * Returns total amount of requests (Pyynnöt - Saapuneet)
+	
+	/*
+	 * Returns total amount of tasks 
 	 * 
 	 * @param userId
+	 * @param token (from intalio)
+	 * @filter filttering string
 	 * @return number or requests
 	 */
-	protected int getTotalRequests(String username, String token) {
+	protected int getTotalTasks(final String username, final String token, final String filter) {
 		if (username != null && !username.isEmpty() && token != null && !token.isEmpty()) {
 			TaskHandle handle = new TaskHandle(token, username);
-			return handle.getTasksTotalNumber(RECEIVED_REQUESTS_FILTER);
+			return handle.getTasksTotalNumber(filter);
 		} else {
 			return 0;
 		}

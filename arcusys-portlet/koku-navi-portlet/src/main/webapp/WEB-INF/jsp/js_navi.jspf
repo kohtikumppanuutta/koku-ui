@@ -108,12 +108,14 @@ function ajaxUpdate() {
 	/**
 	 * Updates the new message number to indicate user
 	 */
-	function updateMessageNum(inboxNum, archiveInboxNum, consentsTotal, appointmentsTotal, requestsTotal) {	
+	function updateMessageNum(inboxNum, archiveInboxNum, consentsTotal, appointmentsTotal, requestsTotal, infoRequestsTotal) {	
 		
 		function updateMsgCounter(elementId, count) {
 			element = jQuery(elementId);
-			if (count !== undefined && count != 0) {
-				element.html('(' + escapeHTML(count) + ')');			
+			if (count && !isNaN(count) && count != 0) {
+				element.html('(' +count+')');
+			} else if (count !== undefined && count != 0 && isNaN(count)) {
+				element.html('(' + escapeHTML(count) + ')');
 			} else {
 				element.html("");
 			}
@@ -124,6 +126,7 @@ function ajaxUpdate() {
 		updateMsgCounter('#consents_num', consentsTotal);
 		updateMsgCounter('#appointments_num', appointmentsTotal);
 		updateMsgCounter('#requests_num', requestsTotal);
+		updateMsgCounter('#infoRequests_num', infoRequestsTotal);
 	};
 	
 	
@@ -146,7 +149,8 @@ function ajaxUpdate() {
 							json["<%=Constants.JSON_ARCHIVE_INBOX %>"],
 							json["<%=Constants.JSON_CONSENTS_TOTAL %>"],
 							json["<%=Constants.JSON_APPOINTMENT_TOTAL %>"],
-							json["<%=Constants.JSON_REQUESTS_TOTAL %>"]
+							json["<%=Constants.JSON_REQUESTS_TOTAL %>"],
+							json["<%=Constants.JSON_INFO_REQUESTS_TOTAL %>"]
 						);
 				}
 				naviRefreshTimer = setTimeout('ajaxUpdate()', 30000);		
