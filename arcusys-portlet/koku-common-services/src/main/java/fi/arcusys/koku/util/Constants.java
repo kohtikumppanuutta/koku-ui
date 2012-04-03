@@ -28,8 +28,11 @@ public final class Constants {
 	/* koku-settings.properties keys */
 	public static final String PROPERTIES_ENVIROMENT_NAME					= "environment.name";
 	public static final String PROPERTIES_VETUMA_ENABLED					= "vetuma.enabled";
-	
-	
+	public static final String PROPERTIES_FILTER_RECIEVED_REQUESTS			= "intalioFilterReceivedRequests";
+	public static final String PROPERTIES_FILTER_RECIEVED_INFO_REQUESTS		= "intalioFilterReceivedInfoRequests";
+	public static final String PROPERTIES_FILTER_RECIEVED_APPLICATIONS		= "intalioFilterReceivedApplications";
+	public static final String PROPERTIES_FILTER_RECIEVED_WARRANTS			= "intalioFilterReceivedWarrants";
+
 	/* ModelMap attribute key */                                        
 	public static final String RESPONSE										= "response";
 	                                                                    
