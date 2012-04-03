@@ -150,6 +150,7 @@ public final class Constants {
 	public static final String JSON_CONSENTS_TOTAL							= "consentsTotal";
 	public static final String JSON_APPOINTMENT_TOTAL						= "appointmentsTotal";
 	public static final String JSON_REQUESTS_TOTAL							= "requestsTotal";
+	public static final String JSON_INFO_REQUESTS_TOTAL						= "infoRequestsTotal";
                                                                     	
 	/* PortletPreferences keys: */                                  	
 	public static final String PREF_REFRESH_DURATION 						= "refreshDuration";

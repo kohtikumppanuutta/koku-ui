@@ -41,7 +41,7 @@ public class QueryProcessCitizenImpl extends AbstractQueryProcess {
 				jsonModel.put(JSON_CONSENTS_TOTAL, String.valueOf(getTotalAssignedConsents(userId)));
 				jsonModel.put(JSON_APPOINTMENT_TOTAL, String.valueOf(getTotalAssignedAppointments(userId)));
 				try {
-					jsonModel.put(JSON_REQUESTS_TOTAL, String.valueOf(getTotalRequests(userId, token)));
+					jsonModel.put(JSON_REQUESTS_TOTAL, String.valueOf(getTotalTasks(userId, token, RECEIVED_REQUESTS_FILTER)));
 				} catch (Exception e) {
 					LOG.error("Coulnd't get TotalRequests (Valtakirja yht.). See following errorMsg: "+e.getMessage(), e);
 				}
