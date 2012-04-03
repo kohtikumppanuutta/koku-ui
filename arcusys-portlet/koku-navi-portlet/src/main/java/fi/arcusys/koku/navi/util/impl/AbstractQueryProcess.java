@@ -26,10 +26,10 @@ public abstract class AbstractQueryProcess implements QueryProcess {
 		LOG.info("Received inforequests filter (Tietopyynnöt - Saapuneet): " + KoKuPropertiesUtil.get(PROPERTIES_FILTER_RECIEVED_INFO_REQUESTS));
 		LOG.info("Received applications filter (Asiointipalvelut - Hakemusten vahvistuspyynnöt): " + KoKuPropertiesUtil.get(PROPERTIES_FILTER_RECIEVED_APPLICATIONS));
 		LOG.info("Received warrants filter (Valtakirjat - Valtuutettuna): " + KoKuPropertiesUtil.get(PROPERTIES_FILTER_RECIEVED_WARRANTS));
-		RECEIVED_REQUESTS_FILTER =  KoKuPropertiesUtil.get(PROPERTIES_FILTER_RECIEVED_REQUESTS);
-		RECEIVED_INFO_REQUESTS_FILTER =  KoKuPropertiesUtil.get(PROPERTIES_FILTER_RECIEVED_INFO_REQUESTS);
-		RECEIVED_KINDERGARTED_APPLICATION_FILTER = KoKuPropertiesUtil.get(PROPERTIES_FILTER_RECIEVED_APPLICATIONS);		
-		RECEIVED_WARRANTS_FILTER = KoKuPropertiesUtil.get(PROPERTIES_FILTER_RECIEVED_WARRANTS);
+		RECEIVED_REQUESTS_FILTER =  KoKuPropertiesUtil.get(PROPERTIES_FILTER_RECIEVED_REQUESTS).trim();
+		RECEIVED_INFO_REQUESTS_FILTER =  KoKuPropertiesUtil.get(PROPERTIES_FILTER_RECIEVED_INFO_REQUESTS).trim();
+		RECEIVED_KINDERGARTED_APPLICATION_FILTER = KoKuPropertiesUtil.get(PROPERTIES_FILTER_RECIEVED_APPLICATIONS).trim();		
+		RECEIVED_WARRANTS_FILTER = KoKuPropertiesUtil.get(PROPERTIES_FILTER_RECIEVED_WARRANTS).trim();
 	}
 	
 	private MessageSource messageSource;
