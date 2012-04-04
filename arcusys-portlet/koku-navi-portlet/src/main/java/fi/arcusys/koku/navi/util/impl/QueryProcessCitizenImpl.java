@@ -1,5 +1,6 @@
 package fi.arcusys.koku.navi.util.impl;
 
+import static fi.arcusys.koku.util.Properties.RECEIVED_REQUESTS_FILTER;
 import static fi.arcusys.koku.util.Constants.JSON_APPOINTMENT_TOTAL;
 import static fi.arcusys.koku.util.Constants.JSON_ARCHIVE_INBOX;
 import static fi.arcusys.koku.util.Constants.JSON_CONSENTS_TOTAL;
