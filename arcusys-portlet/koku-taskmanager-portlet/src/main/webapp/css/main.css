@@ -356,4 +356,9 @@
 		min-width: 700px;
 		width: 100%;
 	}
+	
+	table.task-manager-table td.messageItem.creationDate {
+		width: 100px;
+	}
+	
 }
