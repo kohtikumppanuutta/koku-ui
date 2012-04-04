@@ -172,13 +172,13 @@
 		
 		taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
-				+ '<td><a href="javascript:void(0)" onclick="orderTask(\'description\')"><spring:message code="task.description" /></a></td>';
+				+ '<td class="messgeItem description"><a href="javascript:void(0)" onclick="orderTask(\'description\')"><spring:message code="task.description" /></a></td>';
 				
 		<c:if test="<%= Boolean.valueOf(editable) %>">
 			taskHtml += '<td><spring:message code="task.edit" /></td>';
 		</c:if>
 		
-		taskHtml += '<td><a href="javascript:void(0)" onclick="orderTask(\'creationDate\')"><spring:message code="task.creationDate" /></a></td>'								
+		taskHtml += '<td class="messageItem creationDate"><a href="javascript:void(0)" onclick="orderTask(\'creationDate\')"><spring:message code="task.creationDate" /></a></td>'								
 				 + '</tr> ';
 				 
 		for ( var i = 0; i < tasks.length; i++) {
@@ -190,12 +190,12 @@
 				taskHtml += '<tr>';
 			}
 			
-			taskHtml +=  '<td>' + formLink + '</td>';
+			taskHtml +=  '<td class="messgeItem description">' + formLink + '</td>';
 			if (editable == true) {
 				taskHtml += '<td><div><spring:message code="task.edit" /></div></td>';	
 			}
 			
-			taskHtml += '<td>' + escapeHTML(tasks[i]["creationDate"]) + '</td> </tr>';
+			taskHtml += '<td class="messageItem creationDate">' + escapeHTML(tasks[i]["creationDate"]) + '</td> </tr>';
 		}
 
 		taskHtml += '</table>';
@@ -247,12 +247,12 @@
 		var taskHtml = "";
 		taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
-				+ '<td><spring:message code="task.description" /></td>';
+				+ '<td class="messageItem description"><spring:message code="task.description" /></td>';
 				
 		<c:if test="<%= Boolean.valueOf(editable) %>">
 			taskHtml += '<td><spring:message code="task.edit" /></td>';
 		</c:if>
-		taskHtml += '<td><spring:message code="task.creationDate" /></td>'								
+		taskHtml += '<td class="messageItem creationDate"><spring:message code="task.creationDate" /></td>'								
 				  + '</tr></table>';
 				
 		return taskHtml;
