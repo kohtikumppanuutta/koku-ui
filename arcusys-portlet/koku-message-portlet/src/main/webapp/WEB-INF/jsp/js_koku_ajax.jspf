@@ -104,12 +104,16 @@ KokuAjax.prototype.cancelAppointments = function(messageList, targetPersons, com
 KokuAjax.prototype.ajaxGetTasks = function(pageObj, presentTasks) {
 
 	if (pageObj === undefined || pageObj === null) {
-		console.error("Bug in code!! pageObj undefined or null");
+		if (console) {
+			console.error("Bug in code!! pageObj undefined or null");
+		}
 		return;
 	}
 	
 	if (presentTasks === undefined || presentTasks === null) {
-		console.error("Bug in code!! presentTasks undefined or null");
+		if (console) {
+			console.error("Bug in code!! presentTasks undefined or null");
+		}
 		return;
 	}
 
