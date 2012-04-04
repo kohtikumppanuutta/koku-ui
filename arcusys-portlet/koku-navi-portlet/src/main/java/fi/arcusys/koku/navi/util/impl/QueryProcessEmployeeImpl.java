@@ -15,6 +15,9 @@ import org.springframework.context.MessageSource;
 import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.model.KokuFolderType;
 import fi.arcusys.koku.util.PortalRole;
+import static fi.arcusys.koku.util.Properties.RECEIVED_REQUESTS_FILTER;
+import static fi.arcusys.koku.util.Properties.RECEIVED_INFO_REQUESTS_FILTER;
+
 
 public class QueryProcessEmployeeImpl extends AbstractQueryProcess {
 	
