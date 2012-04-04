@@ -1,4 +1,15 @@
 
+/* Check if browser support logging (IE doesn't seem to support console) */
+if (console === undefined) {
+	console = { 
+		log : function() {
+			alert(arguments[0]);
+		},
+		error : function() {
+			alert(arguments[0]);
+		}
+	};
+}
 
 var koku_navi_type = readKokuCookie();
 if (!koku_navi_type) {
@@ -192,8 +203,8 @@ function navigateToPage(naviType) {
 
 function createKokuCookie(value) {
 	if (!value) {
-		console. error("Bug in code! KokuCookie value missing.");
-	} 
+		console.error("Bug in code! KokuCookie value missing.");
+	}
 	var date = new Date();
 	date.setTime(date.getTime()+(2*60*60*1000));
 	var expires = "; expires="+date.toGMTString();
