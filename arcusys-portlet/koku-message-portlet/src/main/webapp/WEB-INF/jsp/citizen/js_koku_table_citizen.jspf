@@ -37,10 +37,7 @@ KokuTable.prototype.createAppoitmentsTable = function() {
 	 */
 	
 	function createUnansweredAppoitmentsTable(tasks) {
-		if (tasks == undefined || tasks == null || tasks.length == 0) {
-			return KokuUtil.errorMsg.showErrorMsg("<spring:message code="errorMsg.noContent"/>");
-		}
-			var columnNames = [
+		var columnNames = [
 	                   "<spring:message code="message.from" />",
 	                   "<spring:message code="message.subject" />",
 	                   "<spring:message code="message.description" />"
@@ -51,18 +48,10 @@ KokuTable.prototype.createAppoitmentsTable = function() {
 		                 "cleanHtmlsubject",
 		                 "cleanHtmldescription"
 		                ];
-		                
-		KokuTable.prototype.createAppoitmentsTableUtils.shortenMsg(tasks);		                
-		return KokuTable.prototype.tableGenerator.createTable("kokuAjax.showAppointment", "appointmentsTable", columnNames, columnIds, tasks, false);
-	};
-	
+		return createTable(tasks, columnNames, columnIds, "appointmentsTable", false);		                
+	};	
 	 
 	function createOpenAppointmentsTable(tasks) {
-		
-		if (tasks == undefined || tasks == null || tasks.length == 0) {
-			return KokuUtil.errorMsg.showErrorMsg("<spring:message code="errorMsg.noContent"/>");
-		}
-		
 		var columnNames = [
 					   "<spring:message code="message.choose" />",
 	                   "<spring:message code="message.from" />",
@@ -75,19 +64,10 @@ KokuTable.prototype.createAppoitmentsTable = function() {
 		                 "cleanHtmlsubject",
 		                 "cleanHtmldescription"
 		                ];
-		                
-		KokuTable.prototype.createAppoitmentsTableUtils.shortenMsg(tasks);
-		                
-		return KokuTable.prototype.tableGenerator.createTable("kokuAjax.showAppointment", "appointmentsTable", columnNames, columnIds, tasks);                
+		return createTable(tasks, columnNames, columnIds, "appointmentsTable", true);		                
 	};
 	
-	function createReadyAppointmentsTable(tasks) {
-		
-		if (tasks == undefined || tasks == null || tasks.length == 0) {
-			return KokuUtil.errorMsg.showErrorMsg("<spring:message code="errorMsg.noContent"/>");
-		}
-		
-		
+	function createReadyAppointmentsTable(tasks) {		
 		var columnNames = [
 	                   "<spring:message code="message.from" />",
 	                   "<spring:message code="message.subject" />",
@@ -101,11 +81,17 @@ KokuTable.prototype.createAppoitmentsTable = function() {
 		                 "cleanHtmldescription",
 		                 "status"
 		                ];
-		                
-		KokuTable.prototype.createAppoitmentsTableUtils.shortenMsg(tasks);
-		
-		return KokuTable.prototype.tableGenerator.createTable("kokuAjax.showAppointment", "appointmentsTable", columnNames, columnIds, tasks, false);                
+		return createTable(tasks, columnNames, columnIds, "appointmentsTable", false);		                
 	};
+	
+	function createTable(tasks, columnNames, columnIds, tableName, showSelectorCheckBox) {
+		if (tasks == undefined || tasks == null || tasks.length == 0) {
+			return KokuUtil.errorMsg.showErrorMsg("<spring:message code="errorMsg.noContent"/>");
+		}
+					
+		KokuTable.prototype.createAppoitmentsTableUtils.shortenMsg(tasks);		
+		return KokuTable.prototype.tableGenerator.createTable("kokuAjax.showAppointment", "appointmentsTable", columnNames, columnIds, tasks, showSelectorCheckBox);                
+	}
 	
 	return public;
 };
@@ -114,7 +100,20 @@ KokuTable.prototype.createAppoitmentsTable = function() {
 /**
  *  Pyynnöt Vastatut/vanhat / Requests recieved
  */
-KokuCitizenTable.prototype.createRequestsTable = function(tasks) { 
+KokuCitizenTable.prototype.createRequestsTable = function() { 
+
+	/***************
+	 * Public methods
+	 */
+	var public = {
+		old : old,
+		replied: replied
+	}
+	
+	/***************
+	 * Private methods
+	 */	
+
 	function flatten(tasks) {
 		for (var i = 0; i < tasks.length; i++)  {			
 			tasks[i]["replierName"] = tasks[i].replierUser.fullName;
@@ -124,28 +123,46 @@ KokuCitizenTable.prototype.createRequestsTable = function(tasks) {
 			tasks[i]["creationDate"] = tasks[i].request.creationDate;
 		}
 	};
-		
-	if (tasks == undefined || tasks == null || tasks.length == 0) {
-		return showErrorMsgYouDontHaveAnyTipys();
+	
+	function replied(tasks) {
+		var columnNames = [
+		                   "<spring:message code="response.reciever"/>",
+		                   "<spring:message code="response.sender"/>",
+		                   "<spring:message code="response.subject"/>",
+		                   "<spring:message code="response.createdAt"/>",
+		                   "<spring:message code="response.endDate2"/>"
+		                  ];		
+		return createTable(tasks, columnNames, "browseRepliedRequests");		
 	}
 	
-	var columnNames = [
-	                   "<spring:message code="response.reciever"/>",
-	                   "<spring:message code="response.sender"/>",
-	                   "<spring:message code="response.subject"/>",
-	                   "<spring:message code="response.createdAt"/>",
-	                   "<spring:message code="response.endDate"/>"
-	                  ];
+	function old(tasks) {		
+		var columnNames = [
+		                   "<spring:message code="response.reciever"/>",
+		                   "<spring:message code="response.sender"/>",
+		                   "<spring:message code="response.subject"/>",
+		                   "<spring:message code="response.createdAt"/>",
+		                   "<spring:message code="response.endDate"/>"
+		                  ];
+		return createTable(tasks, columnNames, "browseRepliedRequests");		
+	}
 	
-	var columnIds = [
-					 "replierName",
-	                 "sender",
-	                 "cleanHtmlsubject",
-	                 "creationDate",
-	                 "endDate"
-	                ];
-	flatten(tasks);
-	return this.tableGenerator.createTable("kokuAjax.showResponse", "browseRepliedRequests", columnNames, columnIds, tasks, false);
+	function createTable(tasks, columnNames, tableName) {
+		if (tasks == undefined || tasks == null || tasks.length == 0) {
+			return showErrorMsgYouDontHaveAnyTipys();
+		}
+		
+		var columnIds = [
+						 "replierName",
+		                 "sender",
+		                 "cleanHtmlsubject",
+		                 "creationDate",
+		                 "endDate"
+		                ];
+		flatten(tasks);
+		return KokuTable.prototype.tableGenerator.createTable("kokuAjax.showResponse", tableName, columnNames, columnIds, tasks, false);	
+	}
+		
+	return public;
 };
 
 
