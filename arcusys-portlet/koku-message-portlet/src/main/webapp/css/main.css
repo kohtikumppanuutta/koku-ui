@@ -789,14 +789,14 @@
 		width: 120px;
 	}
 	
-	table.task-manager-table.consentsCurrentAndOldTable td.messageItem.anotherPermitterUser {
+	table.task-manager-table.consentsCurrentTable td.messageItem.anotherPermitterUser {
 		width: 120px;
 	}
-	table.task-manager-table.consentsCurrentAndOldTable td.messageItem.status,
-	table.task-manager-table.consentsCurrentAndOldTable td.messageItem.approvalStatus,	
-	table.task-manager-table.consentsCurrentAndOldTable td.messageItem.createType,
-	table.task-manager-table.consentsCurrentAndOldTable td.messageItem.validDate,
-	table.task-manager-table.consentsCurrentAndOldTable td.messageItem.assignedDate {
+	table.task-manager-table.consentsCurrentTable td.messageItem.status,
+	table.task-manager-table.consentsCurrentTable td.messageItem.approvalStatus,	
+	table.task-manager-table.consentsCurrentTable td.messageItem.createType,
+	table.task-manager-table.consentsCurrentTable td.messageItem.validDate,
+	table.task-manager-table.consentsCurrentTable td.messageItem.assignedDate {
 		width: 75px;
 	}
 	
