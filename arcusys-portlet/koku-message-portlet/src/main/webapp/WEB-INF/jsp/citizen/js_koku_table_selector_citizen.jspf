@@ -10,9 +10,11 @@ Config.prototype.getTable = function(taskType, tasks) {
 	
 	switch(taskType) {
 		case "<%= Constants.TASK_TYPE_REQUEST_REPLIED %>" : 
+			taskHtml += table.createRequestsTable().replied(tasks);
+			break;
 		case "<%= Constants.TASK_TYPE_REQUEST_OLD %>" :
-			taskHtml += table.createRequestsTable(tasks);
-			break;	
+			taskHtml += table.createRequestsTable().old(tasks);
+			break;
 		case "<%= Constants.TASK_TYPE_APPOINTMENT_INBOX_CITIZEN %>" :
 			taskHtml +=  table.createAppoitmentsTable().unanswered(tasks);
 			break;

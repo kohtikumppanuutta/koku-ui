@@ -36,11 +36,6 @@ KokuTable.prototype.createAppoitmentsTable = function() {
 	 */
 	 
 	function createOpenAppointmentsTable(tasks) {
-		
-		if (tasks == undefined || tasks == null || tasks.length == 0) {
-			return KokuUtil.errorMsg.showErrorMsg("<spring:message code="errorMsg.noContent"/>");
-		}
-		
 		var columnNames = [
 					   "<spring:message code="message.choose" />",
 	                   "<spring:message code="message.to" />",
@@ -53,18 +48,10 @@ KokuTable.prototype.createAppoitmentsTable = function() {
 		                 "cleanHtmlsubject",
 		                 "cleanHtmldescription"
 		                ];
-		                
-		KokuTable.prototype.createAppoitmentsTableUtils.shortenMsg(tasks);
-		                
-		return KokuTable.prototype.tableGenerator.createTable("kokuAjax.showAppointment", "appointmentsTable", columnNames, columnIds, tasks);                
+		return createTable(tasks, columnNames, columnIds, "appointmentsTable", true);		                
 	};
 	
 	function createReadyAppointmentsTable(tasks) {
-		
-		if (tasks == undefined || tasks == null || tasks.length == 0) {
-			return KokuUtil.errorMsg.showErrorMsg("<spring:message code="errorMsg.noContent"/>");
-		}		
-		
 		var columnNames = [
 					   "<spring:message code="message.choose" />",
 	                   "<spring:message code="message.to" />",
@@ -79,12 +66,21 @@ KokuTable.prototype.createAppoitmentsTable = function() {
 		                 "cleanHtmldescription",
 		                 "status"
 		                ];
-		                
-		KokuTable.prototype.createAppoitmentsTableUtils.shortenMsg(tasks);		
-		return KokuTable.prototype.tableGenerator.createTable("kokuAjax.showAppointment", "appointmentsTable", columnNames, columnIds, tasks);                
+
+		return createTable(tasks, columnNames, columnIds, "appointmentsTable", true);
 	};
 	
+	function createTable(tasks, columnNames, columnIds, tableName, showSelectorCheckBox) {
+		if (tasks == undefined || tasks == null || tasks.length == 0) {
+			return KokuUtil.errorMsg.showErrorMsg("<spring:message code="errorMsg.noContent"/>");
+		}
+					
+		KokuTable.prototype.createAppoitmentsTableUtils.shortenMsg(tasks);		
+		return KokuTable.prototype.tableGenerator.createTable("kokuAjax.showAppointment", "appointmentsTable", columnNames, columnIds, tasks, showSelectorCheckBox);                
+	}	
+	
 	return public;
+	
 };
 
 
