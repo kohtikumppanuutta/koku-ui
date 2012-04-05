@@ -58,6 +58,8 @@ public String htmlToCode(String s)
 
 	<script type="text/javascript"> 
 	
+	<%--  Disabled iframe because it doesn't seem to be used at all 
+	
 	window.onload = function() {
 		var content = '<%= content %>';
 		var iframe = document.getElementById('msgFrame');
@@ -89,6 +91,8 @@ public String htmlToCode(String s)
 	
 	}
 	
+	--%>
+	
 	function htmlToCode(s) {
 		s = s.replace("\n\n", "");
 		s = s.replace("\r\n", "");
@@ -111,7 +115,8 @@ public String htmlToCode(String s)
 		<span class="request-c-1"><spring:message code="request.validTill"/>:</span> <c:out value="${request.model.endDate}" /> <br />
 		
 		<%--  Why iframe here?? --%>
-		<iframe id="msgFrame" name="msgFrame" style="width:100%;" frameborder="0" scrolling="no"></iframe>
+		<%--  Disabled iframe because it doesn't seem to be used at all --%>
+		<%-- <iframe id="msgFrame" name="msgFrame" style="width:100%;" frameborder="0" scrolling="no"></iframe> --%>
 		
 	    <h3><spring:message code="request.responseSummary"/></h3>
 	    <table class="request-table">
