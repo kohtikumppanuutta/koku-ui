@@ -83,6 +83,8 @@ public final class Constants {
 	/* ATTR_MY_TASK_TYPE parameter possible values. (Message-portlet) */
 	public static final String TASK_TYPE_MESSAGE_INBOX						= "msg_inbox";
 	public static final String TASK_TYPE_MESSAGE_OUTBOX						= "msg_outbox";
+	public static final String TASK_TYPE_MESSAGE_ARCHIVE_INBOX				= "msg_archive_inbox";
+	public static final String TASK_TYPE_MESSAGE_ARCHIVE_OUTBOX				= "msg_archive_outbox";
 	public static final String TASK_TYPE_CONSENT_EMPLOYEE_CONSENTS			= "cst_own_employee";					// Virkailijan lähetetyt suostumus pyynnöt 
 	public static final String TASK_TYPE_CONSENT_CITIZEN_CONSENTS			= "cst_own_citizen";					// Kansalaiselle vastatut pyynnöt(/suostumukset)	public static final String TASK_TYPE_CONSENT_CITIZEN_CONSENTS		= "cst_own_citizen";					// Kansalaiselle vastatut pyynnöt(/suostumukset) 
 	public static final String TASK_TYPE_CONSENT_CITIZEN_CONSENTS_OLD		= "cst_own_citizen_old";				// Kansalaiselle vastatut pyynnöt vanhentuneet(/suostumukset) 

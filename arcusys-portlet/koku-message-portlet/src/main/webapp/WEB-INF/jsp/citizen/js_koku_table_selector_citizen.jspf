@@ -41,8 +41,17 @@ Config.prototype.getTable = function(taskType, tasks) {
 			break;
 		case "<%= Constants.TASK_TYPE_APPLICATION_KINDERGARTEN_BROWSE%>" :
 			taskHtml += table.createApplicationsTable(tasks);		
+			break;			
+		case "<%= Constants.TASK_TYPE_MESSAGE_INBOX %>" :
+		case "<%= Constants.TASK_TYPE_MESSAGE_ARCHIVE_INBOX %>" :
+			taskHtml += table.createMessagesTable().inbox(tasks, pageObj.taskType);
 			break;
-		default:											// for message
+		case "<%= Constants.TASK_TYPE_MESSAGE_OUTBOX %>" :
+		case "<%= Constants.TASK_TYPE_MESSAGE_ARCHIVE_OUTBOX %>" :
+			taskHtml += table.createMessagesTable().outbox(tasks, pageObj.taskType);
+			break;
+		default:	// for message
+			// Should we throw error message and insult user breaking our app?
 			taskHtml += table.createMessagesTable(tasks, pageObj.taskType);		
 			break;
 	}
