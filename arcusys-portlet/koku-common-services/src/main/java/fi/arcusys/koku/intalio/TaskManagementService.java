@@ -131,11 +131,11 @@ public class TaskManagementService {
 			countAvailTasksReq.setSubQuery(subQuery);
 			totalNum = tms.getTaskManagementServicesSOAP().countAvailableTasks(countAvailTasksReq);
 		} catch (InvalidParticipantTokenFault_Exception e) {
-			LOG.error("getTotalTasksNumber - InvalidParticipantTokenFault_Exception: "+e.getMessage());
+			LOG.error("getTotalTasksNumber - InvalidParticipantTokenFault_Exception: ", e);
 		} catch (InvalidInputMessageFault_Exception e2) {
-			LOG.error("getTotalTasksNumber - InvalidInputMessageFault_Exception: "+e2.getMessage());
+			LOG.error("getTotalTasksNumber - InvalidInputMessageFault_Exception: ", e2);
 		} catch (Exception e1) {
-			LOG.error("getTotalTasksNumber - Intalio exception: "+e1.getMessage());
+			LOG.error("getTotalTasksNumber - Intalio exception: ", e1);
 		}
 			
 		
