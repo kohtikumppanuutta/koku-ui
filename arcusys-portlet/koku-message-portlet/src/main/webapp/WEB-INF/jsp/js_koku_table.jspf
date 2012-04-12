@@ -166,7 +166,7 @@ KokuTable.prototype.createMessagesTable = function() {
 		}
 		
 		if (taskType === undefined || taskType === null) {
-			console.error("TaskType parameter missing. MessageTable might not be rendered correctly!");
+			/* console.error("TaskType parameter missing. MessageTable might not be rendered correctly!"); */
 		}
 		
 		var formLink = "";
