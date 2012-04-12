@@ -1,48 +1,34 @@
 
 package fi.arcusys.koku.tiva.warrant.employee;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import javax.xml.ws.BindingProvider;
 
 import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationCriteria;
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationQuery;
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationShortSummary;
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationSummary;
+import fi.arcusys.koku.tiva.warrant.employeewarrantservice.KokuLooraValtakirjaService;
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.KokuLooraValtakirjaService_Service;
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.Valtakirjapohja;
-import fi.arcusys.koku.util.PropertiesUtil;
-import fi.koku.settings.KoKuPropertiesUtil;
+import fi.arcusys.koku.util.Properties;
 
 
 public class KokuEmployeeWarrantService {	
 	
-	private static final Logger LOG = Logger.getLogger(KokuEmployeeWarrantService.class);		
-	public static final URL WARRANT_SERVICE_WSDL_LOCATION;
-	
-	static {
-		try {
-			LOG.info("KokuLooraValtakirjaService WSDL location: " + KoKuPropertiesUtil.get("KokuLooraValtakirjaService"));
-			WARRANT_SERVICE_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("KokuLooraValtakirjaService"));
-		} catch (MalformedURLException e) {
-			LOG.error("Failed to create KokuLooraValtakirjaService WSDL url! Given URL address is not valid!");
-			throw new ExceptionInInitializerError(e);
-		}
-	}
-	
-	private KokuLooraValtakirjaService_Service service;
-	
+	private final KokuLooraValtakirjaService service;
 	
 	public KokuEmployeeWarrantService() {
-		service = new KokuLooraValtakirjaService_Service(WARRANT_SERVICE_WSDL_LOCATION);
+		KokuLooraValtakirjaService_Service serviceInit = new KokuLooraValtakirjaService_Service();
+		service = serviceInit.getKokuLooraValtakirjaServicePort();
+		((BindingProvider)service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, Properties.KOKU_LOORA_VALTAKIRJA_SERVICE);		
 	}
 	
 	public int getTotalAuthorizations(AuthorizationCriteria criteria) throws KokuServiceException {
 		try {
-			return service.getKokuLooraValtakirjaServicePort().getTotalAuthorizations(criteria);
+			return service.getTotalAuthorizations(criteria);
 		} catch(RuntimeException e) {
 			if (criteria != null) {
 				throw new KokuServiceException("getTotalAuthorizations failed. " +
@@ -57,7 +43,7 @@ public class KokuEmployeeWarrantService {
 	
 	public List<AuthorizationShortSummary> getAuthorizations(AuthorizationQuery query) throws KokuServiceException {
 		try {
-			return service.getKokuLooraValtakirjaServicePort().getAuthorizations(query);
+			return service.getAuthorizations(query);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getAuthorizations failed. query: '"+query+"'", e);
 		}
@@ -65,7 +51,7 @@ public class KokuEmployeeWarrantService {
 	
 	public AuthorizationSummary getAuthorizationDetails(int valtakirjaId) throws KokuServiceException {
 		try {
-			return service.getKokuLooraValtakirjaServicePort().getAuthorizationDetails(valtakirjaId);
+			return service.getAuthorizationDetails(valtakirjaId);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getAuthorizationDetails failed. valtakirjaId: '"+valtakirjaId+"'", e);
 		}
@@ -73,10 +59,11 @@ public class KokuEmployeeWarrantService {
 	
 	public List<Valtakirjapohja> searchAuthorizationTemplates(String searchString, int limit) throws KokuServiceException {
 		try {
-			return service.getKokuLooraValtakirjaServicePort().searchAuthorizationTemplates(searchString, limit);
+			return service.searchAuthorizationTemplates(searchString, limit);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("searchAuthorizationTemplates failed. searchString: '"+searchString+"'", e);
 		}
 	}
+	
 	
 }

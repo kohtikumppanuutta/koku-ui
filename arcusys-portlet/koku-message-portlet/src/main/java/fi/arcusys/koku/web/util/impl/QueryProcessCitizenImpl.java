@@ -97,10 +97,12 @@ public class QueryProcessCitizenImpl extends AbstractQueryProcess {
 				tasks = warrantHandle.getSentWarrants(userUid, first, max);
 				totalTasksNum = warrantHandle.getTotalSentAuthorizations(userUid);
 			} else { // for message
+				long start = System.nanoTime();
 				MessageHandle msgHandle = new MessageHandle();
 				msgHandle.setMessageSource(getMessageSource());
 				tasks = msgHandle.getMessages(userUid, taskType, keyword, field, orderType, first, max);			
 				totalTasksNum = msgHandle.getTotalMessageNum(userUid, taskType, keyword, field);
+				LOG.info("QueryProcess  - "+((System.nanoTime()-start)/1000/1000) + "ms");
 			}
 			jsonModel.put(JSON_RESULT, RESPONSE_OK);
 		} catch (KokuServiceException kse) {

@@ -1,17 +1,16 @@
 package fi.arcusys.koku.tiva;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import javax.xml.ws.BindingProvider;
 
 import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.citizenservice.ConsentShortSummary;
 import fi.arcusys.koku.tiva.citizenservice.ConsentSummary;
 import fi.arcusys.koku.tiva.citizenservice.ConsentTO;
+import fi.arcusys.koku.tiva.citizenservice.KokuKunpoSuostumusService;
 import fi.arcusys.koku.tiva.citizenservice.KokuKunpoSuostumusService_Service;
-import fi.koku.settings.KoKuPropertiesUtil;
+import fi.arcusys.koku.util.Properties;
 
 /**
  * Retrieves Tiva consent data and related operations via web services
@@ -19,27 +18,16 @@ import fi.koku.settings.KoKuPropertiesUtil;
  * Aug 11, 2011
  */
 public class TivaCitizenService {
-	
-	private static final Logger LOG = Logger.getLogger(TivaCitizenService.class);		
-	public static final URL TIVA_CITIZEN_WSDL_LOCATION;
-	
-	static {
-		try {
-			LOG.info("TivaCitizenService WSDL location: " + KoKuPropertiesUtil.get("TivaCitizenService"));
-			TIVA_CITIZEN_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("TivaCitizenService"));
-		} catch (MalformedURLException e) {
-			LOG.error("Failed to create TivaCitizenService WSDL url! Given URL address is not valid!");
-			throw new ExceptionInInitializerError(e);
-		}
-	}
-	
-	private KokuKunpoSuostumusService_Service kks;
+		
+	private final KokuKunpoSuostumusService service;
 	
 	/**
 	 * Constructor and initialization
 	 */
 	public TivaCitizenService() {
-		this.kks = new KokuKunpoSuostumusService_Service(TIVA_CITIZEN_WSDL_LOCATION);
+		KokuKunpoSuostumusService_Service kks = new KokuKunpoSuostumusService_Service();
+		service = kks.getKokuKunpoSuostumusServicePort();
+		((BindingProvider)service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, Properties.TIVA_CITIZEN_SERVICE);
 	}
 	
 	/**
@@ -51,7 +39,7 @@ public class TivaCitizenService {
 	 */
 	public List<ConsentShortSummary> getAssignedConsents(String user, int startNum, int maxNum) throws KokuServiceException {
 		try {
-			return kks.getKokuKunpoSuostumusServicePort().getAssignedConsents(user, startNum, maxNum);			
+			return service.getAssignedConsents(user, startNum, maxNum);			
 		} catch (RuntimeException re) {
 			throw new KokuServiceException("getAssignedConsents failed. User: '"+user+"'", re);
 		}
@@ -64,7 +52,7 @@ public class TivaCitizenService {
 	 */
 	public ConsentTO getConsentById(long consentId, String user) throws KokuServiceException {
 		try {
-			return kks.getKokuKunpoSuostumusServicePort().getConsentById(consentId, user);
+			return service.getConsentById(consentId, user);
 		} catch (RuntimeException re) {
 			throw new KokuServiceException("getConsentById failed. User: '"+user+"' consentId: '"+consentId + "'", re);
 		}
@@ -79,7 +67,7 @@ public class TivaCitizenService {
 	 */
 	public List<ConsentSummary> getOwnConsents(String user, int startNum, int maxNum) throws KokuServiceException {
 		try {
-			return kks.getKokuKunpoSuostumusServicePort().getOwnConsents(user, startNum, maxNum);
+			return service.getOwnConsents(user, startNum, maxNum);
 		} catch (RuntimeException re) {
 			throw new KokuServiceException("getOwnConsents failed. User: '"+user+"'", re);
 		}
@@ -95,7 +83,7 @@ public class TivaCitizenService {
 	 */
 	public List<ConsentSummary> getOldConsents(String userId, int startNum, int maxNum) throws KokuServiceException {
 		try {
-			return kks.getKokuKunpoSuostumusServicePort().getOldConsents(userId, startNum, maxNum);
+			return service.getOldConsents(userId, startNum, maxNum);
 		} catch (RuntimeException re) {
 			throw new KokuServiceException("getOldConsents failed. UserId: '"+userId+"'", re);
 		}
@@ -109,7 +97,7 @@ public class TivaCitizenService {
 	 */
 	public int getTotalAssignedConsents(String user) throws KokuServiceException {
 		try {
-			return kks.getKokuKunpoSuostumusServicePort().getTotalAssignedConsents(user);
+			return service.getTotalAssignedConsents(user);
 		} catch (RuntimeException re) {
 			throw new KokuServiceException("getTotalAssignedConsents failed. UserId: '"+user+"'", re);
 		}
@@ -122,7 +110,7 @@ public class TivaCitizenService {
 	 */
 	public int getTotalOwnConsents(String user) throws KokuServiceException {
 		try {
-			return kks.getKokuKunpoSuostumusServicePort().getTotalOwnConsents(user);
+			return service.getTotalOwnConsents(user);
 		} catch (RuntimeException re) {
 			throw new KokuServiceException("getTotalOwnConsents failed. UserId: '"+user+"'", re);
 		}
@@ -135,7 +123,7 @@ public class TivaCitizenService {
 	 */
 	public int getTotalOldConsents(String user) throws KokuServiceException {
 		try {
-			return kks.getKokuKunpoSuostumusServicePort().getTotalOldConsents(user);
+			return service.getTotalOldConsents(user);
 		} catch (RuntimeException re) {
 			throw new KokuServiceException("getTotalOldConsents failed. UserId: '"+user+"'", re);
 		}
@@ -147,7 +135,7 @@ public class TivaCitizenService {
 	 */
 	public void revokeOwnConsent(long consentId, String user) throws KokuServiceException {
 		try {
-			kks.getKokuKunpoSuostumusServicePort().revokeOwnConsent(consentId, user);
+			service.revokeOwnConsent(consentId, user);
 		} catch (RuntimeException re) {
 			throw new KokuServiceException("getTotalOldConsents failed. UserId: '"+user+"' consentId: '"+consentId+"'", re);
 		}

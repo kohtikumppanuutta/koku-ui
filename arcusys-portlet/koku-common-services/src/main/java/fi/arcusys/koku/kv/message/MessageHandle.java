@@ -35,7 +35,7 @@ public class MessageHandle extends AbstractHandle {
 	
 	private static final Logger LOG = Logger.getLogger(MessageHandle.class);
 	
-	MessageService ms;
+	private final MessageService ms;
 	
 	public MessageHandle() {
 		ms = new MessageService();
