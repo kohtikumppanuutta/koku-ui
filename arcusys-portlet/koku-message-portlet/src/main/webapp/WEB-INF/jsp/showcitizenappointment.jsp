@@ -39,20 +39,20 @@
 		
 		<c:if test="${appointment.model.slot != null}" >
 	    <h3><spring:message code="appointment.approvedSlots"/></h3>   
-	    <table class="request-table">
+	    <table class="request-table citizen">
 	    	<tr>
-	    		<td class="head"><spring:message code="appointment.date"/></td>
-	    		<td class="head"><spring:message code="appointment.start"/></td>
-	    		<td class="head"><spring:message code="appointment.end"/></td>
-	    		<td class="head"><spring:message code="appointment.location"/></td>
-	    		<td class="head"><spring:message code="appointment.comment"/></td>
+	    		<td class="head date"><spring:message code="appointment.date"/></td>
+	    		<td class="head startTime"><spring:message code="appointment.start"/></td>
+	    		<td class="head endTime"><spring:message code="appointment.end"/></td>
+	    		<td class="head location"><spring:message code="appointment.location"/></td>
+	    		<td class="head comment"><spring:message code="appointment.comment"/></td>
 	    	</tr>
 	        <tr class="evenRow">
-	          <td><c:out value="${appointment.model.slot.date}" /></td>
-	          <td><c:out value="${appointment.model.slot.startTime}" /></td>
-	          <td><c:out value="${appointment.model.slot.endTime}" /></td>
-	          <td><c:out value="${appointment.model.slot.location}" /></td>
-	          <td><c:out value="${appointment.model.slot.comment}" /></td>
+	          <td class="date"><c:out value="${appointment.model.slot.date}" /></td>
+	          <td class="startTime"><c:out value="${appointment.model.slot.startTime}" /></td>
+	          <td class="endTime"><c:out value="${appointment.model.slot.endTime}" /></td>
+	          <td class="location"><c:out value="${appointment.model.slot.location}" /></td>
+	          <td class="comment"><c:out value="${appointment.model.slot.comment}" /></td>
 	        </tr>
 	    </table>  
 		</c:if>		

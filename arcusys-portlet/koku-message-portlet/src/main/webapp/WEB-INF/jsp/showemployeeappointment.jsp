@@ -33,25 +33,25 @@
 		
 		<c:if test="${fn:length(appointment.model.approvedSlots) > 0}">
 	    <h3><spring:message code="appointment.approvedSlots"/></h3>   
-	    <table class="request-table">
+	    <table class="request-table employee">
 	    	<tr>
-	    		<td class="head"><spring:message code="appointment.date"/></td>
-	    		<td class="head"><spring:message code="appointment.start"/></td>
-	    		<td class="head"><spring:message code="appointment.end"/></td>
-	    		<td class="head"><spring:message code="appointment.location"/></td>
-	    		<td class="head"><spring:message code="appointment.comment"/></td>
-	    		<td class="head"><spring:message code="appointment.targetPerson"/></td>
-	    		<td class="head"><spring:message code="appointment.recipients"/></td>
+	    		<td class="head date"><spring:message code="appointment.date"/></td>
+	    		<td class="head startTime"><spring:message code="appointment.start"/></td>
+	    		<td class="head endTime"><spring:message code="appointment.end"/></td>
+	    		<td class="head location"><spring:message code="appointment.location"/></td>
+	    		<td class="head comment"><spring:message code="appointment.comment"/></td>
+	    		<td class="head targetPersonName"><spring:message code="appointment.targetPerson"/></td>
+	    		<td class="head recipients"><spring:message code="appointment.recipients"/></td>
 	    	</tr>
 	    	<c:forEach var="slot" items="${appointment.model.approvedSlots}" varStatus="loopStatus">
 	        <tr class="<c:out value="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}" />">
-	          <td><c:out value="${slot.date}" /></td>
-	          <td><c:out value="${slot.startTime}" /></td>
-	          <td><c:out value="${slot.endTime}" /></td> 
-	          <td><c:out value="${slot.location}" /></td>
-	          <td><c:out value="${slot.comment}" /></td> 
-	          <td><c:out value="${slot.targetPersonUser.fullName}" /></td>
-	          <td>
+	          <td class="date"><c:out value="${slot.date}" /></td>
+	          <td class="startTime"><c:out value="${slot.startTime}" /></td>
+	          <td class="endTime"><c:out value="${slot.endTime}" /></td> 
+	          <td class="location"><c:out value="${slot.location}" /></td>
+	          <td class="comment"><c:out value="${slot.comment}" /></td> 
+	          <td class="targetPersonName"><c:out value="${slot.targetPersonUser.fullName}" /></td>
+	          <td class="recipients">
 	          <c:forEach var="recipient" items="${slot.recipientUsers}" varStatus="loopStatus">
 	          	<c:out value="${recipient.fullName}" />,
 	          </c:forEach>
@@ -63,21 +63,21 @@
 		
 		<c:if test="${fn:length(appointment.model.unapprovedSlots) > 0}">
 	    <h3><spring:message code="appointment.unapprovedSlots"/></h3>   
-	    <table class="request-table">
+	    <table class="request-table employee">
 	    	<tr>
-	    		<td class="head"><spring:message code="appointment.date"/></td>
-	    		<td class="head"><spring:message code="appointment.start"/></td>
-	    		<td class="head"><spring:message code="appointment.end"/></td>
-	    		<td class="head"><spring:message code="appointment.location"/></td>
-	    		<td class="head"><spring:message code="appointment.comment"/></td>
+	    		<td class="head date"><spring:message code="appointment.date"/></td>
+	    		<td class="head startTime"><spring:message code="appointment.start"/></td>
+	    		<td class="head endTime"><spring:message code="appointment.end"/></td>
+	    		<td class="head location"><spring:message code="appointment.location"/></td>
+	    		<td class="head comment"><spring:message code="appointment.comment"/></td>
 	    	</tr>
 	    	<c:forEach var="slot" items="${appointment.model.unapprovedSlots}" varStatus="loopStatus">
 	        <tr class="<c:out value="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}" />">
-	          <td><c:out value="${slot.date}" /></td>
-	          <td><c:out value="${slot.startTime}" /></td>
-	          <td><c:out value="${slot.endTime}" /></td>  
-	          <td><c:out value="${slot.location}" /></td>
-	          <td><c:out value="${slot.comment}" /></td>  
+	          <td class="date"><c:out value="${slot.date}" /></td>
+	          <td class="startTime"><c:out value="${slot.startTime}" /></td>
+	          <td class="endTime"><c:out value="${slot.endTime}" /></td>  
+	          <td class="location"><c:out value="${slot.location}" /></td>
+	          <td class="comment"><c:out value="${slot.comment}" /></td>  
 	        </tr>
 	      	</c:forEach>
 	    </table>  
@@ -88,7 +88,7 @@
 			<spring:message code="appointment.none"/>
 		</c:if>
 		<c:if test="${fn:length(appointment.model.unrespondedUsers) > 0}">
-		<table class="request-table">
+		<table class="request-table employee">
 	    	<tr>
 	    		<td class="head"><spring:message code="appointment.targetPerson"/></td>
 	    		<td class="head"><spring:message code="appointment.recipients"/></td>
@@ -111,7 +111,7 @@
 			<spring:message code="appointment.none"/>
 		</c:if>
 		<c:if test="${fn:length(appointment.model.rejectedUsers) > 0}">
-		<table class="request-table">
+		<table class="request-table employee">
 	    	<tr>
 	    		<td class="head"><spring:message code="appointment.targetPerson"/></td>
 	    		<td class="head"><spring:message code="appointment.recipients"/></td>
@@ -132,7 +132,7 @@
 		<%-- Users who cancelled their appointment --%>
 		<c:if test="${fn:length(appointment.model.usersRejected) > 0}">
 		<h3><spring:message code="appointment.userCancellationHeader"/></h3>
-		<table class="request-table">
+		<table class="request-table employee">
 	    	<tr>
 	    		<td class="head"><spring:message code="appointment.targetPerson"/></td>
 	    		<td class="head"><spring:message code="appointment.replierComment"/></td>
