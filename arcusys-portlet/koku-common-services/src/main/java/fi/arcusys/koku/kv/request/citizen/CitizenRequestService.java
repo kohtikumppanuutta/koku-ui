@@ -1,16 +1,15 @@
 package fi.arcusys.koku.kv.request.citizen;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import javax.xml.ws.BindingProvider;
 
 import fi.arcusys.koku.exceptions.KokuServiceException;
+import fi.arcusys.koku.kv.requestservice.KokuKunpoRequestService;
 import fi.arcusys.koku.kv.requestservice.KokuKunpoRequestService_Service;
 import fi.arcusys.koku.kv.requestservice.ResponseDetail;
 import fi.arcusys.koku.kv.requestservice.ResponseSummary;
-import fi.koku.settings.KoKuPropertiesUtil;
+import fi.arcusys.koku.util.Properties;
 
 /**
  * Retrieves request data and related operations via web services
@@ -18,28 +17,16 @@ import fi.koku.settings.KoKuPropertiesUtil;
  * Aug 22, 2011
  */
 public class CitizenRequestService {
-		
-	private static final Logger LOG = Logger.getLogger(CitizenRequestService.class);		
-	private static final URL REQUEST_WSDL_LOCATION;	
 	
-	static {
-		try {
-			LOG.info("KvMessageservice WSDL location: "+ KoKuPropertiesUtil.get("KokuKunpoRequestService"));
-			REQUEST_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("KokuKunpoRequestService"));
-		} catch (MalformedURLException e) {
-			LOG.error("Failed to create KokuKunpoRequestService WSDL url! Given URL address is not valid!");
-			throw new ExceptionInInitializerError(e);
-		}
-	}
-	
-	
-	private KokuKunpoRequestService_Service rs;
+	private final KokuKunpoRequestService service;
 	
 	/**
 	 * Constructor and initialization
 	 */
 	public CitizenRequestService() {
-		this.rs = new KokuKunpoRequestService_Service(REQUEST_WSDL_LOCATION);
+		final KokuKunpoRequestService_Service rs = new KokuKunpoRequestService_Service();
+		service = rs.getKokuKunpoRequestServicePort();
+		((BindingProvider)service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, Properties.KOKU_KUNPO_REQUEST_SERVICE);
 	}
 	
 	/**
@@ -51,7 +38,7 @@ public class CitizenRequestService {
 	 */
 	public List<ResponseSummary> getRepliedRequests(String userUid, int startNum, int maxNum) throws KokuServiceException {	
 		try {
-			return rs.getKokuKunpoRequestServicePort().getRepliedRequests(userUid, startNum, maxNum);
+			return service.getRepliedRequests(userUid, startNum, maxNum);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getRepliedRequests failed. userUid: '"+userUid+"'", e);
 		}
@@ -66,7 +53,7 @@ public class CitizenRequestService {
 	 */
 	public List<ResponseSummary> getOldRequests(String userUid, int startNum, int maxNum) throws KokuServiceException {
 		try {
-			return rs.getKokuKunpoRequestServicePort().getOldRequests(userUid, startNum, maxNum);
+			return service.getOldRequests(userUid, startNum, maxNum);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getOldRequests failed. userUid: '"+userUid+"'", e);
 		}
@@ -79,7 +66,7 @@ public class CitizenRequestService {
 	 */
 	public ResponseDetail getResponseDetail(long responseId) throws KokuServiceException {
 		try {
-			return rs.getKokuKunpoRequestServicePort().getResponseDetail(responseId);
+			return service.getResponseDetail(responseId);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getOldRequests failed. responseId: '"+responseId+"'", e);
 		}
@@ -92,7 +79,7 @@ public class CitizenRequestService {
 	 */
 	public int getTotalRepliedRequests(String userUid) throws KokuServiceException {
 		try {
-			return rs.getKokuKunpoRequestServicePort().getTotalRepliedRequests(userUid);
+			return service.getTotalRepliedRequests(userUid);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getTotalRepliedRequests failed. userUid: '"+userUid+"'", e);
 		}
@@ -105,7 +92,7 @@ public class CitizenRequestService {
 	 */
 	public int getTotalOldRequests(String userUid) throws KokuServiceException {
 		try {
-			return rs.getKokuKunpoRequestServicePort().getTotalOldRequests(userUid);
+			return service.getTotalOldRequests(userUid);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getTotalOldRequests failed. userUid: '"+userUid+"'", e);
 		}
