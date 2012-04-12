@@ -120,6 +120,7 @@
 	#show-message .request-table {
 		width: 100%;
 	} 
+	
 		
 	#show-message .request-c-1,
 	#show-message .request-table td.head {
@@ -464,6 +465,14 @@
 		font-weight: bold;
 	}
 	
+	#show-message .request-table td.date,
+	#show-message .request-table td.startTime,
+	#show-message .request-table td.endTime,
+	#show-message .request-table td.location,
+	#show-message .request-table td.date {
+		width: 75px;
+	} 
+	
 	.request-table td {
 		padding: 6px; /* cell padding */
 		border: 0px solid; /* cell spacing */
@@ -471,6 +480,10 @@
 		word-wrap: break-word;
 		word-break: break-all;
 		overflow: hidden;
+	}
+	
+	#show-message .request-table td {
+		vertical-align: text-top;
 	}
 	
 	.item_normal {
