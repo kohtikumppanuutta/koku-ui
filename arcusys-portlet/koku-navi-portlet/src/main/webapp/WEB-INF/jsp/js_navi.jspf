@@ -1,6 +1,6 @@
 
 /* Check if browser support logging (IE doesn't seem to support console) */
-if (console === undefined) {
+if (typeof console == "undefined") {
 	console = { 
 		log : function() {
 			alert(arguments[0]);
