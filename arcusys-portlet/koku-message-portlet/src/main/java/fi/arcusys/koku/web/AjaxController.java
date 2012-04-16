@@ -112,14 +112,18 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		
+		long start = System.nanoTime();
 		PortletSession portletSession = request.getPortletSession();		
 		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		registerUserToWS(portletSession);
 		
 		String userId = null;
 		try {
+			long startUser = System.nanoTime();
 			UserIdResolver resolver = new UserIdResolver();
-			userId = resolver.getUserId(username, getPortalRole());			
+			userId = resolver.getUserId(username, getPortalRole());
+			LOG.info("getTasks USER RESOLVER - "+((System.nanoTime()-startUser)/1000/1000) + "ms");
+
 		} catch (KokuServiceException e) {
 			LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
 		} catch (Exception e) {
@@ -136,9 +140,11 @@ public class AjaxController extends AbstractController {
 			query = new QueryProcessDummyImpl(messageSource);
 			LOG.error("PortalMode unknown! Only kunpo/loora portal modes are supported. Please check that properties file is properly configured.");
 		}
-		
+		LOG.info("getTasksBeforeJsonModel - "+((System.nanoTime()-start)/1000/1000) + "ms");
+
 		JSONObject jsonModel = query.getJsonModel(taskType, page, keyword, field, orderType, userId);
-		modelmap.addAttribute(RESPONSE, jsonModel);		
+		modelmap.addAttribute(RESPONSE, jsonModel);
+		LOG.info("getTasks  - "+((System.nanoTime()-start)/1000/1000) + "ms");
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	

@@ -3,20 +3,21 @@ package fi.arcusys.koku.kv.message;
 import static fi.arcusys.koku.util.Constants.RESPONSE_FAIL;
 import static fi.arcusys.koku.util.Constants.RESPONSE_OK;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
+
+import javax.xml.ws.BindingProvider;
 
 import org.apache.log4j.Logger;
 
 import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.kv.messageservice.Criteria;
 import fi.arcusys.koku.kv.messageservice.FolderType;
+import fi.arcusys.koku.kv.messageservice.KokuMessageService;
 import fi.arcusys.koku.kv.messageservice.KokuMessageService_Service;
 import fi.arcusys.koku.kv.messageservice.MessageQuery;
 import fi.arcusys.koku.kv.messageservice.MessageStatus;
 import fi.arcusys.koku.kv.messageservice.MessageSummary;
-import fi.koku.settings.KoKuPropertiesUtil;
+import fi.arcusys.koku.util.Properties;
 
 
 /**
@@ -26,26 +27,20 @@ import fi.koku.settings.KoKuPropertiesUtil;
  */
 public class MessageService {
 	
-	private static final URL MESSAGE_WSDL_LOCATION;
-	private KokuMessageService_Service ms;
 	
 	private static final Logger LOG = Logger.getLogger(MessageService.class);		
 	
-	static {
-		try {
-			LOG.info("KvMessageservice WSDL location: "+ KoKuPropertiesUtil.get("KvMessageService"));
-			MESSAGE_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("KvMessageService"));
-		} catch (MalformedURLException e) {
-			LOG.error("Failed to create KvMessageservice WSDL url! Given URL address is not valid!");
-			throw new ExceptionInInitializerError(e);
-		}
-	}
+
 	
+	private final KokuMessageService service;
+
 	/**
 	 * Constructor and initialization
 	 */
 	public MessageService() {
-		this.ms = new KokuMessageService_Service(MESSAGE_WSDL_LOCATION);
+		KokuMessageService_Service ms = new KokuMessageService_Service();
+		service = ms.getKokuMessageServicePort();
+		((BindingProvider)service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, Properties.KV_MESSAGE_SERVICE);
 	}
 
 	/**
@@ -56,11 +51,15 @@ public class MessageService {
 	 * @return a list of messages
 	 */
 	public List<MessageSummary> getMessages(String user, FolderType folderType, MessageQuery messageQuery) throws KokuServiceException {
+		List<MessageSummary> messages;
+		long start = System.nanoTime();
 		try {
-			return ms.getKokuMessageServicePort().getMessages(user, folderType, messageQuery);
+			messages = service.getMessages(user, folderType, messageQuery);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getMessages failed. user: '"+user+"' folderType: '"+folderType+"'", e);
 		}
+		LOG.info("getMessages  - "+((System.nanoTime()-start)/1000/1000) + "ms");
+		return messages;
 	}
 	
 	/**
@@ -71,11 +70,16 @@ public class MessageService {
 	 * @return the amount of messages
 	 */
 	public int getTotalMessageNum(String user, FolderType folderType, Criteria criteria) throws KokuServiceException {
+		
+		long start = System.nanoTime();
+		int count = 0;
 		try {
-			return ms.getKokuMessageServicePort().getTotalMessages(user, folderType, criteria);
+			count = service.getTotalMessages(user, folderType, criteria);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getTotalMessageNum failed. user: '"+user+"' folderType: '"+folderType+"'", e);
 		}
+		LOG.info("getMessageCount  - "+((System.nanoTime()-start)/1000/1000) + "ms");
+		return count;
 	}
 
 	/**
@@ -90,7 +94,7 @@ public class MessageService {
 	 */
 	public List<MessageSummary> getMessagesOld(String user, FolderType folderType, String subQuery, int startNum, int maxNum) throws KokuServiceException {
 		try {
-			return ms.getKokuMessageServicePort().getMessagesOld(user, folderType, subQuery, startNum, maxNum);
+			return service.getMessagesOld(user, folderType, subQuery, startNum, maxNum);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getMessagesOld failed. user: '"+user+"' folderType: '"+folderType+"'", e);
 		}
@@ -103,7 +107,7 @@ public class MessageService {
 	 */
 	public fi.arcusys.koku.kv.messageservice.Message getMessageById(long messageId) throws KokuServiceException {
 		try {
-			return ms.getKokuMessageServicePort().getMessageById(messageId);
+			return service.getMessageById(messageId);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getMessageById failed. messageId: '"+messageId+"'", e);
 		}
@@ -119,7 +123,7 @@ public class MessageService {
 	 */
 	public int getTotalMessageNumOld(String user, FolderType folderType, String subQuery) throws KokuServiceException {
 		try {
-			return ms.getKokuMessageServicePort().getTotalMessagesOld(user, folderType, subQuery);
+			return service.getTotalMessagesOld(user, folderType, subQuery);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getTotalMessageNumOld failed. messageId: user: '"+user+"' folderType: '"+folderType+"' subQuery: '"+subQuery+"'", e);
 		}
@@ -133,7 +137,7 @@ public class MessageService {
 	 */
 	public int getUnreadMessageNum(String user, FolderType folderType) throws KokuServiceException {
 		try {
-			return ms.getKokuMessageServicePort().getUnreadMessages(user, folderType);
+			return service.getUnreadMessages(user, folderType);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getUnreadMessageNum failed. messageId: user: '"+user+"' folderType: '"+folderType+"'", e);
 		}
@@ -147,7 +151,7 @@ public class MessageService {
 	public String deleteMessages(List<Long> messageIds) {
 				
 		try {
-			ms.getKokuMessageServicePort().deleteMessages(messageIds);
+			service.deleteMessages(messageIds);
 			return RESPONSE_OK;
 		} catch(RuntimeException e) {
 			LOG.error("ERROR while deleting message(s). See errorMsg: "+ e.getMessage(), e);
@@ -164,7 +168,7 @@ public class MessageService {
 	public String setMessageStatus(List<Long> messageIds, MessageStatus messageStatus) {
 		
 		try {
-			ms.getKokuMessageServicePort().setMessagesStatus(messageIds, messageStatus);
+			service.setMessagesStatus(messageIds, messageStatus);
 			return RESPONSE_OK;
 		} catch(RuntimeException e) {
 			LOG.error("ERROR while setting message(s) status. See errorMsg: "+ e.getMessage(), e);
@@ -181,7 +185,7 @@ public class MessageService {
 	 */
 	public String archiveMessages(List<Long> messageIds){
 		try {
-			ms.getKokuMessageServicePort().archiveMessages(messageIds);
+			service.archiveMessages(messageIds);
 			return RESPONSE_OK;
 		} catch(RuntimeException e) {
 			LOG.error("ERROR while archiveMessages. See errorMsg: "+ e.getMessage(), e);
@@ -197,7 +201,7 @@ public class MessageService {
 	 */
 	public String archiveOldMessages(String userUid, FolderType folderType) {
 		try {
-			ms.getKokuMessageServicePort().archiveOldMessages(userUid, folderType);
+			service.archiveOldMessages(userUid, folderType);
 			return RESPONSE_OK;
 		} catch (RuntimeException e) {
 			LOG.error("ERROR while archiveOldMessages. See errorMsg: "+ e.getMessage(), e);
