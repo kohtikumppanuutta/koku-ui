@@ -9,7 +9,7 @@ public class UserIdResolver {
 	
 	private static final Logger LOG = Logger.getLogger(UserIdResolver.class);
 
-	private KokuUserService userService;
+	private final KokuUserService userService;
 	
 	public UserIdResolver() {
 		userService = new KokuUserService();
@@ -27,7 +27,8 @@ public class UserIdResolver {
 		if (username == null || username.isEmpty()) {
 			return null;
 		}
-	
+		
+		long start = System.nanoTime();
 		switch (role) {
 		case CITIZEN:
 			userId = userService.getUserUidByKunpoName(username);
@@ -39,7 +40,8 @@ public class UserIdResolver {
 			userId = null;
 			break;
 		}
-		
+		LOG.info("getUserId  - "+((System.nanoTime()-start)/1000/1000) + "ms");
+
 		if (userId == null) {
 			LOG.info("Couldn't find userId by given username: " + username + " PortalRole: " + role);
 		}

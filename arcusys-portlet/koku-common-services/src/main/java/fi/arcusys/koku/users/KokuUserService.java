@@ -1,19 +1,18 @@
 package fi.arcusys.koku.users;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import javax.xml.ws.BindingProvider;
 
 import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.user.usersandgroupsservice.Child;
 import fi.arcusys.koku.user.usersandgroupsservice.ChildWithHetu;
 import fi.arcusys.koku.user.usersandgroupsservice.Group;
 import fi.arcusys.koku.user.usersandgroupsservice.User;
+import fi.arcusys.koku.user.usersandgroupsservice.UsersAndGroupsService;
 import fi.arcusys.koku.user.usersandgroupsservice.UsersAndGroupsService_Service;
-import fi.koku.settings.KoKuPropertiesUtil;
+import fi.arcusys.koku.util.Properties;
 
 /**
  * Retrieves userId by given portal username
@@ -22,26 +21,16 @@ import fi.koku.settings.KoKuPropertiesUtil;
  *
  */
 public class KokuUserService {
-	private static final Logger LOG = Logger.getLogger(KokuUserService.class);		
-	public static final URL USER_SERVICE_WSDL_LOCATION;
-	
-	static {
-		try {
-			LOG.info("UsersAndGroupsService WSDL location: " + KoKuPropertiesUtil.get("UsersAndGroupsService"));
-			USER_SERVICE_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("UsersAndGroupsService"));
-		} catch (MalformedURLException e) {
-			LOG.error("Failed to create UsersAndGroupsService WSDL url! Given URL address is not valid! Address: '"+KoKuPropertiesUtil.get("UsersAndGroupsService")+"'");
-			throw new ExceptionInInitializerError(e);
-		}
-	}
-
-	private UsersAndGroupsService_Service service;
+	private final UsersAndGroupsService service;
 	
 	/**
 	 * Constructor and initialization
 	 */
 	public KokuUserService() {
-		service = new UsersAndGroupsService_Service(USER_SERVICE_WSDL_LOCATION);
+		UsersAndGroupsService_Service serviceInit = new UsersAndGroupsService_Service();
+		service = serviceInit.getUsersAndGroupsServicePort();
+		((BindingProvider)service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, Properties.USER_SERVICE);
+		// SOAPLoggingHandler.addSOAPLogger((BindingProvider)service);
 	}
 	
 	/**
@@ -52,21 +41,21 @@ public class KokuUserService {
 	 */
 	public String getUserUidByKunpoName(String username) throws KokuServiceException {
 		try {
-			return service.getUsersAndGroupsServicePort().getUserUidByKunpoName(username);
+			return service.getUserUidByKunpoName(username);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getUserUidByKunpoName failed. username: '"+username+"'", e);
 		}
 	}
 	
 	/**
-	 * Get user userId by username from employee portal
+	 * Get user userId by username from employee serviceal
 	 * 
 	 * @param username
 	 * @return userId
 	 */
 	public String getUserUidByLooraName(String username) throws KokuServiceException {
 		try {
-			return service.getUsersAndGroupsServicePort().getUserUidByLooraName(username);
+			return service.getUserUidByLooraName(username);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getUserUidByLooraName failed. username: '"+username+"'", e);
 		}
@@ -74,7 +63,7 @@ public class KokuUserService {
 	
 	public String getKunpoNameByUserUid(String userUid) throws KokuServiceException {
 		try {
-			return service.getUsersAndGroupsServicePort().getKunpoNameByUserUid(userUid);
+			return service.getKunpoNameByUserUid(userUid);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getKunpoNameByUserUid failed. userUid: '"+userUid+"'", e);
 		}
@@ -82,7 +71,7 @@ public class KokuUserService {
 	
 	public String getLooraNameByUserUid(String userUid) throws KokuServiceException {
 		try {
-			return service.getUsersAndGroupsServicePort().getLooraNameByUserUid(userUid);
+			return service.getLooraNameByUserUid(userUid);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getLooraNameByUserUid failed. userUid: '"+userUid+"'", e);
 		}
@@ -90,7 +79,7 @@ public class KokuUserService {
 	
 	public KokuUser getUserInfo(String userUid) throws KokuServiceException {
 		try {
-			User user = service.getUsersAndGroupsServicePort().getUserInfo(userUid);
+			User user = service.getUserInfo(userUid);
 			if (user != null) {
 				return new KokuUser(user);
 			} else {
@@ -104,7 +93,7 @@ public class KokuUserService {
 	public List<KokuChild> getUsersChildren(String userUid) throws KokuServiceException {
 		try {
 			List<KokuChild> childs = new ArrayList<KokuChild>();
-			List<ChildWithHetu> childrens = service.getUsersAndGroupsServicePort().getUsersChildren(userUid);
+			List<ChildWithHetu> childrens = service.getUsersChildren(userUid);
 			for (ChildWithHetu child : childrens) {
 				childs.add(new KokuChild(child));
 			}
@@ -117,7 +106,7 @@ public class KokuUserService {
 	public List<KokuUser> getUsersByGroupUid(String groupUid) throws KokuServiceException {
 		try {
 			List<KokuUser> kokuUsers = new ArrayList<KokuUser>();
-			List<User> users = service.getUsersAndGroupsServicePort().getUsersByGroupUid(groupUid);
+			List<User> users = service.getUsersByGroupUid(groupUid);
 			for (User user : users) {
 				kokuUsers.add(new KokuUser(user));
 			}
@@ -129,7 +118,7 @@ public class KokuUserService {
 		
 	public KokuChild getChildInfo(String childUid) throws KokuServiceException {
 		try {
-			Child child = service.getUsersAndGroupsServicePort().getChildInfo(childUid);
+			Child child = service.getChildInfo(childUid);
 			if (child != null) {
 				return new KokuChild(child); 
 			} else {
@@ -142,7 +131,7 @@ public class KokuUserService {
 	
 	public List<KokuChild> searchChildren(String searchString, int limit) throws KokuServiceException {
 		try {
-			List<Child> childs = service.getUsersAndGroupsServicePort().searchChildren(searchString, limit);
+			List<Child> childs = service.searchChildren(searchString, limit);
 			List<KokuChild> kokuChilds = new ArrayList<KokuChild>();
 			for (Child child : childs) {
 				kokuChilds.add(new KokuChild(child));
@@ -155,7 +144,7 @@ public class KokuUserService {
 	
 	public void searchGroups(String searchString, int limit) throws KokuServiceException {
 		try {
-			List<Group> groups = service.getUsersAndGroupsServicePort().searchGroups(searchString, limit);
+			List<Group> groups = service.searchGroups(searchString, limit);
 			List<KokuGroup> kokuGroup = new ArrayList<KokuGroup>();
 			for (Group group : groups) {
 				kokuGroup.add(new KokuGroup(group));
@@ -167,7 +156,7 @@ public class KokuUserService {
 
 	public List<KokuUser> searchUsers(String searchString, int limit) throws KokuServiceException {
 		try {
-			List<User> users = service.getUsersAndGroupsServicePort().searchUsers(searchString, limit);
+			List<User> users = service.searchUsers(searchString, limit);
 			List<KokuUser> kokuUsers = new ArrayList<KokuUser>();
 			for (User user : users) {
 				kokuUsers.add(new KokuUser(user));
@@ -181,7 +170,7 @@ public class KokuUserService {
 	public KokuUser loginKunpo(String kunpoUsername, String hetu) throws KokuServiceException {
 		try {
 			User user = null;
-			user = service.getUsersAndGroupsServicePort().loginByKunpoNameAndSsn(kunpoUsername, hetu);
+			user = service.loginByKunpoNameAndSsn(kunpoUsername, hetu);
 			if (user != null) {
 				return new KokuUser(user);
 			} else {
@@ -195,7 +184,7 @@ public class KokuUserService {
 	public KokuUser loginLoora(String looraUsername, String hetu) throws KokuServiceException {
 		try {
 			User user = null;
-			user = service.getUsersAndGroupsServicePort().loginByLooraNameAndSsn(looraUsername, hetu);
+			user = service.loginByLooraNameAndSsn(looraUsername, hetu);
 			if (user != null) {
 				return new KokuUser(user);
 			} else {
@@ -208,7 +197,7 @@ public class KokuUserService {
 	
 	public String getKunpoUserUidByHetu(String hetu) throws KokuServiceException {
 		try {
-			return service.getUsersAndGroupsServicePort().getUserUidByKunpoSsn(hetu);
+			return service.getUserUidByKunpoSsn(hetu);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getKunpoUserUidByHetu failed. hetu: '"+hetu+"'", e);
 		}	
@@ -216,7 +205,7 @@ public class KokuUserService {
 	
 	public String getLooraUserUidByUsername(String username) throws KokuServiceException {
 		try {
-			return service.getUsersAndGroupsServicePort().getUserUidByLooraName(username);
+			return service.getUserUidByLooraName(username);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getLooraUserUidByUsername failed. username: '"+username+"'", e);
 		}

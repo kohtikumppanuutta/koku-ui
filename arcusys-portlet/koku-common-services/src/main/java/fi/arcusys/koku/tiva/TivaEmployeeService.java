@@ -1,19 +1,18 @@
 package fi.arcusys.koku.tiva;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import javax.xml.ws.BindingProvider;
 
 import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.tiva.employeeservice.ConsentCriteria;
 import fi.arcusys.koku.tiva.employeeservice.ConsentQuery;
 import fi.arcusys.koku.tiva.employeeservice.ConsentSummary;
 import fi.arcusys.koku.tiva.employeeservice.ConsentTO;
+import fi.arcusys.koku.tiva.employeeservice.KokuLooraSuostumusService;
 import fi.arcusys.koku.tiva.employeeservice.KokuLooraSuostumusService_Service;
 import fi.arcusys.koku.tiva.employeeservice.SuostumuspohjaShort;
-import fi.koku.settings.KoKuPropertiesUtil;
+import fi.arcusys.koku.util.Properties;
 
 /**
  * Retrieves Tiva consent data and related operations via web services
@@ -21,27 +20,16 @@ import fi.koku.settings.KoKuPropertiesUtil;
  * Aug 15, 2011
  */
 public class TivaEmployeeService {
-		
-	private static final Logger LOG = Logger.getLogger(TivaEmployeeService.class);		
-	public static final URL TIVA_EMPLOYEE_WSDL_LOCATION;
-	
-	static {
-		try {
-			LOG.info("TivaEmployeeService WSDL location: " + KoKuPropertiesUtil.get("TivaEmployeeService"));
-			TIVA_EMPLOYEE_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("TivaEmployeeService"));
-		} catch (MalformedURLException e) {
-			LOG.error("Failed to create TivaEmployeeService WSDL url! Given URL address is not valid!");
-			throw new ExceptionInInitializerError(e);
-		}
-	}
-		
-	private KokuLooraSuostumusService_Service kls;
+				
+	private final KokuLooraSuostumusService service;
 	
 	/**
 	 * Constructor and initialization
 	 */
 	public TivaEmployeeService() {
-		this.kls = new KokuLooraSuostumusService_Service(TIVA_EMPLOYEE_WSDL_LOCATION);
+		KokuLooraSuostumusService_Service kls = new KokuLooraSuostumusService_Service();
+		service = kls.getKokuLooraSuostumusServicePort();
+		((BindingProvider)service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, Properties.TIVA_EMPLOYEE_SERVICE);
 	}
 	
 	/**
@@ -52,7 +40,7 @@ public class TivaEmployeeService {
 	 */
 	public List<ConsentSummary> getConsents(String user, ConsentQuery query) throws KokuServiceException {
 		try {
-			return kls.getKokuLooraSuostumusServicePort().getConsents(user, query);
+			return service.getConsents(user, query);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getConsents failed. User: '"+user+"'", e);
 		}
@@ -65,7 +53,7 @@ public class TivaEmployeeService {
 	 */
 	public ConsentTO getConsentDetails(long consentId) throws KokuServiceException {
 		try {
-			return kls.getKokuLooraSuostumusServicePort().getConsentDetails(consentId);
+			return service.getConsentDetails(consentId);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getConsentDetails failed. consentId: '"+consentId+"'", e);
 		}
@@ -79,7 +67,7 @@ public class TivaEmployeeService {
 	 */
 	public int getTotalConsents(String user, ConsentCriteria criteria) throws KokuServiceException {
 		try {
-			return kls.getKokuLooraSuostumusServicePort().getTotalConsents(user, criteria);
+			return service.getTotalConsents(user, criteria);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getTotalConsents failed. User: '"+user+"'", e);
 		}
@@ -93,7 +81,7 @@ public class TivaEmployeeService {
 	 */
 	public List<SuostumuspohjaShort> searchConsentTemplates(String searchString, int limit) throws KokuServiceException {
 		try {
-			return kls.getKokuLooraSuostumusServicePort().searchConsentTemplates(searchString, limit);
+			return service.searchConsentTemplates(searchString, limit);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("searchConsentTemplates failed. User: '"+searchString+"' limit: '"+limit+"'", e);
 		}

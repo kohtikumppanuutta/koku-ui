@@ -1,19 +1,18 @@
 package fi.arcusys.koku.kv.request.employee;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import javax.xml.ws.BindingProvider;
 
 import fi.arcusys.koku.exceptions.KokuServiceException;
+import fi.arcusys.koku.kv.requestservice.KokuRequestService;
 import fi.arcusys.koku.kv.requestservice.KokuRequestService_Service;
 import fi.arcusys.koku.kv.requestservice.Request;
 import fi.arcusys.koku.kv.requestservice.RequestSummary;
 import fi.arcusys.koku.kv.requestservice.RequestType;
 import fi.arcusys.koku.kv.requestservice.ResponseDetail;
 import fi.arcusys.koku.kv.requestservice.ResponseSummary;
-import fi.koku.settings.KoKuPropertiesUtil;
+import fi.arcusys.koku.util.Properties;
 
 /**
  * Retrieves request data and related operations via web services
@@ -21,27 +20,16 @@ import fi.koku.settings.KoKuPropertiesUtil;
  * Aug 22, 2011
  */
 public class EmployeeRequestService {
-		
-	private static final Logger LOG = Logger.getLogger(EmployeeRequestService.class);		
-	private static final URL REQUEST_WSDL_LOCATION;	
 	
-	static {
-		try {
-			LOG.info("KvMessageservice WSDL location: "+ KoKuPropertiesUtil.get("KvRequestService"));
-			REQUEST_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("KvRequestService"));
-		} catch (MalformedURLException e) {
-			LOG.error("Failed to create KvRequestService WSDL url! Given URL address is not valid!");
-			throw new ExceptionInInitializerError(e);
-		}
-	}
-	
-	private KokuRequestService_Service rs;
+	private final KokuRequestService service;
 	
 	/**
 	 * Constructor and initialization
 	 */
 	public EmployeeRequestService() {
-		this.rs = new KokuRequestService_Service(REQUEST_WSDL_LOCATION);
+		final KokuRequestService_Service rs = new KokuRequestService_Service();
+		service = rs.getKokuRequestServicePort();
+		((BindingProvider)service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, Properties.KV_REQUEST_SERVICE);
 	}
 	
 	/**
@@ -56,7 +44,7 @@ public class EmployeeRequestService {
 	 */
 	public List<RequestSummary> getRequests(String user, RequestType requestType, String subQuery, int startNum, int maxNum) throws KokuServiceException {
 		try {
-			return rs.getKokuRequestServicePort().getRequests(user, requestType, subQuery, startNum, maxNum);
+			return service.getRequests(user, requestType, subQuery, startNum, maxNum);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getRequests failed. user: '"+user+"' requestType: '"+requestType+"' subQuery: '"+subQuery+"'", e);
 		}
@@ -72,7 +60,7 @@ public class EmployeeRequestService {
 	 */
 	public List<ResponseSummary> getRepliedRequests(String userUid, int startNum, int maxNum) throws KokuServiceException {
 		try {
-			return rs.getKokuRequestServicePort().getRepliedRequests(userUid, startNum, maxNum);
+			return service.getRepliedRequests(userUid, startNum, maxNum);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getRepliedRequests failed. userUid: '"+userUid+"'", e);
 		}
@@ -88,7 +76,7 @@ public class EmployeeRequestService {
 	 */
 	public List<ResponseSummary> getOldRequests(String userUid, int startNum, int maxNum) throws KokuServiceException {
 		try {
-			return rs.getKokuRequestServicePort().getOldRequests(userUid, startNum, maxNum);
+			return service.getOldRequests(userUid, startNum, maxNum);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getOldRequests failed. userUid: '"+userUid+"'", e);
 		}
@@ -102,7 +90,7 @@ public class EmployeeRequestService {
 	 */
 	public Request getRequestById(long requestId) throws KokuServiceException {
 		try {
-			return rs.getKokuRequestServicePort().getRequestById(requestId);
+			return service.getRequestById(requestId);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getRequestById failed. requestId: '"+requestId+"'", e);
 		}
@@ -116,7 +104,7 @@ public class EmployeeRequestService {
 	 */
 	public ResponseDetail getResponseById(long responseId) throws KokuServiceException {
 		try {
-			return rs.getKokuRequestServicePort().getResponseDetail(responseId);
+			return service.getResponseDetail(responseId);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getResponseById failed. responseId: '"+responseId+"'", e);
 		}
@@ -132,7 +120,7 @@ public class EmployeeRequestService {
 	 */
 	public int getTotalRequestNum(String user, RequestType requestType) throws KokuServiceException {
 		try {
-			return rs.getKokuRequestServicePort().getTotalRequests(user, requestType);
+			return service.getTotalRequests(user, requestType);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getTotalRequestNum failed. user: '"+user+"' requestType: '"+requestType+"'", e);
 		}
@@ -146,7 +134,7 @@ public class EmployeeRequestService {
 	 */
 	public int getTotalResponsesOldNum(String userUid) throws KokuServiceException {
 		try {
-			return rs.getKokuRequestServicePort().getTotalOldRequests(userUid);
+			return service.getTotalOldRequests(userUid);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getTotalResponsesOldNum failed. userUid: '"+userUid+"'", e);
 		}
@@ -160,7 +148,7 @@ public class EmployeeRequestService {
 	 */
 	public int getTotalResponsesRepliedNum(String userUid) throws KokuServiceException {
 		try {
-			return rs.getKokuRequestServicePort().getTotalRepliedRequests(userUid);
+			return service.getTotalRepliedRequests(userUid);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getTotalResponsesRepliedNum failed. userUid: '"+userUid+"'", e);
 		}

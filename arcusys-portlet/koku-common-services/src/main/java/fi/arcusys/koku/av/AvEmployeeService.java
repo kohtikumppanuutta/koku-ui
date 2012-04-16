@@ -1,17 +1,16 @@
 package fi.arcusys.koku.av;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import javax.xml.ws.BindingProvider;
 
 import fi.arcusys.koku.av.employeeservice.Appointment;
 import fi.arcusys.koku.av.employeeservice.AppointmentCriteria;
 import fi.arcusys.koku.av.employeeservice.AppointmentSummary;
+import fi.arcusys.koku.av.employeeservice.KokuLooraAppointmentService;
 import fi.arcusys.koku.av.employeeservice.KokuLooraAppointmentService_Service;
 import fi.arcusys.koku.exceptions.KokuServiceException;
-import fi.koku.settings.KoKuPropertiesUtil;
+import fi.arcusys.koku.util.Properties;
 
 /**
  * Retrieves appointment data and related operations via web services
@@ -20,26 +19,15 @@ import fi.koku.settings.KoKuPropertiesUtil;
  */
 public class AvEmployeeService {
 	
-	private static final Logger LOG = Logger.getLogger(AvEmployeeService.class);	
-	public static final URL AV_EMPLOYEE_WSDL_LOCATION;
-	
-	static {
-		try {
-			LOG.info("AvEmployeeService WSDL location: " + KoKuPropertiesUtil.get("AvEmployeeService"));
-			AV_EMPLOYEE_WSDL_LOCATION =  new URL(KoKuPropertiesUtil.get("AvEmployeeService"));
-		} catch (MalformedURLException e) {
-			LOG.error("Failed to create AvEmployeeService WSDL url! Given URL address is not valid!");
-			throw new ExceptionInInitializerError(e);
-		}
-	}
-	
-	private KokuLooraAppointmentService_Service as;
+	private final KokuLooraAppointmentService service;
 	
 	/**
 	 * Constructor and initialization
 	 */
 	public AvEmployeeService() {
-		this.as = new KokuLooraAppointmentService_Service(AV_EMPLOYEE_WSDL_LOCATION);
+		KokuLooraAppointmentService_Service as = new KokuLooraAppointmentService_Service();
+		service = as.getKokuLooraAppointmentServicePort();
+		((BindingProvider)service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, Properties.AV_EMPLOYEE_SERVICE);
 	}
 	
 	/**
@@ -51,7 +39,7 @@ public class AvEmployeeService {
 	 */
 	public List<AppointmentSummary> getCreatedAppointments(String user, AppointmentCriteria criteria, int startNum, int maxNum) throws KokuServiceException {
 		try {
-			return as.getKokuLooraAppointmentServicePort().getCreatedAppointments(user, startNum, maxNum, criteria);
+			return service.getCreatedAppointments(user, startNum, maxNum, criteria);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getCreatedAppointments failed. user: '"+user+"'", e);
 		}
@@ -66,7 +54,7 @@ public class AvEmployeeService {
 	 */
 	public List<AppointmentSummary> getProcessedAppointments(String user, AppointmentCriteria criteria, int startNum, int maxNum) throws KokuServiceException {
 		try {
-			return as.getKokuLooraAppointmentServicePort().getProcessedAppointments(user, startNum, maxNum, criteria);
+			return service.getProcessedAppointments(user, startNum, maxNum, criteria);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getProcessedAppointments failed. user: '"+user+"'", e);
 		}
@@ -80,7 +68,7 @@ public class AvEmployeeService {
 	 */
 	public int getTotalCreatedAppointmentNum(String user, AppointmentCriteria criteria) throws KokuServiceException {
 		try {
-		return as.getKokuLooraAppointmentServicePort().getTotalCreatedAppointments(user, criteria);
+		return service.getTotalCreatedAppointments(user, criteria);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getTotalCreatedAppointmentNum failed. user: '"+user+"'", e);
 		}
@@ -93,7 +81,7 @@ public class AvEmployeeService {
 	 */
 	public int getTotalProcessedAppointments(String user, AppointmentCriteria criteria) throws KokuServiceException {
 		try {
-			return as.getKokuLooraAppointmentServicePort().getTotalProcessedAppointments(user, criteria);
+			return service.getTotalProcessedAppointments(user, criteria);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getTotalProcessedAppointments failed. user: '"+user+"'", e);
 		}
@@ -106,7 +94,7 @@ public class AvEmployeeService {
 	 */
 	public Appointment getAppointmentById(long appointmentId) throws KokuServiceException {
 		try {
-			return as.getKokuLooraAppointmentServicePort().getAppointmentById(appointmentId);
+			return service.getAppointmentById(appointmentId);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getAppointmentById failed. appointmentId: '"+appointmentId+"'", e);
 		}	
@@ -119,7 +107,7 @@ public class AvEmployeeService {
 	 */
 	public void cancelAppointment(long appointmentId, String comment) throws KokuServiceException {
 		try {
-			as.getKokuLooraAppointmentServicePort().cancelAppointment(appointmentId, comment);
+			service.cancelAppointment(appointmentId, comment);
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("getAppointmentById failed. appointmentId: '"+appointmentId+"' comment: '"+comment+"'", e);
 		}
