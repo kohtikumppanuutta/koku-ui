@@ -465,13 +465,18 @@
 		font-weight: bold;
 	}
 	
-	#show-message .request-table td.date,
-	#show-message .request-table td.startTime,
-	#show-message .request-table td.endTime,
-	#show-message .request-table td.location,
 	#show-message .request-table td.date {
-		width: 75px;
+		width: 80px;
+	}
+	
+	#show-message .request-table td.startTime,
+	#show-message .request-table td.endTime {
+		width: 55px;
 	} 
+	
+	#show-message .request-table td.location {
+		width: 100px;
+	}
 	
 	.request-table td {
 		padding: 6px; /* cell padding */
@@ -802,17 +807,24 @@
 		width: 120px;
 	}
 	
-	table.task-manager-table.consentsCurrentTable td.messageItem.anotherPermitterUser {
+	/* Suostumukset Vastatut - Vanhat */
+	table.task-manager-table.consentsCurrentTable td.messageItem.anotherPermitterUserFullName,
+	table.task-manager-table.consentsOldTable td.messageItem.anotherPermitterUserFullName {
 		width: 120px;
 	}
+	
 	table.task-manager-table.consentsCurrentTable td.messageItem.status,
 	table.task-manager-table.consentsCurrentTable td.messageItem.approvalStatus,	
 	table.task-manager-table.consentsCurrentTable td.messageItem.createType,
 	table.task-manager-table.consentsCurrentTable td.messageItem.validDate,
-	table.task-manager-table.consentsCurrentTable td.messageItem.assignedDate {
+	table.task-manager-table.consentsCurrentTable td.messageItem.assignedDate,
+	table.task-manager-table.consentsOldTable td.messageItem.status,
+	table.task-manager-table.consentsOldTable td.messageItem.approvalStatus,	
+	table.task-manager-table.consentsOldTable td.messageItem.createType,
+	table.task-manager-table.consentsOldTable td.messageItem.validDate,
+	table.task-manager-table.consentsOldTable td.messageItem.assignedDate {
 		width: 75px;
-	}
-	
+	}	
 	
 	/* Tapamiset - Vastausta odottavat */
 	table.task-manager-table.appoitmentsInboxCitizenTable td.senderUser {

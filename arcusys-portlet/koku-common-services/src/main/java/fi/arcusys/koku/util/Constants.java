@@ -13,7 +13,7 @@ public final class Constants {
 	
 	public static final String DATE_FORMAT 									= "d.M.yyyy HH:mm:ss";
 	public static final String DATE											= "d.M.yyyy";
-	public static final String TIME 										= "HH:mm:ss";
+	public static final String TIME 										= "HH:mm";
                                                                         
 	public static final String TIME_ZONE 									= "Europe/Helsinki";
 	public static final int PAGE_NUMBER 									= 10; // number of tasks in one page
