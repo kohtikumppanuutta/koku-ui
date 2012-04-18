@@ -11,7 +11,7 @@ public final class Constants {
 
 	private Constants() { /* Non instantiable */  }
 	
-	public static final String DATE_FORMAT 									= "d.M.yyyy HH:mm:ss";
+	public static final String DATE_FORMAT 									= "d.M.yyyy HH:mm";
 	public static final String DATE											= "d.M.yyyy";
 	public static final String TIME 										= "HH:mm";
                                                                         

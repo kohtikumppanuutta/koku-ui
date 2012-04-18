@@ -82,6 +82,7 @@ public class AjaxController {
 			PortletRequest request, 
 			PortletResponse response) {
 		
+		final long start = System.nanoTime();
 		final PortletSession portletSession = request.getPortletSession();				
 		final String token = (String) portletSession.getAttribute(ATTR_TOKEN);
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
@@ -95,6 +96,7 @@ public class AjaxController {
 		Boolean editableForm = Boolean.valueOf(pref.getValue(PREF_EDITABLE, Boolean.FALSE.toString()));
 		jsonModel.put(JSON_EDITABLE, editableForm.toString());
 		modelmap.addAttribute(RESPONSE, jsonModel);
+		LOG.debug("TaskMgr ajax call took: "+ ((System.nanoTime() - start)/1000/1000)+"ms");
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -108,7 +110,7 @@ public class AjaxController {
 	 * @return ajax view with task state in json format
 	 */
 	@ResourceMapping(value = "getState")
-	public String getTaskState(
+	public String getTaskState (
 			@RequestParam(value = "taskId") String taskId,
 			ModelMap modelmap, 
 			PortletRequest request, 
@@ -160,10 +162,9 @@ public class AjaxController {
 			int numPerPage = TaskUtil.PAGE_NUMBER;
 			int totalTasksNum;
 			int totalPages;
-			List<Task> tasks;
 			String first = String.valueOf((page-1)*numPerPage);
 			String max =  String.valueOf(numPerPage);
-			tasks = taskhandle.getTasksByParams(taskType, keyword, orderType, first, max);
+			final List<Task> tasks = taskhandle.getTasksByParams(taskType, keyword, orderType, first, max);
 			totalTasksNum = taskhandle.getTotalTasksNumber(taskType, keyword);
 			totalPages = (totalTasksNum == 0) ? 1:(int) Math.ceil((double)totalTasksNum/numPerPage);	
 			jsonModel.put(JSON_TOTAL_ITEMS, totalTasksNum);

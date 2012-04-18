@@ -1,5 +1,7 @@
 package fi.arcusys.koku.intalio;
 
+import java.util.List;
+
 /**
  * task data model for task manager, modified from to intalio task object
  * @author Jinhua Chen
@@ -14,6 +16,7 @@ public class Task {
 	private String description;
 	private String creationDate;
 	private String link;
+	private String senderName;
 
 	public Task(String id, String processId, String description,
 			String creationDate) {
@@ -22,7 +25,7 @@ public class Task {
 		this.description = description;
 		this.creationDate = creationDate;
 	}
-	
+		
 	public Task() {}
 	
 	public String getId() {
@@ -78,5 +81,20 @@ public class Task {
 	public void setLink(String link) {
 		this.link = link;
 	}
+	
+	/**
+	 * @return the senderName
+	 */
+	public final String getSenderName() {
+		return senderName;
+	}
 
+	/**
+	 * @param senderName the senderName to set
+	 */
+	public final void setSenderName(String senderName) {
+		this.senderName = senderName;
+	}
+
+	
 }
