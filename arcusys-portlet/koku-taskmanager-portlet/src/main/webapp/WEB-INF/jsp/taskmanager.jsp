@@ -172,6 +172,7 @@
 		
 		taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
+				+ '<td class="messgeItem senderName"><a href="javascript:void(0)" onclick="orderTask(\'senderName\')"><spring:message code="task.senderName" /></a></td>'
 				+ '<td class="messgeItem description"><a href="javascript:void(0)" onclick="orderTask(\'description\')"><spring:message code="task.description" /></a></td>';
 				
 		<c:if test="<%= Boolean.valueOf(editable) %>">
@@ -189,8 +190,8 @@
 			}else {
 				taskHtml += '<tr>';
 			}
-			
-			taskHtml +=  '<td class="messgeItem description">' + formLink + '</td>';
+			taskHtml += '<td class="messgeItem senderName">' + tasks[i]["senderName"] + '</td>';
+			taskHtml += '<td class="messgeItem description">' + formLink + '</td>';
 			if (editable == true) {
 				taskHtml += '<td><div><spring:message code="task.edit" /></div></td>';	
 			}
@@ -247,6 +248,7 @@
 		var taskHtml = "";
 		taskHtml = '<table class="task-manager-table">'
 				+ '<tr class="task-manager-table trheader">'
+				+ '<td class="messageItem senderName"><spring:message code="task.senderName" /></td>';
 				+ '<td class="messageItem description"><spring:message code="task.description" /></td>';
 				
 		<c:if test="<%= Boolean.valueOf(editable) %>">
@@ -708,12 +710,13 @@
 	<div id="task-manager-tasklist">
 		<table class="task-manager-table">
 			<tr class="task-manager-table trheader">
-				<td><spring:message code="task.description" /></td>
+				<td class="messgeItem senderName"><spring:message code="task.senderName" /></td>
+				<td class="messgeItem description"><spring:message code="task.description" /></td>
 				<c:if test="<%= Boolean.valueOf(editable) %>">
 					<td><spring:message code="task.edit" /></td>
 				</c:if>
 				<%-- <td><spring:message code="task.state" /></td> --%>
-				<td><spring:message code="task.creationDate" /></td>								
+				<td class="messgeItem creationDate"><spring:message code="task.creationDate" /></td>								
 			</tr> 
 		</table>
 	</div>

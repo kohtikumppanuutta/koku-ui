@@ -69,44 +69,44 @@ public class TaskHandleTest{
 		String subQuery = "T._state = TaskState.READY AND T._description like '%%' ORDER BY T._creationDate DESC";
 		String first = "0";
 		String max = "5";
-		List<Task> tasklist = tester.getTasksFromServ(taskType, subQuery, first, max);
+		List<Task> tasklist = tester.getTasks(taskType, subQuery, first, max);
 		assertTrue("GetTasksFromServ failed", tasklist.size() > 0);
 	}
-	@Ignore
-	@Test
-	public void createTask() {
-		List<TaskMetadata> tasklist = new ArrayList<TaskMetadata>();
-		TaskMetadata task = new TaskMetadata();
-		List<Task> myTasklist = new ArrayList<Task>();
-		task.setTaskType("ACTIVITY");
-		task.setDescription("task test 1");
-		task.setTaskState(null);
-		GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance();
-		cal.set(2011, 4, 20, 10, 30, 20);
-		XMLGregorianCalendar xmlGregorianCalendar;
-		try {
-			xmlGregorianCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
-			task.setCreationDate(xmlGregorianCalendar);
-		} catch (DatatypeConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		task.setTaskId("task-id-1");
-		String url = "http://trelx28b:8080/form.htm";
-		task.setFormUrl(url);
-		tasklist.add(task);
-		task.setDescription("task test 1");
-		tasklist.add(task);
-		myTasklist = tester.createTask(tasklist);
-		Task myTask = myTasklist.get(0);
-		String expected = "task test 1";
-		String actual = myTask.getDescription();
-		assertEquals("createTask first description failed", expected, actual);
-		expected = "20.5.2011 10:30:20";
-		actual = myTask.getCreationDate();
-		assertEquals("createTask first creation date failed", expected, actual);		
-	}
+//	@Ignore
+//	@Test
+//	public void createTask() {
+//		List<TaskMetadata> tasklist = new ArrayList<TaskMetadata>();
+//		TaskMetadata task = new TaskMetadata();
+//		List<Task> myTasklist = new ArrayList<Task>();
+//		task.setTaskType("ACTIVITY");
+//		task.setDescription("task test 1");
+//		task.setTaskState(null);
+//		GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance();
+//		cal.set(2011, 4, 20, 10, 30, 20);
+//		XMLGregorianCalendar xmlGregorianCalendar;
+//		try {
+//			xmlGregorianCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+//			task.setCreationDate(xmlGregorianCalendar);
+//		} catch (DatatypeConfigurationException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		task.setTaskId("task-id-1");
+//		String url = "http://trelx28b:8080/form.htm";
+//		task.setFormUrl(url);
+//		tasklist.add(task);
+//		task.setDescription("task test 1");
+//		tasklist.add(task);
+//		myTasklist = tester.createTask(tasklist);
+//		Task myTask = myTasklist.get(0);
+//		String expected = "task test 1";
+//		String actual = myTask.getDescription();
+//		assertEquals("createTask first description failed", expected, actual);
+//		expected = "20.5.2011 10:30:20";
+//		actual = myTask.getCreationDate();
+//		assertEquals("createTask first creation date failed", expected, actual);		
+//	}
 	@Ignore
 	@Test
 	public void formatTaskDate() {

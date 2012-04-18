@@ -133,7 +133,7 @@
 	
 }
  
- @media screen { 
+@media screen { 
  
  	#intalioPrintingLink {
 		width: 100%;
@@ -145,7 +145,7 @@
 		cursor: pointer;
 		padding-right: 10px;
 		padding-left: 3px;
-		lineheight: 15px;
+		line-height: 15px;
 		vertical-align: bottom;
 		
 	}
@@ -360,5 +360,10 @@
 	table.task-manager-table td.messageItem.creationDate {
 		width: 100px;
 	}
+	
+	table.task-manager-table td.messgeItem.senderName {
+		width: 120px;
+	}
+	
 	
 }

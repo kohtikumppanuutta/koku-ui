@@ -1,23 +1,29 @@
 package fi.arcusys.koku.intalio;
 
+import static fi.arcusys.koku.util.Constants.DATE_FORMAT;
+import static fi.arcusys.koku.util.Constants.TIME_ZONE;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
+import fi.arcusys.intalio.tms.Task.Input;
 import fi.arcusys.intalio.tms.TaskMetadata;
 import fi.arcusys.koku.exceptions.IntalioAuthException;
+import fi.arcusys.koku.util.Properties;
 import fi.arcusys.koku.util.TaskUtil;
-import static fi.arcusys.koku.util.Constants.*;
 
 /**
  * Handles the intalio task processing including querying tasks, formatting task
@@ -67,11 +73,10 @@ public class TaskHandle {
 	 */
 	public List<Task> getTasksByParams(int taskType, String keyword, 
 			String orderType, String first, String max) {
-		List<Task> tasks = null;
 		String taskTypeStr = TaskUtil.getTaskType(taskType);
 		String subQuery = "";				
 		subQuery = createTaskSubQuery(taskType, keyword, orderType);
-		return getTasksFromServ(taskTypeStr, subQuery, first, max);
+		return getTasks(taskTypeStr, subQuery, first, max);
 	}
 	
 	/**
@@ -82,16 +87,15 @@ public class TaskHandle {
 	 * @param max the maximum tasks to be queried
 	 * @return a list of tasks
 	 */
-	public List<Task> getTasksFromServ(String taskType, String subQuery, String first, String max) {
-		List<Task> myTasklist = new ArrayList<Task>();
+	public List<Task> getTasks(String taskType, String subQuery, String first, String max) {
 		List<TaskMetadata> tasklist = taskMngServ.getAvailableTasks(participantToken, taskType, subQuery, 
         		first, max);
-		return createTask(tasklist);
+		return createTasks(tasklist, participantToken);
 	}
 	
 	public Task getTask(String taskId, String token) {
 		fi.arcusys.intalio.tms.Task task = taskMngServ.getTask(taskId, token);
-		return createTask(task.getMetadata());
+		return createTask(task.getMetadata(), task.getInput());
 	}
 
 	/**
@@ -100,7 +104,6 @@ public class TaskHandle {
 	 * @return the intalio task status
 	 */
 	public String getTaskStatus(String taskId) {
-		String status;
 		return taskMngServ.getTask(taskId, participantToken).getMetadata().getTaskState();
 	}
 	
@@ -109,32 +112,78 @@ public class TaskHandle {
 	 * @param tasklist a list of intalio tasks
 	 * @return formatted task list to be presented on web
 	 */
-	public List<Task> createTask(List<TaskMetadata> tasklist) {
+	private List<Task> createTasks(List<TaskMetadata> tasklist, String token) {
 		List<Task> myTasklist = new ArrayList<Task>();
-		Iterator<TaskMetadata> it = tasklist.iterator();		
-		while (it.hasNext()) {
-			TaskMetadata task = it.next();
-			myTasklist.add(createTask(task));
+		/* Unfortunately getTasks WS call doesn't contain Input object which includes information
+		 * what we want (like sender name). Only way seems to be call task details and this will generate
+		 * more WS calls (default is 10). =\ 
+		 * 
+		 * Better ideas?
+		 * */
+		for (TaskMetadata task : tasklist) {
+			fi.arcusys.intalio.tms.Task taskDetails = taskMngServ.getTask(task.getTaskId(), token);
+			myTasklist.add(createTask(taskDetails.getMetadata(), taskDetails.getInput()));
 		}
 		return myTasklist;
 	}
 	
-	private Task createTask(TaskMetadata task) {
+	private fi.arcusys.koku.intalio.Task createTask(TaskMetadata task, fi.arcusys.intalio.tms.Task.Input input) {
 		if (task == null) {
 			return null;
 		}
-		Task myTask = new Task();
+		fi.arcusys.koku.intalio.Task myTask = new fi.arcusys.koku.intalio.Task();
 		myTask.setDescription(task.getDescription());
 		
 		if (task.getTaskState() != null) {
 			myTask.setState(task.getTaskState().toString());
 		} else {
 			myTask.setState("");
-
 		}
 		myTask.setCreationDate(formatTaskDate(task.getCreationDate()));
 		myTask.setLink(createTaskLink(task));
+		myTask.setSenderName(getSenderNameFromTaskInput(task, input));
 		return myTask;
+	}
+	
+	/**
+	 * Returns task sender name (if available) 
+	 * 
+	 * @param task
+	 * @param input
+	 * @return sender name
+	 */
+	private String getSenderNameFromTaskInput(TaskMetadata task, Input input) {
+		final String descriptionName = task.getDescription();
+		if (descriptionName.startsWith(Properties.RECEIVED_REQUESTS_FILTER)) {
+			// Uusi pyyntö
+			return getSenderName(input, "User_SenderDisplay");
+		} else if (descriptionName.contains(Properties.RECEIVED_INFO_REQUESTS_FILTER)) {
+			// Uusi tietopyyntö
+			return getSenderName(input, "Perustiedot_Lahettaja");
+		} else if (descriptionName.endsWith(Properties.RECEIVED_WARRANTS_FILTER)) {			
+			// Vastaanotetut valtakirjat
+			return getSenderName(input, "Tiedot_LahettajaDisplay");
+		} else {
+			// Hm?
+			return null;
+		}
+	}
+	
+	private String getSenderName(final fi.arcusys.intalio.tms.Task.Input input, final String nodename) {
+		if (input == null || input.getAny() == null || input.getAny().isEmpty()) {
+			return null;
+		}
+		final Object object = input.getAny().get(0);
+		final Element element = ((Element)object);		
+		final NodeList senderNameList = element.getElementsByTagName(nodename);
+		if (senderNameList == null || senderNameList.getLength() == 0) {
+			return null;
+		}
+		final Node senderNameNode = senderNameList.item(0);
+		if (senderNameNode.getFirstChild() == null)  {
+			return null;
+		}
+		return senderNameNode.getFirstChild().getNodeValue();
 	}
 	
 	/**
