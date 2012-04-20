@@ -49,6 +49,7 @@
  * Handle action for task manager
  * @Author: Jinhua Chen
  */
+ 	var tasksPerPage = <%= TaskUtil.PAGE_NUMBER %>
 	var tokenStatus = "${tokenStatus}";
 	var refreshTimer; // global refresh timer
 	var configObj = new config();
@@ -154,13 +155,13 @@
 				var taskHtml = createTasksTable(tasks, editable);
 				jQuery('#task-manager-tasklist').html(taskHtml);
 				decorateTable();
-				var pageHtml = createTasksPage();
+				var pageHtml = createTasksPage(pageObj, tasksPerPage);
 				jQuery('#task-manager-operation-page').html(pageHtml);
 			} else {
 				var message = "<spring:message code="error.invalidToken" />";
 				showErrorMessage(message);
 			}
-		});		
+		});
 	}
 
 	/**
@@ -600,7 +601,7 @@
 	/**
 	 * Create task manager operation part including changing page number and search field
 	 */
-	function createTasksPage() {
+	function createTasksPage(pageObj, tasksPerPage) {
 		var pageHtml = '<ul>'
 					 + '<li><input type="button" value="<spring:message code="task.search"/>"  onclick="showSearchUI()" /></li>'
 					 + '<li><a><img src="<%= request.getContextPath() %>/images/first.gif" onclick="movePage(\'first\')"/></a></li>'
@@ -608,9 +609,8 @@
 					 + '<li><spring:message code="task.page"/> ' + pageObj.currentPage + '/' + pageObj.totalPages + '</li>'
 					 + '<li><a><img src="<%= request.getContextPath() %>/images/next.gif" onclick="movePage(\'next\')"/></a></li>'
 					 + '<li><a><img src="<%= request.getContextPath() %>/images/last.gif" onclick="movePage(\'last\')"/></a></li>'
-					 + '<li><spring:message code="task.displaying"/> ' + createDisplayingTasksNum()  + '</li>'
+					 + '<li><spring:message code="task.displaying"/> ' + createDisplayingTasksNum(pageObj, tasksPerPage)  + '</li>'
 					 + '</ul>';
-								
 		return pageHtml;
 	}
 	
@@ -625,10 +625,10 @@
 	/**
 	 * Create task statistics information
 	 */
-	function createDisplayingTasksNum() {
+	function createDisplayingTasksNum(pageObj, numPerPage) {
 		var displayTask;
 		var startid, endid;
-		var numPerPage = 10;	
+		// var numPerPage = 5;
 		
 		if(parseInt(pageObj.totalItems) == 0) {
 			return "<spring:message code="task.noItems"/>";
@@ -637,7 +637,7 @@
 		startid = (pageObj.currentPage-1)*numPerPage + 1;
 		
 		if(pageObj.currentPage < pageObj.totalPages) {
-			endid = startid + 9;
+			endid = startid + (numPerPage-1);
 		}else {
 			endid = startid + pageObj.totalItems - (pageObj.currentPage-1)* numPerPage -1;
 		}

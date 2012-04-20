@@ -18,7 +18,7 @@ public final class TaskUtil {
 	/**
 	 * Superuser contains username and participant token of intalio server
 	 */
-	public final static int PAGE_NUMBER = 10; // number of tasks in one page
+	public final static int PAGE_NUMBER = 5; // number of tasks in one page
 	public final static int TASK = 1;
 	public final static int NOTIFICATION = 2;
 	public final static int PROCESS = 3;
