@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ page import="javax.portlet.PortletPreferences" %>
 <%@ page import="javax.portlet.WindowState" %>
+<%@ page import="fi.arcusys.koku.util.TaskUtil" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %> 
 
 <portlet:defineObjects />
