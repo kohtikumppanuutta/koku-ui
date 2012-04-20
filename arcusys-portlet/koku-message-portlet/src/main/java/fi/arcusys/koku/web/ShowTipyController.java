@@ -6,6 +6,7 @@ import static fi.arcusys.koku.util.Constants.ATTR_KEYWORD;
 import static fi.arcusys.koku.util.Constants.ATTR_ORDER_TYPE;
 import static fi.arcusys.koku.util.Constants.ATTR_TASK_TYPE;
 import static fi.arcusys.koku.util.Constants.ATTR_USERNAME;
+import static fi.arcusys.koku.util.Constants.ATTR_USER_ID;
 import static fi.arcusys.koku.util.Constants.TASK_TYPE_INFO_REQUEST_BROWSE;
 import static fi.arcusys.koku.util.Constants.TASK_TYPE_INFO_REQUEST_BROWSE_REPLIED;
 import static fi.arcusys.koku.util.Constants.TASK_TYPE_INFO_REQUEST_BROWSE_SENT;
@@ -83,14 +84,17 @@ public class ShowTipyController extends AbstractController {
 		
 		ModelWrapper<KokuInformationRequestDetail> modelWrapper = null;
 		
-		PortletSession portletSession = request.getPortletSession();
-		String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		UserIdResolver resolver = new UserIdResolver();
-		String userId = null;
-		try {
-			userId = resolver.getUserId(username, getPortalRole());
-		} catch (KokuServiceException e) {
-			LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
+		final PortletSession portletSession = request.getPortletSession();
+		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+		String userId = (String) portletSession.getAttribute(ATTR_USER_ID);
+		if (userId == null) {			
+			try {
+				UserIdResolver resolver = new UserIdResolver();
+				userId = resolver.getUserId(username, getPortalRole());
+				portletSession.setAttribute(ATTR_USER_ID, userId);
+			} catch (KokuServiceException e) {
+				LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
+			}
 		}
 		
 		try {

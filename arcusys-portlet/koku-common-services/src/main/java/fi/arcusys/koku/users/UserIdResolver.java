@@ -40,8 +40,6 @@ public class UserIdResolver {
 			userId = null;
 			break;
 		}
-		LOG.info("getUserId  - "+((System.nanoTime()-start)/1000/1000) + "ms");
-
 		if (userId == null) {
 			LOG.info("Couldn't find userId by given username: " + username + " PortalRole: " + role);
 		}
