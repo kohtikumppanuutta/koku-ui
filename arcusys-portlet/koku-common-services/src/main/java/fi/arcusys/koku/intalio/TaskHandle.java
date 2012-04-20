@@ -174,6 +174,9 @@ public class TaskHandle {
 			return null;
 		}
 		final Object object = input.getAny().get(0);
+		if (!(object instanceof Element)) {
+			return null;
+		}
 		final Element element = ((Element)object);		
 		final NodeList senderNameList = element.getElementsByTagName(nodename);
 		if (senderNameList == null || senderNameList.getLength() == 0) {
