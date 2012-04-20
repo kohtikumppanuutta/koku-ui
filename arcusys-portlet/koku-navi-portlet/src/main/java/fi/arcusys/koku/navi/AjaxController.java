@@ -1,8 +1,9 @@
 package fi.arcusys.koku.navi;
 
-import static fi.arcusys.koku.util.Constants.*;
+import static fi.arcusys.koku.util.Constants.ATTR_NAVI_TYPE;
 import static fi.arcusys.koku.util.Constants.ATTR_PORTAL_ROLE;
 import static fi.arcusys.koku.util.Constants.ATTR_TOKEN;
+import static fi.arcusys.koku.util.Constants.ATTR_USER_ID;
 import static fi.arcusys.koku.util.Constants.INTALIO_GROUP_PREFIX;
 import static fi.arcusys.koku.util.Constants.PORTAL_MODE_KUNPO;
 import static fi.arcusys.koku.util.Constants.PORTAL_MODE_LOORA;
@@ -11,7 +12,6 @@ import static fi.arcusys.koku.util.Constants.RESPONSE;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletSession;
-import javax.portlet.PortletURL;
 import javax.portlet.ResourceResponse;
 
 import net.sf.json.JSONObject;
@@ -57,21 +57,21 @@ public class AjaxController {
 	@ResourceMapping(value = "update")
 	public String showAjax(ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		
-		String username = request.getRemoteUser();
-		String userId = null;
+		final PortletSession session = request.getPortletSession();
+		final String username = request.getRemoteUser();
+		String userId = (String) session.getAttribute(ATTR_USER_ID);
 				
 		try {
-			if (username != null) {
+			if (username != null && userId == null ) {
 				UserIdResolver resolver = new UserIdResolver();
 				userId = resolver.getUserId(username, getPortalRole());
+				session.setAttribute(ATTR_USER_ID, userId);
 			}
 		} catch (KokuServiceException e) {
 			LOG.info("Failed to get UserUid. Propably new user and not yet registered. username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
 		} catch (Exception e) {
 			LOG.error("Error while trying to resolve userId. Usually WSDL location is wrong or server down. See following error msg: "+e.getMessage());
-		}
-		
-		PortletSession session = request.getPortletSession();
+		}		
 		
 		// Resolve user Intalio token (if not already done)
 		String token = (String) session.getAttribute(ATTR_TOKEN);
