@@ -86,6 +86,7 @@
                     </manifest>
                     <manifestEntries>
                       <Build-Version>${koku.build.version}</Build-Version>
+                      <Build-Version-VCS>${koku.build.vcs-version}</Build-Version-VCS>
                       <Build-Platform>${os.name} ${os.version}</Build-Platform>
                       <Build-Time>${maven.build.timestamp}</Build-Time>
                     </manifestEntries>
