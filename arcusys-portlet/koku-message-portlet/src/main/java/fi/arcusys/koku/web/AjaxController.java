@@ -125,7 +125,7 @@ public class AjaxController extends AbstractController {
 				UserIdResolver resolver = new UserIdResolver();
 				userId = resolver.getUserId(username, getPortalRole());
 				portletSession.setAttribute(ATTR_USER_ID, userId);
-				LOG.info("UserResolver took "+((System.nanoTime()-startUser)/1000/1000) + "ms");
+				LOG.debug("UserResolver took "+((System.nanoTime()-startUser)/1000/1000) + "ms");
 			} catch (KokuServiceException e) {
 				LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
 			} catch (Exception e) {
@@ -144,7 +144,7 @@ public class AjaxController extends AbstractController {
 		}
 		final JSONObject jsonModel = query.getJsonModel(taskType, page, keyword, field, orderType, userId);
 		modelmap.addAttribute(RESPONSE, jsonModel);
-		LOG.info("getTasks  - "+((System.nanoTime()-start)/1000/1000) + "ms");
+		LOG.debug("getTasks  - "+((System.nanoTime()-start)/1000/1000) + "ms");
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -199,6 +199,23 @@ public class AjaxController extends AbstractController {
     	portletSession.setAttribute(ATTR_KOKU_USER, user);	    	
 	}
 	
+	private KokuActionProcess getActionProcess(PortletRequest request) throws KokuServiceException {
+		final PortletSession portletSession = request.getPortletSession();		
+		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+		String userId = (String) portletSession.getAttribute(ATTR_USER_ID);
+			
+		if (userId == null) {
+			UserIdResolver resolver = new UserIdResolver();
+			resolver.getUserId(username, getPortalRole());				
+		}
+		KokuActionProcess actionProcess = null;
+		switch (getPortalRole()) {
+			case CITIZEN: actionProcess = new KokuActionProcessCitizenImpl(userId); break;
+			case EMPLOYEE: actionProcess = new KokuActionProcessEmployeeImpl(userId); break;
+			default: actionProcess = new KokuActionProcessDummyImpl(null); break;
+		}
+		return actionProcess;		
+	}
 	
 	/**
 	 * Archive old messages (more than 3 month old)
@@ -214,22 +231,11 @@ public class AjaxController extends AbstractController {
 			ModelMap modelmap, PortletRequest request, PortletResponse response) {
 		
 		final PortletSession portletSession = request.getPortletSession();		
-		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
+		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);		
 		final JSONObject jsonModel = new JSONObject();
-		String userId = (String) portletSession.getAttribute(ATTR_USER_ID);
 		
 		try {
-			if (userId == null) {
-				UserIdResolver resolver = new UserIdResolver();
-				resolver.getUserId(username, getPortalRole());				
-			}
-			KokuActionProcess actionProcess = null;
-			switch (getPortalRole()) {
-				case CITIZEN: actionProcess = new KokuActionProcessCitizenImpl(userId); break;
-				case EMPLOYEE: actionProcess = new KokuActionProcessEmployeeImpl(userId); break;
-				default: actionProcess = new KokuActionProcessDummyImpl(null); break;
-			}		
-			actionProcess.archiveOldMessages(folderType);
+			getActionProcess(request).archiveOldMessages(folderType);
 			jsonModel.put(JSON_RESULT, RESPONSE_OK);
 		} catch (KokuServiceException e) {
 			LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
@@ -257,19 +263,8 @@ public class AjaxController extends AbstractController {
 		final PortletSession portletSession = request.getPortletSession();		
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		final JSONObject jsonModel = new JSONObject();
-		String userId = (String) portletSession.getAttribute(ATTR_USER_ID);		
 		try {
-			if (userId == null) {
-				UserIdResolver resolver = new UserIdResolver();
-				userId = resolver.getUserId(username, getPortalRole());						
-			}
-			KokuActionProcess actionProcess = null;
-			switch (getPortalRole()) {
-				case CITIZEN: actionProcess = new KokuActionProcessCitizenImpl(userId); break;
-				case EMPLOYEE: actionProcess = new KokuActionProcessEmployeeImpl(userId); break;
-				default: actionProcess = new KokuActionProcessDummyImpl(null); break;
-			}		
-			actionProcess.archiveMessages(messageList);
+			getActionProcess(request).archiveMessages(messageList);
 			jsonModel.put(JSON_RESULT, RESPONSE_OK);
 		} catch (KokuServiceException e) {
 			LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
@@ -295,21 +290,10 @@ public class AjaxController extends AbstractController {
 		
 		final PortletSession portletSession = request.getPortletSession();		
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
-		final JSONObject jsonModel = new JSONObject();		
-		String userId = (String) portletSession.getAttribute(ATTR_USER_ID);
+		final JSONObject jsonModel = new JSONObject();
 
 		try {
-			if (userId == null) {
-				UserIdResolver resolver = new UserIdResolver();
-				userId = resolver.getUserId(username, getPortalRole());				
-			}
-			KokuActionProcess actionProcess = null;
-			switch (getPortalRole()) {
-				case CITIZEN: actionProcess = new KokuActionProcessCitizenImpl(userId); break;
-				case EMPLOYEE: actionProcess = new KokuActionProcessEmployeeImpl(userId); break;
-				default: actionProcess = new KokuActionProcessDummyImpl(null); break;
-			}		
-			actionProcess.deleteMessages(messageList);
+			getActionProcess(request).deleteMessages(messageList);
 			jsonModel.put(JSON_RESULT, RESPONSE_OK);
 		} catch (KokuServiceException e) {
 			LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
@@ -336,19 +320,8 @@ public class AjaxController extends AbstractController {
 		final PortletSession portletSession = request.getPortletSession();
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);		
 		final JSONObject jsonModel = new JSONObject();
-		String userId = (String) portletSession.getAttribute(ATTR_USER_ID);
 		try {
-			if (userId == null) {
-				UserIdResolver resolver = new UserIdResolver();
-				userId = resolver.getUserId(username, getPortalRole());				
-			}
-			KokuActionProcess actionProcess = null;
-			switch (getPortalRole()) {
-				case CITIZEN: actionProcess = new KokuActionProcessCitizenImpl(userId); break;
-				case EMPLOYEE: actionProcess = new KokuActionProcessEmployeeImpl(userId); break;
-				default: actionProcess = new KokuActionProcessDummyImpl(null); break;
-			}
-			actionProcess.revokeConsents(messageList);
+			getActionProcess(request).revokeConsents(messageList);
 			jsonModel.put(JSON_RESULT, RESPONSE_OK);
 		} catch (KokuServiceException e) {
 			LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
@@ -378,19 +351,9 @@ public class AjaxController extends AbstractController {
 		final PortletSession portletSession = request.getPortletSession();				
 		final String username = (String) portletSession.getAttribute(ATTR_USERNAME);
 		final JSONObject jsonModel = new JSONObject();		
-		String userId = (String) portletSession.getAttribute(ATTR_USER_ID);
+
 		try {
-			if (userId == null) {
-				UserIdResolver resolver = new UserIdResolver();
-				userId = resolver.getUserId(username, getPortalRole());				
-			}
-			KokuActionProcess actionProcess = null;
-			switch (getPortalRole()) {
-				case CITIZEN: actionProcess = new KokuActionProcessCitizenImpl(userId); break;
-				case EMPLOYEE: actionProcess = new KokuActionProcessEmployeeImpl(userId); break;
-				default: actionProcess = new KokuActionProcessDummyImpl(null); break;
-			}
-			actionProcess.revokeWarrants(messageList, comment);
+			getActionProcess(request).revokeWarrants(messageList, comment);
 			jsonModel.put(JSON_RESULT, RESPONSE_OK);
 		} catch (KokuServiceException e) {
 			LOG.error("Failed to get UserUid username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
