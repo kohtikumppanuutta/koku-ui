@@ -18,16 +18,16 @@ public final class TaskUtil {
 	/**
 	 * Superuser contains username and participant token of intalio server
 	 */
-	public final static int PAGE_NUMBER = 5; // number of tasks in one page
-	public final static int TASK = 1;
-	public final static int NOTIFICATION = 2;
-	public final static int PROCESS = 3;
-	public final static String TASK_TYPE = "PATask";
-	public final static String NOTIFICATION_TYPE = "Notification";
-	public final static String PROCESS_TYPE = "PIPATask";
+	public static final int PAGE_NUMBER = 5; // number of tasks in one page
+	public static final int TASK = 1;
+	public static final int NOTIFICATION = 2;
+	public static final int PROCESS = 3;
+	public static final String TASK_TYPE = "PATask";
+	public static final String NOTIFICATION_TYPE = "Notification";
+	public static final String PROCESS_TYPE = "PIPATask";
 	// liferay variable for login username and password
-	public final static String LOGIN_USERNAME_VAR = "_58_login";
-	public final static String LOGIN_PASSWORD_VAR = "_58_password";
+	public static final String LOGIN_USERNAME_VAR = "_58_login";
+	public static final String LOGIN_PASSWORD_VAR = "_58_password";
 	// store some values that can not be stored in session
 	private static final Map<String, String> TASK_HASHMAP = new ConcurrentHashMap<String, String>();
 
@@ -39,17 +39,14 @@ public final class TaskUtil {
 	public static String getTaskType(int taskType) {
 		
 		switch (taskType) {
-		
-		case TaskUtil.TASK:
-			return TaskUtil.TASK_TYPE;
-		case TaskUtil.NOTIFICATION:
-			return TaskUtil.NOTIFICATION_TYPE;
-		case TaskUtil.PROCESS:
-			return TaskUtil.PROCESS_TYPE;
-		default:
-			return TaskUtil.TASK_TYPE;
-		}
-		
+			case TaskUtil.NOTIFICATION:
+				return TaskUtil.NOTIFICATION_TYPE;
+			case TaskUtil.PROCESS:
+				return TaskUtil.PROCESS_TYPE;
+			case TaskUtil.TASK:	// fallthrough
+			default:
+				return TaskUtil.TASK_TYPE;
+		}		
 	}
 	
 	/**

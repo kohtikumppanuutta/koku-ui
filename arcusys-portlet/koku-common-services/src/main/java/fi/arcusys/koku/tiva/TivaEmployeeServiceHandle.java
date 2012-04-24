@@ -60,8 +60,8 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 		query.setMaxNum(maxNum);		
 		ConsentCriteria criteria = createCriteria(keyword, field);	
 		query.setCriteria(criteria);		
-		List<ConsentSummary> consentSummary = tes.getConsents(userId, query);
-		List<KokuConsent> consentList = new ArrayList<KokuConsent>();
+		final List<ConsentSummary> consentSummary = tes.getConsents(userId, query);
+		final List<KokuConsent> consentList = new ArrayList<KokuConsent>();
 		
 		if(consentSummary == null) {
 			return consentList;
@@ -109,19 +109,7 @@ public class TivaEmployeeServiceHandle extends AbstractHandle {
 		convertConsentTOToKokuConsent(kokuConsent, consent);
 		return kokuConsent;
 	}
-	
-	private List<KokuConsent> convertConsentsToKokuConsents(List<ConsentSummary> consentSummary) {
-		List<KokuConsent> consentList = new ArrayList<KokuConsent>();
-		Iterator<ConsentSummary> it = consentSummary.iterator();		
-		while(it.hasNext()) {
-			ConsentSummary consent = it.next();
-			KokuConsent kokuConsent = new KokuConsent();
-			convertConsentSummaryToKokuConsent(kokuConsent, consent);
-			consentList.add(kokuConsent);
-		}
-		return consentList;
-	}
-	
+		
 	private void convertConsentShortSummaryToKokuConsent(KokuConsent kokuConsent, ConsentShortSummary consent) {
 		kokuConsent.setConsentId(consent.getConsentId());
 		kokuConsent.setAnotherPermitterUser(new KokuUser(consent.getAnotherPermitterUserInfo()));

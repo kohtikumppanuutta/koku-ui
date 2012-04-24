@@ -25,10 +25,6 @@ import fi.arcusys.koku.tiva.KokuConsent;
 @RequestMapping(value = "VIEW")
 public class ShowIntalioFormController {
 	
-	@Resource
-	private ResourceBundleMessageSource messageSource;
-
-	
 	/**
 	 * Shows message page
 	 * @param response RenderResponse

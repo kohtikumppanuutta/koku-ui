@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
  * @author Toni Turunen
  */
 
-public class PropertiesUtil {
+public final class PropertiesUtil {
 	
 	private PropertiesUtil() { /* Not instantiable */ }
 	

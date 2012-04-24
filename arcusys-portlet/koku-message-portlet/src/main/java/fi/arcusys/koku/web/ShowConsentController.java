@@ -37,7 +37,7 @@ public class ShowConsentController extends AbstractController {
 
 	
 	@Resource
-	ResourceBundleMessageSource messageSource;
+	private ResourceBundleMessageSource messageSource;
 	
 	/**
 	 * Shows consent page
