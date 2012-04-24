@@ -134,10 +134,9 @@ public class ViewController extends FormHolderController {
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
-	private XmlProxy getProxy(String service, String data) {
-		
-		OperationsValidator validator = new OperationsValidatorImpl();
-		validator = null;
+	private XmlProxy getProxy(String service, String data) {		
+//		OperationsValidator validator = new OperationsValidatorImpl();
+		OperationsValidator validator = null;
 		String endpointUrl = JS_ENDPOINTS.get(service);
 		if (endpointUrl == null) {
 			LOG.error("Coulnd't create XMLProxy. No service found by given service name: '"+service+"'");
@@ -165,9 +164,6 @@ public class ViewController extends FormHolderController {
 
 		final String username = request.getRemoteUser();
 		PortletSession portletSession = request.getPortletSession();
-		if (isInvalidStrongAuthentication(portletSession)) {
-			return authenticationFailed(request);
-		}
 		
 		if (username == null) {
 			LOG.info("Can't show Intalio form. User not logged in");
@@ -229,30 +225,5 @@ public class ViewController extends FormHolderController {
 	@ResourceMapping(value="NORMAL")
 	public void handleResourceRequestInteral(ResourceRequest request, ResourceResponse response ) throws Exception {
 		
-	}
-	
-	/**
-	 * Returns true when following conditions are true:
-	 * <ul>
-	 * <li>Vetuma is enabled (vetuma.authentication=true)</li>
-	 * <li>User is _NOT_ authenticated by using strong authentication (Vetuma)</li>
-	 * <li>Portal is Kunpo (enviroment.name=kunpo)</li>
-	 * </ul>
-	 * @param portletSession
-	 * @return 
-	 */
-	private boolean isInvalidStrongAuthentication(PortletSession portletSession) {
-		return false;
-//		if (VETUMA_ENABLED && IS_KUNPO_PORTAL && !AuthenticationUtil.getUserInfoFromSession(portletSession).hasStrongAuthentication()) {
-//			return true;
-//		} else {
-//			return false;
-//		}
-	}
-	
-	private ModelAndView authenticationFailed(RenderRequest request){
-		LOG.error("Strong authentication required! User '"+request.getUserPrincipal().getName()+"' is not Vetuma authenticated!");	
-		return getFailureView(request);
-	}
-	
+	}	
 }

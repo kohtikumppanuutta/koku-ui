@@ -28,7 +28,6 @@ public class UserIdResolver {
 			return null;
 		}
 		
-		long start = System.nanoTime();
 		switch (role) {
 		case CITIZEN:
 			userId = userService.getUserUidByKunpoName(username);

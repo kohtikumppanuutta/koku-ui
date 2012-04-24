@@ -25,6 +25,7 @@ import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_REQUEST;
 import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_REQUEST_RESPONSE;
 import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_TIPY;
 import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_WARRANT;
+import static fi.arcusys.koku.util.Constants.MY_ACTION_SHOW_MESSAGE;
 import static fi.arcusys.koku.util.Constants.RESPONSE;
 import static fi.arcusys.koku.util.Constants.RESPONSE_FAIL;
 import static fi.arcusys.koku.util.Constants.RESPONSE_OK;
@@ -156,7 +157,7 @@ public class AjaxController extends AbstractController {
 	 * 
 	 * @param portletSession
 	 */
-	private void registerUserToWS(PortletSession portletSession) {
+	private void registerUserToWS(final PortletSession portletSession) {
 		/* No need to re-register user if already done */
 	    if (portletSession.getAttribute(ATTR_KOKU_USER) != null) {
 	    	return;
@@ -182,11 +183,11 @@ public class AjaxController extends AbstractController {
 	    		// Loora
 	    		user = userService.loginLoora(username, userInfo.getPic());
 	    	} else {
-	    		LOG.error("Can't register user to WS! Portlet doesn't have information if portal is Citizen/Employee mode! username: '"+username+"'");
+	    		LOG.error("Can't register user to WS! Portlet doesn't have information if portal is Citizen/Employee mode! username: '"+username+"' SSN: '"+userInfo.getPic()+"'");
 	    		return;
 	    	}
     	} catch (KokuServiceException kse) {
-    		LOG.error("Failed register user to WS.",kse);    		
+    		LOG.error("Failed register user to WS. Username: '"+username+"'", kse);    		
     	}
     	
     	if (user == null) {
@@ -215,7 +216,7 @@ public class AjaxController extends AbstractController {
 			default: actionProcess = new KokuActionProcessDummyImpl(null); break;
 		}
 		return actionProcess;		
-	}
+	}	
 	
 	/**
 	 * Archive old messages (more than 3 month old)
@@ -360,12 +361,10 @@ public class AjaxController extends AbstractController {
 		} catch (KokuActionProcessException kape) {
 			LOG.error("Failed to revoke warrant. Username: '"+ username+"'", kape);
 			jsonModel.put(JSON_RESULT, RESPONSE_FAIL);
-		}
-			
+		}			
 		modelmap.addAttribute(RESPONSE, jsonModel);		
 		return AjaxViewResolver.AJAX_PREFIX;
-	}
-	
+	}	
 	
 	/**
 	 * Cancels appointments
@@ -399,6 +398,7 @@ public class AjaxController extends AbstractController {
 					final UserIdResolver resolver = new UserIdResolver();
 					userId = resolver.getUserId(username, getPortalRole());					
 				}
+				/* Looks scary. We shouldn't trust client side parameters. */
 				if (taskType.endsWith("citizen")) {
 					actionProcess = new KokuActionProcessCitizenImpl(userId);
 				} else if (taskType.endsWith("employee")) {
@@ -459,6 +459,28 @@ public class AjaxController extends AbstractController {
 	}
 	
 	
+	private PortletURL getPortletUrl(final ResourceResponse response, final String currentPage, final String taskType,
+			final String keyword, final String orderType) {
+		final PortletURL renderUrlObj = response.createRenderURL();
+		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
+		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
+		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
+		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);
+		try {
+			renderUrlObj.setWindowState(WindowState.NORMAL);
+		} catch (WindowStateException e) {
+			LOG.error("Create message render url failed");
+		}
+		return renderUrlObj;
+	}
+	
+	private void generateRenderUrl(final PortletURL renderUrlObj, final ModelMap modelmap) {
+		final String renderUrlString = renderUrlObj.toString();		
+		final JSONObject jsonModel = new JSONObject();
+		jsonModel.put(JSON_RENDER_URL, renderUrlString);
+		modelmap.addAttribute(RESPONSE, jsonModel);		
+	}
+	
 	/**
 	 * Creates message render url mainly for gatein portal, and keeps the page
 	 * parameters such as page id, task type, keyword
@@ -479,24 +501,12 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "taskType") String taskType,
 			@RequestParam(value = "keyword") String keyword,
 			@RequestParam(value = "orderType") String orderType,
-			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
+			final ModelMap modelmap, final PortletRequest request, final ResourceResponse response) {
 				
-		PortletURL renderUrlObj = response.createRenderURL();
-		renderUrlObj.setParameter( ATTR_MY_ACTION, "showMessage");
+		final PortletURL renderUrlObj = getPortletUrl(response, currentPage, taskType, keyword, orderType);
+		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_MESSAGE);
 		renderUrlObj.setParameter( ATTR_MESSAGE_ID, messageId);
-		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
-		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
-		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
-		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);
-		try {
-			renderUrlObj.setWindowState(WindowState.NORMAL);
-		} catch (WindowStateException e) {
-			LOG.error("Create message render url failed");
-		}
-		String renderUrlString = renderUrlObj.toString();		
-		JSONObject jsonModel = new JSONObject();
-		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);		
+		generateRenderUrl(renderUrlObj, modelmap);
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -522,22 +532,10 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 		
-		PortletURL renderUrlObj = response.createRenderURL();
+		final PortletURL renderUrlObj = getPortletUrl(response, currentPage, taskType, keyword, orderType);
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_REQUEST);
 		renderUrlObj.setParameter( ATTR_REQUEST_ID, requestId);
-		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
-		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
-		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
-		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);	
-		try {
-			renderUrlObj.setWindowState(WindowState.NORMAL);
-		} catch (WindowStateException e) {
-			LOG.error("Create request render url failed");
-		}
-		String renderUrlString = renderUrlObj.toString();		
-		JSONObject jsonModel = new JSONObject();
-		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);		
+		generateRenderUrl(renderUrlObj, modelmap);
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -563,22 +561,10 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 				
-		PortletURL renderUrlObj = response.createRenderURL();
+		final PortletURL renderUrlObj = getPortletUrl(response, currentPage, taskType, keyword, orderType);
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_REQUEST_RESPONSE);
 		renderUrlObj.setParameter( ATTR_RESPONSE_ID, responseId);
-		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
-		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
-		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
-		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);	
-		try {
-			renderUrlObj.setWindowState(WindowState.NORMAL);
-		} catch (WindowStateException e) {
-			LOG.error("Create request render url failed");
-		}
-		String renderUrlString = renderUrlObj.toString();		
-		JSONObject jsonModel = new JSONObject();
-		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);		
+		generateRenderUrl(renderUrlObj, modelmap);
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -605,23 +591,11 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "targetPerson", required=false) String targetPerson,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 		
-		PortletURL renderUrlObj = response.createRenderURL();
+		final PortletURL renderUrlObj = getPortletUrl(response, currentPage, taskType, keyword, orderType);
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_APPOINTMENT);
 		renderUrlObj.setParameter( ATTR_APPOIMENT_ID, appointmentId);
-		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
-		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
-		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
-		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);	
 		renderUrlObj.setParameter( ATTR_TARGET_PERSON, targetPerson);
-		try {
-			renderUrlObj.setWindowState(WindowState.NORMAL);
-		} catch (WindowStateException e) {
-			LOG.error("Create appointment render url failed");
-		}
-		String renderUrlString = renderUrlObj.toString();		
-		JSONObject jsonModel = new JSONObject();
-		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);		
+		generateRenderUrl(renderUrlObj, modelmap);
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -648,22 +622,10 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 		
-		PortletURL renderUrlObj = response.createRenderURL();
+		final PortletURL renderUrlObj = getPortletUrl(response, currentPage, taskType, keyword, orderType);
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_CONSENT);
 		renderUrlObj.setParameter( ATTR_CONSENT_ID, consentId);
-		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
-		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
-		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
-		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);	
-		try {
-			renderUrlObj.setWindowState(WindowState.NORMAL);
-		} catch (WindowStateException e) {
-			LOG.error("Create consent render url failed");
-		}
-		String renderUrlString = renderUrlObj.toString();		
-		JSONObject jsonModel = new JSONObject();
-		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);		
+		generateRenderUrl(renderUrlObj, modelmap);
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -690,23 +652,10 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 
-		PortletURL renderUrlObj = response.createRenderURL();
+		final PortletURL renderUrlObj = getPortletUrl(response, currentPage, taskType, keyword, orderType);
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_WARRANT);
 		renderUrlObj.setParameter( ATTR_AUTHORIZATION_ID, authorizationId);
-		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
-		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
-		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
-		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);	
-		
-		try {
-			renderUrlObj.setWindowState(WindowState.NORMAL);
-		} catch (WindowStateException e) {
-			LOG.error("Create consent render url failed");
-		}
-		String renderUrlString = renderUrlObj.toString();		
-		JSONObject jsonModel = new JSONObject();
-		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);		
+		generateRenderUrl(renderUrlObj, modelmap);
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -734,23 +683,10 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 		
-		PortletURL renderUrlObj = response.createRenderURL();
+		final PortletURL renderUrlObj = getPortletUrl(response, currentPage, taskType, keyword, orderType);
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_TIPY);
 		renderUrlObj.setParameter( ATTR_REQUEST_ID, requestId);
-		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
-		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
-		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
-		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);	
-		
-		try {
-			renderUrlObj.setWindowState(WindowState.NORMAL);
-		} catch (WindowStateException e) {
-			LOG.error("Create consent render url failed");
-		}
-		String renderUrlString = renderUrlObj.toString();		
-		JSONObject jsonModel = new JSONObject();
-		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);		
+		generateRenderUrl(renderUrlObj, modelmap);
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 	
@@ -777,23 +713,10 @@ public class AjaxController extends AbstractController {
 			@RequestParam(value = "orderType") String orderType,
 			ModelMap modelmap, PortletRequest request, ResourceResponse response) {
 		
-		PortletURL renderUrlObj = response.createRenderURL();
+		final PortletURL renderUrlObj = getPortletUrl(response, currentPage, taskType, keyword, orderType);
 		renderUrlObj.setParameter( ATTR_MY_ACTION, MY_ACTION_SHOW_APPLICATION_KINDERGARTEN);
 		renderUrlObj.setParameter( ATTR_APPLICATION_ID, applicationId);
-		renderUrlObj.setParameter( ATTR_CURRENT_PAGE, currentPage);
-		renderUrlObj.setParameter( ATTR_TASK_TYPE, taskType);
-		renderUrlObj.setParameter( ATTR_KEYWORD, keyword);
-		renderUrlObj.setParameter( ATTR_ORDER_TYPE, orderType);	
-		
-		try {
-			renderUrlObj.setWindowState(WindowState.NORMAL);
-		} catch (WindowStateException e) {
-			LOG.error("Create consent render url failed");
-		}
-		String renderUrlString = renderUrlObj.toString();		
-		JSONObject jsonModel = new JSONObject();
-		jsonModel.put(JSON_RENDER_URL, renderUrlString);
-		modelmap.addAttribute(RESPONSE, jsonModel);		
+		generateRenderUrl(renderUrlObj, modelmap);
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 }

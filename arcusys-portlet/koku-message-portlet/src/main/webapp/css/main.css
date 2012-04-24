@@ -123,8 +123,10 @@
 	
 		
 	#show-message .request-c-1,
-	#show-message .request-table td.head {
+	#show-message .request-table td.head,
+	#show-message div.head {
 		font-weight: bold;
+		color: red;
 	}
 	
 	.task-manager-operation-part .basic-search {
@@ -457,7 +459,8 @@
 		border-collapse: collapse;
 	}
 	
-	.request-table td.head {
+	.request-table td.head,
+	.request-table td.titleCol {
 		background-color: #D1EEEE;
 		border: 0;
 		vertical-align: top;
@@ -465,6 +468,18 @@
 		font-weight: bold;
 	}
 	
+	.request-table td.question {
+		width: 35%; padding-right: 18px;
+	}
+	
+	.request-table td.answer {
+		padding-right: 12px;
+	}
+	
+	.request-table td.titleCol {
+		vertical-align: middle;
+	}
+		
 	#show-message .request-table td.date {
 		width: 80px;
 	}
@@ -833,3 +848,4 @@
 	table.task-manager-table.appoitmentsInboxCitizenTable td.status {
 		width: 80px;
 	}
+}

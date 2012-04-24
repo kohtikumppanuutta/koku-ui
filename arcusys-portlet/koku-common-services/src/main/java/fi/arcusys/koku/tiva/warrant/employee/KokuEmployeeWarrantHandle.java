@@ -24,7 +24,6 @@ import fi.arcusys.koku.users.KokuUserService;
 public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 
 	private final KokuEmployeeWarrantService service;
-	private final KokuUserService userService;
 	
 	private static final String SENDER_UID 			= "senderUid";
 	private static final String RECIEVER_UID 		= "recieverUid";
@@ -37,7 +36,6 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 
 	public KokuEmployeeWarrantHandle() {
 		service = new KokuEmployeeWarrantService();	
-		userService = new KokuUserService();
 	}
 	
 	public List<KokuAuthorizationSummary> getAuthorizations(long authorizationTemplateId, String receipientUid, String senderUid, int startNum, int maxNum) throws KokuServiceException {

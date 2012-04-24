@@ -33,11 +33,9 @@ import fi.arcusys.koku.hak.model.KokuApplicationSummary;
 @Controller("singleKindergartenController")
 @RequestMapping(value = "VIEW")
 public class ShowKindergartenController extends AbstractController {
-	private static final Logger LOG = LoggerFactory.getLogger(ShowKindergartenController.class);
-
 	
 	@Resource
-	ResourceBundleMessageSource messageSource;
+	private ResourceBundleMessageSource messageSource;
 	
 	/**
 	 * Shows warrant page

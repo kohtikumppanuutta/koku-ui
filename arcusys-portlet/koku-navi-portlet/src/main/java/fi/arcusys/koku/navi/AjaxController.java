@@ -71,13 +71,13 @@ public class AjaxController {
 			LOG.info("Failed to get UserUid. Propably new user and not yet registered. username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
 		} catch (Exception e) {
 			LOG.error("Error while trying to resolve userId. Usually WSDL location is wrong or server down. See following error msg: "+e.getMessage());
-		}		
+		}
 		
 		// Resolve user Intalio token (if not already done)
 		String token = (String) session.getAttribute(ATTR_TOKEN);
 		if (userId != null &&  (token == null || token.isEmpty())) {
 			try {
-				token = resolveIntalioToken(session, username);
+				token = resolveIntalioToken(username);
 				session.setAttribute(ATTR_TOKEN, token);
 			} catch (IntalioAuthException iae) {
 				LOG.warn("Authentication exception. Invalid user. Username: '"+username+"' ErrorMsg: "+iae.getMessage());
@@ -110,7 +110,7 @@ public class AjaxController {
 		return AjaxViewResolver.AJAX_PREFIX;
 	}
 		
-	private String resolveIntalioToken(PortletSession session, String userId) throws IntalioAuthException {
+	private String resolveIntalioToken(String userId) throws IntalioAuthException {
 		TaskHandle handle = new TaskHandle();
 		// Magic password! Fix also TaskManagerController magic password when possible.
 		return handle.getTokenByUser(INTALIO_GROUP_PREFIX + userId, "test");

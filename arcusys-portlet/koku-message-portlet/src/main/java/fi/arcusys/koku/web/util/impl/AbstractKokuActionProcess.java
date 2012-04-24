@@ -57,7 +57,7 @@ public abstract class AbstractKokuActionProcess implements KokuActionProcess  {
 			try {
 				msgIds.add(Long.parseLong(msgId));
 			} catch (NumberFormatException nfe) {
-				throw new KokuActionProcessException("Couldn't delete message(s)! Invalid messageId. MessageId: '"+ msgId + "'");
+				throw new KokuActionProcessException("Couldn't delete message(s)! Invalid messageId. MessageId: '"+ msgId + "'", nfe);
 			}
 		}
 		
@@ -83,7 +83,7 @@ public abstract class AbstractKokuActionProcess implements KokuActionProcess  {
 			try {
 				formattedMsgIds.add(Long.parseLong(msgId));				
 			} catch (NumberFormatException nfe) {
-				throw new KokuActionProcessException("Error while parsing messageIds. MessageId is not valid number: '"+msgId+"'");
+				throw new KokuActionProcessException("Error while parsing messageIds. MessageId is not valid number: '"+msgId+"'", nfe);
 			}
 		}
 		

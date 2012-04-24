@@ -43,10 +43,8 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
 			LOG.info(out.toString());
 		} catch (SOAPException e) {
 			LOG.error(e);
-			e.printStackTrace();
 		} catch (IOException ioe) {
 			LOG.error(ioe);
-			ioe.printStackTrace();
 		}
 		LOG.info("SOAP - '" + out.toString()+"'");
 		return true;
