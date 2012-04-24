@@ -2,6 +2,7 @@ package fi.arcusys.koku.web;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
@@ -41,12 +42,12 @@ public class ExportFileController {
 	@Resource
 	private ResourceBundleMessageSource messageSource;
 	
-	private final static String SEPARATOR 					= ";";
-	private final static String TEXT_DELIMITER				= "\"";
-	private final static String NEW_LINE					= "\n";
-	private final static String FILTER						= "\\r\\n|\\r|\\n|"+SEPARATOR+"|"+TEXT_DELIMITER;
+	private static final String SEPARATOR 					= ";";
+	private static final String TEXT_DELIMITER				= "\"";
+	private static final String NEW_LINE					= "\n";
+	private static final String FILTER						= "\\r\\n|\\r|\\n|"+SEPARATOR+"|"+TEXT_DELIMITER;
 	
-	private final static Comparator<KokuAnswer> SORT_BY_ANSWER_NUMBER = new Comparator<KokuAnswer>() {
+	private static final Comparator<KokuAnswer> SORT_BY_ANSWER_NUMBER = new Comparator<KokuAnswer>() {
 			@Override
 			public int compare(KokuAnswer o1, KokuAnswer o2) {
 				if (o1.getQuestionNumber() > o2.getQuestionNumber()) {
@@ -74,6 +75,10 @@ public class ExportFileController {
 		KokuRequest kokuRequest = null;
 		try {
 			kokuRequest = reqhandle.getKokuRequestById(requestId);
+			if (kokuRequest == null) {
+				LOG.error("getKokuRequestById returned null. requestId: '"+requestId+"'");
+				return;
+			}
 		} catch (KokuServiceException kse) {
 			LOG.error("Error when trying to create CSV export. WS doesn't work properly. requestId: '"+requestId+"'", kse);
 		}
@@ -93,47 +98,47 @@ public class ExportFileController {
 
 
 		final String username = resourceRequest.getUserPrincipal().getName();
-		final Locale locale = MessageUtil.getLocale();		
+		final Locale locale = MessageUtil.getLocale();
+		PrintWriter responseWriter = null;
 		try {
-			BufferedWriter writer = new BufferedWriter(response.getWriter());
+			responseWriter = response.getWriter();
+			final BufferedWriter writer = new BufferedWriter(responseWriter);
 			/* UTF-8 BOM (Do not remove, otherwise Excel won't recognize characters correctly!) */
 			writer.append('\uFEFF');
-			if (kokuRequest != null) {
-				/* Headers */
-				writer.write(addQuote(messageSource.getMessage("export.responseSummary", null, locale)));
-				writer.write(NEW_LINE);
-				writer.write(addQuote(messageSource.getMessage("export.respondent", null, locale))+SEPARATOR);
+			/* Headers */
+			writer.write(addQuote(messageSource.getMessage("export.responseSummary", null, locale)));
+			writer.write(NEW_LINE);
+			writer.write(addQuote(messageSource.getMessage("export.respondent", null, locale))+SEPARATOR);
 
-				for (KokuQuestion q : kokuRequest.getQuestions()) {
-					writer.write(addQuote(q.getDescription()) + SEPARATOR);
-				}				
-				writer.write(addQuote(messageSource.getMessage("export.comment", null, locale)));
+			for (KokuQuestion q : kokuRequest.getQuestions()) {
+				writer.write(addQuote(q.getDescription()) + SEPARATOR);
+			}				
+			writer.write(addQuote(messageSource.getMessage("export.comment", null, locale)));
+			writer.write(NEW_LINE);
+			
+			/* Data */
+			for (KokuResponse res : kokuRequest.getRespondedList()) {
+				writer.write(addQuote(res.getReplierUser().getFullName())+SEPARATOR);					
+				Collections.sort(res.getAnswers(), SORT_BY_ANSWER_NUMBER);
+				for (KokuAnswer answer : res.getAnswers()) {
+					if (answer != null) {
+						writer.write(addQuote(answer.getAnswer()) + SEPARATOR);													
+					}
+				}		
+				writer.write(addQuote(res.getComment()));
 				writer.write(NEW_LINE);
-				
-				/* Data */
-				for (KokuResponse res : kokuRequest.getRespondedList()) {
-					writer.write(addQuote(res.getReplierUser().getFullName())+SEPARATOR);					
-					Collections.sort(res.getAnswers(), SORT_BY_ANSWER_NUMBER);
-					for (KokuAnswer answer : res.getAnswers()) {
-						if (answer != null) {
-							writer.write(addQuote(answer.getAnswer()) + SEPARATOR);													
-						}
-					}		
-					writer.write(addQuote(res.getComment()));
-					writer.write(NEW_LINE);
-				}
-				
-				writer.write(NEW_LINE);
-				writer.write(addQuote(messageSource.getMessage("export.missed", null, locale)));
-				writer.write(NEW_LINE);
-
-				for (KokuUser name : kokuRequest.getUnrespondedList()) {
-					writer.write(addQuote(name.getFullName()));
-					writer.write(NEW_LINE);
-				}
-				writer.flush();
-				writer.close();
 			}
+			
+			writer.write(NEW_LINE);
+			writer.write(addQuote(messageSource.getMessage("export.missed", null, locale)));
+			writer.write(NEW_LINE);
+
+			for (KokuUser name : kokuRequest.getUnrespondedList()) {
+				writer.write(addQuote(name.getFullName()));
+				writer.write(NEW_LINE);
+			}
+			writer.flush();
+			writer.close();				
 		} catch (IOException e) {
 			LOG.error("Generate csv file failed. Username: '"+username+"'  RequestId: '"+kokuRequest.getRequestId()+"'");
 		}

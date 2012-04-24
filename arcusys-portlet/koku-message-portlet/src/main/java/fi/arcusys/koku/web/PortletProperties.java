@@ -2,7 +2,7 @@ package fi.arcusys.koku.web;
 
 import fi.koku.settings.KoKuPropertiesUtil;
 
-public class PortletProperties {
+public final class PortletProperties {
 	
 	private PortletProperties() { } // No need to instantiate
 	

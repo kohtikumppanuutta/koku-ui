@@ -45,7 +45,7 @@ public class ShowTipyController extends AbstractController {
 	private static final Logger LOG = LoggerFactory.getLogger(ShowTipyController.class);
 
 	@Resource
-	ResourceBundleMessageSource messageSource;
+	private ResourceBundleMessageSource messageSource;
 	
 	/**
 	 * Shows warrant page

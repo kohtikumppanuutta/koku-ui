@@ -37,7 +37,7 @@ public class ShowWarrantController extends AbstractController {
 	private static final Logger LOG = LoggerFactory.getLogger(ShowWarrantController.class);
 	
 	@Resource
-	ResourceBundleMessageSource messageSource;
+	private ResourceBundleMessageSource messageSource;
 	
 	/**
 	 * Shows warrant page
@@ -89,10 +89,10 @@ public class ShowWarrantController extends AbstractController {
 			}
 		}
 		
-		long authId = -1; 
 		
 		KokuAuthorizationSummary warrant = null;
 		try {			
+			long authId = -1; 
 			try {
 				authId  = Long.valueOf(authorizationId);
 			} catch (NumberFormatException nfe) {
