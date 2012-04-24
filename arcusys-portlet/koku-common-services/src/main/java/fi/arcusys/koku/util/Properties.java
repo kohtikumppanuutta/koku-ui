@@ -60,8 +60,8 @@ public final class Properties {
 			throw new ExceptionInInitializerError("environment.name is null or doesn't exists in koku-settings.properties file!");
 		}
 		
-		IS_KUNPO_PORTAL = (envName != null && envName.equalsIgnoreCase(Constants.PORTAL_MODE_KUNPO) ? true : false);
-		IS_LOORA_PORTAL = (envName != null && envName.equalsIgnoreCase(Constants.PORTAL_MODE_LOORA) ? true : false);
+		IS_KUNPO_PORTAL = (envName.equalsIgnoreCase(Constants.PORTAL_MODE_KUNPO) ? true : false);
+		IS_LOORA_PORTAL = (envName.equalsIgnoreCase(Constants.PORTAL_MODE_LOORA) ? true : false);
 		if (vetumaEnabled != null && vetumaEnabled.equalsIgnoreCase(Boolean.TRUE.toString())) {
 			LOG.info("Vetuma  authentication enabled");
 			VETUMA_ENABLED = true;
