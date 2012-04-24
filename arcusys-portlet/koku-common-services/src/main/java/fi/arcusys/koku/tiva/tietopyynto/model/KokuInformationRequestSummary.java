@@ -84,7 +84,7 @@ public class KokuInformationRequestSummary {
 	public KokuInformationRequestStatus getStatus() {
 		return status;
 	}
-	public void setStatus(KokuInformationRequestStatus kokuInformationRequestStatus) {
+	public final void setStatus(KokuInformationRequestStatus kokuInformationRequestStatus) {
 		this.status = kokuInformationRequestStatus;
 	}
 	public String getTitle() {

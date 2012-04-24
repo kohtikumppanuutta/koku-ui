@@ -111,11 +111,7 @@ public class MessageController extends AbstractController {
 			LOG.error("Exception when getting user id");
 		}
 
-		if (userid != null) {
-			return true;
-		} else {
-			return false;
-		}
+		return (userid != null);
 	}
 
 }

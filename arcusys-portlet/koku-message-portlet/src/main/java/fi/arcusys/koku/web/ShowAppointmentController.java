@@ -45,7 +45,7 @@ public class ShowAppointmentController {
 	private static final Logger LOG = LoggerFactory.getLogger(ShowAppointmentController.class);
 	
 	@Resource
-	ResourceBundleMessageSource messageSource;
+	private ResourceBundleMessageSource messageSource;
 	
 	/**
 	 * Shows the page that presents appointment in detail for either employee
