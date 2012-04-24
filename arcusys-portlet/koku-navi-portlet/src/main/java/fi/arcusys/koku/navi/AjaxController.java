@@ -71,7 +71,7 @@ public class AjaxController {
 			LOG.info("Failed to get UserUid. Propably new user and not yet registered. username: '"+username+"' portalRole: '"+getPortalRole()+"'", e);
 		} catch (Exception e) {
 			LOG.error("Error while trying to resolve userId. Usually WSDL location is wrong or server down. See following error msg: "+e.getMessage());
-		}		
+		}
 		
 		// Resolve user Intalio token (if not already done)
 		String token = (String) session.getAttribute(ATTR_TOKEN);
