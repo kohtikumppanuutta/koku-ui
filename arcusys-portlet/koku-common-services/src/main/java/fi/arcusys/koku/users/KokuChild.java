@@ -7,6 +7,14 @@ import fi.arcusys.koku.user.usersandgroupsservice.Child;
 import fi.arcusys.koku.user.usersandgroupsservice.ChildWithHetu;
 import fi.arcusys.koku.user.usersandgroupsservice.User;
 
+/**
+ * KokuChild
+ * 
+ * Citizen child
+ * 
+ * @author Toni Turunen
+ *
+ */
 public class KokuChild extends KokuUser {
 
 	private List<User> parents;
@@ -25,8 +33,7 @@ public class KokuChild extends KokuUser {
 	public KokuChild(ChildWithHetu child) {
 		this((Child)child);
 		hetu = child.getHetu();
-	}
-	
+	}	
 
     public String getHetu() {
 		return hetu;

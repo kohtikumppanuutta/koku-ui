@@ -1,5 +1,13 @@
 package fi.arcusys.koku.users;
 
+/**
+ * KokuUser
+ * 
+ * Employee/Citizen
+ * 
+ * @author Toni Turunen
+ *
+ */
 public class KokuUser {
 	
 	private String uid;

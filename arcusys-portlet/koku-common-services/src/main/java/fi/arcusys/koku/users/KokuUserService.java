@@ -30,14 +30,14 @@ public class KokuUserService {
 		UsersAndGroupsService_Service serviceInit = new UsersAndGroupsService_Service();
 		service = serviceInit.getUsersAndGroupsServicePort();
 		((BindingProvider)service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, Properties.USER_SERVICE);
-		// SOAPLoggingHandler.addSOAPLogger((BindingProvider)service);
 	}
 	
 	/**
-	 * Get user userId by username from Citizen portal
+	 * Returns UID by given citizen username
 	 * 
 	 * @param username
 	 * @return userId
+	 * @throws KokuServiceException
 	 */
 	public String getUserUidByKunpoName(String username) throws KokuServiceException {
 		try {
@@ -48,10 +48,11 @@ public class KokuUserService {
 	}
 	
 	/**
-	 * Get user userId by username from employee serviceal
+	 * Returns UID by given employee username
 	 * 
 	 * @param username
 	 * @return userId
+	 * @throws KokuServiceException
 	 */
 	public String getUserUidByLooraName(String username) throws KokuServiceException {
 		try {
@@ -61,6 +62,13 @@ public class KokuUserService {
 		}
 	}	
 	
+	/**
+	 * Returns citizen username by given UID
+	 * 
+	 * @param userUid UID
+	 * @return username
+	 * @throws KokuServiceException
+	 */
 	public String getKunpoNameByUserUid(String userUid) throws KokuServiceException {
 		try {
 			return service.getKunpoNameByUserUid(userUid);
@@ -69,6 +77,13 @@ public class KokuUserService {
 		}
 	}
 	
+	/**
+	 * Returns employee username by given UID
+	 * 
+	 * @param userUid UID
+	 * @return
+	 * @throws KokuServiceException
+	 */
 	public String getLooraNameByUserUid(String userUid) throws KokuServiceException {
 		try {
 			return service.getLooraNameByUserUid(userUid);
@@ -77,6 +92,13 @@ public class KokuUserService {
 		}
 	}
 	
+	/**
+	 * Returns more information about user by given UID 
+	 * 
+	 * @param userUid UID
+	 * @return KokuUser
+	 * @throws KokuServiceException
+	 */
 	public KokuUser getUserInfo(String userUid) throws KokuServiceException {
 		try {
 			User user = service.getUserInfo(userUid);
@@ -89,7 +111,14 @@ public class KokuUserService {
 			throw new KokuServiceException("getUserInfo failed. userUid: '"+userUid+"'", e);
 		}
 	}	
-	
+
+	/**
+	 * Returns list of children by UID
+	 * 
+	 * @param userUid UID
+	 * @return List of children
+	 * @throws KokuServiceException
+	 */
 	public List<KokuChild> getUsersChildren(String userUid) throws KokuServiceException {
 		try {
 			List<KokuChild> childs = new ArrayList<KokuChild>();
@@ -103,6 +132,13 @@ public class KokuUserService {
 		}	
 	}
 
+	/**
+	 * Returns list of user by giveb GUID
+	 * 
+	 * @param groupUid GUID
+	 * @return List of koku users
+	 * @throws KokuServiceException
+	 */
 	public List<KokuUser> getUsersByGroupUid(String groupUid) throws KokuServiceException {
 		try {
 			List<KokuUser> kokuUsers = new ArrayList<KokuUser>();
@@ -116,6 +152,13 @@ public class KokuUserService {
 		}	
 	}
 		
+	/**
+	 * Returns information about child
+	 * 
+	 * @param childUid ChaildUID
+	 * @return KokuChild
+	 * @throws KokuServiceException
+	 */
 	public KokuChild getChildInfo(String childUid) throws KokuServiceException {
 		try {
 			Child child = service.getChildInfo(childUid);
@@ -129,6 +172,14 @@ public class KokuUserService {
 		}	
 	}
 	
+	/**
+	 * Search children 
+	 * 
+	 * @param searchString
+	 * @param limit
+	 * @return List of koku children
+	 * @throws KokuServiceException
+	 */
 	public List<KokuChild> searchChildren(String searchString, int limit) throws KokuServiceException {
 		try {
 			List<Child> childs = service.searchChildren(searchString, limit);
@@ -142,18 +193,35 @@ public class KokuUserService {
 		}	
 	}
 	
-	public void searchGroups(String searchString, int limit) throws KokuServiceException {
+	/**
+	 * Search groups
+	 * 
+	 * @param searchString
+	 * @param limit
+	 * @return list of kokuGroups
+	 * @throws KokuServiceException
+	 */
+	public List<KokuGroup> searchGroups(String searchString, int limit) throws KokuServiceException {
+		List<KokuGroup> kokuGroup = new ArrayList<KokuGroup>();
 		try {
 			List<Group> groups = service.searchGroups(searchString, limit);
-			List<KokuGroup> kokuGroup = new ArrayList<KokuGroup>();
 			for (Group group : groups) {
 				kokuGroup.add(new KokuGroup(group));
 			}
 		} catch(RuntimeException e) {
 			throw new KokuServiceException("searchGroups failed. searchString: '"+searchString+"'", e);
-		}	
+		}
+		return kokuGroup;
 	}
 
+	/**
+	 * Search koku users
+	 * 
+	 * @param searchString
+	 * @param limit
+	 * @return list of kokuUsers
+	 * @throws KokuServiceException
+	 */
 	public List<KokuUser> searchUsers(String searchString, int limit) throws KokuServiceException {
 		try {
 			List<User> users = service.searchUsers(searchString, limit);
@@ -167,6 +235,14 @@ public class KokuUserService {
 		}	
 	}	
 	
+	/**
+	 * Login citizen side WS 
+	 * 
+	 * @param kunpoUsername citizenUsername 
+	 * @param hetu SSN
+	 * @return KokuUser
+	 * @throws KokuServiceException
+	 */
 	public KokuUser loginKunpo(String kunpoUsername, String hetu) throws KokuServiceException {
 		try {
 			User user = null;
@@ -181,6 +257,14 @@ public class KokuUserService {
 		}	
 	}
 	
+	/**
+	 * Login employee side WS
+	 * 
+	 * @param looraUsername employeeUsername
+	 * @param hetu SSN
+	 * @return KokuUser
+	 * @throws KokuServiceException
+	 */
 	public KokuUser loginLoora(String looraUsername, String hetu) throws KokuServiceException {
 		try {
 			User user = null;
@@ -195,6 +279,13 @@ public class KokuUserService {
 		}	
 	}
 	
+	/**
+	 * Returns citizen UID by given SSN
+	 * 
+	 * @param hetu
+	 * @return citizen UID
+	 * @throws KokuServiceException
+	 */
 	public String getKunpoUserUidByHetu(String hetu) throws KokuServiceException {
 		try {
 			return service.getUserUidByKunpoSsn(hetu);
@@ -202,7 +293,14 @@ public class KokuUserService {
 			throw new KokuServiceException("getKunpoUserUidByHetu failed. hetu: '"+hetu+"'", e);
 		}	
 	}
-	
+		
+	/**
+	 * Return employee username by given 
+	 * 
+	 * @param username employee username
+	 * @return employee UID
+	 * @throws KokuServiceException
+	 */
 	public String getLooraUserUidByUsername(String username) throws KokuServiceException {
 		try {
 			return service.getUserUidByLooraName(username);
@@ -210,5 +308,4 @@ public class KokuUserService {
 			throw new KokuServiceException("getLooraUserUidByUsername failed. username: '"+username+"'", e);
 		}
 	}
-	
 }

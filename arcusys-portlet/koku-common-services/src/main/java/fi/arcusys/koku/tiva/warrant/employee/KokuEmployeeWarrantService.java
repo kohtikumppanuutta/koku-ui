@@ -16,6 +16,12 @@ import fi.arcusys.koku.tiva.warrant.employeewarrantservice.Valtakirjapohja;
 import fi.arcusys.koku.util.Properties;
 
 
+/**
+ * Warrant (or authorization) services
+ * 
+ * @author Toni Turunen
+ *
+ */
 public class KokuEmployeeWarrantService {	
 	
 	private final KokuLooraValtakirjaService service;
@@ -26,6 +32,13 @@ public class KokuEmployeeWarrantService {
 		((BindingProvider)service).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, Properties.KOKU_LOORA_VALTAKIRJA_SERVICE);		
 	}
 	
+	/**
+	 * Returns number of authorizations by given criteria
+	 * 
+	 * @param criteria
+	 * @return number of authorizations
+	 * @throws KokuServiceException
+	 */
 	public int getTotalAuthorizations(AuthorizationCriteria criteria) throws KokuServiceException {
 		try {
 			return service.getTotalAuthorizations(criteria);
@@ -41,6 +54,13 @@ public class KokuEmployeeWarrantService {
 		}
 	}
 	
+	/**
+	 * Return list of authorizatins by given query
+	 * 
+	 * @param query
+	 * @return list of authorizations
+	 * @throws KokuServiceException
+	 */
 	public List<AuthorizationShortSummary> getAuthorizations(AuthorizationQuery query) throws KokuServiceException {
 		try {
 			return service.getAuthorizations(query);
@@ -49,6 +69,13 @@ public class KokuEmployeeWarrantService {
 		}
 	}
 	
+	/**
+	 * Returns authorization with additional details by given authorizationId
+	 * 
+	 * @param valtakirjaId authorizationId
+	 * @return authorization with additional details
+	 * @throws KokuServiceException
+	 */
 	public AuthorizationSummary getAuthorizationDetails(int valtakirjaId) throws KokuServiceException {
 		try {
 			return service.getAuthorizationDetails(valtakirjaId);
@@ -57,6 +84,14 @@ public class KokuEmployeeWarrantService {
 		}
 	}
 	
+	/**
+	 * Search authorization templates by given search string
+	 * 
+	 * @param searchString
+	 * @param limit
+	 * @return list of authorization templates
+	 * @throws KokuServiceException
+	 */
 	public List<Valtakirjapohja> searchAuthorizationTemplates(String searchString, int limit) throws KokuServiceException {
 		try {
 			return service.searchAuthorizationTemplates(searchString, limit);

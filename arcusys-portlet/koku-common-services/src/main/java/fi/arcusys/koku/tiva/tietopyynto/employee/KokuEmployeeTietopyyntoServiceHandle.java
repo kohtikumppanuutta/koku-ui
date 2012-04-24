@@ -18,23 +18,29 @@ import fi.arcusys.koku.tiva.tietopyynto.model.KokuInformationRequestDetail;
 import fi.arcusys.koku.tiva.tietopyynto.model.KokuInformationRequestSummary;
 import fi.arcusys.koku.util.MessageUtil;
 
+/**
+ * ServiceHandle to handle infoRequests (Tietopyynnöt)
+ * 
+ * @author Toni Turunen
+ *
+ */
 public class KokuEmployeeTietopyyntoServiceHandle extends AbstractTietopyyntoHandle {
 	
-	private final static Logger LOG = Logger.getLogger(KokuEmployeeTietopyyntoServiceHandle.class);
+	private static final Logger LOG = Logger.getLogger(KokuEmployeeTietopyyntoServiceHandle.class);
 
 	private final KokuEmployeeTietopyyntoService service;	
 	
 	/* SearchMap key values */
-	private final static int MAP_INIT_SIZE					= 7;
-	private final static String CREATED_FROM 				= "createdFrom";
-	private final static String CREATED_TO 					= "createdTo";
-	private final static String REPLIED_FROM 				= "repliedFrom";
-	private final static String REPLIED_TO 					= "repliedTo";
-	private final static String SENDER_UID 					= "senderUid";
-	private final static String RECIEVER_UID 				= "recieverUid";	
-	private final static String TARGET_PERSON_UID 			= "targetPersonUid";
-	private final static String INFORMATION					= "searchFromTietosisalto";
-	private final static String FREE_TEXT_SEARCH			= "freeTextSearch";
+	private static final int MAP_INIT_SIZE					= 7;
+	private static final String CREATED_FROM 				= "createdFrom";
+	private static final String CREATED_TO 					= "createdTo";
+	private static final String REPLIED_FROM 				= "repliedFrom";
+	private static final String REPLIED_TO 					= "repliedTo";
+	private static final String SENDER_UID 					= "senderUid";
+	private static final String RECIEVER_UID 				= "recieverUid";	
+	private static final String TARGET_PERSON_UID 			= "targetPersonUid";
+	private static final String INFORMATION					= "searchFromTietosisalto";
+	private static final String FREE_TEXT_SEARCH			= "freeTextSearch";
 			
 	/**
 	 * Constructor and initialization
