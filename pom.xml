@@ -134,8 +134,7 @@
 		<module>lok</module>
 		<module>arcusys-portlet</module>
 		<module>portlet-common</module>
-		<!-- module>intalio</module -->
-		<!-- module>common</module -->
+		<module>portlet-common-web</module>
 	</modules>
 
 	<dependencies>
