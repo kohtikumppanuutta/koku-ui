@@ -5,6 +5,12 @@ import org.apache.log4j.Logger;
 import fi.arcusys.koku.exceptions.KokuServiceException;
 import fi.arcusys.koku.util.PortalRole;
 
+/**
+ * Service to resolve user (citizen/employee) UID
+ * 
+ * @author Toni Turunen
+ *
+ */
 public class UserIdResolver {
 	
 	private static final Logger LOG = Logger.getLogger(UserIdResolver.class);

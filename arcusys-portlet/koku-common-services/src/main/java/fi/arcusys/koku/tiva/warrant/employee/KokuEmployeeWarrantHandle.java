@@ -13,7 +13,6 @@ import fi.arcusys.koku.tiva.warrant.employeewarrantservice.AuthorizationShortSum
 import fi.arcusys.koku.tiva.warrant.employeewarrantservice.Valtakirjapohja;
 import fi.arcusys.koku.tiva.warrant.model.KokuAuthorizationSummary;
 import fi.arcusys.koku.tiva.warrant.model.KokuValtakirjapohja;
-import fi.arcusys.koku.users.KokuUserService;
 
 /**
  * Handles warrants (valtakirja) related operations for employee
@@ -38,6 +37,17 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 		service = new KokuEmployeeWarrantService();	
 	}
 	
+	/**
+	 * Return authorizations by given authorization template, recipient and user 
+	 * 
+	 * @param authorizationTemplateId
+	 * @param receipientUid
+	 * @param senderUid
+	 * @param startNum
+	 * @param maxNum
+	 * @return list of authorizations
+	 * @throws KokuServiceException
+	 */
 	public List<KokuAuthorizationSummary> getAuthorizations(long authorizationTemplateId, String receipientUid, String senderUid, int startNum, int maxNum) throws KokuServiceException {
 		AuthorizationQuery query = new AuthorizationQuery();
 		AuthorizationCriteria criteria = new AuthorizationCriteria();
@@ -138,12 +148,28 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 		return searchMap;
 	}
 	
+	/**
+	 * Return number of received authorizations by recipient UID
+	 * 
+	 * @param recipientUserId
+	 * @return number of recivied authorizations
+	 * @throws KokuServiceException
+	 */
 	public int getUserRecievedWarrantCount(String recipientUserId) throws KokuServiceException {
 		AuthorizationCriteria criteria = new AuthorizationCriteria();
 		criteria.setReceipientUid(recipientUserId);
 		return service.getTotalAuthorizations(criteria);
 	}
 	
+	/**
+	 * Return number of total authorizartions by templateId, recipient UID and sender UID
+	 * 
+	 * @param authorizationTemplateId
+	 * @param receipientUid
+	 * @param senderUid
+	 * @return
+	 * @throws KokuServiceException
+	 */
 	public int getTotalAuthorizations(long authorizationTemplateId, String receipientUid, String senderUid) throws KokuServiceException {
 		AuthorizationCriteria criteria = new AuthorizationCriteria();
 		criteria.setAuthorizationTemplateId(authorizationTemplateId);
@@ -152,6 +178,13 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 		return service.getTotalAuthorizations(criteria);
 	}
 
+	/**
+	 * Return authorization with additional details by given authorizationId
+	 * 
+	 * @param valtakirjaId
+	 * @return Authorization with additional details
+	 * @throws KokuServiceException
+	 */
 	public KokuAuthorizationSummary getAuthorizationDetails(int valtakirjaId) throws KokuServiceException {
 		KokuAuthorizationSummary kokuSummary = new KokuAuthorizationSummary(service.getAuthorizationDetails(valtakirjaId));
 		localize(kokuSummary);
@@ -162,6 +195,14 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 		kokuSummary.setLocalizedStatus(getLocalizedAuthStatus(kokuSummary.getStatus()));
 	}
 
+	/**
+	 * Search authorization templates
+	 * 
+	 * @param searchString
+	 * @param limit
+	 * @return list of authorization templates
+	 * @throws KokuServiceException
+	 */
 	public List<KokuValtakirjapohja> searchAuthorizationTemplates(String searchString, int limit) throws KokuServiceException {
 		List<KokuValtakirjapohja> valtakirjas = new ArrayList<KokuValtakirjapohja>();
 		List<fi.arcusys.koku.tiva.warrant.employeewarrantservice.Valtakirjapohja> valtakirjasFromService = service.searchAuthorizationTemplates(searchString, limit);
@@ -171,6 +212,15 @@ public class KokuEmployeeWarrantHandle extends AbstractWarrantHandle {
 		return valtakirjas;
 	}
 
+	/**
+	 * Search authorizations by given authorization template name
+	 * 
+	 * @param keyword
+	 * @param startNum
+	 * @param maxNum
+	 * @return list of authorizations
+	 * @throws KokuServiceException
+	 */
 	public List<KokuAuthorizationSummary> getAuthorizationsByTemplateId(String keyword, int startNum, int maxNum) throws KokuServiceException {
 		Map<String, String> searchMap = createTemplateSearchMap(keyword);
 		if (searchMap == null) {

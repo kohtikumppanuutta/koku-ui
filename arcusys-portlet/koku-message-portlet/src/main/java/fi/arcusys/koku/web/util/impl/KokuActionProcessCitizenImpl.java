@@ -75,14 +75,13 @@ public class KokuActionProcessCitizenImpl extends AbstractKokuActionProcess {
 		for(String authorizationId : warrantIds) {
 			try {
 				long authId = Long.parseLong(authorizationId);
-				String revokeResult = warrantHandle.revokeOwnAuthorization(authId, getUserId(), comment);
-				if (revokeResult.equals(RESPONSE_FAIL)) {
-					throw new KokuActionProcessException("Revoking warrant failed! authId: '"+authId+"' userId: '"+getUserId()+"' comment:'"+comment+"'");
-				}
+				warrantHandle.revokeOwnAuthorization(authId, getUserId(), comment);
 			} catch (NumberFormatException nfe) {
 				throw new KokuActionProcessException("Couldn't revoke warrant! Invalid authorizationId. UserId: "+ getUserId() + " AuthorizationId: "+ authorizationId + "Comment: " + comment, nfe);
+			} catch (KokuServiceException kse) {
+				throw new KokuActionProcessException("Revoking warrant failed! authId: '"+authorizationId+"' userId: '"+getUserId()+"' comment:'"+comment+"'");
 			}
-		}		
+		}
 	}
 
 	@Override

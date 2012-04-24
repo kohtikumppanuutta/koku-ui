@@ -62,8 +62,8 @@ public class KokuCitizenWarrantHandle extends AbstractWarrantHandle {
 		return service.getTotalReceivedAuthorizations(userId);
 	}
 	
-	public String revokeOwnAuthorization(long authorizationId, String user, String comment) {
-		return service.revokeOwnAuthorization(authorizationId, user, comment);
+	public void revokeOwnAuthorization(long authorizationId, String user, String comment) throws KokuServiceException {
+		service.revokeOwnAuthorization(authorizationId, user, comment);
 	}	
 	
 	

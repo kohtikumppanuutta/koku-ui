@@ -2,6 +2,13 @@ package fi.arcusys.koku.users;
 
 import fi.arcusys.koku.user.usersandgroupsservice.Group;
 
+/**
+ * KokuGroup
+ * 
+ * @author Toni Turunen
+ *
+ */
+
 public class KokuGroup {
 
 	private String groupName;
