@@ -80,7 +80,7 @@ public class KokuActionProcessCitizenImpl extends AbstractKokuActionProcess {
 					throw new KokuActionProcessException("Revoking warrant failed! authId: '"+authId+"' userId: '"+getUserId()+"' comment:'"+comment+"'");
 				}
 			} catch (NumberFormatException nfe) {
-				throw new KokuActionProcessException("Couldn't revoke warrant! Invalid authorizationId. UserId: "+ getUserId() + " AuthorizationId: "+ authorizationId + "Comment: " + comment);
+				throw new KokuActionProcessException("Couldn't revoke warrant! Invalid authorizationId. UserId: "+ getUserId() + " AuthorizationId: "+ authorizationId + "Comment: " + comment, nfe);
 			}
 		}		
 	}
@@ -92,8 +92,9 @@ public class KokuActionProcessCitizenImpl extends AbstractKokuActionProcess {
 		if (consentIds == null) {
 			throw new KokuActionProcessException("consentIds parameter is null");
 		}
-		
-		tivaHandle = new TivaCitizenServiceHandle(getUserId());
+		if (tivaHandle == null) {
+			tivaHandle = new TivaCitizenServiceHandle(getUserId());			
+		}
 		try {
 			for(String consentId : consentIds) {
 				String revokingResult;

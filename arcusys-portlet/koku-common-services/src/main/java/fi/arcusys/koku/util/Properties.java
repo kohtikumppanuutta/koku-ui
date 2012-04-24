@@ -5,9 +5,6 @@ import static fi.arcusys.koku.util.Constants.PROPERTIES_FILTER_RECIEVED_INFO_REQ
 import static fi.arcusys.koku.util.Constants.PROPERTIES_FILTER_RECIEVED_REQUESTS;
 import static fi.arcusys.koku.util.Constants.PROPERTIES_FILTER_RECIEVED_WARRANTS;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.apache.log4j.Logger;
 
 import fi.koku.settings.KoKuPropertiesUtil;
@@ -19,7 +16,7 @@ import fi.koku.settings.KoKuPropertiesUtil;
  * @author Toni Turunen
  *
  */
-public class Properties {
+public final class Properties {
 	
 	private final static Logger LOG = Logger.getLogger(Properties.class);
 	
@@ -63,8 +60,8 @@ public class Properties {
 			throw new ExceptionInInitializerError("environment.name is null or doesn't exists in koku-settings.properties file!");
 		}
 		
-		IS_KUNPO_PORTAL = (envName != null && envName.equalsIgnoreCase(Constants.PORTAL_MODE_KUNPO) ? true : false);
-		IS_LOORA_PORTAL = (envName != null && envName.equalsIgnoreCase(Constants.PORTAL_MODE_LOORA) ? true : false);
+		IS_KUNPO_PORTAL = (envName.equalsIgnoreCase(Constants.PORTAL_MODE_KUNPO) ? true : false);
+		IS_LOORA_PORTAL = (envName.equalsIgnoreCase(Constants.PORTAL_MODE_LOORA) ? true : false);
 		if (vetumaEnabled != null && vetumaEnabled.equalsIgnoreCase(Boolean.TRUE.toString())) {
 			LOG.info("Vetuma  authentication enabled");
 			VETUMA_ENABLED = true;

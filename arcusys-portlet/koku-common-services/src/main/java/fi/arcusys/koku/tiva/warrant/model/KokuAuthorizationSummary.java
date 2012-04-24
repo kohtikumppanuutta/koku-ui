@@ -139,7 +139,7 @@ public class KokuAuthorizationSummary {
 		return status;
 	}
 
-	public void setStatus(KokuAuthorizationStatus status) {
+	public final void setStatus(KokuAuthorizationStatus status) {
 		this.status = status;
 	}
 
@@ -147,7 +147,7 @@ public class KokuAuthorizationSummary {
 		return template;
 	}
 
-	public void setTemplate(KokuValtakirjapohja template) {
+	public final void setTemplate(KokuValtakirjapohja template) {
 		this.template = template;
 	}
 
@@ -187,7 +187,7 @@ public class KokuAuthorizationSummary {
 		return type;
 	}
 
-	public void setType(KokuAuthorizationCreateType type) {
+	public final void setType(KokuAuthorizationCreateType type) {
 		this.type = type;
 	}
 
