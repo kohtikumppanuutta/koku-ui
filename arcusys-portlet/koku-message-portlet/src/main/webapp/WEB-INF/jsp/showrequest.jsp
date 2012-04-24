@@ -1,27 +1,23 @@
 <%@ include file="init.jsp"%>
-<%@ page import="fi.arcusys.koku.kv.model.KokuRequest" %>
-<%@ page import="fi.arcusys.koku.web.util.ModelWrapper" %>
+<%@ page import="fi.arcusys.koku.kv.model.KokuRequest"%>
+<%@ page import="fi.arcusys.koku.web.util.ModelWrapper"%>
 
 
-<portlet:renderURL var="homeURL" windowState="<%= WindowState.NORMAL.toString() %>" >
+<portlet:renderURL var="homeURL"
+	windowState="<%= WindowState.NORMAL.toString() %>">
 	<portlet:param name="myaction" value="home" />
 </portlet:renderURL>
 
-<%!
-
-public String htmlToCode(String s)
-{
-	if(s == null) {
-		return "";
-	} else {
-		s = s.replace("\n\n", "");
-		s = s.replace("\r\n", "");
-		s = s.replace("\n", "");
-		return s;
-	}
-} 
-
-%>
+<%!public String htmlToCode(String s) {
+		if (s == null) {
+			return "";
+		} else {
+			s = s.replace("\n\n", "");
+			s = s.replace("\r\n", "");
+			s = s.replace("\n", "");
+			return s;
+		}
+	}%>
 
 <%
 	ModelWrapper<KokuRequest> model = (ModelWrapper<KokuRequest>) request.getAttribute("request");
@@ -40,23 +36,23 @@ public String htmlToCode(String s)
 	<portlet:param name="newRequestId" value="<%= requestId %>" />
 </portlet:resourceURL>
 
-<%@ include file="js_koku_detail.jspf" %>
-<%@ include file="js_koku_navigation_helper.jspf" %>
-<%@ include file="js_koku_reset_view.jspf" %>
+<%@ include file="js_koku_detail.jspf"%>
+<%@ include file="js_koku_navigation_helper.jspf"%>
+<%@ include file="js_koku_reset_view.jspf"%>
 
 
-<c:choose> 
-  <c:when test="${request.responseStatus == 'FAIL'}" > 
-  	<script type="text/javascript"> 
+<c:choose>
+	<c:when test="${request.responseStatus == 'FAIL'}">
+		<script type="text/javascript"> 
   			kokuErrorMsg += "<span class=\"failureUuid\"><c:out value="${request.errorCode}" /></span></div>";
 			jQuery.jGrowl(kokuErrorMsg, kokuErrorMsgOptions);
 	</script>
-  </c:when> 
+	</c:when>
 
-  <c:when test="${request.responseStatus == 'OK'}" >	   
+	<c:when test="${request.responseStatus == 'OK'}">
 
 
-	<script type="text/javascript"> 
+		<script type="text/javascript"> 
 	
 	<%--  Disabled iframe because it doesn't seem to be used at all 
 	
@@ -108,63 +104,109 @@ public String htmlToCode(String s)
 	
 	
 	</script>
-	<div id="task-manager-wrap" class="single">
-		<div id="show-message" style="padding:12px">
-		<span class="request-c-1"><c:out value="${request.model.subject}" /> </span><br />
-		<span class="request-c-1"><spring:message code="request.createdAt"/>:</span> <c:out value="${request.model.creationDate}" />  <br />
-		<span class="request-c-1"><spring:message code="request.validTill"/>:</span> <c:out value="${request.model.endDate}" /> <br />
-		
-		<%--  Why iframe here?? --%>
-		<%--  Disabled iframe because it doesn't seem to be used at all --%>
-		<%-- <iframe id="msgFrame" name="msgFrame" style="width:100%;" frameborder="0" scrolling="no"></iframe> --%>
-		
-	    <h3><spring:message code="request.responseSummary"/></h3>
-	    <table class="request-table">
-	    	<tr>
-	    		<td rowspan=2 style="vertical-align: middle;" class="head"><spring:message code="request.respondent"/></td>
-	    		<c:forEach items="${request.model.questions}" varStatus="status" var="question" >
-	    			<td  class="head"><c:out value="${question.description}"/></td>
-	    		</c:forEach>
-	    		<td rowspan=2 style="vertical-align: middle;" class="head"><spring:message code="request.comment"/></td>
-	   		</tr>    		
-	    	<tr>
-	    	<c:forEach items="${request.model.questions}" >
-	    		<td class="head"><spring:message code="request.answer"/></td>
-	    	</c:forEach>
-	    	</tr>
-	    	<c:forEach var="response" items="${request.model.respondedList}" varStatus="loopStatus">
-	        <tr class="<c:out value="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}"/>">
-	          <td><c:out value="${response.replierUser.fullName}"/></td>
-	          <c:forEach var="answer" items="${response.answers}">
-	          <td><c:out value="${answer.answer}"/></td>
-	          </c:forEach>
-	          <td><c:out value="${response.comment}"/></td>
-	        </tr>
-	      </c:forEach>
-	    </table>  
-	
-	    <h3><spring:message code="request.missed"/>:</h3>
-	    <c:choose>
-	    	<c:when test="${fn:length(request.model.unrespondedList) == 0}"><spring:message code="request.none"/></c:when>
-	    	<c:otherwise>
-	    		<table>
-		  			<tr style="font-weight:bold;" ><td><spring:message code="request.name"/></td></tr>
-	      			<c:forEach var="unresponse" items="${request.model.unrespondedList}">
-	        		<tr>
-	          			<td><c:out value="${unresponse.fullName}"/></td>
-	        		</tr>
-	      </c:forEach>
-	    </table>
-	  		</c:otherwise>
-	    </c:choose>	
-	    <div id="export"><input type="button" value="<spring:message code="request.export"/>" onclick="exportFile()"/></div>
+		<div id="task-manager-wrap" class="single">
+			<div id="show-message" style="padding: 12px">
+				<span class="request-c-1"><c:out
+						value="${request.model.subject}" /> </span><br /> <span
+					class="request-c-1"><spring:message code="request.createdAt" />:</span>
+				<c:out value="${request.model.creationDate}" />
+				<br /> <span class="request-c-1"><spring:message
+						code="request.validTill" />:</span>
+				<c:out value="${request.model.endDate}" />
+				<br />
+
+				<%--  Why iframe here?? --%>
+				<%--  Disabled iframe because it doesn't seem to be used at all --%>
+				<%-- <iframe id="msgFrame" name="msgFrame" style="width:100%;" frameborder="0" scrolling="no"></iframe> --%>
+
+				<h3>
+					<spring:message code="request.responseSummary" />
+				</h3>
+				<c:forEach var="response" items="${request.model.respondedList}"
+					varStatus="loopStatus">
+					<table class="request-table" style="margin-bottom: 4px;">
+						<tr>
+							<td colspan="2" class="titleCol">
+								<c:out value="${response.replierUser.fullName}" />
+							</td>
+						</tr>
+						<c:forEach begin="0" end="${fn:length(request.model.questions) - 1}" varStatus="loop">
+    						<tr class="<c:out value="${loop.index % 2 == 0 ? 'evenRow' : 'oddRow'}"/>">
+								<td class="question">
+									<c:out value="${request.model.questions[loop.index].description}" />
+								</td>
+								<td class="answer">
+									<c:out value="${response.answers[loop.index].answer}" />
+								</td>
+							</tr>
+						</c:forEach>
+					</table>
+				</c:forEach>
+
+				<!-- 
+				<table class="request-table">
+					<tr>
+						<td rowspan=2 style="vertical-align: middle;" class="head"><spring:message
+								code="request.respondent" /></td>
+						<c:forEach items="${request.model.questions}" varStatus="status"
+							var="question">
+							<td class="head"><c:out value="${question.description}" /></td>
+						</c:forEach>
+						<td rowspan=2 style="vertical-align: middle;" class="head"><spring:message
+								code="request.comment" /></td>
+					</tr>
+					<tr>
+						<c:forEach items="${request.model.questions}">
+							<td class="head"><spring:message code="request.answer" /></td>
+						</c:forEach>
+					</tr>
+					<c:forEach var="response" items="${request.model.respondedList}"
+						varStatus="loopStatus">
+						<tr class="<c:out value="${loopStatus.index % 2 == 0 ? 'evenRow' : 'oddRow'}"/>">
+							<td><c:out value="${response.replierUser.fullName}" /></td>
+							<c:forEach var="answer" items="${response.answers}">
+								<td><c:out value="${answer.answer}" /></td>
+							</c:forEach>
+							<td><c:out value="${response.comment}" /></td>
+						</tr>
+					</c:forEach>
+				</table> -->
+
+				<h3>
+					<spring:message code="request.missed" />
+					:
+				</h3>
+				<c:choose>
+					<c:when test="${fn:length(request.model.unrespondedList) == 0}">
+						<spring:message code="request.none" />
+					</c:when>
+					<c:otherwise>
+						<table>
+							<tr style="font-weight: bold;">
+								<td><spring:message code="request.name" /></td>
+							</tr>
+							<c:forEach var="unresponse"
+								items="${request.model.unrespondedList}">
+								<tr>
+									<td><c:out value="${unresponse.fullName}" /></td>
+								</tr>
+							</c:forEach>
+						</table>
+					</c:otherwise>
+				</c:choose>
+				<div id="export">
+					<input type="button"
+						value="<spring:message code="request.export"/>"
+						onclick="exportFile()" />
+				</div>
+			</div>
 		</div>
-	</div>
-	</c:when> 
+	</c:when>
 </c:choose>
-	
-		
-	<div id="task-manager-operation" class="task-manager-operation-part">
-			<input type="button" value="<spring:message code="page.return"/>" onclick="kokuNavigationHelper.returnMainPage()" />
-	</div>
+
+
+<div id="task-manager-operation" class="task-manager-operation-part">
+	<input type="button" value="<spring:message code="page.return"/>"
+		onclick="kokuNavigationHelper.returnMainPage()" />
+</div>
 
