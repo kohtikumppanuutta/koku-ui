@@ -69,7 +69,8 @@ public final class Constants {
 	                                                                    
 	/* ATTR_MY_ACTION parameter possible values.
 	 * These values define which .jsp file action will referred e.g. showRequest.jsp etc.  
-	 */                     
+	 */
+	public static final String MY_ACTION_SHOW_MESSAGE						= "showMessage";
 	public static final String MY_ACTION_SHOW_REQUEST 						= "showRequest";
 	public static final String MY_ACTION_SHOW_APPOINTMENT					= "showAppointment";
 	public static final String MY_ACTION_SHOW_CONSENT 						= "showConsent";
