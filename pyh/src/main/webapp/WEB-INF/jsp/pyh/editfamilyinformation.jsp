@@ -25,6 +25,10 @@
 	<portlet:param name="action" value="addUsersToFamily" />
 </portlet:actionURL>
 
+<portlet:actionURL var="addRemoveButton">
+	<portlet:param name="action" value="addUsersToFamily" />
+</portlet:actionURL>
+
 <portlet:renderURL var="backURL">
 	<portlet:param name="action" value="guardianFamilyInformation" />
 </portlet:renderURL>
@@ -112,16 +116,29 @@
     </div>
     </br>
     </c:if>
-
 	
    <c:if test="${not empty messages}">
         <h3 class="portlet-section-subheader"><spring:message code="ui.pyh.sent.messages" />
         </h3>
         <c:forEach var="message" items="${messages}">            
             
-            <div class="pyh-message">
-                <c:out value="${message.text}"/>
-            </div>
+            <div class="sentMessage">
+						
+							<div class="sentMessage-left">
+								<c:out value="${message.text}" />
+							</div>
+							<div class="sentMessage-right">
+							<span> <portlet:actionURL var="reject">
+										<portlet:param name="action" value="rejectMessage" />
+										<portlet:param name="userPic" value="${user.pic}" />
+										<portlet:param name="messageId" value="${message.id}" />
+									</portlet:actionURL> <form:form name="reject" method="post" action="${reject}">
+										<input type="submit" class="portlet-form-button"
+										value="<spring:message code="ui.pyh.sent.messages.remove" />" /></span>
+								</form:form>
+							</div>						
+                        <div class="pyh-reset-floating"></div>
+                        </div>
             
         </c:forEach>
         </br>

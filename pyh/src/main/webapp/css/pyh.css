@@ -66,3 +66,18 @@
 .koku-pyh .pyh-left {
 	float: left;
 }
+
+
+.koku-pyh .sentMessage {
+width:auto;
+position: relative;
+}
+
+.koku-pyh .sentMessage-left  {
+float: left;
+}
+
+.koku-pyh .sentMessage-right  {
+float: left;
+padding-left: 70px;
+}
