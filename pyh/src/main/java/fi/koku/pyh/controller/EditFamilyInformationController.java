@@ -147,7 +147,7 @@ public class EditFamilyInformationController {
     
     return "editfamilyinformation";
   }
-  
+    
   /**
    * Render method for showing user's family information editing view with search results.
    * 
@@ -363,7 +363,7 @@ public class EditFamilyInformationController {
     
     response.setRenderParameter("childsGuardianshipInformationNotFound", String.valueOf(childsGuardianshipInformationNotFound));
     response.setRenderParameter("action", "editFamilyInformation");
-  }
+    }
   
   /**
    * Select recipients (PICs) to whom send the confirmation message (membership request) for an operation, 
